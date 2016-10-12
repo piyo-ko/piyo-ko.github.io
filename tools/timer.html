@@ -1,0 +1,169 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+<title>作業時間の内訳をタイマーで測るよ</title>
+
+<script type="text/javascript">
+var total_times = [0, 0, 0, 0]; //ミリ秒
+var current_task_No = -1; // ありえない値
+var current_task_start_time = new Date();
+const working_task_sign="⏱";
+const coffee_break_sign="🍭😃";
+const sleeping_sign="😴💤";
+
+function get_period_in_time_str(millisec) {
+	var str="";
+	var all_sec=Math.round(millisec / 1000);
+	var hour=Math.floor(all_sec / 3600);
+	var min=Math.floor((all_sec % 3600) / 60);
+	var sec=all_sec - hour*3600 - min*60;
+	
+	return( ("0"+hour).slice(-2) + ":" + ("0"+min).slice(-2) + ":" + ("0"+sec).slice(-2) );
+}
+
+function startTask(task_No) {
+	const d = new Date();
+	const prev_task_No = current_task_No;
+	current_task_No = task_No;
+	
+	if (0 <= prev_task_No) {
+		total_times[prev_task_No] += d -current_task_start_time;
+		document.getElementById("task_" + prev_task_No + "_total_time").textContent = get_period_in_time_str(total_times[prev_task_No]);
+	}
+	current_task_start_time = d;
+	document.getElementById("current_task").value = 
+		document.getElementById("task_" + task_No + "_name").value +
+		"を実行中ですよ。開始時刻は\n" + d + "\nですよ。\n";
+	
+	console.log(d + ": task "+ task_No + " (" + document.getElementById("task_" + task_No + "_name").value + ") を開始。");
+
+	//同じタスクの「開始」ボタンを連続して押しても問題ないように、
+	//まず先に、前のタスクの状態をsleeping_signにする。
+	if (prev_task_No >= 0) {
+		document.getElementById("task_" + prev_task_No + "_status").textContent = sleeping_sign;
+	}
+
+	//現在のタスクの状態を書き換える（休憩かどうかで場合分け）
+	if (task_No==0) {
+		document.getElementById("task_" + task_No + "_status").textContent = coffee_break_sign;
+	} else {
+		document.getElementById("task_" + task_No + "_status").textContent = working_task_sign;
+	}
+}
+</script>
+
+<style>
+body {
+	background: saddlebrown;
+	color: whitesmoke;
+	padding: 12pt;
+}
+table, td, th {
+	border: solid 1px springgreen;
+}
+td, th {
+	padding-left: 1ex;
+	padding-right: 1ex;
+	white-space: nowrap;
+}
+input[type="text"], textarea {
+	background: khaki;
+	color: darkgreen;
+}
+p {
+	text-indent: 1em;
+}
+</style>
+</head>
+
+
+<body>
+
+<form name="timer">
+
+<table>
+<tr>
+<th>作業内容</th>
+<th>開始する?</th>
+<th>状態</th>
+<th>合計時間</th>
+</tr>
+
+<tr>
+<td><input type="text" id="task_1_name" size="10" value="調べ物"></td>
+<td><input type="button" id="task_1" value="　　開始　　" onClick="startTask(1)"></td>
+<td id="task_1_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_1_total_time">0:00:00</td>
+</tr>
+
+<tr>
+<td><input type="text" id="task_2_name" size="10" value="翻訳"></td>
+<td><input type="button" id="task_2" value="　　開始　　" onClick="startTask(2)"></td>
+<td id="task_2_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_2_total_time">0:00:00</td>
+</tr>
+
+<tr>
+<td><input type="text" id="task_3_name" size="10" value="事務作業"></td>
+<td><input type="button" id="task_3" value="　　開始　　" onClick="startTask(3)"></td>
+<td id="task_3_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_3_total_time">0:00:00</td>
+</tr>
+
+<!--
+<tr>
+<td><input type="text" id="task_4_name" size="10" value="？？？"></td>
+<td><input type="button" id="task_4" value="　　開始　　" onClick="startTask(4)"></td>
+<td id="task_4_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_4_total_time">0:00:00</td>
+</tr>
+-->
+
+<!--
+<tr>
+<td><input type="text" id="task_5_name" size="10" value="？？？"></td>
+<td><input type="button" id="task_5" value="　　開始　　" onClick="startTask(5)"></td>
+<td id="task_5_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_5_total_time">0:00:00</td>
+</tr>
+-->
+
+<!--
+<tr>
+<td><input type="text" id="task_6_name" size="10" value="？？？"></td>
+<td><input type="button" id="task_6" value="　　開始　　" onClick="startTask(6)"></td>
+<td id="task_6_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_6_total_time">0:00:00</td>
+</tr>
+-->
+
+<tr>
+<td><input type="text" id="task_0_name" size="10" value="休憩"></td>
+<td><input type="button" id="task_0" value="　　開始　　" onClick="startTask(0)"></td>
+<td id="task_0_status" style="font-size: 24pt" >😴💤</td>
+<td id="task_0_total_time">0:00:00</td>
+</tr>
+</table>
+<br>
+<textarea id="current_task" rows="4" cols="40">
+</textarea>
+
+<p><input type="button" id="reset_page" value="クリア" onClick="window.location.reload(true);"></p>
+
+</form>
+
+
+<p>
+たとえば、「本来したい作業は翻訳なのだが、内容についての下調べも必要だし、諸々の連絡など事務作業も必要だし、途中で休憩することもある」という状況があるとして、「時間の内訳はどうなっているのかな?」というのを知りたい場合もあるかと思います。というわけで、開始した作業の「開始」ボタンをクリック (タップ) するだけで、時間の計測・累計加算をしていくページを作ってみました。ただ、作業をするときに、クリック (タップ) しやすいところに本ページ (またはそのローカルコピー) を開きっぱなしにしておかねばならぬので、使い勝手はイマイチかも。自分でもまだ実際の仕事に対して使ったことはありません (え……)。
+</p>
+<p>
+「作業内容」の列は書き換え可能です。本ページ上で書き換えてから使っても良いし、ローカルコピーを作って、そこで書き換えておいても可。あと、コメントアウトしてあるところをアンコメントすると、「作業内容」の行を増やせます。お気に召しましたら、ローカルコピーを作って適当に書き換えてお使いください。
+</p>
+
+<p>なお、詳しいログはconsole.logに書き出してあります。</p>
+
+<nav>
+[<a href="../index.html">ホーム</a>]
+</nav>
+</body>
+</html>

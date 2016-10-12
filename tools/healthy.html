@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>🍄 注意! 注意! 🍄</title>
+<link rel="stylesheet" href="../article.css" type="text/css">
+<script>
+var n =[];	// Notificationオブジェクト用の大域的な配列
+function alertMe(alert_title, alert_str, interval_in_minutes, initial_waiting_seconds, idx) {
+	setTimeout(function () {
+		setInterval(function () {
+			if (n[idx]) {
+				n[idx].close();
+			}
+			n[idx] = new Notification(alert_title, {body: "\n" + alert_str});
+		}, interval_in_minutes*60*1000);
+	}, initial_waiting_seconds*1000);
+}
+
+console.log("通知できるかをこれから調べます\n");
+var n_ok=false;
+
+// ローカルファイルに対してFirefoxはデフォルトで通知を許可しているみたいなので、
+// その状態で使う分には、以下のif文は丸ごと不要で、
+// 次のif (n_ok) { ...} も、if文の判断をしないで中身を実行してしまえばよい。
+// OperaとSafariはうまくいかない。
+// 追記 : Safariは、「開発」メニューを表示して、
+// 「ローカルファイルの制限を無効にする」にチェックを入れておけば動くのでは
+// ないかと思ったが、試してみたらだめだった。
+// さらに追記: 次の日、ダメ元でもう一度試したら通知が出てきた。なぜ???
+// （どうも、チェックが入っていない状態から、チェックを入れる状態に切り換える
+// 動作が必要みたい。入りっぱなしではダメ。）
+if (!("Notification" in window)) {
+	alert("残念ながら、通知機能は使えません");
+} else if (Notification.permission === 'granted') {
+	console.log("既にパーミッションが与えられていた\n");
+	n_ok=true;
+} else if (Notification.permission === 'denied') {
+	console.log("パーミッションが明示的に拒否になっていた\n");
+} else {
+	console.log("許可してくれるかどうかをユーザに尋ねます\n");
+	Notification.requestPermission(function(result) {
+		console.log("いま尋ねていますよ (どきどき)\n");
+		if (result === 'granted') {
+			n_ok=true;
+			cosole.log("許可してもらえた! わーい\n");
+		} else {
+			console.log("拒否された! えーん\n");
+		}
+	});
+}
+
+if (n_ok) {
+	alertMe('背筋ピン!', '姿勢のお手本はこちらですよ → 🗿 🐇 🌵 🌻 🐐', 3, 0, 0);
+	alertMe('水分☕🍹🍵を取らないと!', '干からびちゃうよ👻', 17, 20, 1);
+	alertMe('ちょっと動いた方がいいよ', '🏃🏻🚶🏻🚶🏻🚶🏻... λ λ ...?', 29, 40, 2);
+} else {
+	alert("通知機能を許可してくださらないと、このページはお役に立てませんのよ");
+}
+</script>
+
+</head>
+
+
+
+<body class="main-text-only">
+<nav>
+[<a href="../index.html">ホーム</a>]
+</nav>
+
+<p>
+<span style="font-size: 36pt;">🤖</span>
+姿勢と水分補給と運動不足を注意してあげよう!
+<span style="font-size: 36pt;">🐬</span>
+……という趣旨のページ (本ページ) を作ってみました。
+<em>3分おきに背筋を伸ばすように注意し、
+17分おきに水分補給を促し、
+29分おきに運動不足を指摘します</em>ので、
+よかったら本ページを開きっぱなしにしておいてみてください。
+</p>
+
+<ul>
+<li><a href="https://developer.mozilla.org/ja/docs/WebAPI/Using_Web_Notifications" target="_blank">Web Notifications API</a>を使った
+「<a href="http://qiita.com/tomoki1207/items/c11bad49b7dc40667adb" target="_blank">残業を防ぐHTMLが通知してくる</a>」
+という記事が面白かったので、作ってみたものです。</li>
+<li>本ページのソースを見てもらえれば、大体の中身はお分かりになるかと思います。
+<em>ブラウザからのデスクトップ通知を許している環境なら、通知を出すのではないかと思います</em>が、自分の環境で試しただけですので悪しからず。
+「通知機能を許可してくださらないと、このページはお役に立てませんのよ」というアラートが出るようだったら、通知を許可してからリロードしてみてください。
+通知スタイルは、「通知パネル」だと鬱陶しいので、自動で消える「バナー」がいいかなぁ、と思いますが、そこは各人のお好みでどうぞ (当方の環境はOS Xです)。</li>
+<li>中身が分からなくても、ソースをコピーして、alertMeという関数の呼び出しの引数だけ変えれば、自分用にカスタマイズして使えます (5分おきに「お疲れ様です、お嬢様」と通知するように変えたって良いのよ) 。なお、本ページでは3回の呼び出しを行っています。
+	<ul>
+	<li>alert_title: 通知のタイトル文字列。賑やかしにカラー絵文字を使っても楽しいです。</li>
+	<li>alert_str: タイトルの下に出す本文の文字列。賑やかしにカラー絵文字を使っても楽しいです。</li>
+	<li>interval_in_minutes: その通知を何分おきに出すか、という間隔。複数の通知がバッティングすると鬱陶しいので、バッティングの頻度を減らすために、本ページではとりあえず素数を指定してあります。ただ、別に合成数でも構わないし、小数でもよいはず。</li>
+	<li>initial_waiting_seconds: その通知を出すタイミングのオフセット (単位は秒)。いくら間隔を素数で指定しても、最小公倍数でバッティングします (3分と17分なら51分ごとに両方の通知が出てきます)。せめてちょっとはタイミングがずれてほしいな、ということで、それぞれに対して違うオフセット (0秒と20秒など) を設定しています。これの値が60秒未満かどうか、といったチェックなどはしていません。</li>
+	<li>idx: なんとなく大域配列を使っていますが、その添字の指定用です。とりあえず、0, 1, 2, &hellip; と、呼び出しごとに別々の値を指定しておいてください。</li>
+	</ul>
+</li>
+<li><em>ローカルにこのページのコピーを置いて使っても良いのですが、環境によってはうまく動かないかもしれません</em>。<!--
+	<ul>
+	<li>Mac OS X + Firefox だとうまくいったので、多分、Firefoxはデフォルトで通知を許可しているのだと思われます。</li>
+	<li>Mac OS X + Operaは、ちらっと試しただけですが、うまく動きませんでした。でもまあOperaとはもうさようならした方が良さそうだし、どうでもいいかも。</li>
+	<li>Mac OS X + Safariは、条件によって挙動が違うようです。[環境設定]の[詳細]タブで、[メニューバーに&ldquo;開発&rdquo;メニューを表示]をチェックして、[開発]メニューを表示しておき、本ページを呼び出す直前に、[ローカルファイルの制限を無効にする]を、チェックなしの状態からチェックありの状態に切り換えると、うまくいくみたい。切り換えてから本ページをリロードしても可。チェックマークが元から付いた状態で本ページを呼び出したら、うまくいかない模様。不可解です。</li>
+	<li>他のOSのことは知りません。</li>
+	</ul>
+--></li>
+</ul>
+
+<nav>
+[<a href="../index.html">ホーム</a>]
+</nav>
+
+</body>
+
+
+</html>
