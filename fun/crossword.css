@@ -1,0 +1,90 @@
+/* クロスワード用*/
+
+/* 横の鍵: 位置固定 */
+div.across-clues {
+	position: fixed; 
+	top: 3vh;
+	height: 44vh;
+	left: 50vw;
+	width: 43vw;
+	overflow: auto;
+	padding-left: 1em;
+	padding-right: 1em;
+	border: solid 1px hsl(300,100%,50%);
+}
+/* 縦の鍵: 位置固定 */
+div.down-clues {
+	position: fixed; 
+	top: 50vh;
+	height: 44vh;
+	left: 50vw;
+	width: 43vw;
+	overflow: auto;
+	padding-left: 1em;
+	padding-right: 1em;
+	border: solid 1px hsl(300,100%,50%);
+}
+
+/* 鍵以外の部分は左に寄せる */
+img.xw, p.xw {
+	width: 45vw;
+}
+
+/* 鍵のリスト */
+dl.xw {
+	overflow: hidden;
+}
+dl.xw dt {
+	float: left;
+	clear: both;
+	/*display: inline;*/
+	font-weight: bold;
+	font-family: "Snell Roundhand", "Papyrus", "Times New Roman", "Ricty Discord";
+	/*font-size: bigger;*/
+	width: 2em;
+	height: 150%;
+	/*background: yellow;*/
+}
+dl.xw dd {
+	/*float: left;*/
+	/*clear: right;*/
+	/*display: inline-box;*/
+	/*background: white;*/
+}
+
+/* 問題を画像でなくてテーブルを使って出す場合 */
+table.xw-q {
+	width: 45vw;
+	border-collapse: collapse;
+}
+table.xw-a {
+	border-collapse: separate;
+}
+table.xw-q td {
+	border: solid 1px royalblue; /*rgb(0, 70, 25);*/
+	height: 1em;
+	width: 1em;
+	text-align: center;
+}
+table.xw-a td {
+	border: solid 1px royalblue; /*rgb(0, 70, 25);*/
+	height: 2em;
+	width: 2em;
+	text-align: center;
+}
+td.xw-black {
+	background: navy; /*rgb(0, 70, 25);*/
+}
+.xw-n { /* 桝の中の番号 */
+	color: hsl(300,100%,50%);
+	font-family: "Papyrus", "Times New Roman", "Ricty Discord";
+}
+table.xw-a .xw-n {
+	vertical-align: super;
+	font-size: smaller;
+}
+.xw-c { /* 桝の中の文字 */
+	vertical-align: middle;
+	/*font-family: "American Typewriter", "Courier New";*/
+	font-weight: bold;
+}
