@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>畳語的な擬音語・擬態語の生成器</title>
+<style>
+body {
+	background: hsl(120, 40%, 50%);
+}
+p {
+	text-indent: 1em;
+}
+table {
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+td, th {
+	border: solid 1px white;
+}
+</style>
+<script type = "text/javascript" src = "mora.js"></script>
+<script type = "text/javascript">
+function checkAll(inputName) {
+	var checkBoxes=document.getElementsByName(inputName);
+	// 今のクリックによって変化した、新しい方の値が得られる。
+	var currentVal=checkBoxes[0].checked;
+	
+	if (!currentVal) { // 今のクリックによってtrueからfalseになったとき
+		checkBoxes[0].checked=false;
+		//console.log("checkAll(1)");
+	} else { // 今のクリックによってfalseからtrueになったとき
+		var len=checkBoxes.length;
+		var i;
+		for (i=0; i<len; i++) {
+			checkBoxes[i].checked=true;
+		}
+		//console.log("checkAll(2): len=" + len);
+	}
+}
+
+function clear_result() {
+	document.input1.xyxy_result.value='';
+}
+
+function generate_patterns() {
+	//console.log("generate_patterns(): start\n");
+	var x1_candidates = new Array();
+	var y_candidates = new Array();
+	var x2_candidates = new Array();
+	var pat, p;
+	for (p=0; p<3; p++) {
+		if (document.input1.term_pattern[p].checked) {
+			pat=document.input1.term_pattern[p].value;
+		}
+	}
+	//console.log("pat=" + pat);
+	
+	document.input1.xyxy_result.value="";
+
+	var c, v, c_len, v_len, consonant1, consonant2, vowel, mora1, mora2;
+
+	// まずX (とX') の候補の配列を作ります。
+	c_len=document.input1.xyxy_x_c.length;
+	v_len=document.input1.xyxy_x_v.length;
+	//console.log("[for X] c_len=" + c_len + "; v_len=" + v_len);
+	for (c=1; c<c_len; c++) {
+		if (document.input1.xyxy_x_c[c].checked) {
+			consonant1=document.input1.xyxy_x_c[c].value;
+			consonant2='';	// ここで毎回初期化し直す
+			mora2='';	// ここで毎回初期化し直す
+			//console.log("c=" + c + "; consnant1=" + consonant1 + "#");
+			if (pat=='b' || pat=='c') {
+				//X' の子音が存在すればconsonant2に代入。
+				consonant2=getVoicedConsonant(consonant1);
+				//console.log("c=" + c + "; consnant2=" + consonant2 + "#");
+			}
+			if (pat=='b' && consonant2=='') {
+				continue;
+			}
+			/* ここに来るのは、
+			* pat=='a' && consonant2=='' で、XYXYのパタンを作るとき
+			* pat=='b' && consonant2!='' で、XYX'Yのパタンを作るとき
+			* pat=='c' && consonant2=='' で、XYXYのパタンのみ作るとき
+			* pat=='c' && consonant2!='' で、XYXYとXYX'Yの両方のパタンを作るとき
+			……の、X (とX')を、これから配列にpushするぞ〜、というときです。
+			*/
+			for (v=1; v<v_len; v++) {
+				if (document.input1.xyxy_x_v[v].checked) {
+					vowel=document.input1.xyxy_x_v[v].value;
+					mora1=getMora(consonant1, vowel);
+					if (consonant2 != '') {
+						mora2=getMora(consonant2, vowel);
+					} else {
+						mora2='';
+					}
+					//console.log("v=" + v + "; vowel=" + vowel + ";mora1=" + mora1 + "; mora2=" + mora2 + "#");
+					if (pat=='a') {
+						if (mora1!='') {
+							x1_candidates.push(mora1);
+							x2_candidates.push(mora1);
+						}
+					} else if (pat=='b') {
+						if (mora1!='' && mora2!='') {
+							x1_candidates.push(mora1);
+							x2_candidates.push(mora2);
+						}
+					} else if (pat=='c') {
+						if (mora1!='') {
+							x1_candidates.push(mora1);
+							x2_candidates.push(mora1);
+						}
+						if (mora1!='' && mora2!='') {
+							x1_candidates.push(mora1);
+							x2_candidates.push(mora2);
+						}
+					} // end if pat ...
+				}	// end if ...v[v].cheched
+			} // end for v ...
+		} // end if ...c[c].checked
+	} // end for c ...
+
+
+	// 次にYの候補の配列を作ります。
+	c_len=document.input1.xyxy_y_c.length;
+	v_len=document.input1.xyxy_y_v.length;
+	//console.log("[for Y] c_len=" + c_len + "; v_len=" + v_len);
+	for (c=1; c<c_len-1; c++) {	// 'ん'は母音を持たないのでループから外す。そのためのc_len-1。
+		if (document.input1.xyxy_y_c[c].checked) {
+			consonant1=document.input1.xyxy_y_c[c].value;
+			for (v=1; v<v_len; v++) {
+				if (document.input1.xyxy_y_v[v].checked) {
+					vowel=document.input1.xyxy_y_v[v].value;
+					mora1=getMora(consonant1, vowel);
+					//console.log("v=" + v + "; vowel=" + vowel + "; mora1=" + mora1 + "#");
+					if (mora1!='') {
+						y_candidates.push(mora1);
+					}
+				}	// end if ...v[v].cheched
+			} // end for v ...
+		} // end if ...c[c].checked
+	} // end for c ...
+	// 'ん'のチェック
+	if (document.input1.xyxy_y_c[c_len-1].checked) {
+		y_candidates.push('ん');
+	}
+
+	var x, y, x_len, y_len, phrase;
+	x_len=x1_candidates.length;
+	y_len=y_candidates.length;
+	//console.log("x_len=" + x_len + "; y_len=" + y_len);
+	if (x_len==0 || y_len==0) {
+		alert("指定の仕方が変? あるいはバグ?");
+	}
+	for (x=0; x<x_len; x++) {
+		for (y=0; y<y_len; y++) {
+			phrase=x1_candidates[x]+y_candidates[y]+x2_candidates[x]+y_candidates[y]+'\n';
+			//console.log("phrase="+phrase);
+			document.input1.xyxy_result.value=document.input1.xyxy_result.value+phrase;
+		}
+	}
+	return(0);
+}
+</script>
+</head>
+<body>
+
+<p style="text-align: right">[<a href="../index.html">ホーム</a>]</p>
+
+<p>
+「くるくる」のように「XYXY」のパタンをとる言葉や、「しみじみ」のように「XYX' Y」のパタンをとる言葉のリストを、条件指定をして生成してみるお遊びです。「辞書を引く」といった高級なことは何もしていない、単なる組み合わせによる生成です。
+「くるんくるん」とか「のたりのたり」みたいに、「Y」の後に「ん」や「り」が付くパタンとか、「にこにこ」に対する「にっこり」とか、「ふわふわ」に対する「ふんわり」とか、他にも色々、条件指定で生成したら面白そうなものはあるんだけれど、とりあえず今回はこれだけ。
+</p>
+<p>子音の組み合わせのパタンが「はらはら」と同じ言葉にはどんなものがあるかな〜、とか、母音の組み合わせのパタンが「うだうだ」と同じ言葉にはどんなものがあるかな〜、とか、そういう感じで、適当に条件指定して遊んでみてください。
+</p>
+<p>
+デバッグはあまり真面目にしていません。以下はバグっぽく見えるかもしれませんが、仕様です。
+</p>
+<ul>
+<li>Yの子音に「ん」を指定すると、母音の指定にかかわりなく、Yの候補に「ん」を含めます。</li>
+<li>「XYX' Y」のパタンを指定する場合、「X」には、対応する濁音が存在するものを指定してください。たとえば、「X」に「あ行」の文字を指定しても、対応する濁音がないので、無視されます (その指定に対しては何も生成しません)。「X」に「あ行」の文字と「か行」の文字を指定すると、「あ行」の文字の指定は無視して、「か行」の文字の指定のみ有効とします。</li>
+</ul>
+
+<form name="input1">
+<!--
+<select name="xyxy_x_consonant">
+<option value="a">あ行</option>
+<option value="k">か行</option>
+<option value="ky">　きゃ行</option>
+<option value="g">　が行</option>
+<option value="gy">　ぎゃ行</option>
+<option value="s">さ行</option>
+<option value="sy">　しゃ行</option>
+<option value="z">　ざ行</option>
+<option value="zy">　じゃ行</option>
+<option value="t">た行</option>
+<option value="ty">　ちゃ行</option>
+<option value="d">　だ行</option>
+<option value="dy">　ぢゃ行</option>
+<option value="n">な行</option>
+<option value="ny">　にゃ行</option>
+<option value="h">は行</option>
+<option value="hy">　ひゃ行</option>
+<option value="b">　ば行</option>
+<option value="by">　びゃ行</option>
+<option value="p">　ぱ行</option>
+<option value="py">　ぴゃ行</option>
+<option value="m">ま行</option>
+<option value="my">　みゅ行</option>
+<option value="y">や行</option>
+<option value="r">ら行</option>
+<option value="ry">　りゃ行</option>
+<option value="w">わ行</option>
+</select>
+-->
+
+<table>
+<tr>
+<th colspan="4">パタンを選んでね</th>
+</tr>
+<tr>
+<td colspan="4" style="text-align: center;">
+<input type="radio" name="term_pattern" value="a" checked>XYXY　　
+<input type="radio" name="term_pattern" value="b">XYX' Y　　
+<input type="radio" name="term_pattern" value="c">両方
+</tr>
+
+<tr>
+<th>X (子音)</th>
+<th>X (母音)</th>
+<th>Y (子音)</th>
+<th>Y (母音)</th>
+</tr>
+
+<tr>
+<td nowrap>
+<input type="checkbox" name="xyxy_x_c" value="all" onClick="checkAll('xyxy_x_c');">全部<br>
+<input type="checkbox" name="xyxy_x_c" value="none">あ行<br>
+<input type="checkbox" name="xyxy_x_c" value="k">か行
+　<input type="checkbox" name="xyxy_x_c" value="ky">きゃ行
+　<input type="checkbox" name="xyxy_x_c" value="g">が行
+　<input type="checkbox" name="xyxy_x_c" value="gy">ぎゃ行<br>
+<input type="checkbox" name="xyxy_x_c" value="s">さ行
+　<input type="checkbox" name="xyxy_x_c" value="sy">しゃ行
+　<input type="checkbox" name="xyxy_x_c" value="z">ざ行
+　<input type="checkbox" name="xyxy_x_c" value="zy">じゃ (ぢゃ)行<br>
+<input type="checkbox" name="xyxy_x_c" value="t">た行
+　<input type="checkbox" name="xyxy_x_c" value="ty">ちゃ行
+　<input type="checkbox" name="xyxy_x_c" value="d">だ行
+<!--　<input type="checkbox" name="xyxy_x_c" value="dy">ぢゃ行--><br>
+<input type="checkbox" name="xyxy_x_c" value="n">な行
+　<input type="checkbox" name="xyxy_x_c" value="ny">にゃ行<br>
+<input type="checkbox" name="xyxy_x_c" value="h">は行
+　<input type="checkbox" name="xyxy_x_c" value="hy">ひゃ行
+　<input type="checkbox" name="xyxy_x_c" value="b">ば行
+　<input type="checkbox" name="xyxy_x_c" value="by">びゃ行
+　<input type="checkbox" name="xyxy_x_c" value="p">ぱ行
+　<input type="checkbox" name="xyxy_x_c" value="py">ぴゃ行<br>
+<input type="checkbox" name="xyxy_x_c" value="m">ま行
+　<input type="checkbox" name="xyxy_x_c" value="my">みゅ行<br>
+<input type="checkbox" name="xyxy_x_c" value="y">や行<br>
+<input type="checkbox" name="xyxy_x_c" value="r">ら行
+　<input type="checkbox" name="xyxy_x_c" value="ry">りゃ行<br>
+<input type="checkbox" name="xyxy_x_c" value="w">わ行
+</td>
+
+<td nowrap>
+<input type="checkbox" name="xyxy_x_v" value="all" onClick="checkAll('xyxy_x_v');">全部<br>
+<input type="checkbox" name="xyxy_x_v" value="a">あ段<br>
+<input type="checkbox" name="xyxy_x_v" value="i">い段<br>
+<input type="checkbox" name="xyxy_x_v" value="u">う段<br>
+<input type="checkbox" name="xyxy_x_v" value="e">え段<br>
+<input type="checkbox" name="xyxy_x_v" value="o">お段
+</td>
+
+<td nowrap>
+<input type="checkbox" name="xyxy_y_c" value="all" onClick="checkAll('xyxy_y_c');">全部<br>
+<input type="checkbox" name="xyxy_y_c" value="none">あ行<br>
+<input type="checkbox" name="xyxy_y_c" value="k">か行
+　<input type="checkbox" name="xyxy_y_c" value="ky">きゃ行
+　<input type="checkbox" name="xyxy_y_c" value="g">が行
+　<input type="checkbox" name="xyxy_y_c" value="gy">ぎゃ行<br>
+<input type="checkbox" name="xyxy_y_c" value="s">さ行
+　<input type="checkbox" name="xyxy_y_c" value="sy">しゃ行
+　<input type="checkbox" name="xyxy_y_c" value="z">ざ行
+　<input type="checkbox" name="xyxy_y_c" value="zy">じゃ (ぢゃ)行<br>
+<input type="checkbox" name="xyxy_y_c" value="t">た行
+　<input type="checkbox" name="xyxy_y_c" value="ty">ちゃ行
+　<input type="checkbox" name="xyxy_y_c" value="d">だ行
+<!--　<input type="checkbox" name="xyxy_y_c" value="dy">ぢゃ行--><br>
+<input type="checkbox" name="xyxy_y_c" value="n">な行
+　<input type="checkbox" name="xyxy_y_c" value="ny">にゃ行<br>
+<input type="checkbox" name="xyxy_y_c" value="h">は行
+　<input type="checkbox" name="xyxy_y_c" value="hy">ひゃ行
+　<input type="checkbox" name="xyxy_y_c" value="b">ば行
+　<input type="checkbox" name="xyxy_y_c" value="by">びゃ行
+　<input type="checkbox" name="xyxy_y_c" value="p">ぱ行
+　<input type="checkbox" name="xyxy_y_c" value="py">ぴゃ行<br>
+<input type="checkbox" name="xyxy_y_c" value="m">ま行
+　<input type="checkbox" name="xyxy_y_c" value="my">みゅ行<br>
+<input type="checkbox" name="xyxy_y_c" value="y">や行<br>
+<input type="checkbox" name="xyxy_y_c" value="r">ら行
+　<input type="checkbox" name="xyxy_y_c" value="ry">りゃ行<br>
+<input type="checkbox" name="xyxy_y_c" value="w">わ行<br>
+<input type="checkbox" name="xyxy_y_c" value="nn">ん
+</td>
+
+<td nowrap>
+<input type="checkbox" name="xyxy_y_v" value="all" onClick="checkAll('xyxy_y_v');">全部<br>
+<input type="checkbox" name="xyxy_y_v" value="a">あ段<br>
+<input type="checkbox" name="xyxy_y_v" value="i">い段<br>
+<input type="checkbox" name="xyxy_y_v" value="u">う段<br>
+<input type="checkbox" name="xyxy_y_v" value="e">え段<br>
+<input type="checkbox" name="xyxy_y_v" value="o">お段<br>
+<!--
+<input type="checkbox" name="xyxy_y_v" value="no">無し
+-->
+</td>
+</tr>
+
+<tr>
+<td colspan="4" style="text-align: center;">
+<input type="button" value="生成してみるよ〜" onClick="generate_patterns();">
+<input type="reset" value="全部クリアしますよ">
+<input type="button" value="結果のみクリアしますよ" onClick="clear_result();">
+</td>
+</tr>
+
+<tr>
+<td style="text-align: center;">
+<textarea cols="30" rows="10" name="xyxy_result"></textarea>
+</td>
+<td colspan="3">
+<p>「や行」と「わ行」を指定するのに、「子音」という言い方が不正確なのは知っていますけれど（本当は「半母音」ですよね）、便宜的に「子音」として指定する形にしてあります。「きゃ行」なども同じく「子音」として指定する形にしてあります。</p>
+</td>
+</tr>
+</table>
+
+</form>
+
+
+</body>
+</html>
