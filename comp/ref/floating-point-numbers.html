@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>floating point numbers</title>
+<style>
+body {
+	background: lemonchiffon;
+	color: navy;
+}
+h1 {
+	text-align: center;
+	font-size: large;
+	background: lightgreen;
+}
+.sign {
+	background: orchid;
+}
+.exp {
+	background: skyblue;
+}
+.frac {
+	background: orange;
+}
+.pos {
+	color: darkcyan; 
+	/*font-style: italic;*/
+}
+.pos2 {
+	color: darkmagenta;
+}
+pre, td, th, tt {
+	font-family: "Ricty Discord", "Ricty", "Courier New", monospace;
+}
+pre, td, th	{
+	font-weight: normal;
+	white-space: pre;
+}
+td, th {
+	/*border-style:solid;
+	border-width: 1px;*/
+	border-style:none;
+	text-align:center;
+}
+table {
+	border-collapse: collapse;
+}
+/*
+td {	
+	border-color: navy;
+}
+th {
+	border-color: orange;
+}
+*/
+.memo {
+	font-family: serif;
+}
+.hex {
+	padding-right: 1ex;
+}
+table#simple_lookup {
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+table#simple_lookup td {
+	border: solid green 1px;
+}
+table#simple_lookup th {
+	border: solid green 1px;
+	background: yellow;
+}
+</style>
+</head>
+
+<body>
+
+<nav style="text-align: right;">[<a href="../index.html">Home</a>]</nav>
+
+<a id="pre"></a>
+<h1>肩ならしと前提条件</h1>
+<table id="simple_lookup">
+<tr>
+<!--<th rowspan="2">早見表</th>-->
+<th>16進</th>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>a</td>
+<td>b</td>
+<td>c</td>
+<td>d</td>
+<td>e</td>
+<td>f</td>
+</tr>
+<tr>
+<th>2進</th>
+<td>0000</td>
+<td>0001</td>
+<td>0010</td>
+<td>0011</td>
+<td>0100</td>
+<td>0101</td>
+<td>0110</td>
+<td>0111</td>
+<td>1000</td>
+<td>1001</td>
+<td>1010</td>
+<td>1011</td>
+<td>1100</td>
+<td>1101</td>
+<td>1110</td>
+<td>1111</td>
+</tr>
+</table>
+
+<p lang="ja" style="text-indent: 1em;"><!--上の表は準備体操用です。なお、-->以下の記述において「<tt>*</tt>」は、厳密な意味での「don't care」ではなくて、たとえば「すべて0の並び以外の何か」とか「中略」のようなちょっと緩い感じで、プレースホルダ的に使っています。
+</p>
+
+<p lang="ja" style="text-indent: 1em;">
+あと、各ビットの実際のメモリ上の位置はエンディアンに依存するんですよね。ってわけで、C/C++で共用体 (union) を使って浮動小数点数のビット表現を印字しようとしても、場合分けが面倒だ。むむむ。いや、別にコード自体は探せばどこかにあると思うけれど、自分で書こうとすると面倒だな、ということですが。<br>
+<tt>$ echo -n 123456789 | od -tx1a</tt><br>
+とか<br>
+<tt>$ echo -n 123456789 | hexdump -x</tt><br>
+とかで、自分の環境は調べられるようではあるんだが……。<tt>xxd</tt> というのもある。けど、あまりこれ以上追究しても自分の興味の範囲からは外れるので、ここらでやめまする。
+</p>
+<p lang="ja" style="text-indent: 1em;">
+以下では、エンディアンに依存する物理的なバイト配置にしたがった実装依存のビット位置、ではなく、論理的な桁としてのビット位置を、<tt>-----</tt>という横線の直下に<span class="pos" style="font-weight: bold;">この色で</span>書いておきます (スペースの都合上、2段で表示しています)。
+<tt>-----</tt>という横線の上側は、実装依存になりそうな部分であり、「こうなのかなぁ?」という程度のいい加減な想像を書いてあるだけです。信用しちゃダメですよ。
+</p>
+
+<a id="single"></a>
+<h1>単精度浮動小数点数</h1>
+<pre>
+<span class="pos"> byte No. 2222 2222 3333 3333 0000 0000 1111 1111   ← この辺がエンディアンに依存するはずだが、きちんとは追究していない</span>
+<span class="pos2"> byte No. 3333 3333 2222 2222 1111 1111 0000 0000   ← リトルエンディアンだとこうなると思う</span>
+<span class="pos"> byte No. 1111 1111 0000 0000 3333 3333 2222 2222   ← </span>
+<span class="pos2"> byte No. 0000 0000 1111 1111 2222 2222 3333 3333   ← ビッグエンディアンだとこうなると思う</span>
+<span>  bit No. 7654 3210 7654 3210 7654 3210 7654 3210</span>
+--------------------------------------------------------------
+<span class="pos">          3322 2222 2222 1111 1111 1100 0000 0000</span>
+<span class="pos">   hex    1098 7654 3210 9876 5432 1098 7654 3210    説明 </span><!--
+**** **** <span class="sign">*</span><span class="exp">*** **** *</span><span class="frac">*** **** **** **** **** ****</span>
+-->
+0000 0000 <span class="sign">0</span><span class="exp">000 0000 0</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x00、仮数部がすべて0。よって0を表す。
+
+0000 0001 <span class="sign">0</span><span class="exp">000 0000 0</span><span class="frac">000 0000 0000 0000 0000 0001</span> 符号が+、指数部が0x00、非正規化数。2<sup>-126</sup>×(0.00 ... 01)<sub>2</sub> = 2<sup>-126</sup>×2<sup>-23</sup> = 2<sup>-149</sup> [正の最小値]
+00** **** <span class="sign">0</span><span class="exp">000 0000 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x00、非正規化数。2<sup>-126</sup>×(0.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-149</sup>刻みになる]
+007f ffff <span class="sign">0</span><span class="exp">000 0000 0</span><span class="frac">111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x00、非正規化数。2<sup>-126</sup>×(0.11 ... 11)<sub>2</sub>
+
+0080 0000 <span class="sign">0</span><span class="exp">000 0000 1</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x01、正規化数。1-127= -126だから、2<sup>-126</sup>×(1.00 ... 00)<sub>2</sub> = 2<sup>-126</sup> [正の正規化数の最小値]
+0080 0001 <span class="sign">0</span><span class="exp">000 0000 1</span><span class="frac">000 0000 0000 0000 0000 0001</span> 符号が+、指数部が0x01、正規化数。1-127= -126だから、2<sup>-126</sup>×(1.00 ... 01)<sub>2</sub>
+00** **** <span class="sign">0</span><span class="exp">000 0000 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x01、正規化数。1-127= -126だから、2<sup>-126</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺も2<sup>-149</sup>刻みになる]
+00ff ffff <span class="sign">0</span><span class="exp">000 0000 1</span><span class="frac">111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x01、正規化数。1-127= -126だから、2<sup>-126</sup>×(1.11 ... 11)<sub>2</sub>
+
+0100 0000 <span class="sign">0</span><span class="exp">000 0001 0</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x02、正規化数。2-127= -125だから、2<sup>-125</sup>×(1.00 ... 00)<sub>2</sub>
+0100 0001 <span class="sign">0</span><span class="exp">000 0001 0</span><span class="frac">000 0000 0000 0000 0000 0001</span> 符号が+、指数部が0x02、正規化数。2-127= -125だから、2<sup>-125</sup>×(1.00 ... 01)<sub>2</sub>
+01** **** <span class="sign">0</span><span class="exp">000 0001 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x02、正規化数。2-127= -125だから、2<sup>-125</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-148</sup>刻みになる]
+017f ffff <span class="sign">0</span><span class="exp">000 0001 0</span><span class="frac">111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x02、正規化数。2-127= -125だから、2<sup>-125</sup>×(1.11 ... 11)<sub>2</sub>
+
+01** **** <span class="sign">0</span><span class="exp">000 0001 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x03、正規化数。3-127= -124だから、2<sup>-124</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-147</sup>刻みになる]
+                            :
+                            :
+3f** **** <span class="sign">0</span><span class="exp">011 1111 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x7f (=127)、正規化数。127-127=0だから、2<sup>0</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-23</sup>刻みになる]
+40** **** <span class="sign">0</span><span class="exp">100 0000 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x80 (=128)、正規化数。128-127=1だから、2<sup>1</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-22</sup>刻みになる]
+                            :
+                            :
+4b** **** <span class="sign">0</span><span class="exp">100 1011 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0x96 (=150)、正規化数。150-127=23だから、2<sup>23</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>0</sup>刻みになる。つまりぴったり整数になる]
+                            :
+                            :
+7f** **** <span class="sign">0</span><span class="exp">111 1111 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0xfe (=254)、正規化数。254-127=127だから、2<sup>127</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>104</sup>刻みになる]
+7f7f ffff <span class="sign">0</span><span class="exp">111 1111 0</span><span class="frac">111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0xfe (=254)、正規化数。254-127=127だから、2<sup>127</sup>×(1.11 ... 11)<sub>2</sub> [正の最大値]
+
+7f80 0000 <span class="sign">0</span><span class="exp">111 1111 1</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0xff、仮数部がすべて0。よって+∞を表す。
+7f** **** <span class="sign">0</span><span class="exp">111 1111 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が+、指数部が0xff、仮数部は、「すべて0」以外のもの。NaNを表す。
+
+8000 0000 <span class="sign">1</span><span class="exp">000 0000 0</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0x00、仮数部がすべて0。よって-0を表す。
+80** **** <span class="sign">1</span><span class="exp">000 0000 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が-、指数部が0x00、非正規化数。-2<sup>-126</sup>×(0.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-149</sup>刻みになる]
+8080 0000 <span class="sign">1</span><span class="exp">000 0000 1</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0x01、正規化数。-2<sup>-126</sup>×(1.00 ... 00)<sub>2</sub> = -2<sup>-126</sup> [負の正規化数で絶対値が最小の値]
+                            :
+                            :
+bf** **** <span class="sign">1</span><span class="exp">011 1111 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が-、指数部が0x7f (=127)、正規化数。-2<sup>0</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-23</sup>刻みになる]
+c0** **** <span class="sign">1</span><span class="exp">100 0000 0</span><span class="frac">*** **** **** **** **** ****</span> 符号が-、指数部が0x80 (=128)、正規化数。-2<sup>1</sup>×(1.b<sub>22</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-22</sup>刻みになる]
+                            :
+                            :
+ff7f ffff <span class="sign">1</span><span class="exp">111 1111 0</span><span class="frac">111 1111 1111 1111 1111 1111</span> 符号が1、指数部が0xfe (=254)、正規化数。-2<sup>127</sup>×(1.11 ... 11)<sub>2</sub> [負で絶対値が最大の値]
+
+ff80 0000 <span class="sign">1</span><span class="exp">111 1111 1</span><span class="frac">000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0xff、仮数部がすべて0。よって-∞を表す。
+ff** **** <span class="sign">1</span><span class="exp">111 1111 1</span><span class="frac">*** **** **** **** **** ****</span> 符号が-、指数部が0xff、仮数部は、「すべて0」以外のもの。NaNを表す。
+
+</pre>
+<!--
+<table>
+<tr>
+<th></th>
+<th class="pos">3322 2222 2222 1111 <br>1098 7654 3210 9876 </th>
+<th class="pos">1111 1100 0000 0000<br>5432 1098 7654 3210</th>
+<th></th>
+</tr>
+
+<tr>
+<td class="hex">hhhh hhhh</td>
+<td><span class="sign">*</span><span class="exp">*** **** *</span><span class="frac">*** **** </span></td>
+<td><span class="frac">**** **** **** ****</span></td>
+<td class="memo"></td>
+</tr>
+
+<tr>
+<td class="hex">hhhh hhhh</td>
+<td><span class="sign">*</span><span class="exp">*** **** *</span><span class="frac">*** **** </span></td>
+<td><span class="frac">**** **** **** ****</span></td>
+<td class="memo"></td>
+</tr>
+
+
+</table>
+-->
+<a id="double"></a>
+<h1>倍精度浮動小数点数</h1>
+<pre>
+<span class="pos2">           byte No. 6666 6666 7777 7777 4444 4444 5555 5555 2222 2222 3333 3333 0000 0000 1111 1111   ← この辺がエンディアンに依存するはずだが、きちんとは追究していない</span>
+<span class="pos">           byte No. 1111 1111 0000 0000 3333 3333 2222 2222 5555 5555 4444 4444 7777 7777 6666 6666   ←</span>
+<span class="pos2">           byte No. 7777 7777 6666 6666 5555 5555 4444 4444 3333 3333 2222 2222 1111 1111 0000 0000   ← リトルエンディアンだとこうなると思う</span>
+<span class="pos">           byte No. 0000 0000 1111 1111 2222 2222 3333 3333 4444 4444 5555 5555 6666 6666 7777 7777   ← ビッグエンディアンだとこうなると思う</span>
+<span>            bit No. 7654 3210 7654 3210 7654 3210 7654 3210 7654 3210 7654 3210 7654 3210 7654 3210</span>
+----------------------------------------------------------------------------------------------------------------------------
+<span class="pos">                    6666 5555 5555 5544 4444 4444 3333 3333 3322 2222 2222 1111 1111 1100 0000 0000
+    hexadecimal     3210 9876 5432 1098 7654 3210 9876 5432 1098 7654 3210 9876 5432 1098 7654 3210    説明</span><!--
+**** **** **** **** <span class="sign">*</span><span class="exp">*** **** **** </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span>
+-->
+0000 0000 0000 0000 <span class="sign">0</span><span class="exp">000 0000 0000 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x000、仮数部がすべて0。よって0を表す。
+0000 0000 0000 0001 <span class="sign">0</span><span class="exp">000 0000 0000 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0001</span> 符号が+、指数部が0x000、非正規化数。2<sup>-1022</sup>×(0.00 ... 01)<sub>2</sub> = 2<sup>-1022</sup>×2<sup>-52</sup> = 2<sup>-1074</sup> [正の最小値]
+000* **** **** **** <span class="sign">0</span><span class="exp">000 0000 0000 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x000、非正規化数。2<sup>-1022</sup>×(0.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-1074</sup>刻みになる]
+000f ffff ffff ffff <span class="sign">0</span><span class="exp">000 0000 0000 </span><span class="frac">1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x000、非正規化数。2<sup>-1022</sup>×(0.11 ... 11)<sub>2</sub>
+
+0010 0000 0000 0000 <span class="sign">0</span><span class="exp">000 0000 0001 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x001、正規化数。1-1023= -1022だから、2<sup>-1022</sup>×(1.00 ... 00)<sub>2</sub> = 2<sup>-1022</sup> [正の正規化数の最小値]
+0010 0000 0000 0001 <span class="sign">0</span><span class="exp">000 0000 0001 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0001</span> 符号が+、指数部が0x001、正規化数。1-1023= -1022だから、2<sup>-1022</sup>×(1.00 ... 01)<sub>2</sub>
+001* **** **** **** <span class="sign">0</span><span class="exp">000 0000 0001 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x001、正規化数。1-1023= -1022だから、2<sup>-1022</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺も2<sup>-1074</sup>刻みになる]
+001f ffff ffff ffff <span class="sign">0</span><span class="exp">000 0000 0001 </span><span class="frac">1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x001、正規化数。1-1023= -1022だから、2<sup>-1022</sup>×(1.11 ... 11)<sub>2</sub>
+
+002* **** **** **** <span class="sign">0</span><span class="exp">000 0000 0010 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x002、正規化数。2-1023= -1021だから、2<sup>-1021</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-1073</sup>刻みになる]
+                                           :
+                                           :
+3ff* **** **** **** <span class="sign">0</span><span class="exp">011 1111 1111 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x3ff (=1023)、正規化数。1023-1023=0だから、2<sup>0</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-52</sup>刻みになる]
+400* **** **** **** <span class="sign">0</span><span class="exp">100 0000 0000 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x400 (=1024)、正規化数。1024-1023=1だから、2<sup>1</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-51</sup>刻みになる]
+                                           :
+                                           :
+433* **** **** **** <span class="sign">0</span><span class="exp">100 0011 0011 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x433 (=1075)、正規化数。1075-1023=52だから、2<sup>52</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>0</sup>刻みになる。つまりぴったり整数になる]
+                                           :
+                                           :
+7fe* **** **** **** <span class="sign">0</span><span class="exp">111 1111 1110 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x7fe (=2046)、正規化数。2046-1023=1023だから、2<sup>1023</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>971</sup>刻みになる]
+7fef ffff ffff ffff <span class="sign">0</span><span class="exp">111 1111 1110 </span><span class="frac">1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111</span> 符号が+、指数部が0x7fe (=2046)、正規化数。2046-1023=1023だから、2<sup>1023</sup>×(1.11 ... 11)<sub>2</sub> [正の最大値]
+
+7ff0 0000 0000 0000 <span class="sign">0</span><span class="exp">111 1111 1111 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が+、指数部が0x7ff、仮数部がすべて0。よって+∞を表す。
+7ff0 **** **** **** <span class="sign">0</span><span class="exp">111 1111 1111 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x7ff、仮数部は、「すべて0」以外のもの。NaNを表す。
+
+8000 0000 0000 0000 <span class="sign">1</span><span class="exp">000 0000 0000 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0x000、仮数部がすべて0。よって-0を表す。
+800* **** **** **** <span class="sign">1</span><span class="exp">000 0000 0000 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が-、指数部が0x000、非正規化数。-2<sup>-1022</sup>×(0.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-1074</sup>刻みになる]
+8010 0000 0000 0000 <span class="sign">1</span><span class="exp">000 0000 0001 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0x001、正規化数。1-1023= -1022だから、-2<sup>-1022</sup>×(1.00 ... 00)<sub>2</sub> = -2<sup>-1022</sup> [負の正規化数で絶対値が最小の値]
+                                           :
+                                           :
+bff* **** **** **** <span class="sign">1</span><span class="exp">011 1111 1111 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が-、指数部が0x3ff (=1023)、正規化数。1023-1023=0だから、-2<sup>0</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-52</sup>刻みになる]
+c00* **** **** **** <span class="sign">1</span><span class="exp">100 0000 0000 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が+、指数部が0x400 (=1024)、正規化数。1024-1023=1だから、-2<sup>1</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>-51</sup>刻みになる]
+                                           :
+                                           :
+ffe* **** **** **** <span class="sign">1</span><span class="exp">111 1111 1110 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が-、指数部が0x7fe (=2046)、正規化数。2046-1023=1023だから、-2<sup>1023</sup>×(1.b<sub>51</sub> ... b<sub>0</sub>)<sub>2</sub> [この辺は2<sup>971</sup>刻みになる]
+ffef ffff ffff ffff <span class="sign">1</span><span class="exp">111 1111 1110 </span><span class="frac">1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111</span> 符号が-、指数部が0x7fe (=2046)、正規化数。2046-1023=1023だから、-2<sup>1023</sup>×(1.11 ... 11)<sub>2</sub> [負で絶対値が最大の値]
+
+fff0 0000 0000 0000 <span class="sign">1</span><span class="exp">111 1111 1111 </span><span class="frac">0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span> 符号が-、指数部が0x7ff、仮数部がすべて0。よって-∞を表す。
+fff* **** **** **** <span class="sign">1</span><span class="exp">111 1111 1111 </span><span class="frac">**** **** **** **** **** **** **** **** **** **** **** **** ****</span> 符号が-、指数部が0x7ff、仮数部は、「すべて0」以外のもの。NaNを表す。
+</pre>
+
+<nav style="text-align: right;">[<a href="../index.html">Home</a>]</nav>
+
+</body>
+</html>
