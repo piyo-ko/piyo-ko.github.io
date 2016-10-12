@@ -1,0 +1,115 @@
+body {
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+	background: hsl(170, 60%, 75%);/*hsl(60,50%,65%);*/
+	color: hsl(215,100%,15%);
+	font-family: serif;
+}
+
+p {
+	text-indent: 1em;
+}
+
+::selection {
+	color: hsl(90, 100%, 70%);
+	background: hsl(200, 70%, 25%);
+}
+::-moz-selection {
+	color: hsl(90, 100%, 70%);
+	background: hsl(200, 70%, 25%);
+}
+a:link {
+	color: hsl(130, 60%, 20%);
+}
+a:visited {
+	color: hsl(220, 50%, 20%);
+}
+a:hover {
+	color: white;
+	background: hsl(180, 50%, 25%);
+}
+
+/*テキスト本体と、右側の領域(目次とかリンク集とかに使う予定)とを分けるスタイルのとき */
+div.main-text {
+	position: static;
+	width: 70vw;
+	margin-top: 3vh;
+	margin-left: 2vw;
+	padding-left: 1em;
+	padding-right: 1em;
+	/*border: solid 1px red;*/
+}
+div.notes {
+	position: fixed; 
+	top: 3vh;
+	height: 94vh;
+	left: 75vw;
+	width: 20vw;
+	overflow: auto;
+	padding-left: 1em;
+	padding-right: 1em;
+	
+	background: hsl(250,75%,85%);
+	color: hsl(250,100%,15%);
+	border: solid 1px hsl(300,100%,50%);
+}
+
+/* 本文だけのときに使うスタイル(右側の領域を設けない場合) */
+body.main-text-only {
+	position: static;
+	width: 95vw;
+	margin-top: 3vh;
+	margin-left: 2vw;
+	margin-right: 2vw;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 2vh;
+}
+
+body.main-text-only nav {
+	text-align: right;
+}
+
+nav ul {
+	padding-left: 1em;
+	margin-top: 0;
+}
+em {
+	font-weight: bold;
+	font-family: sans-serif;
+	font-style: normal;
+	/*text-decoration: underline;*/
+}
+
+code {
+	white-space: pre;
+	display: block;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 6pt;
+	padding-bottom: 6pt;
+	margin-left: 1em;
+	margin-right: 1em;
+	margin-top: 6pt;
+	margin-bottom: 6pt;
+	overflow: auto;
+	background: hsl(170, 40%, 15%);
+	color: hsl(215,100%,85%);
+	font-family: "Ricty Discord", "Ricty", "Courier New", monospace;
+}
+/* コメント */
+code .comm {
+	color: hsl(215,100%,70%);
+}
+/* 応答 */
+code .res {
+	color: hsl(170, 100%, 80%);
+	font-style: italic;
+}
+
+tt {
+	font-family: "Ricty Discord", "Ricty", "Courier New", monospace;
+}
+

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansegyptianhieroglyphs.css" type="text/css">
+<link rel="stylesheet" href="base.css" type="text/css">
+<base target="_top">
+<title>くるくるくるくる🌀あっちへふらふら、こっちへふらふらします</title>
+<script>
+function bgImg() {
+	var canv = document.createElement('canvas');
+	var contxt = canv.getContext('2d');
+	var rot = -20/180 * Math.PI;
+	var watermark_str;
+	var font_size;
+	var font_family=""; //"Times"; //"TimesNewRomanPSMT, 'Times New Roman', Times-Roman, Times"; // デフォルト。適当。
+	var font_color=""; // デフォルト。
+	
+	var d = new Date();
+	var patternNo = d.getSeconds() % 4;
+	
+	switch (patternNo) {
+	case 0:
+		watermark_str = "🐬🐠☘🍀🐿🐇🐈";
+		font_family=" 'Apple カラー絵文字' ";
+		font_size = 24;
+		break;
+	case 1:
+		watermark_str = "𓅨 𓅪 𓆐 𓆲";
+        font_family="NotoSansEgyptianHieroglyphs, 'Noto Sans Egyptian Hieroglyphs' ";
+		font_size = 36;
+		font_color = "royalblue";
+		break;
+	case 2:
+		watermark_str = "𓅀 𓅂 𓅃 ";
+        font_family="NotoSansEgyptianHieroglyphs, 'Noto Sans Egyptian Hieroglyphs' ";
+		font_size = 36;
+		font_color = "lightseagreen";
+		break;
+	/*
+	case 3:
+		watermark_str = "λ λ λ...";
+        font_family="Times";
+		font_size="36";
+		font_color = "mediumpurple";
+		break;
+	*/
+	default:
+		watermark_str = "🍡🍵 ☕️🍩";
+		font_family=" 'Apple カラー絵文字' ";
+		font_size =24;
+		break;
+	}
+
+
+	canv.width = Math.round(font_size * watermark_str.length * Math.abs(Math.cos(-rot)) + font_size * Math.abs(Math.sin(-rot)) + 45);
+	canv.height = Math.round(canv.width * Math.abs(Math.sin(-rot)) + font_size * Math.abs(Math.cos(-rot)));
+
+	contxt.fillStyle = "hsl(200, 90%, 90%)";
+	contxt.fillRect(0, 0, canv.width, canv.height);
+
+	contxt.font = font_size + "pt " + font_family;
+	contxt.fillStyle = font_color;
+	contxt.textAlign = 'left';
+	contxt.textBaseline = 'top';
+	contxt.translate(45, canv.height-55);
+	contxt.rotate(rot);
+	contxt.fillText(watermark_str, 0, 0);
+
+	var img_src=canv.toDataURL();
+	//console.log(img_src);
+	document.body.style.background = "url(" + img_src + ")";
+}
+</script>
+</head>
+
+<body onLoad="bgImg();">
+<h1>くるくるくるくる🌀あっちへふらふら、こっちへふらふらします</h1>
+<h1 lang="en">swirling around and around, and drifting here and there</h1>
+
+
+
+<div>
+<p>
+自宅療養中の頭のリハビリというかボケ防止に、SICPを読みつつ翻訳しだして、それを細々と続けているのですが、超たのしい。思わず夜更かししてしまうので、SICPは体に悪い (←褒めている)。まだ途中ですが、対訳形式で訳文の公開をしている人は少ない (いない?) かな、と思って、ちょっとずつ推敲して公開しようと思います (対訳形式って便利だと思うのですが、なんで少ないのかな)。
+→ [ <a href="SICP/00_cover.html">表紙</a> | <a href="SICP/04_toc.html">目次</a> ]
+ (現在 1.1節までの公開です)
+</p>
+</div>
+
+<div><p>
+自民党の憲法改正草案が、一部分を読んだだけでも色々な意味でげんなりするもので、とても全部に目を通す気になれなかったので、口直し (?) に<a href="misc/constitution.html">現憲法を読んで、素人の私でも読みやすいように表示を工夫してみました</a>。皆様にも是非、胸熱な<a href="misc/constitution.html#chap10">97条</a>を読んでみてほしい。あと3章も。
+あの人たちは一体何様のつもりで (その答えは「俺様だ!」のような気もするが……) 個人の自由をどんどん狭めようって思うのかな。自分だけは縛られないと思い上がっているのだろうか。
+</p></div>
+
+<div>
+<p>入院を経験してみて色々思うことがあったので、入院の際の持ち物やお金のことなどについて、<a href="misc/hospitalization.html">書いてみました</a>。かなり個人差のある事柄だと思うので、全然参考にならないかもしれませんが、ちょっとした不便や不快を防ぐお役に立てればな、と思います。
+</p>
+</div>
+
+<div><p>
+英語についての<a href="en/index.html">あれこれ</a>を少しずつまとめていきたい。
+そんなに高いレベルのことではなくても、微妙に隙間にはさまってなかなか良い表現が出てこなくて、なんだかもやもやしたままのこと、ちょっとしたコツみたいなこと、特定の語に関することなど。とりあえず、<a href="en/0002_reference_sources.html">便利な情報源</a>のページは一般性があるかと思う。
+</p></div>
+
+<div>
+<p>
+ついでに、とりとめのないお遊びのページもいくつか。
+</p>
+<ul>
+<li><a href="fun_math/Euler-magic-square.html">オイラーの魔方陣</a>というものがありまして、1から順に「この数はどこに配置されるのかな?」と追っていくと、最後には、「え、なにこの魔方陣すごい……っていうかオイラーやっぱりすごい」ってなります。多分。というわけで、ボタンをポチポチしてみてください。</li>
+<li>「<a href="misc/prime_date.html">今日は素数日かな?</a>」と確かめて結果を表示します。好きな日付も指定できます。</li>
+<li><a href="fun_math/frac_1_9801.html">1/9801</a>の数字の並びがちょっと楽しいです (小学生並みの感想)。</li>
+<li>素人くさいものですが、<a href="misc/crossword_001.html">コンピュータ関連用語のクロスワードパズル</a>を作ってみました。お暇なときにどうぞ。</li>
+<li><a href="misc/onomatopoeia.html">「ほげほげ」みたいな繰り返し言葉を順列組み合わせ的に生成するページ</a>。たとえば「ほげほげ」と同じ母音パタンで生成すると、「こてこて」とか、「おれおれ」(これは擬態語・擬音語ではないけれど) とかが列挙されてくるので、まぁ、ちょっとした暇つぶしにはなるような、ならないような……。</li>
+<li><a href="misc/eto_emoji.html">干支の絵文字</a>を思い立って調べてみた。ヒエログリフを使えば、酉年はめちゃくちゃ多様な絵文字表現が可能である。</li>
+</ul>
+</div>
+
+
+
+<div>
+<p>役に立つのかどうか微妙なへっぽこツール。</p>
+<ul>
+<li><a href="tools/healthy.html">姿勢と水分補給と運動不足を注意</a>してくれるページ (デスクトップ通知を許可している環境で使えるはずです)。</li>
+<li>複数種類の作業を並行して行う場合の<a href="tools/timer.html">作業時間の内訳を計測するためのタイマー</a>。</li>
+<li><a href="tools/one-byte-values.html">1バイトの値の早見表</a>。10進数 (符号なし・あり)、16進数、2進数、ASCII文字。符号つき整数の値も含めて1箇所にまとめた表ってあんまり見ない気がするので、あったら便利かな、と思って。</li>
+<li><a href="tools/floating-point-numbers.html">浮動小数点数のビットの並びを確認するための簡単な一覧表</a>。多分これで合っている筈だけれど、エンディアンがな……。</li>
+</ul>
+</div>
+
+
+
+<div>
+<p>
+料理も皿洗いも嫌いですが自炊派です。
+「これはひどい」というレベルをさまよっていますが、皆様の自炊へのハードルを下げるお役に立つかも、と思って（というのも嘘ではありませんが、自分用の備忘録も兼ねて）、自炊の実態を少し公開してみます。具体的な記事はいずれ書くつもり。とりあえず題名だけ挙げておきます（これだけでも低水準ぶりが明らかだな）。
+</p>
+<dl>
+<dt>レベル&minus;1</dt>
+	<dd>生でそのまま齧って食いつなぐ（え……）</dd>
+<dt>レベル0</dt>
+	<dd>とりあえず調味料と調理器具を揃える</dd>
+	<dd>ローリング・ストック用の食材を買いだめする</dd>
+	<dd>多少は日持ちのする食材も買っておく</dd>
+	<dd>主食を用意する</dd>
+<dt>レベル1</dt>
+	<dd>生鮮食料品を買って料理する</dd>
+	<dd>火を使わない料理</dd>
+	<dd>調味料以外の材料が1種類だけの料理（それでも一応料理だよ）</dd>
+	<dd>焦がす心配もずっとへばりついて様子を見る必要もない料理</dd>
+<dt>レベル2</dt>
+	<dd>味付けのパタンを覚える</dd>
+	<dd>和風の煮物に挑戦</dd>
+	<dd>食材を冷凍する</dd>
+	<dd>炒め物をする</dd>
+<dt>レベル?</dt>
+	<dd>いい加減な揚げ物をする（そして油の再利用に困る）</dd>
+<dt>🌊🌊🌊 深くて超えがたい溝 🌊🌊🌊</dt>
+<dt>レベル?</dt>
+	<dd><!--（油の再利法まで見越したうえで）-->ちゃんとした揚げ物をする</dd>
+</dl>
+</div>
+
+
+<!--
+<div>
+<p>
+そのうち書き留めておこうかな、と思っていることは、ありがたきもの色々（献血とかHomebrewとかmiとかセスキ炭酸ソーダとかクエン酸とかピーマンとかトマトとか）、英語についての色々、すぐ忘れるMacの小技、などかな。
+本の話も書きたいのだが。
+足が悪い時の実感も、書いておくべきかもしれない（元気なときからは想像がつかんことが多いので）。
+</p>
+</div>
+-->
+
+<div>
+<p>Pages written in English (or in English and Japanese).
+<ul>
+<li>Enjoy <a href="fun_math/Euler-magic-square.html">Euler's magic square</a>, which is one of the most fabulous magic squares.</li>
+<li><a href="tools/one-byte-values.html">A quick reference to one-byte values</a> is presented.</li>
+<!--<li><a href="SICP/00_cover.html">A Japanese translation of <i>Structure and Interpretation of Computer Programs</i> (SICP)</a>, although being unfinished yet, is presented together with the original English text.
+I hope that this translation can also serve as a small example of a domain-specific English-Japanese corpus.</li>-->
+</ul>
+</div>
+
+<hr style="border: 2pt royalblue inset;">
+
+<div class="footnote">
+<p lang="ja">
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>
+本サイトは、(たとえば対訳版SICPのページのように) 別段の断りのあるページを除いて、<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja">クリエイティブ・コモンズ 表示 - 非営利 4.0 国際 ライセンス</a>のもとで提供されています。
+御感想などは<tt><a href="https://www.twitter.com/pi__yo__ko" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>宛にどうぞ。
+</p>
+<p lang="en">
+This website is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License</a> except as otherwise specified.
+If you have any message, please send it to <tt><a href="https://www.twitter.com/pi__yo__ko" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>.
+</p>
+</div>
+
+</body>
+
+</html>
