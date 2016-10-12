@@ -1,0 +1,210 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+<title>今日は素数日かな?</title>
+<script type="text/javascript" src="watermark.js"></script>
+
+<script type="text/javascript">
+function about_today() {
+	var t = new Date();
+	//console.log("今日は素数日かな?\n");
+
+	var y = t.getFullYear();
+	var m = t.getMonth()+1; //getMonth()は0〜11を返すので+1する。
+	var d = t.getDate();
+
+	document.getElementById("result_txt").textContent += "今日は西暦だと?\n";
+	about_the_day(y, m, d, true, true);
+	
+	document.getElementById("result_txt").textContent += "\n\n平成だと?\n";
+	about_the_day(y-1988, m, d, false, false);
+	return(true);
+}
+
+function about_the_day(y, m, d, check_md, check_d) {
+	//まず年月日
+	var x = d + m*100 + y*10000; //yyyymmdd (必要に応じて0埋めしてある形)
+	var res=factorize(x);
+	if (m<10) {
+		if (d<10) {
+			x = d + m*100 + y*1000; //yyyymdd (ddは0埋めあり)
+			res += "\n"+factorize(x);
+			x = d + m*10 + y*1000; //yyyymmd (mmは0埋めあり)
+			res += "\n"+factorize(x);
+			x = d + m*10 + y*100; //yyyymd (0埋めなし)
+			res += "\n"+factorize(x);
+		} else {
+			x = d + m*100 + y*1000; //yyyymdd (0埋めなし)
+			res += "\n"+factorize(x);
+		}
+	} else {
+		if (d<10) {
+			x = d + m*10 + y*1000; //yyyymmd (0埋めなし)
+			res += "\n"+factorize(x);
+		}
+	}
+
+	//次は月日だけ
+	if (check_md) {
+		x = d + m*100;	//mmdd (ddは必要に応じて0埋めあり)
+		res += "\n"+factorize(x);
+		if (d<10) {
+			x = d + m*10; //mmd (0埋めなし)
+			res += "\n"+factorize(x);
+		}
+	}
+	//次は日だけ
+	if (check_d) {
+		if (d > 1) {
+			res += "\n"+factorize(d);
+		}
+	}
+
+	//console.log(res);
+	document.getElementById("result_txt").textContent += res;
+	return(true);
+}
+
+function factorize(n) {
+	var orig=n; //退避しておく (nが変化し得るから)
+	var dvs; //除数
+	var idx=0; //その指数
+	var s=""; //式(文字列)
+	var is_prime=true;	//初期化
+
+	// nがループの中で変わる場合がある
+	//  (が、for文の終了条件はこれで良い筈である) ことに注意
+	for (dvs=2; dvs<=Math.sqrt(n); dvs++) { 
+		idx=0;
+		while (true) {
+			if (n % dvs == 0) {
+				idx++;
+				n = n/dvs;
+				is_prime=false;
+			} else {
+				break;
+			}
+		}
+		if (idx > 0) {
+			if (s != "") {
+				s += "*";
+			}
+			s += dvs;
+			if (idx > 1) {
+				s += "^" + idx;
+			}
+		}
+	}
+	if (n!=1) {
+		if (s != "") {
+			s += "*";
+		}
+		s += n;
+	}
+
+	//空白文字で埋めてセンタリングする
+	var orig_len, s_len;
+	orig_len = orig.toString().length;
+	s_len = s.length;
+	if (orig_len == s_len) {
+		s = orig + " = " + s;
+	} else if (orig_len > s_len) {
+		s = orig + " = " + s;
+		for (var i=0; i < orig_len - s_len; i++) {
+			s += " ";
+		}
+	} else {
+		var prefix="";
+		for (var i=0; i < s_len - orig_len; i++) {
+			prefix += " ";
+		}
+		s = prefix + orig + " = " + s;
+	}
+
+	if (is_prime) {
+		//s = "🎉  " + s + "  🎊";
+		//s = "💚  " + s + "  💛";
+		//s = "🔮  " + s + "  💎";
+		s = "💕  " + s + "  💕";
+	}
+
+	return(s);
+}
+
+function test_another_day() {
+	document.getElementById("result_txt").textContent = "指定の年月日だと?\n";
+	about_the_day(
+		parseInt(document.getElementById("year").value),
+		parseInt(document.getElementById("month").value),
+		parseInt(document.getElementById("date").value),
+		true, true
+	);
+	return(true);
+}
+
+window.onload = function() {
+	watermark(' 今日は素数日かな?    ', 'lemonchiffon', 24, 'serif', 'maroon');
+	about_today();
+}
+</script>
+<style>
+body {
+	padding-left: 3em; 
+	padding-right: 3em; 
+	padding-top: 36pt;
+	color: darkred; 
+}
+#result_txt {
+	border: lightcoral dotted 12px; 
+	padding: 8pt; 
+	background: peachpuff;//lightsalmon; 
+	text-align: center; 
+	font-family: 'Ricty Discord', 'Ricty', 'Courier New', monospace; 
+}
+nav, div {
+	background: lemonchiffon; 
+	padding: 4pt;
+}
+nav {
+	text-align: right; 
+	position: fixed; 
+	bottom: 24pt; 
+	right: 24pt;
+}
+div {
+	text-align: center;
+	margin-top: 80pt;
+	/*display: inline-block;*/
+	width: auto;
+	padding-left: auto;
+	padding-right: auto;
+	border: 1px solid lightcoral;
+}
+/*
+form {
+	display: inline;
+}
+*/
+</style>
+</head>
+
+
+<body>
+<pre id="result_txt"></pre>
+
+<div>
+<form id="in">
+ついでに
+<input type="text" size="6" id="year" min="1">年
+<input type="text" size="3" id="month" min="1" max="12">月
+<input type="text" size="3" id="date" min="1" max="31">日
+についても
+<input type="button" value="知りたいな!" onclick="test_another_day();">
+</form>
+</div>
+
+<nav>[<a href="../index.html">ホーム</a>] <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></nav>
+</body>
+</html>
+
+
