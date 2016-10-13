@@ -1,0 +1,576 @@
+body {
+	background: hsl(0, 0%, 15%);
+	color: black;
+	font-family: serif;
+}
+
+/*本体は左側に表示する*/
+.main-txt {
+  position: static;
+  width: 82vw;
+  margin-top: 0vh;
+  margin-left: 0vw;
+  padding-left: 0em;
+  padding-right: 0em;
+}
+/*ページ内の目次リンク的なナビゲーションバーを右側に表示する*/
+.idx-bar {
+  position: fixed; 
+  top: 2vh;
+  height: 96vh;
+  left: 83vw;
+  width: 12vw;
+  overflow: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+/*選択反転の色を派手にする*/
+::selection {
+	color: hsl(90, 100%, 60%);
+	background: hsl(270, 100%, 60%);
+}
+::-moz-selection {
+	color: hsl(90, 100%, 60%);
+	background: hsl(270, 100%, 60%);
+}
+::-webkit-selection {
+	color: hsl(90, 100%, 60%);
+	background: hsl(270, 100%, 60%);
+}
+
+/*アンカーの色*/
+/* span.btnは、展開表示のボタン代わりに使うのでa要素と見た目を同じにする*/
+a, span.btn {
+	color: hsl(340, 75%, 40%);
+	font-weight: bold;
+	text-decoration: underline;
+}
+tt a, a tt {
+	font-weight: normal;
+	text-decoration: none;
+}
+a:hover, span.btn:hover {
+	color: white;
+	background: hsl(180, 50%, 25%);
+	text-decoration: underline;
+}
+
+del {
+	text-decoration: line-through;
+	color: hsl(20, 100%, 40%);
+	font-size: smaller;
+}
+ins {
+	color: hsl(20, 100%, 40%);
+	/*text-decoration: underline;*/
+	text-decoration: none;
+}
+
+/*原文用のクラス。黄色系にする (主に左寄せで使うが、それは後で設定する)*/
+.orig {
+	color: black;
+	background: hsl(45, 80%, 90%);
+	border: solid 2px hsl(45, 100%, 50%);
+	border-left-width: 6pt;
+	border-right-width: 6pt;
+	text-align: left;
+	font-family: /*Baskerville, Georgia,*/ Didot, Palatino, "Times New Roman", serif;
+}
+/*翻訳文用のクラス。水色系にする (主に左寄せで使うが、それは後で設定する)*/
+.trans {
+	color: black;
+	background: hsl(210, 80%, 90%);
+	border: solid 2px hsl(210, 80%, 50%);
+	border-left-width: 6pt;
+	border-right-width: 6pt;
+	text-align: left;
+}
+/*主にコードなど、共通部分用のクラス。桃色系にする。中寄せ*/
+.lisp {
+	color: black;
+	background: hsl(320, 80%, 90%);
+	border: solid 2px hsl(320, 100%, 50%);
+	margin-left: 10%;
+	margin-right: 10%;
+	text-align: left;
+	font-family: "Courier New", Ricty, monospace;
+	white-space: pre;
+	padding-top: 8pt;
+	padding-bottom: 8pt;
+	padding-left: 2em;
+	overflow: auto;
+}
+/*figure要素内のコード(5章で使う)*/
+p.infig-lisp {
+	margin-top: 0;
+	margin-right: 2em;
+	border: dashed 1px hsl(320, 100%, 50%);
+	padding-left: 1em;
+	padding-right: 1em;
+	color: black;
+	font-family: "Courier New", Ricty, monospace;
+	white-space: pre;
+	overflow: auto;
+}
+/*普通の段落中に出てくる<tt>要素の見た目を、.lispと揃える*/
+tt {
+	font-family: "Courier New", Ricty, monospace;
+	white-space: nowrap;
+	/*color: black;*/
+}
+/*練習問題の解答案用のクラス。緑色系にする。*/
+.exercise {
+	color: black;
+	background: hsl(110, 50%, 90%);
+	border: solid 2px hsl(110, 80%, 50%);
+	margin-left: 10%;
+	margin-right: 3%; /*15%;*/
+	text-align: left;
+	white-space: pre;
+	font-family: "Courier New", Ricty, monospace;
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+	padding-left: 2em;
+	padding-right: 2em;
+	overflow: auto;
+}
+/*解答案ではないが、原文でも翻訳文でもない、というもの用。*/
+.extra {
+	color: black;
+	background: hsl(250, 60%, 80%);
+	border: solid 2px hsl(250, 100%, 50%);
+	margin-left: 10%;
+	margin-right: 3%;
+	text-align: left;
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+	padding-left: 2em;
+	padding-right: 2em;
+}
+/*数式用だったりコードの可変部の引用だったりにemタグを使っているところがあるから、一律で背景色をつけるのはやめた方がいいかも。*/
+em {
+	font-style: italic;
+}
+/*原文内の<em>タグは、イタリックにするのが目的で使われている、と考えられるので、背景色は変えない*/
+.orig em {
+	padding-left: 2px;
+	padding-right: 2px;
+	font-family: /*Baskerville, Georgia,*/ Palatino, "Times New Roman", serif;
+}
+/*翻訳文内では、基本的に背景色を変えることにし、イタリックにはしない (色とフォントで強調) */
+.trans em {
+	font-style: normal;
+	font-family: "ヒラギノ丸ゴ ProN", HiraMaruProN-W4, Ricty, sans-serif;
+	background: lightskyblue;
+}
+/*強調している語句でも、ルビの書体は軽くする*/
+.trans em rt {
+	font-family: serif;
+}
+/*数式など、英数字で記載される部分については、原文と同様に、背景色はそのままでイタリックにする*/
+.trans em.en {
+	font-family: /*Baskerville, Georgia,*/ Palatino, "Times New Roman", serif;
+	font-style: italic;
+	padding-left: 2px;
+	padding-right: 2px;
+	background: hsl(210, 80%, 90%);
+}
+/*コード内の可変部に使われているemは色も変えてみよう*/
+p.lisp em {
+	color: purple;
+}
+p.infig-lisp em {
+	color: purple;
+}
+/*語呂合わせの訳のところの強調用の傍点*/
+.pun {
+	text-emphasis: filled sesame crimson;
+}
+
+/*ルビは青くする*/
+rt {
+	color: blue;
+}
+
+/*見出しのフォントを設定*/
+h1[lang="en"],h2[lang="en"],h3[lang="en"],h4[lang="en"],h5[lang="en"] {
+	font-family: /*Copperplate, Luminari,"American Typewriter",*/ Skia, Helvetica, Monaco, Ricty, sans-serif;
+	color: hsl(45, 100%, 20%);
+	/*border-radius: 50pt;*/
+}
+h1[lang="ja"],h2[lang="ja"],h3[lang="ja"],h4[lang="ja"],h5[lang="ja"],h1.extra,h2.extra {
+	font-family: "ヒラギノ丸ゴ ProN", "HiraMaruProN-W4", /*Ricty,*/ sans-serif;
+	color: hsl(210, 80%, 20%);
+	/*border-radius: 50pt;*/
+}
+h1 {
+	font-size: x-large;
+	font-weight: 900;
+}
+h1:before {
+	content: "🍰 ";
+}
+h2 {
+	font-size: x-large;
+	font-weight: 400;
+}
+h2:before {
+	content: "🍭 ";
+}
+h3 {
+	font-size: large;
+	font-weight: 900;
+}
+h3:before {
+	content: "🍬 ";
+}
+h4 {
+	font-size: large;
+	font-weight: 400;
+}
+h4:before {
+	content: "📚 ";
+}
+h5 {
+	font-size: medium;
+	font-weight: 400;
+}
+h5:before {
+	content: "🍀 ";
+}
+/*
+h1:after, h2:after, h3:after, h4:after, h5:after {
+	content: " 🍄";
+}
+*/
+
+/*原文のブロック要素は左寄りにする*/
+p.orig, h1.orig, h2.orig, h3.orig, h4.orig, h5.orig, dl.orig, ul.orig, ol.orig, blockquote.orig, div.orig {
+	margin-left: 3%;
+	margin-right: 10%;
+}
+/*翻訳文のブロック要素は右寄りにする*/
+p.trans, h1.trans, h2.trans, h3.trans, h4.trans, h5.trans, dl.trans, ul.trans, ol.trans, blockquote.trans, div.trans {
+	margin-left: 10%;
+	margin-right: 3%;
+}
+
+
+/*引用要素を、普通の段落とはちょっと見た目が違うようにする*/
+blockquote {
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+	padding-left: 4em;
+	padding-right: 3em;
+	border-radius: 20pt/10pt;
+	text-indent: 1em;
+}
+blockquote.orig {
+	border-left: dotted 8pt orangered;
+}
+blockquote.trans {
+	border-left: dotted 8pt darkorchid;
+}
+
+/*通常の段落*/
+p {
+	padding-left: 4pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+}
+p.orig, p.trans {
+	text-indent: 1em;
+}
+/*その他、一般的なブロック要素*/
+h1, h2, h3, h4, h5 {
+	padding-left: 4pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+}
+dl, ul, ol {
+	padding-left: 2.5em;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 4pt;
+}
+/*dlを定義したついでに*/
+dl.extra dt {
+	font-family: sans-serif;
+	color: hsl(170, 80%, 25%);
+	background: lightyellow;
+}
+dl.extra dd {
+	text-indent: 1em;
+}
+/*解答欄の中でASCII artをインラインブロックとして書くとき用
+*/
+.inline-aa {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 90%;
+	padding: 8pt;
+	border: 4pt double hsl(110, 100%, 60%);
+}
+/*練習問題で、コードではなく文章を書くとき。コード用のフォントだと鬱陶しいので、ちょっと軽めに。ASCII artも同じフォントにしよう。*/
+.ex_comment, .inline-aa {
+	color: hsl(110, 100%, 25%);/*darkgreen;*/
+	white-space: pre;
+	font-family: /*Baskerville, Didot, "クレー", Klee-Medium,*/ /*Georgia,*/ Palatino, "Times New Roman", "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif;
+}
+/*練習問題の解答とかで、ちょっと強調の手段として赤字が欲しいとき用のクラス。<em>ではない。*/
+.em-red {
+	color: red;
+}
+
+/*図は原文と翻訳文で共通なので中寄せ*/
+figure {
+	margin-left: 10%;
+	margin-right: 10%;
+	padding-top: 8pt;
+	padding-bottom: 8pt;
+	padding-left: 2em;
+	background: hsl(320, 80%, 90%);
+	border: solid 2px hsl(320, 100%, 50%);
+	overflow: auto;
+}
+figcaption {
+	font-weight: bold;
+	/*margin-left: 2em;*/
+	margin-right: 2em;
+	margin-top: 4pt;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+figcaption.orig, figcaption.trans {
+	border-left-width: 2px;
+	border-right-width: 2px;
+}
+
+/*説明のための表で、原文・翻訳文に共通のもの。便宜的に<figure>要素で囲って、それにより中寄せにして使う。
+commonは罫線あり。com-align-Lとcom-align-Rは、単なる位置合わせに表形式を使っているだけであって、罫線を表示したくはないもの。*/
+table.common, table.com-align-L, table.com-align-R {
+	margin-left: 5%;
+	margin-right: 5%;
+}
+table.common td {
+	padding-left: 1ex;
+	padding-right: 1ex;
+	text-align: left;
+}
+table.com-align-L td {
+	padding-left: 1ex;
+	padding-right: 1ex;
+	text-align: left;
+}
+table.com-align-R td {
+	padding-left: 1ex;
+	padding-right: 1ex;
+	text-align: right;
+}
+table.common {
+	border: solid 2px hsl(320, 100%, 50%);
+}
+table.common td {
+	border: solid 1px hsl(320, 100%, 50%);
+}
+
+
+/*説明のための表で、原文、翻訳文、練習問題解答案のうちのどれかに属しているもの (つまり共通ではないもの)*/
+/*まずはそれらの表の共通点を設定*/
+table.expl {
+	border: solid 2px;
+	margin-left: 2em;
+	margin-right: 2em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+table.expl td, table.expl th {
+	border: solid 1px;
+	padding-left: 1em;
+	padding-right: 1em;
+	text-align: left;
+}
+/*色を個別に設定*/
+.orig table.expl {
+	border-color: hsl(45, 100%, 50%);
+}
+.orig table.expl td, .orig table.expl th {
+	border-color: hsl(45, 100%, 50%);
+}
+.trans table.expl {
+	border-color: hsl(210, 80%, 50%);
+}
+.trans table.expl td, .trans table.expl th {
+	border-color: hsl(210, 80%, 50%);
+}
+.exercise table.expl {
+	border-color: hsl(110, 100%, 30%);
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+.exercise table.expl td, .exercise table.expl th {
+	border-color: hsl(110, 100%, 30%);
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.exercise table.expl th {
+	text-align: center;
+}
+.extra table.expl {
+	border-color: hsl(250, 100%, 50%);
+}
+.extra table.expl td, .extra table.expl th {
+	border-color: hsl(250, 100%, 50%);
+}
+
+/*目次ページ用のクラス。2行にまたがるときがあるので、text-indent単独ではなくて、padding-leftとの合わせ技で指定することにした。*/
+.tocL0 {
+	text-indent: -2em;
+	padding-left: 2em;
+	font-weight: bold;
+}
+.tocL1 {
+	text-indent: -2em;
+	padding-left: 4em;
+}
+.tocL2 {
+	text-indent: -2em;
+	padding-left: 6em;
+}
+.tocL0, .tocL1, .tocL2 {
+	font-size: medium;
+}
+
+/*訳注など*/
+.note {
+	color: blue;
+	font-style: italic;
+	font-size: smaller;
+}
+.status {
+	display: block;
+	padding: 4pt;
+	line-height: 160%;
+	border: solid 2pt hsl(250, 100%, 50%);
+	border-radius: 40px 10px;
+	background: hsl(250, 60%, 80%);
+	color: hsl(250, 100%, 50%);
+	text-align: center;
+	font-size: large;
+	font-weight: 900;
+	font-family: /*"ヒラギノ角ゴ ProN",*/ "筑紫B丸ゴシック", TsukuBRdGothic-Regular, "ヒラギノ丸ゴ ProN", HiraMaruProN-W4, sans-serif;
+}
+/*ヘッダとフッタは中寄せ。table.centerは索引と目次に使う。これも中寄せ*/
+header, footer, table.center {
+	margin-left: 3%;
+	margin-right: 3%;
+	min-width: 94%;
+}
+table.center td {
+	width: 50%;
+}
+header, footer {
+	color: navy;
+	background-color: hsl(255, 70%, 80%);
+}
+
+/*navは右のナビゲーションバーに配置する*/
+nav {
+	color: navy;
+	background-color: rgb(170,170,170);
+	padding: 4pt;
+}
+
+/*表紙画像用*/
+div.center {
+	text-align: center;
+}
+
+/*数式内部では改行しない(翻訳文の中でしか指定していないけれど*/
+span.math {
+	white-space: nowrap;
+	font-family: /*Baskerville, Georgia,*/ Palatino, "Times New Roman", serif;
+}
+/* &radic;の中身をoverlineつきにするのに使う */
+.radic {
+	border-top: 1px solid;
+	padding-top: 2pt;
+}
+/* 解答欄で色付きマーカーで区別または強調したいときに使う。12色まで */
+span.hilit1 {
+	background: hsl(120, 80%, 75%);
+	/*border-bottom: solid 4pt hsl(120, 80%, 75%);
+	margin-bottom: 4pt;*/
+}
+span.hilit2 {
+	background: hsl(240, 80%, 75%);
+	/*border-bottom: solid 4pt hsl(240, 80%, 75%);
+	margin-bottom: 4pt;*/
+}
+span.hilit3 {
+	background: hsl(0, 80%, 75%);
+}
+span.hilit4 {
+	background: hsl(150, 80%, 75%);
+}
+span.hilit5 {
+	background: hsl(270, 80%, 75%);
+}
+span.hilit6 {
+	background: hsl(30, 80%, 75%);
+}
+span.hilit7 {
+	background: hsl(180, 80%, 75%);
+}
+span.hilit8 {
+	background: hsl(300, 80%, 75%);
+}
+span.hilit9 {
+	background: hsl(60, 80%, 75%);
+}
+span.hilit10 {
+	background: hsl(210, 80%, 75%);
+}
+span.hilit11 {
+	background: hsl(330, 80%, 75%);
+}
+span.hilit12 {
+	background: hsl(90, 80%, 75%);
+}
+
+/*本文と訳注の区切り*/
+hr {
+	border-color: mediumslateblue;
+	border-style: inset;
+	border-width: 4px;
+}
+/* 原文で&curren;を使っているリストもどきに対応する翻訳文*/
+ul.white {
+	list-style-type: circle;
+}
+ol.alph {
+	list-style-type: lower-alpha;
+}
+/* 以下は原版のCSSから継承 */
+ol {
+	list-style-type: decimal;
+}
+
+ol ol {
+	list-style-type: lower-alpha;
+}
+
+ol ol ol {
+	list-style-type: lower-roman;
+}
+
+ol ol ol ol {
+	list-style-type: upper-alpha;
+}
+
+.disable {
+	color: gray;
+}
