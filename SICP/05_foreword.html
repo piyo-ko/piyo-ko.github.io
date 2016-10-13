@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<title>SICP私訳: 序言</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲済み</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="04_toc.html">前へ</a> |
+<a href="06_prefaceTo2ndEd.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]</nav>
+</div>
+
+<div class="main-txt">
+<h1 id="%_chap_Temp_2" class="orig" lang="en"><a href="04_toc.html#%_toc_%_chap_Temp_2">Foreword</a></h1>
+<h1 class="trans" lang="ja">序言</h1>
+
+<p class="orig" lang="en">
+Educators, generals, dieticians, psychologists, and parents program.
+Armies, students, and some societies are programmed.  An assault on
+large problems employs a succession of programs, most of which spring
+into existence en route.  These programs are rife with issues that
+appear to be particular to the problem at hand.  To appreciate
+programming as an intellectual activity in its own right you must turn
+to computer programming; you must read and write computer
+programs -- many of them.  It doesn't matter much what the programs are
+about or what applications they serve.  What does matter is how well
+they perform and how smoothly they fit with other programs in the
+creation of still greater programs.  The programmer must seek both
+perfection of part and adequacy of collection.  In this book the use
+of ``program'' is focused on the creation, execution, and study of
+programs written in a dialect of Lisp for execution on a digital
+computer.  Using Lisp we restrict or limit not what we may program,
+but only the notation for our program descriptions.</p>
+
+<p class="trans" lang="ja">
+教育者や将軍や栄養士や心理学者や親は、<ruby><rb>計画を立てる</rb><rp> (</rp><rt>プログラムする</rt><rp>) </rp></ruby>。
+軍隊や生徒やある種の社会は、<ruby><rb>計画にしたがう</rb><rp> (</rp><rt>プログラムされる</rt><rp>) </rp></ruby>。
+大きな問題への挑戦には、一連の<ruby><rb>計画</rb><rp> (</rp><rt>プログラム<rp>) </rp></ruby>を要するが、それらの<ruby><rb>計画</rb><rp> (</rp><rt>プログラム<rp>) </rp></ruby>のほとんどは、途中で急に湧いて出るものなのだ。
+これらの<ruby><rb>計画</rb><rp> (</rp><rt>プログラム<rp>) </rp></ruby>は、目下の当該問題に特有と見える論点で満ちあふれている。
+
+<ruby><rb>計画立案</rb><rp> (</rp><rt>プログラミング<rp>) </rp></ruby>を、それ自体で知的活動として正当に評価するには、君はコンピュータ・プログラミングに目を向けねばならないし、コンピュータ・プログラム——多くのコンピュータ・プログラム——を読み書きせねばならない。
+プログラムが何についてのものなのかとか、何の応用分野に役立つかとかいったことは、大して重要ではない。
+重要なのは、プログラムがどれくらいうまく機能するのか、そして、さらに大きなプログラム群の作成においてどれくらい円滑に他のプログラムに適合するのか、ということである。
+ブログラマは、部分としての完璧さと、集合体としての適切さの双方を探し求めねばならない。
+本書において、「プログラム」という用語は、ディジタル・コンビュータ上での実行向けのLisp方言により書かれたプログラムの作成・実行・検討に焦点を当てて使うことにする。
+Lispを使うと、私たちは、私たちがプログラムするかもしれないものを制約または制限するのではなく、自分たちのプログラム記述のための表記法だけを、制約または制限することとなる。</p>
+
+<p class="orig" lang="en">
+Our traffic with the subject matter of this book involves us with
+three foci of phenomena: the human mind, collections of computer
+programs, and the computer.  Every computer program is a model,
+hatched in the mind, of a real or mental process.  These processes,
+arising from human experience and thought, are huge in number,
+intricate in detail, and at any time only partially understood.  They
+are modeled to our permanent satisfaction rarely by our computer
+programs.  Thus even though our programs are carefully handcrafted
+discrete collections of symbols, mosaics of interlocking functions,
+they continually evolve: we change them as our perception of the model
+deepens, enlarges, generalizes until the model ultimately attains a
+metastable place within still another model with which we struggle.
+The source of the exhilaration associated with computer programming is
+the continual unfolding within the mind and on the computer of
+mechanisms expressed as programs and the explosion of perception they
+generate.  If art interprets our dreams, the computer executes them in
+the guise of programs!</p>
+
+<p class="trans" lang="ja">
+本書の主題とともに進んでゆくと、私たちは、諸現象における三つの重点——つまり、人間の精神と、コンピュータ・プログラムの集まりと、コンピュータ<!--自体-->——に携わることになる。<!--span class="note">(ちょっと意訳か。)</span-->
+あらゆるコンピュータ・プログラムは、現実の過程または精神的な過程のモデル——心の中で孵化したモデル——である。
+これらの過程は、人間の経験や思考から生じるものなのだが、莫大な数にのぼり、細目が込み入っていて、いつでも部分的にしか理解できない。
+私たちが永久に満足できる形で、これらの過程がコンピュータ・プログラムによってモデル化される、ということは、めったにない。
+よって、たとえプログラムが、注意深く手作業で作り出された<!--複数の-->個別のシンボル集合体——つまり、互いに連関している関数からなるモザイク<!--の一群-->——であったとしても、プログラムは、絶え間なく進化してゆく。というのも、私たちは、モデルに対する自分の認識が深まり、拡がり、一般化するにつれて、プログラムを変更する——最終的にモデルが、準平衡状態の場所を、私たちが取り組むさらに別のモデルの中で獲得するまで、変更し続ける——からである。<!--というのも、私たちは、モデルに対する自分の認識が深まり、拡がり、一般化するにつれて、プログラムを変更するからであり、その変更は、最終的にモデルが、準平衡状態の場所を、私たちが取り組むことになるさらに別のモデルの中で獲得するまで、続くのである。-->
+<!--私たちが取り組むことになるさらに別のモデルの中での準平衡状態の場所を最終的に獲得するまで、続くのである。-->
+<!--シンボルの、注意深く手作業で作り出された、複数の別々の集まり-->
+<!--コンビュータ・プログラミングにまつわるワクワク感の源泉は、心の中で、そして、プログラムとして表されたメカニズムを持つコンビュータの上で、次々と生じる展開なのであり、また、プログラムが生み出す認識の爆発なのである。-->
+コンビュータ・プログラミングにまつわるワクワク感の源泉は、プログラムとして表されたメカニズムが、心の中やコンビュータ上で次々と展開してゆくことにあり、また、プログラムが生み出す認識の爆発にあるのだ。
+もし芸術が私たちの夢を<!--解釈-->通訳するというならば、コンピュータは、プログラムの外観をまとって夢を遂行するのだ<!--成し遂げるのである-->!
+<!--芸術が私たちの夢を解釈するとき、コンピュータは、プログラムの外観をまとって夢を遂行する!-->
+</p>
+
+<p class="orig" lang="en">
+For all its power, the computer is a harsh taskmaster.  Its programs
+must be correct, and what we wish to say must be said accurately in
+every detail.  As in every other symbolic activity, we become
+convinced of program truth through argument.  Lisp itself can be
+assigned a semantics (another model, by the way), and if a program's
+function can be specified, say, in the predicate calculus, the proof
+methods of logic can be used to make an acceptable correctness
+argument.  Unfortunately, as programs get large and complicated, as
+they almost always do, the adequacy, consistency, and correctness of
+the specifications themselves become open to doubt, so that complete
+formal arguments of correctness seldom accompany large programs.
+Since large programs grow from small ones, it is crucial that we
+develop an arsenal of standard program structures of whose correctness
+we have become sure -- we call them idioms -- and learn to combine them
+into larger structures using organizational techniques of proven
+value.  These techniques are treated at length in this book, and
+understanding them is essential to participation in the Promethean
+enterprise called programming.  More than anything else, the
+uncovering and mastery of powerful organizational techniques
+accelerates our ability to create large, significant programs.
+Conversely, since writing large programs is very taxing, we are
+stimulated to invent new methods of reducing the mass of function and
+detail to be fitted into large programs.</p>
+
+<p class="trans" lang="ja">
+その<span class="note"> (素晴らしい) </span>性能にもかかわらず、コンピュータとは、<span class="note"> (その性能で私たちを楽にしてくれるのではなくて、むしろ) </span>きつい仕事を押し付けてくるものである。
+コンピュータのプログラムは正しくなくてはならないし、私たちが言いたいことは、あらゆる細目にわたって正確に言われなくてはならない。
+他のあらゆる記号的活動と同様、私たちは引数を通じて<!--議論を通じて<span class="note"> (冠詞がついていないし、次の文とのつながりから判断してこう訳したが、「引数を通じて」とすべきかも) </span-->、プログラムが真であることを納得するようになる。
+Lisp自体には、セマンティクス (ちなみに、もう一つのモデルである) を割り当てることができ、もしあるプログラムの機能を、たとえば述語計算の形で特定できるならば、論理の証明法を使って、受け入れ可能な<!--正当性-->正しさの議論をすることができる。
+しかし残念なことに、プログラムが大きく、かつ複雑になるにつれて——プログラムとはほとんど常にそうなるものだが——、仕様自体の適切さ・整合性・<!--正当性-->正しさは疑わしくなり、そのため、<!--正当性-->正しさについての完全な形式的議論が大きなプログラムに付随していることは、ほとんどない。
+大きなプログラムは小さなプログラムから育ってくるものだから、私たちが<!--正当性-->正しさについて既に確信している標準的なプログラム構造——それらを私たちはイディオムと呼んでいる——の集積を開発することと、<!--証明済みの値についての-->有効性が証明された組織的な技法を用いてそれらの標準的なプログラム構造同士を結びつけて、より大きな構造にする仕方を覚えることは、重要である。
+こうした技法を本書では長々と扱っており、こうした技法を理解することは、プロメテウスのように独創的な、プログラミングという企てに参加するには、必須の事柄である。
+他の何にもまして、強力で組織的な技法の発見とその完全な理解によってこそ、私たちが大きく重要なプログラムを作成する能力は促進されるのである。
+逆に、大きなプログラムを書くには大変な労力を要するので、それが刺激となって、私たちは、大きなプログラムに適合するように<!--なっている-->機能と細目の大部分を削減する新たな方法を、考案するように仕向けられる。
+</p>
+
+<p class="orig" lang="en">
+Unlike programs, computers must obey the laws of physics.  If they
+wish to perform rapidly -- a few nanoseconds per state change -- they
+must transmit electrons only small distances (at most 1 <small><sup>1</sup>/<small>2</small></small>
+feet).  The heat generated by the huge number of devices so
+concentrated in space has to be removed.  An exquisite engineering art
+has been developed balancing between multiplicity of function and
+density of devices.  In any event, hardware always operates at a level
+more primitive than that at which we care to program.  The processes
+that transform our Lisp programs to ``machine'' programs are
+themselves abstract models which we program.  Their study and creation
+give a great deal of insight into the organizational programs
+associated with programming arbitrary models.  Of course the computer
+itself can be so modeled.  Think of it: the behavior of the smallest
+physical switching element is modeled by quantum mechanics described
+by differential equations whose detailed behavior is captured by
+numerical approximations represented in computer programs executing on
+computers composed of <tt>...</tt>!</p>
+
+<p class="trans" lang="ja">
+プログラムとは違って、コンピュータは物理法則に従わねばならない。
+もし、コンピュータが高速に——状態変化ごとに2、3ナノ秒といった速さで——動作しようと思えば、コンピュータは、電子をほんの短い距離しか (せいぜい1 <small><sup>1</sup>/<small>2</small></small>フィートしか) <!--送ってはならない-->送れないはずだ。
+空間的にとても集中している莫大な数の機器によって産生される熱は、取り除かれなくてはならない。
+精巧な工学的技法は、機能の多様性と機器の密集度との間のバランスをとる仕方を発展させてきた。
+いずれにせよ、ハードウェアは常に、私たちがプログラムを書くために関心を払っているレベルよりも原始的なレベルにおいて、動いているのだ。
+Lispプログラムを「マシン」プログラムに変形する過程は、それ自体が、私たちがプログラムする対象の抽象的モデルである。
+そうした抽象的モデルの検討と作成は、任意のモデルをプログラムすることに結びついた組織的プログラムへの大いなる洞察を与えてくれる。
+もちろん、コンピュータ自体も、そうやってモデル化できる。
+考えてみてほしい。最小の物理的スイッチング素子の振る舞いが量子力学によりモデル化され、その量子力学は微分方程式により記述され、その微分方程式の詳細な振る舞いは数値的近似によって捉えられ、その数値的近似はコンピュータ・プログラムにおいて表現され、そのコンピュータ・プログラムはコンピュータ上で走り、そのコンピュータは何々から構成され……というふうに!<!--span class="note"> (原文の語順を活かさないと意味が通じにくいので、原文の語順を活かすためにあえて意訳した。)</span-->
+</p>
+
+<p class="orig" lang="en">
+It is not merely a matter of tactical convenience to separately
+identify the three foci.  Even though, as they say, it's all in the
+head, this logical separation induces an acceleration of symbolic
+traffic between these foci whose richness, vitality, and potential is
+exceeded in human experience only by the evolution of life itself.  At
+best, relationships between the foci are metastable.  The computers
+are never large enough or fast enough.  Each breakthrough in hardware
+technology leads to more massive programming enterprises, new
+organizational principles, and an enrichment of abstract models.
+Every reader should ask himself periodically ``Toward what end, toward
+what end?'' -- but do not ask it too often lest you pass up the fun of
+programming for the constipation of bittersweet philosophy.</p>
+
+<p class="trans" lang="ja">
+上述の三つの重点を分離して識別することは、単に戦術上の便宜の問題である訳ではない。
+<!--たとえ、よく言われるようにすべては頭の中にあるのだとしても、人類の経験において豊富さ・生命力・潜在力の点で勝っているものは生命の進化自体以外にないような、これらの重点同士の間での、シンボルの往来の促進が、この論理的分離によって引き起こされる。--><!--span class="note">(何だか不自然にしか訳せないが……)</span-->
+<!--その豊富さ・生命力・潜在力を凌ぐものは人類の経験において生命自体の進化以外にないと言えるこれらの重点間でのシンボルの往来の促進が、この論理的分離によって引き起こされる。-->
+たとえ、よく言われるようにすべては頭の中にあるのだとしても、この論理的分離により、これらの重点——その豊富さ・生命力・潜在力を凌ぐものは、人類の経験において、生命自体の進化以外にない——同士の間での記号的な流通が、促進するように仕向けられる。
+これらの重点間の関係は、せいぜい準平衡状態である。
+コンピュータは、決して、十分に大きくもないし十分に速くもない。
+ハードウェア技術における各ブレイクスルーは、より大規模なプログラミングの企てや、新たな組織的法則や、抽象的モデルを豊かにすることへとつながる。
+あらゆる読者は、自らに「何の目的で、何の目的で?」と周期的に問いかけるべきである——とは言え、苦しくも楽しい哲学による便秘的圧迫のせいでプログラミングの楽しみを逃してしまうといけないから、あまりにしばしば問いかけてはいけない。
+</p>
+
+<p class="orig" lang="en">
+Among the programs we write, some (but never enough) perform a precise
+mathematical function such as sorting or finding the maximum of a
+sequence of numbers, determining primality, or finding the square
+root.  We call such programs algorithms, and a great deal is known of
+their optimal behavior, particularly with respect to the two important
+parameters of execution time and data storage requirements.  A
+programmer should acquire good algorithms and idioms.  Even though
+some programs resist precise specifications, it is the responsibility
+of the programmer to estimate, and always to attempt to improve, their
+performance.</p>
+
+<p class="trans" lang="ja">
+私たちが書くプログラムの中で、いくつかのプログラム (だが決して十分な数とは言えないプログラム) は、正確な数学的機能——例えば、数の並びをソートすること、数の並びの中の最大値を見つけること、素数かどうか判断すること、二乗根を求めることなど——を遂行する。
+私たちはそういうプログラムをアルゴリズムと呼んでいて、諸アルゴリズムの最適な振る舞い——特に、実行時間とデータ記憶要件という二つの重要なパラメタに関して最適な振る舞い——について、多くのことが知られている。
+プログラマは、良いアルゴリズムとイディオムを獲得すべきである。
+たとえ、<!--何らかのプログラムが正確な仕様には抵抗しているとしても-->正確な明細の規定<!--に対して抵抗する-->がしづらいプログラムも中にはあるのだとしても、それらのプログラムの性能を見積もることと、それらのプログラムの性能を改善しようと常に試みることは、プログラマの責任である。
+</p>
+
+<p class="orig" lang="en">
+Lisp is a survivor, having been in use for about a quarter of a
+century.  Among the active programming languages only Fortran has had
+a longer life.  Both languages have supported the programming needs of
+important areas of application, Fortran for scientific and engineering
+computation and Lisp for artificial intelligence.  These two areas
+continue to be important, and their programmers are so devoted to
+these two languages that Lisp and Fortran may well continue in active
+use for at least another quarter-century.</p>
+
+<p class="trans" lang="ja">
+Lispは、およそ四半世紀にわたって使われてきた生き残りである。
+現役のプログラミング言語の中では、より長く使われてきたものはFortranしかない。
+両言語は、重要な応用分野でのプログラミング要求を支援してきた——Fortranは科学的・工学的計算の分野で、Lispは人工知能の分野で。
+これら二つの分野は重要であり続けるし、これら二つの分野のプログラマたちはこれら二つの言語にとても打ち込んでいるので、LispとFortranは、おそらく少なくともあと四半世紀の間は現役で使用され続けるだろう。
+</p>
+
+<p class="orig" lang="en">
+Lisp changes.  The Scheme dialect used in this text has evolved from
+the original Lisp and differs from the latter in several important
+ways, including static scoping for variable binding and permitting
+functions to yield functions as values.  In its semantic structure
+Scheme is as closely akin to Algol 60 as to early Lisps.  Algol 60,
+never to be an active language again, lives on in the genes of Scheme
+and Pascal.  It would be difficult to find two languages that are the
+communicating coin of two more different cultures than those gathered
+around these two languages.  Pascal is for building
+pyramids -- imposing, breathtaking, static structures built by armies
+pushing heavy blocks into place.  Lisp is for building
+organisms -- imposing, breathtaking, dynamic structures built by squads
+fitting fluctuating myriads of simpler organisms into place.  The
+organizing principles used are the same in both cases, except for one
+extraordinarily important difference: The discretionary exportable
+functionality entrusted to the individual Lisp programmer is more than
+an order of magnitude greater than that to be found within Pascal
+enterprises.  Lisp programs inflate libraries with functions whose
+utility transcends the application that produced them.  The list,
+Lisp's native data structure, is largely responsible for such growth
+of utility.  The simple structure and natural applicability of lists
+are reflected in functions that are amazingly nonidiosyncratic.  In
+Pascal the plethora of declarable data structures induces a
+specialization within functions that inhibits and penalizes casual
+cooperation.  It is better to have 100 functions operate on one data
+structure than to have 10 functions operate on 10 data structures.  As
+a result the pyramid must stand unchanged for a millennium; the
+organism must evolve or perish.</p>
+
+<p class="trans" lang="ja">
+Lispは変化する。
+本書で使われるScheme方言は元のLispから進化してきたもので、いくつかの重要な点で——変数束縛のための静的スコーピングや、関数が関数を値として生み出すことを許していること、などの点で——元のLispとは異なる。
+意味的構造の点で、Schemeは、初期の諸々のLispによく似ているのと同様、Algol 60によく似ている。
+Algol 60は、もはや再び現役の言語とはなれないだろうが、SchemeとPascalの遺伝子の中に生き続けている。
+これら二つの言語のまわりに集まっている文化よりも、さらに多様な二つの文化の間を流通するコインであるような、二つの言語を見つけることは、おそらく難しい。
+Pascalは、ピラミッド型の<!--システム-->もの——重いブロックを適切な場所に置く<!--大群-->大勢の人々によって構築された、印象的な、息を呑むような、静的な構造——を構築するためのものである。
+Lispは、有機体——変動する、無数の、より単純な有機体を、適切な場所に嵌め込む精鋭部隊によって構築された、印象的な、息を呑むような、動的な構造——を構築するためのものである。
+両者において使われている組織化の原理は、一つの並はずれた重要な違い——つまり、個々のLispプログラマに託されている、<!--任意のエクスポートが可能だという機能性--><!--任意の-->自由裁量で使えるエクスポート可能な機能が、Pascal企業において見られるだろう機能<!--性--><!--よりも一桁大きいという以上のものである-->と比べて一桁以上多い、という点——を除いて、同じである
+<span class="note">(Pascalでは、型の制約もきついので、ガチガチに固めてオーダ・メイドで専用のものを作るため、他の目的に流用できるものは少数しかない、という傾向があるのに対し、Lispでは、型の制約も緩いし、汎用的なものをたくさん作って適宜組み合わせる傾向があるよ、という感じの趣旨)</span>。
+Lispプログラムは、その関数群を生み出したアプリケーションを超越する有用性を持っているような関数群で、ライブラリを膨らませるものである。
+リスト——Lispのネイティブなデータ構造——は、そういう有用性の発展に対して、大いなる責任を負っている。
+リストの平易な構造と自然な応用可能性は、驚くほど非特異的な関数に反映されている。
+Pascalでは、気軽な協調を妨げたり罰したりしてしまうような、関数内部での特殊化を、過度に多い宣言可能なデータ構造が誘発してしまう。
+<span class="note">(Lispのように) </span>一つのデータ構造に関して動作する百個の関数がある方が、<span class="note">(Pascalのように) </span>十種のデータ構造に関して動作する十個の関数があるよりも、良いのである。
+その結果として、ピラミッド型のシステムは、千年にわたり変わらぬままであるに違いない——有機体は進化するか消滅するに違いないが。
+</p>
+
+<p class="orig" lang="en">
+To illustrate this difference, compare the treatment of material and
+exercises within this book with that in any first-course text using
+Pascal.  Do not labor under the illusion that this is a text
+digestible at MIT only, peculiar to the breed found there.  It is
+precisely what a serious book on programming Lisp must be, no matter
+who the student is or where it is used.</p>
+
+<p class="trans" lang="ja">
+この違いを説明するために、本書での題材と練習問題の扱い方を、Pascalを使った初歩的教科書での題材と練習問題の扱い方と比べてみなさい。
+本書がMIT <span class="note">(という難関大学)</span> でのみ理解可能な——つまり、MITで見つかる種族に特有の——教科書である、と錯覚して苦悩してはいけない。
+教科書というものは、まさに、Lispをプログラムすることについての本気の書物のあるべき姿なのであって、学生が誰だろうと、どこで使われようと、関係ないのである。
+</p>
+
+<p class="orig" lang="en">
+Note that this is a text about programming, unlike most Lisp books,
+which are used as a preparation for work in artificial intelligence.
+After all, the critical programming concerns of software engineering
+and artificial intelligence tend to coalesce as the systems under
+investigation become larger.  This explains why there is such growing
+interest in Lisp outside of artificial intelligence.</p>
+
+<p class="trans" lang="ja">
+本書がプログラミングについての教科書であり、ほとんどのLispの本——それらは、人工知能における課題のための準備として使われる——とは違っていることに注意されたい。
+<!--何しろ、調査中のシステムが大きくなるにつれて、ソフトウェア工学に関する批評的プログラミングの関心事と人工知能とは、結合する傾向がある。<span class="note">(前の文とのつながりが悪いし、andで何と何を並列しているのかについても要検討かも。)</span>-->
+何しろ、調査中のシステムが大きくなるにつれて、ソフトウェア工学と人工知能についての、プログラミングの重要な諸問題は、一つになる傾向がある。
+このことは、人工知能分野の外部でLispへの興味がとても高まっている理由の説明になっている。
+</p>
+
+<p class="orig" lang="en">
+As one would expect from its goals, artificial intelligence research
+generates many significant programming problems.  In other
+programming cultures this spate of problems spawns new languages.
+Indeed, in any very large programming task a useful organizing
+principle is to control and isolate traffic within the task modules
+via the invention of language.  These languages tend to become less
+primitive as one approaches the boundaries of the system where we
+humans interact most often.  As a result, such systems contain complex
+language-processing functions replicated many times.  Lisp has such a
+simple syntax and semantics that parsing can be treated as an
+elementary task.  Thus parsing technology plays almost no role in Lisp
+programs, and the construction of language processors is rarely an
+impediment to the rate of growth and change of large Lisp systems.
+Finally, it is this very simplicity of syntax and semantics that is
+responsible for the burden and freedom borne by all Lisp programmers.
+No Lisp program of any size beyond a few lines can be written without
+being saturated with discretionary functions.  Invent and fit; have
+fits and reinvent!  We toast the Lisp programmer who pens his thoughts
+within nests of parentheses.</p>
+
+<p class="trans" lang="ja">
+人工知能の目標から人が予期するだろうように、人工知能の研究は、多くの重要なプログラミング上の問題を作り出す。
+他のプログラミング文化では、このような問題の多発は、新たな諸言語を生み出す。
+確かに、とても大きなプログラミング・タスクではいつも、有用な組織化の原則とは、言語の創作を通じて、<!--諸-->タスク・モジュール内でのトラフィックを管理・分離することである。
+これらの<span class="note"> (新たに生み出された) </span>言語は、私たち人間がもっとも頻繁につきあうシステムの境界に人が近づくにつれて、<!--より原始的でなくなる-->より非原始的になる傾向がある
+<span class="note">(人間が一番よく使うところに近づくほど、高級言語を使うことが多く、ブラックボックスとして隠しておいて一般人があまり触らないところほど、原始的・物理的な言語を使っているよね、ということ)</span>。
+結果として、そういうシステムは、何度も複製される複雑な言語処理<!--の諸-->機能を含むことになる。
+Lispは<ruby><rb>構文</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby>と<ruby><rb>意味論</rb><rp> (</rp><rt>セマンティクス</rt><rp>) </rp></ruby>がとても簡素なので、構文解析を基本的タスクとして扱うことが可能である。
+よって、Lispプログラムでは、構文解析技術はほとんど何の役割も果たさないし、大きなLispシステムの成長・変化の速度に対して、言語処理器の構成が妨げとなることも、滅多にない。
+最後に、すべてのLispプログラマが負っている義務と自由に対して責任があるのは、まさにこの<ruby><rb>構文</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby>と<ruby><rb>意味論</rb><rp> (</rp><rt>セマンティクス</rt><rp>) </rp></ruby>の簡素さなのである。
+
+二、三行を超えるいかなる大きさのLispプログラムも、<!--任意の-->自由裁量で使える関数群で溢れているということなく、書くことはできない。
+<span class="pun">考え</span>出して、<span class="pun">あて</span>はめよ——<span class="pun">あ</span>! っ<span class="pun">て</span>なって、また<span class="pun">考え</span>直せ!
+<!--考え出して、あてはめよ——あっ! と思えば、考え直せ!-->
+<!--<ruby><rb>考案</rb><rp> (</rp><rt>invent</rt><rp>) </rp></ruby>し<ruby><rb>適合</rb><rp> (</rp><rt>fit</rt><rp>) </rp></ruby>させよ——びっくりして刷新せよ!<span class="note"> (言葉遊び的なところだし、これでは変な訳なのは分かっているのだが……)</span>-->
+入れ子の括弧の中に自分の考えを囲い込むLispプログラマに乾杯。
+</p>
+
+<p class="orig" lang="en">
+Alan J. Perlis<br>
+New Haven, Connecticut
+</p>
+
+<p class="trans" lang="ja">
+アラン・J・パーリス<br>
+コネチカット州ニューヘブン
+</p>
+
+</div>
+</body>
+
+</html>

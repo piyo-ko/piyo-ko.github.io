@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>SICP私訳: 第1版への前書き</title>
+</head>
+
+<body>
+
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲済み</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="06_prefaceTo2ndEd.html">前へ</a> |
+<a href="08_ack.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]</nav>
+</div>
+
+<div class="main-txt">
+
+
+<h1 id="%_chap_Temp_4" class="orig" lang="en"><a href="04_toc.html#%_toc_%_chap_Temp_4">Preface to the First Edition</a></h1>
+<h1 class="trans" lang="ja">第1版への前書き</h1>
+
+<blockquote class="orig" lang="en">
+A computer is like a violin.  You can imagine a novice trying first a
+phonograph and then a violin.  The latter, he says, sounds terrible.
+That is the argument we have heard from our humanists and most of our
+computer scientists.  Computer programs are good, they say, for
+particular purposes, but they aren't flexible.  Neither is a violin,
+or a typewriter, until you learn how to use it.<br>
+<br>
+<span id="%_idx_4">Marvin Minsky</span>, ``Why Programming Is a Good
+Medium for Expressing Poorly-Understood and Sloppily-Formulated
+Ideas''</blockquote>
+
+<blockquote class="trans" lang="ja">
+コンピュータはヴァイオリンに似ている。
+最初に蓄音機を試してみてからヴァイオリンを試す初心者のことを、君は想像できるだろう。
+その初心者は、ヴァイオリンはひどい音がする、と言う。
+それは、人文主義者やほとんどの計算機科学者から私たちが聞かされてきた主張である。
+かれらは、コンピュータ・プログラムは特定の目的には良いけれど柔軟性がないよね、と言う。
+使い方を覚えるまでは、ヴァイオリンもタイプライタも同様なのに
+<span class="note">(構文がとりづらいが……)</span>。<br>
+<br>
+マーヴィン・ミンスキー『なぜコンピュータは、ちゃんと理解していない考えや、雑にしか形式化されていない考えを表現するための良い手段なのか』
+</blockquote>
+
+<p class="orig" lang="en">
+``The Structure and Interpretation of Computer Programs'' is the
+entry-level subject in computer science at the Massachusetts Institute
+of Technology.  It is required of all students at MIT who major
+in electrical engineering or in computer science, as one-fourth of the
+``common core curriculum,'' which also includes two subjects on
+circuits and linear systems and a subject on the design of digital
+systems.  We have been involved in the development of this subject
+since 1978, and we have taught this material in its present form since
+the fall of 1980 to between 600 and 700 students each year.  Most of
+these students have had little or no prior formal training in
+computation, although many have played with computers a bit and a few
+have had extensive programming or hardware-design experience.</p>
+
+<p class="trans" lang="ja">
+『コンピュータプログラムの構造と解釈』は、マサチューセッツ工科大学での計算機科学の入門レベルの科目である。
+電子工学または計算機科学を専攻するMITの全学生にとって、本科目は、「共通コア・カリキュラム」をなす四科目の一つとして必須の
+ものである——ちなみに、「共通コア・カリキュラム」は、ほかに、回路と線形システムについての二科目と、ディジタル・システムの設計についての一科目を含む。
+私たちは、1978年から本科目の発展に携わっており、1980年の秋からは、本教材を現在の形で毎年600〜700人の学生に教えてきた。
+これらの学生のほとんどは、ほとんど、あるいは、まったく、計算についての正式な訓練を以前に受けたことがなかった——もっとも、多くの学生は、少しコンピュータで遊んだことがあり、少数の学生はプログラミングかハードウェア設計の豊富な経験があったが。
+</p>
+
+<p class="orig" lang="en">
+Our design of this introductory computer-science subject reflects two
+major concerns.  First, we want to establish the idea that a computer
+language is not just a way of getting a computer to perform operations
+but rather that it is a novel formal medium for expressing ideas about
+methodology.  Thus, programs must be written for people to read, and
+only incidentally for machines to execute.  Second, we believe that
+the essential material to be addressed by a subject at this level is
+not the syntax of particular programming-language constructs, nor
+clever algorithms for computing particular functions efficiently, nor
+even the mathematical analysis of algorithms and the foundations of
+computing, but rather the techniques used to control the intellectual
+complexity of large software systems.</p>
+
+<p class="trans" lang="ja">
+この計算機科学の入門的科目についての私たちの構想は、二つの重要な関心事を反映している。
+第一に、コンピュータ言語は単にコンピュータに操作を行わせる手段なのではなく、むしろ方法論についての考えを表現するための新たな形式的手段なのである、という考え方を確立したい。
+よって、プログラムは、他人が読むために書かれなくてはならず、マシンが実行するため、というのは付随的な目的にすぎない。<!--span class="note"> (ちょっと意訳) </span-->
+第二に、このレベルの科目で講義されるべき必須の題材は、特定のプログラミング言語の構造についての文法ではなく、特定の関数を効率的に計算するための巧みなアルゴリズムでもなく、アルゴリズムや計算の基礎についての数学的解析でさえもなく<!--span class="note"> (andの係り受けについて要検討)</span-->、むしろ、大型のソフトウェア・システムの知的複雑性を管理するために使われる技法なのである、と私たちは信じている。
+</p>
+
+<p class="orig" lang="en">
+Our goal is that students who complete this subject should have a good
+feel for the elements of style and the aesthetics of programming.
+They should have command of the major techniques for controlling
+complexity in a large system. They should be capable of reading a
+50-page-long program, if it is written in an exemplary style. They
+should know what not to read, and what they need not understand at any
+moment.  They should feel secure about modifying a program, retaining
+the spirit and style of the original author.</p>
+
+<p class="trans" lang="ja">
+私たちの目標は、本科目を修了した学生たちが、様式を構成する要素に対して優れた理解力を備えるようにな<!--るとともに、-->り、かつ、プログラミングに対する審美眼を備えるようになる<!--、というもの-->ことだ。
+学生たちは、大型のシステムにおける複雑性を管理するための主要な技法の運用能力を持つようになるはずだ。
+学生たちは、50ページにわたる長さのプログラムを読めるようになるはずだ——そのプログラムが模範的な書き方で書かれていれば。
+学生たちは、何を読まないでおくべきか、そして、何は今すぐ理解する必要がないのか、ということが分かるようになるはずだ。
+学生たちは、元の書き手の精神と様式を保ちながらもプログラムを改変することについて、自信を感じるはずだ。
+<!--
+私たちの目標は、本科目を修了した学生たちが、様式を構成する要素に対して優れた理解力を備えるようになり、かつ、プログラミングに対する審美眼を備えるようになること、
+学生たちが、大型のシステムにおける複雑性を管理するための主要な技法の運用能力を持つようになること、
+学生たちが、50ページにわたる長さのプログラムを読めるようになること——そのプログラムが模範的な書き方で書かれていれば、だが——、
+学生たちが、何を読まないでおくべきか、そして、何は今すぐ理解する必要がないのか、ということが分かるようになること、
+学生たちが、元の書き手の精神と様式を保ちながらもプログラムを改変することについて、自信を感じるようになること、
+である。
+-->
+</p>
+
+<p class="orig" lang="en">
+These skills are by no means unique to computer programming.  The
+techniques we teach and draw upon are common to all of engineering
+design.  We control complexity by building abstractions that hide
+details when appropriate.  We control complexity by establishing
+conventional interfaces that enable us to construct systems by
+combining standard, well-understood pieces in a ``mix and match'' way.
+We control complexity by establishing new languages for describing a
+design, each of which emphasizes particular aspects of the design and
+deemphasizes others.</p>
+
+<p class="trans" lang="ja">
+これらの技能は、決してコンピュータ・プログラミングに特有のものではない。
+私たちが教え、利用している技法は、すべての工学設計に共通のものである。
+私たちは、詳細を隠す抽象概念を適宜組み立てることにより、複雑さを抑えている。
+「異なるものをうまく組み合わせる」方法で標準規格やよく分かっている部品と組み合わせればシステムを構築できるようにしてくれる、伝統的なインタフェイスを築くことにより、私たちは複雑さを抑えている。
+私たちは、設計を記述するための新たな言語を確立することにより、複雑さを抑えている——それら新たな言語の各々は、その設計の特定の側面を強調し、他の側面を軽視するものである。
+</p>
+
+<p class="orig" lang="en">
+Underlying our approach to this subject is our conviction that
+``computer science'' is not a science and that its significance has
+little to do with computers.  The computer revolution is a revolution
+in the way we think and in the way we express what we think.  The
+essence of this change is the emergence of what might best be called
+<em>procedural epistemology</em> -- the study of the structure of
+knowledge from an imperative point of view, as opposed to the more
+declarative point of view taken by classical mathematical subjects.
+Mathematics provides a framework for dealing precisely with notions of
+``what is.''  Computation provides a framework for dealing precisely
+with notions of ``how to.''</p>
+
+<p class="trans" lang="ja">
+本科目に対する私たちの取り組み方の根底にあるのは、「計算機科学」は科学ではないという信念、そして、計算機科学の重点はコンピュータとはほとんど関係がないという信念である。
+コンピュータ革命は、私たちが考える方法における革命であり、私たちが考えることを表現する方法における革命である。
+この変化の要諦は、<em>手続き的認識論</em>とでも呼ぶのが一番良さそうなもの——古典的な数学的科目で採られている、より平叙文的な立場とは逆の、命令文的な立場からの、知識の構造の研究——の出現である。
+数学は、「何であるか」の概念を正確に扱うための枠組みを提供する。
+計算は、「どうやって」の概念を正確に扱うための枠組みを提供する。
+</p>
+
+<p class="orig" lang="en">
+In teaching our material we use a dialect of the programming language
+Lisp.  We never formally teach the language, because we don't have to.
+We just use it, and students pick it up in a few days.  This is one
+great advantage of Lisp-like languages: They have very few ways of
+forming compound expressions, and almost no syntactic structure.  All
+of the formal properties can be covered in an hour, like the rules of
+chess.  After a short time we forget about syntactic details of the
+language (because there are none) and get on with the real
+issues -- figuring out what we want to compute, how we will decompose
+problems into manageable parts, and how we will work on the parts.
+Another advantage of Lisp is that it supports (but does not enforce)
+more of the large-scale strategies for modular decomposition of
+programs than any other language we know.  We can make procedural and
+data abstractions, we can use higher-order functions to capture common
+patterns of usage, we can model local state using assignment and data
+mutation, we can link parts of a program with streams and delayed
+evaluation, and we can easily implement embedded languages.  All of
+this is embedded in an interactive environment with excellent support
+for incremental program design, construction, testing, and debugging.
+We thank all the generations of Lisp wizards, starting with John
+McCarthy, who have fashioned a fine tool of unprecedented power and
+elegance.</p>
+
+<p class="trans" lang="ja">
+私たちの教材を教えるにあたって、私たちは、プログラミング言語Lispの方言を使っている。
+私たちは、その言語を正式に教えてはいない。というのも、教える必要がないからだ。
+私たちはただその言語を使うだけであり、学生たちはその言語をわずかな日数で身につける。
+これは、Lisp的な言語の素晴らしい利点の一つである。
+Lisp的な言語には、複合的な式を形作る方法がごくわずかしかなく、ほとんど何の文法的構造もない。
+形式的な性質のすべて1時間以内で扱うことが可能なのだ——チェスのルールと同様に。
+間もなく私たちは、言語の文法的詳細を忘れ (というのも、文法的詳細などないので)、現実の問題に取り組みだす——つまり、何を計算したいのか、どうやって問題を扱いやすい部分に分解するのか、それらの部分にどう取り組むか、を理解するのである。
+Lispの他の利点は、Lispが、私たちが知っている他のどの言語よりも、プログラムのモジュール分解のための大規模な戦略を支援している (ただし強制はしていない) ことである。
+私たちは、手続きとデータの抽象化を行えるし、使用の共通パタンをつかまえるための高階関数を使えるし、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>とデータ変異を使って局所状態をモデル化できるし、プログラムの部品を、ストリームと遅延評価につなげられるし、埋め込まれた言語を簡単に実装できる
+<span class="note">(ここで「代入」(assignment) に「わりあて」とルビを当てている理由は、「おきかえ」の意味の「代入」(substitution) も後で出てきて、どちらの概念も日本語では「代入」と呼ぶにもかかわらず、この意味の違いが問題になってくるため)</span>。
+こうしたすべての事柄は、インクリメンタルなプログラムの設計・構築・テスト・デバッグに対する優れた支援とともに、対話型の環境に埋め込まれている。
+ジョン・マッカーシー——空前の力と優美さを備えた素晴らしい道具を作ってくれた——から始まる、すべての世代のLisp魔術師たちに感謝する。
+</p>
+
+<p class="orig" lang="en">
+Scheme, the dialect of Lisp that we use, is an attempt to bring
+together the power and elegance of Lisp and Algol.  From Lisp we take
+the metalinguistic power that derives from the simple syntax, the
+uniform representation of programs as data objects, and the
+garbage-collected heap-allocated data.  From Algol we take lexical
+scoping and block structure, which are gifts from the pioneers of
+programming-language design who were on the Algol committee.  We wish
+to cite John Reynolds and Peter Landin for their insights into the
+relationship of Church's lambda calculus to the structure of
+programming languages.  We also recognize our debt to the
+mathematicians who scouted out this territory decades before computers
+appeared on the scene.  These pioneers include Alonzo Church, Barkley
+Rosser, Stephen Kleene, and Haskell Curry.</p>
+
+<p class="trans" lang="ja">
+Scheme——私たちが使っているLispの方言——は、LispとAlgolの力強さと優美さを結びつける試みである。
+Lispから、私たちは、簡潔な構文に由来するメタ言語学的な力と、データオブジェクトとしてのプログラムの一様な表現と、ガーベジ・コレクションされるヒープ割り当て済みデータを受け取っている。
+Algolから、私たちは、レキシカル・スコープとブロック構造——それらは、Algol委員会の構成員であった、プログラミング言語設計の先駆者たちからの贈り物である——を受け取っている。
+私たちは、チャーチのラムダ計算と、プログラミング言語の構造との間の関係についての洞察ゆえに、ジョン・レイノルズとピーター・ランディンの名を記しておきたい。
+私たちは、コンピュータが登場する前の数十年間にこの領域を探索した数学者たちに恩があることも、分かっている。
+これらの先駆者たちには、アロンゾ・チャーチ、バークリー・ロッサー、スティーヴン・クリーネ、ハスケル・カリーなどが含まれる。</p>
+
+
+</div>
+</body>
+</html>

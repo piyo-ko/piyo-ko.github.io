@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>SICP私訳: 第1章　手続きを使って抽象概念を組み立てる</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲済み</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="08_ack.html">前へ</a> |
+<a href="10_sec1_1.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_chap_1">1</a>
+📚<a href="#%_sec_Temp_6">…</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+</div>
+
+<div class="main-txt">
+<h1 class="orig" lang="en" id="%_chap_1"><a href="04_toc.html#%_toc_%_chap_1">Chapter 1<br>
+Building Abstractions with Procedures</a></h1>
+<h1 class="trans" lang="ja">第1章　手続きを使って<!--抽象物を構築する-->抽象概念を組み立てる
+</h1>
+
+<blockquote class="orig" lang="en">
+The acts of the mind, wherein it exerts its power over simple ideas,
+are chiefly these three: 1. Combining several simple ideas into one
+compound one, and thus all complex ideas are made.  2. The second is
+bringing two ideas, whether simple or complex, together, and setting
+them by one another so as to take a view of them at once, without
+uniting them into one, by which it gets all its ideas of relations.
+3.  The third is separating them from all other ideas that accompany
+them in their real existence: this is called abstraction, and thus all
+its general ideas are made.<br>
+<br>
+<a name="%_idx_6"></a>John Locke, <em>An Essay Concerning Human Understanding</em>
+(1690)</blockquote>
+
+<blockquote class="trans" lang="ja">
+精神のはたらき——精神は、単純な考えに対して力を行使する——は、主に次の三つである。
+第一に、いくつかの単純な<!--考え-->観念を結びつけて、一つの複合的な<!--考え-->観念とすること。こうして、すべての複雑な<!--考え-->観念は作られるのである。
+第二に、二つの<!--考え-->観念を、<!--それらが-->単純であろうが複雑であろうが一緒にまとめておいて、それらを一目で見渡せるように、お互いに嵌め込むこと——ただし、それらを一つに統合することなしに。そうすることにより、精神は、諸関係についてのすべての<!--考え-->観念を得るのである。<!--意訳かなあ……-->
+第三に、現実の存在においてそれら<!--二つ-->の<!--考え-->観念に付随する他のすべての<!--考え-->観念から、それら<!--二つ-->の<!--考え-->観念を分離すること。これは抽象化と呼ばれ、こうして、すべての一般的な<!--考え-->観念ができあがる。<!--itsは何を指すか?--><br>
+<br>
+<a name="%_idx_6"></a>ジョン・ロック『人間知性論』 (1690)
+</blockquote>
+
+<p class="orig" lang="en">
+We are about to study the idea of a <a name="%_idx_8"></a><a name="%_idx_10"></a><em>computational process</em>.
+Computational processes are abstract beings that inhabit computers.
+As they evolve, processes manipulate other abstract things called <a name="%_idx_12"></a><em>data</em>.  The evolution of a process is directed by a pattern of rules
+called a <a name="%_idx_14"></a><em>program</em>.  People create programs to direct processes.
+In effect, we conjure the spirits of the computer with our spells.</p>
+
+<p class="trans" lang="ja">
+私たちは<em>計算プロセス</em>という考えについて学ぼうとしているところである。
+計算プロセスとは、コンピュータの中にある抽象的存在である。
+計算プロセスが進むのに応じて、プロセスは、<em>データ</em>と呼ばれる別の抽象的な物を<!--扱う-->操作する。
+プロセスの進展は、<em>プログラム</em>と呼ばれる諸規則のパタンにより、指図される。
+人はプロセスに指図するためにプログラムを作る。
+実際、私たちは、呪文でコンピュータの精霊を呼び出すのだ。
+</p>
+
+<p class="orig" lang="en">
+A computational process is indeed much like a sorcerer's idea of a
+spirit.  It cannot be seen or touched.  It is not composed of matter
+at all.  However, it is very real.  It can perform intellectual work.
+It can answer questions.  It can affect the world by disbursing money
+at a bank or by controlling a robot arm in a factory.  The programs we
+use to conjure processes are like a sorcerer's spells.  They are
+carefully composed from symbolic expressions in arcane and esoteric
+<a name="%_idx_16"></a><em>programming languages</em> that prescribe the tasks we want our
+processes to perform.</p>
+
+<p class="trans" lang="ja">
+実際、計算プロセスは、魔術師が持っている、精霊という考えとよく似ている。
+それは、見えないし、さわれない。
+それは、まったく、物質から作られているのではない。
+しかし、それは、とても現実的である。
+それは、知的な仕事を遂行できる。
+それは、質問に答えられる。
+それは、銀行でお金を支払うことによって、あるいは、工場でロボットアームを制御することによって、この世界に影響を与えられる。
+私たちがプロセスを呼び出すのに使うプログラムは、魔術師の呪文のようなものである。
+それは、プロセスに実行させたい課題を規定する、謎めいて深遠な<em>プログラミング言語</em>で書かれた象徴的表現から、注意深く合成されている。
+</p>
+
+<p class="orig" lang="en">
+A computational process, in a correctly working computer, executes
+programs precisely and accurately.  Thus, like the sorcerer's
+apprentice, novice programmers must learn to understand and to
+anticipate the consequences of their conjuring.  Even small errors
+(usually called <a name="%_idx_18"></a><em>bugs</em> or <a name="%_idx_20"></a><em>glitches</em>) in programs can have
+complex and unanticipated consequences.</p>
+
+<p class="trans" lang="ja">
+計算プロセスは、正しく動くコンピュータにおいては、プログラムを精密かつ正確に実行する。
+よって、魔術師の見習いと同様に、新人プログラマは、自分が行う呼び出しの結果を理解するとともに予め見越しておくために、学習を行わなくてはならない。
+プログラム内の小さな間違い (通常、<em>バグ</em>または<em>グリッチ</em>と呼ばれる) でさえ、複雑で思いがけない結果をもたらすのだ。
+</p>
+
+<p class="orig" lang="en">
+Fortunately, learning to program is considerably less dangerous than
+learning sorcery, because the spirits we deal with are conveniently
+contained in a secure way.  Real-world programming, however,
+requires care, expertise, and wisdom.  A small bug in a computer-aided
+design program, for example, can lead to the catastrophic collapse of
+an airplane or a dam or the self-destruction of an industrial robot.</p>
+
+<p class="trans" lang="ja">
+幸いにも、プログラムを書くことを学ぶことは、魔術を学ぶことよりも、遥かに危険が少ない。というのも、私たちが扱う精霊たちは、安全な方法で都合よく封じ込まれているからだ。
+しかし、実世界のプログラミングには、用心と、専門知識と、知恵を要する。
+たとえば、コンピュータ支援設計プログラムにおける小さなバグが、飛行機またはダムの壊滅的崩壊、あるいは、工業ロボットの自壊を招くことがあり得る。
+</p>
+
+<p class="orig" lang="en">
+Master software engineers have the ability to organize programs so
+that they can be reasonably sure that the resulting processes will
+perform the tasks intended.  They can visualize the behavior of their
+systems in advance.  They know how to structure programs so that
+unanticipated problems do not lead to catastrophic consequences, and
+when problems do arise, they can <a name="%_idx_22"></a><em>debug</em> their programs.  Well-designed
+computational systems, like well-designed automobiles or nuclear
+reactors, are designed in a modular manner, so that the parts can be
+constructed, replaced, and debugged separately.</p>
+
+<p class="trans" lang="ja">
+<!--名人的ソフトウェア・プログラマには、プログラムを、結果として生じるプロセスが、意図した課題をまず間違いなく遂行するだろう、と確信できるようにまとめあげる能力がある。-->
+プログラムの結果として生じるプロセスが、意図した課題を遂行するだろう、と理性的に確信できるようにプログラムをまとめあげる能力が、名人的ソフトウェア技師にはある。
+かれらは、自分のシステムの振る舞いを予め視覚化することができる。
+かれらは、思いがけない問題が壊滅的な結果をもたらさないようにプログラムを構成するにはどうするのか、問題はどんな場合に起きるのか、ということを知っているし、かれらは自分のプログラムを<em>デバッグ</em>できる。
+うまく設計された計算システムは、うまく設計された自動車や原子炉と同様に、モジュール式に設計されており、そのため、諸部分を別々に構築・置換・デバッグすることができる。
+</p>
+
+
+<a name="%_sec_Temp_6"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_6">Programming in Lisp</a></h4>
+<h4 class="trans" lang="ja">Lispでプログラミングする</h4>
+
+<p class="orig" lang="en">
+We need an appropriate language for describing processes, and we will
+use for this purpose the programming language Lisp.  Just as our
+everyday thoughts are usually expressed in our natural language (such
+as English, French, or Japanese), and descriptions of quantitative
+phenomena are expressed with mathematical notations, our procedural
+thoughts will be expressed in Lisp.  <a name="%_idx_24"></a>Lisp was invented in the late
+1950s as a formalism for reasoning about the use of certain kinds of
+logical expressions, called <a name="%_idx_26"></a><em>recursion equations</em>, as a model for
+computation.  The language was conceived by <a name="%_idx_28"></a>John McCarthy and is based
+on his paper ``Recursive Functions of Symbolic Expressions and Their
+Computation by Machine'' (McCarthy 1960).</p>
+
+<p class="trans" lang="ja">
+私たちは、プロセスを記述するための適当な言語を必要としており、この目的のために私たちは、プログラミング言語のLispを使おう。
+私たちの日々の考えが普通は自分の自然言語 (たとえば、英語、フランス語、あるいは日本語) で表され、量的な現象が数学的表記法で表されるのとちょうど同じように、私たちの手続き的な考えは、Lispで表されることになるだろう。
+Lispは、計算のモデルとしてのある種の論理式——<em>再帰方程式</em>と呼ばれる——の使用についての推論のための形式化として、1950年代後半に発明された。
+この言語は、ジョン・マッカーシーが思いついたものであり、「記号式の再帰的関数と、機械によるその計算」という彼の論文 (<a href="http://www-formal.stanford.edu/jmc/recursive.html" target="_blank">McCrthy 1960</a>) に基づいている。
+</p>
+
+<p class="orig" lang="en">
+Despite its inception as a mathematical formalism, Lisp is a practical
+programming language.  A Lisp <a name="%_idx_30"></a><em>interpreter</em> is a machine that
+carries out processes described in the Lisp language.  The first Lisp
+interpreter was implemented by <a name="%_idx_32"></a>McCarthy with the help of colleagues
+and students in the Artificial Intelligence Group of the <a name="%_idx_34"></a>MIT Research
+Laboratory of Electronics and in the MIT Computation
+Center.<a name="call_footnote_Temp_7" href="#footnote_Temp_7"><sup><small>1</small></sup></a> <a name="%_idx_38"></a>Lisp, whose name is an acronym for LISt Processing,
+was designed to provide symbol-manipulating capabilities for
+attacking programming problems such as the symbolic differentiation
+and integration of algebraic expressions.  It included for this
+purpose new data objects known as atoms and lists, which most
+strikingly set it apart from all other languages of the period.</p>
+
+<p class="trans" lang="ja">
+数学的形式化として始まったにもかかわらず、Lispは、実用的なプログラミング言語である。
+Lispの<em>インタプリタ</em>は、Lisp言語で記述されたプロセスを実行するマシンである。
+最初のLispインタプリタは、マッカーシーによって、MIT電子工学調査研究所の人工知能グループとMIT計算センタの同僚や学生の助けを借りて、実装された<a href="#footnote_Temp_7"><sup><small>1</small></sup></a>。
+Lisp——その名はLISt Processingの頭字語である——は、代数式の<!--記号微分や記号積分-->記号的微積分などのプログラミングの諸問題に取り組むための、記号操作の能力を<!--与える-->提供するために、設計された。
+この目的のため、Lispは、アトムとリストとして知られる新たなデータオブジェクトを含んでいたのであり、そのことが、最も際立ってLispを他のすべての同時代の言語と区別している。
+</p>
+
+<p class="orig" lang="en">
+Lisp was not the product of a concerted design effort.  Instead, it
+evolved informally in an experimental manner in response to users'
+needs and to pragmatic implementation considerations.  Lisp's informal
+evolution has continued through the years, and the community of Lisp
+users has traditionally resisted attempts to promulgate any
+``official'' definition of the language.  This evolution, together
+with the flexibility and elegance of the initial conception, has
+enabled Lisp, which is the second oldest language in widespread use
+today (only <a name="%_idx_40"></a>Fortran is older), to continually adapt to encompass the
+most modern ideas about program design.  Thus, Lisp is by now a family
+of dialects, which, while sharing most of the original features, may
+differ from one another in significant ways.  The dialect of Lisp used
+in this book is called <a name="%_idx_42"></a><a name="%_idx_44"></a>Scheme.<a name="call_footnote_Temp_8" href="#footnote_Temp_8"><sup><small>2</small></sup></a></p>
+
+<p class="trans" lang="ja">
+Lispは、熱心な設計努力の賜物ではない。
+そうではなく、Lispは、ユーザの要求に応じて、また、実用的な実装上の問題点に応じて、試験的なやり方で形式ばらずに進展した。
+Lispの形式ばらない進展は何年も続き、Lispユーザの共同体は、この言語のいかなる「公式な」定義を公布する試みに対しても、伝統的に抵抗してきた。
+<!--このような進展は、最初の着想の柔軟性と優美さとともに、Lisp——現在、広く使われている中では二番目に古い言語である (<a name="%_idx_40"></a>Fortranのみが、より古い) ——に、プログラム設計についての最も現代的な概念を包含するように継続的に適合していくのを可能たらしめてきた。-->
+<!--このような進展ぶりと、最初の着想の柔軟性および優美さによって、Lisp——いま広く使われている中では二番目に古い言語である (Fortranのみが、より古い) ——は、プログラム設計についての最も現代的な概念を包含するように絶え間なく適合していくことが可能となった。-->
+このような進展は、最初の着想の柔軟性および明晰さとも相まって、Lisp——現在、広く使われている中では二番目に古い言語である (Fortranのみが、より古い) ——が、プログラム設計についての最も現代的な概念を包含するように、絶え間なく適合していくことを可能としてきた。
+かくして、今やLispは、諸方言——元の特徴のほとんどを共有しているとはいえ、互いに大いに異なることもある——の集まりである。
+本書で使うLispの方言は、Schemeと呼ばれる<a href="#footnote_Temp_8"><sup><small>2</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+Because of its experimental character and its emphasis on symbol
+manipulation, <a name="%_idx_96"></a><a name="%_idx_98"></a><a name="%_idx_100"></a>Lisp was at first very inefficient for numerical
+computations, at least in comparison with Fortran.  Over the years,
+however, Lisp compilers have been developed that translate programs
+into machine code that can perform numerical computations reasonably
+efficiently.  And for special applications, Lisp has been used with
+great effectiveness.<a name="call_footnote_Temp_9" href="#footnote_Temp_9"><sup><small>3</small></sup></a>  Although Lisp has not yet overcome its old reputation
+as hopelessly inefficient, Lisp is now used in many applications where
+efficiency is not the central concern.  For example, Lisp has become
+a language of choice for operating-system shell languages and for
+extension languages for editors and computer-aided design systems.</p>
+
+<p class="trans" lang="ja">
+試験的な性質ゆえに、そして、記号操作を重視するがゆえに、Lispは、最初は、数値計算用には非常に非効率的だった——少なくともFortranと比べて。
+しかし、数値計算をかなり効率的に実行できるマシンコードへと、プログラムを変換するLispコンパイラが、長年にわたって開発されてきた。
+また、特殊な応用分野では、Lispは、多大なる有効性をもって使われてきた<a href="#footnote_Temp_9"><sup><small>3</small></sup></a>。
+絶望的に非効率だという旧来の評判を、Lispはまだ克服してはいないとはいえ、今やLispは、効率性が中心的関心事ではないような多くの応用分野で使われている。
+たとえば、Lispは、オペレーティング・システムのシェル言語だとか、エディタやコンピューター支援設計システム用の拡張言語だとかの、選択肢たる言語となった。
+<!--こなれていない。〜として選べる(〜のために(選択肢として)選べる)言語、とか訳す?-->
+<!--Lispは、たとえば、オペレーティング・システムのシェル言語のためや、エディタやコンピューター支援設計システム用の拡張言語のために、選択肢として選べる言語となった。-->
+</p>
+
+<p class="orig" lang="en">
+If Lisp is not a mainstream language, why are we using it as the
+framework for our discussion of programming?  Because the language
+possesses <a name="%_idx_112"></a>unique features that make it an excellent medium for
+studying important programming constructs and data structures and for
+relating them to the linguistic features that support them.  The most
+significant of these features is the fact that Lisp descriptions of
+processes, called <a name="%_idx_114"></a><a name="%_idx_116"></a><em>procedures</em>, can
+themselves be represented and manipulated as Lisp data.  The
+importance of this is that there are powerful program-design
+techniques that rely on the ability to blur the traditional
+distinction between ``passive'' data and ``active'' processes.  As we
+shall discover, Lisp's flexibility in handling procedures as data
+makes it one of the most convenient languages in existence for
+exploring these techniques.  The ability to represent procedures as
+data also makes Lisp an excellent language for writing programs that
+must manipulate other programs as data, such as the interpreters and
+compilers that support computer languages.  Above and beyond these
+considerations, programming in Lisp is great fun.</p>
+
+<p class="trans" lang="ja">
+もしLsipが主流言語<!--でなければ-->ではないならば、なぜ私たち<!--が-->はプログラミングの議論のための枠組みとしてLispを使っているというのだろう?
+なぜなら、この言語を、重要なプログラミング構成<!--体-->とデータ構造とを学ぶための、また、それらのプログラミング構成とデータ構造を、それらを支える言語的特徴と関連づけるための、優れた手段たらしめる格別な特徴を、この言語は有しているからである。
+これらの特徴のうち最も重要なものは、プロセスのLisp記述——<em>手続き</em>と呼ばれる——自体を、Lispデータとして表現したり操作したりすることができる、という事実である。
+このことの重要性は、「受動的な」データと「能動的な」プロセスの間にある従来の区別をぼやかす能力に依存するような、強力なプログラム設計技法が存在する、ということにある。
+私たちが見出すことになるとおり、手続きをデータとして扱う際のLispの柔軟性は、Lispを、これらの技法を探求するための最も便利な現存の言語の一つたらしめている。
+<!--手続きをデータとして表現する能力は、Lispを、他のプログラムをデータとして操作せねばならないプログラム——たとえば、コンピュータ言語を下支えする、インタプリタやコンパイラなど——を書くための、優れた言語たらしめている。-->
+手続きをデータとして表現する能力により、Lispは、他のプログラムをデータとして操作せねばならないプログラム——たとえば、コンピュータ言語を下支えする、インタプリタやコンパイラなど——を書くための、優れた言語にもなっている。
+これらの事柄に加えて、Lispでプログラミングすることは、とても楽しいのだ。
+</p>
+
+<a name="footnotes"></a>
+<hr>
+<p class="orig" lang="en"><a name="footnote_Temp_7" href="#call_footnote_Temp_7"><sup><small>1</small></sup></a> The <em>Lisp 1 Programmer's Manual</em> appeared in
+1960, and the <em>Lisp 1.5 Programmer's Manual</em> <a name="%_idx_36"></a>(McCarthy 1965)
+was published in 1962.  The early history of Lisp is described in
+McCarthy 1978.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_7"><sup><small>1</small></sup></a>
+1960年に出た<em class="en">Lisp 1 Programmer's Manual</em>と、<em class="en">Lisp 1.5 Programmer's Manual</em> <a name="%_idx_36"></a> (McCarthy 1965) は、1962年に公開された。
+Lispの初期の歴史は、McCarthy 1978に述べられている。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_8" href="#call_footnote_Temp_8"><sup><small>2</small></sup></a> The two dialects in which most
+major Lisp programs of the 1970s were written are <a name="%_idx_46"></a><a name="%_idx_48"></a>MacLisp <a name="%_idx_50"></a>(Moon 1978;
+<a name="%_idx_52"></a>Pitman 1983), developed at the <a name="%_idx_54"></a>MIT Project MAC, and <a name="%_idx_56"></a><a name="%_idx_58"></a>Interlisp
+<a name="%_idx_60"></a>(Teitelman 1974), developed at <a name="%_idx_62"></a>Bolt Beranek and Newman Inc. and the
+<a name="%_idx_64"></a>Xerox Palo Alto Research Center.  <a name="%_idx_66"></a><a name="%_idx_68"></a>Portable Standard Lisp <a name="%_idx_70"></a>(Hearn 1969;
+<a name="%_idx_72"></a>Griss 1981) was a Lisp dialect designed to be easily portable
+between different machines.  MacLisp spawned a number of subdialects,
+such as <a name="%_idx_74"></a><a name="%_idx_76"></a>Franz Lisp, which was developed at the <a name="%_idx_78"></a>University of
+California at Berkeley, and <a name="%_idx_80"></a><a name="%_idx_82"></a>Zetalisp (Moon 1981), which was based on a
+special-purpose processor designed at the <a name="%_idx_84"></a>MIT Artificial Intelligence
+Laboratory to run Lisp very efficiently.  The Lisp dialect used in
+this book, called <a name="%_idx_86"></a>Scheme (Steele 1975), was invented in 1975 by <a name="%_idx_88"></a><a name="%_idx_90"></a>Guy
+Lewis Steele Jr. and Gerald Jay Sussman of the MIT Artificial
+Intelligence Laboratory and later reimplemented for instructional use
+at MIT.  Scheme became an IEEE standard in 1990 (IEEE 1990).  The
+<a name="%_idx_92"></a><a name="%_idx_94"></a>Common Lisp dialect (Steele 1982, Steele 1990) was developed by the
+Lisp community to combine features from the earlier Lisp dialects
+to make an industrial standard for Lisp.  Common Lisp became an ANSI
+standard in 1994 (ANSI&nbsp;1994).</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_8"><sup><small>2</small></sup></a>
+1970年代の最も重要なLispの諸プログラムを書くのに使われた二つの方言は、MacLisp (Moon 1978; Pitman 1983) ——MIT Project MACで開発された——と、Interlisp (Teitelman 1974) ——Bolt Beranek and Newman Inc.とXerox Palo Alto Research Centerで開発された——である。
+Portable Standard Lisp (Hearn 1969; Griss 1981) は、異なるマシン間で簡単に移植可能となるように設計されたLisp方言だった。
+MacLispは、Franz Lisp——カリフォルニア大学バークリー校で開発された——や、Zetalisp (Moon 1981) ——Lispを非常に効率的に実行させるようにMIT人工知能研究所において設計された特定用途プロセッサに基づいていた——などの、多くの下位方言を産み出した。
+本書で使うLisp方言——Scheme (Steele 1975) と呼ばれる——は、1975年に、MIT人工知能研究所のGuy Lewis Steele Jr. とGerald Jay Sussmanによって作り出され、後にMITにおいて教育用途のために再実装された。
+Schemeは、1990年にIEEE規格となった (IEEE 1990)。
+Common Lisp方言 (Steele 1982, Steele 1990) は、Lispの産業的規格を作るために、初期のLispの諸方言からの特徴を統合するように、Lisp共同体により開発された。
+Common Lispは1994年にANSI規格 (ANSI 1994) になった。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_9" href="#call_footnote_Temp_9"><sup><small>3</small></sup></a> One such special application was a
+breakthrough computation of scientific importance -- an integration of
+the motion of the <a name="%_idx_102"></a><a name="%_idx_104"></a>Solar System that extended previous results by
+nearly two orders of magnitude, and demonstrated that the dynamics of
+the Solar System is chaotic.  This computation was made possible by
+new integration algorithms, a special-purpose compiler, and a
+special-purpose computer all implemented with the aid of software
+tools written in Lisp <a name="%_idx_106"></a>(Abelson et al. 1992; <a name="%_idx_108"></a><a name="%_idx_110"></a>Sussman and
+Wisdom 1992).</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_9"><sup><small>3</small></sup></a>
+そういう特殊な応用分野の一つは、<!--科学的重要性のブレイクスルー計算-->科学的重要性を持ったブレイクスルー的な計算である——すなわち、以前の結果をほぼ二桁ぶん拡張し、太陽系の力学が混沌としていることを実証した、太陽系の動きの積分である。
+この計算は、新たな積分アルゴリズムと、特定用途コンパイラと、特定用途コンピュータによって可能となったものだが、それらすべては、Lispで書かれたソフトウェア・ツールの助けを借りて実現されたものである (Abelson et al. 1992; Sussman and Wisdom 1992) 。
+</p>
+</div>
+</body>
+
+</html>

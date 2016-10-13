@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>SICP私訳: 第2版への前書き</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲済み</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="05_foreword.html">前へ</a> |
+<a href="07_prefaceTo1stEd.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]</nav>
+</div>
+
+<div class="main-txt">
+
+<h1 id="%_chap_Temp_3" class="orig" lang="en"><a href="04_toc.html#%_toc_%_chap_Temp_3">Preface to the Second Edition</a></h1>
+<h1 class="trans" lang="ja">第2版への前書き</h1>
+
+<blockquote class="orig" lang="en">
+Is it possible that software is not like anything else, that it
+is meant to be discarded: that the whole point is to 
+always see it as a soap bubble?<br>
+<br>
+<a name="%_idx_2"></a>Alan J. Perlis
+</blockquote>
+
+<blockquote class="trans" lang="ja">
+ソフトウェアが他の何とも似ておらず、捨てられることになっている、などということがあり得るだろうか? ——大事な点はソフトウェアを常にシャボン玉のように儚いものとして見ることだ、などということがあり得るだろうか? <span class="note">(要検討)</span><br>
+<br>
+Alan J. Perlis
+</blockquote>
+
+<p class="orig" lang="en">
+The material in this book has been the basis of MIT's entry-level
+computer science subject since 1980.  We had been teaching this
+material for four years when the first edition was published, and
+twelve more years have elapsed until the appearance of this second
+edition.  We are pleased that our work has been widely adopted and
+incorporated into other texts.  We have seen our students take the
+ideas and programs in this book and build them in as the core of new
+computer systems and languages.  In literal realization of an ancient
+Talmudic pun, our students have become our builders.  We are lucky to
+have such capable students and such accomplished builders.
+</p>
+
+<p class="trans" lang="ja">
+本書の内容は、1980年から、MITでの入門レベルの計算機科学の科目の基礎をなしてきた。
+第一版が出版されたとき、私たちはこの内容を四年間にわたり教えてきたところだったが、この第二版が現れるまでには十二年間以上が経過した。
+私たちの著作が広く採用され、他の教科書に取り込まれてきたことを、嬉しく思う。
+私たちは、学生たちが本書の考えとプログラムを受け入れ、それらを新たなコンピュータ・システムと言語の核として<ruby><rb>盛り込む</rb><rp> (</rp><rt>build in</rt><rp>) </rp></ruby>のを見てきた。
+古代のタルムードの語呂合わせの、文字どおりの現実化において、学生たちは<ruby><rb>建築業者</rb><rp> (</rp><rt>builders</rt><rp>) </rp></ruby>になってきたのだ。
+そういう有能な学生と、そういう熟練した建築業者とを得られたことは幸いである。
+</p>
+
+<p class="orig" lang="en">
+In preparing this edition, we have incorporated hundreds of 
+clarifications suggested by our own teaching experience and the
+comments of colleagues at MIT and elsewhere.  We have redesigned
+most of the major programming systems in the book, including
+the generic-arithmetic system, the interpreters, the register-machine
+simulator, and the compiler; and we have rewritten all the program
+examples to ensure that any Scheme implementation conforming to
+the IEEE Scheme standard (IEEE 1990) will be able to run the code.
+</p>
+
+<p class="trans" lang="ja">
+この版を準備するにあたって、私たちは、私たち自身の授業の経験や、MITや他所の同僚たちのコメントから示唆された、何百もの明確化を取り込んだ。
+私たちは、本書の重要なプログラミング・システム—— 一般算術システム、インタプリタ、レジスタ・マシン・シミュレータ、コンパイラ、など——のほとんどを設計し直した。そして、IEEEのScheme標準 (IEEE 1990) に適合するどのSchemeの実装もコードを実行できることを保証するために、すべてのプログラム例を書き直した。
+</p>
+
+<p class="orig" lang="en">
+This edition emphasizes several new themes.  The most important
+of these is the central role played by different approaches to
+dealing with time in computational models: objects with state,
+concurrent programming, functional programming, lazy evaluation,
+and nondeterministic programming.  We have included new sections on 
+concurrency and nondeterminism, and we have tried to integrate this
+theme throughout the book.
+</p>
+
+<p class="trans" lang="ja">
+この版では、いくつかの新しい主題を強調している。
+その中で最も重要な主題は、計算モデルにおいて時間を扱うためのいくつかの異なる手法——状態つきオブジェクト、並行プログラミング、関数型プログラミング、遅延評価、非決定的プログラミング——が果たす中心的役割である。
+私たちは、並行性と非決定性についての新たな節を入れるとともに、上記の最重要主題を本書の全体に溶け込ませるよう努めた。
+</p>
+
+<p class="orig" lang="en">
+The first edition of the book closely followed the syllabus of our MIT
+one-semester subject.  With all the new material in the second
+edition, it will not be possible to cover everything in a single
+semester, so the instructor will have to pick and choose.  In our own
+teaching, we sometimes skip the section on logic programming
+(section&nbsp;<a href="29_sec4_4.html#%_sec_4.4">4.4</a>), we have students use the
+register-machine simulator but we do not cover its implementation
+(section&nbsp;<a href="32_sec5_2.html#%_sec_5.2">5.2</a>), and we give only a cursory overview of
+the compiler (section&nbsp;<a href="35_sec5_5.html#%_sec_5.5">5.5</a>).  Even so, this is still
+an intense course.  Some instructors may wish to cover only the first
+three or four chapters, leaving the other material for subsequent
+courses.
+</p>
+
+<p class="trans" lang="ja">
+本書の第一版は、私たちのMITでの一学期ぶんの科目のシラバスにぴったり従っていた。
+第二版でのすべての新しい内容を含めると、一学期で何もかもを扱うのは不可能だろうから、教官は精選する必要があるだろう。
+私たち自身の授業では、ときどき論理プログラミングの節 (<a href="29_sec4_4.html#%_sec_4.4">4.4</a>節) を飛ばしたり、学生にレジスタ・マシン・シミュレータを使わせても、その実装 (<a href="32_sec5_2.html#%_sec_5.2">5.2</a>節) は扱わなかったり、コンパイラ (<a href="35_sec5_5.html#%_sec_5.5">5.5</a>節) の大まかな概観を与えるだけだったりする。
+たとえそうでも、依然としてこれは大変な課程である。
+最初の三〜四章のみを扱って、他の内容は後続の課程に取っておきたい、と思う教官もいるだろう。
+</p>
+
+<p class="orig" lang="en">
+The World-Wide-Web site <tt>www-mitpress.mit.edu/sicp</tt>
+provides support for users of this book.
+This includes programs from the book,
+sample programming assignments, supplementary materials,
+and downloadable implementations of the Scheme dialect of Lisp.
+</p>
+
+<p class="trans" lang="ja">
+ウェブサイト<tt>www-mitpress.mit.edu/sicp</tt>では、本書のユーザのためのサポートを提供している
+<span class="note"> (今の URL は <tt><a href="https://mitpress.mit.edu/sicp/" target="_blank">https://mitpress.mit.edu/sicp/</a></tt> である) </span>。
+このサポートは、本書のプログラム、プログラミングの宿題の例、補足情報、LispのScheme方言のダウンロード可能な実装、などを含む。
+</p>
+
+</div>
+</body>
+
+</html>
