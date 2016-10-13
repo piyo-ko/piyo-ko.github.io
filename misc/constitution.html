@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>素人だけれど憲法を読んでみる</title>
+<style type="text/css">
+body {
+  color: hsl(30, 45%, 15%);
+  background: hsl(170, 100%, 85%);
+  line-height: 160%;
+}
+a {
+  color: crimson; /*hsl(170, 90%, 25%);*/
+}
+a:hover {
+  background: hsl(30, 45%, 15%);
+  color: hsl(170, 100%, 85%);
+}
+
+/*本体は左側に表示する*/
+.main {
+  position: static;
+  width: 82vw;
+  margin-top: 0vh;
+  margin-left: 0vw;
+  padding-left: 0em;
+  padding-right: 0em;
+}
+/*ページ内の目次リンク的なナビゲーションバーを右側に表示する*/
+.nav-bar {
+  position: fixed; 
+  top: 2vh;
+  height: 96vh;
+  left: 83vw;
+  width: 12vw;
+  overflow: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+h1, h2 {
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  background: hsl(170, 90%, 65%);
+}
+h1 {
+  text-decoration: underline;
+}
+h2 {
+  text-decoration: none;
+}
+
+thead {
+  color: hsl(30, 55%, 30%);
+  background: hsl(170, 30%, 60%);
+}
+td, th {
+  vertical-align: top;
+}
+th {
+  white-space: nowrap;
+  text-align: right;
+  padding-right: 1ex;
+  padding-left: 1ex;
+}
+
+.ps1 { 
+       border-style: solid; 
+       border-color: hsl(30, 65%, 65%); 
+       border-top-width: 0px;
+       border-left-width: 4px;
+       margin-left: 3px;
+       border-right-width: 1px;
+       border-bottom-width: 2px;
+       padding: 3px;
+}
+.ps2 {
+       border-style: solid; 
+       border-color: hsl(170, 65%, 45%); 
+       border-top-width: 2px;
+       border-left-width: 4px;
+       margin-left: 3px;
+       border-right-width: 1px;
+       border-bottom-width: 0px;
+       padding: 1px;
+}
+ul, p {
+  margin-top: 2pt;
+  margin-bottom: 2pt;
+}
+ul {
+  margin-left: 0;
+  padding-left: 2em;
+}
+ul.note {
+  margin-left: 2em;
+  margin-right: 2em;
+  list-style-type: square;
+}
+td ul {
+  margin-left: 0;
+  padding-left: 1em;
+}
+li {
+  margin-top: 0;
+  margin-left: 0.5em;
+  padding-left: 0;
+}
+p {
+  text-indent: 1em;
+}
+div {
+  margin-bottom: 18pt;
+  padding-left: 0;
+}
+nav {
+  background: hsl(170, 30%, 60%);
+}
+nav ul {
+  list-style-type: none; 
+  line-height: 120%; 
+  margin-left: 0; 
+  padding-left: 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+<h1>素人だけれど憲法を読んでみる</h1>
+<p>何を考えてこのページを作ったのか、というと。</p>
+<ul class="note">
+<li>何年かにわたる、いやーな感じの政治状況により、立憲主義がにわかに脚光を浴びたりして、素人ながら私も憲法を読んでみました。中学か高校の授業以来だ。今の政治社会状況や自民党のトンデモ草案と比べると、現在の憲法は読んでホッとすること。というわけで (?)、すっきり爽やかなチョコミントアイスみたいな配色にしてみた。</li>
+<li>日本語としては確かにこなれていないところもあるけれど、それでも、<a href="#preface">前文</a>と、<a href="#chap02">2章</a>、<a href="#chap03">3章</a>、<a href="#chap10">97条</a>は、多くの人に読まれるべきだと思いました。私は、「あ、これのおかげで自由が奪われることを心配しなくてよい (少なくとも建前上は、そうなっている) んだな」と、多々感じられたので、読んで良かったと思います)。<a href="#chap10">97条</a>は特に胸熱なので読んでみてください。</li>
+<li>ついったらんどでたまに「生きているだけで褒めてくれるbot」みたいなアカウントのツイートが流れてきて、あれはゆるいお笑いを狙っているだけだとは思うのだけれど、基本的人権も、まさにただ生きているだけで保障されるべきもので、何かの義務や属性との引き換えに得るものではない。とまあ、こういったようなことも、割と素直に読み取れると思います。ただ、そのことは繰り返し確認しておかないと、反対派がぞろぞろ出てくるのよな (自然法則ではなくて、歴史的に勝ち取ってきた概念だから、繰り返し確認が必要なんだよね)。自分で自分の首を絞めたがるって何なのかね。</li>
+<li>なお、1章に関しては、「3章と矛盾しているじゃないか」と素朴に思うので、賛成できません (制定時には1章が必要だった、という事情は認めるけれども)。一部の人を門地により差別し、いわれなき義務を課し、信教・言論・居住・職業選択などの自由も奪っているようにしか見えない。適宜の経過措置を設けて (お年を召した方は現状維持を選べるようにし、お若い方にもある程度の年金を支給して移行を支援する、とか)、そのうえで、どんどん皇籍離脱を進めれば、制度を自然消滅させられると思うのですが。</li>
+<li>といったようなことを書いたしばらく後で、例の会見があったわけですが、ばりばりに制度存続を望んでおいででしたね。御本人 (たち) がそういう価値観を内面化してしまっておいでだとなかなか自然消滅も困難かもしれん。でも消滅させるべき制度だという考えは変わらない。</li>
+</ul>
+
+<p>このページではどういう加工をしているのか、というと。</p>
+<ul class="note">
+<li>本ページは、<a href="http://law.e-gov.go.jp/cgi-bin/idxsearch.cgi" target="_blank">法令データ提供システム</a>で検索した<a href="http://law.e-gov.go.jp/cgi-bin/idxselect.cgi?IDX_OPT=4&H_NAME=&H_NAME_YOMI=%82%a0&H_NO_GENGO=H&H_NO_YEAR=&H_NO_TYPE=2&H_NO_NO=&H_FILE_NAME=S21KE000&H_RYAKU=1&H_CTG=1&H_YOMI_GUN=1&H_CTG_GUN=1" target="_blank">憲法のページ</a>のデータを加工したものです。</li>
+<li>元のデータは、「第１項」のところに「１」と書かない習慣にしたがって書かれていますが、本ページでは「１」と明示してあります。</li>
+<li>一文が長いところでは、係り受けを見やすくするために、改行を入れたりリスト表示にしたりしています。また、<span class="ps1"><span class="ps2">ここからここまでが一つの塊ですよ</span>ということを示すための<span class="ps2">表示上の工夫</span></span>をしてみたところもあります。ただ、私は素人なので、誤読しているところもあるかもしれません。もしそういうところがあれば、<a href="https://www.twitter.com/pi__yo__ko" target="_blank">@pi__yo__ko</a></tt> 宛に御教示いただけると幸いです。</li>
+</ul>
+
+<h1 id="preface">日本国憲法 （昭和二十一年十一月三日憲法）</h1>
+
+<div>
+<p>日本国民は、</p>
+  <ul>
+  <li>正当に選挙された<span class="ps1">国会における代表者</span>を通じて行動し、</li>
+  <li>われらとわれらの子孫のために、
+    <ul><li><span class="ps1">諸国民との協和</span>による成果と、</li>
+    <li>わが国全土にわたつて<span class="ps1">自由のもたらす恵沢</span></li></ul>
+  を確保し、</li>
+  <li><span class="ps1"><span class="ps2">政府の行為</span>によつて再び<span class="ps2">戦争の惨禍</span>が起ることのないやうにする</span>ことを決意し、</li>
+  <li>ここに<span class="ps1">主権が国民に存すること</span>を宣言し、</li>
+  <li>この憲法を確定する。</li>
+  </ul>
+<p>そもそも国政は、</p>
+  <ul>
+  <li><span class="ps1">国民の厳粛な信託</span>によるものであつて、</li>
+  <li>その権威は国民に由来し、</li>
+  <li>その権力は国民の代表者がこれを行使し、</li>
+  <li>その福利は国民がこれを享受する。</li>
+  </ul>
+  <p>これは<span class="ps1">人類普遍の原理</span>であり、この憲法は、かかる原理に基くものである。われらは、<span class="ps1">これに反する一切の<span class="ps2">憲法、法令及び詔勅</span></span>を排除する。</p>
+</div>
+
+<div>
+<p>日本国民は、</p>
+<ul>
+<li>恒久の平和を念願し、</li>
+<li><span class="ps1"><span class="ps2">人間相互の関係</span>を支配する<span class="ps2">崇高な理想</span></span>を深く自覚するのであつて、</li>
+<li><span class="ps1"><span class="ps2">平和を愛する諸国民</span>の<span class="ps2">公正と信義</span></span>に信頼して、<span class="ps1">われらの安全と生存</span>を保持しようと決意した。</li>
+</ul>
+<p>われらは、</p>
+<ul>
+<li>平和を維持し、</li>
+<li><span class="ps1">専制と隷従、圧迫と偏狭</span>を地上から永遠に除去しよう</li>
+</ul>
+<p>と努めてゐる国際社会において、名誉ある地位を占めたいと思ふ。われらは、<span class="ps1">全世界の国民が、ひとしく<span class="ps2">恐怖と欠乏から免かれ、平和のうちに生存する権利</span>を有すること</span>を確認する。
+</p></div>
+
+<div>
+<p>われらは、</p>
+<ul>
+<li><span class="ps1">いづれの国家も、<span class="ps2">自国のことのみに専念して他国を無視</span>してはならない</span>のであつて、</li>
+<li><span class="ps1">政治道徳の法則</span>は、普遍的なものであり、</li>
+<li><span class="ps1">この法則に従ふこと</span>は、<span class="ps1"><span class="ps2">自国の主権を維持し、他国と対等関係に立たう</span>とする各国</span>の責務である</li>
+</ul>
+<p>と信ずる。</p>
+<p>日本国民は、国家の名誉にかけ、<span class="ps1">全力をあげて<span class="ps2">この崇高な理想と目的</span>を達成すること</span>を誓ふ。
+</p>
+</div>
+
+<h2 id="chap01">第一章　天皇</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第一条</th><th></th><th></th><td>天皇は、<span class="ps1">日本国の象徴</span>であり<span class="ps1">日本国民統合の象徴</span>であつて、この地位は、<span class="ps1"><span class="ps2">主権の存する日本国民</span>の総意</span>に基く。</td></tr>
+
+<tr><th>第二条</th><th></th><th></th><td>皇位は、世襲のものであつて、<span class="ps1">国会の議決した皇室典範</span>の定めるところにより、これを継承する。</td></tr>
+
+<tr><th>第三条</th><th></th><th></th><td><span class="ps1">天皇の<span class="ps2">国事に関するすべての行為</span></span>には、<span class="ps1">内閣の助言と承認</span>を必要とし、内閣が、その責任を負ふ。</td></tr>
+
+<tr><th>第四条</th><th>１</th><th></th><td>天皇は、<span class="ps1">この憲法の定める国事に関する行為</span>のみを行ひ、<span class="ps1">国政に関する権能</span>を有しない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>天皇は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">その国事に関する行為</span>を委任することができる。</td></tr>
+
+<tr><th>第五条</th><th></th><th></th><td><span class="ps1">皇室典範の定めるところ</span>により摂政を置くときは、摂政は、天皇の名で<span class="ps1">その国事に関する行為</span>を行ふ。この場合には、<span class="ps1">前条第一項の規定</span>を準用する。</td></tr>
+
+<tr><th>第六条</th><th>１</th><th></th><td>天皇は、国会の指名に基いて、内閣総理大臣を任命する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>天皇は、内閣の指名に基いて、最高裁判所の長たる裁判官を任命する。</td></tr>
+
+<tr><th>第七条</th><th></th><th></th><td>天皇は、<span class="ps1">内閣の助言と承認</span>により、国民のために、左の国事に関する行為を行ふ。</td></tr>
+<tr><th></th><th></th><th>一</th><td>憲法改正、法律、政令及び条約を公布すること。</td></tr>
+<tr><th></th><th></th><th>二</th><td>国会を召集すること。</td></tr>
+<tr><th></th><th></th><th>三</th><td>衆議院を解散すること。</td></tr>
+<tr><th></th><th></th><th>四</th><td>国会議員の総選挙の施行を公示すること。</td></tr>
+<tr><th></th><th></th><th>五</th><td><span class="ps1"><span class="ps2">国務大臣</span>及び<span class="ps2">法律の定めるその他の官吏</span>の任免</span>並びに<span class="ps1">全権委任状及び<span class="ps2">大使及び公使</span>の信任状</span>を認証すること。</td></tr>
+<tr><th></th><th></th><th>六</th><td><span class="ps1"><span class="ps2">大赦</span>、<span class="ps2">特赦</span>、<span class="ps2">減刑</span>、<span class="ps2">刑の執行の免除</span>及び<span class="ps2">復権</span></span>を認証すること。</td></tr>
+<tr><th></th><th></th><th>七</th><td>栄典を授与すること。</td></tr>
+<tr><th></th><th></th><th>八</th><td><span class="ps1">批准書</span>及び<span class="ps1">法律の定めるその他の外交文書</span>を認証すること。</td></tr>
+<tr><th></th><th></th><th>九</th><td><span class="ps1">外国の大使及び公使</span>を接受すること。</td></tr>
+<tr><th></th><th></th><th>十</th><td>儀式を行ふこと。</td></tr>
+
+<tr><th>第八条</th><th></th><th></th><td><ul><li>皇室に財産を譲り渡し、又は</li><li>皇室が、財産を譲り受け、若しくは賜与する</li></ul>ことは、国会の議決に基かなければならない。</td></tr>
+
+</table>
+
+
+<h2 id="chap02">第二章　戦争の放棄</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第九条</th><th>１</th><th></th>
+<td>日本国民は、
+<ul><li><span class="ps1"><span class="ps2">正義と秩序</span>を基調とする国際平和</span>を誠実に希求し、</li>
+<li><span class="ps1">国権の発動たる戦争</span>と、<span class="ps1"><span class="ps2">武力による威嚇</span>又は<span class="ps2">武力の行使</span></span>は、<span class="ps1">国際紛争を解決する手段</span>としては、永久にこれを放棄する。</li>
+</ul>
+</td></tr>
+<tr><th></th><th>２</th><th></th><td>前項の目的を達するため、<span class="ps1">陸海空軍その他の戦力</span>は、これを保持しない。国の交戦権は、これを認めない。</td></tr>
+
+</table>
+
+
+<h2 id="chap03">第三章　国民の権利及び義務</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第十条</th><th></th><th></th><td><span class="ps1">日本国民たる要件</span>は、法律でこれを定める。</td></tr>
+
+
+<tr><th>第十一条</th><th></th><th></th><td>国民は、<span class="ps1">すべての基本的人権の享有</span>を妨げられない。<span class="ps1">この憲法が国民に保障する基本的人権</span>は、<span class="ps1">侵すことのできない永久の権利</span>として、<span class="ps1">現在及び将来の国民</span>に与へられる。</td></tr>
+
+<tr><th>第十二条</th><th></th><th></th><td><span class="ps1">この憲法が国民に保障する<span class="ps2">自由及び権利</span></span>は、<span class="ps1">国民の不断の努力</span>によつて、これを保持しなければならない。又、国民は、これを濫用してはならないのであつて、常に<span class="ps1">公共の福祉のため</span>にこれを利用する責任を負ふ。</td></tr>
+
+
+<tr><th>第十三条</th><th></th><th></th><td>すべて国民は、個人として尊重される。<span class="ps1"><span class="ps2">生命、自由及び幸福追求</span>に対する国民の権利</span>については、公共の福祉に反しない限り、<span class="ps1">立法その他の国政</span>の上で、最大の尊重を必要とする。</td></tr>
+
+
+<tr><th>第十四条</th><th>１</th><th></th><td>すべて国民は、<ul><li>法の下に平等であつて、</li><li><span class="ps1">人種、信条、性別、社会的身分又は門地</span>により、<span class="ps1">政治的、経済的又は社会的関係</span>において、差別されない。</li></ul></td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">華族その他の貴族</span>の制度は、これを認めない。</td></tr>
+
+<tr><th></th><th>３</th><th></th><td><span class="ps1">栄誉、勲章その他の栄典</span>の授与は、いかなる特権も伴はない。栄典の授与は、<span class="ps1">現にこれを有し、又は将来これを受ける者</span>の一代に限り、その効力を有する。</td></tr>
+
+
+<tr><th>第十五条</th><th>１</th><th></th><td><span class="ps1"><span class="ps2">公務員を選定し</span>、及び<span class="ps2">これを罷免する</span>こと</span>は、国民固有の権利である。</td></tr>
+<tr><th></th><th>２</th><th></th><td>すべて公務員は、<span class="ps1">全体の奉仕者</span>であつて、<span class="ps1">一部の奉仕者</span>ではない。</td></tr>
+<tr><th></th><th>３</th><th></th><td>公務員の選挙については、<span class="ps1">成年者による普通選挙</span>を保障する。</td></tr>
+<tr><th></th><th>４</th><th></th><td>すべて<span class="ps1">選挙における投票の秘密</span>は、これを侵してはならない。選挙人は、その選択に関し<span class="ps1">公的にも私的にも</span>責任を問はれない。</td></tr>
+
+
+<tr><th>第十六条</th><th></th><th></th><td>何人も、
+<ul><li><span class="ps1">損害の救済</span>、<span class="ps1">公務員の罷免</span>、<span class="ps1"><span class="ps2">法律、命令又は規則</span>の<span class="ps2">制定、廃止又は改正</span></span><span class="ps1">その他の事項</span>に関し、</li>
+<li>平穏に請願する</li>
+</ul>権利を有し、何人も、<span class="ps1">かかる請願をしたため</span>に<span class="ps1">いかなる差別待遇</span>も受けない。</td></tr>
+
+<tr><th>第十七条</th><th></th><th></th><td>何人も、<span class="ps1"><span class="ps2">公務員の不法行為</span>により、損害を受けたとき</span>は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">国又は公共団体</span>に、その賠償を求めることができる。</td></tr>
+
+<tr><th>第十八条</th><th></th><th></th><td>何人も、<span class="ps1">いかなる奴隷的拘束</span>も受けない。又、<span class="ps1">犯罪に因る処罰の場合</span>を除いては、<span class="ps1">その意に反する苦役</span>に服させられない。</td></tr>
+
+<tr><th>第十九条</th><th></th><th></th><td><span class="ps1">思想及び良心の自由</span>は、これを侵してはならない。</td></tr>
+
+<tr><th>第二十条</th><th>１</th><th></th><td><span class="ps1">信教の自由</span>は、何人に対してもこれを保障する。<span class="ps1">いかなる宗教団体</span>も、<span class="ps1"><span class="ps2">国から特権を受け</span>、又は<span class="ps2">政治上の権力を行使して</span></span>はならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>何人も、<span class="ps1">宗教上の<span class="ps2">行為、祝典、儀式又は行事</span></span>に参加することを強制されない。</td></tr>
+<tr><th></th><th>３</th><th></th><td><span class="ps1">国及びその機関</span>は、<span class="ps1">宗教教育その他いかなる宗教的活動</span>もしてはならない。</td></tr>
+
+
+<tr><th>第二十一条</th><th>１</th><th></th><td><span class="ps1"><span class="ps2">集会</span>、<span class="ps2">結社</span>及び<span class="ps2">言論、出版その他一切の表現</span>の自由</span>は、これを保障する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>検閲は、これをしてはならない。<span class="ps1">通信の秘密</span>は、これを侵してはならない。</td></tr>
+
+<tr><th>第二十二条</th><th>１</th><th></th><td>何人も、<span class="ps1">公共の福祉</span>に反しない限り、<span class="ps1"><span class="ps2">居住、移転及び職業選択</span>の自由</span>を有する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>何人も、<span class="ps1"><span class="ps2">外国に移住し</span>、又は<span class="ps2">国籍を離脱する</span>自由</span>を侵されない。</td></tr>
+
+<tr><th>第二十三条</th><th></th><th></th><td><span class="ps1">学問の自由</span>は、これを保障する。</td></tr>
+
+<tr><th>第二十四条</th><th>１</th><th></th><td>婚姻は、<ul><li><span class="ps1">両性の合意のみ</span>に基いて成立し、</li><li><span class="ps1">夫婦が同等の権利を有すること</span>を基本として、相互の協力により、維持され</li></ul>なければならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">配偶者の選択</span>、<span class="ps1">財産権</span>、<span class="ps1">相続</span>、<span class="ps1">住居の選定</span>、<span class="ps1">離婚</span>並びに<span class="ps1"><span class="ps2">婚姻及び家族</span>に関するその他の事項</span>に関しては、法律は、<span class="ps1">個人の尊厳</span>と<span class="ps1">両性の本質的平等</span>に立脚して、制定されなければならない。</td></tr>
+
+<tr><th>第二十五条</th><th>１</th><th></th><td>すべて国民は、<span class="ps1"><span class="ps2">健康で文化的な最低限度の生活</span>を営む権利</span>を有する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>国は、<span class="ps1">すべての生活部面</span>について、<span class="ps1"><span class="ps2">社会福祉、社会保障及び公衆衛生</span>の<span class="ps2">向上及び増進</span></span>に努めなければならない。</td></tr>
+
+<tr><th>第二十六条</th><th>１</th><th></th><td>すべて国民は、<span class="ps1">法律の定めるところ</span>により、その能力に応じて、ひとしく<span class="ps1">教育を受ける権利</span>を有する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>すべて国民は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1"><span class="ps2">その保護する子女</span>に普通教育を受けさせる義務</span>を負ふ。義務教育は、これを無償とする。</td></tr>
+
+<tr><th>第二十七条</th><th>１</th><th></th><td>すべて国民は、勤労の権利を有し、義務を負ふ。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1"><span class="ps2">賃金、就業時間、休息その他の勤労条件</span>に関する基準</span>は、法律でこれを定める。</td></tr>
+<tr><th></th><th>３</th><th></th><td>児童は、これを酷使してはならない。</td></tr>
+
+<tr><th>第二十八条</th><th></th><th></th><td><span class="ps1">勤労者の<span class="ps2">団結する権利</span>及び<span class="ps2">団体交渉その他の団体行動をする権利</span></span>は、これを保障する。</td></tr>
+
+<tr><th>第二十九条</th><th>１</th><th></th><td>財産権は、これを侵してはならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>財産権の内容は、公共の福祉に適合するやうに、法律でこれを定める。</td></tr>
+<tr><th></th><th>３</th><th></th><td>私有財産は、<span class="ps1">正当な補償</span>の下に、これを公共のために用ひることができる。</td></tr>
+
+<tr><th>第三十条</th><th></th><th></th><td>国民は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">納税の義務</span>を負ふ。</td></tr>
+
+<tr><th>第三十一条</th><th></th><th></th><td>何人も、<span class="ps1">法律の定める手続</span>によらなければ、<ul><li>その生命若しくは自由を奪はれ、又は</li><li>その他の刑罰を科せられ</li></ul>ない。</td></tr>
+
+<tr><th>第三十二条</th><th></th><th></th><td>何人も、<span class="ps1">裁判所において裁判を受ける権利</span>を奪はれない。</td></tr>
+
+<tr><th>第三十三条</th><th></th><th></th><td>何人も、<ul><li>現行犯として逮捕される場合を除いては、</li><li><span class="ps1"><span class="ps2">権限を有する司法官憲</span>が発し、且つ<span class="ps2">理由となつてゐる犯罪</span>を明示する令状</span>によらなければ、</li></ul>逮捕されない。</td></tr>
+
+<tr><th>第三十四条</th><th></th><th></th><td>何人も、<ul><li>理由を直ちに告げられ、且つ、</li><li>直ちに弁護人に依頼する権利を与へられ</li></ul>なければ、<span class="ps1">抑留又は拘禁</span>されない。又、<ul><li>何人も、正当な理由がなければ、拘禁されず、</li><li>要求があれば、その理由は、直ちに<span class="ps1"><span class="ps2">本人及びその弁護人</span>の出席する<span class="ps2">公開の法廷</span></span>で示されなければならない。</li></ul></td></tr>
+
+<tr><th>第三十五条</th><th>１</th><th></th><td>何人も、<ul><li><span class="ps1">その住居、書類及び所持品</span>について、<span class="ps1">侵入、捜索及び押収</span>を受けることのない権利は、</li><li>第三十三条の場合を除いては、</li><li><span class="ps1"><span class="ps2">正当な理由</span>に基いて発せられ、且つ<span class="ps2">捜索する場所</span>及び<span class="ps2">押収する物</span>を明示する令状</span>がなければ、</li></ul>侵されない。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">捜索又は押収</span>は、<span class="ps1"><span class="ps2">権限を有する司法官憲</span>が発する各別の令状</span>により、これを行ふ。</td></tr>
+
+<tr><th>第三十六条</th><th></th><th></th><td><span class="ps1">公務員による<span class="ps2">拷問及び残虐な刑罰</span></span>は、絶対にこれを禁ずる。</td></tr>
+
+<tr><th>第三十七条</th><th>１</th><th></th><td>すべて刑事事件においては、被告人は、<span class="ps1">公平な裁判所の迅速な公開裁判</span>を受ける権利を有する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>刑事被告人は、<ul><li>すべての証人に対して審問する機会を充分に与へられ、</li><li>又、<span class="ps1"><span class="ps2">公費で</span><span class="ps2">自己のために</span><span class="ps2">強制的手続により</span>証人を求める権利</span>を有する。</li></ul></td></tr>
+<tr><th></th><th>３</th><th></th><td>刑事被告人は、いかなる場合にも、<span class="ps1">資格を有する弁護人</span>を依頼することができる。<span class="ps1">被告人が自らこれを依頼することができないとき</span>は、国でこれを附する。</td></tr>
+
+<tr><th>第三十八条</th><th>１</th><th></th><td>何人も、自己に不利益な供述を強要されない。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1"><span class="ps2">強制、拷問若しくは脅迫</span>による自白</span>又は<span class="ps1">不当に長く<span class="ps2">抑留若しくは拘禁</span>された後の自白</span>は、これを証拠とすることができない。</td></tr>
+<tr><th></th><th>３</th><th></th><td>何人も、<span class="ps1">自己に不利益な唯一の証拠</span>が<span class="ps1">本人の自白</span>である場合には、<span class="ps1">有罪とされ、又は刑罰を科せられ</span>ない。</td></tr>
+
+<tr><th>第三十九条</th><th></th><th></th><td>何人も、<span class="ps1">実行の時に適法であつた行為</span>又は<span class="ps1">既に無罪とされた行為</span>については、<span class="ps1">刑事上の責任</span>を問はれない。又、同一の犯罪について、重ねて<span class="ps1">刑事上の責任</span>を問はれない。</td></tr>
+
+<tr><th>第四十条</th><th></th><th></th><td>何人も、<span class="ps1"><span class="ps2">抑留又は拘禁</span>された後、<span class="ps2">無罪の裁判</span>を受けたとき</span>は、<span class="ps1">法律の定めるところ</span>により、国に<span class="ps1">その補償</span>を求めることができる。</td></tr>
+</table>
+
+<h2 id="chap04">第四章　国会</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+<tr><th>第四十一条</th><th></th><th></th><td>国会は、<span class="ps1">国権の最高機関</span>であつて、<span class="ps1">国の唯一の立法機関</span>である。</td></tr>
+
+<tr><th>第四十二条</th><th></th><th></th><td>国会は、<span class="ps1">衆議院及び参議院の両議院</span>でこれを構成する。</td></tr>
+
+<tr><th>第四十三条</th><th>１</th><th></th><td>両議院は、<span class="ps1"><span class="ps2">全国民を代表する</span><span class="ps2">選挙された議員</span></span>でこれを組織する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>両議院の議員の定数は、法律でこれを定める。</td></tr>
+
+<tr><th>第四十四条</th><th></th><th></th><td><span class="ps1">両議院の<span class="ps2">議員及びその選挙人</span>の資格</span>は、法律でこれを定める。但し、<span class="ps1">人種、信条、性別、社会的身分、門地、教育、財産又は収入</span>によつて差別してはならない。</td></tr>
+
+<tr><th>第四十五条</th><th></th><th></th><td>衆議院議員の任期は、四年とする。但し、衆議院解散の場合には、その期間満了前に終了する。</td></tr>
+
+<tr><th>第四十六条</th><th></th><th></th><td>参議院議員の任期は、六年とし、三年ごとに議員の半数を改選する。</td></tr>
+
+<tr><th>第四十七条</th><th></th><th></th><td><span class="ps1">選挙区、投票の方法その他<span class="ps2">両議院の議員の選挙に関する事項</span></span>は、法律でこれを定める。</td></tr>
+
+<tr><th>第四十八条</th><th></th><th></th><td>何人も、<span class="ps1">同時に両議院の議員たること</span>はできない。</td></tr>
+
+<tr><th>第四十九条</th><th></th><th></th><td>両議院の議員は、<span class="ps1">法律の定めるところ</span>により、国庫から<span class="ps1">相当額の歳費</span>を受ける。</td></tr>
+
+<tr><th>第五十条</th><th></th><th></th><td><ul><li>両議院の議員は、<span class="ps1">法律の定める場合</span>を除いては、<span class="ps1">国会の会期中</span>逮捕されず、</li><li><span class="ps1">会期前に逮捕された議員</span>は、<span class="ps1">その議院の要求</span>があれば、会期中これを釈放しなければならない。</li></ul></td></tr>
+
+<tr><th>第五十一条</th><th></th><th></th><td>両議院の議員は、<span class="ps1">議院で行つた<span class="ps2">演説、討論又は表決</span></span>について、院外で責任を問はれない。</td></tr>
+
+<tr><th>第五十二条</th><th></th><th></th><td><span class="ps1">国会の常会</span>は、毎年一回これを召集する。</td></tr>
+
+<tr><th>第五十三条</th><th></th><th></th><td>内閣は、<span class="ps1">国会の臨時会の召集</span>を決定することができる。<span class="ps1"><span class="ps2">いづれかの議院</span>の<span class="ps2">総議員の四分の一以上</span>の要求</span>があれば、内閣は、その召集を決定しなければならない。</td></tr>
+
+<tr><th>第五十四条</th><th>１</th><th></th><td>衆議院が解散されたときは、<ul><li>解散の日から四十日以内に、衆議院議員の総選挙を行ひ、</li><li>その選挙の日から三十日以内に、国会を召集し</li></ul>なければならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>衆議院が解散されたときは、参議院は、同時に閉会となる。但し、内閣は、<span class="ps1">国に緊急の必要があるとき</span>は、<span class="ps1">参議院の緊急集会</span>を求めることができる。</td></tr>
+<tr><th></th><th>３</th><th></th><td><span class="ps1"><span class="ps2">前項但書の緊急集会</span>において採られた措置</span>は、<ul><li>臨時のものであつて、</li><li><span class="ps1">次の国会開会の後十日以内に、衆議院の同意がない場合</span>には、その効力を失ふ。</li></ul></td></tr>
+
+<tr><th>第五十五条</th><th></th><th></th><td>両議院は、各々<span class="ps1">その議員の資格に関する争訟</span>を裁判する。但し、<span class="ps1">議員の議席を失はせる</span>には、<span class="ps1"><span class="ps2">出席議員の三分の二以上</span>の多数による議決</span>を必要とする。</td></tr>
+
+<tr><th>第五十六条</th><th>１</th><th></th><td>両議院は、各々<span class="ps1">その総議員の三分の一以上の出席</span>がなければ、<span class="ps1">議事を開き議決すること</span>ができない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>両議院の議事は、<span class="ps1">この憲法に特別の定のある場合</span>を除いては、<span class="ps1">出席議員の過半数</span>でこれを決し、<span class="ps1">可否同数のとき</span>は、<span class="ps1">議長の決するところ</span>による。</td></tr>
+
+<tr><th>第五十七条</th><th>１</th><th></th><td>両議院の会議は、公開とする。但し、<span class="ps1"><span class="ps2">出席議員の三分の二以上</span>の多数で議決したとき</span>は、秘密会を開くことができる。</td></tr>
+<tr><th></th><th>２</th><th></th><td>両議院は、各々<span class="ps1">その会議の記録</span>を保存し、<span class="ps1"><span class="ps2">秘密会の記録</span>の中で<span class="ps2">特に秘密を要する</span>と認められるもの</span>以外は、これを<span class="ps1">公表し、且つ一般に頒布し</span>なければならない。</td></tr>
+<tr><th></th><th>３</th><th></th><td><span class="ps1"><span class="ps2">出席議員の五分の一以上</span>の要求</span>があれば、<span class="ps1">各議員の表決</span>は、これを<span class="ps1">会議録に記載</span>しなければならない。</td></tr>
+
+<tr><th>第五十八条</th><th>１</th><th></th><td>両議院は、各々<span class="ps1">その議長その他の役員</span>を選任する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>両議院は、各々<ul><li><span class="ps1"><span class="ps2">その会議その他の手続</span>及び<span class="ps2">内部の規律</span>に関する規則</span>を定め、</li><li>又、<span class="ps1">院内の秩序をみだした議員</span>を懲罰する</li></ul>ことができる。但し、<span class="ps1">議員を除名する</span>には、<span class="ps1"><span class="ps2">出席議員の三分の二以上</span>の多数による議決</span>を必要とする。</td></tr>
+
+<tr><th>第五十九条</th><th>１</th><th></th><td>法律案は、<span class="ps1">この憲法に特別の定のある場合</span>を除いては、<span class="ps1">両議院で可決したとき</span>法律となる。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1"><span class="ps2">衆議院で可決し、参議院でこれと異なつた議決をした</span>法律案</span>は、<span class="ps1">衆議院で<span class="ps2">出席議員の三分の二以上の多数</span>で再び可決したとき</span>は、法律となる。</td></tr>
+<tr><th></th><th>３</th><th></th><td>前項の規定は、<span class="ps1"><span class="ps2">法律の定めるところ</span>により、衆議院が、<span class="ps2">両議院の協議会を開くこと</span>を求めること</span>を妨げない。</td></tr>
+<tr><th></th><th>４</th><th></th><td>参議院が、<span class="ps1">衆議院の可決した法律案</span>を受け取つた後、<span class="ps1"><span class="ps2">国会休会中の期間</span>を除いて六十日以内</span>に、議決しないときは、衆議院は、<span class="ps1"><span class="ps2">参議院がその法律案を否決した</span>ものとみなす</span>ことができる。</td></tr>
+
+<tr><th>第六十条</th><th>１</th><th></th><td>予算は、さきに衆議院に提出しなければならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>予算について、参議院で<span class="ps1">衆議院と異なつた議決</span>をした場合に、
+<ul><li><span class="ps1">法律の定めるところ</span>により、<span class="ps1">両議院の協議会</span>を開いても意見が一致しないとき、又は</li><li>参議院が、<span class="ps1">衆議院の可決した予算</span>を受け取つた後、<span class="ps1"><span class="ps2">国会休会中の期間</span>を除いて三十日以内</span>に、議決しないとき</li></ul>
+は、<span class="ps1">衆議院の議決</span>を<span class="ps1">国会の議決</span>とする。</td></tr>
+
+<tr><th>第六十一条</th><th></th><th></th><td><span class="ps1"><span class="ps2">条約の締結</span>に必要な<span class="ps2">国会の承認</span></span>については、<span class="ps1">前条第二項の規定</span>を準用する。</td></tr>
+
+<tr><th>第六十二条</th><th></th><th></th><td>両議院は、各々<ul><li>国政に関する調査を行ひ、</li><li>これに関して、<span class="ps1">証人の<span class="ps2">出頭及び証言</span></span>並びに<span class="ps1">記録の提出</span>を要求する</li></ul>ことができる。</td></tr>
+
+<tr><th>第六十三条</th><th></th><th></th><td>内閣総理大臣その他の国務大臣は、<ul><li><span class="ps1"><span class="ps2">両議院の一</span>に議席を有すると有しないと</span>にかかはらず、</li><li>何時でも</li><li>議案について発言するため</li></ul>議院に出席することができる。又、<span class="ps1"><span class="ps2">答弁又は説明のため</span>出席を求められたとき</span>は、出席しなければならない。</td></tr>
+
+<tr><th>第六十四条</th><th>１</th><th></th><td>国会は、<span class="ps1">罷免の訴追を受けた裁判官</span>を裁判するため、<span class="ps1"><span class="ps2">両議院の議員</span>で組織する弾劾裁判所</span>を設ける。</td></tr>
+<tr><th></th><th>２</th><th></th><td>弾劾に関する事項は、法律でこれを定める。</td></tr>
+</table>
+
+<h2 id="chap05">第五章　内閣</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第六十五条</th><th></th><th></th><td>行政権は、内閣に属する。</td></tr>
+
+<tr><th>第六十六条</th><th>１</th><th></th><td>内閣は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">その首長たる内閣総理大臣</span>及び<span class="ps1">その他の国務大臣</span>でこれを組織する。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">内閣総理大臣その他の国務大臣</span>は、文民でなければならない。</td></tr>
+<tr><th></th><th>３</th><th></th><td>内閣は、<span class="ps1">行政権の行使</span>について、国会に対し連帯して責任を負ふ。</td></tr>
+
+<tr><th>第六十七条</th><th>１</th><th></th><td>内閣総理大臣は、<span class="ps1">国会議員の中から</span><span class="ps1">国会の議決で</span>、これを指名する。この指名は、<span class="ps1">他のすべての案件</span>に先だつて、これを行ふ。</td></tr>
+<tr><th></th><th>２</th><th></th><td>衆議院と参議院とが異なつた指名の議決をした場合に、<ul><li><span class="ps1">法律の定めるところ</span>により、<span class="ps1">両議院の協議会</span>を開いても意見が一致しないとき、又は</li><li>衆議院が指名の議決をした後、<span class="ps1"><span class="ps2">国会休会中の期間</span>を除いて十日以内</span>に、参議院が、指名の議決をしないとき</li></ul>は、<span class="ps1">衆議院の議決</span>を<span class="ps1">国会の議決</span>とする。</td></tr>
+
+<tr><th>第六十八条</th><th>１</th><th></th><td>内閣総理大臣は、国務大臣を任命する。但し、その過半数は、国会議員の中から選ばれなければならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td>内閣総理大臣は、任意に国務大臣を罷免することができる。</td></tr>
+
+<tr><th>第六十九条</th><th></th><th></th><td>内閣は、<ul><li>衆議院で<ul><li><span class="ps1">不信任の決議案</span>を可決し、又は</li><li><span class="ps1">信任の決議案</span>を否決した</li></ul>ときは、</li><li>十日以内に衆議院が解散されない限り、</li></ul>総辞職をしなければならない。</td></tr>
+
+<tr><th>第七十条</th><th></th><th></th><td><ul><li>内閣総理大臣が欠けたとき、又は</li><li><span class="ps1">衆議院議員総選挙の後</span>に初めて<span class="ps1">国会の召集</span>があつたとき</li></ul>は、内閣は、総辞職をしなければならない。</td></tr>
+
+<tr><th>第七十一条</th><th></th><th></th><td><span class="ps1">前二条の場合</span>には、内閣は、<span class="ps1">あらたに内閣総理大臣が任命されるまで</span>引き続きその職務を行ふ。</td></tr>
+
+<tr><th>第七十二条</th><th></th><th></th><td>内閣総理大臣は、内閣を代表して<ul><li>議案を国会に提出し、</li><li><span class="ps1">一般国務及び外交関係</span>について国会に報告し、並びに</li><li>行政各部を指揮監督する。</li></ul></td></tr>
+
+<tr><th>第七十三条</th><th></th><th></th><td>内閣は、<span class="ps1">他の一般行政事務</span>の外、左の事務を行ふ。</td></tr>
+<tr><th></th><th></th><th>一</th><td>法律を誠実に執行し、国務を総理すること。</td></tr>
+<tr><th></th><th></th><th>二</th><td>外交関係を処理すること。</td></tr>
+<tr><th></th><th></th><th>三</th><td>条約を締結すること。但し、<span class="ps1">事前に、<span class="ps2">時宜によつては</span>事後に</span>、<span class="ps1">国会の承認を経ること</span>を必要とする。</td></tr>
+<tr><th></th><th></th><th>四</th><td><span class="ps1">法律の定める基準</span>に従ひ、<span class="ps1">官吏に関する事務</span>を掌理すること。</td></tr>
+<tr><th></th><th></th><th>五</th><td>予算を作成して国会に提出すること。</td></tr>
+<tr><th></th><th></th><th>六</th><td><span class="ps1">この憲法及び法律の規定</span>を実施するために、政令を制定すること。但し、政令には、<span class="ps1">特にその法律の委任がある場合</span>を除いては、罰則を設けることができない。</td></tr>
+<tr><th></th><th></th><th>七</th><td><span class="ps1">大赦、特赦、減刑、<span class="ps2">刑の執行の免除</span>及び復権</span>を決定すること。</td></tr>
+
+<tr><th>第七十四条</th><th></th><th></th><td><span class="ps1">法律及び政令</span>には、すべて<ul><li><span class="ps1">主任の国務大臣</span>が署名し、</li><li>内閣総理大臣が連署する</li></ul>ことを必要とする。</td></tr>
+
+<tr><th>第七十五条</th><th></th><th></th><td>国務大臣は、その在任中、<span class="ps1">内閣総理大臣の同意</span>がなければ、訴追されない。但し、これがため、訴追の権利は、害されない。</td></tr>
+</table>
+
+<h2 id="chap06">第六章　司法</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第七十六条</th><th>１</th><th></th><td>すべて司法権は、<span class="ps1"><span class="ps2">最高裁判所</span>及び<span class="ps2">法律の定めるところにより設置する下級裁判所</span></span>に属する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>特別裁判所は、これを設置することができない。行政機関は、<span class="ps1">終審として裁判を行ふこと</span>ができない。</td></tr>
+<tr><th></th><th>３</th><th></th><td>すべて裁判官は、<ul><li>その良心に従ひ独立してその職権を行ひ、</li><li>この憲法及び法律にのみ拘束される。</li></ul></td></tr>
+
+<tr><th>第七十七条</th><th>１</th><th></th><td>最高裁判所は、<span class="ps1"><span class="ps2">訴訟に関する手続</span>、<span class="ps2">弁護士</span>、<span class="ps2">裁判所の内部規律</span>及び<span class="ps2">司法事務処理</span>に関する事項</span>について、<span class="ps1">規則を定める権限</span>を有する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>検察官は、<span class="ps1">最高裁判所の定める規則</span>に従はなければならない。</td></tr>
+<tr><th></th><th>３</th><th></th><td>最高裁判所は、<span class="ps1"><span class="ps2">下級裁判所に関する規則</span>を定める権限</span>を、下級裁判所に委任することができる。</td></tr>
+
+<tr><th>第七十八条</th><th></th><th></th><td>裁判官は、<ul><li>裁判により、<span class="ps1">心身の故障のために職務を執ることができない</span>と決定された場合を除いては、</li><li>公の弾劾によらなければ</li></ul>罷免されない。<span class="ps1">裁判官の懲戒処分</span>は、<span class="ps1">行政機関がこれを行ふこと</span>はできない。</td></tr>
+
+<tr><th>第七十九条</th><th>１</th><th></th><td>最高裁判所は、<span class="ps1">その長たる裁判官</span>及び<span class="ps1">法律の定める員数のその他の裁判官</span>でこれを構成し、<span class="ps1"><span class="ps2">その長たる裁判官</span>以外の裁判官</span>は、内閣でこれを任命する。</td></tr>
+<tr><th></th><th>２</th><th></th><td>最高裁判所の裁判官の任命は、<ul><li><span class="ps1"><span class="ps2">その任命後</span>初めて行はれる衆議院議員総選挙の際</span><span class="ps1">国民の審査</span>に付し、</li><li><span class="ps1"><span class="ps2">その後十年を経過した後</span>初めて行はれる衆議院議員総選挙の際</span>更に審査に付し、</li><li>その後も同様とする。</li></ul></td></tr>
+<tr><th></th><th>３</th><th></th><td>前項の場合において、<span class="ps1"><span class="ps2">投票者の多数</span>が<span class="ps2">裁判官の罷免</span>を可とするとき</span>は、その裁判官は、罷免される。</td></tr>
+<tr><th></th><th>４</th><th></th><td>審査に関する事項は、法律でこれを定める。</td></tr>
+<tr><th></th><th>５</th><th></th><td><span class="ps1">最高裁判所の裁判官</span>は、<span class="ps1">法律の定める年齢に達した時</span>に退官する。</td></tr>
+<tr><th></th><th>６</th><th></th><td><span class="ps1">最高裁判所の裁判官</span>は、すべて定期に<span class="ps1">相当額の報酬</span>を受ける。この報酬は、在任中、これを減額することができない。</td></tr>
+
+<tr><th>第八十条</th><th>１</th><th></th><td><span class="ps1">下級裁判所の裁判官</span>は、<span class="ps1">最高裁判所の指名した者の名簿</span>によつて、内閣でこれを任命する。その裁判官は、任期を十年とし、<span class="ps1">再任されること</span>ができる。但し、<span class="ps1">法律の定める年齢に達した時</span>には退官する。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">下級裁判所の裁判官</span>は、すべて定期に<span class="ps1">相当額の報酬</span>を受ける。この報酬は、在任中、これを減額することができない。</td></tr>
+
+<tr><th>第八十一条</th><th></th><th></th><td>最高裁判所は、<span class="ps1">一切の<span class="ps2">法律、命令、規則又は処分</span></span>が<span class="ps1">憲法に適合するかしないか</span>を決定する権限を有する<span class="ps1">終審裁判所</span>である。</td></tr>
+
+<tr><th>第八十二条</th><th>１</th><th></th><td><span class="ps1">裁判の<span class="ps2">対審及び判決</span></span>は、公開法廷でこれを行ふ。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">裁判所が、<span class="ps2">裁判官の全員一致</span>で、<span class="ps2">公の秩序又は善良の風俗を害する虞がある</span>と決した場合</span>には、対審は、公開しないでこれを行ふことができる。但し、<ul><li>政治犯罪、</li><li>出版に関する犯罪又は</li><li><span class="ps1">この憲法第三章で保障する国民の権利</span>が問題となつてゐる事件</li></ul>の対審は、常にこれを公開しなければならない。</td></tr>
+
+</table>
+
+<h2 id="chap07">第七章　財政</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+<tr><th>第八十三条</th><th></th><th></th><td><span class="ps1">国の財政を処理する権限</span>は、<span class="ps1">国会の議決</span>に基いて、これを行使しなければならない。</td></tr>
+
+<tr><th>第八十四条</th><th></th><th></th><td><span class="ps1"><span class="ps2">あらたに租税を課し</span>、又は<span class="ps2">現行の租税を変更する</span></span>には、<span class="ps1"><span class="ps2">法律</span>又は<span class="ps2">法律の定める条件</span>によること</span>を必要とする。</td></tr>
+
+<tr><th>第八十五条</th><th></th><th></th><td><span class="ps1"><span class="ps2">国費を支出し</span>、又は<span class="ps2">国が債務を負担する</span></span>には、<span class="ps1">国会の議決</span>に基くことを必要とする。</td></tr>
+
+<tr><th>第八十六条</th><th></th><th></th><td>内閣は、<span class="ps1">毎会計年度の予算</span>を<span class="ps1">作成し、国会に提出して</span>、<span class="ps1">その審議を受け議決を経</span>なければならない。</td></tr>
+
+<tr><th>第八十七条</th><th>１</th><th></th><td><span class="ps1">予見し難い予算の不足</span>に充てるため、<span class="ps1">国会の議決</span>に基いて予備費を設け、<span class="ps1">内閣の責任</span>でこれを支出することができる。</td></tr>
+<tr><th></th><th>２</th><th></th><td>すべて<span class="ps1">予備費の支出</span>については、内閣は、事後に<span class="ps1">国会の承諾</span>を得なければならない。</td></tr>
+
+<tr><th>第八十八条</th><th></th><th></th><td>すべて皇室財産は、国に属する。すべて皇室の費用は、<span class="ps1">予算に計上して国会の議決を経</span>なければならない。</td></tr>
+
+<tr><th>第八十九条</th><th></th><th></th><td>公金その他の公の財産は、<ul><li><span class="ps1">宗教上の<span class="ps2">組織若しくは団体</span></span>の<span class="ps1">使用、便益若しくは維持</span>のため、又は</li><li><span class="ps1">公の支配</span>に属しない<span class="ps1"><span class="ps2">慈善、教育若しくは博愛</span>の事業</span>に対し、</li></ul>これを<span class="ps1"><span class="ps2">支出し</span>、又は<span class="ps2">その利用に供し</span></span>てはならない。</td></tr>
+
+<tr><th>第九十条</th><th>１</th><th></th><td>国の収入支出の決算は、<ul><li>すべて毎年会計検査院がこれを検査し、</li><li>内閣は、次の年度に、その検査報告とともに、これを国会に提出し</li></ul>なければならない。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">会計検査院の<span class="ps2">組織及び権限</span></span>は、法律でこれを定める。</td></tr>
+
+<tr><th>第九十一条</th><th></th><th></th><td>内閣は、<span class="ps1">国会及び国民</span>に対し、<span class="ps1">定期に、少くとも毎年一回、</span><span class="ps1">国の財政状況について</span>報告しなければならない。</td></tr>
+
+</table>
+
+<h2 id="chap08">第八章　地方自治</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第九十二条</th><th></th><th></th><td><span class="ps1">地方公共団体の<span class="ps2">組織及び運営</span>に関する事項</span>は、<span class="ps1">地方自治の本旨</span>に基いて、法律でこれを定める。</td></tr>
+
+<tr><th>第九十三条</th><th>１</th><th></th><td>地方公共団体には、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">その議事機関</span>として議会を設置する。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1"><span class="ps2">地方公共団体の長</span>、<span class="ps2">その議会の議員</span>及び<span class="ps2">法律の定めるその他の吏員</span></span>は、<span class="ps1">その地方公共団体の住民</span>が、直接これを選挙する。</td></tr>
+
+<tr><th>第九十四条</th><th></th><th></th><td>地方公共団体は、<span class="ps1"><span class="ps2">その財産を管理し</span>、<span class="ps2">事務を処理し</span>、及び<span class="ps2">行政を執行する</span>権能</span>を有し、<span class="ps1">法律の範囲内で条例を制定する</span>ことができる。</td></tr>
+
+<tr><th>第九十五条</th><th></th><th></th><td><span class="ps1">一の地方公共団体のみに適用される特別法</span>は、<span class="ps1">法律の定めるところ</span>により、<span class="ps1">その地方公共団体の住民の投票</span>において<span class="ps1">その過半数の同意</span>を得なければ、国会は、これを制定することができない。</td></tr>
+
+</table>
+
+<h2 id="chap09">第九章　改正</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第九十六条</th><th>１</th><th></th><td>この憲法の改正は、<span class="ps1">各議院の総議員の三分の二以上の賛成</span>で、国会が、<span class="ps1">これを発議し、国民に提案して</span><span class="ps1">その承認を経</span>なければならない。この承認には、<span class="ps1">特別の国民投票</span>又は<span class="ps1"><span class="ps2">国会の定める選挙</span>の際行はれる投票</span>において、<span class="ps1">その過半数の賛成</span>を必要とする。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">憲法改正について<span class="ps2">前項の承認</span>を経たとき</span>は、天皇は、国民の名で、<span class="ps1">この憲法と一体を成すもの</span>として、直ちにこれを公布する。</td></tr>
+
+</table>
+
+<h2 id="chap10">第十章　最高法規</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第九十七条</th><th></th><th></th><td><ul><li><span class="ps1"><span class="ps2">この憲法が日本国民に保障する</span><span class="ps2">基本的人権</span></span>は、<span class="ps1"><span class="ps2">人類の多年にわたる自由獲得の努力</span>の成果</span>であつて、</li><li><span class="ps1">これらの権利</span>は、過去<span class="ps1">幾多の試錬</span>に堪へ、<span class="ps1"><span class="ps2">現在及び将来の国民</span>に対し、<span class="ps2">侵すことのできない永久の権利</span>として信託されたもの</span>である。</li></ul></td></tr>
+
+<tr><th>第九十八条</th><th>１</th><th></th><td>この憲法は、<span class="ps1">国の最高法規</span>であつて、<span class="ps1">その条規に反する<span class="ps2">法律、命令、詔勅</span>及び<span class="ps2">国務に関するその他の行為</span>の<span class="ps2">全部又は一部</span></span>は、その効力を有しない。</td></tr>
+<tr><th></th><th>２</th><th></th><td><span class="ps1">日本国が締結した条約</span>及び<span class="ps1">確立された国際法規</span>は、<span class="ps1">これを誠実に遵守すること</span>を必要とする。</td></tr>
+
+<tr><th>第九十九条</th><th></th><th></th><td><span class="ps1">天皇又は摂政</span>及び<span class="ps1">国務大臣、国会議員、裁判官その他の公務員</span>は、<span class="ps1">この憲法を<span class="ps2">尊重し擁護する</span>義務</span>を負ふ。</td></tr>
+
+</table>
+
+<h2 id="chap11">第十一章　補則</h2>
+<table>
+<thead><tr><th>条</th><th>項</th><th>号</th><td></td></tr></thead>
+
+<tr><th>第百条</th><th>１</th><th></th><td>この憲法は、<span class="ps1"><span class="ps2">公布の日</span>から起算して六箇月を経過した日</span>から、これを施行する。</td></tr>
+<tr><th></th><th>２</th><th></th><td><ul><li>この憲法を施行するために必要な法律の制定、参議院議員の選挙及び国会召集の手続</li><li>並びにこの憲法を施行するために必要な準備手続</li></ul>は、<span class="ps1">前項の期日よりも前</span>に、これを行ふことができる。</td></tr>
+
+<tr><th>第百一条</th><th></th><th></th><td><span class="ps1">この憲法施行の際、参議院がまだ成立してゐないとき</span>は、<span class="ps1">その成立するまでの間</span>、衆議院は、<span class="ps1">国会としての権限</span>を行ふ。</td></tr>
+
+<tr><th>第百二条</th><th></th><th></th><td><span class="ps1"><span class="ps2">この憲法による第一期の参議院議員</span>のうち、その半数の者</span>の任期は、これを三年とする。その議員は、<span class="ps1">法律の定めるところ</span>により、これを定める。</td></tr>
+
+<tr><th>第百三条</th><th></th><th></th><td><span class="ps1">この憲法施行の際現に在職する<span class="ps2">国務大臣、衆議院議員及び裁判官並びにその他の公務員</span></span>で、<span class="ps1"><span class="ps2">その地位に相応する地位</span>がこの憲法で認められてゐる者</span>は、<span class="ps1">法律で特別の定をした場合</span>を除いては、この憲法施行のため、当然には<span class="ps1">その地位を失ふこと</span>はない。但し、<span class="ps1">この憲法によつて、後任者が<span class="ps2">選挙又は任命</span>されたとき</span>は、当然その地位を失ふ。
+</table>
+
+</div>
+
+
+<div class="nav-bar"><nav><ul>
+<li><a href="#preface">前文</a></li>
+<li><a href="#chap01">1章</a> (天皇) (1〜8条)</li>
+<li><a href="#chap02">2章</a> (戦争の放棄) (9条)</li>
+<li><a href="#chap03">3章</a> (国民の権利及び義務) (10〜40条)</li>
+<li><a href="#chap04">4章</a> (国会) (41〜64条)</li>
+<li><a href="#chap05">5章</a> (内閣) (65〜75条)</li>
+<li><a href="#chap06">6章</a> (司法) (76〜82条)</li>
+<li><a href="#chap07">7章</a> (財政) (83〜91条)</li>
+<li><a href="#chap08">8章</a> (地方自治) (92〜95条)</li>
+<li><a href="#chap09">9章</a> (改正) (96条)</li>
+<li><a href="#chap10">10章</a> (最高法規) (97〜99条)</li>
+<li><a href="#chap11">11章</a> (補則) (100〜103条)</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><a href="../index.html">ホーム</a></li>
+</ul>
+
+<hr>
+
+<p>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.charset='UTF-8';js.type='text/javascript';js.async=true;js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+<!--
+<br>このページは <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">クリエイティブ・コモンズ 表示 4.0 国際 ライセンスの下に提供されています。</a>
+-->
+</p>
+</nav></div>
+
+</body>
+</html>
