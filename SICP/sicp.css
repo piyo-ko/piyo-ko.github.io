@@ -313,12 +313,15 @@ dl.extra dd {
 	line-height: 90%;
 	padding: 8pt;
 	border: 4pt double hsl(110, 100%, 60%);
+	color: hsl(110, 100%, 25%);
+	white-space: pre;
+	font-family: "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif; /*ここでラテン文字フォントも一緒に指定すると表示が崩れる*/
 }
-/*練習問題で、コードではなく文章を書くとき。コード用のフォントだと鬱陶しいので、ちょっと軽めに。ASCII artも同じフォントにしよう。*/
-.ex_comment, .inline-aa {
+/*練習問題で、コードではなく文章を書くとき。コード用のフォントだと鬱陶しいので、ちょっと軽めに。*/
+.ex_comment {
 	color: hsl(110, 100%, 25%);/*darkgreen;*/
 	white-space: pre;
-	font-family: /*Baskerville, Didot, "クレー", Klee-Medium,*/ /*Georgia,*/ Palatino, "Times New Roman", "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif;
+	font-family: Palatino, "Times New Roman", "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif; 
 }
 /*練習問題の解答とかで、ちょっと強調の手段として赤字が欲しいとき用のクラス。<em>ではない。*/
 .em-red {
