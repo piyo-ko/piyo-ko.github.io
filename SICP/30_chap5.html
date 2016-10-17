@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="sicp.css" type="text/css">
+<base target="_top">
+<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="29_sec4_4.html">前へ</a> |
+<a href="31_sec5_1.html">次へ</a> |
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+<a href="#footnotes">脚注</a>
+]</nav>
+</div>
+
+<div class="main-txt">
+
+
+<a name="%_chap_5"></a>
+<h1 class="orig" lang="en"><a href="04_toc.html#%_toc_%_chap_5">Chapter 5</a><br><a href="04_toc.html#%_toc_%_chap_5">Computing with Register Machines</a></h1>
+<h1 class="trans" lang="ja">第5章　レジスタ・マシンで計算する</h1>
+
+<blockquote class="orig" lang="en">
+My aim is to show that the heavenly machine is not a kind of divine,
+live being, but a kind of clockwork (and he who believes that a clock
+has soul attributes the maker's glory to the work), insofar as nearly
+all the manifold motions are caused by a most simple and material
+force, just as all motions of the clock are caused by a single weight.
+<br>
+<a name="%_idx_5456"></a>Johannes Kepler (letter to Herwart von Hohenburg, 1605)
+</blockquote>
+
+<blockquote class="trans" lang="ja">
+私の目的は、天空の機械が、神による、生きている存在といった類のものではなく、時計仕掛けといった類のものである——時計のすべての動きが、単一の<ruby><rb>錘</rb><rp> (</rp><rt>おもり</rt><rp>) </rp></ruby>により引き起こされるのとちょうど同じように、多岐にわたる運動のほとんどすべてが、最も単純で<!--重要-->本質的な力によって引き起こされる限りは、そうである——ことを (そして、時計には魂があると信じる者は、作成者の栄誉を、その作品ゆえのものである、と考えるのだ、ということを) 示すことなのです。
+<br>
+ヨハネス・ケプラー (ヘルヴァート・フォン・ホーエンブルクへの手紙、1605年)
+</blockquote>
+
+<p class="orig" lang="en">
+We began this book by studying processes and by describing processes
+in terms of procedures written in Lisp.  To explain the meanings of
+these procedures, we used a succession of models of evaluation: the
+substitution model of chapter 1, the environment model of chapter 3,
+and the metacircular evaluator of chapter 4.  Our examination of the
+metacircular evaluator, in particular, dispelled much of the mystery
+of how Lisp-like languages are interpreted.
+But even the metacircular evaluator leaves important questions
+unanswered, because it fails to elucidate the mechanisms of control in
+a Lisp system.  For instance, the evaluator does not explain how the
+evaluation of a subexpression manages to return a value to the
+expression that uses this value, nor does the evaluator explain how
+some recursive procedures generate iterative processes (that is, are evaluated
+using constant space) whereas other recursive procedures generate recursive
+processes.  These questions remain unanswered because the metacircular
+evaluator is itself a Lisp program and hence inherits the control
+structure of the underlying Lisp system.  In order to provide a more
+complete description of the control structure of the Lisp evaluator,
+we must work at a more primitive level than Lisp itself.</p>
+
+<p class="trans" lang="ja">
+私たちは本書を、プロセスを研究すること、そしてLispで書かれた手続きの観点からプロセスを記述することから始めた。
+これらの手続きの意味を説明するために、評価についての一連のモデルを使った。
+すなわち、1章の<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルと、3章の環境モデルと、4章のメタ循環的な評価器である。
+とりわけ、メタ循環的な評価器の吟味により、Lispのような言語がどのように解釈されるのか、ということの謎のほとんどは、払いのけられた。
+しかし、メタ循環的な評価器でさえ、Lispシステムでの制御の仕組みを解明できていないせいで、未解答の重要な疑問を残したままなのだ。
+たとえば、部分式の評価がどのようにして値を、その値を使う式へと何とかうまく返すのか、ということについては、当該評価器は説明を与えてくれないし、他の再帰的手続きは再帰的プロセスを生成するのに、ある種の再帰的手続きはいかにして反復的プロセスを生成する (つまり、一定の空間を使って評価される) のか、ということについても、当該評価器は説明を与えてくれない。
+これらの疑問は、未解答のまま残っている。なぜなら、メタ循環的な評価器自体がLispプログラムであり、そのため、根底にあるLispシステムの制御構造を受け継いでいるからである。
+Lisp評価器の制御構造についての、より完全な記述を提供するためには、私たちは、Lisp自体よりもさらに原始的な水準で作業せねばならない。
+</p>
+
+<p class="orig" lang="en">
+In this chapter we will describe processes in terms of the step-by-step
+operation of a traditional computer.  Such a computer, or <a name="%_idx_5458"></a><em>register
+machine</em>, sequentially executes <em>instructions</em> that
+manipulate the contents of a fixed set of storage elements called <a name="%_idx_5460"></a><em>registers</em>.  A typical register-machine instruction applies a
+primitive operation to the contents of some registers and assigns the
+result to another register.  Our descriptions of processes executed by
+register machines will look very much like ``machine-language''
+programs for traditional computers.  However, instead of focusing on
+the machine language of any particular computer, we will examine
+several Lisp procedures and design a specific register machine to
+execute each procedure.  Thus, we will approach our task from the
+perspective of a hardware architect rather than that of a
+machine-language computer programmer.  In designing register machines,
+we will develop mechanisms for implementing important programming
+constructs such as recursion.  We will also present a language for
+describing designs for register machines.  In
+section <a href="32_sec5_2.html#%_sec_5.2">5.2</a> we will
+implement a Lisp program that
+uses these descriptions to simulate the machines we design.</p>
+
+<p class="trans" lang="ja">
+本章では、伝統的コンピュータの段階的な演算を用いて、プロセスを記述しよう。
+そうしたコンピュータ、すなわち<em>レジスタ・マシン</em>は、<em>レジスタ</em>と呼ばれる記憶素子の所定の一揃いの中身を操作する<em>命令</em>を、逐次的に実行する。
+典型的なレジスタ・マシン命令は、原始的演算をいくつかのレジスタの中身に適用して、結果を別のレジスタに<ruby><rb>代入する</rb><rp> (</rp><rt>わりあてる</rt><rp>) </rp></ruby>。
+レジスタ・マシンにより実行されるプロセスについての私たちの説明は、伝統的コンピュータ用の「マシン語」プログラムにとてもよく似ていることだろう。
+しかし、どれか特定のコンピュータのマシン語に焦点を合わせる代わりに、私たちは、いくつかのLisp手続きを吟味し、それぞれの手続きを実行するための特別なレジスタ・マシンを設計しよう。
+このようにして、私たちは、マシン語コンピュータ・プログラマの観点から、というよりはむしろハードウェア設計者の観点から、自分たちの課題に取りかかろう。
+レジスタ・マシンを設計する際には、再帰などの重要なプログラミング構成を実装するための仕組みを開発しよう。
+レジスタ・マシン用の設計を記述するための言語も提示しよう。
+<a href="32_sec5_2.html#%_sec_5.2">5.2</a>節では、私たちが設計するマシンをシミュレートするのにこれらの記述を用いるLispプログラムを、実装しよう。
+</p>
+
+<p class="orig" lang="en">
+Most of the primitive operations of our register machines are very
+simple.  For example, an operation might add the numbers fetched from
+two registers, producing a result to be stored into a third register.
+Such an operation can be performed by easily described hardware.  In
+order to deal with list structure, however, we will also use the
+memory operations <tt>car</tt>, <tt>cdr</tt>, and <tt>cons</tt>, which require
+an elaborate storage-allocation mechanism.  In
+section <a href="33_sec5_3.html#%_sec_5.3">5.3</a> we study their implementation in
+terms of more elementary operations.</p>
+
+<p class="trans" lang="ja">
+私たちのレジスタ・マシンのほとんどの原始的演算は、とても単純だ。
+たとえば、ある演算は、二つのレジスタから取ってきた数同士を足すかもしれず、これによって第三のレジスタに格納すべき結果を作り出すかもしれない。
+そうした演算は、容易に記述されるハードウェアによって実行され得る。
+しかし、リスト構造を取り扱うためには、<tt>cat</tt> や <tt>cdr</tt> や <tt>cons</tt> というメモリ演算も使うことになるだろうし、これらは、格納と割り当てに関する精妙な仕組みを必要とする。
+<a href="33_sec5_3.html#%_sec_5.3">5.3</a>節では、より基礎的な演算を使った、それらメモリ演算の実装について、研究する。
+</p>
+
+<p class="orig" lang="en">
+In section <a href="34_sec5_4.html#%_sec_5.4">5.4</a>, after we have accumulated experience
+formulating simple procedures as register machines, we will design a
+machine that carries out the algorithm described by the metacircular
+evaluator of section <a href="26_sec4_1.html#%_sec_4.1">4.1</a>.  This will fill in the gap in
+our understanding of how Scheme expressions are interpreted, by
+providing an explicit model for the mechanisms of control in the
+evaluator.
+In section <a href="35_sec5_5.html#%_sec_5.5">5.5</a> we will study a simple compiler that
+translates Scheme programs into sequences of instructions that can be
+executed directly with the registers and operations of the evaluator
+register machine.</p>
+
+<p class="trans" lang="ja">
+<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節では、単純な手続きをレジスタ・マシンとして定式化する経験を積んだ後で、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節のメタ循環的評価器により記述されるアルゴリズムを実行するマシンを設計しよう。
+これは、Scheme式がどのようにして解釈されるのか、ということについての理解における空白を、評価器の中の制御の仕組みのための明示的なモデルを与えることによって、埋めてくれるだろう。
+<a href="35_sec5_5.html#%_sec_5.5">5.5</a>節では、レジスタと評価器レジスタ・マシンの演算とを用いて直接的に実行することができる命令列へと、Schemeプログラムを変換する単純なコンパイラについて研究しよう。
+</p>
+
+</div>
+</body>
+</html>
