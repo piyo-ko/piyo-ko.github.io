@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="11_sec1_2.html">前へ</a> |
+<a href="13_chap2.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_sec_1.3">1.3</a>
+§<a href="#%_sec_1.3.1">1.3.1</a>
+📝<a href="#%_thm_1.29">1.29</a>
+📝<a href="#%_thm_1.30">1.30</a>
+📝<a href="#%_thm_1.31">1.31</a>
+📝<a href="#%_thm_1.32">1.32</a>
+📝<a href="#%_thm_1.33">1.33</a>
+§<a href="#%_sec_1.3.2">1.3.2</a>
+📚<a href="#%_sec_Temp_100">&hellip;</a>
+📝<a href="#%_thm_1.34">1.34</a>
+§<a href="#%_sec_1.3.3">1.3.3</a>
+📚<a href="#%_sec_Temp_103">&hellip;</a>
+📚<a href="#%_sec_Temp_106">&hellip;</a>
+📝<a href="#%_thm_1.35">1.35</a>
+📝<a href="#%_thm_1.36">1.36</a>
+📝<a href="#%_thm_1.37">1.37</a>
+📝<a href="#%_thm_1.38">1.38</a>
+📝<a href="#%_thm_1.39">1.39</a>
+§<a href="#%_sec_1.3.4">1.3.4</a>
+📚<a href="#%_sec_Temp_116">&hellip;</a>
+📚<a href="#%_sec_Temp_120">&hellip;</a>
+📝<a href="#%_thm_1.40">1.40</a>
+📝<a href="#%_thm_1.41">1.41</a>
+📝<a href="#%_thm_1.42">1.42</a>
+📝<a href="#%_thm_1.43">1.43</a>
+📝<a href="#%_thm_1.44">1.44</a>
+📝<a href="#%_thm_1.45">1.45</a>
+📝<a href="#%_thm_1.46">1.46</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+</div>
+
+<div class="main-txt">
+
+
+<a name="%_sec_1.3"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_1.3">1.3  Formulating Abstractions with Higher-Order Procedures</a></h2>
+<h2 class="trans" lang="ja">1.3 高階手続きを使って抽象概念を定式化する</h2>
+
+<p class="orig" lang="en">
+We have seen that procedures are, in effect, abstractions that describe
+compound operations on numbers independent of the particular numbers.
+For example, when we</p>
+
+<p class="trans" lang="ja">
+私たちは、手続きが、事実上は、特定の数とは無関係の、数についての複合的演算を記述する抽象化手段である、ということを見てきた。
+たとえば、私たちが以下のように書くとき、
+</p>
+
+<p class="lisp"><a name="%_idx_962"></a>(define (cube x) (* x x x))</p>
+
+<p class="orig" lang="en">
+we are not talking about the cube of a particular number, but rather
+about a method for obtaining the cube of any number.  Of course we
+could get along without ever defining this procedure, by
+always writing expressions such as</p>
+
+<p class="trans" lang="ja">
+私たちは、特定の数の3乗について述べているのではなく、むしろ、任意の数の3乗を得る方法について述べている。
+もちろん、この手続きをまったく定義せずにうまくやることも可能だろう——以下のような式を常に書くことによって。
+</p>
+
+<p class="lisp">(* 3 3 3)
+(* x x x)
+(* y y y)</p>
+
+<p class="orig" lang="en">
+and never mentioning <tt>cube</tt> explicitly.  This would place us at a
+serious disadvantage, forcing us to work always at the level of the
+particular operations that happen to be primitives in the language
+(multiplication, in this case) rather than in terms of higher-level
+operations.  Our programs would be able to compute cubes, but our
+language would lack the ability to express the concept of cubing.  One
+of the things we should demand from a powerful programming language is
+the ability to build abstractions by assigning names to common
+patterns and then to work in terms of the abstractions directly.
+Procedures provide this ability.  This is why all but the most
+primitive programming languages include mechanisms for defining
+procedures.</p>
+
+<p class="trans" lang="ja">
+そしてまた、明示的には <tt>cube</tt> にまったく言及しないことによって。
+だが、このやり方によって、私たちは、きわめて不利な立場に追いやられるだろう。というのも、このやり方によって、私たちは、より高いレベルの演算を用いて作業する、というよりもむしろ、たまたま言語のプリミティプであるような特定の演算 (この事例では乗算) のレベルで常に作業するように、強いられるからだ。
+私たちのプログラムは3乗を計算できるだろうが、私たちの言語は、3乗するという概念を表現する能力を欠いてしまうだろう。
+強力なプログラミング言語に対して私たちが求めるべき事柄の一つは、共通のパタンに名前を割り当てることで抽象概念を組み立て、その抽象概念を直接的に使って作業するための能力である。
+手続きはこの能力を与えてくれる。
+これが、もっとも原始的なものを除くすべてのプログラミング言語が、手続きを定義するための仕組みを有する理由なのである。
+</p>
+
+<p class="orig" lang="en">
+Yet even in numerical processing we will be severely limited in our
+ability to create abstractions if we are restricted to procedures
+whose parameters must be numbers.  Often the same programming pattern
+will be used with a number of different procedures.  To express such
+patterns as concepts, we will need to construct procedures that can
+accept procedures as arguments or return procedures as values.
+Procedures that manipulate procedures are called <a name="%_idx_964"></a><em>higher-order
+procedures</em>.  This section shows how higher-order procedures can serve
+as powerful abstraction mechanisms, vastly increasing the expressive
+power of our language.</p>
+
+<p class="trans" lang="ja">
+数値的な処理においてさえも、もし、仮引数が数でなければならないような手続きのみに限定されていたら、私たちは、抽象概念を創造する能力において著しく制限されてしまうだろう。
+しばしば、同じプログラミング・パタンが、多くの異なる手続きと一緒に使われることだろう。
+そういうパタンを概念として表現するためには、手続きを実引数として受け入れられるか、あるいは、手続きを値として返せるような手続きを、構築する必要があるだろう。
+手続きを操作する手続きは、<em>高階手続き</em>と呼ばれる。
+本節では、高階手続き——言語の表現力を大いに高めてくれる——が、強力な抽象化の仕組みとしていかに役立つことができるのか、ということを示す。
+</p>
+
+<a name="%_sec_1.3.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_1.3.1">1.3.1  Procedures as Arguments</a></h3>
+<h3 class="trans" lang="ja">1.3.1 実引数としての手続き</h3>
+
+
+<a name="%_idx_966"></a><a name="%_idx_968"></a>
+
+<p class="orig" lang="en">
+Consider the following three procedures.  The first computes the sum
+of the integers from <tt>a</tt> through <tt>b</tt>:</p>
+
+<p class="trans" lang="ja">
+以下の三つの手続きを考えよう。
+一番目の手続きは、<tt>a</tt> から <tt>b</tt> までの整数の和を計算する。
+</p>
+
+<p class="lisp"><a name="%_idx_970"></a>(define (sum-integers a b)
+  (if (&gt; a b)
+      0
+      (+ a (sum-integers (+ a 1) b))))
+</p>
+
+<p class="orig" lang="en">
+The second computes the sum of the cubes of the integers in the given range:</p>
+
+<p class="trans" lang="ja">
+二番目の手続きは、与えられた範囲の整数の3乗の和を計算する。
+</p>
+
+<p class="lisp"><a name="%_idx_972"></a>(define (sum-cubes a b)
+  (if (&gt; a b)
+      0
+      (+ (cube a) (sum-cubes (+ a 1) b))))
+</p>
+
+<p class="orig" lang="en">
+The third computes the sum of a sequence of terms in the
+series</p>
+
+<p class="trans" lang="ja">
+三番目の手続きは、次のような級数における一連の項の和を計算する。</p>
+
+<figure><img src="ch1-Z-G-26.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+which converges to <img src="book-Z-G-D-9.gif" border="0">/8 (very slowly):<a name="call_footnote_Temp_90" href="#footnote_Temp_90"><sup><small>49</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+なお、これは、(とてもゆっくりと) &pi;/8 に収束する<a href="#footnote_Temp_90"><sup><small>49</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_978"></a>(define (pi-sum a b)
+  (if (&gt; a b)
+      0
+      (+ (/ 1.0 (* a (+ a 2))) (pi-sum (+ a 4) b))))
+</p>
+
+<p class="orig" lang="en">
+These three procedures clearly share a common underlying pattern.
+They are for the most part identical, differing only in the name of
+the procedure, the function of <tt>a</tt> used to compute the term to be added,
+and the function that provides the next value of <tt>a</tt>.  We could generate
+each of the procedures by filling in slots in the same template:
+</p>
+
+<p class="trans" lang="ja">
+これら三つの手続きは、明らかに、根底にある共通のパタンを共有している。
+これら三つの手続きは、ほとんどの部分において同一であり、ただ、手続き名と、足すべき項を計算するのに使われる <tt>a</tt> の関数と、<tt>a</tt> の次の値を与える関数だけが、異なっている。
+私たちは、同じテンプレート内の欄を埋めることによって、これらの手続きの各々を作り出せるだろう。
+</p>
+
+<p class="lisp">(define (&lt;<em>name</em>&gt; a b)
+  (if (&gt; a b)
+      0
+      (+ (&lt;<em>term</em>&gt; a)
+         (&lt;<em>name</em>&gt; (&lt;<em>next</em>&gt; a) b))))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_980"></a>The presence of such a common pattern is strong evidence that there is
+a useful abstraction waiting to be brought to the surface.  Indeed,
+mathematicians long ago identified the abstraction of
+<a name="%_idx_982"></a><a name="%_idx_984"></a><em>summation of a series</em> and invented ``sigma
+<a name="%_idx_986"></a><a name="%_idx_988"></a>notation,'' for example</p>
+
+<p class="trans" lang="ja">
+このような共通パタンの存在は、表面化するのを待っている有用な抽象概念がある、ということの強力な証拠である。
+実際、数学者たちは、ずっと前に、<em>級数の和</em>という抽象概念を特定し、「シグマ記法」を発明した——これは、たとえば以下のようなものであり、
+
+<figure><img src="ch1-Z-G-27.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+to express this concept.  The power of sigma notation is that it
+allows mathematicians to deal with the concept of summation
+itself rather than only with particular sums -- for example, to
+formulate general results about sums that are independent of the
+particular series being summed.
+</p>
+
+<p class="trans" lang="ja">
+級数の和というこの抽象概念を表現するためのものである。
+シグマ記法の威力は、シグマ記法によって、数学者たちが、特定の総和だけを扱うというよりむしろ、総和をとるという概念自体を扱えるようになる——たとえば、足される特定の級数とは独立な、総和についての一般的成果を定式化できるようになる——という点にある。
+</p>
+
+<p class="orig" lang="en">
+Similarly, as program designers, we would like our language to
+be powerful enough so that we can write a procedure that expresses the
+concept of summation itself rather than only procedures
+that compute particular sums.  We can do so readily in our
+procedural language by taking the common template shown above and
+transforming the ``slots'' into formal parameters:
+</p>
+
+<p class="trans" lang="ja">
+同様に、プログラム設計者として私たちは、特定の総和を計算する手続きだけを書けるというよりむしろ、総和をとるという概念自体を表現する手続きを書けるように、私たちの言語には十分に強力であってほしい。
+私たちは、私たちの手続き的言語で、難なくそういったことができる——上記の共通テンプレートを受け入れて、「欄」を形式に則った仮引数に変形することによって。
+</p>
+
+<p class="lisp"><a name="%_idx_990"></a>(define (sum term a next b)
+  (if (&gt; a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+</p>
+
+<p class="orig" lang="en">
+Notice that <tt>sum</tt> takes as its arguments the lower and upper bounds
+<tt>a</tt> and <tt>b</tt> together with the procedures <tt>term</tt> and <tt>next</tt>.
+We can use <tt>sum</tt> just as we would any procedure.  For example, we can
+use it (along with a procedure <tt>inc</tt> that increments its argument by 1)
+to define <tt>sum-cubes</tt>:
+</p>
+
+<p class="trans" lang="ja">
+<tt>sum</tt> が、下限と上限にあたる <tt>a</tt> と <tt>b</tt> を、<tt>term</tt> と <tt>next</tt> という手続きとともに、実引数としてとることに注意してほしい。
+私たちが任意の手続きを使うであろう方法とまさに同じように、私たちは、<tt>sum</tt> を使うことができる。
+たとえば、私たちは、<tt>sum</tt> を (実引数を1だけ増やす、<tt>inc</tt> という手続きとともに) 使って <tt>sum-cubes</tt> を定義することができる。
+</p>
+
+<p class="lisp"><a name="%_idx_992"></a>(define (inc n) (+ n 1))
+<a name="%_idx_994"></a>(define (sum-cubes a b)
+  (sum cube a inc b))
+</p>
+
+<p class="orig" lang="en">
+Using this, we can compute the sum of the cubes of the integers from 1
+to 10:
+</p>
+
+<p class="trans" lang="ja">
+これを使うと、私たちは、1から10までの整数の3乗の和を計算できる。
+</p>
+
+<p class="lisp">(sum-cubes 1 10)
+<i>3025</i>
+</p>
+
+<p class="orig" lang="en">
+With the aid of an identity procedure to compute the term, we can define
+<tt>sum-integers</tt> in terms of <tt>sum</tt>:
+</p>
+
+<p class="trans" lang="ja">
+項を計算するための恒等手続きの助けを借りると、私たちは、<tt>sum</tt> を使って <tt>sum-integers</tt> を定義することができる。
+</p>
+
+<p class="lisp"><a name="%_idx_996"></a>(define (identity x) x)
+
+<a name="%_idx_998"></a>(define (sum-integers a b)
+  (sum identity a inc b))
+</p>
+
+<p class="orig" lang="en">
+Then we can add up the integers from 1 to 10:
+</p>
+
+<p class="trans" lang="ja">
+すると、私たちは、1から10までの整数を足し合わせることができる。
+</p>
+
+<p class="lisp">(sum-integers 1 10)
+<i>55</i>
+</p>
+
+<p class="orig" lang="en">
+We can also define <tt>pi-sum</tt> in the same way:<a name="call_footnote_Temp_91" href="#footnote_Temp_91"><sup><small>50</small></sup></a></p>
+
+<p class="trans" lang="ja">
+同じ方法で、私たちは <tt>pi-sum</tt> も定義できる<a href="#footnote_Temp_91"><sup><small>50</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_1000"></a>(define (pi-sum a b)
+  (define (pi-term x)
+    (/ 1.0 (* x (+ x 2))))
+  (define (pi-next x)
+    (+ x 4))
+  (sum pi-term a pi-next b))
+</p>
+
+<p class="orig" lang="en">
+Using these procedures, we can compute an approximation to 
+<img src="book-Z-G-D-9.gif" border="0">:</p>
+
+<p class="trans" lang="ja">
+これらの手続きを使うと、私たちは、&pi;の近似値を計算できる。
+</p>
+
+<p class="lisp">(* 8 (pi-sum 1 1000))
+<i>3.139592655589783</i>
+</p>
+
+<p class="orig" lang="en">
+Once we have <tt>sum</tt>, we can use it as a building block in
+formulating further concepts.  For instance, the <a name="%_idx_1002"></a>definite integral of a
+function <em>f</em> between the limits <em>a</em> and <em>b</em> can be approximated
+numerically using the formula</p>
+
+<p class="trans" lang="ja">
+一旦 <tt>sum</tt> が使えるようになると、私たちは、更なる概念を定式化する際に、<tt>sum</tt> を基本的構成要素として使える。
+たとえば、<em class="en">a</em> と <em class="en">b</em> という両端の間での、<em class="en">f</em> という関数の定積分は、以下の公式を使って、数値的に近似できる。
+</p>
+
+<figure><img src="ch1-Z-G-28.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+for small values of <em>d</em><em>x</em>.  We can express this directly as a
+procedure:</p>
+
+<p class="trans" lang="ja">
+ただし、<em class="en">dx</em> の小さな値に対して。
+私たちは、これを手続きとして直接的に表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1004"></a>(define (integral f a b dx)
+  (define (add-dx x) (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b)
+     dx))
+(integral cube 0 1 0.01)
+<i>.24998750000000042</i>
+(integral cube 0 1 0.001)
+<i>.249999875000001</i>
+</p>
+
+<p class="orig" lang="en">
+(The exact value of the integral of <tt>cube</tt> between 0 and 1 is 1/4.)
+</p>
+
+<p class="trans" lang="ja">
+(0から1までの <tt>cube</tt> の積分の正確な値は、1/4である。)
+<!-- x^3の不定積分は (1/4)*x^4+Cだから、 (1/4)*1^4 - (1/4)*0^4 = 1/4 - 0 = 1/4 -->
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_1.29"></a>
+<b>Exercise 1.29.</b>  <a name="%_idx_1006"></a>Simpson's Rule is a more accurate method of numerical integration than
+the method illustrated above.  Using Simpson's Rule, the integral of a
+function <em>f</em> between <em>a</em> and <em>b</em> is approximated as</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.29.</b> シンプソンの公式は、上記の方法よりも正確な数値積分の方法である。
+シンプソンの公式を使うと、<em class="en">f</em> という関数の <em class="en">a</em> から <em class="en">b</em> までの積分は、次のように近似される。
+</p>
+
+<figure><img src="ch1-Z-G-29.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+where <em>h</em> = (<em>b</em> - <em>a</em>)/<em>n</em>, for some even integer <em>n</em>, and <em>y</em><sub><em>k</em></sub>  = <em>f</em>(<em>a</em> + <em>k</em><em>h</em>).
+(Increasing <em>n</em> increases the accuracy of the approximation.)  Define
+a procedure that takes as arguments <em>f</em>, <em>a</em>, <em>b</em>, and <em>n</em> and returns
+the value of the integral, computed using Simpson's Rule.
+Use your procedure to integrate <tt>cube</tt> between 0 and 1
+(with <em>n</em> = 100 and <em>n</em> = 1000), and compare the results to those of the
+<tt>integral</tt> procedure shown above.</p>
+
+<p class="trans" lang="ja">
+ただしここで、ある偶数の整数 <em class="en">n</em> に対して、
+<span class="math"><em class="en">h</em> = (<em class="en">b</em> &minus; <em class="en">a</em>)/<em class="en">n</em> </span>
+であり、かつ、
+<span class="math"><em class="en">y<sub>k</sub></em>  = <em class="en">f</em>(<em class="en">a</em> + <em class="en">kh</em>)</span>
+である。
+(<em class="en">n</em> の増大により、近似の精度が高まる。)
+<em class="en">f</em> と <em class="en">a</em> と <em class="en">b</em> と <em class="en">n</em> を引数としてとり、積分値——シンプソンの公式を使って計算されたもの——を返すような、手続きを定義せよ。
+君の手続きを使って、(<span class="math"><em class="en">n</em> = 100</span> とした場合と、<span class="math"><em class="en">n</em> = 1000</span> とした場合で) 0から1まで <tt>cube</tt> を積分し、その結果を、上記の <tt>integral</tt> という手続きを使ったときの結果と比べよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.30"></a>
+<b>Exercise 1.30.</b>  <a name="%_idx_1008"></a>The <tt>sum</tt> procedure above generates a linear recursion.  The
+procedure can be rewritten so that the sum is performed iteratively.
+Show how to do this by filling in the missing expressions in the
+following definition:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.30.</b> 上記の <tt>sum</tt> という手続きは、線形再帰を作り出す。
+この手続きは、合計が反復的になされるように、書き換えることができる。
+以下の定義中の欠けている式を埋めることによって、この書き換えの方法を示せ。
+</p>
+
+<p class="lisp">(define (sum term a next b)
+  (define (iter a result)
+    (if &lt;<em>??</em>&gt;
+        &lt;<em>??</em>&gt;
+        (iter &lt;<em>??</em>&gt; &lt;<em>??</em>&gt;)))
+  (iter &lt;<em>??</em>&gt; &lt;<em>??</em>&gt;))
+</p>
+
+<p class="exercise"><span class="ex_comment">; こうかな?</span>
+(define (sum term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (+ (term a) result))))
+  (iter a 0))</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.31"></a>
+<b>Exercise 1.31.</b>  
+<a name="%_idx_1010"></a>a.  The <tt>sum</tt> procedure is only the simplest of a vast number of
+similar abstractions that can be captured as higher-order procedures.<a name="call_footnote_Temp_95" href="#footnote_Temp_95"><sup><small>51</small></sup></a>  Write an analogous procedure
+called <tt>product</tt> that returns the product of the values of a
+function at points over a given range.
+Show how to define <a name="%_idx_1012"></a><tt>factorial</tt> in terms of
+<tt>product</tt>.  Also use <tt>product</tt> to compute approximations to
+<a name="%_idx_1014"></a><img src="book-Z-G-D-9.gif" border="0"> using the formula<a name="call_footnote_Temp_96" href="#footnote_Temp_96"><sup><small>52</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.31.</b>
+a. <tt>sum</tt> の手続きは、高階手続きとして表現され得る莫大な数の類似の抽象化のうちで、もっとも単純なものにすぎない<a href="#footnote_Temp_95"><sup><small>51</small></sup></a>。
+与えられた範囲にわたる各点における、関数の値の積を返すような、<tt>product</tt> と呼ばれる類似の手続きを書け。
+<tt>product</tt> を使って <tt>factorial</tt> を定義する方法を示せ。
+また、以下の公式を用いて &pi; の近似値を計算するために、<tt>product</tt> を使ってみよ<a href="#footnote_Temp_96"><sup><small>52</small></sup></a>。
+</p>
+
+<figure><img src="ch1-Z-G-30.gif" border="0"></figure>
+
+<p class="exercise"><span class="ex_comment">; sumをproductに、0を1に変えただけ。</span>
+(define (product term a next b)
+  (if (&gt; a b)
+      1
+      (* (term a)
+         (product term (next a) next b))))
+
+<span class="ex_comment">; incとidentityも再掲</span>
+(define (inc x) (+ x 1))
+(define (identity x) x)
+(define (factorial n) (product identity 1 inc n))
+
+<span class="ex_comment">; 上記公式の第 2j&minus;1 項と第 2j 項 (j=1, 2, &hellip;) は、それぞれ、2j/(2j+1) と 2(j+1)/(2j+1) である。
+; この2項を組にする。</span>
+(define (twin j)
+  (* (/ (* 2 j) (+ (* 2 j) 1))
+     (/ (* 2 (+ j 1)) (+ (* 2 j) 1))))
+<span class="ex_comment">; 上記公式の第 2n 項までを使った近似値を求める。</span>
+(define (get-pi n) (* 4 (product twin 1 inc n)))
+
+<span class="ex_comment">; ちょっと試してみる。</span>
+gosh&gt; (get-pi 1)
+32/9
+gosh&gt; (get-pi 10)
+274877906944/85530896451
+gosh&gt; (define pi (acos -1))
+pi
+gosh&gt; pi
+3.141592653589793
+gosh&gt; (- pi (get-pi 1))
+-0.41396290196576224
+gosh&gt; (- pi (get-pi 10))
+-0.07219228670339639
+gosh&gt; (- pi (get-pi 100))
+-0.00778581957880764
+</p>
+
+<p class="orig" lang="en">
+b.  If your <tt>product</tt>
+procedure generates a recursive process, write one that generates
+an iterative process.
+If it generates an iterative process, write one that generates
+a recursive process.</p>
+
+<p class="trans" lang="ja">
+b. もし君の書いた <tt>product</tt> が再帰的なプロセスを作り出すなら、反復的なプロセスを作り出すようなものを書け。
+もし君の書いた <tt>product</tt> が反復的なプロセスを作り出すなら、再帰的なプロセスを作り出すようなものを書け。
+</p>
+
+<p class="exercise"><span class="ex_comment">; 練習問題1.30に倣って反復版を書く。</span>
+(define (product term a next b)
+  (define (iter a result)
+    (if (&gt; a b)
+        result
+        (iter (next a) (* (term a) result))))
+  (iter a 1))
+</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.32"></a>
+<b>Exercise 1.32.</b>  <a name="%_idx_1018"></a><a name="%_idx_1020"></a><a name="%_idx_1022"></a>a. Show that <tt>sum</tt> and <tt>product</tt>
+(exercise <a href="#%_thm_1.31">1.31</a>) are both special cases of a still more
+general notion called <tt>accumulate</tt> that combines a collection of
+terms, using some general accumulation function:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.32.</b>
+a. <tt>sum</tt> と <tt>product</tt> (練習問題<a href="#%_thm_1.31">1.31</a>) が、どちらも、ある種の一般的な累積関数を使って項の集まりを合成するような、さらにずっと一般的な、<tt>accumulate</tt> と呼ばれる概念の、特殊な場合であることを示せ。
+</p>
+
+<p class="lisp">(accumulate combiner null-value term a next b)
+</p>
+
+<p class="orig" lang="en">
+<tt>Accumulate</tt> takes as arguments the same term and range
+specifications as <tt>sum</tt> and <tt>product</tt>, together with a <tt>combiner</tt>
+procedure (of two arguments) that specifies how the current
+term is to be combined with the accumulation of the preceding terms
+and a <tt>null-value</tt> that specifies what base value to use
+when the terms run out.  Write <tt>accumulate</tt>
+and show how <tt>sum</tt> and <tt>product</tt> can both
+be defined as simple calls to <tt>accumulate</tt>.</p>
+
+<p class="trans" lang="ja">
+<tt>accumulate</tt> は、<tt>sum</tt> および <tt>product</tt> と同じく、項と範囲の指定を引数としてとるとともに、先行する項の累積に現在の項をどのように結合すべきかを指定する、(2引数の) <tt>combiner</tt> という手続きと、項が尽きたときにどういう基底値を使うべきかを指定する、<tt>null-value</tt> を、引数としてとる。
+<tt>accumulate</tt> を書け。そして、<tt>sum</tt> および <tt>product</tt> の双方が、どうやったら <tt>accumulate</tt> の単純な呼び出しとして定義され得るのか、ということを示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">; こうかな?</span>
+(define (accumulate combiner null-value term a next b)
+  (if (&gt; a b)
+      null-value
+      (combiner (term a)
+                (accumulate combiner null-value term (next a) next b))))
+(define (sum term a next b) (accumulate + 0 term a next b))
+(define (product term a next b) (accumulate * 1 term a next b))</p>
+
+<p class="orig" lang="en">
+b. If your <tt>accumulate</tt>
+procedure generates a recursive process, write one that generates
+an iterative process.
+If it generates an iterative process, write one that generates
+a recursive process.
+</p>
+
+<p class="trans" lang="ja">
+b. もし君の書いた <tt>accumulate</tt> の手続きが再帰的なプロセスを作り出すなら、反復的なプロセスを作り出すようなものを書け。
+もし君の書いた <tt>accumulate</tt> の手続きが反復的なプロセスを作り出すなら、再帰的なプロセスを作り出すようなものを書け。
+</p>
+
+<p class="exercise"><span class="ex_comment">; こうかな?</span>
+(define (accumulate combiner null-value term a next b)
+  (define (iter a result)
+    (if (&gt; a b)
+       result
+       (iter (next a) (combiner (term a) result))))
+  (iter a null-value))</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.33"></a>
+<b>Exercise 1.33.</b>  <a name="%_idx_1024"></a>You can obtain an even more general version of <tt>accumulate</tt>
+(exercise <a href="#%_thm_1.32">1.32</a>) by introducing the notion of a <a name="%_idx_1026"></a><em>filter</em> on the terms to be combined.  That is, combine only those
+terms derived from values in the range that satisfy a specified
+condition.  The resulting <tt>filtered-accumulate</tt> abstraction takes
+the same arguments as accumulate, together with an additional
+predicate of one argument that specifies the filter.  Write <tt>filtered-accumulate</tt> as a procedure.  Show how to express the
+following using <tt>filtered-accumulate</tt>:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.33</b> 結合されるべき項に対する<em>フィルタ</em>という概念を導入することにより、君は、<tt>accumulate</tt> (練習問題<a href="#%_thm_1.32">1.32</a>) の、より一般的なバージョンさえも、得ることができる。
+つまり、指定された条件を満たすような当該範囲内の値から導出される項のみを、結合せよ。
+その結果としてできる <tt>filtered-accumulate</tt> という抽象概念は、<tt>accumulate</tt> と同じ引数をとり、さらに、フィルタを指定するような、1引数の追加の述語も、引数としてとる。
+<tt>filtered-accumulate</tt> を手続きとして書け。
+<tt>filtered-accumulate</tt> を使って以下のことを表現する方法を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">; こうかな?</span>
+(define (filtered-accumulate combiner null-value term a next b filter?)
+  (if (&gt; a b)
+      null-value
+      (if (filter? a)
+        (combiner (term a)
+                  (filtered-accumulate combiner null-value term (next a) next b filter?))
+        (filtered-accumulate combiner null-value term (next a) next b filter?))))
+</p>
+
+<p class="orig" lang="en">
+a. the sum of the squares of the prime numbers in the interval <em>a</em> to
+<em>b</em> (assuming that you have a <tt>prime?</tt> predicate already written)</p>
+
+<p class="trans" lang="ja">
+a. <em class="en">a</em> から <em class="en">b</em> までの範囲内の素数の2乗の和 (なお、君は <tt>prime?</tt> という述語を既に書いているものとする)。
+</p>
+
+<p class="exercise"><span class="ex_comment">; <a href="11_sec1_2.html#%_idx_860">1.2節</a>より再掲</span>
+(define (smallest-divisor n) (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (cond ((&gt; (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+(define (divides? a b) (= (remainder b a) 0))
+<span class="ex_comment">; 1.2節では以下のとおり定義していた。
+; (define (prime? n) (= n (smallest-divisor n)))
+; が、ちょっと変える。</span>
+(define (prime? n) (and (> n 1) (= n (smallest-divisor n))))
+
+<span class="ex_comment">; incを再掲。squareも定義する。</span>
+(define (inc x) (+ x 1))
+(define (square x) (* x x))
+
+<span class="ex_comment">; さて本題</span>
+(define (sum-of-squared-primes a b)
+  (filtered-accumulate + 0 square a inc b prime?))
+
+<span class="ex_comment">; 実行例</span>
+gosh&gt; (sum-of-squared-primes 1 10)
+87
+gosh&gt; (+ 4 9 25 49)
+87
+</p>
+
+<p class="orig" lang="en">
+b. the product of all the positive integers less than <em>n</em>
+<a name="%_idx_1028"></a>that are relatively prime to <em>n</em> (i.e., all positive integers
+<em>i</em> &lt; <em>n</em> such that  <em>G</em><em>C</em><em>D</em>(<em>i</em>,<em>n</em>) = 1).</p>
+
+<p class="trans" lang="ja">
+b. <em class="en">n</em> とは互いに素な、<em class="en">n</em> 未満のすべての正整数 (つまり、
+<span class="math"><em class="en">GCD</em>(<em class="en">i</em>, <em class="en">n</em>) = 1</span> 
+であるような、
+<span class="math"><em class="en">i</em> &lt; <em class="en">n</em></span> 
+なるすべての正整数 <em class="en">i</em>) の積
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_1.3.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_1.3.2">1.3.2  Constructing Procedures Using <tt>Lambda</tt></a></h3>
+<h3 class="trans" lang="ja">1.3.2 <tt>lambda</tt> を使って手続きを構築する</h3>
+
+<p class="orig" lang="en">
+In using <tt>sum</tt> as in section <a href="#%_sec_1.3.1">1.3.1</a>,
+it seems terribly awkward to have to define trivial procedures such as
+<tt>pi-term</tt> and <tt>pi-next</tt> just so we can use them as arguments to
+our higher-order procedure.  Rather than define <tt>pi-next</tt> and <tt>pi-term</tt>, it would be more convenient
+to have a way to directly specify ``the procedure that returns its
+input incremented by 4'' and ``the procedure that returns the
+reciprocal of its input times its input plus 2.''  We can do this by
+introducing the special form <tt>lambda</tt>, which creates procedures.
+Using <tt>lambda</tt> we can describe what we want as</p>
+
+<p class="trans" lang="ja">
+<a href="#%_sec_1.3.1">1.3.1</a>節のように <tt>sum</tt> を使う際、<tt>pi-term</tt> や <tt>pi-next</tt> などの瑣末な手続きを、高階手続きに渡す実引数として使えるようにするために、定義しなくてはならないのは、ひどく不便なように思える。
+<tt>pi-term</tt> や <tt>pi-next</tt> を定義するよりむしろ、「入力を4だけ増やしたものを返す手続き」や「入力に2を足したものを入力に掛けたものの逆数を返す手続き」と直接的に指定するための方法がある方が、より便利であろう。
+<tt>lambda</tt> という特殊形式——これは、手続きを作成する——を導入することで、こういうことが行えるようになる。
+私たちは以下のようにして、<tt>lambda</tt> を使って、望みのものを記述することができる。
+</p>
+
+<p class="lisp">(lambda (x) (+ x 4))
+</p>
+
+<p class="orig" lang="en">
+and
+</p>
+
+<p class="trans" lang="ja">
+および
+</p>
+
+<p class="lisp">(lambda (x) (/ 1.0 (* x (+ x 2))))
+</p>
+
+<p class="orig" lang="en">
+Then our <tt>pi-sum</tt> procedure can be expressed without defining any
+auxiliary procedures as</p>
+
+<p class="trans" lang="ja">
+すると、<tt>pi-sum</tt> の手続きは、補助的手続きを何も定義することなく、以下のように表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1030"></a>(define (pi-sum a b)
+  (sum (lambda (x) (/ 1.0 (* x (+ x 2))))
+       a
+       (lambda (x) (+ x 4))
+       b))
+</p>
+
+<p class="orig" lang="en">
+Again using <tt>lambda</tt>, we can write the <tt>integral</tt> procedure
+without having to define the auxiliary procedure <tt>add-dx</tt>:</p>
+
+<p class="trans" lang="ja">
+もう一度 <tt>lambda</tt> を使うと、<tt>add-dx</tt> という補助的手続きを定義する必要なしに、<tt>integral</tt> の手続きを書ける。
+</p>
+
+<p class="lisp"><a name="%_idx_1032"></a>(define (integral f a b dx)
+  (* (sum f
+          (+ a (/ dx 2.0))
+          (lambda (x) (+ x dx))
+          b)
+     dx))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1034"></a><a name="%_idx_1036"></a><a name="%_idx_1038"></a><a name="%_idx_1040"></a><a name="%_idx_1042"></a>In general, <tt>lambda</tt> is used to create procedures in the same way as
+<tt>define</tt>, except that <a name="%_idx_1044"></a>no name is specified for the procedure:</p>
+
+<p class="trans" lang="ja">
+一般的には、<tt>lambda</tt> は、手続きに名前が指定されないという点を除けば <tt>define</tt> と同じ方法で、手続きを作成するのに使われる。
+</p>
+
+<p class="lisp">(lambda (&lt;<em>formal-parameters</em>&gt;) &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en">
+The resulting procedure is just as much a procedure as one that is
+created using <tt>define</tt>.  The only difference is that it has not
+been associated with any name in the environment.  In fact,</p>
+
+<p class="trans" lang="ja">
+結果としてできる手続きは、<tt>define</tt> を使って作られた手続きとちょうど同様な手続きである。
+唯一の違いは、環境中のどの名前とも、今まで関連づけられていない、という点である。
+実際、
+</p>
+
+<a name="%_idx_1046"></a><p class="lisp">(define (plus4 x) (+ x 4))
+</p>
+
+<p class="orig" lang="en">
+is equivalent to</p>
+
+<p class="trans" lang="ja">
+は、以下のものと等価だ。
+</p>
+
+<p class="lisp">(define plus4 (lambda (x) (+ x 4)))
+</p>
+
+<p class="orig" lang="en">
+We can read a <tt>lambda</tt> expression as follows:</p>
+
+<p class="trans" lang="ja">
+私たちは、<tt>lambda</tt> 式を次のように読むことができる。
+</p>
+
+<p class="lisp">    (lambda             (x)             (+    x     4))
+        <img src="book-Z-G-D-16.gif" border="0">                 <img src="book-Z-G-D-16.gif" border="0">               <img src="book-Z-G-D-16.gif" border="0">    <img src="book-Z-G-D-16.gif" border="0">    <img src="book-Z-G-D-16.gif" border="0">
+ the procedure   of an argument <tt>x</tt>  that adds  <tt>x</tt> and 4<br>
+ <span class="trans" lang="ja">引数 x をとり、x と 4 を足す手続き</span>
+</p>
+
+<a name="%_idx_1048"></a><a name="%_idx_1050"></a><a name="%_idx_1052"></a>
+<p class="orig" lang="en">
+Like any expression that has a procedure as its value, a
+<tt>lambda</tt> expression can be used as the operator in a combination such as</p>
+
+<p class="trans" lang="ja">
+自身の値として手続きを持つ任意の式と同様に、<tt>lambda</tt> 式は、たとえば以下のように、コンビネーション中の演算子として使うことができるし、
+</p>
+
+<p class="lisp">((lambda (x y z) (+ x y (square z))) 1 2 3)
+<i>12</i>
+</p>
+
+<p class="orig" lang="en">
+or, more generally, in any context where we would normally use a
+procedure name.<a name="call_footnote_Temp_99" href="#footnote_Temp_99"><sup><small>53</small></sup></a></p>
+
+<p class="trans" lang="ja">
+あるいは、より一般的には、普通は手続き名を使うであろう、という任意の文脈において、使うことができる<a href="#footnote_Temp_99"><sup><small>53</small></sup></a>。
+</p>
+
+<a name="%_sec_Temp_100"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_100">Using <tt>let</tt> to create local variables</a></h4>
+<h4 class="trans" lang="ja"><tt>let</tt> を使って局所変数を作成する</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_1058"></a><a name="%_idx_1060"></a>
+Another use of <tt>lambda</tt> is in creating local variables.
+We often need local variables in our procedures other than those that have
+been bound as formal parameters.  For example, suppose we wish to
+compute the function</p>
+
+<p class="trans" lang="ja">
+<tt>lambda</tt> のもう一つの使用法は、局所変数の作成における使用である。
+私たちは、仮引数として既に束縛されたもの以外の局所変数も、しばしば手続きの中で必要とする。
+たとえば、以下の関数を計算したいのだとしよう。
+</p>
+
+<figure><img src="ch1-Z-G-31.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+which we could also express as</p>
+
+<p class="trans" lang="ja">
+これは、次のようにも表現できるだろう。
+</p>
+
+<figure><img src="ch1-Z-G-32.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+In writing a procedure to compute <em>f</em>, we would like to include as
+local variables not only <em>x</em> and <em>y</em>  but also the names of
+intermediate quantities like <em>a</em> and <em>b</em>.  One way to
+accomplish this is to
+use an auxiliary procedure to bind the local variables:</p>
+
+<p class="trans" lang="ja">
+<em class="en">f</em> を計算する手続きを書く際、私たちは、<em class="en">x</em> と <em class="en">y</em> だけでなく、<em class="en">a</em> や <em class="en">b</em> のような中間段階の量の名前も、局所変数として含めたい。
+これを達成するための一つの方法は、局所変数を束縛するための補助的手続きを使うことである。
+</p>
+
+<p class="lisp">(define (f x y)
+  (define (f-helper a b)
+    (+ (* x (square a))
+       (* y b)
+       (* a b)))
+  (f-helper (+ 1 (* x y)) 
+            (- 1 y)))
+</p>
+
+<p class="orig" lang="en">
+Of course, we could use a <tt>lambda</tt> expression to specify an
+anonymous procedure for binding our local variables.  The body of
+<tt>f</tt> then becomes a single call to that procedure:</p>
+
+<p class="trans" lang="ja">
+もちろん、局所変数を束縛するための無名手続きとして、<tt>lambda</tt> 式を使うこともできるだろう。
+すると、<tt>f</tt> の本体は、そのような手続きの呼び出しが一つあるだけ、となる。
+</p>
+
+<p class="lisp">(define (f x y)
+  ((lambda (a b)
+     (+ (* x (square a))
+        (* y b)
+        (* a b)))
+   (+ 1 (* x y))
+   (- 1 y)))
+</p>
+
+<p class="orig" lang="en">
+This construct is so useful that there is a special form called
+<tt>let</tt> to make its use more convenient.  Using <tt>let</tt>, the <tt>f</tt>
+procedure could be written as</p>
+
+<p class="trans" lang="ja">
+この構成はとても有用なので、その使用をより便利にするための、<tt>let</tt> と呼ばれる特殊形式が存在する。
+<tt>let</tt> を使うと、<tt>f</tt> の手続きは、以下のように書けるだろう。
+</p>
+
+<p class="lisp">(define (f x y)
+  (let ((a (+ 1 (* x y)))
+        (b (- 1 y)))
+    (+ (* x (square a))
+       (* y b)
+       (* a b))))
+</p>
+
+<a name="%_idx_1062"></a><a name="%_idx_1064"></a>
+<p class="orig" lang="en">
+The general form of a <tt>let</tt> expression is
+</p>
+
+<p class="trans" lang="ja">
+<tt>let</tt> 式の一般的形式は次のとおりである。
+</p>
+
+<p class="lisp">(let ((&lt;<em>var<sub>1</sub></em>&gt; &lt;<em>exp<sub>1</sub></em>&gt;)
+      (&lt;<em>var<sub>2</sub></em>&gt; &lt;<em>exp<sub>2</sub></em>&gt;)
+      <img src="book-Z-G-D-18.gif" border="0">
+      (&lt;<em>var<sub><em>n</em></sub></em>&gt; &lt;<em>exp<sub><em>n</em></sub></em>&gt;))
+   &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en">
+which can be thought of as saying
+</p>
+
+<p class="trans" lang="ja">
+これは、次のように言っているものと見なせる。
+</p>
+
+<div class="orig" lang="en">
+<table border=0><tr><td valign=top >let </td><td valign=top >&lt;<em>var<sub>1</sub></em>&gt; have the value &lt;<em>exp<sub>1</sub></em>&gt; and</td></tr>
+<tr><td valign=top ></td><td valign=top >&lt;<em>var<sub>2</sub></em>&gt; have the value &lt;<em>exp<sub>2</sub></em>&gt; and</td></tr>
+<tr><td valign=top ></td><td valign=top ><img src="book-Z-G-D-18.gif" border="0"></td></tr>
+<tr><td valign=top ></td><td valign=top >&lt;<em>var<sub><em>n</em></sub></em>&gt; have the value &lt;<em>exp<sub><em>n</em></sub></em>&gt;</td></tr>
+<tr><td valign=top >in  </td><td valign=top >&lt;<em>body</em>&gt;
+</td></tr></table>
+</div>
+
+<p class="trans" lang="ja">
+本体 (&lt;<em class="en">body</em>&gt;) において、<br>
+変数<sub>1</sub> (&lt;<em class="en">var<sub>1</sub></em>&gt;) が 式<sub>1</sub> (&lt;<em class="en">exp<sub>1</sub></em>&gt;) という値を持つものとし、<br>
+変数<sub>2</sub> (&lt;<em class="en">var<sub>2</sub></em>&gt;) が 式<sub>2</sub> (&lt;<em class="en">exp<sub>2</sub></em>&gt;) という値を持つものとし、<br>
+&nbsp;&nbsp;<img src="book-Z-G-D-18.gif"><br>
+変数<sub>n</sub> (&lt;<em class="en">var<sub>n</sub></em>&gt;) が 式<sub>n</sub> (&lt;<em class="en">exp<sub>n</sub></em>&gt;) という値を持つものとせよ。
+</p>
+
+<p class="orig" lang="en">
+The first part of the <tt>let</tt> expression is a list of
+name-expression pairs.  When the <tt>let</tt> is evaluated, each name is
+associated with the value of the corresponding expression.  The body
+of the <tt>let</tt> is evaluated with
+these names bound as local variables.  The way this happens is that the <tt>let</tt> expression is interpreted as an alternate syntax for</p>
+
+<p class="trans" lang="ja">
+<tt>let</tt> 式の最初の部分は、名前と式の対のリストである。
+<tt>let</tt> が評価されるとき、それぞれの名前は、対応する式の値と関連づけられる。
+<tt>let</tt> の本体は、局所変数として束縛されたこれらの名前を使って、評価される。
+このようなことが起こる状況とは、<tt>let</tt> 式が以下のものの代替的構文として解釈されるときである。
+</p>
+
+<p class="lisp">((lambda (&lt;<em>var<sub>1</sub></em>&gt; <tt>...</tt>&lt;<em>var<sub><em>n</em></sub></em>&gt;)
+    &lt;<em>body</em>&gt;)
+ &lt;<em>exp<sub>1</sub></em>&gt;
+ <img src="book-Z-G-D-18.gif" border="0">
+ &lt;<em>exp<sub><em>n</em></sub></em>&gt;)
+</p>
+
+<p class="orig" lang="en">
+No new mechanism is required in the interpreter in order to
+provide local variables.  A <a name="%_idx_1066"></a><a name="%_idx_1068"></a><tt>let</tt> expression is simply syntactic sugar for
+the underlying <tt>lambda</tt> application.</p>
+
+<p class="trans" lang="ja">
+局所変数を提供するために、インタプリタには、新たな仕組みは何も必要とされない。
+<tt>let</tt> 式は、単に、裏に潜んだ <tt>lambda</tt> 適用の糖衣構文にすぎない。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1070"></a><a name="%_idx_1072"></a>We can see from this equivalence that
+the scope of a variable specified by a <tt>let</tt> expression is the body of
+the <tt>let</tt>.
+This implies that:</p>
+
+<p class="trans" lang="ja">
+この等価性から、私たちは、<tt>let</tt> 式により指定された変数のスコープが、<tt>let</tt> の本体である、と理解できる。
+このことは、以下のことを暗示する。
+</p>
+
+<ul class="orig" lang="en">
+<li><tt>Let</tt> allows one to
+bind variables as locally as possible to where they
+are to be used.  For example, if the value of <tt>x</tt> is 5,
+the value of the expression</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li><tt>let</tt> によって、変数が使われることになる場所にできるだけ局所的に、その変数を束縛できるようになる。
+たとえば、もし <tt>x</tt> の値が5なら、以下の式の値は、</li>
+</ul>
+
+<p class="lisp">(+ (let ((x 3))
+     (+ x (* x 10)))
+   x)
+</p>
+
+<ul class="orig cont">
+<li>is 38.  Here, the <tt>x</tt> in the body of the <tt>let</tt> is 3,
+so the value of the <tt>let</tt> expression is 33.  On the other hand, the
+<tt>x</tt> that is the second argument to the outermost <tt>+</tt> is still 5.</li>
+</ul>
+
+<ul class="trans cont">
+<li>38である。
+ここで、<tt>let</tt> の本体内での <tt>x</tt> は3なので、<tt>let</tt> 式の値は33である。
+一方、一番外側の <tt>+</tt> の二つ目の実引数である <tt>x</tt> は、依然として5である。</li>
+</ul>
+
+<ul class="orig" lang="en">
+<li>The variables' values are computed outside the <tt>let</tt>.
+This matters when the expressions that
+provide the values for the local variables depend upon
+variables having the same names as the local variables themselves.
+For example, if the value of <tt>x</tt> is 2, the expression</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>変数の値は、<tt>let</tt> の外側で計算される。
+このことは、局所変数に値を与える式が、その局所変数自体と同じ名前を持つ変数に依存しているときに、重要である。
+たとえば、もし <tt>x</tt> の値が2なら、以下の式は、</li>
+</ul>
+
+<p class="lisp">(let ((x 3)
+      (y (+ x 2)))
+  (* x y))
+</p>
+
+<ul class="orig cont">
+<li>will have the value 12 because, inside the body of the <tt>let</tt>,
+<tt>x</tt> will be 3 and <tt>y</tt> will be 4 (which is the
+outer <tt>x</tt> plus 2).</li>
+</ul>
+
+<ul class="trans cont">
+<li>12になるだろう。というのも、<tt>let</tt> の本体内では、<tt>x</tt> は3となり、<tt>y</tt> は4 (外側の <tt>x</tt> に2を足したもの) となるだろうから。</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="%_idx_1074"></a><a name="%_idx_1076"></a>Sometimes we can use internal definitions to get the same effect as
+with <tt>let</tt>.  For example, we could have defined the procedure <tt>f</tt> above as</p>
+
+<p class="trans" lang="ja">
+私たちは、ときには、<tt>let</tt> と同じ効果を得るために内部の定義を使うことができる。
+たとえば、上記の <tt>f</tt> という手続きを、以下のように定義することもできただろう。
+</p>
+
+<p class="lisp">(define (f x y)
+  (define a (+ 1 (* x y)))
+  (define b (- 1 y))
+  (+ (* x (square a))
+     (* y b)
+     (* a b)))
+</p>
+
+<p class="orig" lang="en">
+We prefer, however, to use <tt>let</tt> in situations like this
+and to use internal <tt>define</tt> only for internal procedures.<a name="call_footnote_Temp_101" href="#footnote_Temp_101"><sup><small>54</small></sup></a></p>
+
+<p class="trans" lang="ja">しかし、私たちは、このような状況では <tt>let</tt> を使う方を好み、内部の <tt>define</tt> は内部の手続きにだけ使うことを好む<a href="#footnote_Temp_101"><sup><small>54</small></sup></a>。
+</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.34"></a>
+<b>Exercise 1.34.</b>  Suppose we define the procedure</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.34.</b> 以下の手続きを定義するものとしよう。
+</p>
+
+<p class="lisp">(define (f g)
+  (g 2))
+</p>
+
+<p class="orig" lang="en">
+Then we have</p>
+
+<p class="trans" lang="ja">
+すると、以下のようになる。
+</p>
+
+<p class="lisp">(f square)
+<i>4</i>
+
+(f (lambda (z) (* z (+ z 1))))
+<i>6</i>
+</p>
+
+<p class="orig" lang="en">
+What happens if we (perversely) ask the interpreter to evaluate the
+combination <tt>(f f)</tt>?  Explain.</p>
+
+<p class="trans" lang="ja">
+もし、(ひねくれて) インタプリタに対して、<tt>(f f)</tt> というコンビネーションを評価するように求めたら、何が起こるだろうか?
+説明せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">; 定義にしたがって <tt>(f f)</tt> を展開すると、
+; <tt>(f 2)</tt> となり、これをまた定義にしたがって展開すると、
+; <tt>(2 2)</tt> となるのだが、オペレータたるべき第1要素は、ここでは 2 という数である。
+; 数はオペレータたりえない。ということでエラー。
+
+; 実際、実行してみると、ほれ、この通り。</span>
+gosh&gt; (f f)
+*** ERROR: invalid application: (2 2)
+</p>
+
+<a name="%_sec_1.3.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_1.3.3">1.3.3  Procedures as General Methods</a></h3>
+<h3 class="trans" lang="ja">1.3.3 一般的な方法としての手続き</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_1078"></a><a name="%_idx_1080"></a>
+We introduced compound procedures in
+section <a href="10_sec1_1.html#%_sec_1.1.4">1.1.4</a> as a mechanism for abstracting
+patterns of numerical operations so as to make them independent of the
+particular numbers involved.  With higher-order procedures, such as
+the <tt>integral</tt> procedure of
+section <a href="#%_sec_1.3.1">1.3.1</a>, we began to see a more
+powerful kind of abstraction: procedures used to express general
+methods of computation, independent of the particular functions
+involved.  In this section we discuss two more elaborate
+examples -- general methods for finding zeros and fixed points of
+functions -- and show how these methods can be expressed directly as
+procedures.
+</p>
+
+<p class="trans" lang="ja">
+数値的演算のパタンがそれ自体に伴う特定の数とは独立となるように、その数値的演算のパタンを抽象化するための仕組みとして、<a href="10_sec1_1.html#%_sec_1.1.4">1.1.4</a>節で私たちは、複合的手続きを導入した。
+<a href="#%_sec_1.3.1">1.3.1</a>節の <tt>integral</tt> という手続きなどの高階手続きを使って、私たちは、より強力な種類の抽象化——計算の一般的方法を、それに伴う特定の関数とは独立して表現するために、使われる手続き——を理解し始めた。
+本節では、さらに込み入った二つの例——関数の零点および不動点を見つけるための一般的方法——について議論し、どのようにしてこれらの方法を直接的に手続きとして表現できるのかを示す。
+</p>
+
+<a name="%_sec_Temp_103"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_103">Finding roots of equations by the half-interval method</a></h4>
+<h4 class="trans" lang="ja">二分法により方程式の解を見つける</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_1082"></a>
+The <em>half-interval method</em> is a simple but powerful technique for
+finding roots of an equation <em>f</em>(<em>x</em>) = 0, where <em>f</em> is a continuous
+function.  The idea is that, if we are given points <em>a</em> and <em>b</em> such
+that <em>f</em>(<em>a</em>) &lt; 0 &lt; <em>f</em>(<em>b</em>), then <em>f</em> must have at least one zero between
+<em>a</em> and <em>b</em>.  To locate a zero, let <em>x</em> be the average of <em>a</em> and <em>b</em>
+and compute <em>f</em>(<em>x</em>).  If <em>f</em>(<em>x</em>) &gt; 0, then <em>f</em> must have a zero between
+<em>a</em> and <em>x</em>.  If <em>f</em>(<em>x</em>) &lt; 0, then <em>f</em> must have a zero between <em>x</em> and
+<em>b</em>.  Continuing in this way, we can identify smaller and smaller
+intervals on which <em>f</em> must have a zero.  When we reach a point where
+the interval is small enough, the process stops.  Since the interval
+of uncertainty is reduced by half at each step of the process, the
+number of steps required grows as <img src="book-Z-G-D-3.gif" border="0">(<tt>log</tt>( <em>L</em>/<em>T</em>)), where <em>L</em> is the
+length of the original interval and <em>T</em> is the error tolerance
+(that is, the size of the interval we will consider ``small enough'').
+Here is a procedure that implements this strategy:
+</p>
+
+<p class="trans" lang="ja">
+二分法は、
+<span class="math"><em class="en">f</em>(<em class="en">x</em>) = 0</span>
+という方程式の根を見つけるための、単純だが強力な技法である——ただしここで、<em class="en">f</em> は連続関数である。
+考え方はこうだ——もし、
+<span class="math"><em class="en">f</em>(<em class="en">a</em>) &lt; 0 &lt; <em class="en">f</em>(<em class="en">b</em>)</span>
+となるような点 <em class="en">a</em> および <em class="en">b</em> を与えられたら、
+<em class="en">f</em> には、<em class="en">a</em> と <em class="en">b</em> の間に少なくとも一つの零点がなくてはならない。
+零点を突き止めるために、<em class="en">a</em> と <em class="en">b</em> の平均を <em class="en">x</em> として、<em class="en">f</em>(<em class="en">x</em>) を計算せよ。
+もし、
+<span class="math"><em class="en">f</em>(<em class="en">x</em>) &gt; 0</span>
+ならば、<em class="en">f</em> には、<em class="en">a</em> と <em class="en">x</em> の間に少なくとも一つの零点がなくてはならない。
+もし、
+<em class="en">f</em>(<em class="en">x</em>) &lt; 0
+ならば、<em class="en">f</em> には、<em class="en">x</em> と <em class="en">b</em> の間に少なくとも一つの零点がなくてはならない。
+この方法で続けていくと、<em class="en">f</em> に零点があるはずの区間を、どんどん小さく特定してゆくことができる。
+その区間が十分に小さいような、ある段階に達すると、プロセスが止まる。
+プロセスの各ステップにおいて、不確実性をもった区間が半分に縮められるので、必要なステップの数は、&Theta;(<tt>log</tt>( <em class="en">L</em>/<em class="en">T</em>)) で増大する——ただし、<em class="en">L</em> は元々の区間の長さであり、<em class="en">T</em> は誤差の許容範囲 (つまり、私たちが「十分に小さい」と考える区間の大きさ) である。
+この戦略を実装する手続きは、以下のとおりである。
+</p>
+
+<p class="lisp"><a name="%_idx_1084"></a>(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))
+</p>
+
+<p class="orig" lang="en">
+We assume that we are initially given the function <em>f</em> together with
+points at which its values are negative and positive.  We first
+compute the midpoint of the two given points.  Next we check to see if
+the given interval is small enough, and if so we simply return the
+midpoint as our answer.  Otherwise, we compute as a test value the
+value of <em>f</em> at the midpoint.  If the test value is positive, then
+we continue the process with a new interval running from the original
+negative point to the midpoint.  If the test value is negative, we
+continue with the interval from the midpoint to the positive point.
+Finally, there is the possibility that the test value is 0, in which
+case the midpoint is itself the root we are searching for.
+</p>
+
+<p class="trans" lang="ja">
+<em class="en">f</em> という関数が、その関数の値が負になる点と正になる点とともに、最初に与えられる、ということを、私たちは想定している。
+最初に、与えられた二つの点の中点を計算する。
+次に、与えられた区間が十分に小さいかどうかを調べ、そして、もしそうなら、単純に中点を答えとして返す。
+それ以外の場合、中点における <em class="en">f</em> の値を、テスト値として計算する。
+もしテスト値が正なら、元々の負の点から中点までの新たな区間を使って、プロセスを続行する。
+もしテスト値が負なら、中点から正の点までの区間を使って、プロセスを続行する。
+最後に、テスト値が0だという可能性があり、この場合、中点自体が、私たちの探し求めている根である。
+</p>
+
+<p class="orig" lang="en">
+To test whether the endpoints are ``close enough'' we can use a
+procedure similar to the one used in section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a> for
+computing square roots:<a name="call_footnote_Temp_104" href="#footnote_Temp_104"><sup><small>55</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+端点同士が「十分に近い」かどうかをテストするために、私たちは、二乗根を計算するために<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節で使った手続きと似た手続きを使うこともできる<a href="#footnote_Temp_104"><sup><small>55</small></sup></a>。
+</p>
+
+<p class="lisp">(define (close-enough? x y)
+  (&lt; (abs (- x y)) 0.001))
+</p>
+
+<p class="orig" lang="en">
+<tt>Search</tt> is awkward to use directly, because
+we can accidentally give it points at which <em>f</em>'s
+values do not have the required sign, in which case we get a wrong answer.
+Instead we will use <tt>search</tt> via the following procedure, which
+checks to see which of the endpoints has a negative function value and
+which has a positive value, and calls the <tt>search</tt> procedure
+accordingly.  If the function has the same sign on the two given
+points, the half-interval method cannot be used, in which case the
+procedure signals an error.<a name="call_footnote_Temp_105" href="#footnote_Temp_105"><sup><small>56</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+<tt>search</tt> は、そのまま使うには具合が悪い。というのも、<em class="en">f</em> の値が、要求されている符号ではないような点を、うっかり <tt>search</tt> に与えてしまうことがあり得るからで、その場合、間違った答えを得てしまう。
+代わりに、私たちは、以下の手続き——どちらの端点が負の関数値を持ち、どちらが正の値を持つのか、ということを調べ、その結果に応じて <tt>search</tt> という手続きを呼び出す——を介して、<tt>search</tt> を使うことにしよう。
+もし、与えられた二つの点において、関数が同じ符号になるなら、二分法は使えないので、この場合、以下の手続きは、エラーだという合図を送る<a href="#footnote_Temp_105"><sup><small>56</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_1092"></a>(define (half-interval-method f a b)
+  (let ((a-value (f a))
+        (b-value (f b)))
+    (cond ((and (negative? a-value) (positive? b-value))
+           (search f a b))
+          ((and (negative? b-value) (positive? a-value))
+           (search f b a))
+          (else
+           (error &quot;Values are not of opposite sign&quot; a b)))))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1094"></a>The following example uses the half-interval method to approximate <img src="book-Z-G-D-9.gif" border="0">
+as the root between 2 and 4 of <tt>sin</tt>  <em>x</em>  =  0:
+</p>
+
+<p class="trans" lang="ja">
+以下の例では、
+<span class="math"><tt>sin</tt>  <em class="en">x</em>  =  0</span>
+の、2と4の間にある根としての &pi; を、二分法を使って近似している。
+</p>
+
+<p class="lisp">(half-interval-method sin 2.0 4.0)
+<i>3.14111328125</i>
+</p>
+
+<p class="orig" lang="en">
+Here is another example, using the half-interval method
+to search for a root of the equation <em>x</em><sup>3</sup>  -  2<em>x</em>  -  3  =  0
+between 1 and 2:
+</p>
+
+<p class="trans" lang="ja">
+ここにもう一つ例があって、
+<span class="math"><em class="en">x</em><sup>3</sup>  &minus;  2<em class="en">x</em>  &minus;  3  =  0</span>
+という方程式の、1と2の間にある根を、二分法を使って探している。
+</p>
+
+<p class="lisp">(half-interval-method (lambda (x) (- (* x x x) (* 2 x) 3))
+                      1.0
+                      2.0)
+<i>1.89306640625</i>
+</p>
+
+<a name="%_sec_Temp_106"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_106">Finding fixed points of functions</a></h4>
+<h4 class="trans" lang="ja">関数の不動点を見つける</h4>
+
+<a name="%_idx_1096"></a><a name="%_idx_1098"></a>
+<p class="orig" lang="en">
+A number <em>x</em> is called a <em>fixed point</em> of a function <em>f</em> if <em>x</em>
+satisfies the equation <em>f</em>(<em>x</em>) = <em>x</em>.  For some functions <em>f</em> we can locate
+a fixed point by beginning with an initial guess and applying <em>f</em>
+repeatedly,
+</p>
+
+<p class="trans" lang="ja">
+<em class="en">x</em> という数は、もし
+<span class="math"><em class="en">f</em>(<em class="en">x</em>) = <em class="en">x</em></span>
+という方程式を満たすなら、<em class="en">f</em> なる関数の<em>不動点</em>と呼ばれる。
+いくつかの関数 <em class="en">f</em> については、最初の推測値から始めて <em class="en">f</em> を繰り返し適用することにより、不動点を突き止められる。
+</p>
+
+<figure><img src="ch1-Z-G-33.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+until the value does not change very much.  Using this idea, we can
+devise a procedure <tt>fixed-point</tt> that takes as inputs a function
+and an initial guess and produces an approximation to a fixed point of
+the function.  We apply the function repeatedly until we find two
+successive values whose difference is less than some prescribed
+tolerance:
+</p>
+
+<p class="trans" lang="ja">
+この繰り返しは、値がそれほど変化しなくなるまで続く。
+この考え方を使うと、関数と最初の推測値を入力として取って、その関数の不動点の近似値を示してみせるような、<tt>fixed-point</tt> という手続きを、案出することができる。
+ある所定の許容範囲よりも小さな差しかないような、連続する二つの値が見つかるまで、関数は繰り返し適用される。
+</p>
+
+<p class="lisp">(define tolerance 0.00001)
+<a name="%_idx_1100"></a>(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (&lt; (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1102"></a><a name="%_idx_1104"></a>For example, we can use this method to approximate the fixed point of
+the cosine function, starting with 1 as an initial approximation:<a name="call_footnote_Temp_107" href="#footnote_Temp_107"><sup><small>57</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+たとえば、最初の近似値として1から始めると、この方法を使って余弦関数の不動点を近似できる<a href="#footnote_Temp_107"><sup><small>57</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_1112"></a><a name="%_idx_1114"></a>(fixed-point cos 1.0)
+<i>.7390822985224023</i>
+</p>
+
+<p class="orig" lang="en">
+Similarly, we can find a solution to the equation
+<em>y</em> = <tt>sin</tt> <em>y</em>  +  <tt>cos</tt> <em>y</em>:
+</p>
+
+<p class="trans" lang="ja">
+同様にして、
+<span class="math"><em class="en">y</em> = <tt>sin</tt> <em class="en">y</em>  +  <tt>cos</tt> <em class="en">y</em></span>
+という方程式の解を見つけることもできる。
+</p>
+
+<p class="lisp"><a name="%_idx_1116"></a><a name="%_idx_1118"></a>(fixed-point (lambda (y) (+ (sin y) (cos y)))
+             1.0)
+<i>1.2587315962971173</i>
+</p>
+
+<p class="orig" lang="en">
+The fixed-point process is reminiscent of the process we used for
+finding square roots in section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>.  Both are based on the
+idea of repeatedly improving a guess until the result satisfies some
+criterion.  In fact, we can readily formulate the <a name="%_idx_1120"></a>square-root
+computation as a fixed-point search.  Computing the square root of
+some number <em>x</em> requires finding a <em>y</em> such that <em>y</em><sup>2</sup>  =  <em>x</em>.  Putting
+this equation into the equivalent form <em>y</em>  =  <em>x</em>/<em>y</em>, we recognize that we
+are looking for a fixed point of the function<a name="call_footnote_Temp_108" href="#footnote_Temp_108"><sup><small>58</small></sup></a> <em>y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em>, and we
+can therefore try to compute square roots as
+</p>
+
+<p class="trans" lang="ja">
+不動点のプロセスは、二乗根を見つけるために<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節で使ったプロセスを彷彿とさせる。
+両者とも、結果がある基準を満たすまでは繰り返し推測値を改善する、という考えに基づいている。
+実際、二乗根の計算を、不動点の探索として難なく定式化できる。
+ある数 <em class="en">x</em> の二乗根を計算するには、
+<span class="math"><em class="en">y</em><sup>2</sup>  =  <em class="en">x</em></span>
+となるような <em class="en">y</em> を見つけることが必要である。
+この方程式を、
+<span class="math"><em class="en">y</em>  =  <em class="en">x</em>/<em class="en">y</em></span>
+という等価な形に変えると、
+<span class="math"><em class="en">y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span>
+という関数<a href="#footnote_Temp_108"><sup><small>58</small></sup></a>の不動点を探しているのだということが分かり、したがって、二乗根を以下のように計算しようと試みることも可能だ。
+</p>
+
+<p class="lisp">(define (sqrt x)
+  (fixed-point (lambda (y) (/ x y))
+               1.0))
+</p>
+
+<p class="orig" lang="en">
+Unfortunately, this fixed-point search does not converge.  Consider an
+initial guess <em>y</em><sub>1</sub>.  The next guess is <em>y</em><sub>2</sub>  =  <em>x</em>/<em>y</em><sub>1</sub> and the next
+guess is <em>y</em><sub>3</sub>  =  <em>x</em>/<em>y</em><sub>2</sub>  =  <em>x</em>/(<em>x</em>/<em>y</em><sub>1</sub>)  =  <em>y</em><sub>1</sub>.  This results in an infinite
+loop in which the two guesses <em>y</em><sub>1</sub> and <em>y</em><sub>2</sub> repeat over and over,
+oscillating about the answer.
+</p>
+
+<p class="trans" lang="ja">
+あいにく、この不動点探索は収束しない。
+<em class="en">y</em><sub>1</sub> という最初の推測値を考えてみよう。
+次の推測値は
+<span class="math"><em class="en">y</em><sub>2</sub>  =  <em class="en">x</em>/<em class="en">y</em><sub>1</sub></span>
+であり、その次の推測値は
+<span class="math"><em class="en">y</em><sub>3</sub>  =  <em class="en">x</em>/<em class="en">y</em><sub>2</sub>  =  <em class="en">x</em>/(<em class="en">x</em>/<em class="en">y</em><sub>1</sub>)  =  <em class="en">y</em><sub>1</sub></span>
+だ。
+これは、<em class="en">y</em><sub>1</sub> と <em class="en">y</em><sub>2</sub> という二つの推測値が何度も繰り返し出てくる無限ループ、という結果になり、答えの周りで振動してしまう。
+</p>
+
+<p class="orig" lang="en">
+One way to control such oscillations is to prevent the guesses from
+changing so much.
+Since the answer is always between our guess <em>y</em>
+and <em>x</em>/<em>y</em>, we can make a new guess that is not as far from <em>y</em> as <em>x</em>/<em>y</em>
+by averaging <em>y</em> with <em>x</em>/<em>y</em>, so that the next guess after
+<em>y</em> is (1/2)(<em>y</em> + <em>x</em>/<em>y</em>) instead of <em>x</em>/<em>y</em>.
+The process of making such a sequence of guesses is simply the process
+of looking for a fixed point of <em>y</em>  <img src="book-Z-G-D-17.gif" border="0">  (1/2)(<em>y</em> + <em>x</em>/<em>y</em>):
+</p>
+
+<p class="trans" lang="ja">
+そういう振動を抑えるための一つの方法は、推測値が大きく変化するのを防ぐことである。
+答えは常に、<em class="en">y</em> という推測値と、<em class="en">x</em>/<em class="en">y</em> との間にあるのだから、<em class="en">x</em>/<em class="en">y</em> ほどには <em class="en">y</em> から隔たっていないような新たな推測値を、<em class="en">y</em> と <em class="en">x</em>/<em class="en">y</em> の平均をとることで作ることができ、その結果、<em class="en">y</em> の後の次の推測値は、
+<span class="math"><em class="en">x</em>/<em class="en">y</em></span>
+ではなく、
+<span class="math">(1/2)(<em class="en">y</em> + <em class="en" class="en">x</em>/<em>y</em>)</span>
+となる。
+推測値のそういう連なりを作り出すプロセスは、単純に、
+<span class="math"><em class="en">y</em>  <img src="book-Z-G-D-17.gif" border="0">  (1/2)(<em class="en">y</em> + <em class="en">x</em>/<em class="en">y</em>)</span>
+の不動点を探すプロセスである。
+</p>
+
+<p class="lisp"><a name="%_idx_1126"></a>(define (sqrt x)
+  (fixed-point (lambda (y) (average y (/ x y)))
+               1.0))
+</p>
+
+<p class="orig" lang="en">
+(Note that <em>y</em> = (1/2)(<em>y</em> + <em>x</em>/<em>y</em>) is a simple transformation of the
+equation <em>y</em> = <em>x</em>/<em>y</em>; to derive it, add <em>y</em> to both sides of the equation
+and divide by 2.)
+</p>
+
+<p class="trans" lang="ja">
+(<span class="math"><em class="en">y</em> = (1/2)(<em class="en">y</em> + <em class="en">x</em>/<em class="en">y</em>)</span>
+が、
+<span class="math"><em class="en">y</em> = <em class="en">x</em>/<em class="en">y</em></span>
+という方程式の単純な変形にすぎない、ということに注意せよ。これを導出するには、方程式の両辺に <em class="en">y</em> を足して2で割ればよい。)
+</p>
+
+<p class="orig" lang="en">
+With this modification, the square-root procedure works.  In fact, if
+we unravel the definitions, we can see that the sequence of
+approximations to the square root generated here is precisely the
+same as the one generated by our original square-root procedure of
+section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>.  This approach of averaging
+successive approximations to a solution, a technique we that we call
+<a name="%_idx_1128"></a><em>average damping</em>, often aids the convergence of fixed-point
+searches.
+</p>
+
+<p class="trans" lang="ja">
+この修正により、二乗根の手続きはうまく動く。
+実際、二乗根へ向かってここで生成される近似値の連なりが、<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節の元々の二乗根の手続きによって生成されるものとまったく同じだということは、もし定義を解きほぐせば、理解できるだろう。
+<!--連続する近似値を平均するこの手法は、しばしば不動点探索の収束の助けとなる解法——私たちが<em>平均による減衰</em>と呼ぶ技法——である。-->
+<!--原文の構文が変? -->
+解への連続する近似値を平均するというこの手法、すなわち、私たちが<em>平均による減衰</em>と呼ぶ技法は、しばしば不動点探索の収束の助けとなる。<span class="note">(that の前の we が余計?)</span>
+</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.35"></a>
+<b>Exercise 1.35.</b>  <a name="%_idx_1130"></a><a name="%_idx_1132"></a>Show that the golden ratio <img src="book-Z-G-D-11.gif" border="0"> (section <a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>)
+is a fixed point of the transformation <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  1  +  1/<em>x</em>, and use
+this fact to compute <img src="book-Z-G-D-11.gif" border="0"> by means of the <tt>fixed-point</tt>
+procedure.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.35.</b> 黄金比 &phi; (<a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>節) が、
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  1  +  1/<em class="en">x</em></span>
+という変換の不動点であることを示せ。そして、この事実を使って、<tt>fixed-point</tt> の手続きにより、&phi; を計算せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">1.2.2節では、 &phi;=(1+&radic;5)/2 と定義している。そして、&phi;<sup>2</sup>=&phi;+1 である。
+上記変換を &phi; に適用すると、
+1 + 1/&phi; = (&phi;+1)/&phi; = &phi;<sup>2</sup>/&phi; = &phi;
+となり、元の &phi; 自体が得られる。つまり、&phi;は上記変換の不動点である。</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.36"></a>
+<b>Exercise 1.36.</b>  Modify <tt>fixed-point</tt> so that it prints the sequence of
+approximations it generates, using
+the <tt>newline</tt> and <tt>display</tt> primitives shown in
+exercise <a href="11_sec1_2.html#%_thm_1.22">1.22</a>.  Then find a solution to <em>x</em><sup><em>x</em></sup>  = 
+1000 by finding a fixed point of <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  <tt>log</tt>(1000)/<tt>log</tt>(<em>x</em>).  (Use
+Scheme's <a name="%_idx_1134"></a><a name="%_idx_1136"></a>primitive <tt>log</tt> procedure, which computes natural
+logarithms.)  Compare the number of steps this takes with and without
+average damping.  (Note that you cannot start <tt>fixed-point</tt> with a
+guess of 1, as this would cause division by <tt>log</tt>(1) = 0.)
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.36.</b>  <tt>fixed-point</tt> が自分の生成する近似値の列を印字するように、<a href="11_sec1_2.html#%_thm_1.22">1.22</a>節に示した <tt>newline</tt> および <tt>display</tt> というプリミティブを用いて、<tt>fixed-point</tt> を修正せよ。
+そして、
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  <tt>log</tt>(1000)/<tt>log</tt>(<em class="en">x</em>)</span>
+の不動点を見つけることにより、
+<span class="math"><em class="en">x</em><sup><em class="en">x</em></sup>  = 1000</span>
+の解を見つけよ。
+(Schemeのプリミティブである、<tt>log</tt> という手続き——自然対数を計算する——を利用せよ。)
+これに要するステップの数を、平均による減衰を行う場合と行わない場合で、比較せよ。
+(1という推測値で <tt>fixed-point</tt> を開始してはならないことに注意せよ。なぜなら、こうすると、
+<span class="math"><tt>log</tt>(1) = 0</span>
+による除算が引き起こされるだろうから。)
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.37"></a>
+<b>Exercise 1.37.</b>  <a name="%_idx_1138"></a>a. An infinite <em>continued fraction</em> is an expression of the form</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.37.</b> a. 無限<em>連分数</em>は、以下の形の式である。
+</p>
+
+<figure><img src="ch1-Z-G-34.gif" border="0"></figure> 
+
+<p class="orig" lang="en">
+<a name="%_idx_1140"></a><a name="%_idx_1142"></a>
+As an example, one can show that the infinite continued fraction
+expansion with the <em>N</em><sub><em>i</em></sub> and the <em>D</em><sub><em>i</em></sub> all equal to 1 produces
+1/<img src="book-Z-G-D-11.gif" border="0">, where <img src="book-Z-G-D-11.gif" border="0"> is the golden ratio (described in
+section <a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>).
+One way to approximate an
+infinite continued fraction is to truncate the expansion after a given
+number of terms.  Such a truncation -- a so-called <em><em>k</em>-term finite
+continued fraction</em> -- has the form</p>
+
+<p class="trans" lang="ja">
+たとえば、<em class="en">N</em><sub><em class="en">i</em></sub> と <em class="en">D<sub>i</sub></em> がすべて1の無限連分数展開が 1/&phi; を作り出す——ここで &phi; は、(<a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>節で述べた) 黄金比である——ことを示すことができる。
+無限連分数を近似する一つの方法は、与えられた項数の後で展開を打ち切ることである。
+そういう打ち切り——いわゆる<em class="en">k 項有限連分数</em>——は、以下の形となる。
+</p>
+
+<figure><img src="ch1-Z-G-35.gif" border="0"></figure> 
+
+<p class="orig" lang="en">
+Suppose that <tt>n</tt> and <tt>d</tt> are procedures of one argument (the
+term index <em>i</em>) that return the <em>N</em><sub><em>i</em></sub> and <em>D</em><sub><em>i</em></sub> of the terms of the
+continued fraction.  Define a procedure <tt>cont-frac</tt>
+such that evaluating <tt>(cont-frac n d k)</tt>
+computes the value of the <em>k</em>-term finite
+continued fraction.  Check your procedure by approximating 1/<img src="book-Z-G-D-11.gif" border="0"> using
+</p>
+
+<p class="trans" lang="ja">
+<tt>n</tt> と <tt>d</tt> が、連分数の項のうちで <em class="en">N<sub>i</sub></em> と <em class="en">D<sub>i</sub></em> を返すような、1引数の (項の添え字である <em class="en">i</em> を引数とする) 手続きであるものとしよう。
+<tt>(cont-frac n d k)</tt> を評価することが、<em class="en">k</em> 項有限連分数の値を計算することとなるように、<tt>cont-frac</tt> なる手続きを定義せよ。
+以下のものを用いて 1/&phi; を近似することにより、君の書いた手続きを検査せよ。
+</p>
+
+<p class="lisp">(cont-frac (lambda (i) 1.0)
+           (lambda (i) 1.0)
+           k)
+</p>
+<p class="orig" lang="en">
+for successive values of <tt>k</tt>.  How large must you make <tt>k</tt>
+in order to get an approximation that is accurate to 4 decimal places?
+</p>
+
+<p class="trans" lang="ja">
+なお、近似は <tt>k</tt> の連続する値に対して行え。
+小数点以下4桁の精度の近似値を得るために、<tt>k</tt> をどれほど大きくせねばならないか?
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">b. If your <tt>cont-frac</tt>
+procedure generates a recursive process, write one that generates
+an iterative process.
+If it generates an iterative process, write one that generates
+a recursive process.
+</p>
+
+<p class="trans" lang="ja">
+b. もし君の書いた <tt>cont-frac</tt> の手続きが再帰的プロセスを生成するなら、反復的プロセスを生成する手続きを書け。
+もし君の書いた <tt>cont-frac</tt> の手続きが反復的プロセスを生成するなら、再帰的プロセスを生成する手続きを書け。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.38"></a>
+<b>Exercise 1.38.</b>  <a name="%_idx_1144"></a>In 1737, the Swiss mathematician Leonhard Euler published a memoir
+<em>De Fractionibus Continuis</em>, which included a <a name="%_idx_1146"></a><a name="%_idx_1148"></a>continued fraction
+expansion for <em>e</em> - 2, where <em>e</em> is the base of the natural logarithms.
+In this fraction, the <em>N</em><sub><em>i</em></sub> are all 1, and the <em>D</em><sub><em>i</em></sub> are successively
+1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, <tt>...</tt>.  Write a program that uses
+your <tt>cont-frac</tt> procedure from
+exercise <a href="#%_thm_1.37">1.37</a> to approximate <em>e</em>, based on
+Euler's expansion.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.38.</b> 1737年に、スイスの数学者であるレオンハルト・オイラーは、<em class="en">De Fractionibus Continuis</em> という研究報告を出版し、ここには、<em class="en">e</em> &minus; 2 の連分数展開が含まれていた——ただし <em class="en">e</em> は自然対数の底である。
+この分数では、<em class="en">N<sub>i</sub></em> がすべて1であり、<em class="en">D<sub>i</sub></em> は順に
+1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, <tt>...</tt>
+である。
+練習問題<a href="#%_thm_1.37">1.37</a>で君が書いた <tt>cont-frac</tt> という手続きを使って <em class="en">e</em> を近似するプログラムを、オイラー展開に基づいて書け。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.39"></a>
+<b>Exercise 1.39.</b>  <a name="%_idx_1150"></a><a name="%_idx_1152"></a><a name="%_idx_1154"></a>A continued fraction representation of the tangent function was
+published in 1770 by the German mathematician J.H. Lambert:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.39.</b> 正接関数の連分数表現が、ドイツの数学者である J. H. ランバートによって、1770年に公表された。
+</p>
+
+<figure><img src="ch1-Z-G-36.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+where <em>x</em> is in radians.
+Define a procedure <tt>(tan-cf x k)</tt> that computes an approximation
+to the tangent function based on Lambert's
+formula.  <tt>K</tt> specifies the number of terms to compute, as in
+exercise <a href="#%_thm_1.37">1.37</a>.
+</p>
+
+<p class="trans" lang="ja">
+ここで、<em class="en">x</em>はラジアン単位とする。
+ランバートの公式に基づく正接関数の近似値を計算するような、<tt>(tan-cf x k)</tt> という手続きを定義せよ。
+練習問題<a href="#%_thm_1.37">1.37</a>と同様に、<tt>k</tt> は、計算すべき項の数を指定する。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_1.3.4"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_1.3.4">1.3.4  Procedures as Returned Values</a></h3>
+<h3 class="trans" lang="ja">1.3.4 返り値としての手続き</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_1156"></a><a name="%_idx_1158"></a>
+The above examples demonstrate how
+the ability to pass procedures as arguments significantly enhances
+the expressive power of our programming language.  We can achieve even
+more expressive power by creating procedures whose returned values are
+themselves procedures.
+</p>
+
+<p class="trans" lang="ja">
+上記の例は、手続きを引数として受け渡す能力が、いかにプログラミング言語の表現力を著しく向上させるのか、を実証している。
+私たちは、返り値自体が手続きであるような手続きを作成することで、より一層の表現力でさえも達成できる。
+</p>
+
+<p class="orig" lang="en">
+We can illustrate this idea by looking again at the fixed-point
+example described at the end of
+section <a href="#%_sec_1.3.3">1.3.3</a>.  We formulated a new version
+of the square-root procedure as a fixed-point search, starting with
+the observation that <img src="book-Z-G-D-13.gif" border="0"><em>x</em> is a fixed-point of the function
+<em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em>.  Then we used average damping to make the
+approximations converge.  Average damping is a useful general
+technique in itself.  Namely, given a function <em>f</em>, we consider the
+function whose value at <em>x</em> is equal to the average of <em>x</em> and <em>f</em>(<em>x</em>).
+</p>
+
+<p class="trans" lang="ja">
+私たちは、<a href="#%_sec_1.3.3">1.3.3</a>節の最後で述べた不動点の例に再び注目することで、この考えを解説することができる。
+&radic;<em class="en">x</em> が
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span>
+という関数の不動点である、という知見から始めて、
+私たちは、不動点探索としての二乗根の手続きの新たなバージョンを定式化した。
+そして、私たちは、平均による減衰を使って、近似値を収束させた。
+平均による減衰は、それ自体で有用な一般的技法である。
+つまり、<em class="en">f</em> という関数が与えられると、私たちは、<em class="en">x</em> における値が <em class="en">x</em> と <em class="en">f</em>(<em class="en">x</em>) の平均に等しいような関数を考えるわけだ。
+</p>
+
+<p class="orig" lang="en">
+We can express the idea of average damping by means of the
+following procedure:
+</p>
+
+<p class="trans" lang="ja">
+以下の手続きを使って、平均による減衰の考え方を表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1160"></a>(define (average-damp f)
+  (lambda (x) (average x (f x))))
+</p>
+
+<p class="orig" lang="en">
+<tt>Average-damp</tt> is a procedure that takes as its argument a
+procedure <tt>f</tt> and returns as its value a procedure (produced by
+the <tt>lambda</tt>) that, when applied to a number <tt>x</tt>, produces the
+average of <tt>x</tt> and <tt>(f x)</tt>.  For example, applying <tt>average-damp</tt> to the <tt>square</tt> procedure produces a procedure whose
+value at some number <em>x</em> is the average of <em>x</em> and <em>x</em><sup>2</sup>.  Applying
+this resulting procedure to 10 returns the average of 10 and 100, or
+55:<a name="call_footnote_Temp_114" href="#footnote_Temp_114"><sup><small>59</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+<tt>average-damp</tt> は、<tt>f</tt> という手続きを引数として取り、<tt>x</tt> という数に適用されたときに <tt>x</tt> と <tt>(f x)</tt> の平均を作り出す手続き (<tt>lambda</tt> により作り出される) を値として返すような、手続きである。
+たとえば、<tt>average-damp</tt> を <tt>square</tt> の手続きに適用すると、ある <em class="en">x</em> という数における値が、<em class="en">x</em> と <em class="en">x</em><sup>2</sup> の平均であるような手続きが作り出される。
+結果として生じるこの手続きを10に適用すると、10と100の平均——つまり55——が、返される<a href="#footnote_Temp_114"><sup><small>59</small></sup></a>。
+</p>
+
+<p class="lisp">((average-damp square) 10)
+<i>55</i>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1168"></a>Using <tt>average-damp</tt>, we can reformulate the square-root procedure
+as follows:
+</p>
+
+<p class="trans" lang="ja">
+<tt>average-damp</tt> を使って、二乗根の手続きを以下のように定式化しなおすことができる。
+</p>
+
+<p class="lisp"><a name="%_idx_1170"></a>(define (sqrt x)
+  (fixed-point (average-damp (lambda (y) (/ x y)))
+               1.0))
+</p>
+
+<p class="orig" lang="en">
+Notice how this formulation makes explicit the three ideas in the
+method: fixed-point search, average damping, and the function
+<em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em>.  It is instructive to compare this formulation of the
+square-root method with the original version given in
+section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>.  Bear in mind that these procedures express
+the same process, and notice how much clearer the idea becomes when we
+express the process in terms of these abstractions.  In general, there
+are many ways to formulate a process as a procedure.  Experienced
+programmers know how to choose procedural formulations that are
+particularly perspicuous, and where useful elements of the process are
+exposed as separate entities that can be reused in other applications.
+As a simple example of reuse, notice that the cube root of <em>x</em> is a
+fixed point of the function <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em><sup>2</sup>, so we can immediately
+generalize our square-root procedure to one that extracts <a name="%_idx_1172"></a><a name="%_idx_1174"></a>cube
+roots:<a name="call_footnote_Temp_115" href="#footnote_Temp_115"><sup><small>60</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+この方法に含まれる三つの考え方——不動点探索と、平均による減衰と、
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span> 
+という関数——が、この定式化によりどれほど明らかになっているか、ということに注意してほしい。
+二乗根を求める方法のこの定式化を、<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節で与えられた元々のバージョンと比べてみることは、ためになる。
+これらの手続きが同じプロセスを表現していることを心に留めよ。そして、これらの抽象化を使ってプロセスを表現するときに、どれほど考え方がより明確になるのか、ということに注意せよ。
+一般に、プロセスを手続きとして定式化する方法はたくさんある。
+経験を積んだプログラマは、特に明快で分かりやすい手続き的定式化の選び方を知っているし、プロセスの有用な諸要素が、他のアプリケーションで再利用できる個々の実体として、どこに曝け出されているのか、ということを知っている。
+再利用の簡単な例として、<em class="en">x</em> の三乗根が
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em><sup>2</sup></span>
+という関数の不動点であることに注目せよ。すると、私たちはすぐに、二乗根の手続きを、三乗根を求める手続きへと一般化できる<a href="#footnote_Temp_115"><sup><small>60</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_1176"></a>(define (cube-root x)
+  (fixed-point (average-damp (lambda (y) (/ x (square y))))
+               1.0))
+</p>
+
+<a name="%_sec_Temp_116"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_116">Newton's method</a></h4>
+<h4 class="trans" lang="ja">ニュートン法</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_1178"></a>
+When we first introduced the square-root procedure, in
+section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>, we mentioned that this was a special case of
+<em>Newton's method</em>.  
+If <em>x</em> <img src="book-Z-G-D-17.gif" border="0">  <em>g</em>(<em>x</em>) is a differentiable function, then a solution of
+the equation <em>g</em>(<em>x</em>) = 0 is a fixed point of the function <em>x</em> <img src="book-Z-G-D-17.gif" border="0">  <em>f</em>(<em>x</em>)
+where
+</p>
+
+<p class="trans" lang="ja">
+<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節で最初に二乗根の手続きを導入したとき、これは<em>ニュートン法</em>の特殊な場合なのだ、と述べた。
+もし、
+<span class="math"><em class="en">x</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">g</em>(<em class="en">x</em>)</span>
+が微分可能な関数なら、
+<span class="math"><em class="en">g</em>(<em class="en">x</em>) = 0</span>
+という方程式の解は、
+<span class="math"><em class="en">x</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">f</em>(<em class="en">x</em>)</span>
+という関数の不動点である。ただしここで、
+</p>
+
+<figure><img src="ch1-Z-G-37.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+and
+<em>D</em><em>g</em>(<em>x</em>) is the derivative of <em>g</em> evaluated at <em>x</em>.  <a name="%_idx_1180"></a>Newton's
+method is the use of the fixed-point method we saw above to
+approximate a solution of the equation by finding a fixed point of
+the function <em>f</em>.<a name="call_footnote_Temp_117" href="#footnote_Temp_117"><sup><small>61</small></sup></a>
+For many functions <em>g</em> and for sufficiently good initial guesses for
+<em>x</em>, Newton's method converges very rapidly to a solution of
+<em>g</em>(<em>x</em>) = 0.<a name="call_footnote_Temp_118" href="#footnote_Temp_118"><sup><small>62</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+であり、かつ、
+<span class="math"><em class="en">D</em><em class="en">g</em>(<em class="en">x</em>)</span>
+は、<em class="en">x</em> において評価された、<em class="en">g</em>の導関数である。
+ニュートン法は、ここまでで見た不動点法を、<em class="en">f</em> という関数の不動点を見つけることで方程式の解を近似することのために、利用するものなのである<a href="#footnote_Temp_117"><sup><small>61</small></sup></a>。
+多くの関数 <em class="en">g</em> と、<em class="en">x</em> についての十分に良い最初の推測値とに対して、ニュートン法は、とても速く
+<span class="math"><em class="en">g</em>(<em class="en">x</em>) = 0</span>
+の解に収束する<a href="#footnote_Temp_118"><sup><small>62</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1186"></a><a name="%_idx_1188"></a><a name="%_idx_1190"></a>In order to implement Newton's method as a procedure, we must first
+express the idea of derivative.  Note that ``derivative,'' like
+average damping, is something that transforms a function into another
+function.  For instance, the derivative of the function <em>x</em> <img src="book-Z-G-D-17.gif" border="0"> 
+<em>x</em><sup>3</sup> is the function <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  3<em>x</em><sup>2</sup>.  In general, if <em>g</em> is a
+function and <em>d</em><em>x</em> is a small number, then the derivative <em>D</em><em>g</em> of <em>g</em> is
+the function whose value at any number <em>x</em> is given (in the limit of
+small <em>d</em><em>x</em>) by</p>
+
+<p class="trans" lang="ja">
+ニュートン法を手続きとして実装するためには、まず、導関数という概念を表現せねばならない。
+「導関数」が、平均による減衰と同様に、ある関数を別の関数へと変換する何かである、ということに注意しよう。
+たとえば、
+<span class="math"><em class="en">x</em> <img src="book-Z-G-D-17.gif" border="0"> <em class="en">x</em><sup>3</sup></span>
+という関数の導関数は、
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  3<em class="en">x</em><sup>2</sup></span>
+という関数である。
+一般に、もし <em class="en">g</em> が関数で <em class="en">dx</em> が小さな数なら、<em class="en">g</em> の導関数である <em class="en">Dg</em> は、任意の数 <em class="en">x</em> における値が以下のように与えられる関数である (ただし、小さな <em class="en">dx</em> の極限において)。
+</p>
+
+<figure><img src="ch1-Z-G-38.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+Thus, we can express the idea of derivative (taking <em>d</em><em>x</em> to be, say,
+0.00001) as the procedure
+</p>
+
+<p class="trans" lang="ja">
+よって、(<em class="en">dx</em> を、たとえば0.00001とすることで) 導関数の概念を以下のような手続きとして表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1192"></a>(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+</p>
+
+<p class="orig" lang="en">
+along with the definition
+</p>
+
+<p class="trans" lang="ja">
+なお、この手続きの表現は、以下の定義をともなう。
+</p>
+
+<p class="lisp">(define dx 0.00001)
+</p>
+
+<p class="orig" lang="en">
+Like <tt>average-damp</tt>, <tt>deriv</tt> is a procedure that takes a
+procedure as argument and returns a procedure as value.  For example,
+to approximate the derivative of <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em><sup>3</sup> at 5 (whose exact
+value is 75) we can evaluate
+</p>
+
+<p class="trans" lang="ja">
+<tt>average-damp</tt> と同様に、<tt>deriv</tt> は、手続きを引数として取って手続きを値として返すような手続きである。
+たとえば、5における
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x<sup>3</sup></em></span>
+の微分係数 (正確な値は75である) を近似するために、以下のものを評価することができる。
+</p>
+
+<p class="lisp"><a name="%_idx_1194"></a>(define (cube x) (* x x x))
+((deriv cube) 5)
+<i>75.00014999664018</i>
+</p>
+
+<p class="orig" lang="en">
+With the aid of <tt>deriv</tt>, we can express Newton's method as a
+fixed-point process:
+</p>
+
+<p class="trans" lang="ja">
+<tt>deriv</tt> の助けを借りると、ニュートン法を以下のような不動点プロセスとして表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1196"></a>(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+<a name="%_idx_1198"></a>(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+</p>
+
+<p class="orig" lang="en">
+The <tt>newton-transform</tt> procedure expresses the formula at the
+beginning of this section, and <tt>newtons-method</tt> is readily defined
+in terms of this.  It takes as arguments a procedure that computes the
+function for which we want to find a zero, together with an initial
+guess.  For instance, to find the <a name="%_idx_1200"></a>square root of <em>x</em>, we can use
+Newton's method to find a zero of the function <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>y</em><sup>2</sup> - <em>x</em> starting with
+an initial guess of 1.<a name="call_footnote_Temp_119" href="#footnote_Temp_119"><sup><small>63</small></sup></a>
+This provides yet another form of the square-root
+procedure:
+</p>
+
+<p class="trans" lang="ja">
+<tt>newton-transform</tt> という手続きは、本節の最初の公式を表現しており、<tt>newtons-method</tt> は、これを用いて速やかに定義される。
+<tt>newtons-method</tt> は、零点を見つけたい関数を計算する手続きを、最初の推測値とともに、引数として取る。
+たとえば、<em class="en">x</em> の二乗根を見つけるために、ニュートン法を使って、1という最初の推測値から始めて、
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">y</em><sup>2</sup> &minus; <em class="en">x</em></span>
+という関数の零点を見つけることができる<a href="#footnote_Temp_119"><sup><small>63</small></sup></a>。
+これは、以下のように、二乗根の手続きのさらに別の形を与える。
+</p>
+
+<p class="lisp"><a name="%_idx_1202"></a>(define (sqrt x)
+  (newtons-method (lambda (y) (- (square y) x))
+                  1.0))
+</p>
+
+<a name="%_sec_Temp_120"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_120">Abstractions and first-class procedures</a></h4>
+<h4 class="trans" lang="ja">抽象化と第一級手続き</h4>
+
+<p class="orig" lang="en">
+We've seen two ways to express the square-root
+computation as an instance of a more general method, once as a fixed-point
+search and once using Newton's method.  Since Newton's method
+was itself expressed as a fixed-point process,
+we actually saw two ways to compute square roots as fixed points.
+Each method begins with a function and finds a <a name="%_idx_1204"></a>fixed
+point of some transformation of the function.  We can express this
+general idea itself as a procedure:
+</p>
+
+<p class="trans" lang="ja">
+私たちは、二乗根の計算をより一般的な手法の例として表現するための、二つの方法を見てきた——つまり、一つは不動点探索としての方法、一つはニュートン法を用いる方法である。
+ニュートン法は、それ自体が不動点プロセスとして表現されたので、私たちは、実際には、二乗根を不動点として計算するための二つの方法を見たわけである。
+各方法は、ある関数から始めて、その関数の何らかの変換の不動点を見つけるものである。
+この一般的な考え方自体を、次のような手続きとして表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1206"></a>(define (fixed-point-of-transform g transform guess)
+  (fixed-point (transform g) guess))
+</p>
+
+<p class="orig" lang="en">
+This very general procedure takes as its arguments a procedure <tt>g</tt>
+that computes some function, a procedure that transforms <tt>g</tt>, and
+an initial guess.  The returned result is a fixed point of the
+transformed function.
+</p>
+
+<p class="trans" lang="ja">
+この非常に一般的な手続きは、ある関数を計算する <tt>g</tt> という手続きと、<tt>g</tt> を変換する手続きと、最初の推測値を、引数として取る。
+返される結果は、変換後の関数の不動点である。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1208"></a>Using this abstraction, we can recast the first square-root
+computation from this section (where we look for
+a fixed point of the average-damped version of <em>y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em>)
+as an instance of this general method:
+</p>
+
+<p class="trans" lang="ja">
+このような抽象化を用いると、本節の最初の二乗根の計算 (その計算では、
+<span class="math"><em class="en">y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span>
+について平均による減衰を行ったものの不動点を探している) を、この一般的な方法の例として、次のように書き直すことができる。
+</p>
+
+<p class="lisp"><a name="%_idx_1210"></a>(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (/ x y))
+                            average-damp
+                            1.0))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1212"></a>Similarly, we can express the second square-root computation from this section
+(an instance
+of Newton's method that finds a fixed point of the
+Newton transform of <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>y</em><sup>2</sup> - <em>x</em>) as
+</p>
+
+<p class="trans" lang="ja">
+同様に、本節で二番目の二乗根の計算 (つまり、
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">y</em><sup>2</sup> &minus; <em class="en">x</em></span>
+というニュートン変換の不動点を見つける、ニュートン法の例) を、以下のように表現できる。
+</p>
+
+<p class="lisp"><a name="%_idx_1214"></a><a name="%_idx_1216"></a>(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (- (square y) x))
+                            newton-transform
+                            1.0))
+</p>
+
+<p class="orig" lang="en">
+We began section <a href="#%_sec_1.3">1.3</a> with the observation
+that compound procedures
+are a crucial abstraction mechanism, because they permit us to
+express general methods of computing as explicit elements in our
+programming language.  Now we've seen how higher-order
+procedures permit us to manipulate these general methods
+to create further abstractions.
+</p>
+
+<p class="trans" lang="ja">
+複合的手続きは極めて重大な抽象化の仕組みである——というのも、複合的手続きによって、私たちは、計算の一般的方法を、プログラミング言語の明示的な要素として表現できるようになるからだ——という見解から、私たちは<a href="#%_sec_1.3">1.3</a>節を始めた。
+私たちは今や、高階手続きによって、いかに私たちがこれらの一般的方法を操作してさらなる抽象概念を作り出せるようになるのか、を見てきたところである。
+</p>
+
+<p class="orig" lang="en">
+As programmers, we should be alert to opportunities to identify the
+underlying abstractions in our programs and to build upon them and
+generalize them to create more powerful abstractions.  This is not to
+say that one should always write programs in the most abstract way
+possible; expert programmers know how to choose the level of
+abstraction appropriate to their task.  But it is important to be able
+to think in terms of these abstractions, so that we can be ready to
+apply them in new contexts.  The significance of higher-order
+procedures is that they enable us to represent these abstractions
+explicitly as elements in our programming language, so that they can
+be handled just like other computational elements.
+</p>
+
+<p class="trans" lang="ja">
+プログラマとして、私たちは、自分のプログラムの中で根底に横たわる抽象概念を特定し、それら抽象概念を活かす機会、そして、それら抽象概念を一般化して、より強力な抽象概念を作り出す機会に、気を配るべきである。
+これは、常に可能な限り最も抽象的なやり方でプログラムを書くべきだ、と言っているわけではない。熟練プログラマは、自分のタスクに適した抽象化のレベルの選び方を知っている。
+しかし、これらの抽象概念を使って考えられることは重要であり、それでこそ、私たちは、これらの抽象概念を新たな文脈に適用する準備ができるのだ。
+高階手続きの重要性は、次の点である。すなわち、これらの抽象概念をプログラミング言語の要素として明示的に表現することが、高階手続きによって可能となり、その結果、これらの抽象概念は、他の計算的要素とちょうど同様に扱えるようになるのである。
+</p>
+
+<p class="orig" lang="en">
+In general, programming languages impose restrictions on the ways in
+which computational elements can be manipulated.  Elements with the
+fewest restrictions are said to have <a name="%_idx_1218"></a><em>first-class</em> status.  Some
+of the ``rights and privileges'' of first-class elements are:<a name="call_footnote_Temp_121" href="#footnote_Temp_121"><sup><small>64</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+一般的に、プログラミング言語は、計算的要素を操作できる方法に対して、制約を押し付けてくる。
+最少の制約しかない要素は、<em>第一級</em>の地位にある、と言われる。
+第一級要素の「権利と特権」のいくつかは、以下のとおりである<a href="#footnote_Temp_121"><sup><small>64</small></sup></a>。
+</p>
+
+<ul class="orig" lang="en">
+<li>They may be named by variables.</li>
+<li>They may be passed as arguments to procedures.</li>
+<li>They may be returned as the results of procedures.</li>
+<li>They may be included in data structures.<a name="call_footnote_Temp_122" href="#footnote_Temp_122"><sup><small>65</small></sup></a></li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>変数によって名前が付けられてもよい。</li>
+<li>実引数として手続きに受け渡されてもよい。</li>
+<li>手続きの結果として返されてもよい。</li>
+<li>データ構造の中に含まれてもよい<a href="#footnote_Temp_122"><sup><small>65</small></sup></a>。</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="%_idx_1222"></a><a name="%_idx_1224"></a>Lisp, unlike other common programming languages, awards procedures
+full first-class status.  This poses challenges for efficient
+implementation, but the resulting gain in expressive power is
+enormous.<a name="call_footnote_Temp_123" href="#footnote_Temp_123"><sup><small>66</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+Lispは、他の普通のプログラミング言語とは異なり、手続きに対して、完全な第一級の地位を与えている。
+このことが効率的な実装を難しくしているのだが、結果として得られる表現力上の利点は、非常に大きい<a href="#footnote_Temp_123"><sup><small>66</small></sup></a>。
+</p>
+
+<p class="orig" lang="en"><a name="%_thm_1.40"></a>
+<b>Exercise 1.40.</b>  Define a procedure <tt>cubic</tt> that can be used together with the <tt>newtons-method</tt> procedure in expressions of the form
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.40.</b> 以下の形の式の中で <tt>newtons-method</tt> の手続きと一緒に使えるような、<tt>cubic</tt> という手続きを定義せよ。
+</p>
+
+<p class="lisp">(newtons-method (cubic a b c) 1)
+</p>
+
+<p class="orig" lang="en">
+to approximate zeros of the cubic <em>x</em><sup>3</sup>  + <em>a</em><em>x</em><sup>2</sup>  + <em>b</em><em>x</em>  + <em>c</em>.
+</p>
+
+<p class="trans" lang="ja">
+これは、
+<span class="math"><em class="en">x</em><sup>3</sup>  + <em class="en">ax</em><sup>2</sup>  + <em class="en">bx</em>  + <em class="en">c</em></span>
+という3次式の零点を近似するためのものである。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.41"></a>
+<b>Exercise 1.41.</b>  Define a procedure <tt>double</tt> that takes a procedure of one
+argument as argument and
+returns a procedure that applies the original procedure twice.  For
+example, if <tt>inc</tt> is a procedure that adds 1 to its argument,
+then <tt>(double inc)</tt> should be a procedure that adds 2.  What
+value is returned by
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.41.</b> 1引数の手続きを引数として取り、その元の手続きを2回適用する手続きを返すような、<tt>double</tt> という手続きを定義せよ。
+たとえば、<tt>inc</tt> が引数に1を足す手続きだとすると、<tt>(double inc)</tt> は2を足す手続きとなるべきである。
+以下により、どのような値が返されるだろうか?
+</p>
+
+<p class="lisp">(((double (double double)) inc) 5)
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.42"></a>
+<b>Exercise 1.42.</b>  <a name="%_idx_1226"></a><a name="%_idx_1228"></a>Let <em>f</em> and <em>g</em> be two one-argument functions.  The <em>composition</em>
+<em>f</em> after <em>g</em> is defined to be the function <em>x</em> <img src="book-Z-G-D-17.gif" border="0">  <em>f</em>(<em>g</em>(<em>x</em>)).
+Define a procedure <tt>compose</tt> that implements composition.  For
+example, if <tt>inc</tt> is a procedure that adds 1 to its argument,
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.42.</b> <em class="en">f</em> と <em class="en">g</em> を二つの1引数関数とする。
+<em class="en">g</em> の後に <em class="en">f</em> を施す<em>合成</em>は、
+<span class="math"><em class="en">x</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">f</em>(<em class="en">g</em>(<em class="en">x</em>))</span>
+という関数だと定義される。
+合成を実装する、<tt>compose</tt> という手続きを定義せよ。
+たとえば、<tt>inc</tt> が引数に1を足す手続きだとすると、以下のようになる。
+</p>
+
+<p class="lisp">((compose square inc) 6)
+<i>49</i>
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.43"></a>
+<b>Exercise 1.43.</b>  <a name="%_idx_1230"></a>If <em>f</em> is a numerical function and <em>n</em> is a positive integer, then we
+can form the <em>n</em>th repeated application of <em>f</em>, which is defined to be
+the function whose value at <em>x</em> is <em>f</em>(<em>f</em>(<tt>...</tt>(<em>f</em>(<em>x</em>))<tt>...</tt>)).  For
+example, if <em>f</em> is the function <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em> + 1,
+then the <em>n</em>th repeated application of <em>f</em> is
+the function <em>x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em> + <em>n</em>.  If <em>f</em> is the operation of
+squaring a number, then the <em>n</em>th repeated application of <em>f</em> is the
+function that raises its argument to the 2<sup><em>n</em></sup>th power.  Write a
+procedure that takes as inputs a procedure that computes <em>f</em> and a
+positive integer <em>n</em> and returns the procedure that computes the <em>n</em>th
+repeated application of <em>f</em>.  Your procedure should be able to be used
+as follows:
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.43.</b> もし<em class="en">f</em> が数値的な関数で <em class="en">n</em> が正整数なら、<em class="en">f</em> の <em class="en">n</em> 回の繰り返し適用——<em class="en">x</em> における値が
+<span class="math"><em class="en">f</em>(<em class="en">f</em>(<tt>...</tt>(<em class="en">f</em>(<em class="en">x</em>))<tt>...</tt>))</span>
+であるような関数として定義される——を作り出すことができる。
+たとえば、もし <em class="en">f</em> が
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em> + 1</span>
+という関数なら、<em class="en">f</em> の <em class="en">n</em> 回の繰り返し適用は、
+<span class="math"><em class="en">x</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em> + <em class="en">n</em></span>
+という関数である。
+もし <em class="en">f</em> が数を二乗する演算なら、<em class="en">f</em> の <em class="en">n</em> 回の繰り返し適用は、引数を2<sup><em class="en">n</em></sup>乗する関数である。
+<em class="en">f</em> を計算する手続きと、正整数の <em class="en">n</em> とを入力として受け取り、<em class="en">f</em> の <em class="en">n</em> 回の繰り返し適用を計算する手続きを返すような、手続きを書け。
+君の書いた手続きは、以下のように使えるべきである。
+</p>
+
+<p class="lisp">((repeated square 2) 5)
+<i>625</i>
+</p>
+
+<p class="orig" lang="en">
+Hint: You may find it convenient to use <tt>compose</tt> from
+exercise <a href="#%_thm_1.42">1.42</a>.
+</p>
+
+<p class="trans" lang="ja">
+ヒント: 練習問題<a href="#%_thm_1.42">1.42</a>の <tt>compose</tt> を使うのが便利だ、と君は気づくかもね。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.44"></a>
+<b>Exercise 1.44.</b>  <a name="%_idx_1232"></a><a name="%_idx_1234"></a><a name="%_idx_1236"></a>The idea of <em>smoothing</em> a function is an important concept in
+signal processing.  If <em>f</em> is a function and <em>d</em><em>x</em> is some small number,
+then the smoothed version of <em>f</em> is the function whose value at a
+point <em>x</em> is the average of <em>f</em>(<em>x</em> - <em>d</em><em>x</em>), <em>f</em>(<em>x</em>), and <em>f</em>(<em>x</em> + <em>d</em><em>x</em>).  Write a
+procedure <tt>smooth</tt> that takes as input a procedure that computes
+<em>f</em> and returns a procedure that computes the smoothed <em>f</em>.  It is
+sometimes valuable to repeatedly smooth a function (that is, smooth
+the smoothed function, and so on) to obtained the <em><em>n</em>-fold
+smoothed function</em>.  Show how to generate the <em>n</em>-fold smoothed
+function of any given function using <tt>smooth</tt> and <tt>repeated</tt>
+from exercise <a href="#%_thm_1.43">1.43</a>.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.44.</b> 関数を<em>平滑化する</em>という考え方は、信号処理における重要な概念である。
+もし <em class="en">f</em> が関数で <em class="en">dx</em> がある小さな数なら、<em class="en">f</em> を平滑化したものは、<em class="en">x</em> なる点における値が、
+<span class="math"><em class="en">f</em>(<em class="en">x</em> &minus; <em class="en">dx</em>)</span>
+と
+<span class="math"><em class="en">f</em>(<em class="en">x</em>)</span>
+と
+<span class="math"><em class="en">f</em>(<em class="en">x</em> + <em class="en">dx</em>)</span>
+の平均であるような関数である。
+<em class="en">f</em> を計算する手続きを入力として受け取り、平滑化した <em class="en">f</em> を計算する手続きを返すような、<tt>smooth</tt> という手続きを書け。
+ときとして、関数を繰り返し平滑化して (つまり、平滑化した関数を平滑する、などして) <em class="en">n 重に平滑化された関数</em>を得ることは、有益である。<!--obtainedは、たぶんobtainのtypo-->
+任意の与えられた関数の、<em class="en">n</em> 重に平滑化された関数</em>を、<tt>smooth</tt> と、練習問題<a href="#%_thm_1.43">1.43</a>の <tt>repeated</tt> とを用いて、生成する方法を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.45"></a>
+<b>Exercise 1.45.</b>  We saw in section <a href="#%_sec_1.3.3">1.3.3</a>
+that attempting to compute square roots by naively finding a
+fixed point of <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em> does not converge, and that this can be
+fixed by average damping.  The same method works for finding cube
+roots as fixed points of the average-damped <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em><sup>2</sup>.
+Unfortunately, the process does not work for <a name="%_idx_1238"></a><a name="%_idx_1240"></a>fourth roots -- a single
+average damp is not enough to make a fixed-point search for <em>y</em> <img src="book-Z-G-D-17.gif" border="0"> 
+<em>x</em>/<em>y</em><sup>3</sup> converge.  On the other hand, if we average damp twice (i.e.,
+use the average damp of the average damp of <em>y</em> <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em><sup>3</sup>) the
+fixed-point search does converge.  Do some experiments to determine
+how many average damps are required to compute <a name="%_idx_1242"></a><a name="%_idx_1244"></a><em>n</em>th roots as a
+fixed-point search based upon repeated average damping of <em>y</em> <img src="book-Z-G-D-17.gif" border="0"> 
+<em>x</em>/<em>y</em><sup><em>n</em>-1</sup>.  Use this to implement a simple procedure for computing
+<em>n</em>th roots using <tt>fixed-point</tt>, <tt>average-damp</tt>, and the <tt>repeated</tt> procedure of exercise <a href="#%_thm_1.43">1.43</a>.
+Assume that any arithmetic operations you need are available as primitives.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.45.</b> <a href="#%_sec_1.3.3">1.3.3</a>節で私たちは、素朴に
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span>
+の不動点を見つけることで二乗根を計算しようと試みると収束しないのだ、ということを見、また、これは平均による減衰によって修正できるのだ、ということを見た。
+平均による減衰を受けた後の
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em><sup>2</sup></span>
+の不動点としての3乗根を見つけるためにも、同じ方法が役立つ。
+しかしあいにく、そのプロセスは、4乗根に対してはうまく働かない——平均による減衰を1回行うだけでは、
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0"> <em class="en">x</em>/<em class="en">y</em><sup>3</sup></span>
+の不動点探索を収束させるのに不十分なのだ。
+他方、もし平均による減衰を2回行えば (つまり、
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em><sup>3</sup></span>
+に対して平均による減衰を施したものに、平均による減衰を施したものを使えば)、不動点探索は確かに収束する。
+<span class="math"><em class="en">y</em> <img src="book-Z-G-D-17.gif" border="0"> <em class="en">x</em>/<em class="en">y<sup>n&minus;1</sup></em></span>
+に対して平均による減衰を繰り返し施したものに基づく不動点探索として、<em class="en">n</em> 乗根の計算を行うには、平均による減衰が何回必要なのか、ということを判定するための何らかの実験を行え。
+これを用いて、<em class="en">n</em> 乗根を計算するための、<tt>fixed-point</tt> と <tt>average-damp</tt> と練習問題<a href="#%_thm_1.43">1.43</a>の <tt>repeated</tt> とを用いた、簡単な手続きを実装せよ。
+必要な算術演算は、どれでもプリミティブとして利用可能だと想定すること。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en"><a name="%_thm_1.46"></a>
+<b>Exercise 1.46.</b>  <a name="%_idx_1246"></a><a name="%_idx_1248"></a><a name="%_idx_1250"></a><a name="%_idx_1252"></a>Several of the numerical methods described in this chapter are instances
+of an extremely general computational strategy known as <em>iterative
+improvement</em>.  Iterative improvement says that, to compute something,
+we start with an initial guess for the answer, test if the guess is
+good enough, and otherwise improve the guess and continue the process
+using the improved guess as the new guess.  Write a procedure <tt>iterative-improve</tt> that takes two procedures as arguments: a method
+for telling whether a guess is good enough and a method for improving
+a guess.  <tt>Iterative-improve</tt> should return as its value a
+procedure that takes a guess as argument and keeps improving the guess
+until it is good enough.  Rewrite the <tt>sqrt</tt> procedure of
+section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a> and the <tt>fixed-point</tt> procedure of
+section <a href="#%_sec_1.3.3">1.3.3</a> in terms of <tt>iterative-improve</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題1.46.</b> 本章で説明した数値的な方法のうちのいくつかは、<em>反復改善法</em>として知られる極度に一般的な計算的戦略の例である。
+反復改善法は、何かを計算するためには、答えについての最初の推測値から始めて、その推測値が十分に良いかをテストし、十分に良くはない場合には推測値を改善し、その改善した推測値を新たな推測値として使ってプロセスを続ける、ということを示している。
+二つの手続きを引数として取る、<tt>iterative-improve</tt> という手続きを書け——それら引数とは、推測値が十分に良いかどうかを知らせる方法と、推測値を改善する方法である。
+<tt>iterative-improve</tt> は、その値として、以下の手続きを返すべきである。すなわち、推測値を引数として取り、推測値が十分に良くなるまで推測値を改善し続けるような手続きを。
+<a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節の <tt>sqrt</tt> の手続きと、 <a href="#%_sec_1.3.3">1.3.3</a>節の <tt>fixed-point</tt> の手続きを、<tt>iterative-improve</tt> を使う形に書き換えよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+
+<a name="footnotes"></a>
+<hr>
+<p class="orig" lang="en"><a name="footnote_Temp_90" href="#call_footnote_Temp_90"><sup><small>49</small></sup></a> This series,
+<a name="%_idx_974"></a><a name="%_idx_976"></a>usually written in the equivalent form (<img src="book-Z-G-D-9.gif" border="0">/4)  =  1 - (1/3) + (1/5) - (1/7) + <tt>&middot;&middot;&middot;</tt>, is due to Leibniz.  We'll see how
+to use this as the basis for some fancy numerical tricks in
+section <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>.
+</p>
+
+<p class="trans" lang="ja">
+この級数——大抵は、
+<span class="math">(&pi;/4)  =  1 &minus; (1/3) + (1/5) &minus; (1/7) + &hellip;</span>
+という等価な形で書かれる——はライプニッツによるものである。
+どのようにしてこれを、いくつかの巧みな数値的妙技の基礎として使うのか、ということについては、<a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>節で見よう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_91" href="#call_footnote_Temp_91"><sup><small>50</small></sup></a> Notice
+that we have used block structure (section <a href="10_sec1_1.html#%_sec_1.1.8">1.1.8</a>) to
+embed the definitions of <tt>pi-next</tt> and <tt>pi-term</tt> within <tt>pi-sum</tt>, since these procedures are unlikely to be useful for any
+other purpose.  We will see how to get rid of them altogether in
+section <a href="#%_sec_1.3.2">1.3.2</a>.
+</p>
+
+<p class="trans" lang="ja">
+<tt>pi-next</tt> と <tt>pi-term</tt> の定義を、これらの手続きは他のいかなる目的にとっても有用ではなさそうなので、ブロック構造 (<a href="10_sec1_1.html#%_sec_1.1.8">1.1.8</a>節) を使って <tt>pi-sum</tt> の中に埋め込んだ、ということに着目せよ。
+これらの手続きをすっかり取り除く方法を<a href="#%_sec_1.3.2">1.3.2</a>節で見よう。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_95" href="#call_footnote_Temp_95"><sup><small>51</small></sup></a> The intent of
+exercises <a href="#%_thm_1.31">1.31</a>-<a href="#%_thm_1.33">1.33</a> is to
+demonstrate the expressive power that is attained by using an
+appropriate abstraction to consolidate many seemingly disparate
+operations.  However, though accumulation and filtering are elegant
+ideas, our hands are somewhat tied in using them at this point since
+we do not yet have data structures to provide suitable means of
+combination for these abstractions.  We will return to these ideas in
+section <a href="15_sec2_2.html#%_sec_2.2.3">2.2.3</a> when we show how
+to use <em>sequences</em> as interfaces for combining filters and
+accumulators to build even more powerful abstractions.  We will see
+there how these methods really come into their own as a powerful and
+elegant approach to designing programs.
+</p>
+
+<p class="trans" lang="ja">
+練習問題<a href="#%_thm_1.31">1.31</a>〜<a href="#%_thm_1.33">1.33</a>の意図は、見たところはまったく異なる多くの演算を統合するための適切な抽象化を使うことで達せられる表現力を、実証することである。
+しかし、累積とフィルタリングは洗練された考え方だとはいえ、これらの抽象概念のための適切な合成手段を提供してくれるデータ構造を、私たちはまだ手にしていないので、現時点で私たちは、これらを使う際に、やや自由を奪われてしまう。
+フィルタと累積器を合成して更に強力な抽象概念を構築するためのインタフェイスとして、<em>列</em> をどう使うのか、ということを<a href="15_sec2_2.html#%_sec_2.2.3">2.2.3</a>節で示すときに、累積とフィルタリングというこれらの考え方に立ち戻ろう。
+そこでは、これらの方法がいかにして、プログラムを設計するための強力で洗練された手法として、本当に真価を発揮するのか、ということを見るだろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_96" href="#call_footnote_Temp_96"><sup><small>52</small></sup></a> This formula was discovered by the seventeenth-century
+<a name="%_idx_1016"></a>English mathematician John Wallis.
+</p>
+
+<p class="trans" lang="ja">
+この公式は17世紀のイングランドの数学者である、ジョン・ウォーリスにより発見された。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_99" href="#call_footnote_Temp_99"><sup><small>53</small></sup></a> It would be clearer and less intimidating to
+people learning Lisp if a name more obvious than <tt>lambda</tt>, such as
+<tt>make-procedure</tt>, were used.  But the convention is firmly
+entrenched.  The notation is adopted from the <a name="%_idx_1054"></a><img src="book-Z-G-D-6.gif" border="0"> calculus, a
+<a name="%_idx_1056"></a>mathematical formalism introduced by the mathematical logician Alonzo
+Church (1941).  Church developed the <img src="book-Z-G-D-6.gif" border="0"> calculus to provide a
+rigorous foundation for studying the notions of function and function
+application.  The <img src="book-Z-G-D-6.gif" border="0"> calculus has become a basic tool for
+mathematical investigations of the semantics of programming
+languages.
+</p>
+
+<p class="trans" lang="ja">
+もし、<tt>lambda</tt> よりも分かりやすい名前——たとえば <tt>make-procedure</tt> など——が使われていたなら、Lispを学ぶ人々にとって、物事は、より明瞭だったろうし、今よりは威圧的な感じがしなかっただろう。
+しかし、この慣習はしっかり確立されているのだ。
+この表記法は、&lambda;計算——数理論理学者のアロンゾ・チャーチにより導入された数学的形式論 (1941)——から採用されている。
+チャーチは、関数と関数適用の概念を研究するための厳密な基礎を提供するために、&lambda;計算を開発した。
+&lambda;計算は、プログラミング言語の意味論の数学的調査のための、基本的な道具となった。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_101" href="#call_footnote_Temp_101"><sup><small>54</small></sup></a> Understanding internal definitions well enough to be sure a
+program means what we intend it to mean requires a more elaborate
+model of the evaluation process than we have presented in this
+chapter.  The subtleties do not arise with internal definitions of
+procedures, however.  We will return to this issue in
+section <a href="26_sec4_1.html#%_sec_4.1.6">4.1.6</a>, after we learn more about
+evaluation.
+</p>
+
+<p class="trans" lang="ja">
+私たちがプログラムに意味させようとするものをプログラムが意味している、ということを確信するほどまでに、内部定義を十分よく理解するためには、本章で提示してきたものよりも込み入った、評価プロセスのモデルが必要である。
+だがしかし、巧妙さは、手続きの内部定義にともなって発生するわけではない。
+評価についてもっと学んでから、<a href="26_sec4_1.html#%_sec_4.1.6">4.1.6</a>節でこの問題に立ち戻ろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_104" href="#call_footnote_Temp_104"><sup><small>55</small></sup></a> We have used 0.001 as a representative ``small'' number to indicate a
+tolerance for the acceptable error in a calculation.  The appropriate
+tolerance for a real calculation depends upon the problem to be solved
+and the limitations of the computer and the algorithm.  This is often
+<a name="%_idx_1086"></a>a very subtle consideration, requiring help from a numerical analyst
+or some other kind of magician.
+</p>
+
+<p class="trans" lang="ja">
+計算において許容可能な誤差の範囲を示す、代表的な「小さな」数として、私たちは0.001を使ってきた。
+現実の計算にとって適切な許容誤差範囲は、解決すべき問題によるし、コンピュータやアルゴリズムの限界にもよる。
+これは、しばしば、とても微妙な問題点であり、数値分析家または他の何らかの種類の魔術師からの助力を要する。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_105" href="#call_footnote_Temp_105"><sup><small>56</small></sup></a> This
+<a name="%_idx_1088"></a><a name="%_idx_1090"></a>can be accomplished using <tt>error</tt>, which takes as
+arguments a number of items that are printed as error
+messages.
+</p>
+
+<p class="trans" lang="ja">
+これは、<tt>error</tt>——エラーメッセージとして印字されるいくつかの項目を引数としてとる——を使って達成できる。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_107" href="#call_footnote_Temp_107"><sup><small>57</small></sup></a> Try this during a boring lecture: Set your calculator to
+<a name="%_idx_1106"></a><a name="%_idx_1108"></a><a name="%_idx_1110"></a>radians mode and then repeatedly press the <tt>cos</tt> button until you
+obtain the fixed point.
+</p>
+
+<p class="trans" lang="ja">
+退屈な講義の間に、これを試してみたまえ。君の計算機をラジアン・モードに設定して、それから、不動点を得るまで、<tt>cos</tt> ボタンを繰り返し押したまえ。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_108" href="#call_footnote_Temp_108"><sup><small>58</small></sup></a>  <img src="book-Z-G-D-17.gif" border="0"> 
+<a name="%_idx_1122"></a><a name="%_idx_1124"></a>(pronounced ``maps to'') is
+the mathematician's way of writing <tt>lambda</tt>.
+<em>y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em>x</em>/<em>y</em> means <tt>(lambda(y) (/ x y))</tt>, that is, the
+function whose value at <em>y</em> is <em>x</em>/<em>y</em>.
+</p>
+
+<p class="trans" lang="ja">
+<img src="book-Z-G-D-17.gif" border="0"> (「〜へ写像する」と読む) は、数学者が <tt>lambda</tt> を書く方法である。
+<span class="math"><em class="en">y</em>  <img src="book-Z-G-D-17.gif" border="0">  <em class="en">x</em>/<em class="en">y</em></span>
+は、<tt>(lambda(y) (/ x y))</tt> を意味する。すなわち、<em class="en">y</em> における値が
+<span class="math"><em class="en">x</em>/<em class="en">y</em></span>
+であるような関数を、意味する。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_114" href="#call_footnote_Temp_114"><sup><small>59</small></sup></a> Observe that this is a combination whose operator is itself
+<a name="%_idx_1162"></a><a name="%_idx_1164"></a><a name="%_idx_1166"></a>a combination.  Exercise <a href="10_sec1_1.html#%_thm_1.4">1.4</a> already demonstrated
+the ability to form such combinations, but that was only a toy
+example.  Here we begin to see the real need for such
+combinations -- when applying a procedure that is obtained as the value
+returned by a higher-order procedure.
+</p>
+
+<p class="trans" lang="ja">
+これが、演算子自体がコンビネーションであるようなコンビネーションだ、ということに気づいてほしい。
+練習問題<a href="10_sec1_1.html#%_thm_1.4">1.4</a>では既に、そういうコンビネーションを形成する能力を例証したが、それは単なるおもちゃ的な例に過ぎなかった。
+ここで私たちは、そういうコンビネーションに対する本当の必要性を見始めている——高階手続きによって返される値として得られる手続きを適用するときに。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_115" href="#call_footnote_Temp_115"><sup><small>60</small></sup></a> See exercise <a href="#%_thm_1.45">1.45</a> for a further
+generalization.
+</p>
+
+<p class="trans" lang="ja">
+さらなる一般化については、練習問題<a href="#%_thm_1.45">1.45</a>を参照。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_117" href="#call_footnote_Temp_117"><sup><small>61</small></sup></a> Elementary calculus books usually describe Newton's
+method in terms of the sequence of approximations
+<em>x</em><sub><em>n</em>+1</sub> = <em>x</em><sub><em>n</em></sub> - <em>g</em>(<em>x</em><sub><em>n</em></sub>)/<em>D</em><em>g</em>(<em>x</em><sub><em>n</em></sub>).  Having language for talking about
+processes and using the idea of fixed points simplifies the description
+of the method.
+</p>
+
+<p class="trans" lang="ja">
+初歩的な計算の本は、普通、二ユートン法を、
+<span class="math"><em class="en">x<sub>n+1</sub></em> = <em class="en">x</em><sub><em class="en">n</em></sub> &minus; <em class="en">g</em>(<em class="en">x</em><sub><em class="en">n</em></sub>)/<em class="en">D</em><em class="en">g</em>(<em class="en">x</em><sub><em class="en">n</em></sub>)</span>
+という近似列の観点から説明する。
+プロセスについて語り、不動点の考え方を使う言葉を持つことは、この方法の説明を簡素化する。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_118" href="#call_footnote_Temp_118"><sup><small>62</small></sup></a> Newton's method does not always converge to an answer, but
+it can be shown that in favorable cases each iteration doubles the
+number-of-digits accuracy of the approximation to the solution.
+In such cases, <a name="%_idx_1182"></a><a name="%_idx_1184"></a>Newton's method will converge much more
+rapidly than the half-interval method.
+</p>
+
+<p class="trans" lang="ja">
+ニュートン法は常に答えに収束するわけではないが、好都合な事例においては、各々の反復によって、解に対する近似の桁数精度が倍増する、ということを示せる。
+そういう事例では、二ユートン法は、二分法よりずっと速く収束するだろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_119" href="#call_footnote_Temp_119"><sup><small>63</small></sup></a> For finding square roots, Newton's method converges rapidly to the
+correct solution from any starting point.
+</p>
+
+<p class="trans" lang="ja">
+二乗根を見つけるためなら、ニュートン法は、どのような開始点からでも、正しい解へと迅速に収束する。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_121" href="#call_footnote_Temp_121"><sup><small>64</small></sup></a> The notion of first-class status of programming-language
+<a name="%_idx_1220"></a>elements is due to the British computer scientist Christopher
+Strachey (1916-1975).
+</p>
+
+<p class="trans" lang="ja">
+プログラミング言語の要素についての、第一級の地位という概念は、英国の計算機科学者であるクリストファ・ストレイチ (1916-1975) による。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_122" href="#call_footnote_Temp_122"><sup><small>65</small></sup></a> We'll see
+examples of this after we introduce data structures in chapter 2.
+</p>
+
+<p class="trans" lang="ja">
+2章でデータ構造を導入した後で、これの例を見よう。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_123" href="#call_footnote_Temp_123"><sup><small>66</small></sup></a> The major implementation cost of first-class
+procedures is that allowing procedures to be returned as values
+requires reserving storage for a procedure's free variables even while
+the procedure is not executing.  In the Scheme implementation we will
+study in section <a href="26_sec4_1.html#%_sec_4.1">4.1</a>, these variables are stored in the
+procedure's environment.
+</p>
+
+<p class="trans" lang="ja">
+第一級の手続きの主な実装コストは、値として手続きを返せるようにすると、手続きが実行中でない間でさえも当該手続きの自由変数のための記憶装置を予約する必要が生じることだ。
+私たちが<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節で研究する予定のSchemeの実装では、これらの変数は、手続きの環境に記憶される。
+</p>
+
+</div>
+
+</body>
+</html>
