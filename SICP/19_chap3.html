@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+
+<body>
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="18_sec2_5.html">前へ</a> |
+<a href="20_sec3_1.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]</nav>
+</div>
+
+<div class="main-txt">
+<a name="%_chap_3"></a>
+<h1 class="orig" lang="en">
+<a href="book-Z-H-4.html#%_toc_%_chap_3">Chapter 3</a>
+<a href="book-Z-H-4.html#%_toc_%_chap_3">Modularity, Objects, and State</a></h1>
+<h1 class="trans" lang="ja">3章　モジュール性とオブジェクトと状態</h1>
+
+
+<p class="orig" lang="en">
+M<img src="ch3-Z-G-1.gif" border="0"><br>
+
+(Even while it changes, it stands still.)<br>
+<a name="%_idx_2820"></a>Heraclitus
+</p>
+
+<p class="trans" lang="ja">
+変化している間であろうとも、それは依然として在るのだ。<br>
+ヘラクレイトス
+</p>
+
+<p class="orig" lang="en">
+Plus &ccedil;a change, plus c'est la m&ecirc;me chose.<br>
+<a name="%_idx_2822"></a>Alphonse Karr</p>
+
+<p class="trans" lang="ja">
+物事は変われば変わるほど、ますます同じものである。<br>
+アルフォンス・カー
+</p>
+
+<p class="orig" lang="en">
+The preceding chapters introduced the basic elements from which
+programs are made.  We saw how primitive procedures and primitive data
+are combined to construct compound entities, and we learned that
+abstraction is vital in helping us to cope with the complexity of
+large systems.  But these tools are not sufficient for designing
+programs.  Effective program synthesis also requires organizational
+principles that can guide us in formulating the overall design of a
+program.  In particular, we need strategies to help us structure large
+systems so that they will be <em>modular</em>, that is, so that they can
+be divided ``naturally'' into coherent parts that can be separately
+developed and maintained.</p>
+
+<p class="trans" lang="ja">
+これまでの章では、プログラムを作る元となる基本的な要素を導入した。
+複合的な実体を構成するために、どのように原始的手続きと原始的データを組み合わせるのか、ということを見たし、私たちが大規模システムの複雑さに対処するのを助けるうえで、抽象化は不可欠である、ということを学んだ。
+しかし、これらの手段は、プログラムを設計するのには十分でない。
+効果的なブログラム統合には、プログラムの全体的な設計を定式化する際に私たちを導いていけるような、組織的な原則も必要なのだ。
+特に、大規模システムが<em>モジュール性のある</em>ものとなるように——つまり、別々に開発および保守ができるような、統一性のとれた諸部分へと、大規模システムが「自然に」分割できるように——私たちが大規模システムを構築するのを手助けするための、戦略が必要だ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2824"></a><a name="%_idx_2826"></a>One powerful design strategy, which is particularly appropriate to the
+construction of programs for modeling physical systems, is to base the
+structure of our programs on the structure of the system being
+modeled.  For each object in the system, we construct a corresponding
+computational object.  For each system action, we define a symbolic
+operation in our computational model.  Our hope in using this strategy
+is that extending the model to accommodate new objects or new actions
+will require no strategic changes to the program, only the addition of
+the new symbolic analogs of those objects or actions.  If we have been
+successful in our system organization, then to add a new feature or
+debug an old one we will have to work on only a localized part of the
+system.</p>
+
+<p class="trans" lang="ja">
+一つの強力な設計戦略——物理系をモデル化するためのプログラムの構築に特に適している——は、プログラムの構造の基礎を、モデル化されている<ruby><rb>系</rb><rp> (</rp><rt>システム</rt><rp>) </rp></ruby>の構造に置くことである。
+系の中の各<ruby><rb>物体</rb><rp> (</rp><rt>オブジェクト</rt><rp>) </rp></ruby>に対して、それに対応する、計算機上のオブジェクトを構築する。
+系の動作のそれぞれに対して、計算モデルにおける記号的操作を定義する。
+この戦略を使う際に期待していることは、新たな<!--オブジェクト-->物体または新たな動作に応えるためにモデルを拡張することには、プロクラムに対する何の戦略的変更も必要ないだろう——ただ、それらの<!--オブジェクト-->物体または動作の、新たな記号的相似物を追加するだけでよいだろう——ということだ。
+もし系の組織化がうまくいったら、私たちは、新たな機能を追加するため、あるいは、古い機能をデバッグするためには、系のうち局所化された部分についてだけ、作業すればよいのだ。
+</p>
+
+<p class="orig" lang="en">
+To a large extent, then, the way we organize a large program is
+dictated by our perception of the system to be modeled.  In this
+chapter we will investigate two prominent organizational strategies
+arising from two rather different ``world views'' of the structure of
+systems.  The first organizational strategy concentrates on <a name="%_idx_2828"></a><em>objects</em>, viewing a large system as a collection of distinct objects
+whose behaviors may change over time.  An alternative organizational
+strategy concentrates on the <a name="%_idx_2830"></a><em>streams</em> of information that flow in
+the system, much as an electrical engineer views a signal-processing
+system.</p>
+
+<p class="trans" lang="ja">
+そして、私たちが大きなプログラムを組織立てる方法は、モデル化すべき系に対する私たちの認識に、かなり大きな程度まで影響されている。
+本章では、系の構造についての二つの相当に異なった「世界観」から生じる、二つの重要な組織化戦略を調査しよう。
+第一の組織化戦略では、大きな<ruby><rb>系</rb><rp> (</rp><rt>システム</rt><rp>) </rp></ruby>を、時とともに振る舞いが変化する可能性があるような別個の<ruby><rb>物体</rb><rp> (</rp><rt>オブジェクト</rt><rp>) </rp></ruby>の集まりである、と見なしつつ、<em>オブジェクト</em>に集中する。
+もう一つの組織化戦略では、電気技術者が信号処理システムを見るのと同じように、系の中を流れる情報の<em><ruby><rb>流れ</rb><rp> (</rp><rt>ストリーム</rt><rp>) </rp></ruby></em>に集中する。
+</p>
+
+<p class="orig" lang="en">
+Both the object-based approach and the stream-processing approach
+raise significant linguistic issues in programming.
+With objects, we must be concerned with how a computational object can
+change and yet maintain its identity.  This will force us to abandon
+our old substitution model of computation
+(section <a href="book-Z-H-10.html#%_sec_1.1.5">1.1.5</a>) in favor of a more mechanistic
+but less theoretically tractable <a name="%_idx_2832"></a><em>environment model</em> of
+computation.  The difficulties of dealing with objects, change, and
+identity are a fundamental consequence of the need to grapple with
+time in our computational models.  These difficulties become even
+greater when we allow the possibility of concurrent execution of
+programs.  The stream approach can be most fully exploited when we
+decouple simulated time in our model from the order of the events that
+take place in the computer during evaluation.  We will accomplish this
+using a technique known as <a name="%_idx_2834"></a><em>delayed evaluation</em>.</p>
+
+<p class="trans" lang="ja">
+オブジェクトに基づく手法と、ストリームを処理する手法の両方とも、プログラミングにおける重要な言語的問題を提起する。
+オブジェクトを使うときは、計算機上のオブジェクトがどう変化しうるのか、について注意しなくてはならず、それでもそのオブジェクトの同一性を保たねばならない。
+このことのために、私たちは、計算についての古い代入モデル (<a href="book-Z-H-10.html#%_sec_1.1.5">1.1.5</a>節) を捨てざるをえない——計算についての、より機械的だが理論的にはより扱いづらい、<em>環境モデル</em>を支持する——ことになるだろう。
+オブジェクトと変化と同一性を扱うことの難しさは、私たちの計算モデルにおいて時間に取り組む必要性からくる、根本的な結果である。
+この難しさは、プログラムの並行実行の可能性を認める場合に、さらに増す。
+ストリームの手法は、評価の間にコンピュータ内で起こるイベントの順序から、モデルにおけるシミュレートされた時間を切り離したときに、もっとも完全に活用されうる。
+<em>遅延評価</em>として知られる技法を使って、これを達成しよう。
+</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="19_chap3.html">前へ</a> |
+<a href="21_sec3_2.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_sec_3.1">3.1</a>
+§<a href="#%_sec_3.1.1">3.1.1</a>
+📝<a href="#%_thm_3.1">3.1</a>
+📝<a href="#%_thm_3.2">3.2</a>
+📝<a href="#%_thm_3.3">3.3</a>
+📝<a href="#%_thm_3.4">3.4</a>
+§<a href="#%_sec_3.1.2">3.1.2</a>
+📝<a href="#%_thm_3.5">3.5</a>
+📝<a href="#%_thm_3.6">3.6</a>
+§<a href="#%_sec_3.1.3">3.1.3</a>
+📚<a href="#%_sec_Temp_336">&hellip;</a>
+📚<a href="#%_sec_Temp_338">&hellip;</a>
+📝<a href="#%_thm_3.7">3.7</a>
+📝<a href="#%_thm_3.8">3.8</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+</div>
+
+<div class="main-txt">
+
+<a name="%_sec_3.1"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_3.1">3.1  Assignment and Local State</a></h2>
+<h2 class="trans" lang="ja">3.1 <ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と局所状態</h2>
+
+<p class="orig" lang="en">
+<a name="%_idx_2836"></a><a name="%_idx_2838"></a>
+We ordinarily view the world as populated by independent objects, each
+of which has a state that changes over time.  An object is said to
+``have state'' if its behavior is influenced by its history.  A bank
+account, for example, has state in that the answer to the question
+``Can I withdraw $100?''  depends upon the history of deposit and
+withdrawal transactions.  We can characterize an object's state by one
+or more <a name="%_idx_2840"></a><em>state variables</em>, which among them maintain enough
+information about history to determine the object's current behavior.
+In a simple banking system, we could characterize the state of an
+account by a current balance rather than by remembering the entire
+history of account transactions.</p>
+
+<p class="trans" lang="ja">
+普通、私たちは世界を、独立した<!--オブジェクト--><!--個物-->物——その各々には、時とともに変化する状態がある——<!--が棲息して-->で満ちているところだと見なす。
+<!--オブジェクト--><!--個物-->物は、自分の振る舞いが自分の履歴から影響を受ける場合に、「状態がある」と言われる。
+たとえば、「私は100ドルを引き出せるか?」という質問に対する答えが、預け入れと引き出しの取引の履歴に依存している、という点において、銀行口座には状態がある。
+私たちは、<!--オブジェクト--><!--個物-->物の状態を、一つ以上の<em>状態変数</em>——その<!--オブジェクト--><!--個物-->物の現在の振る舞いを決定するための、履歴についての十分な情報を、それら状態変数の間で保持する——によって、特徴づけることができる。
+簡単な銀行システムでは、ある口座の状態を、口座の取引の全履歴を覚えていることによって、というよりもむしろ、現在の預金残高によって、特徴づけることが可能だろう。
+</p>
+
+<p class="orig" lang="en">
+In a system composed of many objects, the objects are rarely
+completely independent.  Each may influence the states of others
+through interactions, which serve to couple the state variables of one
+object to those of other objects.  Indeed, the view that a system is
+composed of separate objects is most useful when the state variables
+of the system can be grouped into closely coupled subsystems that are
+only loosely coupled to other subsystems.</p>
+
+<p class="trans" lang="ja">
+多くの<!--オブジェクト--><!--個物-->物から構成される<!--システム-->系では、それらの<!--オブジェクト--><!--個物-->物同士が完全に独立していることは稀である。
+それぞれの<!--オブジェクト--><!--個物-->物は、他の<!--オブジェクト--><!--個物-->物の状態に対して、相互作用——ひとつの<!--オブジェクト--><!--個物-->物の状態変数を、他の<!--オブジェクト--><!--個物-->物の状態変数に結びつけるのに役立つ——を通じて、影響を与えるかもしれない。
+ばらばらの<!--オブジェクト--><!--個物-->物から<!--システム-->系が構成されるという考え方は、実のところ、他の<!--サブシステム-->下位の系とは緩く結合されているだけの、<span class="note">(自己の内部では?) </span>密接に結合しているいくつかの<!--サブシステム-->下位の系へと、<!--システム-->系の状態変数をグループ化できるときに、もっとも有用である。
+</p>
+
+<p class="orig" lang="en">
+This view of a system can be a powerful framework for organizing
+computational models of the system.  For such a model to be modular,
+it should be decomposed into computational objects that model the
+actual objects in the system.  Each computational object must have its
+own <em>local state variables</em> describing the actual object's state.
+Since the states of objects in the system being modeled change over
+time, the state variables of the corresponding computational objects
+must also change.  If we choose to model the flow of time in the
+system by the elapsed time in the computer, then we must have a way to
+construct computational objects whose behaviors change as our programs
+run.  In particular, if we wish to model state variables by ordinary
+symbolic names in the programming language, then the language must
+provide an <a name="%_idx_2842"></a><em>assignment operator</em> to enable us to change the value
+associated with a name.</p>
+
+<p class="trans" lang="ja">
+このような<!--システム-->系の見方は、<!--システム-->系の計算モデルを組織立てるための強力な枠組みになり得る。
+そのようなモデルがモジュール性を備えたものであるためには、そのモデルは、<!--システム内-->系の中の実際の<!--オブジェクト群--><!--個物-->物体の群をモデル化している計算オブジェクト群へと、分解されるはずである。
+各計算オブジェクトは、実際の<!--オブジェクト--><!--個物-->物体の状態を説明する、自分自身の<em>局所的状態変数</em>を持たねばならない。
+モデル化されている<!--システム内のオブジェクト-->系の中の<!--個物-->物体の状態は、時とともに変化するので、対応する計算オブジェクトの状態変数も、変化しなくてはならない。
+もし、その系における時の流れを、コンピュータにおける経過時間によりモデル化することを選ぶなら、私たちには、プログラムが動くのにつれて振る舞いが変化するような計算オブジェクトを構築する方法が、なくてはならない。
+特に、もし、プログラミング言語における普通の記号的な名前によって、状態変数をモデル化したいのであれば、その言語は、名前に関連づけられた値を変更することを可能にする<em><ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>演算子</em>を、提供しなくてはならない。
+<span class="note">(1章のsubstitutionと3章のassignmentは、日本語だとどっちも「代入」になっちゃうんだけど、異なる概念だからややこしいな……。ということで、とりあえず、「<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>」と「<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>」のようにルビで処理しておく。)</span>
+</p>
+
+<a name="%_sec_3.1.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_3.1.1">3.1.1  Local State Variables</a></h3>
+<h3 class="trans" lang="ja">3.1.1 局所的状態変数</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2844"></a><a name="%_idx_2846"></a>
+<a name="%_idx_2848"></a><a name="%_idx_2850"></a>To illustrate what we mean by having a computational object with
+time-varying state, let us model the situation of withdrawing money
+from a bank account.  We will do this using a procedure <tt>withdraw</tt>, which takes as argument an <tt>amount</tt> to be withdrawn.
+If there is enough money in the account to accommodate the withdrawal,
+then <tt>withdraw</tt> should return the balance remaining after the
+withdrawal.  Otherwise, <tt>withdraw</tt> should return the message <em>Insufficient funds.</em> For example, if we begin with $100 in the
+account, we should obtain the following sequence of responses using
+<tt>withdraw</tt>:
+</p>
+
+
+<p class="trans" lang="ja">
+経時変化する状態を有する、計算機上のオブジェクトがある、ということによって、何を意味しているのか、を例示するために、銀行口座からお金を下ろすという状況をモデル化しよう。
+<tt>withdraw</tt> という手続き——引き出すべき <ruby><rb><tt>amount</tt></rb><rp> (</rp><rt>金額</rt><rp>) </rp></ruby> を引数として取る——を用いて、このモデル化を行おう。
+もし、その引き出しに応えるのに十分なお金が口座にあれば、<tt>withdraw</tt> は、引き出し後に残っている預金残高を返すべきである。
+そうでなければ、<tt>withdraw</tt> は、<ruby><rb><em>Insufficient funds</em></rb><rp> (</rp><rt>資金不足</rt><rp>) </rp></ruby> というメッセージを返すべきである。
+例えば、もし口座に100ドルあるところから始めたなら、<tt>withdraw</tt> を使って以下の一連の応答を得るはずだ。
+</p>
+
+<p class="lisp">(withdraw 25)
+<i>75</i>
+(withdraw 25)
+<i>50</i>
+(withdraw 60)
+<i>&quot;Insufficient funds&quot;</i>
+(withdraw 15)
+<i>35</i>
+</p>
+
+
+<p class="orig" lang="en">
+Observe that the expression <tt>(withdraw 25)</tt>, evaluated twice,
+yields different values.  This is a new kind of behavior for a
+procedure.  Until now, all our procedures could be viewed as
+specifications for computing mathematical functions.  A call to a
+procedure computed the value of the function applied to the given
+arguments, and two calls to the same procedure with the
+same arguments always produced the same result.<a name="call_footnote_Temp_321" href="#footnote_Temp_321"><sup><small>1</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<tt>(withdraw 25)</tt> という式——二回評価されている——が、異なる値を生み出す、ということに気づいてほしい。
+これは、手続きにとって新たな種類の振る舞いである。
+現在まで、私たちの手続きのすべては、数学的関数を計算するための仕様だと見なし得た。
+手続きの呼び出しは、与えられた引数に適用される関数の値を計算したし、同じ手続きに対する、同じ引数をともなった二回の呼び出しは、常に同じ結果を生み出した<a href="#footnote_Temp_321"><sup><small>1</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+To implement <tt>withdraw</tt>, we can use a variable <tt>balance</tt> to
+indicate the balance of money in the account and define <tt>withdraw</tt>
+as a procedure that accesses <tt>balance</tt>.  The <tt>withdraw</tt>
+procedure checks to see if <tt>balance</tt> is at least as large as the
+requested <tt>amount</tt>.  If so, <tt>withdraw</tt> decrements <tt>balance</tt> by <tt>amount</tt> and returns the new value of <tt>balance</tt>.
+Otherwise, <tt>withdraw</tt> returns the <em>Insufficient funds</em>
+message.  Here are the definitions of <tt>balance</tt> and <tt>withdraw</tt>:
+</p>
+
+<p class="trans" lang="ja">
+<tt>withdraw</tt> を実装するために、口座におけるお金の残高を示すための <tt>balance</tt> という変数を使うことができ、<tt>withdraw</tt> を、<tt>balance</tt> にアクセスする手続きとして定義することができる。
+<tt>withdraw</tt> という手続きは、<tt>balance</tt> が、少なくとも求められた <tt>amount</tt> 以上かどうかを、調べる。
+もしそうなら、<tt>withdraw</tt> は、<tt>amount</tt> だけ <tt>balance</tt> を減らして、<tt>balance</tt> の新たな値を返す。
+そうでない場合、<tt>withdraw</tt> は、<em>Insufficient funds</em> のメッセージを返す。
+ここに、<tt>balance</tt> と <tt>withdraw</tt> の定義を示す。
+</p>
+
+<p class="lisp">(define balance 100)
+
+<a name="%_idx_2858"></a>(define (withdraw amount)
+  (if (&gt;= balance amount)
+      (begin (set! balance (- balance amount))
+             balance)
+      &quot;Insufficient funds&quot;))
+</p>
+
+<p class="orig" lang="en">
+Decrementing <tt>balance</tt> is accomplished by the expression
+</p>
+
+<p class="trans" lang="ja">
+<tt>balance</tt> を減らすことは、以下の式により達成される。
+</p>
+
+<p class="lisp">(set! balance (- balance amount))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2860"></a><a name="%_idx_2862"></a>This uses the <tt>set!</tt> special form, whose syntax is</p>
+
+<p class="trans" lang="ja">
+これは、<tt>set!</tt> という特殊形式を使っていて、その文法は、以下のとおりである。
+</p>
+
+<p class="lisp">(set! &lt;<em>name</em>&gt; &lt;<em>new-value</em>&gt;)
+</p>
+
+<p class="orig" lang="en">
+Here &lt;<em>name</em>&gt; is a symbol and &lt;<em>new-value</em>&gt; is any expression.  <tt>Set!</tt> changes &lt;<em>name</em>&gt; so that its value is the result obtained by
+evaluating &lt;<em>new-value</em>&gt;.  In the case at hand, we are changing <tt>balance</tt> so that its new value will be the result of subtracting <tt>amount</tt> from the previous value of <tt>balance</tt>.<a name="call_footnote_Temp_322" href="#footnote_Temp_322"><sup><small>2</small></sup></a></p>
+
+<p class="trans" lang="ja">
+ここで、&lt;<em class="en">name</em>&gt; は記号であり、
+&lt;<em class="en">new-value</em>&gt; は任意の式である。
+<tt>set!</tt> は、&lt;<em class="en">name</em>&gt; の値が、
+&lt;<em class="en">new-value</em>&gt; 
+を評価することで得られる結果となるように、
+&lt;<em class="en">name</em>&gt; を変更する。
+目下の場合において私たちは、<tt>balance</tt> の新たな値が、<tt>balance</tt> の以前の値から <tt>amount</tt> を引いた結果となるように、<tt>balance</tt> を変更しているところである<a href="#footnote_Temp_322"><sup><small>2</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2874"></a><a name="%_idx_2876"></a><tt>Withdraw</tt> also uses the <tt>begin</tt> special form to cause
+two expressions to be evaluated
+in the case where the <tt>if</tt> test is true: first decrementing <tt>balance</tt> and then returning the value of <tt>balance</tt>.  In general,
+evaluating the expression
+</p>
+
+<p class="trans" lang="ja">
+<tt>if</tt> の検査が真である場合に、二つの式が評価される——まず <tt>balance</tt> を減らし、それから、<tt>balance</tt> の値を返す——ようにするための、<tt>begin</tt> という特殊形式も、<tt>withdraw</tt> は使っている。
+一般に、次の式を評価することにより、
+</p>
+
+<p class="lisp">(begin &lt;<em>exp<sub>1</sub></em>&gt; &lt;<em>exp<sub>2</sub></em>&gt; <tt>...</tt> &lt;<em>exp<sub><em>k</em></sub></em>&gt;)
+</p>
+
+<p class="orig" lang="en">
+causes the expressions &lt;<em>exp<sub>1</sub></em>&gt; through &lt;<em>exp<sub><em>k</em></sub></em>&gt; to be
+evaluated in sequence and the value of the final expression
+&lt;<em>exp<sub><em>k</em></sub></em>&gt; to be returned as the value of the entire <tt>begin</tt>
+form.<a name="call_footnote_Temp_323" href="#footnote_Temp_323"><sup><small>3</small></sup></a></p>
+
+<p class="trans" lang="ja">
+&lt;<em class="en">exp<sub>1</sub></em>&gt; から 
+&lt;<em class="en">exp<sub><em class="en">k</em></sub></em>&gt; 
+までの式が順に評価され、
+&lt;<em class="en">exp<sub><em class="en">k</em></sub></em>&gt; 
+という最後の式の値が、<tt>begin</tt> 形式全体の値として、返される<a href="#footnote_Temp_323"><sup><small>3</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+Although <tt>withdraw</tt> works as desired, the variable
+<tt>balance</tt> presents a problem.  As specified above, <tt>balance</tt>
+is a name defined in the global environment and is freely accessible
+to be examined or modified by any procedure.  It would be much better
+if we could somehow make <tt>balance</tt> internal to <tt>withdraw</tt>, so
+that <tt>withdraw</tt> would be the only procedure that could access <tt>balance</tt> directly and any other procedure could access <tt>balance</tt>
+only indirectly (through calls to <tt>withdraw</tt>).  This would more
+accurately model the notion that <tt>balance</tt> is a local state
+variable used by <tt>withdraw</tt> to keep track of the state of the
+account.</p>
+
+<p class="trans" lang="ja">
+<tt>withdraw</tt> は望みどおりに動くものの、<tt>balance</tt> という変数は問題を提示する。
+上に具体的に述べたように、<tt>balance</tt> は、大域環境で定義された名前であり、任意の手続きによって、検査されたり、あるいは修正されたりするために、自由にアクセス可能である。
+もし、なんとかして <tt>balance</tt> を <tt>withdraw</tt> の内部のものにしておくことが可能であれば、その方がずっと良いだろうし、その結果、<tt>withdraw</tt> は <tt>balance</tt> に直接的にアクセスし得る唯一の手続きになるだろうし、他のどの手続きも <tt>balance</tt> には (<tt>withdraw</tt>の呼び出しを通じて) 間接的にしかアクセスし得なくなるだろう。
+これは、<tt>balance</tt> が、口座の状態を追いかけて把握するために <tt>withdraw</tt> により使われる局所状態変数なのだ、という概念を、より正確にモデル化することだろう。
+</p>
+
+<p class="orig" lang="en">
+We can make <tt>balance</tt> internal to <tt>withdraw</tt> by rewriting the
+definition as follows:
+</p>
+
+<p class="trans" lang="ja">
+以下のように定義を書き直すことで、<tt>balance</tt> を <tt>withdraw</tt> の内部のものにできる。
+</p>
+
+
+<p class="lisp"><a name="%_idx_2884"></a>(define new-withdraw
+  (let ((balance 100))
+    (lambda (amount)
+      (if (&gt;= balance amount)
+          (begin (set! balance (- balance amount))
+                 balance)
+          &quot;Insufficient funds&quot;))))
+</p>
+
+<p class="orig" lang="en">
+What we have done here is use <tt>let</tt> to establish an environment
+with a local variable <tt>balance</tt>, bound to the initial value 100.
+Within this local environment, we use <tt>lambda</tt> to create a
+procedure that takes <tt>amount</tt> as an argument and behaves like our
+previous <tt>withdraw</tt> procedure.  This procedure -- returned as the
+result of evaluating the <tt>let</tt> expression -- is <tt>new-withdraw</tt>,
+which behaves in precisely the same way as <tt>withdraw</tt> but whose
+variable <tt>balance</tt> is not accessible by any other
+procedure.<a name="call_footnote_Temp_324" href="#footnote_Temp_324"><sup><small>4</small></sup></a></p>
+
+<p class="trans" lang="ja">
+ここで行ったことは、100という初期値に束縛された <tt>balance</tt> という局所変数のある環境を、<tt>let</tt> を使って確立することである。
+この局所的環境の内部では、引数として <tt>amount</tt> をとって先の <tt>withdraw</tt> の手続きのごとく振る舞うような手続きを、<tt>lambda</tt> を使って作成している。
+この手続き——<tt>let</tt> 式を評価する結果として返される——が、<tt>new-withdraw</tt> であり、<tt>new-withdraw</tt> は、<tt>withdraw</tt> とまったく同じように振る舞うが、<tt>balance</tt> というその変数は、他のどの手続きからもアクセスできない<a href="#footnote_Temp_324"><sup><small>4</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+Combining <tt>set!</tt> with local variables is the general programming
+technique we will use for constructing computational objects with
+local state.  Unfortunately, using this technique raises a serious
+problem: When we first introduced procedures, we also introduced the
+substitution model of evaluation
+(section <a href="10_sec1_1.html#%_sec_1.1.5">1.1.5</a>) to provide an interpretation of
+what procedure application means.  We said that applying a procedure
+should be interpreted as evaluating the body of the procedure with the
+formal parameters replaced by their values.  The trouble is that, as
+soon as we introduce assignment into our language, substitution is no
+longer an adequate model of procedure application.  (We will see why
+this is so in section <a href="#%_sec_3.1.3">3.1.3</a>.)  As a
+consequence, we technically have at this point no way to understand
+why the <tt>new-withdraw</tt> procedure behaves as claimed above.  In
+order to really understand a procedure such as <tt>new-withdraw</tt>, we
+will need to develop a new model of procedure application.  In
+section <a href="21_sec3_2.html#%_sec_3.2">3.2</a> we will introduce such a model,
+together with an explanation of <tt>set!</tt> and local variables.
+First, however, we examine some variations on the theme established by
+<tt>new-withdraw</tt>.</p>
+
+<p class="trans" lang="ja">
+<tt>set!</tt> を局所変数と結びつけることは、局所状態を有する計算機上のオブジェクトを構築するために、私たちがこれから使うであろう、一般的なプログラミング技法である。
+しかしあいにく、この技法を使うことで、深刻な問題を起こしてしまう。
+手続きを最初に導入したときに、私たちは、手続きの適用が何を意味するのかについての解釈を与えるための、評価に関する<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデル (<a href="10_sec1_1.html#%_sec_1.1.5">1.1.5</a>節) をも、導入した。
+手続きを適用することは、仮引数をそれら仮引数の値で置き換えた状態の手続きの本体を評価することである、と解釈されるべきだ、と私たちは言った。
+問題は、私たちの言語に<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を導入するや否や、<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>がもはや、手続き適用の適切なモデルではなくなることである。
+(なぜこれがそうなのか、ということを、<a href="#%_sec_3.1.3">3.1.3</a>節で見よう。)
+結果として、この時点で私たちは、なぜ <tt>new-withdraw</tt> の手続きが、上記で主張したように振る舞うのか 、を理解する術を、厳密には持っていないのだ。
+ <tt>new-withdraw</tt> のような手続きを本当に理解するためには、手続き適用の新たなモデルを開発する必要がある。
+<a href="21_sec3_2.html#%_sec_3.2">3.2</a>節で、そういうモデルを—— <tt>set!</tt> および局所変数についての説明とともに——導入しよう。
+しかし、まずは、<tt>new-withdraw</tt> により確立された主題についての、いくつかの変種について吟味する。
+</p>
+
+<p class="orig" lang="en">
+The following procedure, <tt>make-withdraw</tt>, creates ``withdrawal
+processors.''  The formal parameter <tt>balance</tt> in <tt>make-withdraw</tt> specifies the initial amount of money in the
+account.<a name="call_footnote_Temp_325" href="#footnote_Temp_325"><sup><small>5</small></sup></a></p>
+
+<p class="trans" lang="ja">
+以下の手続き——すなわち <tt>make-withdraw</tt> ——は、「引き出し処理器」を作成する。
+<tt>make-withdraw</tt> における仮引数の <tt>balance</tt> は、口座にある最初の金額を指定する<a href="#footnote_Temp_325"><sup><small>5</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_2894"></a>(define (make-withdraw balance)
+  (lambda (amount)
+    (if (&gt;= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        &quot;Insufficient funds&quot;)))
+</p>
+
+<p class="orig" lang="en">
+<tt>Make-withdraw</tt> can be used as follows to create two objects
+<tt>W1</tt> and <tt>W2</tt>:
+</p>
+
+<p class="trans" lang="ja">
+<tt>W1</tt> と <tt>W2</tt> という二つのオブジェクトを作成するために、<tt>make-withdraw</tt> を以下のように使うことができる。
+</p>
+
+<p class="lisp">(define W1 (make-withdraw 100))
+(define W2 (make-withdraw 100))
+(W1 50)
+<i>50</i>
+(W2 70)
+<i>30</i>
+(W2 40)
+<i>&quot;Insufficient funds&quot;</i>
+(W1 40)
+<i>10</i>
+</p>
+
+<p class="orig" lang="en">
+Observe that <tt>W1</tt> and <tt>W2</tt> are completely independent objects,
+each with its own local state variable <tt>balance</tt>.  Withdrawals
+from one do not affect the other.</p>
+
+<p class="trans" lang="ja">
+<tt>W1</tt> と <tt>W2</tt> が完全に独立したオブジェクトである——そして各々には、 <tt>balance</tt> という、それ自身の局所状態変数がある——ということに気づいてほしい。
+一方からの引き出しは、他方に影響しない。
+</p>
+
+<p class="orig" lang="en">
+We can also create objects that handle deposits as well as
+withdrawals, and thus we can represent simple bank accounts.  Here is
+a procedure that returns a ``bank-account object'' with
+a specified initial balance:
+</p>
+
+<p class="trans" lang="ja">
+引き出しと同様に、預け入れを扱うオブジェクトを作成することもできるし、したがって、簡単な銀行口座を表現できる。
+指定された初期残高を有する「銀行口座オブジェクト」を返す手続きを、ここに示す。
+</p>
+
+<p class="lisp"><a name="%_idx_2896"></a><a name="%_idx_2898"></a>(define (make-account balance)
+  (define (withdraw amount)
+    (if (&gt;= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        &quot;Insufficient funds&quot;))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error &quot;Unknown request -- MAKE-ACCOUNT&quot;
+                       m))))
+  dispatch)
+</p>
+
+<p class="orig" lang="en">
+Each call to <tt>make-account</tt> sets up an environment with a local
+state variable <tt>balance</tt>.  Within this environment, <tt>make-account</tt> defines procedures <tt>deposit</tt> and <tt>withdraw</tt>
+that access <tt>balance</tt> and an additional procedure <tt>dispatch</tt>
+that takes a ``message'' as input and returns one of the two local
+procedures.  The <tt>dispatch</tt> procedure itself is returned as the
+value that represents the bank-account object.
+This is precisely the <a name="%_idx_2900"></a><em>message-passing</em>
+style of programming that we saw in section <a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>, although
+here we are using it in conjunction with the ability to modify local
+variables.</p>
+
+<p class="trans" lang="ja">
+<tt>make-account</tt> に対する各回の呼び出しが、<tt>balance</tt> という局所状態変数のある環境を設定する。
+この環境内において <tt>make-account</tt> は、<tt>balance</tt> にアクセスする <tt>deposit</tt> および <tt>withdraw</tt> という手続きを定義するとともに、入力として「メッセージ」をとって二つの局所的手続きのうちの一方を返す、<tt>dispatch</tt> という付加的な手続きを定義する。
+<tt>dispatch</tt> という手続き自体が、銀行口座オブジェクトを表現する値として、返される。
+これはまさに、<a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>節で見た、プログラミングの<em>メッセージ・パッシング</em>様式である——それを、ここでは、局所変数を変更する能力と一緒に使っているのであるが。
+</p>
+
+<p class="orig" lang="en">
+<tt>Make-account</tt> can be used as follows:
+</p>
+
+<p class="trans" lang="ja">
+<tt>make-account</tt> は、次のように使える。
+</p>
+
+<p class="lisp">(define acc (make-account 100))
+((acc 'withdraw) 50)
+<i>50</i>
+((acc 'withdraw) 60)
+<i>&quot;Insufficient funds&quot;</i>
+((acc 'deposit) 40)
+<i>90</i>
+((acc 'withdraw) 60)
+<i>30</i>
+</p>
+
+<p class="orig" lang="en">
+Each call to <tt>acc</tt> returns the locally defined <tt>deposit</tt> or
+<tt>withdraw</tt> procedure, which is then applied to the specified <tt>amount</tt>.  As was the case with <tt>make-withdraw</tt>, another call to <tt>make-account</tt>
+</p>
+
+<p class="trans" lang="ja">
+<tt>acc</tt> への各回の呼び出しは、局所的に定義された <tt>deposit</tt> か <tt>withdraw</tt> の手続きを返し、その返された手続きが、次に、指定された <tt>amount</tt> に適用される。
+<tt>make-withdraw</tt> の場合と同様に、以下のような、<tt>make-account</tt> に対する別の呼び出しは、
+</p>
+
+<p class="lisp">(define acc2 (make-account 100))
+</p>
+
+<p class="orig" lang="en">
+will produce a completely separate account object, which maintains its
+own local <tt>balance</tt>.</p>
+
+<p class="trans" lang="ja">
+完全に別の口座オブジェクト——それ自身の局所的な <tt>balance</tt> を保持する——を、作り出すだろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.1"></a>
+<b>Exercise 3.1.</b>  An <a name="%_idx_2902"></a><em>accumulator</em> is a procedure that is called repeatedly with a
+single numeric argument and accumulates its arguments into a sum.
+Each time it is called, it returns the currently accumulated sum.
+Write a procedure <a name="%_idx_2904"></a><tt>make-accumulator</tt> that generates accumulators,
+each maintaining an independent sum.  The input to <tt>make-accumulator</tt> should specify the initial value of the sum; for
+example
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.1.</b> <em>アキュムレータ (累算器)</em> とは、一つの数値的引数とともに繰り返し呼び出されて、引数を和に累積加算するような、手続きである。
+アキュムレータは、呼び出されるたびに、現在の、累積加算された和を返す。
+アキュムレータ——それぞれが、独立した和を保持する——を生成する、<tt>make-accumulator</tt> という手続きを書け。
+<tt>make-accumulator</tt> への入力は、和の初期値を指定すべきである。
+たとえば、以下のように。
+</p>
+
+<p class="lisp">(define A (make-accumulator 5))
+(A 10)
+<i>15</i>
+(A 10)
+<i>25</i>
+</p>
+
+<p class="exercise">(define (make-accumulator sum)
+  (lambda (to-be-added)
+    (set! sum (+ sum to-be-added))
+    sum))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.2"></a>
+<b>Exercise 3.2.</b>  In software-testing applications, it is useful to be able to count the
+number of times a given procedure is called during the course of a
+computation.  Write a procedure <a name="%_idx_2906"></a><a name="%_idx_2908"></a><a name="%_idx_2910"></a><tt>make-monitored</tt> that takes as
+input a procedure, <tt>f</tt>, that itself takes one input.  The result
+returned by <tt>make-monitored</tt> is a third procedure, say <tt>mf</tt>,
+that keeps track of the number of times it has been called by
+maintaining an internal counter.  If the input to <tt>mf</tt> is the
+special symbol <tt>how-many-calls?</tt>, then <tt>mf</tt> returns the
+value of the counter.  If the input is the special symbol <tt>reset-count</tt>, then <tt>mf</tt> resets the counter to zero.  For any other
+input, <tt>mf</tt> returns the result of calling <tt>f</tt> on that input
+and increments the counter.  For instance, we could make a monitored
+version of the <tt>sqrt</tt> procedure:
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.2.</b> ソフトウェアを検査する応用分野では、計算の経過において所定の手続きが呼び出された回数を数えることが可能である、ということは、有用である。
+それ自体が一つの引数をとるような手続き——すなわち <tt>f</tt> ——を入力としてとる、<tt>make-monitored</tt> という手続きを書け。
+<tt>make-monitored</tt> により返される結果は、内部カウンタを保持することにより、自分の呼び出された回数を追跡するような、第三の手続き—— <tt>mf</tt> としよう——である。
+もし、<tt>mf</tt> への入力が、<tt>how-many-calls?</tt> という特別な記号だったら、<tt>mf</tt> は、カウンタの値を返す。
+もし、入力が、<tt>reset-count</tt> という特別な記号だったら、<tt>mf</tt> は、カウンタを0にリセットする。
+それ以外のどの入力に対しても、<tt>mf</tt> は、その入力で <tt>f</tt> を呼び出した結果を返し、カウンタをインクリメントする。
+たとえば、次のような、<tt>sqrt</tt> の手続きの被監視版を作れる。
+</p>
+
+<p class="lisp">(define s (make-monitored sqrt))
+
+(s 100)
+<i>10</i>
+
+(s 'how-many-calls?)
+<i>1</i>
+</p>
+
+
+<p class="exercise">(define (make-monitored f)
+  (let ((count 0))
+    (lambda (param)
+      (cond ((eq? param 'how-many-calls?) count)
+            ((eq? param 'reset-count) (set! count 0))
+            (else (set! count (+ count 1)) (f param))))))
+
+<span class="ex_comment">; 以下、実行例 (sqrtはGaucheの組み込みを使っている)</span>
+gosh&gt; (define s (make-monitored sqrt))
+s
+gosh&gt; (s 100)
+10
+gosh&gt; (s 'how-many-calls?)
+1
+gosh&gt; (s 81)
+9
+gosh&gt; (s 'how-many-calls?)
+2
+gosh&gt; (s 400)
+20
+gosh&gt; (s 'how-many-calls?)
+3
+gosh&gt; (s 'reset-count)
+0
+gosh&gt; (s 36)
+6
+gosh&gt; (s 'how-many-calls?)
+1
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.3"></a>
+<b>Exercise 3.3.</b>  <a name="%_idx_2912"></a><a name="%_idx_2914"></a>Modify the <tt>make-account</tt> procedure so that it creates
+password-protected accounts.  That is, <tt>make-account</tt> should take
+a symbol as an additional argument, as in
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.3.</b> パスワードで保護された口座を作成するように、<tt>make-account</tt> の手続きを修正せよ。
+つまり、<tt>make-account</tt> は、以下のように、追加の引数として記号を取るべきである。
+</p>
+
+<p class="lisp">(define acc (make-account 100 'secret-password))
+</p>
+
+<p class="orig" lang="en">
+The resulting account object should process a request only if it is
+accompanied by the password with which the account was created, and
+should otherwise return a complaint:
+</p>
+
+<p class="trans" lang="ja">
+結果としてできる口座オブジェクトは、その口座が作成された際に指定されたパスワードを伴っている場合に限り、要求を処理するべきであり、それ以外の場合には、抗議を返すべきである。
+</p>
+
+<p class="lisp">((acc 'secret-password 'withdraw) 40)
+<i>60</i>
+
+((acc 'some-other-password 'deposit) 50)
+<i>&quot;Incorrect password&quot;</i>
+</p>
+
+
+<p class="exercise"><span class="ex_comment">; とりあえず元のをコピーしただけだよ***</span>
+(define (make-account balance)
+  (define (withdraw amount)
+    (if (&gt;= balance amount)
+        (begin (set! balance (- balance amount))
+               balance)
+        &quot;Insufficient funds&quot;))
+  (define (deposit amount)
+    (set! balance (+ balance amount))
+    balance)
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          (else (error &quot;Unknown request -- MAKE-ACCOUNT&quot;
+                       m))))
+  dispatch)</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.4"></a>
+<b>Exercise 3.4.</b>  Modify the <tt>make-account</tt> procedure of
+exercise <a href="#%_thm_3.3">3.3</a> by adding another local state
+variable so that, if an account is accessed more than seven
+consecutive times with an incorrect password, it invokes the procedure
+<tt>call-the-cops</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.4.</b> もし、不正なパスワードで連続して7回を超えて口座がアクセスされたら、<tt>call-the-cops</tt> という手続きを呼び出すように、練習問題<a href="#%_thm_3.3">3.3</a>の <tt>make-account</tt> の手続きを、別の局所状態変数を付け加えることによって修正せよ。
+</p>
+
+
+<p class="exercise"><span class="ex_comment">; テスト用に適当に定義しておく</span>
+(define (call-the-cops) (display "警官を呼んじゃるけんな!") (newline))
+
+<span class="ex_comment">; んで、本題。</span>
+</p>
+
+<a name="%_sec_3.1.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_3.1.2">3.1.2  The Benefits of Introducing Assignment</a></h3>
+<h3 class="trans" lang="ja">3.1.2 <ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を導入することの利点</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2916"></a>
+<a name="%_idx_2918"></a><a name="%_idx_2920"></a>As we shall see, introducing assignment into our programming language
+leads us into a thicket of difficult conceptual issues.  Nevertheless,
+viewing systems as collections of objects with local state is a
+powerful technique for maintaining a modular design.  As a simple
+example, consider the design of a procedure <tt>rand</tt> that, whenever
+it is called, returns an integer chosen at random.</p>
+
+<p class="trans" lang="ja">
+これから見るように、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>をプログラミング言語に導入することで、私たちは、難しい概念的論点の錯綜の只中へと連れて行かれる。
+それにもかかわらず、局所状態を持ったオブジェクトの集まりとしてシステムを見ることは、モジュール性のある設計を保つための強力な技法なのだ。
+簡単な例として、呼ばれたらいつでも、無作為に選んだ整数を返すような、<tt>rand</tt> という手続きの設計について考えよう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2922"></a>It is not at all clear what is meant by ``chosen at random.''  What we
+presumably want is for successive calls to <tt>rand</tt> to produce a
+sequence of numbers that has statistical properties of uniform
+distribution.  We will not discuss methods for generating suitable
+sequences here.  Rather, let us assume that we have a procedure <tt>rand-update</tt> that has the property that if we start with a given
+number <em>x</em><sub>1</sub> and form
+</p>
+
+<p class="trans" lang="ja">
+「無作為に選んだ」が何を意味するのか、ということは、まったく不明確だ。
+私たちがおそらく欲していることは、<tt>rand</tt> の連続した呼び出しに対して、一様分布という統計的性質を具えた一連の数の並びを、作り出すことである。
+適切な並びを生成するための方法については、ここでは議論しないでおこう。
+それよりむしろ、次のような性質を具えた、<tt>rand-update</tt> という手続きがあるものと仮定しよう——すなわち、<em class="en">x</em><sub>1</sub> という所定の数と以下の形式から始めると、
+</p>
+
+<p class="lisp"><em>x</em><sub>2</sub> = (rand-update <em>x</em><sub>1</sub>)
+<em>x</em><sub>3</sub> = (rand-update <em>x</em><sub>2</sub>)
+</p>
+
+<p class="orig" lang="en">
+then the sequence of values <em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, <em>x</em><sub>3</sub>, <tt>...</tt>, will have the
+desired statistical properties.<a name="call_footnote_Temp_330" href="#footnote_Temp_330"><sup><small>6</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<span class="math"><em class="en">x</em><sub>1</sub>, <em class="en">x</em><sub>2</sub>, <em class="en">x</em><sub>3</sub>, <tt>...</tt></span>
+という一連の値の並びは、所望の統計的性質を具えるであろう、という性質である<a href="#footnote_Temp_330"><sup><small>6</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+We can implement <tt>rand</tt> as a procedure with a local state variable
+<tt>x</tt> that is initialized to some fixed value <tt>random-init</tt>.
+Each call to <tt>rand</tt> computes <tt>rand-update</tt> of the current
+value of <tt>x</tt>, returns this as the random number, and also stores
+this as the new value of <tt>x</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<tt>random-init</tt> という何らかの固定値に初期化される <tt>x</tt> という局所状態変数をともなった手続きとして、<tt>rand</tt> を実装できる。
+<tt>rand</tt> に対するそれぞれの呼び出しは、<tt>x</tt> の現在の値の <tt>rand-update</tt> を計算し、これを乱数として返すとともに、これを <tt>x</tt> の新たな値として格納する。
+</p>
+
+<p class="lisp"><a name="%_idx_2934"></a>(define rand
+  (let ((x random-init))
+    (lambda ()
+      (set! x (rand-update x))
+      x)))
+</p>
+
+<p class="orig" lang="en">
+Of course, we could generate the same sequence of random numbers
+without using assignment by simply calling <tt>rand-update</tt> directly.
+However, this would mean that any part of our program that used random
+numbers would have to explicitly remember the current value of <tt>x</tt>
+to be passed as an argument to <tt>rand-update</tt>.  To realize what an
+annoyance this would be, consider using random numbers to implement a
+technique called <a name="%_idx_2936"></a><a name="%_idx_2938"></a><em>Monte Carlo simulation</em>.</p>
+
+<p class="trans" lang="ja">
+もちろん、単に <tt>rand-update</tt> を直接的に呼び出すことによって、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使わずに同じ乱数列を生成することもできる。
+しかし、これは、自分のプログラムのうちで乱数を使うどの部分もが、<tt>rand-update</tt> に引数として渡されるべき <tt>x</tt> の現在の値を、明示的に記憶していなくてはならないだろう、ということを意味するだろう。
+これがどんなにいらつくことだろうか、と気づくために、<em>モンテカルロ・シミュレーション</em>と呼ばれる技法を、乱数を用いて実装することを考えてみたまえ。
+</p>
+
+<p class="orig" lang="en">
+The Monte Carlo method consists of choosing sample experiments at
+random from a large set and then making deductions on the basis of the
+probabilities estimated from tabulating the results of those
+experiments.  For example, we can approximate <a name="%_idx_2940"></a><img src="book-Z-G-D-9.gif" border="0"> using the fact
+that 6/<img src="book-Z-G-D-9.gif" border="0"><sup>2</sup> is the probability that two integers chosen at random
+will have no factors in common; that is, that their greatest common
+divisor will be 1.<a name="call_footnote_Temp_331" href="#footnote_Temp_331"><sup><small>7</small></sup></a> To obtain
+the approximation to <img src="book-Z-G-D-9.gif" border="0">, we perform a large number of experiments.
+In each experiment we choose two integers at random and perform a test
+<a name="%_idx_2946"></a>to see if their GCD is 1.  The fraction of times that the test is
+passed gives us our estimate of 6/<img src="book-Z-G-D-9.gif" border="0"><sup>2</sup>, and from this we obtain our
+approximation to <img src="book-Z-G-D-9.gif" border="0">.</p>
+
+<p class="trans" lang="ja">
+モンテカルロ法は、大きな集合の中から無作為に標本の実験を選ぶこと、そして、それらの実験の結果を表にまとめることから推定される確率に基づいて、演繹を行うこと、からなる。
+たとえば、6/&pi;<sup>2</sup> は、無作為に選ばれた二つの整数が共通の因数を持たない——つまり、それらの整数の最大公約数が1である——確率である、という事実を用いて、&pi; を近似することができる<a href="#footnote_Temp_331"><sup><small>7</small></sup></a>。
+&pi; に対する近似値を得るために、多数回の実験を行う。
+各回の実験において、二つの整数を無作為に選び、それらのGCDが1かどうかを調べる検査を行う。
+検査に通った回数の割合が、6/&pi;<sup>2</sup> の推定値を与えてくれて、私たちは、この推定値から、&pi; の近似値を得るのである。
+</p>
+
+<p class="orig" lang="en">
+The heart of our program is a procedure <tt>monte-carlo</tt>, which takes
+as arguments the number of times to try an experiment, together with
+the experiment, represented as a no-argument procedure that will
+return either true or false each time it is run.  <tt>Monte-carlo</tt>
+runs the experiment for the designated number of trials and returns a
+number telling the fraction of the trials in which the experiment was
+found to be true.
+</p>
+
+<p class="trans" lang="ja">
+私たちのプログラムの心臓部は <tt>monte-carlo</tt> という手続きで、これは、実験をやってみる回数を、その実験——動作するたびに、真または偽のいずれかを返す、引数なしの手続きとして、表現される——とともに、引数としてとる。
+<tt>monte-carlo</tt> は、指定された試行回数だけ、その実験を実行し、その実験が真となった試行の割合を知らせる数を返す。
+</p>
+
+<p class="lisp"><a name="%_idx_2948"></a>(define (estimate-pi trials)
+  (sqrt (/ 6 (monte-carlo trials cesaro-test))))
+<a name="%_idx_2950"></a>(define (cesaro-test)
+   (= (gcd (rand) (rand)) 1))
+<a name="%_idx_2952"></a>(define (monte-carlo trials experiment)
+  (define (iter trials-remaining trials-passed)
+    (cond ((= trials-remaining 0)
+           (/ trials-passed trials))
+          ((experiment)
+           (iter (- trials-remaining 1) (+ trials-passed 1)))
+          (else
+           (iter (- trials-remaining 1) trials-passed))))
+  (iter trials 0))
+</p>
+
+<p class="orig" lang="en">
+Now let us try the same computation using <tt>rand-update</tt> directly
+rather than <tt>rand</tt>, the way we would be forced to proceed if we
+did not use assignment to model local state:
+</p>
+
+<p class="trans" lang="ja">
+それでは、<tt>rand</tt> ではなくむしろ <tt>rand-update</tt> を直接使って——もし、局所状態をモデル化するのに<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使わなかったなら、進まざるを得なかったであろう道である——、同じ計算を試してみよう。
+</p>
+
+<p class="lisp"><a name="%_idx_2954"></a>(define (estimate-pi trials)
+  (sqrt (/ 6 (random-gcd-test trials random-init))))
+(define (random-gcd-test trials initial-x)
+  (define (iter trials-remaining trials-passed x)
+    (let ((x1 (rand-update x)))
+      (let ((x2 (rand-update x1)))
+        (cond ((= trials-remaining 0)   
+               (/ trials-passed trials))
+              ((= (gcd x1 x2) 1)
+               (iter (- trials-remaining 1)
+                     (+ trials-passed 1)
+                     x2))
+              (else
+               (iter (- trials-remaining 1)
+                     trials-passed
+                     x2))))))
+  (iter trials 0 initial-x))
+</p>
+
+<p class="orig" lang="en">
+While the program is still simple, it betrays some painful
+breaches of modularity.  In our first version of the program, using
+<tt>rand</tt>, we can express the Monte Carlo method directly as
+a general <tt>monte-carlo</tt> procedure that takes as an argument an
+arbitrary <tt>experiment</tt> procedure.  In our second version of the
+program, with no local state for the random-number generator, <tt>random-gcd-test</tt> must explicitly manipulate the random numbers <tt>x1</tt> and <tt>x2</tt> and recycle <tt>x2</tt> through the iterative loop as
+the new input to <tt>rand-update</tt>.  This explicit handling of the
+random numbers intertwines the structure of accumulating test results
+with the fact that our particular experiment uses two random numbers,
+whereas other Monte Carlo experiments might use one random number or
+three.  Even the top-level procedure <tt>estimate-pi</tt> has to be
+concerned with supplying an initial random number.  The fact that the
+random-number generator's insides are leaking out into other parts of
+the program makes it difficult for us to isolate the Monte Carlo idea
+so that it can be applied to other tasks.  In the first version of the
+program, assignment encapsulates the state of the random-number
+generator within the <tt>rand</tt> procedure, so that the details of
+random-number generation remain independent of the rest of the
+program.</p>
+
+<p class="trans" lang="ja">
+プログラムはまだ簡潔ではあるものの、いくつかのお粗末なモジュール性違反を晒している。
+プログラムの最初のバージョン—— <tt>rand</tt> を使っている方 ——では、任意の <tt>experiment</tt> という手続きを引数としてとる、一般的な <tt>monte-carlo</tt> という手続きとして、モンテカルロ法を直接的に表現できる。
+プログラムの2番目のバージョン——乱数生成器のための局所状態がない方——では、<tt>random-gcd-test</tt> が明示的に、<tt>x1</tt> および <tt>x2</tt> という乱数を操作しなくてはならず、しかも、繰り返しループの間ずっと、<tt>rand-update</tt> への新たな入力として <tt>x2</tt> をリサイクルせねばならない。
+このように乱数を明示的に取り扱うことで、試験結果を蓄積するという構造が、特定の実験では2個の乱数を使用するという事実と、絡み合わされてしまう——他のモンテカルロ実験では、1個または3個の乱数を使うかもしれないというのに。
+<tt>estimate-pi</tt> というトップレベルの手続きでさえ、初期乱数を供給することに注意を向けねばならない。
+乱数生成器の中身がプログラムの他の部分へと漏れ出している、という事実のせいで、私たちが、モンテカルロの概念が他の課題にも適用できるようにとモンテカルロの概念を隔離しておくことが、難しくなるのである。
+プログラムの最初のバージョンでは、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>によって、乱数生成器の状態を <tt>rand</tt> という手続きの内部に隠蔽しているので、乱数生成の詳細は、プログラムの残りの部分とは独立したままである。
+</p>
+
+<p class="orig" lang="en">
+The general phenomenon illustrated by the Monte Carlo example is this:
+From the point of view of one part of a complex process, the other
+parts appear to change with time.  They have hidden time-varying local
+state.  If we wish to write computer programs whose structure reflects
+this decomposition, we make
+computational objects (such as bank accounts and random-number
+generators) whose behavior changes with time.  We model state with
+local state variables, and we model the changes of state with
+assignments to those variables.</p>
+
+<p class="trans" lang="ja">
+モンテカルロの事例により示された一般的現象とは、こうである——すなわち、複雑なプロセスのうちの一つの部分の観点からは、残りの部分は、時とともに変化するように見える。
+残りの部分は、経時変化する局所状態を隠した。
+このような分解を反映した構造を持つコンピュータ・プログラムを書きたければ、私たちは、振る舞いが時とともに変化するような、計算機上のオブジェクト (たとえば、銀行口座や乱数生成器など) を作成するのである。
+私たちは、局所状態変数を使って状態をモデル化し、それらの変数への<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使って状態の変化をモデル化する。
+</p>
+
+<p class="orig" lang="en">
+It is tempting to conclude this discussion by saying that, by
+introducing assignment and the technique of hiding state in local
+variables, we are able to structure systems in a more modular fashion
+than if all state had to be manipulated explicitly, by passing
+additional parameters.  Unfortunately, as we shall see, the story is
+not so simple.</p>
+
+<p class="trans" lang="ja">
+次のように言うことで、この議論を締めくくりたいところだ——すなわち、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を導入することと状態を局所変数の中に隠す技法とによって、私たちは、追加のパラメタを渡すことによってすべての状態が明示的に操作されねばならなかった場合よりも、もっとモジュール性のあるやり方で、システムを構造化することができるのだ、と。
+しかしあいにく、これから見ることになるとおり、話はそれほど簡単ではない。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.5"></a>
+<b>Exercise 3.5.</b>  <a name="%_idx_2956"></a><a name="%_idx_2958"></a><a name="%_idx_2960"></a><em>Monte Carlo integration</em> is a method of estimating definite
+integrals by means of Monte Carlo simulation.  Consider computing the
+area of a region of space described by a predicate <em>P</em>(<em>x</em>, <em>y</em>) that is
+true for points (<em>x</em>, <em>y</em>) in the region and false for points not in the
+region.  For example, the region contained within a circle of radius
+3 centered at (5, 7) is described by the predicate that tests
+whether (<em>x</em> - 5)<sup>2</sup>  +  (<em>y</em> - 7)<sup>2</sup><u>&lt;</u> 3<sup>2</sup>.  To estimate the area of the
+region described by such a predicate, begin by choosing a rectangle
+that contains the region.  For example, a rectangle with diagonally
+opposite corners at (2, 4) and (8, 10) contains the circle above.
+The desired integral is the area of that portion of the rectangle that
+lies in the region.  We can estimate the integral by picking, at
+random, points (<em>x</em>,<em>y</em>) that lie in the rectangle, and testing <em>P</em>(<em>x</em>,
+<em>y</em>) for each point to determine whether the point lies in the region.
+If we try this with many points, then the fraction of points that fall
+in the region should give an estimate of the proportion of the
+rectangle that lies in the region.  Hence, multiplying this fraction
+by the area of the entire rectangle should produce an estimate of the
+integral.</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.5.</b> <em>モンテカルロ積分</em> とは、モンテカルロ・シミュレーションを用いて定積分を推定する方法である。
+ある領域内の点
+<span class="math">(<em class="en">x</em>, <em class="en">y</em>)</span>
+に対しては真であり、かつ、その領域外の点に対しては偽であるような、
+<span class="math"><em class="en">P</em>(<em class="en">x</em>, <em class="en">y</em>)</span>
+という述語によって記述される、空間内の領域の面積を、計算することを考えよう。
+たとえば、半径が3で中心が 
+<span class="math">(5, 7)</span> 
+にある円で囲まれた領域は、
+<span class="math">(<em class="en">x</em> &minus; 5)<sup>2</sup>  +  (<em class="en">y</em> &minus; 7)<sup>2</sup> &le; 3<sup>2</sup></span>
+か否かを調べる述語によって、記述される。
+そのような述語により記述される領域の面積を見積もるために、その領域を含む矩形を選ぶことから始めよう。
+たとえば、斜めに向き合う隅同士が
+<span class="math">(2, 4) と (8, 10) </span>
+にある矩形は、上記の円を含む。
+所望の積分は、矩形のうちの、その領域の中にある部分の、面積である。
+矩形内にある点
+<span class="math">(<em class="en">x</em>, <em class="en">y</em>)</span>
+を無作為に選ぶこと、そして、
+各点に対して、その点が上記領域内にあるか否かを判定するために、
+<span class="math"><em class="en">P</em>(<em class="en">x</em>, <em class="en">y</em>) </span>
+を調べること、によって、積分を見積もることができる。
+もしこれを、多くの点を使って試すならば、その領域内に属する点の割合は、矩形のうちでその領域内にある部分の推定値を示すはずだ。
+ゆえに、この割合と矩形全体の面積を掛けることで、積分の推定値が生み出されるはずだ。
+</p>
+
+<p class="orig" lang="en">
+Implement Monte Carlo integration as a procedure <a name="%_idx_2962"></a><tt>estimate-integral</tt> that takes as arguments a predicate <tt>P</tt>, upper
+and lower bounds <tt>x1</tt>, <tt>x2</tt>, <tt>y1</tt>, and <tt>y2</tt> for the
+rectangle, and the number of trials to perform in order to produce the
+estimate.  Your procedure should use the same <tt>monte-carlo</tt> procedure that was used above to estimate <img src="book-Z-G-D-9.gif" border="0">.  Use
+your <tt>estimate-integral</tt> to produce an estimate of <img src="book-Z-G-D-9.gif" border="0"> by
+measuring the area of a unit circle.</p>
+
+<p class="trans" lang="ja">
+<tt>P</tt> という述語と、矩形に対する上限と下限である <tt>x1</tt> と <tt>x2</tt> と <tt>y1</tt> と <tt>y2</tt> と、推定値を作り出すために実行すべき試行の回数とを引数としてとる、<tt>estimate-integral</tt> という手続きとして、モンテカルロ積分を実装せよ。
+君の手続きは、&pi; を見積もるために上記で使われた、同じ <tt>monte-carlo</tt> の手続きを、使うべきである。
+単位円の面積を測ることによって &pi; の推定値を作り出すために、君の <tt>estimate-integral</tt> を使いたまえ。
+</p>
+
+<p class="orig" lang="en">
+You will find it useful to have a procedure that returns a number
+chosen at random from a given range.  The following <tt>random-in-range</tt>
+procedure implements this in terms of the <tt>random</tt>
+procedure used in section <a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>, which returns a nonnegative
+number less than its input.<a name="call_footnote_Temp_333" href="#footnote_Temp_333"><sup><small>8</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+与えられた範囲の中から無作為に選ばれた数を返す手続きがあれば有益だ、と君は気づくだろう。
+以下の <tt>random-in-range</tt> という手続きは、これを、<a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>節で使った <tt>random</tt> の手続き——入力より小さな非負整数を返す——を用いて、実装している<a href="#footnote_Temp_333"><sup><small>8</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_2970"></a>(define (random-in-range low high)
+  (let ((range (- high low)))
+    (+ low (random range))))
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.6"></a>
+<b>Exercise 3.6.</b>  <a name="%_idx_2972"></a><a name="%_idx_2974"></a>It is useful to be able to reset a random-number generator to produce
+a sequence starting from a given value.  Design a new <tt>rand</tt>
+procedure that is called with an argument that is either the symbol
+<tt>generate</tt> or the symbol <tt>reset</tt> and behaves as follows: <tt>(rand
+'generate)</tt> produces a new random number; <tt>((rand 'reset)
+&lt;<em>new-value</em>&gt;)</tt> resets the internal state variable to the designated
+&lt;<em>new-value</em>&gt;.  Thus, by resetting the state, one can generate
+repeatable sequences.  These are very handy to have when testing and
+debugging programs that use random numbers.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.6.</b> もし、与えられた値から始まる列を作り出すように、乱数生成器をリセットすることができれば、有用である。
+<tt>generate</tt> という記号か <tt>reset</tt> という記号のいずれかであるような引数とともに呼び出されて、以下のように振る舞う、新たな <tt>rand</tt> の手続きを、設計せよ。
+すなわち、
+<tt>(rand 'generate)</tt> は新たな乱数を作り出し、
+<tt>((rand 'reset) &lt;<em class="en">new-value</em>&gt;)</tt> は、初期状態変数を、指定された &lt;<em class="en">new-value</em>&gt; へとリセットする。
+このようにして、状態をリセットすることにより、繰り返し可能な列を生成できる。
+これらは、乱数を使うプログラムをテストしたりデバッグしたりするときに、あると非常に便利である。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_3.1.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_3.1.3">3.1.3  The Costs of Introducing Assignment</a></h3>
+<h3 class="trans" lang="ja">3.1.3 <ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を導入するすることの対価</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2976"></a>
+As we have seen, the <tt>set!</tt> operation enables us to model objects
+that have local state.  However, this advantage comes at a price.  Our
+programming language can no longer be interpreted in terms of the
+substitution model of procedure application that we introduced in
+section <a href="sec1_1.html#%_sec_1.1.5">1.1.5</a>.  Moreover, no simple model with
+``nice'' mathematical properties can be an adequate framework for
+dealing with objects and assignment in programming languages.</p>
+
+<p class="trans" lang="ja">
+ここまで見てきたように、局所状態を持つ物体をモデル化することが、<tt>set!</tt> 演算によって、可能になる。
+しかし、この利点は高くつく。
+私たちのプログラミング言語は、もはや、<a href="sec1_1.html#%_sec_1.1.5">1.1.5</a>節で導入した、手続き適用の<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルの観点からは、解釈できないのだ。
+さらに、「よい感じの」数学的性質を具えた簡潔なモデルはどれも、プログラミング言語におけるオブジェクトと<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を扱うための適切な枠組みとはなり得ない。
+</p>
+
+<p class="orig" lang="en">
+So long as we do not use assignments, two evaluations of the same
+procedure with the same arguments will produce the same result, so
+that procedures can be viewed as computing mathematical functions.
+Programming without any use of assignments, as we did throughout the
+first two chapters of this book, is accordingly known as <a name="%_idx_2978"></a><em>functional programming</em>.</p>
+
+<p class="trans" lang="ja">
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使わない限り、同じ引数での同じ手続きの2回の評価は、同じ結果を生み出すだろうし、ゆえに、手続きは、数学的関数を計算するものと見なせる。
+本書の最初の二つの章を通じてずっとそうしてきたような、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>をまったく使わないプログラミングは、したがって、<em>関数型プログラミング</em>として知られる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2980"></a>To understand how assignment complicates matters, consider a
+simplified version of the <tt>make-withdraw</tt> procedure of
+section <a href="#%_sec_3.1.1">3.1.1</a> that does not bother to check
+for an insufficient amount:
+</p>
+
+<p class="trans" lang="ja">
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>がどのようにして事態を複雑にしてしまうのかを理解するために、わざわざ不十分な金額の検査はしないような、<a href="#%_sec_3.1.1">3.1.1</a>節の <tt>make-withdraw</tt> の手続きの簡略版を考えよう。
+</p>
+
+<p class="lisp"><a name="%_idx_2982"></a>(define (make-simplified-withdraw balance)
+  (lambda (amount)
+    (set! balance (- balance amount))
+    balance))
+(define W (make-simplified-withdraw 25))
+(W 20)
+<i>5</i>
+(W 10)
+<i> - 5</i>
+</p>
+
+<p class="orig" lang="en">
+Compare this procedure with the following <tt>make-decrementer</tt>
+procedure, which does not use <tt>set!</tt>:
+</p>
+
+<p class="trans" lang="ja">
+この手続きを、以下の <tt>make-decrementer</tt> の手続き—— <tt>set!</tt> を使わない——と比べよ。
+</p>
+
+<p class="lisp"><a name="%_idx_2984"></a>(define (make-decrementer balance)
+  (lambda (amount)
+    (- balance amount)))
+</p>
+
+<p class="orig" lang="en">
+<tt>Make-decrementer</tt> returns a procedure that subtracts its input
+from a designated amount <tt>balance</tt>, but there is no accumulated effect
+over successive calls, as with <tt>make-simplified-withdraw</tt>:
+</p>
+
+<p class="trans" lang="ja">
+<tt>make-decrementer</tt> は、指定された <tt>balance</tt> という金額から入力を引く手続きを返すが、連続する呼び出しに対しての、蓄積される効果—— <tt>make-simplified-withdraw</tt> のときに見られるようなもの——は、ないのである。
+</p>
+
+<p class="lisp">(define D (make-decrementer 25))
+(D 20)
+<i>5</i>
+(D 10)
+<i>15</i>
+</p>
+
+<p class="orig" lang="en">
+We can use the substitution model to explain how <tt>make-decrementer</tt> works.  For instance, let us analyze the evaluation
+of the expression</p>
+
+<p class="trans" lang="ja">
+<tt>make-decrementer</tt> がどのように動作するかを説明するのに、<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルを使える。
+たとえば、以下の式の評価を分析しよう。
+</p>
+
+<p class="lisp">((make-decrementer 25) 20)
+</p>
+
+<p class="orig" lang="en">
+We first simplify the operator of the combination by substituting 25
+for <tt>balance</tt> in the body of <tt>make-decrementer</tt>.  This reduces
+the expression to</p>
+
+<p class="trans" lang="ja">
+まず、<tt>make-decrementer</tt> の本体の中の <tt>balance</tt> <ruby><rb>を25で置き換える</rb><rp> (</rp><rt>に25を代入する</rt><rp>) </rp></ruby>ことで、このコンビネーションの演算子を簡単化する。
+これにより、式は以下のように還元される。
+</p>
+
+<p class="lisp">((lambda (amount) (- 25 amount)) 20)
+</p>
+
+<p class="orig" lang="en">
+Now we apply the operator by substituting 20 for <tt>amount</tt> in the
+body of the <tt>lambda</tt> expression:</p>
+
+<p class="trans" lang="ja">
+<tt>lambda</tt> 式の本体の中の <tt>amount</tt> <ruby><rb>を20で置き換える</rb><rp> (</rp><rt>に20を代入する</rt><rp>) </rp></ruby>ことで、私たちは今や、演算子を適用する。
+</p>
+
+<p class="lisp">(- 25 20)
+</p>
+
+<p class="orig" lang="en">
+The final answer is 5.</p>
+
+<p class="trans" lang="ja">
+最終的な答えは5である。
+</p>
+
+<p class="orig" lang="en">
+Observe, however, what happens if we attempt a similar substitution
+analysis with <tt>make-simplified-withdraw</tt>:</p>
+
+<p class="trans" lang="ja">
+しかし、<tt>make-simplified-withdraw</tt> を使って同様の<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>分析を試みた場合に、何が起きるのか、ということに気づいてほしい。
+</p>
+
+<p class="lisp">((make-simplified-withdraw 25) 20)
+</p>
+
+<p class="orig" lang="en">
+We first simplify the operator by substituting 25 for <tt>balance</tt> in
+the body of <tt>make-simplified-withdraw</tt>.
+This reduces the expression to<a name="call_footnote_Temp_335" href="#footnote_Temp_335"><sup><small>9</small></sup></a></p>
+
+<p class="trans" lang="ja">
+まず、<tt>make-simplified-withdraw</tt> の本体の中の <tt>balance</tt> <ruby><rb>を25で置き換える</rb><rp> (</rp><rt>に25を代入する</rt><rp>) </rp></ruby>ことで、演算子を簡単化する。
+これにより、式は以下のように還元される<a href="#footnote_Temp_335"><sup><small>9</small></sup></a>。
+</p>
+
+<p class="lisp">((lambda (amount) (set! balance (- 25 amount)) 25) 20)
+</p>
+
+<p class="orig" lang="en">
+Now we apply the operator by substituting 20 for <tt>amount</tt> in the
+body of the <tt>lambda</tt> expression:</p>
+
+<p class="trans" lang="ja">
+<tt>lambda</tt> 式の本体の中の <tt>amount</tt> <ruby><rb>を20で置き換える</rb><rp> (</rp><rt>に20を代入する</rt><rp>) </rp></ruby>ことで、私たちは今や、演算子を適用する。
+</p>
+
+<p class="lisp">(set! balance (- 25 20)) 25
+</p>
+
+<p class="orig" lang="en">
+If we adhered to the substitution model, we would have to say that the
+meaning of the procedure application is to first set <tt>balance</tt> to
+5 and then return 25 as the value of the expression.  This gets the
+wrong answer.  In order to get the correct answer, we would have to
+somehow distinguish the first occurrence of <tt>balance</tt> (before the
+effect of the <tt>set!</tt>)  from the second occurrence of <tt>balance</tt>
+(after the effect of the <tt>set!</tt>), and the substitution model
+cannot do this.</p>
+
+<p class="trans" lang="ja">
+もし、<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルを固守するならば、私たちは、こう言わねばならなかっただろう——すなわち、この手続き適用の意味は、まず <tt>balance</tt> を5に設定して、それから式の値として25を返すことなのだ、と。
+これは間違った答えをもたらす。
+正しい答えを得るためには、私たちはどうにかして、<tt>balance</tt> の最初の出現 (<tt>set!</tt> の影響の前) と、<tt>balance</tt> の二度目の出現 (<tt>set!</tt> の影響の後) とを区別しなくてはならないだろうし、<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルにはこの区別ができない。
+</p>
+
+<p class="orig" lang="en">
+The trouble here is that substitution is based ultimately on the
+notion that the symbols in our language are essentially names for
+values.  But as soon as we introduce <tt>set!</tt> and the idea that the
+value of a variable can change, a variable can no longer be simply a
+name.  Now a variable somehow refers to a place where a value can be
+stored, and the value stored at this place can change.  In
+section <a href="21_sec3_2.html#%_sec_3.2">3.2</a>
+we will see how environments play this role of ``place'' in our
+computational model.
+</p>
+
+<p class="trans" lang="ja">
+ここでの問題点は、<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>が、最終的には、私たちの言語における記号とは根本的には値に対する名前なのだ、という概念に、基づいていることである。
+しかし、<tt>set!</tt> と、変数の値は変化し得るという考え方とを導入するや否や、変数はもはや、単に名前であることができなくなる。
+今や変数は、値を記憶できる場所を何らかの方法で参照するのであり、この場所に記憶された値は変化し得るのだ。
+私たちの計算モデルにおいて、環境がどのようにして、この「場所」という役割を演じるのか、ということを、<a href="21_sec3_2.html#%_sec_3.2">3.2</a>節で見ることにしよう。
+</p>
+
+<a name="%_sec_Temp_336"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_336">Sameness and change</a></h4>
+<h4 class="trans" lang="ja">同じであることと変化と</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2986"></a><a name="%_idx_2988"></a>
+The issue surfacing here is more profound than the mere breakdown of a
+particular model of computation.  As soon as we introduce change into
+our computational models, many notions that were previously
+straightforward become problematical.  Consider the concept of two
+things being ``the same.''</p>
+
+<p class="trans" lang="ja">
+ここで表面化している論点は、計算についての特定のモデルの単なる破綻よりも、もっと深刻である。
+私たちの計算モデルに変化を導入するや否や、以前は単純で分かりやすかった多くの概念が、問題の多いものになるのだ。
+二つのものが「同じ」である、という概念を考えよう。
+</p>
+
+<p class="orig" lang="en">
+Suppose we call <tt>make-decrementer</tt> twice with the same argument to
+create two procedures:
+</p>
+
+<p class="trans" lang="ja">
+二つの手続きを作成するために、同じ引数を使って <tt>make-decrementer</tt> を2回呼び出すものとしよう。
+</p>
+
+<p class="lisp">(define D1 (make-decrementer 25))
+(define D2 (make-decrementer 25))
+</p>
+
+<p class="orig" lang="en">
+Are <tt>D1</tt> and <tt>D2</tt> the same?  An acceptable answer is yes,
+because <tt>D1</tt> and <tt>D2</tt> have the same computational
+behavior -- each is a procedure that subtracts its input from 25.  In
+fact, <tt>D1</tt> could be substituted for <tt>D2</tt> in any computation
+without changing the result.</p>
+
+<p class="trans" lang="ja">
+<tt>D1</tt> と <tt>D2</tt> は同じだろうか?
+受け入れ可能な答えは、はい、である——というのも、<tt>D1</tt> と <tt>D2</tt> は、同じ計算的振る舞いをするからである。すなわち、<tt>D1</tt> と <tt>D2</tt> の各々は、自分への入力を25から引く手続きである。
+実際、<tt>D1</tt> は、いかなる計算においても、結果を変えることなく、<tt>D2</tt> の代わりに使われ得るだろう。
+</p>
+
+<p class="orig" lang="en">
+Contrast this with making two calls to <tt>make-simplified-withdraw</tt>:
+</p>
+
+<p class="trans" lang="ja">
+このことを、<tt>make-simplified-withdraw</tt> に対する2回の呼び出しを行うことと、対比してみよう。
+</p>
+
+<p class="lisp">(define W1 (make-simplified-withdraw 25))
+(define W2 (make-simplified-withdraw 25))
+</p>
+
+<p class="orig" lang="en">
+Are <tt>W1</tt> and <tt>W2</tt> the same?  Surely not, because calls to <tt>W1</tt> and <tt>W2</tt> have distinct effects, as shown by the following
+sequence of interactions:
+</p>
+
+<p class="trans" lang="ja">
+<tt>W1</tt> と <tt>W2</tt> は同じだろうか?
+確実に、そうではない——というのも、<tt>W1</tt> と <tt>W2</tt> に対する呼び出しは、以下の一連のやりとりで示されるように、別個の効果があるからである。
+</p>
+
+<p class="lisp">(W1 20)
+<i>5</i>
+(W1 20)
+<i> - 15</i>
+(W2 20)
+<i>5</i>
+</p>
+
+<p class="orig" lang="en">
+Even though <tt>W1</tt> and <tt>W2</tt> are ``equal'' in the sense that they
+are both created by evaluating the same expression, <tt>(make-simplified-withdraw 25)</tt>, it is not true that <tt>W1</tt> could be
+substituted for <tt>W2</tt> in any expression without changing the result
+of evaluating the expression.</p>
+
+<p class="trans" lang="ja">
+たとえ <tt>W1</tt> と <tt>W2</tt> が、両方とも同じ式——つまり、<tt>(make-simplified-withdraw 25)</tt> ——を評価することによって作成されたのだ、という意味において「等価」なのだとしても、式を評価した結果を変えずに、任意の式の中の <tt>W2</tt> の代わりに <tt>W1</tt> を使うことが可能だろう、というのは真ではない。
+</p>
+
+<p class="orig" lang="en">
+A language that supports the concept that ``equals can be substituted
+for equals'' in an expresssion
+without changing the value of the expression is said to be
+<a name="%_idx_2990"></a><a name="%_idx_2992"></a><a name="%_idx_2994"></a><em>referentially transparent</em>.  Referential transparency is violated
+when we include <tt>set!</tt> in our computer language.  This makes it
+tricky to determine when we can simplify expressions by substituting
+equivalent expressions.  Consequently, reasoning about programs that
+use assignment becomes drastically more difficult.</p>
+
+<p class="trans" lang="ja">
+式の値を変えずに式の中で「等価物を等価物で代用できる」という概念をサポートする言語は、<em>参照透過性がある</em>、と言われる。
+私たちのコンピュータ言語に <tt>set!</tt> を含める場合、参照透過性は破られる。
+このことのせいで、等価な式を<ruby><rb>代入する</rb><rp> (</rp><rt>かわりにつかう</rt><rp>) </rp></ruby>ことによって式を簡単化できるのはどのようなときなのか、を判定することが、扱いにくいものになる。
+その結果、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使うプログラムについて考えることは、劇的に、より難しくなる。
+</p>
+
+<p class="orig" lang="en">
+Once we forgo referential transparency, the notion of what it means
+for computational objects to be ``the same'' becomes difficult to
+capture in a formal way.  Indeed, the meaning of ``same'' in the real
+world that our programs model is hardly clear in itself.  In general,
+we can determine that two apparently identical objects are indeed
+``the same one'' only by modifying one object and then observing
+whether the other object has changed in the same way.  But how can we
+tell if an object has ``changed'' other than by observing the ``same''
+object twice and seeing whether some property of the object differs
+from one observation to the next?  Thus, we cannot determine
+``change'' without some <em>a priori</em> notion of ``sameness,'' and we
+cannot determine sameness without observing the effects of change.</p>
+
+<p class="trans" lang="ja">
+一旦、参照透過性なしで我慢すると、計算オブジェクト同士にとって「同じ」であるとは何を意味するのか、という概念が、形式的な方法では摑まえ難くなる。
+実際、私たちのプログラムがモデル化している実世界における「同じ」の意味は、それ自体ではほとんど明らかではない。
+一般に、一方のオブジェクトを変更して、それから、他方のオブジェクトが同じように変化したかどうかを観察することによってのみ、私たちは、見たところ同一の二つのオブジェクト同士が本当に「同じ一つのもの」である、と判定できる。
+しかし、「同じ」オブジェクトを二回観察し、そのオブジェクトの何らかの属性が観察ごとに異なるかどうかを調べることによる以外で、どのようにしたら、オブジェクトが「変化した」かどうかが分かるのだろう。
+このように、「同じであること」についての何らかの<em>先験的な</em>概念がないことには、私たちは「変化」を判定できないし、変化の影響を観察することなしには、同じであることを判定できないのだ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2996"></a>As an example of how this issue arises in programming, consider the
+situation where Peter and Paul have a bank account with $100 in
+it.  There is a substantial difference between modeling this as
+</p>
+
+<p class="trans" lang="ja">
+この問題がプログラミングの際にどのように起こるのか、ということの例として、100ドルの入った銀行口座をピーターとポールが持っている、という状況を考えよう。
+本質的な違いが、この状況を以下のようにモデル化することと、
+</p>
+
+<p class="lisp">(define peter-acc (make-account 100))
+(define paul-acc (make-account 100))
+</p>
+
+<p class="orig" lang="en">
+and modeling it as
+</p>
+
+<p class="trans" lang="ja">
+この状況を以下のようにモデル化することとの間に、存在する。
+</p>
+
+<p class="lisp">(define peter-acc (make-account 100))
+(define paul-acc peter-acc)
+</p>
+
+<p class="orig" lang="en">
+In the first situation, the two bank accounts are distinct.
+Transactions made by Peter will not affect Paul's account, and vice
+versa.  In the second situation, however, we have defined <tt>paul-acc</tt> to be <em>the same thing</em> as <tt>peter-acc</tt>.  In effect,
+Peter and Paul now have a joint bank account, and if Peter makes a
+withdrawal from <tt>peter-acc</tt> Paul will observe less money in <tt>paul-acc</tt>.  These two similar but distinct situations can cause
+confusion in building computational models.  With the shared account,
+in particular, it can be especially confusing that there is one object
+(the bank account) that has two different names (<tt>peter-acc</tt> and
+<tt>paul-acc</tt>); if we are searching for all the places in our program
+where <tt>paul-acc</tt> can be changed, we must remember to look also at
+things that change <tt>peter-acc</tt>.<a name="call_footnote_Temp_337" href="#footnote_Temp_337"><sup><small>10</small></sup></a></p>
+
+<p class="trans" lang="ja">
+一番目の状況では、二つの銀行口座は別箇のものである。
+ピーターにより行われる取引は、ポールの口座に影響しないだろうし、逆もまた同様である。
+しかし、二番目の状況では、<tt>paul-acc</tt> を <tt>peter-acc</tt> と <em>同じ物</em> として定義した。
+事実上は、ピーターとポールは今や共有の銀行口座を持っていて、もしピーターが <tt>peter-acc</tt> からの引き出しを行えば、ポールは、減少したお金を <tt>paul-acc</tt> において観測することになるだろう。
+これら二つの似て非なる状況は、計算モデルを構築する際に混乱を引き起こし得る。
+とりわけ、共有の口座があると、二つの異なる名前 (<tt>peter-acc</tt> と <tt>paul-acc</tt>) のある一つのオブジェクト (当該銀行口座) が存在する、ということが、特に紛らわしくなり得る。もし、<tt>paul-acc</tt> が変更される可能性のある、プログラム内のすべての場所を、私たちが探しているところだとすると、私たちは、<tt>peter-acc</tt> を変更するものをも、忘れずに検査せねばならない<a href="#footnote_Temp_337"><sup><small>10</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+With reference to the above remarks on ``sameness'' and ``change,''
+observe that if Peter and Paul could only examine their bank balances,
+and could not perform operations that changed the balance, then the
+issue of whether the two accounts are distinct would be moot.  In
+general, so long as we never modify data objects, we can regard a
+compound data object to be precisely the totality of its pieces.  For
+example, a rational number is determined by giving its numerator and
+its denominator.  But this view is no longer valid in the presence of
+change, where a compound data object has an ``identity'' that is
+something different from the pieces of which it is composed.  A bank
+account is still ``the same'' bank account even if we change the
+balance by making a withdrawal; conversely, we could have two
+different bank accounts with the same state information.  This
+complication is a consequence, not of our programming language, but of
+our perception of a bank account as an object.  We do not, for
+example, ordinarily regard a rational number as a changeable object
+with identity, such that we could change the numerator and still have
+``the same'' rational number.</p>
+
+<p class="trans" lang="ja">
+「同じであること」と「変化」についての上記意見を参照して、次のことに気づいてほしい——すなわち、もしピータートポールが、ただ自分たちの銀行残高を調べることができるだけで、残高を変える操作を実行することができなかったとしたら、二つの口座が別箇のものかどうかという論点は、現実的な意味がないだろう。
+一般に、データオブジェクトを決して修正しないでいる限りは、複合データオブジェクトを、まさにそれ自体の諸部品の総計である、と見なすことが可能だ。
+たとえば、有理数は、その分子と分母を与えることによって、定められる。
+しかし、この見方は、変化のあるところ——そこでは、複合データオブジェクトは、それ自身を構成する諸部品とは異なる何かであるような、「自己同一性」を有する——では、もはや妥当でない。
+たとえ引き出しを実行することで残高を変化させたとしても、銀行口座は、依然として「同じ」銀行口座である。逆に、同じ状態情報を持った、二つの異なる銀行口座が、あり得る。
+こうした複雑化は、プログラミング言語の結果ではなく、銀行口座をオブジェクトだと見る、私たちの認識の結果なのだ。
+たとえば、私たちは、普通、有理数を、自己同一性を持っている変更可能なオブジェクト——分子を変更することが可能で、それでも依然として「同じ」有理数である、というようなもの——だとは見なさない。
+</p>
+
+<a name="%_sec_Temp_338"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_338">Pitfalls of imperative programming</a></h4>
+<h4 class="trans" lang="ja">命令型プログラミングの陥穽</h4>
+
+<p class="orig" lang="en">
+In contrast to functional programming, programming that makes
+extensive use of assignment is known as <a name="%_idx_3014"></a><a name="%_idx_3016"></a><em>imperative
+programming</em>.  In addition to raising complications about
+computational models, programs written in imperative style are
+susceptible to bugs that cannot occur in functional programs.  For
+example, recall the iterative factorial program from
+section <a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>:
+</p>
+
+<p class="trans" lang="ja">
+関数型プログラミングとは対照的に、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を広範囲に利用するプログラミングは、<em>命令型プログラミング</em>として知られる。
+計算モデルについての高まりゆく複雑さに加えて、命令型の流儀で書かれたプログラムは、関数型のプログラムでは起こり得ないバグの、影響を受けやすい。
+たとえば、<a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>節での反復的な階乗プログラムを思い出そう。
+</p>
+
+<p class="lisp">(define (factorial n)
+  (define (iter product counter)
+    (if (&gt; counter n)
+        product
+        (iter (* counter product)
+              (+ counter 1))))
+  (iter 1 1))
+</p>
+
+<p class="orig" lang="en">
+Instead of passing arguments in the internal iterative loop, we could
+adopt a more imperative style by using explicit assignment
+to update the values of the variables <tt>product</tt> and <tt>counter</tt>:</p>
+
+<p class="trans" lang="ja">
+内部の反復ループにおいて引数を受け渡す代わりに、<tt>product</tt> と <tt>counter</tt> という変数の値を更新するための明示的な<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を使うことで、より命令型らしい流儀を採用することも可能である。
+</p>
+
+<p class="lisp"><a name="%_idx_3018"></a>(define (factorial n)
+  (let ((product 1)
+        (counter 1))
+    (define (iter)
+      (if (&gt; counter n)
+          product
+          (begin (set! product (* counter product))
+                 (set! counter (+ counter 1))
+                 (iter))))
+    (iter)))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_3020"></a><a name="%_idx_3022"></a>This does not change the results produced by the program, but it does
+introduce a subtle trap.  How do we decide the order of the assignments?
+As it happens, the program is correct as written.  But
+writing the assignments in the opposite order</p>
+
+<p class="trans" lang="ja">
+これは、プログラムにより作り出される結果を変えはしないが、微妙な罠を持ち込んでしまう。
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>の順序をどのように決定すべきなのか?
+実際のところ、このプログラムは、書かれたとおりで正しい。
+しかし、以下のように<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を逆順で書いたら、
+</p>
+
+<p class="lisp">(set! counter (+ counter 1))
+(set! product (* counter product))
+</p>
+
+<p class="orig" lang="en">
+would have produced a different, incorrect result.
+In general, programming with assignment forces us to
+carefully consider the relative orders of the assignments to make sure
+that each statement is using the correct version of the variables that
+have been changed.  This issue simply does not arise in functional
+programs.<a name="call_footnote_Temp_339" href="#footnote_Temp_339"><sup><small>11</small></sup></a></p>
+
+<p class="trans" lang="ja">
+別の、間違った結果を生み出してしまっただろう。
+一般に、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>をともなうプログラミングでは、変更された変数の正しいバージョンをそれぞれの文が用いている、ということを確実にするために、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>の相対的順序を注意深く考えざるを得ない。
+この問題は、関数型のプログラムではまったく起きない<a href="#footnote_Temp_339"><sup><small>11</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+The complexity of imperative programs becomes even worse if we
+consider applications in which several processes execute concurrently.  We
+will return to this in section <a href="23_sec3_4.html#%_sec_3.4">3.4</a>.
+First, however, we will address the issue of providing a computational
+model for expressions that involve assignment, and explore the uses of
+objects with local state in designing simulations.</p>
+
+<p class="trans" lang="ja">
+命令型プログラムの複雑さは、複数のプロセスが並行して実行されるアプリケーションを考えるときに、さらに悪化する。
+<a href="23_sec3_4.html#%_sec_3.4">3.4</a>節で、このことに立ち戻ろう。
+しかしまずは、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>をともなう式のための計算モデルを提供する、という問題に取り組むとともに、シミュレーションを設計する際の、局所状態を有するオブジェクトの利用について、検討しよう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.7"></a>
+<b>Exercise 3.7.</b>  <a name="%_idx_3026"></a>Consider the bank account objects created by <tt>make-account</tt>, with
+the password modification described in
+exercise <a href="#%_thm_3.3">3.3</a>.  Suppose that our banking
+system requires the ability to make joint accounts.  Define a
+procedure <a name="%_idx_3028"></a><tt>make-joint</tt> that accomplishes this.  <tt>Make-joint</tt>
+should take three arguments.  The first is a password-protected
+account.  The second argument must match the password with which the
+account was defined in order for the <tt>make-joint</tt> operation to
+proceed.  The third argument is a new password.  <tt>Make-joint</tt> is
+to create an additional access to the original account using the new
+password.  For example, if <tt>peter-acc</tt> is a bank account with
+password <tt>open-sesame</tt>, then</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.7.</b> 練習問題<a href="#%_thm_3.3">3.3</a>で述べたパスワードについての修正をほどこした <tt>make-account</tt> により作成された、銀行口座オブジェクトを考えよう。
+私たちの銀行システムには、共同口座を作る能力が必要であるものとしよう。
+これを達成する、<tt>make-joint</tt> という手続きを定義せよ。
+<tt>make-joint</tt> は、三つの引数を取るべきである。
+第一のものは、パスワードで保護された口座である。
+<tt>make-joint</tt> の操作が先へ進むためには、第二の引数は、口座が定義されたときに使われたパスワードと一致せねばならない。
+第三の引数は新たなパスワードだ。
+<tt>make-joint</tt> は、新たなパスワードを使った、元の口座への追加的なアクセスを、作成することになる。
+たとえば、<tt>peter-acc</tt> が、<tt>open-sesame</tt> というパスワードの銀行口座であれば、
+</p>
+
+<p class="lisp">(define paul-acc
+  (make-joint peter-acc 'open-sesame 'rosebud))
+</p>
+
+<p class="orig" lang="en">
+will allow one to make transactions on <tt>peter-acc</tt> using the name
+<tt>paul-acc</tt> and the password <tt>rosebud</tt>.  You may wish to modify
+your solution to exercise <a href="#%_thm_3.3">3.3</a> to accommodate
+this new feature.
+</p>
+
+<p class="trans" lang="ja">
+によって、<tt>paul-acc</tt> という名前と <tt>rosebud</tt> というパスワードを使って <tt>peter-acc</tt> 上での取引を行うことが、可能となるだろう。
+君は、練習問題<a href="#%_thm_3.3">3.3</a>に対する君の解答を修正して、この新たな機能に応えたい、と思うかもしれないね。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_3.8"></a>
+<b>Exercise 3.8.</b>  <a name="%_idx_3030"></a><a name="%_idx_3032"></a>When we defined the evaluation model in
+section <a href="10_sec1_1.html#%_sec_1.1.3">1.1.3</a>, we said that the first step
+in evaluating an expression is to evaluate its subexpressions.  But we
+never specified the order in which the subexpressions should be
+evaluated (e.g., left to right or right to left).  When we introduce
+assignment, the order in which the arguments to a procedure are
+evaluated can make a difference to the result.  Define a simple
+procedure <tt>f</tt> such that evaluating <tt>(+ (f 0) (f 1))</tt> will
+return 0 if the arguments to <tt>+</tt> are evaluated from left to right
+but will return 1 if the arguments are evaluated from right to left.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題3.8.</b> <a href="10_sec1_1.html#%_sec_1.1.3">1.1.3</a>節で評価モデルを定義したとき、私たちは、式を評価する際の最初のステップは、その式の部分式を評価することである、と言った。
+しかし、部分式が評価されるべき順序 (たとえば、左から右、もしくは右から左) をまったく指定しなかった。
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を導入する場合、手続きの引数が評価される順序が、結果に違いをもたらし得る。
+<tt>+</tt> の引数が左から右へ評価されるのであれば、<tt>(+ (f 0) (f 1))</tt> を評価することで0が返るが、引数が右から左へ評価されるのであれば、<tt>(+ (f 0) (f 1))</tt> を評価することで1が返るような、<tt>f</tt> という簡単な手続きを定義せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="footnotes"></a>
+<hr>
+<p class="orig" lang="en">
+<a name="footnote_Temp_321" href="#call_footnote_Temp_321"><sup><small>1</small></sup></a> Actually,
+this is not quite true.  One exception was the <a name="%_idx_2852"></a><a name="%_idx_2854"></a>random-number generator
+in section <a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>.  Another exception involved the
+<a name="%_idx_2856"></a>operation/type tables we introduced in section <a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>,
+where the values of two calls to <tt>get</tt> with the same arguments
+depended on intervening calls to <tt>put</tt>.
+On the other hand, until we introduce
+assignment, we have no way to create such procedures ourselves.</p>
+
+<p class="trans" lang="ja">
+実際は、これは完全に真だというわけではない。
+ある一つの例外は、<a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>節における乱数生成器であった。
+もう一つの例外は、<a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>節で導入した、演算・型の表に関連していた——そこでは、同じ引数を伴った、<tt>get</tt> の二回の呼び出しの値が、間に介在する <tt>put</tt> の呼び出しに依存していた。
+一方で、代入を導入するまでは、そういった手続きを私たちが自分自身で作成する術はないのである。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_322" href="#call_footnote_Temp_322"><sup><small>2</small></sup></a> <a name="%_idx_2864"></a><a name="%_idx_2866"></a>The value of a <tt>set!</tt> expression is implementation-dependent.
+<tt>Set!</tt> should be used only for its effect, not for its value.</p>
+
+<p class="trans" lang="ja">
+<tt>set!</tt> 式の値は、実装依存である。
+<tt>set!</tt> は、その効果のためにだけ使われるべきであり、その値のために使われるべきではない。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2868"></a><a name="%_idx_2870"></a><a name="%_idx_2872"></a>The name
+<tt>set!</tt> reflects a naming convention used in Scheme: Operations
+that change the values of variables (or that change data structures,
+as we will see in section <a href="22_sec3_3.html#%_sec_3.3">3.3</a>) are given names that
+end with an exclamation point.  This is similar to the convention of
+designating predicates by names that end with a question mark.</p>
+
+<p class="trans" lang="ja">
+<tt>set!</tt> という名前は、Schemeで使われる命名の慣習を反映している。
+変数の値を変更する (または、<a href="22_sec3_3.html#%_sec_3.3">3.3</a>節で見ることになるように、データ構造を変更する) 演算には、感嘆符で終わる名前が与えられるのだ。
+これは、疑問符で終わる名前によって述語を指定するという習慣に似ている。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_323" href="#call_footnote_Temp_323"><sup><small>3</small></sup></a> We have already used <a name="%_idx_2878"></a><tt>begin</tt> implicitly in our
+programs, because in Scheme the body of a procedure can be a sequence
+of expressions.  Also, the &lt;<em>consequent</em>&gt; part of each clause in a
+<a name="%_idx_2880"></a><a name="%_idx_2882"></a><tt>cond</tt> expression can be a sequence of expressions rather than a
+single expression.</p>
+
+<p class="trans" lang="ja">
+私たちのプログラムの中で、私たちは既に <tt>begin</tt> を暗黙裡に使ったことがある——というのも、Schemeでは、手続きの本体は、式の連なりであってもよいからである。
+また、<tt>cond</tt> 式の中のそれぞれの節の &lt;<em class="en">consequent</em>&gt; の部分も、単一の式というよりもむしろ、式の連なりである可能性がある。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_324" href="#call_footnote_Temp_324"><sup><small>4</small></sup></a> In programming-language jargon, the variable <tt>balance</tt> is said to be <a name="%_idx_2886"></a><a name="%_idx_2888"></a><em>encapsulated</em> within the <tt>new-withdraw</tt> procedure.  Encapsulation reflects the general
+system-design principle known as the <a name="%_idx_2890"></a><a name="%_idx_2892"></a><em>hiding principle</em>: One can
+make a system more modular and robust by protecting parts of the
+system from each other; that is, by providing information access only
+to those parts of the system that have a ``need to know.''</p>
+
+<p class="trans" lang="ja">
+プログラミング言語の専門用語では、<tt>balance</tt> という変数は、<tt>new-withdraw</tt> の手続きの中に<em>カプセル化 (隠蔽) されている</em>、と言われる。
+カプセル化は、<em>隠蔽原則</em>として知られる一般的なシステム設計の原則を反映している。
+システムの部品同士をお互いから守ることで——つまり、システムの部品のうち、「知る必要」があるものにだけ、情報アクセスを提供することで——、システムを、よりモジュール性があり、かつ、より頑健なものにすることができる。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_325" href="#call_footnote_Temp_325"><sup><small>5</small></sup></a> In contrast with <tt>new-withdraw</tt> above, we do not
+have to use <tt>let</tt> to make <tt>balance</tt> a local variable, since
+formal parameters are already local.  This will be clearer after the
+discussion of the environment model of evaluation in section <a href="21_sec3_2.html#%_sec_3.2">3.2</a>.
+(See also exercise <a href="21_sec3_2.html#%_thm_3.10">3.10</a>.)</p>
+
+<p class="trans" lang="ja">
+上記の <tt>new-withdraw</tt> とは対照的に、<tt>balance</tt> を局所変数にするために <tt>let</tt> を使わなくてもよい——というのも、仮引数はすでに局所的なので。
+このことは、評価についての環境モデルに関する<a href="21_sec3_2.html#%_sec_3.2">3.2</a>節における議論の後に、もっと明確になるだろう。
+(練習問題<a href="21_sec3_2.html#%_thm_3.10">3.10</a>も参照。)
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_330" href="#call_footnote_Temp_330"><sup><small>6</small></sup></a> One common way to implement
+<tt>rand-update</tt> is to use the rule that <em>x</em> is updated to <em>a</em><em>x</em> + <em>b</em>
+modulo <em>m</em>, where <em>a</em>, <em>b</em>, and <em>m</em> are appropriately chosen integers.
+Chapter 3 of <a name="%_idx_2924"></a>Knuth 1981 includes an extensive discussion of techniques
+for generating sequences of random numbers and establishing their
+statistical properties.  Notice that the <tt>rand-update</tt> procedure
+computes a mathematical function: Given the same input twice, it
+produces the same output.  Therefore, the number sequence produced by
+<tt>rand-update</tt> certainly is not ``random,'' if by ``random'' we
+insist that each number in the sequence is unrelated to the preceding
+number.  The relation between ``real randomness'' and so-called <a name="%_idx_2926"></a><em>pseudo-random</em> sequences, which are produced by well-determined
+computations and yet have suitable statistical properties, is a
+complex question involving difficult issues in mathematics and
+philosophy.  <a name="%_idx_2928"></a><a name="%_idx_2930"></a><a name="%_idx_2932"></a>Kolmogorov, Solomonoff, and Chaitin have made great
+progress in clarifying these issues; a discussion can be found in
+Chaitin 1975.</p>
+
+<p class="trans" lang="ja">
+<tt>rand-update</tt> を実装するためのよくある手は、<em class="en">x</em> が、<em class="en">m</em> を法として
+<span class="math"><em class="en">ax</em> + <em class="en">b</em></span>
+に更新される、という規則を使うことである——ただしここで、<em class="en">a</em> と <em class="en">b</em> と <em class="en">m</em> は、適切に選ばれた整数である。
+Knuth 1981の3章は、乱数の列を生成する技法とその統計的性質を立証する技法についての、広汎な議論を含む。
+<tt>rand-update</tt> の手続きが数学的関数を計算する、ということに注意せよ。
+同じ入力を二度与えられると、<tt>rand-update</tt> は同じ出力を生み出す。
+したがって、<tt>rand-update</tt> により作り出される数列は、確かに「無作為」ではない——もし、列の中のそれぞれの数は、先行する数とは無関係である、ということを、「無作為」という言葉によって主張しているのであれば、だが。
+「真の無作為性」と、いわゆる<em>擬似乱数的</em>な列——適切に定められた計算により作り出され、それでもなお適切な統計的性質を具えている——との間の関係は、数学と哲学における難しい論点を含む、複雑な問題である。
+コルモゴロフと、ソロモノフと、チャイティンは、これらの論点を明確にすることにおいて、素晴らしい進歩を成し遂げた。Chaitin 1975の中に論文を見つけられる。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_331" href="#call_footnote_Temp_331"><sup><small>7</small></sup></a> This theorem is due to E. <a name="%_idx_2942"></a>Ces&agrave;ro.  See
+section 4.5.2 of <a name="%_idx_2944"></a>Knuth 1981 for a discussion and a proof.</p>
+
+<p class="trans" lang="ja">
+この定理は、E. Ces&agrave;ro による。
+議論と証明については、Knuth 1981の4.5.2節を参照のこと。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_333" href="#call_footnote_Temp_333"><sup><small>8</small></sup></a> <a name="%_idx_2964"></a>MIT Scheme provides such a procedure.  If <a name="%_idx_2966"></a><a name="%_idx_2968"></a><tt>random</tt>
+is given an exact
+integer (as in section <a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>) it returns an exact integer,
+but if it is given a decimal value (as in this exercise) it returns
+a decimal value.</p>
+
+<p class="trans" lang="ja">
+MIT Schemeは、そういう手続きを提供している。
+もし、(<a href="11_sec1_2.html#%_sec_1.2.6">1.2.6</a>節でのように) <tt>random</tt> に厳密な整数が与えられれば、<tt>random</tt> は厳密な整数を返すが、もし、(本練習問題でのように) <tt>random</tt> に小数の値が与えられれば、<tt>random</tt> は小数の値を返す。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_335" href="#call_footnote_Temp_335"><sup><small>9</small></sup></a> We don't substitute for
+the occurrence of <tt>balance</tt> in the <tt>set!</tt> expression because
+the &lt;<em>name</em>&gt; in a <tt>set!</tt> is not evaluated.
+If we did substitute for it, we would get
+<tt>(set! 25 (- 25 amount))</tt>, which makes no sense.</p>
+
+<p class="trans" lang="ja">
+<tt>set!</tt> の中の &lt;<em class="en">name</em>&gt; は評価されないので、<tt>set!</tt> 式の中の <tt>balance</tt> の出現<!--は、<ruby><rb>置き換えない</rb><rp> (</rp><rt>代入を行わない</rt><rp>)</rp></ruby>--><ruby><rb>への代入</rb><rp> (</rp><rt>をおきかえること</rt><rp>) </rp></ruby>はしない。
+もしこれに対して<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>)</rp></ruby>を行っていたら、<tt>(set! 25 (- 25 amount))</tt> を得ただろうが、これは無意味である。
+</p>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_337" href="#call_footnote_Temp_337"><sup><small>10</small></sup></a> The phenomenon of a
+single computational object being accessed by more than one name is
+known as <a name="%_idx_2998"></a><em>aliasing</em>.  The joint bank account situation illustrates
+a very simple example of an alias.  In section <a href="22_sec3_3.html#%_sec_3.3">3.3</a>
+we will see much more complex examples, such as ``distinct'' compound
+data structures that share parts.  Bugs can occur in our programs if
+<a name="%_idx_3000"></a><a name="%_idx_3002"></a><a name="%_idx_3004"></a>we forget that a change to an object may also, as a ``side effect,''
+change a ``different'' object because the two ``different'' objects
+are actually a single object appearing under different aliases.  These
+so-called <em>side-effect bugs</em> are so difficult to locate and to
+analyze that some people have proposed that programming languages be
+designed in such a way as to not allow side effects or aliasing
+<a name="%_idx_3006"></a><a name="%_idx_3008"></a><a name="%_idx_3010"></a><a name="%_idx_3012"></a>(Lampson et al. 1981; Morris, Schmidt, and Wadler 1980).</p>
+
+<p class="trans" lang="ja">
+一つよりも多い名前によってアクセスされる、単一の計算オブジェクト、という現象は、<em>エイリアシング</em>として知られる。
+共同銀行口座の状況は、<ruby><rb>別名</rb><rp> (</rp><rt>エイリアス</rt><rp>) </rp></ruby>の極めて簡単な例を示している。
+<a href="22_sec3_3.html#%_sec_3.3">3.3</a>節では、もっとずっと複雑な例——部品を共有するような、「別箇の」データ構造同士、といったもの——を見よう。
+二つの「別の」オブジェクトが、実際には、異なる別名のもとに現れる単一のオブジェクトであるために、あるオブジェクトに対する変更が、「副作用」として、「別の」オブジェクトをも変更するかもしれない、ということを忘れてしまうと、プログラムにバグが発生し得る。
+これらのいわゆる<em>副作用バグ</em>は、場所を突き止めて分析するのがとても難しいので、副作用またはエイリアシングを許さないような方法でプログラミング言語を設計することを提案した人々もいる (Lampson et al. 1981; Morris, Schmidt, and Wadler 1980)。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_339" href="#call_footnote_Temp_339"><sup><small>11</small></sup></a> In view of this, it is ironic that introductory programming
+is most often taught in a highly imperative style.  This may be a
+vestige of a belief, common throughout the 1960s and 1970s, that
+programs that call procedures must inherently be less efficient than
+programs that perform assignments.  (Steele (1977) <a name="%_idx_3024"></a>debunks this
+argument.)  Alternatively it may reflect a view that step-by-step
+assignment is easier for beginners to visualize than procedure call.
+Whatever the reason, it often saddles beginning programmers with
+``should I set this variable before or after that one'' concerns that can
+complicate programming and obscure the important ideas.</p>
+
+<p class="trans" lang="ja">
+これを考慮すると、入門的なプログラミングが、もっとも多くの場合に、非常に命令型的な流儀で教えられている、ということは、皮肉なことだ。
+これは、手続きを呼び出すプログラムは、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を実行するプログラムよりも、本質的に非効率であるに違いない、という、1960年代から1970年代を通じて広く信じられていた信念の、名残かもしれない。
+(Steele (1977) は、この主張の誤りを指摘している。)
+あるいは、初心者にとっては、手続き呼び出しよりも、一歩ずつ<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を行うことの方が、心に思い浮かべやすい、という見方を、反映しているのかもしれない。
+理由が何であれ、そのせいで、プログラミングを複雑化するとともに重要な概念を理解しづらくする可能性のある「自分はこの変数を、あの変数の前に設定すべきか、それともあの変数の後で設定すべきか?」という心配事を、しばしば新米プログラマに負わせてしまうのだ。
+</p>
+
+</div>
+
+</body>
+</html>
