@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="sicp.css" type="text/css">
+<base target="_top">
+<title>SICP私訳: 第4章 メタ言語的な抽象化</title>
+</head>
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="24_sec3_5.html">前へ</a> |
+<a href="26_sec4_1.html">次へ</a> |
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+
+[ 
+<a href="#%_chap_4">第4章</a> |
+<a href="#footnotes">脚注</a>
+]
+</nav>
+</div>
+
+<div class="main-txt">
+<a name="%_chap_4"></a>
+<h1 class="orig" lang="en"><a href="04_toc.html#%_toc_%_chap_4">Chapter 4</a><br><a href="04_toc.html#%_toc_%_chap_4">Metalinguistic Abstraction</a></h1>
+<h1 class="trans" lang="ja">第4章　メタ言語的な抽象化</h1>
+
+
+<blockquote class="orig" lang="en">
+<tt>...</tt> It's in words that the magic
+is -- Abracadabra, Open Sesame, and the rest -- but the magic words in
+one story aren't magical in the next.  The real magic is to understand
+which words work, and when, and for what; the trick is to learn the
+trick.
+<tt>...</tt> And those words are made from the letters of our
+alphabet: a couple-dozen squiggles we can draw with the pen.  This is
+the key!  And the treasure, too, if we can only get our hands on it!
+It's as if -- as if the key to the treasure <em>is</em> the treasure!
+<br><br>
+<a name="%_idx_4188"></a>John Barth, <em>Chimera</em>
+</blockquote>
+
+<blockquote class="trans" lang="ja">
+……魔術は、アブラカタブラとか開け胡麻とかその他もろもろ、言葉の中にあるけれど、一つのお話の中での魔法の言葉は、次のお話では魔力がない。
+本当の魔法とは、どの言葉が機能するのか、いつ機能するのか、そして何に対して機能するのか、ということを理解することなのだ。そのコツは、コツを学ぶことだ。
+……そしてそれらの言葉は、私たちのアルファベット——ペンで描けるような2、3ダースののたくり書き——の文字から作られている。
+このことが鍵なんだよ!
+そして、宝でもある——もし私たちがそれを手に入れることさえできれば。
+それはまるで——そう、まるで、財宝への鍵<em>が</em>財宝<em>である</em>みたいなことなんだ!
+<br><br>
+ジョン・バース「キメラ」
+</blockquote>
+
+<p class="orig" lang="en">
+In our study of program design, we have seen that expert programmers
+control the complexity of their designs with the same general
+techniques used by designers of all complex systems.  They combine
+primitive elements to form compound objects, they abstract compound
+objects to form higher-level building blocks, and they preserve
+modularity by adopting appropriate large-scale views of system
+structure.  In illustrating these techniques, we have used Lisp as a
+language for describing processes and for constructing computational
+data objects and processes to model complex phenomena in the real
+world.  However, as we confront increasingly complex problems, we will
+find that Lisp, or indeed any fixed programming language, is not
+sufficient for our needs.  We must constantly turn to new languages in
+order to express our ideas more effectively.  Establishing new
+languages is a powerful strategy for controlling complexity in
+engineering design; we can often enhance our ability to deal with a
+complex problem by adopting a new language that enables us to describe
+(and hence to think about) the problem in a different way, using
+primitives, means of combination, and means of abstraction that are
+particularly well suited to the problem at hand.<a name="call_footnote_Temp_508" href="#footnote_Temp_508"><sup><small>1</small></sup></a></p>
+
+<p class="trans" lang="ja">
+すべての複雑なシステムの設計者たちにより使われている、同じ一般的技法を使って、達人プログラマたちが自分の設計の複雑さを統御している、ということを、私たちは、プログラム設計についての私たちの勉強において、これまで見てきた。
+かれらは、複合的なオブジェクトを形成するために、原始的な要素同士を結合するし、より高い水準での基本的構成要素を形成するために、複合的なオブジェクトを抽象化するし、システム構造についての適切な大縮尺的視点を採用することにより、モジュール性を守るのだ。
+これらの技法を例解するにあたり、私たちは、プロセスを説明するための、そして、計算機上のデータオブジェクトやら、現実世界での複雑な現象をモデル化するためのプロセスやらを構築するための、言語として、Lispを使ってきた。
+しかし、どんどん複雑な問題に直面するようになるのにつれて、私たちは、Lispが——あるいは、実は、決められた一つのプログラミング言語なら何でも——自分たちの要求には十分ではないことに気づくだろう。
+私たちは、自分の考えをより有効に表現するために、絶えず、新たな諸言語に目を向けなくてはならない。
+新たな言語を築き上げることは、工学の設計における複雑さを統御するための強力な戦略である。
+現下の問題に特によく適しているような、プリミティブと結合手段と抽象化手段とを用いて、異なる方法で問題を記述する (よって、その問題について考える) ことを可能にしてくれるような、新しい言語を採用することによって、複雑な問題を取り扱う能力を高められることは、よくある<a href="#footnote_Temp_508"><sup><small>1</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4190"></a><a name="%_idx_4192"></a>Programming is endowed with a multitude of languages.  There are
+physical languages, such as the machine languages for particular
+computers.  These languages are concerned with the representation of
+data and control in terms of individual bits of storage and primitive
+machine instructions.  The machine-language programmer is concerned
+with using the given hardware to erect systems and utilities for the
+efficient implementation of resource-limited computations.  High-level
+languages, erected on a machine-language substrate, hide concerns
+about the representation of data as collections of bits and the
+representation of programs as sequences of primitive instructions.
+These languages have means of combination and abstraction, such as
+procedure definition, that are appropriate to the larger-scale
+organization of systems.</p>
+
+<p class="trans" lang="ja">
+プログラミングは、多数の言語に恵まれている。
+特定のコンピュータ用のマシン語などの、物理的言語がある。
+これらの言語は、記憶装置の個々のビットと原始的なマシン命令の観点からの、データ表現と制御に関わっている。
+マシン語のプログラマは、与えられたハードウェアを使って、資源の制限された計算の効率的な実装のためのシステムとユーティリティを打ち立てることに、関心がある。
+高級言語——マシン語の基礎の上に打ち立てられている——は、ビットの集まりとしてのデータの表現についての、そして、原始的な命令の連なりとしてのプログラムの表現についての、心配事を隠す。
+これらの言語には、例えば手続き定義のような、システムのうちのより大規模な組織に適した、結合手段と抽象化手段がある。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4194"></a><a name="%_idx_4196"></a><em>Metalinguistic abstraction</em> -- establishing new
+languages -- plays an important role in all branches of engineering
+design.  It is particularly important to computer programming, because
+in programming not only can we formulate new languages but we can also
+implement these languages by constructing evaluators.  An <a name="%_idx_4198"></a><em>evaluator</em> (or <em>interpreter</em>) for a programming language is a procedure
+that, when applied to an expression of the language, performs the
+actions required to evaluate that expression.</p>
+
+<p class="trans" lang="ja">
+<em>メタ言語的な抽象化</em>——新たな言語を築き上げること——は、工学の設計のすべての分野で重要な役割を果たす。
+これは、コンピュータプログラミングにとって、とりわけ重要である。なぜなら、プログラミングにおいて、私たちは、新たな言語を定式化できるだけでなく、評価器を構築することによって、これらの言語を実装することもできるからである。
+あるプログラミング言語のための<em>評価器</em> (あるいは<em>インタプリタ</em>) は、その言語の式に適用されたときに、その式を評価するのに必要な動作を実行するような、手続きである。
+</p>
+
+<p class="orig" lang="en">
+It is no exaggeration to regard this as the most fundamental idea in
+programming:</p>
+
+<p class="trans" lang="ja">
+このことを、プログラミングにおける最も根本的な概念だと見なすことは、誇張でも何でもない。すなわち、
+</p>
+
+<blockquote class="orig" lang="en">
+The evaluator, which determines the meaning of expressions in a
+programming language, is just another program.</blockquote>
+
+<blockquote class="trans" lang="ja">
+評価器とは、プログラミング言語における式の意味を決定づけるものなのだが、まさにちょうど、もう一つのプログラムなのである。
+</blockquote>
+
+<p class="orig" lang="en">
+To appreciate this point is to change our images of ourselves as
+programmers.  We come to see ourselves as designers of languages,
+rather than only users of languages designed by others.</p>
+
+<p class="trans" lang="ja">
+この点の価値を正しく理解することは、プログラマとしての自分自身についての印象を変更することなのである。
+私たちは、自分のことを、他人によって設計された言語の単なる使用者であるというよりもむしろ、言語の設計者である、と見なすようになる。
+</p>
+
+<p class="orig" lang="en">
+In fact, we can regard almost any program as the evaluator for some
+language.  For instance, the polynomial manipulation system of
+section <a href="18_sec2_5.html#%_sec_2.5.3">2.5.3</a> embodies the rules of polynomial
+arithmetic and implements them in terms of operations on
+list-structured data.  If we augment this system with procedures to
+read and print polynomial expressions, we have the core of a
+special-purpose language for dealing with problems in symbolic
+mathematics.  The digital-logic simulator of
+section <a href="22_sec3_3.html#%_sec_3.3.4">3.3.4</a> and the constraint propagator of
+section <a href="22_sec3_3.html#%_sec_3.3.5">3.3.5</a> are legitimate languages in their own
+right, each with its own primitives, means of combination, and means
+of abstraction.  Seen from this perspective, the technology for coping
+with large-scale computer systems merges with the technology for
+building new computer languages, and <a name="%_idx_4200"></a>computer science itself becomes
+no more (and no less) than the discipline of constructing appropriate
+descriptive languages.</p>
+
+<p class="trans" lang="ja">
+実際、ほとんどの任意のプログラムを、何らかの言語の評価器と見なせるのだ。
+たとえば、<a href="18_sec2_5.html#%_sec_2.5.3">2.5.3</a>節の多項式操作システムは、多項式算術の規則を具現化しており、それらの規則を、リスト構造化されたデータ上の演算を用いて、実装している。
+もし、多項式を読んだり印字したりするための手続きを使って、このシステムを拡張したら、記号的数学における問題を扱うための専用言語の核ができる。
+<a href="22_sec3_3.html#%_sec_3.3.4">3.3.4</a>節のディジタル論理シミュレータと、<a href="22_sec3_3.html#%_sec_3.3.5">3.3.5</a>節の制約伝播器は、それ自体の能力において、正当な言語——それぞれ、自分自身のプリミティブと、結合手段と抽象化手段を持っている——である。
+この観点から見ると、大規模コンピュータシステムに対処するための技術は、新たなコンピュータ言語を構築するための技術と一つになるのであり、計算機科学それ自体は、適切な記述的言語を構築するための規律以上のものではない (そしてそれ以下でもない) ようになる。
+</p>
+
+<p class="orig" lang="en">
+We now embark on a tour of the technology by which languages are
+established in terms of other languages.  In this chapter we shall use
+Lisp as a base, implementing evaluators as Lisp procedures.  <a name="%_idx_4202"></a>Lisp is
+particularly well suited to this task, because of its ability to
+represent and manipulate symbolic expressions.  We will take the first
+step in understanding how languages are implemented by building an
+evaluator for Lisp itself.  The language implemented by our evaluator
+will be a subset of the Scheme dialect of Lisp that we use in this
+book.  Although the evaluator described in this chapter is written for
+a particular dialect of Lisp, it contains the essential structure of
+an evaluator for any expression-oriented language designed for writing
+programs for a sequential machine.  (In fact, most language processors
+contain, deep within them, a little ``Lisp'' evaluator.)  The
+evaluator has been simplified for the purposes of illustration and
+discussion, and some features have been left out that would be
+important to include in a production-quality Lisp system.
+Nevertheless, this simple evaluator is adequate to execute most of the
+programs in this book.<a name="call_footnote_Temp_509" href="#footnote_Temp_509"><sup><small>2</small></sup></a></p>
+
+<p class="trans" lang="ja">
+私たちは今や、他の言語を使って言語を確立する技術の見学の旅に出るのだ。
+本章では、Lispを基礎として使う——そして評価器をLispの手続きとして実装する——ことになるだろう。
+Lispは、記号的な式を表現して操作する能力ゆえに、とりわけこの課題によく適している。
+LIsp自体のための評価器を構築することで、言語がどう実装されるのかについての理解における最初の一歩を踏み出そう。
+私たちの評価器により実装される言語は、私たちが本書で使っている、LispのScheme方言の、部分集合になるだろう。
+本章で説明する評価器は、Lispの特定の方言用に書かれてはいるものの、逐次的なマシン用のプログラムを書くために設計された任意の式指向の言語用の評価器の、本質的な構造を含んでいる。
+(実際、ほとんどの言語処理器は、それ自身の内部の深くに、ほんの小さな「Lisp」評価器を含むのだ。)
+評価器は説明と議論のために簡単化されており、製品の品質水準のLispシステムには含めておくことが重要であろう、いくつかの特徴的機能は、省かれている。
+それでもなお、この簡単な評価器は、本書のほとんどのプログラムを実行するのに十分に適している<a href="#footnote_Temp_509"><sup><small>2</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+An important advantage of making the evaluator accessible as a Lisp
+program is that we can implement alternative evaluation rules by
+describing these as modifications to the evaluator program.  One place
+where we can use this power to good effect is to gain extra control
+over the ways in which computational models embody the notion of time,
+which was so central to the discussion in chapter 3.  There, we
+mitigated some of the complexities of state and assignment by using
+streams to decouple the representation of time in the world from time
+in the computer.  Our stream programs, however, were
+sometimes cumbersome, because they were constrained by
+the applicative-order evaluation of Scheme.
+In section <a href="27_sec4_2.html#%_sec_4.2">4.2</a>, we'll change
+the underlying language to provide for a more elegant approach, by modifying
+the evaluator to provide for <em>normal-order evaluation</em>.</p>
+
+<p class="trans" lang="ja">
+評価器をLispプログラムとしてアクセス可能にしておくことの重要な利点は、今のものとは別の評価規則を、評価器プログラムに対する改変として記述することによって、これらの規則を実装できることである。
+この能力をよく効かせて使うことのできる一つの場は、計算モデルが時間の概念——3章での議論にとって、かなり重要だったもの——を体現しているやり方に対して追加的な支配力を得ることである。<span class="note">(なんか変な文だな)</span>
+そこでは、私たちは、世界の中における時間の表現をコンピュータ内の時間から切り離すためのストリームを使うことで、状態と<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>の複雑さのいくぶんかを、緩和した。
+私たちのストリーム・プログラムは、しかし、ときとして、複雑で非効率なものだった。というのも、Schemeの適用順評価により制約されていたからである。
+<a href="27_sec4_2.html#%_sec_4.2">4.2</a>節で私たちは、<em>正規順評価</em>を提供するように評価器を改変することで、根底にある言語を、より洗練された手法を提供するように変更しよう。
+</p>
+
+<p class="orig" lang="en">
+Section <a href="28_sec4_3.html#%_sec_4.3">4.3</a> implements a more
+ambitious linguistic change, whereby expressions have many values,
+rather than just a single value.  In this language of <em>nondeterministic computing</em>, it is natural to express processes that
+generate all possible values for expressions and then search for those
+values that satisfy certain constraints.  In terms of models of
+computation and time, this is like having time branch into a set of
+``possible futures'' and then searching for appropriate time lines.
+With our nondeterministic evaluator, keeping track of multiple values
+and performing searches are handled automatically by the underlying
+mechanism of the language.</p>
+
+<p class="trans" lang="ja">
+<a href="28_sec4_3.html#%_sec_4.3">4.3</a>節では、より野心的な言語的挑戦——式に、ただ一つの値というよりもむしろ、多数個の値を、持たせるようなもの——を実装する。
+<em>非決定的コンピューティング</em>のこの言語では、式に対してすべてのあり得る値を生成するようなプロセスを表現すること、そしてその後、ある種の制約を満たすような値を探すことは、自然である。
+計算と時間についてのモデル、という観点からは、これは、「あり得る未来」の集合への時間分岐があって、そして、適切な時間線を探すこと、と似ている。
+私たちの非決定的な評価器を使うと、複数の値を追いかけて把握しておくことと探索を実行することが、言語の中の、根底にある仕組みによって、自動的に取り扱われる。
+</p>
+
+<p class="orig" lang="en">
+In section <a href="29_sec4_4.html#%_sec_4.4">4.4</a> we implement a <em>logic-programming</em> language in which knowledge is expressed in terms
+of relations, rather than in terms of computations with inputs and
+outputs.  Even though this makes the language drastically different
+from Lisp, or indeed from any conventional language, we will see that
+the logic-programming evaluator shares the essential structure of the
+Lisp evaluator.</p>
+
+<p class="trans" lang="ja">
+<a href="29_sec4_4.html#%_sec_4.4">4.4</a>節では、入力と出力を持つ計算の観点からというよりもむしろ、関係の観点から知識が表現されるような、<em>論理プログラミング</em>言語を実装する。
+たとえこれが、言語を、Lispとは抜本的に異なるもの、あるいは、従来のどんな言語とも実際に異なるものにしてしまうのだとしても、私たちは、論理プログラミングの評価器が、Lisp評価器の本質的構造を共有している、ということを知るだろう。
+</p>
+
+<a name="footnotes"></a>
+<hr>
+
+<p class="orig" lang="en"><a name="footnote_Temp_508" href="#call_footnote_Temp_508"><sup><small>1</small></sup></a> The same idea
+is pervasive throughout all of engineering.  For example, electrical
+engineers use many different languages for describing circuits.  Two
+of these are the language of electrical <em>networks</em> and the
+language of electrical <em>systems</em>.  The network language emphasizes
+the physical modeling of devices in terms of discrete electrical
+elements.  The primitive objects of the network language are primitive
+electrical components such as resistors, capacitors, inductors, and
+transistors, which are characterized in terms of physical variables
+called voltage and current.  When describing circuits in the network
+language, the engineer is concerned with the physical characteristics
+of a design.  In contrast, the primitive objects of the system
+language are signal-processing modules such as filters and amplifiers.
+Only the functional behavior of the modules is relevant, and signals
+are manipulated without concern for their physical realization as
+voltages and currents.  The system language is erected on the network
+language, in the sense that the elements of signal-processing systems
+are constructed from electrical networks.  Here, however, the concerns
+are with the large-scale organization of electrical devices to solve a
+given application problem; the physical feasibility of the parts is
+assumed.  This layered collection of languages is another example of
+the stratified design technique illustrated by the picture
+language of section <a href="15_sec2_2.html#%_sec_2.2.4">2.2.4</a>.
+</p>
+
+<p class="trans" lang="ja">
+同じ考え方が、工学のすべてに広く行き渡っている。
+たとえば、電気技師は、回路を記述するための多くの異なる言語を使う。
+これらのうちの二つは、電気的な<em>ネットワーク</em>についての言語と、電気的な<em>システム</em>についての言語である。
+ネットワーク言語は、個々の電気素子の観点からの、装置の物理的モデル化を、強調する。
+ネットワーク言語の原始的オブジェクトは、たとえば、抵抗器、キャパシタ、インダクタ、トランジスタのような、原始的な電気的構成要素——電圧および電流と呼ばれる物理的変数を用いて特徴づけられる——である。
+回路をネットワーク言語で記述するとき、技師は、設計の物理的特徴に注意を払っている。
+それに対して、システム言語の原始的オブジェクトは、たとえば、フィルタや増幅器などの、信号処理モジュールである。
+モジュールの関数的な振る舞いのみが重要なのであり、信号は、その信号の、電圧と電流としての物理的実現とは関係なく、操作される。
+システム言語は、ネットワーク言語の上に打ち立てられる——信号処理システムの素子が、電気的なネットワークから構築される、という意味で。
+しかし、ここでは、与えられた応用問題を解決するための電気的な装置の、大規模な組織化に、関心がある。部品の物理的な実現可能性が仮定されている。
+このような、言語の層状の集まりは、<a href="15_sec2_2.html#%_sec_2.2.4">2.2.4</a>節のお絵描き言語によって例示される階層化設計技法の、別の例である。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_509" href="#call_footnote_Temp_509"><sup><small>2</small></sup></a> The most important features that our evaluator leaves out
+are mechanisms for handling errors and supporting debugging.  For a
+more extensive discussion of evaluators, see <a name="%_idx_4204"></a><a name="%_idx_4206"></a><a name="%_idx_4208"></a>Friedman, Wand, and Haynes
+1992, which gives an exposition of programming languages that proceeds
+via a sequence of evaluators written in Scheme.
+</p>
+
+<p class="trans" lang="ja">
+私たちの評価器が省いている最も重要な機能は、エラーを扱うための仕組みとデバッグを支援するための仕組みである。
+評価器についての、より広汎な議論については、Friedman, Wand, and Haynes 1992 —— Schemeで書かれた一連の評価器を介して進んでゆく、諸プログラミング言語の包括的解説を与えてくれる——を参照のこと。
+</p>
+
+</div>
+</body>
+</html>

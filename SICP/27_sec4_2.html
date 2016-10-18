@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="sicp.css" type="text/css">
+<base target="_top">
+<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="26_sec4_1.html">前へ</a> |
+<a href="28_sec4_3.html">次へ</a> |
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_sec_4.2">4.2</a>
+§<a href="#%_sec_4.2.1">4.2.1</a>
+📝<a href="#%_thm_4.25">4.25</a>
+📝<a href="#%_thm_4.26">4.26</a>
+§<a href="#%_sec_4.2.2">4.2.2</a>
+📚<a href="#%_sec_Temp_583">&hellip;</a>
+📚<a href="#%_sec_Temp_584">&hellip;</a>
+📝<a href="#%_thm_4.27">4.27</a>
+📝<a href="#%_thm_4.28">4.28</a>
+📝<a href="#%_thm_4.29">4.29</a>
+📝<a href="#%_thm_4.30">4.30</a>
+📝<a href="#%_thm_4.31">4.31</a>
+§<a href="#%_sec_4.2.3">4.2.3</a>
+📝<a href="#%_thm_4.32">4.32</a>
+📝<a href="#%_thm_4.33">4.33</a>
+📝<a href="#%_thm_4.34">4.34</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+</div>
+
+<div class="main-txt">
+<a name="%_sec_4.2"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.2">4.2  Variations on a Scheme -- Lazy Evaluation</a></h2>
+<h2 class="trans" lang="ja">4.2 Schemeの変種——遅延評価</h2>
+
+
+<a name="%_idx_4666"></a><a name="%_idx_4668"></a>
+<a name="%_idx_4670"></a><a name="%_idx_4672"></a>
+<p class="orig" lang="en">
+Now that we have an evaluator expressed as a Lisp program, we can
+experiment with alternative choices in language design simply by
+modifying the evaluator.  Indeed, new languages are often invented by
+first writing an evaluator that embeds the new language within an
+existing high-level language.  For example, if we wish to discuss some
+aspect of a proposed modification to Lisp with another member of the
+Lisp community, we can supply an evaluator that embodies
+the change.  The recipient can then experiment with the new
+evaluator and send back comments as further modifications.  Not only
+does the high-level implementation base make it easier to test and
+debug the evaluator; in addition, the embedding enables the designer
+to snarf<a name="call_footnote_Temp_575" href="#footnote_Temp_575"><sup><small>31</small></sup></a> features
+from the underlying language, just as our embedded Lisp evaluator
+uses primitives and control structure from the underlying Lisp.  Only
+later (if ever) need the designer go to the trouble of building a
+complete implementation in a low-level language or in hardware.  In
+this section and the next we explore some variations on Scheme that
+provide significant additional expressive power.</p>
+
+<p class="trans" lang="ja">
+Lispプログラムとして表現された評価器があるからには、私たちは、単にその評価器を改変することによって、言語設計における代替的選択肢を使って実験を行うことができるわけである。
+実際、新たな言語は、既存の高級言語の中にその新たな言語を埋め込むような評価器をまず書くことによって考案されることがしばしばである。
+たとえば、もし、Lispに対して提案された改変の何らかの側面について、Lisp界の別のメンバと議論したければ、その変更を具現化する評価器を提供できる。
+すると、受け取り手は、その新たな評価器を使って実験を行うことができるし、さらなる改変としてコメントを送り返すことができる。
+<!--高いレベルでの実装という基点によって、評価器のテストとデバッグがより容易になる、というだけではない。-->
+高いレベルでの実装という基点は、単に、評価器のテストとデバッグをより容易にしてくれるだけではない。
+さらに、ちょうど私たちの埋め込み型Lisp評価器が、根底にあるLispからのプリミティブと制御構造とを利用しているのと同様に、埋め込みによって、設計者は、根底にある言語から、特徴を<ruby><rb>貪欲に取り込む</rb><rp> (</rp><rt>スナーフする</rt><rp>) </rp></ruby>こと<a href="#footnote_Temp_575"><sup><small>31</small></sup></a>も、可能となるのだ。
+設計者が、低級言語あるいはハードウェアで完全な実装をわざわざ構築する必要があるのは、(仮にそういうことがあるとしても) ただ後になってからである。
+<!--設計者は、(仮にそういうことがあるとしても) ただ後になってから、低級言語あるいはハードウェアで完全な実装をわざわざ構築すればよいのである。-->
+<!--低級言語で、あるいはハードウェアで、わざわざ完全な実装を設計者が構築せねばならないのは、(仮にそういうことがあるとしても) 後になってから-->
+本節と次節では、重要な追加的表現力をもたらすような、Schemeに対するいくつかの変種を探究する。
+</p>
+
+<a name="%_sec_4.2.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.2.1">4.2.1  Normal Order and Applicative Order</a></h3>
+<h3 class="trans" lang="ja">4.2.1 正規順と適用順</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_4680"></a><a name="%_idx_4682"></a>In section <a href="10_sec1_1.html#%_sec_1.1">1.1</a>, where we began our discussion
+of models of evaluation, we noted that Scheme is an <em>applicative-order</em> language, namely, that all the arguments to Scheme
+procedures are evaluated when the procedure is applied.  In
+contrast, <em>normal-order</em> languages delay evaluation of procedure arguments
+until the actual argument values are needed.
+Delaying evaluation of procedure arguments until the
+last possible moment (e.g., until they are required by a primitive
+operation) is called <a name="%_idx_4684"></a><em>lazy evaluation</em>.<a name="call_footnote_Temp_576" href="#footnote_Temp_576"><sup><small>32</small></sup></a>
+Consider the procedure</p>
+
+<p class="trans" lang="ja">
+<a href="10_sec1_1.html#%_sec_1.1">1.1</a>節では、評価のモデルについての議論を始めたわけだが、そこにおいて私たちは、Schemeは<em>適用順</em>の言語である、と注釈しておいた。つまり、Scheme手続きに対するすべての実引数は、その手続きが適用されるときに評価されるのだ、と注釈した。
+対照的に、<em>正規順</em>の言語は、実際の実引数の値が必要とされるときまで、手続きの実引数の評価を遅延させる。
+手続きの実引数の評価を、最後の可能な瞬間まで (たとえば、手続きの実引数が原始的演算により必要とされるまで) 遅延させることは、<em><ruby><rb>遅延</rb><rp> (</rp><rt>なまけもの</rt><rp>) </rp></ruby>評価</em>と呼ばれる<a href="#footnote_Temp_576"><sup><small>32</small></sup></a>。
+以下の手続きを考えよう。
+</p>
+
+<p class="lisp">(define (try a b)
+  (if (= a 0) 1 b))
+</p>
+
+
+<p class="orig" lang="en">Evaluating <tt>(try 0 (/ 1 0))</tt> generates an error in Scheme.  With
+lazy evaluation, there would be no error.  Evaluating the expression
+would return 1, because the argument <tt>(/ 1 0)</tt> would
+never be evaluated.</p>
+
+<p class="trans" lang="ja">
+Schemeでは、<tt>(try 0 (/ 1 0))</tt> を評価することでエラーが生成される。
+遅延評価を使えば、エラーはないだろう。
+この式を評価することで、1を返すであろう。というのも、<tt>(/ 1 0)</tt> という実引数は、決して評価されることがないであろうから。
+</p>
+
+<p class="orig" lang="en">
+An example that exploits lazy evaluation is the 
+definition of a procedure <tt>unless</tt></p>
+
+<p class="trans" lang="ja">
+遅延評価を活用する例は、以下の <tt>unless</tt> という手続きの定義であり、
+</p>
+
+<p class="lisp">(define (unless condition usual-value exceptional-value)
+  (if condition exceptional-value usual-value))
+</p>
+
+
+<p class="orig" lang="en">that can be used in expressions such as</p>
+
+<p class="trans" lang="ja">
+これは、次のような式の中で使える。
+</p>
+
+<p class="lisp">(unless (= b 0)
+        (/ a b)
+        (begin (display &quot;exception: returning 0&quot;)
+               0))
+</p>
+
+
+<p class="orig" lang="en">This won't work in an applicative-order language because both the
+usual value and the exceptional value will be evaluated before
+<tt>unless</tt> is called (compare exercise <a href="10_sec1_1.html#%_thm_1.6">1.6</a>).  An
+advantage of lazy evaluation is that some procedures, such as <tt>unless</tt>, can do useful computation even if evaluation of some of their
+arguments would produce errors or would not terminate.</p>
+
+<p class="trans" lang="ja">
+これは、適用順の言語ではうまく動かないだろう。なぜなら、<tt>unless</tt> が呼ばれる前に、通常時の値と例外時の値の双方が評価されるであろうからである (練習問題<a href="10_sec1_1.html#%_thm_1.6">1.6</a>を比較せよ)。
+遅延評価の利点は、<tt>unless</tt> などのある種の手続きが、たとえ当該手続きの実引数のうちのいくつかの評価がエラーを引き起こすだろうとしても、あるいは、終了しないであろうとしても、役に立つ計算を行える、という点である。
+</p>
+
+<p class="orig" lang="en">
+If the body of a procedure is entered before an argument has been
+evaluated we say that the procedure is <a name="%_idx_4686"></a><em>non-strict</em> in that
+argument.  If the argument is evaluated before the body of the
+procedure is entered we say that the procedure is <a name="%_idx_4688"></a><em>strict</em> in that
+argument.<a name="call_footnote_Temp_577" href="#footnote_Temp_577"><sup><small>33</small></sup></a>
+In a purely applicative-order language, all procedures are strict in
+each argument.  In a purely normal-order language, all compound
+procedures are non-strict in each argument, and primitive procedures may be
+either strict or non-strict.  There are also languages (see
+exercise <a href="#%_thm_4.31">4.31</a>) that give programmers
+detailed control over the strictness of the procedures they define.</p>
+
+<p class="trans" lang="ja">
+もし、実引数が評価される前に手続きの本体に入るなら、その手続きはその実引数に関して<em>非正格</em>である、と言う。
+もし、手続きの本体に入る前に実引数が評価されるなら、その手続きはその実引数に関して<em>正格</em>である、と言う<a href="#footnote_Temp_577"><sup><small>33</small></sup></a>。
+純粋に適用順の言語では、すべての手続きは、各実引数に関して正格である。
+純粋に正規順の言語では、すべての複合的手続きは、各実引数に関して非正格であり、原始的手続きは、正格または非正格のいずれでもよい。
+プログラマに対して、自分が定義する手続きの正格性に対する詳細な制御権を与えるような言語もある (練習問題<a href="#%_thm_4.31">4.31</a>を参照)。
+</p>
+
+<p class="orig" lang="en">
+A striking example of a procedure that can usefully be made non-strict
+is <tt>cons</tt> (or, in general, almost any constructor for data
+structures).  One can do useful computation, combining elements to
+form data structures and operating on the resulting data structures,
+even if the values of the elements are not known.  It makes perfect
+sense, for instance, to compute the length of a list without knowing
+the values of the individual elements in the list.  We will exploit
+this idea in section <a href="#%_sec_4.2.3">4.2.3</a> to implement the
+streams of chapter 3 as lists formed of non-strict <tt>cons</tt>
+pairs.</p>
+
+<p class="trans" lang="ja">
+有益に非正格化できる手続きの魅力的な例は、<tt>cons</tt> (あるいは、一般には、データ構造に対するほぼ任意のコンストラクタ) である。
+たとえ要素の値が知られていなくても、有益な計算——すなわち、データ構造を形成するために要素同士を結合し、結果としてできたデータ構造に対して演算を行うこと——を実行できる。
+たとえば、リストの個々の要素の値を知らないまま、リストの長さを計算することは、申し分なく意味をなす。
+この考えについては、非正格な <tt>cons</tt> 対から形成されたリストとしての、3章のストリームを実装するために、<a href="#%_sec_4.2.3">4.2.3</a>節で探求しよう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.25"></a>
+<b>Exercise 4.25.</b>  Suppose that (in ordinary applicative-order Scheme) we define <tt>unless</tt>
+as shown above and then define <tt>factorial</tt> in terms of <tt>unless</tt> as</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.25.</b> (普通の適用順のSchemeにおいて) 上に示したように <tt>unless</tt> を定義し、それから、<tt>unless</tt> を用いて次のように <tt>factorial</tt> を定義するものとせよ。
+</p>
+
+<p class="lisp">(define (factorial n)
+  (unless (= n 1)
+          (* n (factorial (- n 1)))
+          1))
+</p>
+
+
+<p class="orig" lang="en">What happens if we attempt to evaluate <tt>(factorial 5)</tt>?  Will our
+definitions work in a normal-order language?
+</p>
+
+<p class="trans" lang="ja">
+<tt>(factorial 5)</tt> を評価しようと試みると、何が起こるか?
+私たちの定義は、正規順だとうまく動くだろうか?
+</p>
+
+<p class="exercise"><span class="ex_comment">; 適用順だと以下のとおり止まらない 。
+; なぜなら、unless の後の述語の値が真になったときでも、その後ろの式を
+; 評価しようとするから。</span>
+(factorial 5)
+
+(unless <span class="hilit1">(= 5 1)</span> 
+<span class="hilit2">  (* 5 (factorial (- 5 1)))</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 (factorial (- 5 1)))</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 <span class="hilit3">(factorial 4)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">(= 4 1)</span>
+       (* 4 (factorial (- 4 1))) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 (factorial (- 4 1))) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 <span class="hilit5">(factorial 3)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">(= 3 1)</span>
+            (* 3 (factorial (- 3 1))) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 (factorial (- 3 1))) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 <span class="hilit7">(factorial 2)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">(= 2 1)</span>
+                 (* 2 (factorial (- 2 1))) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 (factorial (- 2 1))) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 <span class="hilit9">(factorial 1)</span>) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 
+<span class="hilit9">                    (unless <span class="hilit10">(= 1 1)</span>
+                      (* 1 (factorial (- 1 1))) 1)</span>) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+             (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 
+<span class="hilit9">                    (unless <span class="hilit10">true</span>
+                      (* 1 (factorial (- 1 1))) 1)</span>) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 
+<span class="hilit9">                    (unless <span class="hilit10">true</span>
+                      (* 1 <span class="hilit11">(factorial 0)</span>) 1)</span>) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+
+(unless <span class="hilit1">false</span>
+<span class="hilit2">  (* 5 
+<span class="hilit3">     (unless <span class="hilit4">false</span>
+       (* 4 
+<span class="hilit5">          (unless <span class="hilit6">false</span>
+            (* 3 
+<span class="hilit7">               (unless <span class="hilit8">false</span>
+                 (* 2 
+<span class="hilit9">                    (unless <span class="hilit10">true</span>
+                      (* 1 
+<span class="hilit11">                         (unless (= 0 1)
+                           (* 0 (factorial (- 0 1))) 1)</span>) 1)</span>) 1)</span>) 1)</span>) 1)</span>)</span> 1)
+</p>
+
+<p class="exercise"><span class="ex_comment">; 正規順だと止まる。</span>
+(factorial 5)
+
+(unless <span class="hilit1">(= 5 1)</span> <span class="hilit2">(* 5 <span class="hilit3">(factorial (- 5 1))</span>)</span> 1)
+
+(if <span class="hilit1">(= 5 1)</span> 1 <span class="hilit2">(* 5 <span class="hilit3">(factorial (- 5 1))</span>)</span>)
+
+<span class="hilit2">(* 5 <span class="hilit3">(factorial (- 5 1))</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (unless <span class="hilit4">(= (- 5 1) 1)</span>
+     (* (- 5 1) <span class="hilit5">(factorial (- (- 5 1) 1))</span>) 1)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (if <span class="hilit4">(= (- 5 1) 1)</span> 1
+       (* (- 5 1) <span class="hilit5">(factorial (- (- 5 1) 1))</span>))</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1) <span class="hilit5">(factorial (- (- 5 1) 1))</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (unless <span class="hilit6">(= (- (- 5 1) 1) 1)</span>
+        (* (- (- 5 1) 1) <span class="hilit7">(factorial (- (- (- 5 1) 1) 1))</span>) 1)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (if <span class="hilit6">(= (- (- 5 1) 1) 1)</span> 1
+          (* (- (- 5 1) 1) <span class="hilit7">(factorial (- (- (- 5 1) 1) 1))</span>))</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1) <span class="hilit7">(factorial (- (- (- 5 1) 1) 1))</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (unless <span class="hilit8">(= (- (- (- 5 1) 1) 1) 1)</span>
+           (* (- (- (- 5 1) 1) 1) <span class="hilit9">(factorial (- (- (- (- 5 1) 1) 1) 1))</span>) 1)</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (if <span class="hilit8">(= (- (- (- 5 1) 1) 1) 1)</span> 1
+             (* (- (- (- 5 1) 1) 1) <span class="hilit9">(factorial (- (- (- (- 5 1) 1) 1) 1))</span>))</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (* (- (- (- 5 1) 1) 1) <span class="hilit9">(factorial (- (- (- (- 5 1) 1) 1) 1))</span>)</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (* (- (- (- 5 1) 1) 1) 
+<span class="hilit9">            (unless <span class="hilit10">(= (- (- (- (- 5 1) 1) 1) 1) 1)</span>
+              (* (- (- (- (- 5 1) 1) 1) 1)
+<span class="hilit11">                 (factorial (- (- (- (- (- 5 1) 1) 1) 1) 1))</span>) 1)</span>)</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (* (- (- (- 5 1) 1) 1) 
+<span class="hilit9">            (if <span class="hilit10">(= (- (- (- (- 5 1) 1) 1) 1) 1)</span> 1
+                (* (- (- (- (- 5 1) 1) 1) 1)
+<span class="hilit11">                   (factorial (- (- (- (- (- 5 1) 1) 1) 1) 1))</span>))</span>)</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5
+<span class="hilit3">   (* (- 5 1)
+<span class="hilit5">      (* (- (- 5 1) 1)
+<span class="hilit7">         (* (- (- (- 5 1) 1) 1) 
+            <span class="hilit9">1</span>)</span>)</span>)</span>)</span>
+
+<span class="ex_comment">; と、まあ、こう展開が完了する。あとの評価はちょっと端折るけれど、以下のとおり。</span>
+<span class="hilit2">(* 5 <span class="hilit3">(* 4 <span class="hilit5">(* 3 <span class="hilit7">(* 2 <span class="hilit9">1</span>)</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5 <span class="hilit3">(* 4 <span class="hilit5">(* 3 <span class="hilit7">2</span>)</span>)</span>)</span>
+
+<span class="hilit2">(* 5 <span class="hilit3">(* 4 <span class="hilit5">6</span>)</span>)</span>
+
+<span class="hilit2">(* 5 <span class="hilit3">24</span>)</span>
+
+<span class="hilit2">120</span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.26"></a>
+<b>Exercise 4.26.</b>  <a name="%_idx_4692"></a><a name="%_idx_4694"></a>Ben Bitdiddle and Alyssa P. Hacker disagree over the importance of
+lazy evaluation for implementing things such as <tt>unless</tt>.  Ben
+points out that it's possible to implement <tt>unless</tt> in applicative
+order as a special form.
+Alyssa counters that, if one did that, <tt>unless</tt> would be merely
+syntax, not a procedure that could be used in conjunction with
+higher-order procedures.  Fill in the details on both sides of the
+argument.  Show how to implement <tt>unless</tt> as a derived expression
+(like <tt>cond</tt> or <tt>let</tt>),
+and give an example of a situation where it might be useful to have
+<tt>unless</tt> available as a procedure, rather than as a special form.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.26.</b> ベン・ビットディドルとアリッサ・P・ハッカは、<tt>unless</tt> のようなものを実装するための遅延評価が重要だということには、賛成しない。
+ベンは、<tt>unless</tt> を特殊形式として適用順で実装することが可能だよ、と指摘する。
+アリッサは、もし誰かがそうしたら、<tt>unless</tt> は、より高階の手続きとともに使える手続きではなく、単なる文法になっただろうね、と反撃する。
+議論の両面における詳細を埋めよ。
+どのようにして <tt>unless</tt> を、(<tt>cond</tt> または <tt>let</tt> のような) 派生式として実装するのかを示せ。そして、特殊形式としてというよりもむしろ手続きとして <tt>unless</tt> を使用可能にしておくのが有用かもしれないような、状況の例を挙げよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_4.2.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.2.2">4.2.2  An Interpreter with Lazy Evaluation</a></h3>
+<h3 class="trans" lang="ja">4.2.2 遅延評価を使うインタプリタ</h3>
+
+<p class="orig" lang="en">
+In this section we will implement a normal-order language that is
+the same as Scheme except that compound procedures are non-strict
+in each argument.  Primitive procedures will still be strict.
+It is not difficult to modify the evaluator of
+section <a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a> so that the language it interprets behaves
+this way.  Almost all the required changes center around procedure
+application.</p>
+
+<p class="trans" lang="ja">
+本節では、複合的な手続きが各実引数について非正格であるという点を除いて、Schemeと同一であるような、正規順の言語を実装しよう。
+原始的手続きは依然として正格なままだろう。
+解釈する対象の言語がこのように振る舞うように、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の評価器を改変することは、難しくない。
+必要な変更のほとんどすべては、手続き適用のまわりに集中している。
+</p>
+
+<p class="orig" lang="en">
+The basic idea is that, when applying a procedure, the interpreter
+must determine which arguments are to be
+evaluated and which are to be
+delayed.  The delayed arguments are not
+evaluated; instead, they are transformed into objects called <a name="%_idx_4696"></a><em>thunk</em>s.<a name="call_footnote_Temp_580" href="#footnote_Temp_580"><sup><small>34</small></sup></a>
+The thunk must contain the information required to produce the value
+of the argument when it is needed, as if it had been evaluated at
+the time of the application.  Thus, the thunk must contain the
+argument expression and the environment in
+which the procedure application is being evaluated.</p>
+
+<p class="trans" lang="ja">
+基本的な考えは、手続きを適用するときに、インタプリタが、どの実引数を評価すべきで、どの実引数を遅延させるべきなのか、ということを判定せねばならない、というものだ。
+遅延させた実引数は、評価されない。その代わり、それらは<em>サンク</em>と呼ばれるオブジェクトへと変形される<a href="#footnote_Temp_580"><sup><small>34</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4704"></a><a name="%_idx_4706"></a>The process of evaluating the expression in a thunk is called <em>forcing</em>.<a name="call_footnote_Temp_581" href="#footnote_Temp_581"><sup><small>35</small></sup></a>
+In general, a thunk will be forced only when its value is needed:
+when it is passed to a primitive procedure that
+will use the value of the thunk; when it is the
+value of a predicate of a conditional; and when it
+is the value of an operator that is about to be applied as a procedure.
+One design choice we have available is whether or not to <a name="%_idx_4710"></a><em>memoize</em> thunks, as we did with delayed objects in
+section <a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a>.  With memoization, the first time a
+thunk is forced, it stores the value that is computed.  Subsequent
+forcings simply return the stored value without repeating the
+computation.  We'll make our interpreter memoize, because this is
+more efficient for many applications.  There are tricky
+considerations here, however.<a name="call_footnote_Temp_582" href="#footnote_Temp_582"><sup><small>36</small></sup></a></p>
+
+<p class="trans" lang="ja">
+サンクの中の式を評価するプロセスは、<em>強制</em>と呼ばれる<a href="#footnote_Temp_581"><sup><small>35</small></sup></a>。
+一般に、サンクは、そのサンクの値が必要とされるときにだけ、強制されるだろう。
+つまり、そのサンクの値を使うであろう原始的手続きへと、そのサンクが渡されるときと、そのサンクが条件式の述語の値であるときと、そのサンクが、手続きとして今まさに適用されようとしているオペレータの値であるときにだけ、サンクは強制されるだろう。
+私たちが利用可能にしておける設計上の一つの選択肢は、遅延させたオブジェクトに関して<a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a>節で行ったのと同様にしてサンクを<em>メモ化する</em>べきかどうか、ということである。
+メモ化を行えば、最初にサンクが強制されるときに、計算された値がメモ化により格納される。
+後続の強制では、計算を繰り返すことなく、格納された値を単に返すだけだ。
+私たちの評価器に、メモ化を行わせよう。なぜなら、これは、多くの用途にとって、より効率的だからである。
+しかし、ここには扱いにくい問題がある <a href="#footnote_Temp_582"><sup><small>36</small></sup></a>。
+</p>
+
+<a name="%_sec_Temp_583"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_583">Modifying the evaluator</a></h4>
+<h4 class="trans" lang="ja">評価器を改変する</h4>
+
+<p class="orig" lang="en">
+The main difference between the lazy evaluator and the one in
+section <a href="26_sec4_1.html#%_sec_4.1">4.1</a> is in the handling of procedure
+applications in <tt>eval</tt> and <tt>apply</tt>.</p>
+
+<p class="trans" lang="ja">
+遅延を行う評価器と<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節の評価器との主な違いは、<tt>eval</tt> と <tt>apply</tt> における手続き適用の取り扱いにある。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4720"></a>The <tt>application?</tt> clause of <tt>eval</tt> becomes</p>
+
+<p class="trans" lang="ja">
+<tt>eval</tt> の <tt>application?</tt> 節は以下のようになる。
+</p>
+
+<p class="lisp">((application? exp)
+ (apply (actual-value (operator exp) env)
+        (operands exp)
+        env))
+</p>
+
+
+<p class="orig" lang="en">This is almost the same as the <tt>application?</tt> clause of <tt>eval</tt>
+in section <a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>.  For lazy evaluation, however,
+we call <tt>apply</tt> with the operand expressions, rather than the
+arguments produced by evaluating them.  Since we will need the environment to
+construct thunks if the arguments are to be delayed, we must pass this as well.
+We still evaluate the
+operator, because <tt>apply</tt> needs the actual procedure to be applied
+in order to dispatch on its type (primitive versus compound) and apply it.</p>
+
+<p class="trans" lang="ja">
+これはほとんど、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節での <a href="26_sec4_1.html#%_idx_4242"><tt>eval</tt></a> の <tt>application?</tt> 節と同じである。
+ただし、遅延評価のために、オペランド式を評価することで作り出される実引数ではなく、むしろオペランド式とともに、<tt>apply</tt> を呼び出している。
+実引数を遅延すべきなら、サンクを構築するために環境を必要とするだろうから、環境も渡さねばならない。
+依然として、オペレータは評価する。というのも、<tt>apply</tt> は、実際の手続きの型 (原始的か複合的か) に基づいて振り分けを行って実際の手続きを適用するために、適用されるべき実際の手続きを必要とするからである。
+</p>
+
+<p class="orig" lang="en">
+Whenever we need the actual value of an expression, we use
+</p>
+
+<p class="trans" lang="ja">
+式の実際の値を必要とするときはいつでも、以下のものを使うのだが、
+</p>
+
+
+<p class="lisp"><a name="%_idx_4722"></a>(define (actual-value exp env)
+  (force-it (eval exp env)))
+</p>
+
+
+<p class="orig" lang="en">instead of just <tt>eval</tt>, so that if the expression's value
+is a thunk, it will be forced.</p>
+
+<p class="trans" lang="ja">
+これは単なる <tt>eval</tt> の代わりであって、これの結果、もし式の値がサンクであれば、サンクは強制されることだろう。
+</p>
+
+<p class="orig" lang="en">
+Our new version of <tt>apply</tt> is also almost the same as the
+version in section <a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>.  The difference is
+that <tt>eval</tt> has passed in unevaluated operand expressions:
+For primitive procedures (which are strict), we evaluate all the
+arguments before applying the primitive;
+for compound procedures (which are non-strict) we delay all the
+arguments before applying the procedure.</p>
+
+<p class="trans" lang="ja">
+私たちの <tt>apply</tt> の新バージョンは、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節での<a href="26_sec4_1.html#%_idx_4250">バージョン</a>とほとんど同じである。
+違いは、<!--未評価のオペランド式の中で、<tt>eval</tt> が以下のものを渡してきた点である。-->未評価のオペランド式の中を <tt>eval</tt> が 通過してきた点である。
+すなわち、私たちは、原始的手続き (これらは正格である) については、当該プリミティブを適用する前にすべての実引数を評価するし、複合的手続き (これらは非正格である) については、当該手続きを適用する前にすべての実引数を遅延させる。
+</p>
+
+<p class="lisp"><a name="%_idx_4724"></a>(define (apply procedure arguments env)
+  (cond ((primitive-procedure? procedure)
+         (apply-primitive-procedure
+          procedure
+          (list-of-arg-values arguments env)))  <em>; changed</em>
+        ((compound-procedure? procedure)
+         (eval-sequence
+          (procedure-body procedure)
+          (extend-environment
+           (procedure-parameters procedure)
+           (list-of-delayed-args arguments env) <em>; changed</em>
+           (procedure-environment procedure))))
+        (else
+         (error
+          &quot;Unknown procedure type -- APPLY&quot; procedure))))
+</p>
+
+
+<p class="orig" lang="en">The procedures that process the arguments are just like <tt>list-of-values</tt> from section <a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>, except that
+<tt>list-of-delayed-args</tt> delays the arguments instead of evaluating
+them, and <tt>list-of-arg-values</tt> uses <tt>actual-value</tt> instead
+of <tt>eval</tt>:</p>
+
+<p class="trans" lang="ja">
+実引数を処理する手続きは、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の <tt>list-of-values</tt> とちょうど同様である——ただし、<tt>list-of-delayed-args</tt> は実引数を評価する代わりに遅延させ、<tt>list-of-arg-values</tt> は <tt>eval</tt> の代わりに <tt>actual-value</tt> を使う、という点を除いて。
+</p>
+
+<p class="lisp"><a name="%_idx_4726"></a>(define (list-of-arg-values exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (actual-value (first-operand exps) env)
+            (list-of-arg-values (rest-operands exps)
+                                env))))
+<a name="%_idx_4728"></a>(define (list-of-delayed-args exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (delay-it (first-operand exps) env)
+            (list-of-delayed-args (rest-operands exps)
+                                  env))))
+</p>
+
+<p class="orig" lang="en">
+The other place we must change the evaluator is in the handling of
+<tt>if</tt>, where we must use <tt>actual-value</tt> instead
+of <tt>eval</tt> to get the value of the predicate expression
+before testing whether it is true or false:</p>
+
+<p class="trans" lang="ja">
+評価器を変更せねばならない、もう一方の箇所は、<tt>if</tt> の取り扱いの中にあり、そこでは、述語式が真か偽かを検査する前に述語式の値を得るために、<tt>eval</tt> の代わりに <tt>actual-value</tt> を使わねばならない。
+<span class="note">(??要検討)</span>
+</p>
+
+<p class="lisp"><a name="%_idx_4730"></a>(define (eval-if exp env)
+  (if (true? (actual-value (if-predicate exp) env))
+      (eval (if-consequent exp) env)
+      (eval (if-alternative exp) env)))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4732"></a>Finally, we must change the <tt>driver-loop</tt>
+procedure (section <a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>) to use <tt>actual-value</tt> instead
+of <tt>eval</tt>, so that if a delayed value
+is propagated back to the read-eval-print loop, it will be forced
+before being printed.  We also change the prompts to indicate that
+this is the lazy evaluator:</p>
+
+<p class="trans" lang="ja">
+最後に、<tt>driver-loop</tt> の手続き (<a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>節) を、<tt>eval</tt> の代わりに <tt>actual-value</tt> を使うように変更せねばならない——それによって、もし遅延された値が伝播して読み込み・評価・印字ループに戻ってきたら、その遅延された値は、印字される前に強制されるようになるだろう。
+また、これが遅延評価器だと示すように、プロンプトも変更する。
+</p>
+
+<p class="lisp"><a name="%_idx_4734"></a>(define input-prompt &quot;;;; L-Eval input:&quot;)
+(define output-prompt &quot;;;; L-Eval value:&quot;)
+<a name="%_idx_4736"></a>(define (driver-loop)
+  (prompt-for-input input-prompt)
+  (let ((input (read)))
+    (let ((output
+           (actual-value input the-global-environment)))
+      (announce-output output-prompt)
+      (user-print output)))
+  (driver-loop))
+</p>
+
+<p class="orig" lang="en">
+With these changes made, we can start the evaluator and test it.  The
+successful evaluation of the <tt>try</tt> expression discussed in
+section <a href="#%_sec_4.2.1">4.2.1</a> indicates that the interpreter is
+performing lazy evaluation:</p>
+
+<p class="trans" lang="ja">
+これらの変更を行うと、評価器を起動して試すことができる。
+<a href="#%_sec_4.2.1">4.2.1</a> 節で議論した <tt>try</tt> 式の評価がうまくいくことは、この評価器が遅延評価を実行しているのだ、ということを示す。
+</p>
+
+<p class="lisp">(define the-global-environment (setup-environment))
+(driver-loop)
+<i>;;; L-Eval input:</i>
+(define (try a b)
+  (if (= a 0) 1 b))
+<i>;;; L-Eval value:</i>
+<i>ok</i>
+<i>;;; L-Eval input:</i>
+(try 0 (/ 1 0))
+<i>;;; L-Eval value:</i>
+<i>1</i>
+</p>
+
+<a name="%_sec_Temp_584"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_584">Representing thunks</a></h4>
+<h4 class="trans" lang="ja">サンクを表現する</h4>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4738"></a>
+Our evaluator must arrange to create thunks when procedures are
+applied to arguments and to force these thunks later.  A thunk must
+package an expression together with the environment, so that the
+argument can be produced later.
+To force the thunk, we simply extract the expression and environment
+from the thunk and evaluate the expression in the environment.
+We use <tt>actual-value</tt> rather than <tt>eval</tt> so that in case the
+value of the expression is itself a thunk, we will force that, and so
+on, until we reach something that is not a thunk:</p>
+
+<p class="trans" lang="ja">
+私たちの評価器は、手続きが実引数に適用されるときにサンクを作成するように、かつ、これらのサンクを後に強制するように、手筈を整えておかねばならない。
+サンクは環境とともに式をパッケージ化せねばならず、その結果、実引数を後で作り出すことが可能となる。
+サンクを強制するには、単純に式と環境をサンクから抽出して、その式をその環境内で評価する。
+式の値自体がサンクである場合にはそのサンクを強制し、サンクでない何かに到達するまで以下同様に続けるように、<tt>eval</tt> ではなくむしろ <tt>actual-value</tt> を使う。
+</p>
+
+<p class="lisp"><a name="%_idx_4740"></a>(define (force-it obj)
+  (if (thunk? obj)
+      (actual-value (thunk-exp obj) (thunk-env obj))
+      obj))
+</p>
+
+<p class="orig" lang="en">
+One easy way to package an expression with an environment is to make a
+list containing the expression and the environment.
+Thus, we create a thunk as follows:</p>
+
+<p class="trans" lang="ja">
+式を環境と一緒にパッケージ化するための簡単な一つの方法は、その式とその環境を含むリストを作ることだ。
+よって、以下のようにサンクを作成する。
+</p>
+
+<p class="lisp"><a name="%_idx_4742"></a>(define (delay-it exp env)
+  (list 'thunk exp env))
+
+(define (thunk? obj)
+  (tagged-list? obj 'thunk))
+
+(define (thunk-exp thunk) (cadr thunk))
+
+(define (thunk-env thunk) (caddr thunk))
+</p>
+
+<p class="orig" lang="en">
+Actually, what we want for our interpreter is not quite this, but
+rather thunks that have been memoized.
+When a thunk is forced, we will turn it into an evaluated thunk
+by replacing the stored expression with its value and
+changing the <tt>thunk</tt> tag so that it can be recognized as
+already evaluated.<a name="call_footnote_Temp_585" href="#footnote_Temp_585"><sup><small>37</small></sup></a></p>
+
+<p class="trans" lang="ja">
+実際は、私たちが評価器に対して望むことは、必ずしもこういうことではなく、むしろ、メモ化されたサンクである。
+サンクが強制されると、私たちは、記憶された式をその値で置き換えて、そして、そのサンクを評価済みのものだと認識できるように <tt>thunk</tt> のタグを変更することで、そのサンクを評価済みのサンクへと変えることだろう<a href="#footnote_Temp_585"><sup><small>37</small></sup></a>。
+</p>
+
+<p class="lisp">(define (evaluated-thunk? obj)
+  (tagged-list? obj 'evaluated-thunk))
+
+(define (thunk-value evaluated-thunk) (cadr evaluated-thunk))
+<a name="%_idx_4748"></a>(define (force-it obj)
+  (cond ((thunk? obj)
+         (let ((result (actual-value
+                        (thunk-exp obj)
+                        (thunk-env obj))))
+           (set-car! obj 'evaluated-thunk)
+           (set-car! (cdr obj) result)  <em>; replace <tt>exp</tt> with its value</em>
+           (set-cdr! (cdr obj) '())     <em>; forget unneeded <tt>env</tt></em>
+           result))
+        ((evaluated-thunk? obj)
+         (thunk-value obj))
+        (else obj)))
+</p>
+
+
+<p class="orig" lang="en">Notice that the same <tt>delay-it</tt> procedure works both with and
+without memoization.</p>
+
+<p class="trans" lang="ja">
+メモ化をする場合としない場合のどちらでも、同じ <tt>delay-it</tt> という手続きがうまく動くことに注目してほしい。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.27"></a>
+<b>Exercise 4.27.</b>  Suppose we type in the following definitions to the lazy evaluator:
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.27.</b> 遅延評価器に対して以下の定義を打ち込むものと仮定せよ。
+</p>
+
+<p class="lisp">(define count 0)
+(define (id x)
+  (set! count (+ count 1))
+  x)
+</p>
+
+<p class="orig" lang="en">Give the missing values in the following sequence of
+interactions, and explain your answers.<a name="call_footnote_Temp_587" href="#footnote_Temp_587"><sup><small>38</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+以下の一連のやりとりでの欠けている値を示し、自分の答えについて説明せよ<a href="#footnote_Temp_587"><sup><small>38</small></sup></a>。
+</p>
+
+<p class="lisp">(define w (id (id 10)))
+<i>;;; L-Eval input:</i>
+count
+<i>;;; L-Eval value:</i>
+&lt;<em>response</em>&gt;
+<i>;;; L-Eval input:</i>
+w
+<i>;;; L-Eval value:</i>
+&lt;<em>response</em>&gt;
+<i>;;; L-Eval input:</i>
+count
+<i>;;; L-Eval value:</i>
+&lt;<em>response</em>&gt;
+</p>
+
+
+<p class="exercise">(define w (id (id 10)))
+<i>;;; L-Eval input:</i>
+count
+<i>;;; L-Eval value:</i>
+0
+<i>;;; L-Eval input:</i>
+w
+<i>;;; L-Eval value:</i>
+10
+<i>;;; L-Eval input:</i>
+count
+<i>;;; L-Eval value:</i>
+2
+
+<span class="ex_comment">
+だと思うんだが。</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.28"></a>
+<b>Exercise 4.28.</b>  <tt>Eval</tt> uses <tt>actual-value</tt> rather than <tt>eval</tt>
+to evaluate the operator before passing it to <tt>apply</tt>,
+in order to force the value of the operator.
+Give an example that demonstrates the need for this forcing.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.28.</b> <tt>eval</tt> は、演算子を <tt>apply</tt> に渡す前に演算子を評価するのに、<tt>eval</tt> ではなくむしろ <tt>actual-value</tt> を使う——演算子の値を強制するために、である。
+この強制の必要性を実証する例を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.29"></a>
+<b>Exercise 4.29.</b>  Exhibit a program that you would expect to run much more slowly
+without memoization than with memoization.  Also, consider the
+following interaction, where the <tt>id</tt> procedure is defined as in
+exercise <a href="#%_thm_4.27">4.27</a> and <tt>count</tt> starts at 0:
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.29.</b> メモ化をする場合と比べてメモ化なしでは遥かにゆっくりと動作する、と君が予測するだろうプログラムを示せ。
+また、以下のやりとりを考えよ。ただしここで、<tt>id</tt> という手続きは、練習問題<a href="#%_thm_4.27">4.27</a>でのように定義されており、<tt>count</tt> は 0 から始まるものとする。
+</p>
+
+<p class="lisp">(define (square x)
+  (* x x))
+<i>;;; L-Eval input:</i>
+(square (id 10))
+<i>;;; L-Eval value:</i>
+&lt;<em>response</em>&gt;
+<i>;;; L-Eval input:</i>
+count
+<i>;;; L-Eval value:</i>
+&lt;<em>response</em>&gt;
+</p>
+
+
+<p class="orig" lang="en">Give the responses both when the evaluator memoizes and when it does not.
+</p>
+
+<p class="trans" lang="ja">
+評価器がメモ化を行う場合とメモ化を行わない場合の双方で、応答を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+
+<p class="orig" lang="en">
+<a name="%_thm_4.30"></a>
+<b>Exercise 4.30.</b>  Cy D. Fect, a reformed C programmer, is worried that some side effects
+may never take place, because the lazy evaluator doesn't force the
+expressions in a sequence.
+Since the value of an expression in a sequence other than the last one
+is not used (the expression is there only for its effect, such as
+assigning to a variable or printing), there can be no subsequent use
+of this value (e.g., as an argument to a primitive procedure) that
+will cause it to be forced.  Cy thus thinks that when evaluating
+sequences, we must force all expressions in the sequence except the
+final one.  He proposes to modify <tt>eval-sequence</tt> from
+section <a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a> to use <tt>actual-value</tt> rather
+than <tt>eval</tt>:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.30.</b> 改心した C プログラマであるサイ・D・フェクトは、ある種の副作用が決して起こらないかもしれない、と心配している。というのも、遅延評価器は列の中の式を強制しないからである。
+列の中の最後の一つを除く式の値は使われない (式は、変数への<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>や印字など、その式の作用だけのためにそこにある) ので、この値が強制されるようにするような、この値を (たとえば、原始的手続きに対する実引数として) 後に使用することがないかもしれない。
+よって、列を評価するときに、その列の中の最後の一つを除くすべての式を強制しなくてはならない、とサイは考える。
+彼は、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の <tt>eval-sequence</tt> を、<tt>eval</tt> ではなくむしろ <tt>actual-value</tt> を使うように改変することを提案する。
+</p>
+
+<p class="lisp">(define (eval-sequence exps env)
+  (cond ((last-exp? exps) (eval (first-exp exps) env))
+        (else (actual-value (first-exp exps) env)
+              (eval-sequence (rest-exps exps) env))))
+</p>
+
+
+<p class="orig" lang="en">
+a. Ben Bitdiddle thinks Cy is wrong.
+He shows Cy the <tt>for-each</tt> procedure described in
+exercise <a href="15_sec2_2.html#%_thm_2.23">2.23</a>, which gives an important example of
+a sequence with side effects:</p>
+
+<p class="trans" lang="ja">
+a. ベン・ビットディドルは、サイが間違っている、と考える。
+ベンは、練習問題<a href="15_sec2_2.html#%_thm_2.23">2.23</a>で説明されている <tt>for-each</tt> の手続き——副作用のある列の重要な例を示している——をサイに示す。
+</p>
+
+<p class="lisp"><a name="%_idx_4750"></a>(define (for-each proc items)
+  (if (null? items)
+      'done
+      (begin (proc (car items))
+             (for-each proc (cdr items)))))
+</p>
+
+
+<p class="orig" lang="en">He claims that the evaluator in the text (with the original <tt>eval-sequence</tt>) handles this correctly:</p>
+
+<p class="trans" lang="ja">
+ベンは、本文中の (元の <tt>eval-sequence</tt> を使う) 評価器が、これを正しく扱う、と主張する。
+</p>
+
+<p class="lisp"><i>;;; L-Eval input:</i>
+(for-each (lambda (x) (newline) (display x))
+          (list 57 321 88))
+<i>57</i>
+<i>321</i>
+<i>88</i>
+<i>;;; L-Eval value:</i>
+<i>done</i>
+</p>
+
+
+<p class="orig" lang="en">Explain why Ben is right about the behavior of <tt>for-each</tt>.</p>
+
+<p class="trans" lang="ja">
+なぜベンが<tt>for-each</tt> の振る舞いについては正しいのかを、説明せよ。
+</p>
+
+<p class="orig" lang="en">
+b. Cy agrees that Ben is right about the <tt>for-each</tt> example,
+but says that that's not the kind of program he was thinking about
+when he proposed his change to <tt>eval-sequence</tt>.
+He defines the following two procedures in the lazy evaluator:</p>
+
+<p class="trans" lang="ja">
+b. サイは、<tt>for-each</tt> の例についてはベンが正しい、と同意するのだが、それは自分が <tt>eval-sequence</tt> に対する変更を提案したときに考えていた種類のプログラムではないんだ、と言う。
+サイは、遅延評価器で以下の二つの手続きを定義する。
+</p>
+
+<p class="lisp">(define (p1 x)
+  (set! x (cons x '(2)))
+  x)
+
+(define (p2 x)
+  (define (p e)
+    e
+    x)
+  (p (set! x (cons x '(2)))))
+</p>
+
+
+<p class="orig" lang="en">What are the values of <tt>(p1 1)</tt> and <tt>(p2 1)</tt> with the
+original <tt>eval-sequence</tt>?
+What would the values be with Cy's proposed change to <tt>eval-sequence</tt>?</p>
+
+<p class="trans" lang="ja">
+元の <tt>eval-sequence</tt> を使うと、<tt>(p1 1)</tt> と <tt>(p2 1)</tt> の値はどのようなものだろうか?
+<tt>eval-sequence</tt> に対しての、サイの提案した変更を使ったら、これらの値はどのようなものになるだろうか?
+
+</p>
+
+<p class="orig" lang="en">
+c. Cy also points out that changing <tt>eval-sequence</tt> as he proposes
+does not affect the behavior of the example in part a.
+Explain why this is true.</p>
+
+<p class="trans" lang="ja">
+c. 自分の提案したように <tt>eval-sequence</tt> を変更することが、a. の部分での例の振る舞いに対しては影響しない、とサイも指摘する。
+なぜこれが真実なのかを説明せよ。
+</p>
+
+<p class="orig" lang="en">
+d. How do you think sequences ought to be treated in the lazy evaluator?
+Do you like Cy's approach, the approach in the text, or some other approach?
+</p>
+
+<p class="trans" lang="ja">
+d. 君は、遅延評価器で列をどのように扱うべきだと考えるかな?
+君は、サイの手法が好きかな? または、本文での手法が好きかな? それとも何らかの他の手法が好きかな?
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.31"></a>
+<b>Exercise 4.31.</b>  <a name="%_idx_4752"></a>The approach taken in this section is somewhat unpleasant, because it
+makes an incompatible change to Scheme.  It might be nicer to
+implement lazy evaluation as an <em>upward-compatible extension</em>,
+that is, so that ordinary Scheme programs will work as before.  We can
+do this by extending the syntax of procedure declarations to let the user
+control whether or not arguments are to be delayed.  While we're at
+it, we may as well also give the user the choice between delaying with
+and without memoization.  For example, the definition
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.31.</b> 本節でとられる手法は、互換性のない変更をSchemeに対して行うので、幾分か不愉快だ。
+<em>上位互換的な拡張</em>として——つまり、普通のSchemeプログラムが以前と同様にうまく動くであろうように——遅延評価を実装する方が、良いかもしれない。
+これは、実引数を遅延させるべきかどうかをユーザに制御させるように手続き宣言の文法を拡張することで、行える。
+私たちは、これにかかずらう一方で、メモ化ありの遅延とメモ化なしの遅延のどちらにするかという選択肢をユーザに与えても構わない。
+たとえば、以下の定義は、
+</p>
+
+<p class="lisp">(define (f a (b lazy) c (d lazy-memo))
+  <tt>...</tt>)
+</p>
+
+
+<p class="orig" lang="en">would define <tt>f</tt> to be a procedure of four arguments, where the
+first and third arguments are evaluated when the procedure is called,
+the second argument is delayed, and the fourth argument is both
+delayed and memoized.  Thus, ordinary procedure definitions will
+produce the same behavior as ordinary Scheme, while adding the <tt>lazy-memo</tt> declaration to each parameter of every compound procedure
+will produce the behavior of the lazy evaluator defined in this
+section. Design and implement the changes required to produce such an
+extension to Scheme.  You will have to implement new syntax procedures
+to handle the new syntax for <tt>define</tt>.  You must also arrange for
+<tt>eval</tt> or <tt>apply</tt> to determine when arguments are to be delayed, and to
+force or delay arguments accordingly, and you must arrange for forcing
+to memoize or not, as appropriate.
+</p>
+
+<p class="trans" lang="ja">
+<tt>f</tt> を4引数の手続きであるものと定義するだろうが、ここで、1番目と3番目の実引数は手続きが呼ばれたときに評価され、2番目の実引数は遅延され、4番目の実引数は遅延されるとともにメモ化も行われる。
+よって、すべての複合的手続きの各仮引数に <tt>lazy-memo</tt> の宣言を加えることで、本節で定義された遅延評価器の振る舞いを作り出すことになる一方で、普通の手続き定義は、普通のSchemeと同じ振る舞いを作り出すだろう。
+Schemeに対するそのような拡張を作り出すのに必要な変更を、設計し、実装せよ。
+君は、<tt>define</tt> についての新たな構文を扱うための、新たな構文手続きを実装しなくてはならないだろう。
+また、<tt>eval</tt> または <tt>apply</tt> が、いつ実引数を遅延させるべきなのかを決定できるように、そしてそれに応じて実引数を強制するか<!--または-->遅延させることができるように、君は手筈を整えねばならないし、君はまた、適宜メモ化を行うようにかまたは行わないように、強制の手筈を整えねばならない。
+<!--強制がメモ化を伴うように、または伴わないように、適宜に-->
+<!--強制がメモ化を伴うかどうかを適宜に-->
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_4.2.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.2.3">4.2.3  Streams as Lazy Lists</a></h3>
+<h3 class="trans" lang="ja">4.2.3 遅延リストとしてのストリーム</h3>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4754"></a><a name="%_idx_4756"></a><a name="%_idx_4758"></a><a name="%_idx_4760"></a><a name="%_idx_4762"></a>
+<a name="%_idx_4764"></a><a name="%_idx_4766"></a><a name="%_idx_4768"></a><a name="%_idx_4770"></a>In section <a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a>, we showed how to implement streams
+as delayed lists.  We introduced special forms <tt>delay</tt> and <tt>cons-stream</tt>, which allowed us to construct a ``promise'' to compute
+the <tt>cdr</tt> of a stream, without actually fulfilling that promise
+until later.  We could use this general technique of introducing
+special forms whenever we need more control over the evaluation process,
+but this is awkward.  For one thing, a special form is not a
+first-class object like a procedure, so we cannot use it together with
+higher-order procedures.<a name="call_footnote_Temp_592" href="#footnote_Temp_592"><sup><small>39</small></sup></a>  Additionally,
+we were forced to create streams as a new kind of data object
+similar but not identical to lists, and this required us to
+reimplement many ordinary list operations (<tt>map</tt>, <tt>append</tt>, and
+so on) for use with streams.</p>
+
+<p class="trans" lang="ja">
+<a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a>節では、遅延されたリストとしてストリームを実装する方法を示した。
+私たちは、<tt>delay</tt> と <tt>cons-stream</tt> という特殊形式——ストリームの <tt>cdr</tt> を計算するという「約束」を、後になるまではその約束を実際に果たすことなしに、構築できるようにしてくれる——を導入した。
+私たちは、評価プロセスに対するさらなる統御を必要とする場合にはいつでも、特殊形式を導入するというこの一般的な技法を使うことができるだろうが、これはぎこちない。
+その理由の一つは、特殊形式が手続きのような第一級オブジェクトではないこと、そのため、より高階の手続きと一緒には特殊形式を使えないことである<a href="#footnote_Temp_592"><sup><small>39</small></sup></a>。
+さらには、リストに似てはいるが同一ではないようなデータオブジェクトの新種としてストリームを作成するよう、私たちが強いられたこと、そしてこのことによって私たちが、多くの普通のリスト演算 (<tt>map</tt> や <tt>append</tt> やその他諸々) を、ストリームとともに使うために実装し直さねばならなくなったことである。
+</p>
+
+<p class="orig" lang="en">
+With lazy evaluation, streams and lists can be identical, so there is
+no need for special forms or for separate list and stream operations.
+All we need to do is to arrange matters so that <tt>cons</tt> is
+non-strict.  One way to accomplish this is to extend the lazy
+evaluator to allow for non-strict primitives, and to implement <tt>cons</tt> as one of these.  An easier way is to recall
+(section <a href="14_sec2_1.html#%_sec_2.1.3">2.1.3</a>) that there is no fundamental need to
+implement <tt>cons</tt> as a primitive at all.  Instead, we can represent
+<a name="%_idx_4772"></a>pairs as procedures:<a name="call_footnote_Temp_593" href="#footnote_Temp_593"><sup><small>40</small></sup></a></p>
+
+<p class="trans" lang="ja">
+遅延評価を使えば、ストリームとリストは同一たり得るし、すると、特殊形式の必要性もなく、また、リスト演算とストリーム演算を別々にする必要性もない。
+私たちは、ただ、<tt>cons</tt> が非正格となるように物事を整えさえすればよい。
+これを達成するための一つの方法は、非正格なプリミティブを見越しておくように遅延評価器を拡張し、こうした非正格なプリミティブのうちの一つとして <tt>cons</tt> を実装することである。
+より簡単な方法は、<tt>cons</tt> をプリミティブとして実装する根本的な必要性など全くないのだ、と思い出すことである (<a href="14_sec2_1.html#%_sec_2.1.3">2.1.3</a>節)。
+私たちは、その代わり、対を手続きとして表現できる<a href="#footnote_Temp_593"><sup><small>40</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4774"></a>(define (cons x y)
+  (lambda (m) (m x y)))
+<a name="%_idx_4776"></a>(define (car z)
+  (z (lambda (p q) p)))
+<a name="%_idx_4778"></a>(define (cdr z)
+  (z (lambda (p q) q)))
+</p>
+
+<p class="orig" lang="en">
+In terms of these basic operations, the standard definitions of the
+list operations will work with infinite lists (streams) as well as
+finite ones, and the stream operations can be implemented as list operations.
+Here are some examples:</p>
+
+<p class="trans" lang="ja">
+これらの基本的演算を用いると、リスト演算の標準的定義は、有限のものを用いるのと同様に、無限のリスト (ストリーム) を用いてもうまく動作するだろうし、ストリーム演算をリスト演算として実装できる。
+ここにいくつかの例を示す。
+</p>
+
+<p class="lisp"><a name="%_idx_4780"></a>(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+<a name="%_idx_4782"></a>(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+<a name="%_idx_4784"></a>(define (scale-list items factor)
+  (map (lambda (x) (* x factor))
+       items))
+<a name="%_idx_4786"></a>(define (add-lists list1 list2)
+  (cond ((null? list1) list2)
+        ((null? list2) list1)
+        (else (cons (+ (car list1) (car list2))
+                    (add-lists (cdr list1) (cdr list2))))))
+<a name="%_idx_4788"></a>(define ones (cons 1 ones))
+<a name="%_idx_4790"></a>(define integers (cons 1 (add-lists ones integers)))
+<i>;;; L-Eval input:</i>
+(list-ref integers 17)
+<i>;;; L-Eval value:</i>
+<i>18</i>
+</p>
+
+
+
+<p class="orig" lang="en">
+Note that these lazy lists are even lazier than the streams of
+chapter 3:  The <tt>car</tt> of the list, as well as the <tt>cdr</tt>, is
+delayed.<a name="call_footnote_Temp_594" href="#footnote_Temp_594"><sup><small>41</small></sup></a>
+In fact, even accessing the <tt>car</tt> or <tt>cdr</tt> of a lazy
+pair need not force the value of a list element.  The value will be
+forced only when it is really needed -- e.g., for use as the
+argument of a primitive, or to be printed as an answer.</p>
+
+<p class="trans" lang="ja">
+これらの遅延リストは、3章のストリームより遅延してさえいる。
+つまり、リストの <tt>car</tt> が—— <tt>cdr</tt> と同様に——遅延されるのだ<a href="#footnote_Temp_594"><sup><small>41</small></sup></a>。
+実際、遅延した対の <tt>car</tt> または <tt>cdr</tt> にアクセスすることでさえ、リスト要素の値を強制する必要がないのだ。
+値は、その値が——たとえば、プリミティブの実引数としての使用のためだとか、あるいは、答えとして印字するためだとかで——本当に必要とされるときにのみ、強制されるだろう。
+</p>
+
+
+<p class="orig" lang="en">
+Lazy pairs also help with the problem that arose with streams in
+section <a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>, where we found that
+formulating stream models of systems with loops may require us to
+sprinkle our programs with <a name="%_idx_4798"></a><a name="%_idx_4800"></a>explicit <tt>delay</tt> operations, beyond the
+ones supplied by <tt>cons-stream</tt>.  With lazy evaluation, all
+arguments to procedures are delayed uniformly.  For instance, we can
+implement procedures to integrate lists and solve differential
+equations as we originally intended in
+section <a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>:</p>
+
+<p class="trans" lang="ja">
+遅延対は、<a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>節——そこでは、ループのあるシステムのストリーム・モデルを定式化することが、<tt>cons-stream</tt> により供給される <tt>delay</tt> 演算を超えた明示的な <tt>delay</tt> 演算を自分のプログラムにちりばめることを要請することがある、ということに気づいたのだった——においてストリームにともなって生じた問題についても、助けとなる。
+遅延評価を使うと、手続きに対するすべての実引数は、一律に遅延される。
+たとえば、<a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>節で元々意図していたようにリストを積分して微分方程式を解くための手続きを、実装できる。
+</p>
+
+<p class="lisp"><a name="%_idx_4802"></a>(define (integral integrand initial-value dt)
+  (define int
+    (cons initial-value
+          (add-lists (scale-list integrand dt)
+                    int)))
+  int)
+<a name="%_idx_4804"></a>(define (solve f y0 dt)
+  (define y (integral dy y0 dt))
+  (define dy (map f y))
+  y)
+<i>;;; L-Eval input:</i>
+(list-ref (solve (lambda (x) x) 1 0.001) 1000)
+<i>;;; L-Eval value:</i>
+<i>2.716924</i>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.32"></a>
+<b>Exercise 4.32.</b>  Give some examples that illustrate the difference between the streams
+of chapter 3 and the ``lazier'' lazy lists described in this section.
+How can you take advantage of this extra laziness?
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.32.</b> 3章のストリームと、本節で説明した「より遅延した」遅延リストとの違いを例証するような事例を、いくつか示せ。
+この追加的な遅延を、君はどう利用するかな?
+</p>
+
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.33"></a>
+<b>Exercise 4.33.</b>  Ben Bitdiddle tests the lazy list implementation given above by
+evaluating the expression
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.33.</b> ベン・ビットディドルは、以下の式を評価することによって、上記の遅延リストの実装を検査する。
+</p>
+
+<p class="lisp">(car '(a b c))
+</p>
+
+<p class="orig" lang="en">To his surprise, this produces an error.  After some thought, he
+realizes that the ``lists'' obtained by reading in quoted expressions
+are different from the lists manipulated by the new definitions of
+<tt>cons</tt>, <tt>car</tt>, and <tt>cdr</tt>.  Modify the evaluator's
+treatment of quoted expressions so that quoted lists typed at the
+driver loop will produce true lazy lists.
+</p>
+
+<p class="trans" lang="ja">
+彼が驚いたことには、これはエラーを生み出す。
+やや考えた後、彼は、引用符つきの式を読み込むことで得られる「リスト」が、<tt>cons</tt> と <tt>car</tt> と <tt>cdr</tt> の新たな定義により操作されたリストとは違うことに気づく。
+ドライバ・ループで打ち込まれた引用符つきのリストが、真の遅延リストを作り出すように、引用符つきの式の、評価器による取り扱いを、改変せよ。
+</p>
+
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.34"></a>
+<b>Exercise 4.34.</b>  Modify the driver loop for the evaluator so that lazy pairs and lists
+will print in some reasonable way.  (What are you going to do about
+infinite lists?)  You may also need to modify the representation of
+lazy pairs so that the evaluator can identify them in order
+to print them.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.34.</b> 遅延対と遅延リストが、何らかの合理的な方法で印字されるように、評価器用のドライバ・ループを改変せよ
+(無限リストについて、君は何をするつもりかな?)。
+遅延対を印字するために評価器が遅延対を識別できるように、君は、遅延対の表現を改変する必要もあるかもしれないね。
+
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="footnotes"></a>
+<hr>
+
+<p class="orig" lang="en"><a name="footnote_Temp_575" href="#call_footnote_Temp_575"><sup><small>31</small></sup></a> Snarf: ``To grab, especially a large document or
+<a name="%_idx_4674"></a><a name="%_idx_4676"></a><a name="%_idx_4678"></a>file for the purpose of using it either with or without the owner's
+permission.''  Snarf down: ``To snarf, sometimes with the connotation
+of absorbing, processing, or understanding.''  (These definitions were
+snarfed from Steele et al. 1983.  See also Raymond 1993.)</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_575"><sup><small>31</small></sup></a>
+<ruby><rb>貪欲に取り込む</rb><rp> (</rp><rt>スナーフ</rt><rp>) </rp></ruby>とは、「特に大規模な文書またはファイルを、それを使用する目的で、所有者の許しがあろうとなかろうと、つかみ取ること」である。
+スナーフ・ダウンとは、「スナーフすることであり、ときとして、吸収すること、加工すること、または理解すること、という含意がある」
+(なお、これらの定義は、Steele et al. 1983 からスナーフした。Raymond 1993 も参照)。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_576" href="#call_footnote_Temp_576"><sup><small>32</small></sup></a> The difference between the ``lazy'' terminology and
+the ``normal-order'' terminology is somewhat fuzzy.  Generally, ``lazy''
+refers to the mechanisms of particular evaluators, while ``normal-order''
+refers to the semantics of languages, independent of any particular
+evaluation strategy.  But this is not a hard-and-fast distinction, and
+the two terminologies are often used interchangeably.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_576"><sup><small>32</small></sup></a>
+「<ruby><rb>遅延</rb><rp> (</rp><rt>なまけもの</rt><rp>) </rp></ruby>」という用語法と、「正規順」という用語法との違いは、やや曖昧だ。
+一般的に、「遅延」は特定の評価器の仕組みを指すのに対して、「正規順」は、どの特定の評価器の戦略とも独立に、言語の<ruby><rb>意味論</rb><rp> (</rp><rt>セマンティクス</rt><rp>) </rp></ruby>を指す。
+しかしこれは、厳格で動かせない差異ではなく、二つの用語法はしばしば交換可能に用いられる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_577" href="#call_footnote_Temp_577"><sup><small>33</small></sup></a> The ``strict'' versus ``non-strict'' terminology means essentially the
+same thing as ``applicative-order'' versus ``normal-order,'' except that
+it refers to individual procedures and arguments rather than to the
+language as a whole.  At a conference on programming languages you
+might hear someone say, ``The normal-order language <a name="%_idx_4690"></a>Hassle has certain
+strict primitives.  Other procedures take their arguments by lazy
+evaluation.''</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_577"><sup><small>33</small></sup></a>
+「正格」対「非正格」という用語法は、言語全体に言及するというよりむしろ個別の手続きと実引数に言及するものだ、という点を除けば、本質的には、「適用順」対「正規順」と同じことを意味する。
+プログラミング言語についての会議では、誰かが「Hassle という正規順の言語には、ある種の正格なプリミティブがある。その他の手続きは、遅延評価により実引数をとる」と言うのを聞くことがあるかもしれない。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_580" href="#call_footnote_Temp_580"><sup><small>34</small></sup></a> The word <em>thunk</em> was invented by an informal
+<a name="%_idx_4698"></a><a name="%_idx_4700"></a><a name="%_idx_4702"></a>working group that was discussing the implementation of call-by-name
+in Algol 60.  They observed that most of the analysis of (``thinking
+about'') the expression could be done at compile time; thus, at run
+time, the expression would already have been ``thunk'' about (Ingerman
+et al. 1960).</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_580"><sup><small>34</small></sup></a>
+<em>サンク (thunk) </em>という語は、Algol 60での名前による呼び出しの実装を議論していた非公式作業部会で創作された。
+かれらは、次のことに気づいた。すなわち、式についての分析（「〜について考える (thinking about)」）のほとんどは、コンパイル時に行えるだろうから、実行時には、式は既に、その式について「考え (thunk)」済みになっているだろう、と。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_581" href="#call_footnote_Temp_581"><sup><small>35</small></sup></a> This is analogous to the use of <tt>force</tt>
+<a name="%_idx_4708"></a>on the delayed objects that were introduced in chapter 3 to represent
+streams.  The critical difference between what we are
+doing here and what we did in chapter 3 is that we are building
+delaying and forcing into the evaluator, and thus making this uniform
+and automatic throughout the language.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_581"><sup><small>35</small></sup></a>
+これは、ストリームを表現するために3章で導入した、遅延させたオブジェクトに対する <tt>force</tt> の使用と類似している。
+ここで行っている事柄と、3章で行った事柄との間の決定的な違いは、遅延と強制を評価器の中に組み込んでいるところだ、という点、したがって、言語の全体を通じて、これ <span class="note">(遅延と強制 / ここで行っている事柄)</span> を一律かつ自動的なものにしているところだ、という点である。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_582" href="#call_footnote_Temp_582"><sup><small>36</small></sup></a> Lazy evaluation combined with memoization is sometimes
+<a name="%_idx_4712"></a>referred to as <em>call-by-need</em> argument passing, in contrast to
+<em>call-by-name</em> argument passing.  <a name="%_idx_4714"></a><a name="%_idx_4716"></a>(Call-by-name, introduced in
+Algol 60, is similar to non-memoized lazy evaluation.)
+As language designers, we can build our evaluator to memoize,
+not to memoize, or leave this an option for programmers
+(exercise <a href="#%_thm_4.31">4.31</a>).  As you might expect
+from chapter 3, these choices raise issues that become both subtle and
+confusing in the presence of assignments.  (See
+exercises <a href="#%_thm_4.27">4.27</a> and <a href="#%_thm_4.29">4.29</a>.)
+<a name="%_idx_4718"></a>An excellent article by Clinger (1982) attempts to clarify the
+multiple dimensions of confusion that arise here.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_582"><sup><small>36</small></sup></a>
+メモ化と組み合わされた遅延評価は、ときとして、<em>名前による呼び出し</em>型の引数渡しと比べて、<em>必要による呼び出し</em>型の引数渡し、と呼ばれる
+(名前による呼び出しは Algol 60 で導入されたものだが、これは、メモ化されていない遅延評価と似ている)。
+言語設計者として私たちは、自分の評価器を、メモ化を行うようにもメモ化を行わないようにも構築できるできるし、あるいは、このことをプログラマ用のオプションとして残しておくこともできる(練習問題<a href="#%_thm_4.31">4.31</a>)。
+君が3章から予測するかもしれないように、これらの選択肢は、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>がある場合には、微妙にもなり且つ混乱をもたらすようにもなる問題を引き起こす (練習問題<a href="#%_thm_4.27">4.27</a>と練習問題<a href="#%_thm_4.29">4.29</a>を参照)。
+Clinger (1982) による優れた論文は、ここで起こる混乱の複数の側面を明確にすることを試みている。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_585" href="#call_footnote_Temp_585"><sup><small>37</small></sup></a> Notice that we also erase the <tt>env</tt> from the thunk once the
+expression's value has been computed.  This makes no difference in the
+values returned by the interpreter.  It does help save space,
+however, because removing the reference from the thunk to the <tt>env</tt>
+once it is no longer needed allows this structure to be
+<a name="%_idx_4744"></a><a name="%_idx_4746"></a><em>garbage-collected</em> and its
+space recycled, as we will discuss in section <a href="33_sec5_3.html#%_sec_5.3">5.3</a>.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_585"><sup><small>37</small></sup></a>
+一旦、式の値が計算されたら、サンクから <tt>env</tt> を消してもいることに、気づいてほしい。
+これは、評価器によって返される値に何も違いをもたらさない。
+しかし、これは確かに空間を節約する助けになる。なぜなら、<a href="33_sec5_3.html#%_sec_5.3">5.3</a>節で議論するとおり、<tt>env</tt> がもはや不要になればサンクから <tt>env</tt> への参照を削除する、ということによって、この構造体 <span class="note">(つまり <tt>env</tt>)</span> を<em>ガーベジ・コレクションする</em>ことと、その空間をリサイクルすることが可能となるためである。
+</p>
+
+<p class="orig" lang="en">
+Similarly, we could have allowed unneeded environments in the memoized
+delayed objects of section <a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a> to be garbage-collected,
+by having <tt>memo-proc</tt> do something like <tt>(set! proc '())</tt>
+to discard the procedure <tt>proc</tt> (which includes the environment
+in which the <tt>delay</tt> was evaluated) after storing its value.</p>
+
+<p class="trans" lang="ja">
+同様にして、<a href="24_sec3_5.html#%_sec_3.5.1">3.5.1</a>節のメモ化された遅延オブジェクトにおける不要な環境を、ガーベジ・コレンクションすることを可能とすることもできたであろう—— (<tt>delay</tt> が評価された環境を含む) <tt>proc</tt> という手続きを、その値を記憶した後に捨てるために、<tt>(set! proc '())</tt> に似たような何かを <tt>memo-proc</tt> に行わせることによって。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_587" href="#call_footnote_Temp_587"><sup><small>38</small></sup></a> This exercise
+demonstrates that the interaction between lazy evaluation and side
+effects can be very confusing.  This is just what you might expect
+from the discussion in chapter 3.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_587"><sup><small>38</small></sup></a>
+この練習問題は、遅延評価と副作用の間の相互作用が、非常に混乱を招くものとなり得ることを実証している。
+これは、まさに君が3章の議論から予想したかもしれないことである。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_592" href="#call_footnote_Temp_592"><sup><small>39</small></sup></a> This is precisely the issue with the <tt>unless</tt> procedure,
+as in exercise <a href="#%_thm_4.26">4.26</a>.</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_592"><sup><small>39</small></sup></a>
+練習問題<a href="#%_thm_4.26">4.26</a>に見られるとおり、これは正確には <tt>unless</tt> の手続きの問題である。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_593" href="#call_footnote_Temp_593"><sup><small>40</small></sup></a> This is the procedural representation described in
+exercise <a href="14_sec2_1.html#%_thm_2.4">2.4</a>.  Essentially any procedural representation
+(e.g., a message-passing implementation) would do as well.  Notice
+that we can install these definitions in the lazy evaluator simply by
+typing them at the driver loop.  If we had originally included <tt>cons</tt>, <tt>car</tt>, and <tt>cdr</tt> as primitives in the global
+environment, they will be redefined.  (Also see
+exercises <a href="#%_thm_4.33">4.33</a> and <a href="#%_thm_4.34">4.34</a>.)</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_593"><sup><small>40</small></sup></a> 
+これは、練習問題<a href="14_sec2_1.html#%_thm_2.4">2.4</a>で説明された手続き的表現である。
+本質的に、どの手続き的表現も (たとえば、メッセージ・パッシング式の実装も)、同様にうまく動くだろう。
+単純に、これらの定義をドライバ・ループに打ち込むだけで、これらの定義を遅延評価器に作り込むことができることに気づいてほしい。
+もし、もともと <tt>cons</tt> と <tt>car</tt> と <tt>cdr</tt> を大域環境内にプリミティブとして含めていたのであれば、これらは再定義されるだろう (練習問題<a href="#%_thm_4.33">4.33</a>と<a href="#%_thm_4.34">4.34</a>も参照)。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_594" href="#call_footnote_Temp_594"><sup><small>41</small></sup></a> This permits us to create delayed versions of more general kinds of
+<a name="%_idx_4792"></a>list structures, not just sequences.  Hughes 1990 discusses some
+<a name="%_idx_4794"></a><a name="%_idx_4796"></a>applications of ``lazy trees.''</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_594"><sup><small>41</small></sup></a>
+これにより私たちは、単なる列ではなくて、より一般的な種類のリスト構造の遅延版を、作成できるようになる。
+Hughes 1990 は、「遅延木」のいくつかの応用を論じている。
+</div>
+
+</body>
+</html>

@@ -1,0 +1,3365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="sicp.css" type="text/css">
+<base target="_top">
+<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+<body>
+
+<div class="idx-bar">
+<nav>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="25_chap4.html">前へ</a> |
+<a href="27_sec4_2.html">次へ</a> |
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_sec_4.1">4.1</a>
+§<a href="#%_sec_4.1.1">4.1.1</a>
+🎨<a href="#%_fig_4.1">4.1</a>
+📚<a href="#%_sec_Temp_512">&hellip;</a>
+🍀<a href="#%_sec_Temp_513">&hellip;</a>
+🍀<a href="#%_sec_Temp_514">&hellip;</a>
+🍀<a href="#%_sec_Temp_515">&hellip;</a>
+📚<a href="#%_sec_Temp_516">&hellip;</a>
+📚<a href="#%_sec_Temp_517">&hellip;</a>
+📚<a href="#%_sec_Temp_519">&hellip;</a>
+📚<a href="#%_sec_Temp_521">&hellip;</a>
+📚<a href="#%_sec_Temp_522">&hellip;</a>
+📝<a href="#%_thm_4.1">4.1</a>
+§<a href="#%_sec_4.1.2">4.1.2</a>
+📚<a href="#%_sec_Temp_529">&hellip;</a>
+📝<a href="#%_thm_4.2">4.2</a>
+📝<a href="#%_thm_4.3">4.3</a>
+📝<a href="#%_thm_4.4">4.4</a>
+📝<a href="#%_thm_4.5">4.5</a>
+📝<a href="#%_thm_4.6">4.6</a>
+📝<a href="#%_thm_4.7">4.7</a>
+📝<a href="#%_thm_4.8">4.8</a>
+📝<a href="#%_thm_4.9">4.9</a>
+📝<a href="#%_thm_4.10">4.10</a>
+§<a href="#%_sec_4.1.3">4.1.3</a>
+📚<a href="#%_sec_Temp_541">&hellip;</a>
+📚<a href="#%_sec_Temp_542">&hellip;</a>
+📚<a href="#%_sec_Temp_543">&hellip;</a>
+📝<a href="#%_thm_4.11">4.11</a>
+📝<a href="#%_thm_4.12">4.12</a>
+📝<a href="#%_thm_4.13">4.13</a>
+§<a href="#%_sec_4.1.4">4.1.4</a>
+📝<a href="#%_thm_4.14">4.14</a>
+§<a href="#%_sec_4.1.5">4.1.5</a>
+🎨<a href="#%_fig_4.2">4.2</a>
+🎨<a href="#%_fig_4.3">4.3</a>
+📝<a href="#%_thm_4.15">4.15</a>
+§<a href="#%_sec_4.1.6">4.1.6</a>
+📝<a href="#%_thm_4.16">4.16</a>
+📝<a href="#%_thm_4.17">4.17</a>
+📝<a href="#%_thm_4.18">4.18</a>
+📝<a href="#%_thm_4.19">4.19</a>
+📝<a href="#%_thm_4.20">4.20</a>
+📝<a href="#%_thm_4.21">4.21</a>
+§<a href="#%_sec_4.1.7">4.1.7</a>
+📝<a href="#%_thm_4.22">4.22</a>
+📝<a href="#%_thm_4.23">4.23</a>
+📝<a href="#%_thm_4.24">4.24</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+
+</div>
+
+<!--
+$ curl -o ch4-Z-G-#1.gif https://mitpress.mit.edu/sicp/full-text/book/ch4-Z-G-[1-10].gif
+-->
+
+<div class="main-txt">
+
+<a name="%_sec_4.1"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1">4.1  The Metacircular Evaluator</a></h2>
+<h2 class="trans" lang="ja">4.1 メタ循環的な評価器</h2>
+
+
+<a name="%_idx_4210"></a>
+<p class="orig" lang="en">
+Our evaluator for Lisp will be implemented as a Lisp program.  It may
+seem circular to think about evaluating Lisp programs using an
+evaluator that is itself implemented in Lisp.  However, evaluation is
+a process, so it is appropriate to describe the evaluation process
+using Lisp, which, after all, is our tool for describing
+processes.<a name="call_footnote_Temp_510" href="#footnote_Temp_510"><sup><small>3</small></sup></a>  An evaluator that is written in the same language
+<a name="%_idx_4212"></a><a name="%_idx_4214"></a>that it evaluates is said to be <em>metacircular</em>.</p>
+
+<p class="trans" lang="ja">
+Lispに対する私たちの評価器は、Lispプログラムとして実装されるだろう。
+それ自体がLispで実装されている評価器を使ってLispプログラムを評価する、ということについて考えることは、循環的なように見えるかもしれない。
+しかし、評価はプロセスであり、したがって、Lispを使って評価プロセスを記述することは適切なのである——Lispは、結局のところ、プロセスを記述するための道具なのだ<a href="#footnote_Temp_510"><sup><small>3</small></sup></a>。
+評価する対象と同じ言語で書かれている評価器は、<em>メタ循環的</em>と言われる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4216"></a><a name="%_idx_4218"></a>The metacircular evaluator is essentially a Scheme formulation of the
+environment model of evaluation described in
+section <a href="21_sec3_2.html#%_sec_3.2">3.2</a>.  Recall that the model has two
+basic parts:</p>
+
+<p class="trans" lang="ja">
+メタ循環的な評価器は、本質的に、<a href="21_sec3_2.html#%_sec_3.2">3.2</a>節で説明した、評価についての環境モデルのScheme定式化である。
+あのモデルには二つの基本的部分があることを思い出そう。
+</p>
+
+<ol class="orig" lang="en">
+<li> To evaluate a combination (a compound expression other than a 
+special form), evaluate the subexpressions and then apply the value of
+the operator subexpression to the values of the operand
+subexpressions.</li>
+
+<li>To apply a compound procedure to a set of arguments, evaluate the
+body of the procedure in a new environment.  To construct this
+environment, extend the environment part of the procedure object by a
+frame in which the formal parameters of the procedure are bound to the
+arguments to which the procedure is applied.
+</li>
+</ol>
+
+
+<ol class="trans" lang="ja">
+<li>コンビネーション (特殊形式以外の複合的な式) を評価するには、部分式を評価し、それから、オペレータ部分式の値を、オペランド部分式の値に適用せよ。</li>
+<li>複合的な手続きを、一揃いの引数に適用するには、手続きの本体を新たな環境内で評価せよ。この環境を構築するには、手続きの適用先の実引数に手続きの仮引数が束縛されているようなフレームのぶんだけ、手続きオブジェクトの環境部分を拡張せよ。</li>
+</ol>
+
+<p class="orig" lang="en">
+<a name="%_idx_4220"></a>These two rules describe the essence of the evaluation process, a
+basic cycle in which expressions to be evaluated in environments are
+reduced to procedures to be applied to arguments, which in turn are
+reduced to new expressions to be evaluated in new environments, and so
+on, until we get down to symbols, whose values are looked
+up in the environment, and to primitive procedures, which are applied
+directly (see figure <a href="#%_fig_4.1">4.1</a>).<a name="call_footnote_Temp_511" href="#footnote_Temp_511"><sup><small>4</small></sup></a>
+This evaluation cycle will be embodied by the interplay between the two
+critical procedures in the evaluator, <tt>eval</tt> and <tt>apply</tt>,
+which are described in section <a href="#%_sec_4.1.1">4.1.1</a>
+(see figure <a href="#%_fig_4.1">4.1</a>).</p>
+
+<p class="trans" lang="ja">
+これら二つの規則は、評価プロセスの本質を、説明している。すなわち、環境内で評価されるべき式を、実引数に適用されるべき手続きへと還元し、今度はその手続きを、新たな環境で評価されるべき新たな式へと還元し、<!--というふうにして-->以下同様にして、記号——環境内で値を調べられるもの——と原始的手続き——直接的に適用されるもの——のところへ降りてたどり着くまで続ける、という基本的な循環を、説明しているのだ (図<a href="#%_fig_4.1">4.1</a>を参照)<a href="#footnote_Temp_511"><sup><small>4</small></sup></a>。
+この評価の循環は、評価器における二つの重要な手続き——すなわち <tt>eval</tt> と<tt>apply</tt> であり、<a href="#%_sec_4.1.1">4.1.1</a>節でこれらを説明する——の間の相互作用によって、実体化されるだろう (図<a href="#%_fig_4.1">4.1</a>を参照)。
+</p>
+
+<p class="orig" lang="en">
+The implementation of the evaluator will depend upon procedures that
+define the <em>syntax</em> of the expressions to be evaluated.  We will
+use <a name="%_idx_4224"></a>data abstraction to make the evaluator independent of the
+representation of the language.  For example, rather than committing
+to a choice that an assignment is to be represented by a list
+beginning with the symbol <tt>set!</tt> we use an abstract predicate
+<tt>assignment?</tt> to test for an assignment, and we use abstract
+selectors <tt>assignment-variable</tt> and <tt>assignment-value</tt> to
+access the parts of an assignment.  Implementation of expressions will
+be described in detail in section <a href="#%_sec_4.1.2">4.1.2</a>.
+There are also operations, described in
+section <a href="#%_sec_4.1.3">4.1.3</a>, that specify the
+representation of procedures and environments.  For example, <tt>make-procedure</tt> constructs compound procedures, <tt>lookup-variable-value</tt> accesses the values of variables, and <tt>apply-primitive-procedure</tt> applies a primitive procedure to a given list
+of arguments.</p>
+
+<p class="trans" lang="ja">
+評価器の実装は、評価されるべき式の<em><ruby><rb>構文</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby></em>を定義する手続きに依存するだろう。
+私たちは、評価器を言語の表現とは独立したものとするために、データ抽象化を使おう。
+たとえば、<tt>set!</tt> という記号で始まるリストによって<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>が表現されることになる、という選択肢に入れ込むよりもむしろ、私たちは、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>について調べるための <tt>assignment?</tt> という抽象的述語を使い、そして、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>の部分部分にアクセスするための <tt>assignment-variable</tt> および <tt>assignment-value</tt> という抽象的セレクタを使う。
+式の実装は、<a href="#%_sec_4.1.2">4.1.2</a>節で詳しく説明しよう。
+手続きと環境を指定する演算——<a href="#%_sec_4.1.3">4.1.3</a>節で説明する——も、存在する。
+たとえば、<tt>make-procedure</tt> は複合的手続きを構築し、<tt>lookup-variable-value</tt> は変数の値にアクセスし、<tt>apply-primitive-procedure</tt> は与えられた引数のリストに原始的手続きを適用する。
+</p>
+
+<a name="%_sec_4.1.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.1">4.1.1  The Core of the Evaluator</a></h3>
+<h3 class="trans" lang="ja">4.1.1 評価器の核</h3>
+
+
+<a name="%_idx_4226"></a>
+<a name="%_fig_4.1"></a>
+<figure>
+<img src="ch4-Z-G-1.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 4.1:</b>  The <tt>eval</tt>-<tt>apply</tt> cycle exposes the essence
+of a computer language.</figcaption>
+<figcaption class="trans" lang="ja"><b>図4.1:</b> <tt>eval</tt>-<tt>apply</tt> の循環がコンピュータ言語の本質を<ruby><rb>露</rb><rp> (</rp><rt>あら</rt><rp>) </rp></ruby>わにする。</figcaption>
+<a name="%_idx_4228"></a>
+</figure>
+
+
+<p class="orig" lang="en">
+The evaluation process can be described as the interplay between two
+procedures: <tt>eval</tt> and <tt>apply</tt>.</p>
+
+<p class="trans" lang="ja">
+評価プロセスは、二つの手続き——すなわち <tt>eval</tt> と <tt>apply</tt> ——の間の相互作用として、記述することが可能である。
+</p>
+
+
+<a name="%_sec_Temp_512"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_512">Eval</a></h4>
+<h4 class="trans" lang="ja">eval</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_4230"></a><tt>Eval</tt> takes as arguments an expression and an environment.  It
+classifies the expression and directs its evaluation.  <tt>Eval</tt> is
+structured as a case analysis of the syntactic type of the expression
+to be evaluated.  In order to keep the procedure general, we express
+the determination of the type of an expression abstractly, making no
+commitment to any particular <a name="%_idx_4232"></a>representation for the various types of
+expressions.  Each type of expression has a predicate that tests for
+it and an abstract means for selecting its parts.  This <a name="%_idx_4234"></a><a name="%_idx_4236"></a><em>abstract
+syntax</em> makes it easy to see how we can change the syntax of the
+language by using the same evaluator, but with a different collection of
+syntax procedures.</p>
+
+<p class="trans" lang="ja">
+<tt>eval</tt> は、引数として式と環境をとる。
+<tt>eval</tt> は、その式を分類して、その式の評価を指揮する。
+<tt>eval</tt> は、評価すべき式の文法上の種類についての場合分け分析として、構造化される。
+この手続きを一般的なままに保つために、私たちは、様々な種類の式の、いかなる特定の表現にも関与せずに、式の種類の決定を抽象的に表現する。
+それぞれの種類の式には、その種類の式かどうかを検査するための述語と、その種類の式のうちの一部を選択するための抽象的手段がある。
+この<em>抽象的文法</em>により、どうすれば同じ評価器——ただし、文法手続きの別の集まりを伴うもの——を使って言語の文法を変えられるのかを理解することが、簡単になる。
+</p>
+
+
+<a name="%_sec_Temp_513"></a>
+<h5 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_513">Primitive expressions</a></h5>
+<h5 class="trans" lang="ja">原始的な式</h5>
+
+<ul class="orig" lang="en">
+<li><a name="%_idx_4238"></a><a name="%_idx_4240"></a>For self-evaluating expressions, such as numbers, <tt>eval</tt> returns
+the expression itself.</li>
+
+<li><tt>Eval</tt> must look up variables in the environment to find their values.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>数などの自己評価的な式については、<tt>eval</tt> は、その式自体を返す。</li>
+<li><tt>eval</tt> は、変数の値を見つけるために、環境内で変数を調べなくてはならない。</li>
+</ul>
+
+<a name="%_sec_Temp_514"></a>
+<h5 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_514">Special forms</a></h5>
+<h5 class="trans" lang="ja">特殊形式</h5>
+
+
+<ul class="orig" lang="en">
+<li>For quoted expressions, <tt>eval</tt> returns the expression that was
+quoted.</li>
+
+<li>An assignment to (or a definition of) a variable must recursively call
+<tt>eval</tt> to compute the new value to be associated with the
+variable.  The environment must be modified to change (or create) the
+binding of the variable.</li>
+
+<li>An <tt>if</tt> expression requires special processing of its parts, so as to
+evaluate the consequent if the predicate is true, and otherwise to
+evaluate the alternative.</li>
+
+<li>A <tt>lambda</tt> expression must be transformed into an
+applicable procedure by packaging together the parameters and body
+specified by the <tt>lambda</tt> expression with the environment of the
+evaluation.</li>
+
+<li>A <tt>begin</tt> expression requires evaluating its sequence of
+expressions in the order in which they appear.</li>
+
+<li>A case analysis (<tt>cond</tt>) is transformed into a nest of <tt>if</tt>
+expressions and then evaluated.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>引用された式については、<tt>eval</tt> は、引用された式を返す。</li>
+<li>変数への<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby> (または変数の定義) は、その変数に関連づけられるべき新たな値を計算するために、再帰的に <tt>eval</tt> を呼ばなくてはならない。
+環境は、その変数の束縛を変更する (または作成する) ように修正されねばならない。</li>
+<li><tt>if</tt> 式は、<tt>if</tt> 式の一部について特殊な処理をする——もし述語が真なら帰結式を評価し、それ以外の場合は代替式を評価するようにする——ことを要する。</li>
+<li><tt>lambda</tt> 式は、<tt>lambda</tt> 式により指定される仮引数と本体を、評価の環境と一緒に一包みにすることで、適用可能な手続きへと変形されねばならない。</li>
+<li><tt>begin</tt> 式は、<tt>begin</tt> 式の一連の式を、それらの式が現れる順に評価することを要する。</li>
+<li>場合分け分析 (<tt>cond</tt>) は、<tt>if</tt> 式の入れ子へと変形され、それから評価される。</li>
+</ul>
+
+
+<a name="%_sec_Temp_515"></a>
+<h5 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_515">Combinations</a></h5>
+<h5 class="trans" lang="ja">コンビネーション</h5>
+
+<ul class="orig" lang="en">
+<li>For a procedure application, <tt>eval</tt> must recursively
+evaluate the operator part and the operands of the combination.  The
+resulting procedure and arguments are passed to <tt>apply</tt>, which
+handles the actual procedure application.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>手続き適用について、<tt>eval</tt> は、コンビネーションの演算子部分とオペランドとを、再帰的に評価せねばならない。
+結果として生じる手続きと実引数が <tt>apply</tt> に渡され、<tt>apply</tt> が実際の手続き適用を取り扱う。</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="%_idx_4242"></a>Here is the definition of <tt>eval</tt>:</p>
+
+<p class="trans" lang="ja">
+ここに <tt>eval</tt> の定義を示す。
+</p>
+
+<p class="lisp">(define (eval exp env)
+  (cond ((self-evaluating? exp) exp)
+        ((variable? exp) (lookup-variable-value exp env))
+        ((quoted? exp) (text-of-quotation exp))
+        ((assignment? exp) (eval-assignment exp env))
+        ((definition? exp) (eval-definition exp env))
+        ((if? exp) (eval-if exp env))
+        ((lambda? exp)
+         (make-procedure (lambda-parameters exp)
+                         (lambda-body exp)
+                         env))
+        ((begin? exp) 
+         (eval-sequence (begin-actions exp) env))
+        ((cond? exp) (eval (cond-&gt;if exp) env))
+        ((application? exp)
+         (apply (eval (operator exp) env)
+                (list-of-values (operands exp) env)))
+        (else
+         (error &quot;Unknown expression type -- EVAL&quot; exp))))
+</p>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4244"></a><a name="%_idx_4246"></a>For clarity, <tt>eval</tt> has been implemented as a case analysis using
+<tt>cond</tt>.  The disadvantage of this is that our procedure handles
+only a few distinguishable types of expressions, and no new ones can
+be defined without editing the definition of <tt>eval</tt>.  In most Lisp
+implementations, dispatching on the type of an expression is done in a
+data-directed style.  This allows a user to add new types of
+expressions that <tt>eval</tt> can distinguish, without modifying the
+definition of <tt>eval</tt> itself.
+(See exercise <a href="#%_thm_4.3">4.3</a>.)</p>
+
+<p class="trans" lang="ja">
+明確さのために、<tt>eval</tt> は、<tt>cond</tt> を用いた場合分け分析として実装されている。
+このことの欠点は、私たちの手続きが少数の区別可能な種類の式のみしか扱わず、<tt>eval</tt> の定義を編集しないことには新たな種類の式を何も定義できない、という点である。
+ほとんどのLisp処理系において、式の種類による<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>は、データ指向的な流儀で行われる。
+これによってユーザは、<tt>eval</tt> が区別できる新たな種類の式を、<tt>eval</tt> 自体の定義を修正せずに、追加できるようになる (練習問題<a href="#%_thm_4.3">4.3</a>を参照)。
+</p>
+
+
+<a name="%_sec_Temp_516"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_516">Apply</a></h4>
+<h4 class="trans" lang="ja">apply</h4>
+
+
+<p class="orig" lang="en">
+<tt>Apply</tt> takes two arguments, a procedure and a list of arguments
+to which the procedure should be applied.  <tt>Apply</tt> classifies
+procedures into two kinds: It calls <a name="%_idx_4248"></a><tt>apply-primitive-procedure</tt> to apply primitives; it applies compound
+procedures by sequentially evaluating the expressions that
+make up the body of the procedure.  The environment for the
+evaluation of the body of a compound procedure
+is constructed by extending the base environment carried by
+the procedure to include a frame that binds the parameters of the
+procedure to the arguments to which the procedure is to be applied.
+Here is the definition of <tt>apply</tt>:</p>
+
+<p class="trans" lang="ja">
+<tt>apply</tt> は二つの実引数をとる——つまり、手続きと、その手続きが適用されるべき実引数のリストである。
+<tt>apply</tt> は手続きを二種類に分類する。
+つまり、<tt>apply</tt> は、プリミティブを適用するためには <tt>apply-primitive-procedure</tt> を呼び出す。
+その一方で、<tt>apply</tt> は、複合的な手続きの本体を構成する式を順に評価することによって、複合的な手続きを適用するのである。
+複合的な手続きの本体の評価のための環境は、その手続きが適用されるべき実引数にその手続きの仮引数を束縛するフレームを含むように、その手続きによって持ち運ばれる基礎環境を拡張することによって、構築される。
+ここに、<tt>apply</tt> の定義を示す。
+</p>
+
+<p class="lisp"><a name="%_idx_4250"></a>(define (apply procedure arguments)
+  (cond ((primitive-procedure? procedure)
+         (apply-primitive-procedure procedure arguments))
+        ((compound-procedure? procedure)
+         (eval-sequence
+           (procedure-body procedure)
+           (extend-environment
+             (procedure-parameters procedure)
+             arguments
+             (procedure-environment procedure))))
+        (else
+         (error
+          &quot;Unknown procedure type -- APPLY&quot; procedure))))
+</p>
+
+
+<a name="%_sec_Temp_517"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_517">Procedure arguments</a></h4>
+<h4 class="trans" lang="ja">手続きの実引数</h4>
+
+<p class="orig" lang="en">
+When <tt>eval</tt> processes a
+procedure application, it uses <tt>list-of-values</tt> to produce the
+list of arguments to which the procedure is to be applied. <tt>List-of-values</tt> takes as an argument the operands of the combination.
+It evaluates each operand and returns a list of the corresponding
+values:<a name="call_footnote_Temp_518" href="#footnote_Temp_518"><sup><small>5</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<tt>eval</tt> が手続き適用を処理するとき、<tt>eval</tt> は、<tt>list-of-values</tt> を用いて、その手続きが適用されるべき実引数のリストを作り出す。
+<tt>list-of-values</tt> は、引数として、コンビネーションのオペランドをとる。
+<tt>list-of-values</tt> は、各オペランドを評価し、対応する値のリストを返す<a name="call_footnote_Temp_518" href="#footnote_Temp_518"><sup><small>5</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4256"></a>(define (list-of-values exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (eval (first-operand exps) env)
+            (list-of-values (rest-operands exps) env))))
+</p>
+
+<a name="%_sec_Temp_519"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_519">Conditionals</a></h4>
+<h4 class="trans" lang="ja">条件式</h4>
+
+
+<p class="orig" lang="en">
+<tt>Eval-if</tt> evaluates the predicate part of an <tt>if</tt> expression
+in the given environment.  If
+the result is true, <tt>eval-if</tt> evaluates the consequent, otherwise
+it evaluates the alternative:</p>
+
+<p class="trans" lang="ja">
+<tt>eval-if</tt> は、<tt>if</tt> 式の述語部分を、与えられた環境内で評価する。
+もし結果が真なら、<tt>eval-if</tt> は帰結式を評価し、そうでなければ、<tt>eval-if</tt> は代替式を評価する。
+</p>
+
+<p class="lisp"><a name="%_idx_4258"></a>(define (eval-if exp env)
+  (if (true? (eval (if-predicate exp) env))
+      (eval (if-consequent exp) env)
+      (eval (if-alternative exp) env)))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4260"></a>The use of <tt>true?</tt> in <tt>eval-if</tt> highlights the issue of the
+connection between an implemented language and an implementation
+language.  The <tt>if-predicate</tt> is evaluated in the language being
+implemented and thus yields a value in that language.  The interpreter
+predicate <tt>true?</tt> translates that value into a value that can be
+tested by the <tt>if</tt> in the implementation language: The
+metacircular representation of truth might not be the same as that of
+the underlying Scheme.<a name="call_footnote_Temp_520" href="#footnote_Temp_520"><sup><small>6</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<tt>eval-if</tt> における <tt>true?</tt> の使用は、実装される言語と実装言語との間の関係の問題を目立たせている。
+<tt>if-predicate</tt> は、実装される言語において評価され、したがって、その言語での値を生み出す。
+<tt>true?</tt> というインタプリタ述語は、その値を、実装言語における <tt>if</tt> によって検査できる値へと、変換する。
+つまり、真であることのメタ循環的な表現は、根底にあるSchemeでの、真であることの表現とは、同じではないかもしれないのである<a href="#footnote_Temp_520"><sup><small>6</small></sup></a>。
+</p>
+
+<a name="%_sec_Temp_521"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_521">Sequences</a></h4>
+<h4 class="trans" lang="ja">並び</h4>
+
+
+<p class="orig" lang="en">
+<tt>Eval-sequence</tt> is used by <tt>apply</tt> to evaluate the sequence of
+expressions in a procedure body and by <tt>eval</tt> to evaluate the
+sequence of expressions in a <tt>begin</tt>
+expression.  It takes as arguments a sequence of expressions and an
+environment, and evaluates the expressions in the order in which they
+occur.  The value returned is the value of the final expression.</p>
+
+<p class="trans" lang="ja">
+<tt>eval-sequence</tt> は、手続き本体の中の一連の式の並びを評価するために <tt>apply</tt> によって使われ、また、<tt>begin</tt> 式の中の一連の式の並びを評価するために、<tt>eval</tt> によって使われる。
+<tt>eval-sequence</tt> は、引数として、一連の式の並びと環境をとり、それらの式が現れる順でそれらの式を評価する。
+返される値は、最後の式の値である。
+</p>
+
+<p class="lisp"><a name="%_idx_4264"></a>(define (eval-sequence exps env)
+  (cond ((last-exp? exps) (eval (first-exp exps) env))
+        (else (eval (first-exp exps) env)
+              (eval-sequence (rest-exps exps) env))))
+</p>
+
+<a name="%_sec_Temp_522"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_522">Assignments and definitions</a></h4>
+<h4 class="trans" lang="ja"><ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義</h4>
+
+<p class="orig" lang="en">
+The following procedure handles assignments to variables.  It calls
+<tt>eval</tt> to find the value to be assigned and transmits the variable
+and the resulting value to <tt>set-variable-value!</tt> to be installed
+in the designated environment.</p>
+
+<p class="trans" lang="ja">
+次の手続きは、変数への<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を取り扱う。
+これは、<tt>eval</tt> を呼び出して、<ruby><rb>代入される</rb><rp> (</rp><rt>わりあてられる</rt><rp>) </rp></ruby>べき値を手に入れ、そして、変数と、結果として得られた値とを <tt>set-variable-value!</tt> に伝えて、指定された環境にこれらが組み込まれるようにする。<span class="note">(to be installed ... の訳について再検討が必要かも?)</span>
+</p>
+
+<p class="lisp"><a name="%_idx_4266"></a>(define (eval-assignment exp env)
+  (set-variable-value! (assignment-variable exp)
+                       (eval (assignment-value exp) env)
+                       env)
+  'ok)
+</p>
+
+<p class="orig" lang="en">Definitions of variables are handled in a similar
+manner.<a name="call_footnote_Temp_523" href="#footnote_Temp_523"><sup><small>7</small></sup></a></p>
+
+<p class="trans" lang="ja">
+似たような方法で、変数の定義が扱われる<a href="#footnote_Temp_523"><sup><small>7</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4268"></a>(define (eval-definition exp env)
+  (define-variable! (definition-variable exp)
+                    (eval (definition-value exp) env)
+                    env)
+  'ok)
+</p>
+
+<p class="orig" lang="en">We have chosen here to return the symbol <tt>ok</tt> as the value
+of an assignment or a definition.<a name="call_footnote_Temp_524" href="#footnote_Temp_524"><sup><small>8</small></sup></a></p>
+
+<p class="trans" lang="ja">
+ここでは、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>または定義の値として、<tt>ok</tt> という記号を返すことを選んだ<a href="#footnote_Temp_524"><sup><small>8</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.1"></a>
+<b>Exercise 4.1.</b>  <a name="%_idx_4270"></a><a name="%_idx_4272"></a>Notice that we cannot tell whether the metacircular evaluator
+evaluates operands from left to right or from right to left.  Its evaluation
+order is inherited from the underlying Lisp:
+If the arguments to <tt>cons</tt> in <tt>list-of-values</tt>
+are evaluated from left to right, then <tt>list-of-values</tt> will
+evaluate operands from left to right; and 
+if the arguments to <tt>cons</tt>
+are evaluated from right to left, then <tt>list-of-values</tt> will
+evaluate operands from right to left.</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.1.</b> メタ循環的な評価器がオペランドを左から右へ評価するのか、それとも右から左へ評価するのか、ということを私たちは判断できないのだ、ということに気づいてほしい。
+評価器の評価順序は、根底にあるLispから受け継がれる。
+もし、<tt>list-of-values</tt> における <tt>cons</tt> への実引数が左から右へ評価されるなら、<tt>list-of-values</tt> はオペランドを左から右へ評価するだろうし、もし、<tt>cons</tt> への実引数が右から左へ評価されるなら、<tt>list-of-values</tt> はオペランドを右から左へ評価するだろう。
+</p>
+
+<p class="orig" lang="en">
+Write a version of <tt>list-of-values</tt> that evaluates operands
+from left to right regardless of the order of evaluation in the underlying
+Lisp.  Also write a version of <tt>list-of-values</tt> that evaluates operands
+from right to left.
+
+
+<p class="trans" lang="ja">
+根底にあるLispにおける評価の順序によらずにオペランドを左から右へ評価するような、<tt>list-of-values</tt> の一バージョンを書け。
+また、オペランドを右から左へ評価するような、<tt>list-of-values</tt> の一バージョンも書け。
+</p>
+
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="%_sec_4.1.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.2">4.1.2  Representing Expressions</a></h3>
+<h3 class="trans" lang="ja">4.1.2 式を表現する</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_4274"></a><a name="%_idx_4276"></a>
+<a name="%_idx_4278"></a>The evaluator is reminiscent of the symbolic differentiation program
+discussed in section <a href="16_sec2_3.html#%_sec_2.3.2">2.3.2</a>.  Both
+programs operate on symbolic expressions.  In both programs, the
+result of operating on a compound expression is determined by
+operating recursively on the pieces of the expression and combining
+the results in a way that depends on the type of the expression.  In
+both programs we used <a name="%_idx_4280"></a>data abstraction to decouple the general rules
+of operation from the details of how expressions are represented.  In
+the differentiation program this meant that the same differentiation
+procedure could deal with algebraic expressions in prefix form, in
+infix form, or in some other form.  For the evaluator, this means that
+the syntax of the language being evaluated is determined solely by the
+procedures that classify and extract pieces of expressions.</p>
+
+<p class="trans" lang="ja">
+この評価器は、<a href="16_sec2_3.html#%_sec_2.3.2">2.3.2</a>節で議論した記号微分プログラムを偲ばせる。
+双方のプログラムは、記号的な式に対して演算を行う<!--動作する-->。
+双方のプログラムにおいて、複合的な式に対して演算を行う<!--動作する-->ことの結果は、その式の部分に対して再帰的に演算を行って<!--動作して-->から式の種類に応じた方法でその結果を結合することによって、決定される。
+双方のプログラムにおいて、私たちは、式がどのように表現されるのかという細目から演算の一般的な規則を分離するために、データ抽象化を用いた。
+微分プログラムでは、これは、前置形式だろうと、中置形式だろうと、あるいは何らかの他の形式だろうと、同じ微分手続きが代数的な式を扱えるだろう、ということを意味した。
+評価器については、これは、評価されている言語の文法が、式の部分を分類・抽出する手続きによってのみ決定されるのだ、ということを意味する。
+</p>
+
+<p class="orig" lang="en">
+Here is the specification of the syntax of our language:
+</p>
+
+<p class="trans" lang="ja">
+ここに私たちの言語の文法の仕様書を示す。
+</p>
+
+<p class="orig" lang="en">
+&curren; The only self-evaluating items are numbers and
+strings:</p>
+
+<ul class="trans white" lang="ja">
+<li>自己評価的な項目は、数と文字列のみである。</li>
+</ul>
+
+
+<p class="lisp"><a name="%_idx_4282"></a>(define (self-evaluating? exp)
+  (cond ((number? exp) true)
+        ((string? exp) true)
+        (else false)))
+</p>
+
+<p class="orig" lang="en">&curren; Variables are represented by symbols:</p>
+
+
+<ul class="trans white" lang="ja">
+<li>変数は記号により表される。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4284"></a>(define (variable? exp) (symbol? exp))
+</p>
+
+
+<p class="orig" lang="en">&curren; Quotations have the form <tt>(quote
+&lt;<em>text-of-quotation</em>&gt;)</tt>:<a name="call_footnote_Temp_526" href="#footnote_Temp_526"><sup><small>9</small></sup></a></p>
+
+
+<ul class="trans white" lang="ja">
+<li>引用は <tt>(quote &lt;<em class="en">text-of-quotation</em>&gt;)</tt> という形をしている<a href="#footnote_Temp_526"><sup><small>9</small></sup></a>。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4286"></a>(define (quoted? exp)
+  (tagged-list? exp 'quote))
+
+<a name="%_idx_4288"></a>(define (text-of-quotation exp) (cadr exp))
+</p>
+
+
+<p class="orig" lang="en"><tt>Quoted?</tt> is defined in terms of the procedure <tt>tagged-list?</tt>, which identifies lists beginning with a designated
+symbol:</p>
+
+<p class="trans" lang="ja">
+<tt>quoted?</tt> は <tt>tagged-list?</tt> という手続きを使って定義されるが、これは、指定された記号で始まるリストを見分けるものである。
+</p>
+
+<p class="lisp"><a name="%_idx_4290"></a>(define (tagged-list? exp tag)
+  (if (pair? exp)
+      (eq? (car exp) tag)
+      false))
+</p>
+
+<p class="orig" lang="en">&curren; Assignments have the form <tt>(set!
+&lt;<em>var</em>&gt; &lt;<em>value</em>&gt;)</tt>:</p>
+
+
+<ul class="trans white" lang="ja">
+<li><ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>は 
+<tt>(set! &lt;<em class="en">var</em>&gt; &lt;<em class="en">value</em>&gt;)</tt>
+という形をしている。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4292"></a>(define (assignment? exp)
+  (tagged-list? exp 'set!))
+<a name="%_idx_4294"></a>(define (assignment-variable exp) (cadr exp))
+<a name="%_idx_4296"></a>(define (assignment-value exp) (caddr exp))
+</p>
+
+<p class="orig" lang="en">&curren; Definitions have the form</p>
+
+
+<ul class="trans white" lang="ja">
+<li>定義は次のような形をしている</li>
+</ul>
+
+<p class="lisp">(define &lt;<em>var</em>&gt; &lt;<em>value</em>&gt;)
+</p>
+
+<p class="orig" lang="en">or the form</p>
+
+<p class="trans" lang="ja">
+か、あるいは、次のような形をしている。
+</p>
+
+<p class="lisp">(define (&lt;<em>var</em>&gt; &lt;<em>parameter<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>parameter<sub><em>n</em></sub></em>&gt;)
+  &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en"><a name="%_idx_4298"></a><a name="%_idx_4300"></a>The latter form (standard procedure definition) is syntactic sugar for</p>
+
+<p class="trans" lang="ja">
+後者の形 (標準的な手続き定義) は、以下のものに対する糖衣構文である。
+</p>
+
+<p class="lisp">(define &lt;<em>var</em>&gt;
+  (lambda (&lt;<em>parameter<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>parameter<sub><em>n</em></sub></em>&gt;)
+    &lt;<em>body</em>&gt;))
+</p>
+
+<p class="orig" lang="en">The corresponding syntax procedures are the following:</p>
+
+<p class="trans" lang="ja">
+対応する文法手続きは以下のとおりである。
+</p>
+
+
+<p class="lisp"><a name="%_idx_4302"></a>(define (definition? exp)
+  (tagged-list? exp 'define))
+<a name="%_idx_4304"></a>(define (definition-variable exp)
+  (if (symbol? (cadr exp))
+      (cadr exp)
+      (caadr exp)))
+<a name="%_idx_4306"></a>(define (definition-value exp)
+  (if (symbol? (cadr exp))
+      (caddr exp)
+      (make-lambda (cdadr exp)   <em>; formal parameters</em>
+                   (cddr exp)))) <em>; body</em>
+</p>
+
+<p class="orig" lang="en">&curren; <tt>Lambda</tt> expressions are lists that begin with the
+symbol <tt>lambda</tt>:</p>
+
+
+<ul class="trans white" lang="ja">
+<li><tt>lambda</tt> 式は、<tt>lambda</tt> という記号で始まるリストである。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4308"></a>(define (lambda? exp) (tagged-list? exp 'lambda))
+<a name="%_idx_4310"></a>(define (lambda-parameters exp) (cadr exp))
+<a name="%_idx_4312"></a>(define (lambda-body exp) (cddr exp))
+</p>
+
+<p class="orig" lang="en">We also provide a constructor for <tt>lambda</tt> expressions,
+which is used by <tt>definition-value</tt>, above:
+</p>
+
+<p class="trans" lang="ja">
+<tt>lambda</tt> 式に対するコンストラクタ——上記の <tt>definition-value</tt> により使われる——も提供する。
+</p>
+
+<p class="lisp"><a name="%_idx_4314"></a>(define (make-lambda parameters body)
+  (cons 'lambda (cons parameters body)))
+</p>
+
+<p class="orig" lang="en">&curren; Conditionals begin with <tt>if</tt> and have a predicate, a
+consequent, and an (optional) alternative.  If the expression has no
+alternative part, we provide <tt>false</tt> as the alternative.<a name="call_footnote_Temp_527" href="#footnote_Temp_527"><sup><small>10</small></sup></a></p>
+
+
+<ul class="trans white" lang="ja">
+<li>条件式は、<tt>if</tt> で始まり、かつ、述語と帰結式と (オプショナルな) 代替式を有する。
+もし、その式に代替式の部分がなければ、<tt>false</tt> を代替式として提供する<a href="#footnote_Temp_527"><sup><small>10</small></sup></a>。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4316"></a>(define (if? exp) (tagged-list? exp 'if))
+<a name="%_idx_4318"></a>(define (if-predicate exp) (cadr exp))
+<a name="%_idx_4320"></a>(define (if-consequent exp) (caddr exp))
+<a name="%_idx_4322"></a>(define (if-alternative exp)
+  (if (not (null? (cdddr exp)))
+      (cadddr exp)
+      'false))
+</p>
+
+<p class="orig" lang="en">We also provide a constructor for <tt>if</tt> expressions,
+to be used by <tt>cond-&gt;if</tt> to transform <tt>cond</tt> expressions
+into <tt>if</tt> expressions:
+</p>
+
+<p class="trans" lang="ja">
+<tt>if</tt> 式のためのコンストラクタも提供する——これは、<tt>cond</tt> 式を <tt>if</tt> 式に変形するために <tt>cond-&gt;if</tt> により使われることになる。
+</p>
+
+<p class="lisp"><a name="%_idx_4324"></a>(define (make-if predicate consequent alternative)
+  (list 'if predicate consequent alternative))
+</p>
+
+<p class="orig" lang="en">&curren; <tt>Begin</tt> packages a sequence of expressions into a single
+expression.  We include syntax operations on <tt>begin</tt> expressions
+to extract the actual sequence from the <tt>begin</tt> expression, as
+well as selectors that return the first expression and the rest of the
+expressions in the sequence.<a name="call_footnote_Temp_528" href="#footnote_Temp_528"><sup><small>11</small></sup></a></p>
+
+
+<ul class="trans white" lang="ja">
+<li><tt>begin</tt> は一連の式の並びを一包みにして、一つの式にまとめる。
+私たちは、最初の式を返すセレクタと、並びのうちの残りすべての式を返すセレクタを含めるとともに、<tt>begin</tt> 式から実際の並びを抽出するための、<tt>begin</tt> 式に対する文法演算を含める<a href="#footnote_Temp_528"><sup><small>11</small></sup></a>。
+</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4326"></a>(define (begin? exp) (tagged-list? exp 'begin))
+<a name="%_idx_4328"></a>(define (begin-actions exp) (cdr exp))
+<a name="%_idx_4330"></a>(define (last-exp? seq) (null? (cdr seq)))
+<a name="%_idx_4332"></a>(define (first-exp seq) (car seq))
+<a name="%_idx_4334"></a>(define (rest-exps seq) (cdr seq))
+</p>
+
+<p class="orig" lang="en">We also include a constructor <tt>sequence-&gt;exp</tt> (for use by
+<tt>cond-&gt;if</tt>) that transforms a sequence into a single expression,
+using <tt>begin</tt> if necessary:</p>
+
+<p class="trans" lang="ja">
+もし必要なら <tt>begin</tt> を使って並びを単一の式へと変形する、(<tt>cond-&gt;if</tt> が使うための) <tt>sequence-&gt;exp</tt> というコンストラクタも、含める。
+</p>
+
+<p class="lisp"><a name="%_idx_4336"></a>(define (sequence-&gt;exp seq)
+  (cond ((null? seq) seq)
+        ((last-exp? seq) (first-exp seq))
+        (else (make-begin seq))))
+<a name="%_idx_4338"></a>(define (make-begin seq) (cons 'begin seq))
+</p>
+
+<p class="orig" lang="en">&curren; A procedure application is any compound expression
+that is not one of the above expression types.  The <tt>car</tt> of the
+expression is the operator, and the <tt>cdr</tt> is the list of operands:</p>
+
+
+<ul class="trans white" lang="ja">
+<li>手続き適用は、上記の式の種類のうちの一つではないような、任意の複合的な式である。
+その式の <tt>car</tt> は演算子であり、<tt>cdr</tt> はオペランドのリストである。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_4340"></a>(define (application? exp) (pair? exp))
+<a name="%_idx_4342"></a>(define (operator exp) (car exp))
+<a name="%_idx_4344"></a>(define (operands exp) (cdr exp))
+<a name="%_idx_4346"></a>(define (no-operands? ops) (null? ops))
+<a name="%_idx_4348"></a>(define (first-operand ops) (car ops))
+<a name="%_idx_4350"></a>(define (rest-operands ops) (cdr ops))
+</p>
+
+<a name="%_sec_Temp_529"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_529">Derived expressions</a></h4>
+<h4 class="trans" lang="ja">派生した式</h4>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4352"></a><a name="%_idx_4354"></a><a name="%_idx_4356"></a><a name="%_idx_4358"></a>
+Some special forms in our language can be defined in terms of
+expressions involving other special forms, rather than being
+implemented directly.  One example is <tt>cond</tt>, which can be
+implemented as a nest of <tt>if</tt> expressions.  For example,
+we can reduce the problem of evaluating the expression</p>
+
+<p class="trans" lang="ja">
+私たちの言語における幾つかの特殊形式は、直接的に実装されるというよりもむしろ、他の特殊形式を含む式を用いて定義できる。
+一例は <tt>cond</tt> であり、これは、<tt>if</tt> 式の入れ子として実装できる。
+たとえば、以下の式を評価する、という問題を還元して、
+</p>
+
+<p class="lisp">(cond ((&gt; x 0) x)
+      ((= x 0) (display 'zero) 0)
+      (else (- x)))
+</p>
+
+<p class="orig" lang="en">to the problem of evaluating the following
+expression involving <tt>if</tt> and <tt>begin</tt> expressions:</p>
+
+<p class="trans" lang="ja">
+<tt>if</tt> 式と <tt>begin</tt> 式を含む以下の式を評価する、という問題へと帰着させることができる。
+</p>
+
+<p class="lisp">(if (&gt; x 0)
+    x
+    (if (= x 0)
+        (begin (display 'zero)
+               0)
+        (- x)))
+</p>
+
+<p class="orig" lang="en">
+Implementing the evaluation of <tt>cond</tt> in this way
+simplifies the evaluator because it reduces the number of special
+forms for which the evaluation process must be explicitly specified.</p>
+
+<p class="trans" lang="ja">
+この方法での <tt>cond</tt> の評価を実装することで、評価プロセスを明示的に指定せねばならない特殊形式の数を減らすことになるため、評価器は簡素化される。
+</p>
+
+<p class="orig" lang="en">
+We include syntax procedures that extract the parts of a <tt>cond</tt>
+expression, and a procedure <tt>cond-&gt;if</tt> that transforms <tt>cond</tt>
+expressions into <tt>if</tt> expressions.  A case analysis begins with <tt>cond</tt> and has a list of predicate-action clauses.  A clause is an <tt>else</tt> clause if its predicate is the symbol <tt>else</tt>.<a name="call_footnote_Temp_530" href="#footnote_Temp_530"><sup><small>12</small></sup></a></p>
+
+<p class="trans" lang="ja">
+私たちは、<tt>cond</tt> 式の部分を抽出する文法手続きと、<tt>cond</tt> 式を <tt>if</tt> 式へと変形する <tt>cond-&gt;if</tt> という手続きとを含める。
+場合分け分析は、<tt>cond</tt> で始まって、述語・動作の節のリストを有する。
+節は、もしその節の述語が <tt>else</tt> という記号なら、<tt>else</tt> 節である<a href="#footnote_Temp_530"><sup><small>12</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4360"></a>(define (cond? exp) (tagged-list? exp 'cond))
+<a name="%_idx_4362"></a>(define (cond-clauses exp) (cdr exp))
+<a name="%_idx_4364"></a>(define (cond-else-clause? clause)
+  (eq? (cond-predicate clause) 'else))
+<a name="%_idx_4366"></a>(define (cond-predicate clause) (car clause))
+<a name="%_idx_4368"></a>(define (cond-actions clause) (cdr clause))
+<a name="%_idx_4370"></a>(define (cond-&gt;if exp)
+  (expand-clauses (cond-clauses exp)))
+
+<a name="%_idx_4372"></a>(define (expand-clauses clauses)
+  (if (null? clauses)
+      'false                          <em>; no <tt>else</tt> clause</em>
+      (let ((first (car clauses))
+            (rest (cdr clauses)))
+        (if (cond-else-clause? first)
+            (if (null? rest)
+                (sequence-&gt;exp (cond-actions first))
+                (error &quot;ELSE clause isn't last -- COND-&gt;IF&quot;
+                       clauses))
+            (make-if (cond-predicate first)
+                     (sequence-&gt;exp (cond-actions first))
+                     (expand-clauses rest))))))
+</p>
+
+<p class="orig" lang="en">
+Expressions (such as <tt>cond</tt>) that we choose to implement as syntactic
+transformations are called <em>derived expressions</em>.
+<tt>Let</tt> expressions are also derived expressions
+(see exercise <a href="#%_thm_4.6">4.6</a>).<a name="call_footnote_Temp_531" href="#footnote_Temp_531"><sup><small>13</small></sup></a></p>
+
+<p class="trans" lang="ja">
+文法上の変形として実装することを私たちが選ぶ式 (<tt>cond</tt> など) は、<em>派生式</em>と呼ばれる。
+<tt>let</tt> 式も、派生式である (練習問題<a href="#%_thm_4.6">4.6</a>を参照)<a href="#footnote_Temp_531"><sup><small>13</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.2"></a>
+<b>Exercise 4.2.</b>  <a name="%_idx_4384"></a>Louis Reasoner plans to reorder the <tt>cond</tt> clauses
+in <tt>eval</tt> so that the clause for procedure applications appears
+before the clause for assignments.  He argues that this will make the
+interpreter more efficient:  Since programs usually contain more
+applications than assignments, definitions, and so on,
+his modified <tt>eval</tt> will usually check fewer
+clauses than the original <tt>eval</tt> before identifying the type of an
+expression.</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.2.</b> ルイス・リーズナは、手続き適用のための節が<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>のための節より前に現れるように、<tt>eval</tt> の中の <tt>cond</tt> 節を整理し直すつもりだ。
+ルイスは、これによってインタプリタがより効率的になるだろう、と主張する。
+プログラムは通常、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>や定義などよりも多くの適用を含むのだから、ルイスの修正した <tt>eval</tt> は、通常、式の種類を突き止めるまでに元の <tt>eval</tt> よりも少数の節を調べるだけで済むだろう。
+</p>
+
+
+<ol class="orig alph" lang="en">
+<li>What is wrong with Louis's plan?  (Hint: What will
+Louis's evaluator do with the expression <tt>(define x 3)</tt>?)
+</li>
+<li>
+<a name="%_idx_4386"></a>Louis is upset that his plan didn't work.
+He is willing to go to any lengths to make his evaluator
+recognize procedure applications before it checks for most other
+kinds of expressions.
+Help him by changing the syntax of the evaluated language so that
+procedure applications start with <tt>call</tt>.  For example, instead of
+<tt>(factorial 3)</tt> we will now have to write <tt>(call factorial 3)</tt>
+and instead of <tt>(+ 1 2)</tt> we will have to write <tt>(call + 1 2)</tt>.
+</li>
+</ol>
+
+
+<ol class="trans alph" lang="ja">
+<li>ルイスの構想の何がおかしいのだろうか?
+(ヒント: <tt>(define x 3)</tt> という式があると、ルイスの評価器は何をするだろう?)</li>
+<li>ルイスは、自分の構想がうまくいかなかったのでうろたえた。
+彼は、何としてでも自分の評価器に、他のほとんどの種類の式を調べる前に手続き適用を認識するようにさせたい。
+手続き適用が <tt>call</tt> で始まるように、評価される側の言語の文法を変更することによって、彼を助けてやってくれたまえ。
+たとえば、<tt>(factorial 3)</tt> の代わりに、私たちはこれから、<tt>(call factorial 3)</tt> と書かねばならないだろうし、<tt>(+ 1 2)</tt>  の代わりに、私たちはこれから、<tt>(call + 1 2)</tt> と書かねばならないだろう。</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.3"></a>
+<b>Exercise 4.3.</b>  <a name="%_idx_4388"></a><a name="%_idx_4390"></a><a name="%_idx_4392"></a>Rewrite <tt>eval</tt> so that the dispatch is done in data-directed
+style.  Compare this with the data-directed
+differentiation procedure of
+exercise <a href="17_sec2_4.html#%_thm_2.73">2.73</a>.
+(You may use the <tt>car</tt> of a compound expression as the
+type of the expression, as is appropriate for the syntax implemented
+in this section.)
+.</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.3.</b> データ指向的な流儀で振り分けが行われるように、<tt>eval</tt> を書き直せ。
+これを、練習問題<a href="17_sec2_4.html#%_thm_2.73">2.73</a>のデータ指向的な微分手続きと比較せよ
+(本節で実装される文法にとって適切なとおり、君は、複合的な式の <tt>car</tt> を、その式の種類として使ってもよい)。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.4"></a>
+<b>Exercise 4.4.</b>  <a name="%_idx_4394"></a><a name="%_idx_4396"></a><a name="%_idx_4398"></a>Recall the definitions of the special forms <tt>and</tt> and <tt>or</tt>
+from chapter 1:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.4.</b> 1章での、<tt>and</tt> および <tt>or</tt> という特殊形式の定義を思い出そう。
+</p>
+
+<ul class="orig" lang="en">
+<li><tt>and</tt>: The expressions are evaluated from
+left to right.  If any expression evaluates to
+false, false is returned; any remaining expressions are not
+evaluated.  If all the expressions evaluate to true values, the value
+of the last expression is returned.  If there are no expressions then
+true is returned.</li>
+
+<li><tt>or</tt>: The expressions are evaluated from left to right.  If any
+expression evaluates to a true value, that value is
+returned; any remaining expressions are not evaluated.  If all
+expressions evaluate to false, or if there are no expressions,
+then false is returned.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li><tt>and</tt>: 式は左から右へ評価される。
+もし、いずれかの式が偽という評価になったら、偽が返される。
+そして、残りのどの式も、評価されない。
+もし、すべての式が真値という評価になったら、最後の式の値が返される。
+もし、式が何もなければ、真が返される。</li>
+<li><tt>or</tt>: 式は左から右へ評価される。
+もし、いずれかの式が真値という評価になったら、その値が返される。
+そして、残りのどの式も、評価されない。
+もし、すべての式が偽という評価になったら、あるいは、もし、式が何もなかったら、偽が返される。</li>
+</ul>
+
+<p class="orig" lang="en">Install <tt>and</tt> and <tt>or</tt> as new special forms for the evaluator
+by defining appropriate syntax procedures and evaluation
+procedures <tt>eval-and</tt> and <tt>eval-or</tt>.  Alternatively, show how
+to implement <tt>and</tt> and <tt>or</tt> as derived expressions.
+</p>
+
+<p class="trans" lang="ja">
+適切な文法手続きと、<tt>eval-and</tt> および <tt>eval-or</tt> という評価手続きとを定義することによって、評価器に対する新たな特殊形式として、<tt>and</tt> および <tt>or</tt> を組み込め。
+あるいは、<tt>and</tt> および <tt>or</tt> を派生式として実装する方法を示せ。
+</p>
+
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.5"></a>
+<b>Exercise 4.5.</b>  <a name="%_idx_4400"></a><a name="%_idx_4402"></a><a name="%_idx_4404"></a>Scheme allows an additional syntax for <tt>cond</tt> clauses, <tt>(&lt;<em>test</em>&gt; =&gt; &lt;<em>recipient</em>&gt;)</tt>.  If &lt;<em>test</em>&gt;
+evaluates to a true value, then &lt;<em>recipient</em>&gt; is evaluated.  Its
+value must be a procedure of one argument; this procedure is then
+invoked on the value of the &lt;<em>test</em>&gt;, and the result is returned as
+the value of the <tt>cond</tt> expression.  For example</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.5.</b> Schemeは <tt>cond</tt> 節に対して、追加的な構文、すなわち、
+<tt>(&lt;<em class="en">test</em>&gt; =&gt; &lt;<em class="en">recipient</em>&gt;)</tt>
+を許している。
+もし &lt;<em class="en">test</em>&gt; が、真値という評価になったら、&lt;<em class="en">recipient</em>&gt; が評価される。
+その値は、一引数の手続きでなくてはならない。そして、この手続きが &lt;<em class="en">test</em>&gt; の値に対して呼び出されて、その結果が、<tt>cond</tt> 式の値として返される。
+たとえば、
+</p>
+
+<p class="lisp">(cond ((assoc 'b '((a 1) (b 2))) =&gt; cadr)
+      (else false))
+</p>
+
+<p class="orig" lang="en">returns 2.
+Modify the handling of <tt>cond</tt> so that it supports this extended
+syntax.
+</p>
+
+<p class="trans" lang="ja">
+は、2を返す。
+<tt>cond</tt> がこの拡張構文をサポートするように、 <tt>cond</tt> の取り扱いを修正せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.6"></a>
+<b>Exercise 4.6.</b>  <a name="%_idx_4406"></a><tt>Let</tt> expressions are derived expressions, because</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.6.</b> <tt>let</tt> 式は派生式である。なぜなら、
+</p>
+
+
+<p class="lisp">(let ((&lt;<em>var<sub>1</sub></em>&gt; &lt;<em>exp<sub>1</sub></em>&gt;) <tt>...</tt> (&lt;<em>var<sub><em>n</em></sub></em>&gt; &lt;<em>exp<sub><em>n</em></sub></em>&gt;))
+  &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en">is equivalent to</p>
+
+<p class="trans" lang="ja">
+は、以下のものと等価だからである。
+</p>
+
+<p class="lisp">((lambda (&lt;<em>var<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>var<sub><em>n</em></sub></em>&gt;)
+   &lt;<em>body</em>&gt;)
+ &lt;<em>exp<sub>1</sub></em>&gt;
+ <img src="book-Z-G-D-18.gif" border="0">
+ &lt;<em>exp<sub><em>n</em></sub></em>&gt;)
+</p>
+
+<p class="orig" lang="en">Implement a syntactic transformation <tt>let-&gt;combination</tt> that
+reduces evaluating <tt>let</tt> expressions to evaluating combinations of
+the type shown above, and add the appropriate clause to <tt>eval</tt> to
+handle <tt>let</tt> expressions.
+</p>
+
+<p class="trans" lang="ja">
+<tt>let</tt> 式を評価することを、上に示した種類のコンビネーションを評価することへと帰着させるような、<tt>let-&gt;combination</tt> という文法上の変形を実装せよ。そして、<tt>let</tt> 式を扱うために、<tt>eval</tt> に適切な節を追加せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.7"></a>
+<b>Exercise 4.7.</b>  <a name="%_idx_4408"></a><a name="%_idx_4410"></a><a name="%_idx_4412"></a><tt>Let*</tt> is similar to <tt>let</tt>, except that the bindings of the <del><tt>let</tt></del> <ins><tt>let*</tt></ins> variables are performed sequentially from left to right, and each
+binding is made in an environment in which all of the preceding
+bindings are visible.  For example
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.7.</b> <tt>let*</tt> は <tt>let</tt> に似ている——ただし、<tt>let*</tt> 変数<span class="note"> (正誤表にしたがって修正した) </span>の束縛が左から右へ順に行われ、かつ、それぞれの束縛は、先行する束縛すべてが見えている環境においてなされる、という点を除いて。
+たとえば、
+</p>
+
+<p class="lisp">(let* ((x 3)
+       (y (+ x 2))
+       (z (+ x y 5)))
+  (* x z))
+</p>
+
+<p class="orig" lang="en">returns 39.  Explain how a <tt>let*</tt> expression can be rewritten as a
+set of nested <tt>let</tt> expressions, and write a procedure <tt>let*-&gt;nested-lets</tt> that performs this transformation.  If we
+have already implemented <tt>let</tt> (exercise <a href="#%_thm_4.6">4.6</a>)
+and we want to
+extend the evaluator to handle <tt>let*</tt>, is it sufficient to add
+a clause to <tt>eval</tt> whose action is
+</p>
+
+<p class="trans" lang="ja">
+は39を返す。<span class="note">(x=3, y=5, z=13となるから。)</span>
+どのようにしたら <tt>let*</tt> 式を、入れ子になった一揃いの <tt>let</tt> 式として書き直せるのか、説明せよ。そして、この変形を行う <tt>let*-&gt;nested-lets</tt> という手続きを書け。
+もし既に <tt>let</tt> を実装していて (練習問題<a href="#%_thm_4.6">4.6</a>)、かつ、<tt>let*</tt> を扱うように評価器を拡張したいとすると、動作が以下の通りであるような節を <tt>eval</tt> に追加するだけで十分だろうか、
+</p>
+
+<p class="lisp">(eval (let*-&gt;nested-lets exp) env)
+</p>
+
+<p class="orig" lang="en">or must we
+explicitly expand <tt>let*</tt> in terms of non-derived expressions?
+</p>
+
+<p class="trans" lang="ja">
+それとも、非派生式を使って明示的に <tt>let*</tt> を展開せねばならないのだろうか?
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.8"></a>
+<b>Exercise 4.8.</b>  <a name="%_idx_4414"></a><a name="%_idx_4416"></a><a name="%_idx_4418"></a><a name="%_idx_4420"></a>``Named <tt>let</tt>'' is a variant of <tt>let</tt> that has the form
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.8.</b> 「名前つき <tt>let</tt>」は、以下の形式を有する、<tt>let</tt> の変種である。
+</p>
+
+<p class="lisp">(let &lt;<em>var</em>&gt; &lt;<em>bindings</em>&gt; &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en">The &lt;<em>bindings</em>&gt; and &lt;<em>body</em>&gt; are just as in ordinary <tt>let</tt>, except that &lt;<em>var</em>&gt; is bound within &lt;<em>body</em>&gt; to a
+procedure whose body is &lt;<em>body</em>&gt; and whose parameters are the
+variables in the &lt;<em>bindings</em>&gt;.  Thus, one can repeatedly execute the
+&lt;<em>body</em>&gt; by invoking the procedure named &lt;<em>var</em>&gt;.  For example,
+the iterative Fibonacci procedure (section <a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>)
+can be rewritten using named <tt>let</tt> as follows:
+</p>
+
+<p class="trans" lang="ja">
+本体が &lt;<em class="en">body</em>&gt; であり仮引数が &lt;<em class="en">bindings</em>&gt; 内の変数であるような手続きへと、&lt;<em class="en">var</em>&gt; が &lt;<em class="en">body</em>&gt; において束縛される、という点を除いて、&lt;<em class="en">bindings</em>&gt; と &lt;<em class="en">body</em>&gt; は元々の <tt>let</tt> とちょうど同じである。
+よって、&lt;<em class="en">var</em>&gt; と名付けられた手続きを呼び出すことによって、繰り返し &lt;<em class="en">body</em>&gt; を実行することが可能だ。
+たとえば、反復的なフィボナッチ手続き (<a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>節) は、名前つき <tt>let</tt> を用いて以下のように書き換えることができる。
+</p>
+
+<p class="lisp"><a name="%_idx_4422"></a>(define (fib n)
+  (let fib-iter ((a 1)
+                 (b 0)
+                 (count n))
+    (if (= count 0)
+        b
+        (fib-iter (+ a b) a (- count 1)))))
+</p>
+
+<p class="orig" lang="en">Modify <tt>let-&gt;combination</tt> of exercise <a href="#%_thm_4.6">4.6</a> to
+also support named <tt>let</tt>.
+</p>
+
+<p class="trans" lang="ja">
+名前つき <tt>let</tt> もサポートするように、練習問題<a href="#%_thm_4.6">4.6</a>の <tt>let-&gt;combination</tt> を修正せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.9"></a>
+<b>Exercise 4.9.</b>  <a name="%_idx_4424"></a><a name="%_idx_4426"></a>Many languages support a variety of iteration constructs, such as <tt>do</tt>, <tt>for</tt>, <tt>while</tt>, and <tt>until</tt>.  In Scheme,
+iterative processes can be expressed in terms of ordinary procedure
+calls, so special iteration constructs provide no essential gain in
+computational power.  On the other hand, such constructs are often
+convenient.  Design some iteration constructs, give examples of their
+use, and show how to implement them as derived expressions.
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.9.</b> 多くの言語は、<tt>do</tt> や <tt>for</tt> や <tt>while</tt> や <tt>until</tt> などの、様々な反復構成をサポートする。
+Schemeでは、反復的プロセスは、普通の手続き呼び出しを使って表現することが可能であり、そのため、特殊な反復構成は、計算能力において何も本質的な進歩をもたらさない。
+他方、そうした構成は、しばしば便利である。
+いくつかの反復構成を設計し、その使用例を示し、それらを派生式として実装する方法を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.10"></a>
+<b>Exercise 4.10.</b>  <a name="%_idx_4428"></a><a name="%_idx_4430"></a>By using data abstraction, we were able to write an <tt>eval</tt>
+procedure that is independent of the particular syntax of the language
+to be evaluated.  To illustrate this, design and implement a new
+syntax for Scheme by modifying the procedures in this section, without
+changing <tt>eval</tt> or <tt>apply</tt>.
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.10.</b> データ抽象化を用いることによって、評価されるべき言語の特定の文法とは独立している <tt>eval</tt> 手続きを書くことも可能だったろう。
+これを例示するために、<tt>eval</tt> も <tt>apply</tt> も変更せずに本節の手続きを修正することによって、Scheme用の新たな文法を設計および実装せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="%_sec_4.1.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.3">4.1.3  Evaluator Data Structures</a></h3>
+<h3 class="trans" lang="ja">4.1.3 評価器のデータ構造</h3>
+
+<p class="orig" lang="en">
+In addition to defining the external syntax of expressions, the
+evaluator implementation must also define the data structures that the
+evaluator manipulates internally, as part of the execution of a
+program, such as the representation of procedures and environments and
+the representation of true and false.</p>
+
+<p class="trans" lang="ja">
+式についての外部的文法を定義するのに加えて、評価器の実装は、プログラムの実行の一部として評価器が内部的に操作するデータ構造——手続きと環境の表現や、真と偽の表現など——も、定義せねばならない。
+</p>
+
+
+<a name="%_sec_Temp_541"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_541">Testing of predicates</a></h4>
+<h4 class="trans" lang="ja">述語の検査</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_4432"></a>For conditionals, we accept anything to be true that is not
+the explicit <tt>false</tt> object.</p>
+
+<p class="trans" lang="ja">
+条件式については、明示的な <tt>false</tt> オブジェクトではないものは何でも、真と認める。
+</p>
+
+<p class="lisp"><a name="%_idx_4434"></a>(define (true? x)
+  (not (eq? x false)))
+<a name="%_idx_4436"></a>(define (false? x)
+  (eq? x false))
+</p>
+
+<a name="%_sec_Temp_542"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_542">Representing procedures</a></h4>
+<h4 class="trans" lang="ja">手続きを表現する</h4>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4438"></a>
+To handle primitives, we assume that we have available the
+following procedures:</p>
+
+<p class="trans" lang="ja">
+プリミティブを扱うために、私たちは、以下の手続きを利用可能にしてあるものと想定する。
+</p>
+
+<ul class="orig" lang="en">
+<li><a name="%_idx_4440"></a><tt>(apply-primitive-procedure &lt;<em>proc</em>&gt; &lt;<em>args</em>&gt;)</tt>
+applies the given primitive procedure to the argument values in the
+list &lt;<em>args</em>&gt; and returns the result of the application.</li>
+
+<li><a name="%_idx_4442"></a><tt>(primitive-procedure? &lt;<em>proc</em>&gt;)</tt>
+tests whether &lt;<em>proc</em>&gt; is a primitive procedure.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li><tt>(apply-primitive-procedure &lt;<em class="en">proc</em>&gt; &lt;<em class="en">args</em>&gt;)</tt>
+は、与えられた原始的手続きを、&lt;<em class="en">args</em>&gt; というリスト内の実引数の値へと適用し、適用の結果を返す。</li>
+<li><tt>(primitive-procedure? &lt;<em class="en">proc</em>&gt;)</tt>
+は、&lt;<em class="en">proc</em>&gt; が原始的手続きか否かを調べる。</li>
+</ul>
+
+<p class="orig" lang="en">
+These mechanisms for handling primitives are further described in
+section <a href="#%_sec_4.1.4">4.1.4</a>.</p>
+
+<p class="trans" lang="ja">
+プリミティブを扱うためのこれらの仕組みは、<a href="#%_sec_4.1.4">4.1.4</a>節でさらに説明される。
+</p>
+
+<p class="orig" lang="en">
+Compound procedures are constructed from parameters, procedure
+bodies, and environments using the constructor <tt>make-procedure</tt>:</p>
+
+<p class="trans" lang="ja">
+複合的な手続きは、仮引数と手続き本体と環境から、<tt>make-procedure</tt> というコンストラクタを用いて構築される。
+</p>
+
+<p class="lisp"><a name="%_idx_4444"></a>(define (make-procedure parameters body env)
+  (list 'procedure parameters body env))
+<a name="%_idx_4446"></a>(define (compound-procedure? p)
+  (tagged-list? p 'procedure))
+<a name="%_idx_4448"></a>(define (procedure-parameters p) (cadr p))
+<a name="%_idx_4450"></a>(define (procedure-body p) (caddr p))
+<a name="%_idx_4452"></a>(define (procedure-environment p) (cadddr p))
+</p>
+
+<a name="%_sec_Temp_543"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_543">Operations on Environments</a></h4>
+<h4 class="trans" lang="ja">環境に対する操作</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_4454"></a>
+The evaluator needs operations for manipulating environments.  As
+explained in section <a href="21_sec3_2.html#%_sec_3.2">3.2</a>, an environment is a
+sequence of frames, where each frame is a table of bindings that
+associate variables with their corresponding values.  We use
+the following operations for manipulating environments:</p>
+
+<p class="trans" lang="ja">
+評価器には、環境を操作するための演算が必要だ。
+<a href="21_sec3_2.html#%_sec_3.2">3.2</a>節で説明したように、環境とは一連のフレームであり、ここで各フレームは、変数をそれに対応する値に関連づける束縛の表である。
+私たちは、環境を操作するために以下の演算を使う。
+</p>
+
+<ul class="orig" lang="en">
+<a name="%_idx_4456"></a><li><tt>(lookup-variable-value &lt;<em>var</em>&gt; &lt;<em>env</em>&gt;)</tt>
+returns the value that is bound to the symbol &lt;<em>var</em>&gt; in the
+environment &lt;<em>env</em>&gt;, or signals an error if the variable is unbound.</li>
+
+<li><a name="%_idx_4458"></a><tt>(extend-environment &lt;<em>variables</em>&gt; &lt;<em>values</em>&gt; &lt;<em>base-env</em>&gt;)</tt>
+returns a new environment, consisting of a new frame in which the
+symbols in the list &lt;<em>variables</em>&gt; are bound to the corresponding
+elements in the list &lt;<em>values</em>&gt;, where the enclosing environment is
+the environment &lt;<em>base-env</em>&gt;.</li>
+
+<li><a name="%_idx_4460"></a><tt>(define-variable! &lt;<em>var</em>&gt; &lt;<em>value</em>&gt; &lt;<em>env</em>&gt;)</tt>
+adds to the first frame in the environment &lt;<em>env</em>&gt; a new binding that
+associates the variable &lt;<em>var</em>&gt; with the value &lt;<em>value</em>&gt;.</li>
+
+<li><a name="%_idx_4462"></a><tt>(set-variable-value! &lt;<em>var</em>&gt; &lt;<em>value</em>&gt; &lt;<em>env</em>&gt;)</tt>
+changes the binding of the variable &lt;<em>var</em>&gt; in the environment &lt;<em>env</em>&gt;
+so that the variable is now bound to the value &lt;<em>value</em>&gt;, or signals
+an error if the variable is unbound.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li><tt>(lookup-variable-value &lt;<em class="en">var</em>&gt; &lt;<em class="en">env</em>&gt;)</tt>
+は、&lt;<em class="en">env</em>&gt; という環境において &lt;<em class="en">var</em>&gt; という記号に束縛されている値を返す。あるいは、もしその変数が束縛されていなければ、エラーの合図を出す。
+</li>
+<li><tt>(extend-environment &lt;<em class="en">variables</em>&gt; &lt;<em class="en">values</em>&gt; &lt;<em class="en">base-env</em>&gt;)</tt>
+は、新たな環境—— &lt;<em class="en">variables</em>&gt; というリスト内の記号が、&lt;<em class="en">values</em>&gt; というリスト内の対応する要素に束縛されているような、新たなフレームからなり、外側を囲う環境は &lt;<em class="en">base-env</em>&gt; という環境である、というもの——を返す。
+</li>
+<li><tt>(define-variable! &lt;<em class="en">var</em>&gt; &lt;<em class="en">value</em>&gt; &lt;<em class="en">env</em>&gt;)</tt>
+は、&lt;<em class="en">var</em>&gt; という変数を &lt;<em class="en">value</em>&gt; という値に関連づける新たな束縛を、&lt;<em class="en">env</em>&gt; という環境内の最初のフレームに追加する。
+</li>
+<li><tt>(set-variable-value! &lt;<em class="en">var</em>&gt; &lt;<em class="en">value</em>&gt; &lt;<em class="en">env</em>&gt;)</tt>
+は、 &lt;<em class="en">env</em>&gt; という環境内の &lt;<em class="en">var</em>&gt; という変数の束縛を、この変数が今からは &lt;<em class="en">value</em>&gt; という値に束縛されるように、変更する。あるいは、もしその変数が束縛されていなければ、エラーの合図を出す。
+</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="%_idx_4464"></a>To implement these operations we represent an environment as a list of
+frames.  The enclosing environment of an environment is the <tt>cdr</tt> of
+the list.  The empty environment is simply the empty list.</p>
+
+<p class="trans" lang="ja">
+これらの演算を実装するために、フレームのリストとして環境を表現する。
+ある環境の、外側を囲う環境は、そのリストの <tt>cdr</tt> である。
+空の環境は、単に、空リストである。
+</p>
+
+<p class="lisp"><a name="%_idx_4466"></a>(define (enclosing-environment env) (cdr env))
+<a name="%_idx_4468"></a>(define (first-frame env) (car env))
+(define the-empty-environment '())
+</p>
+
+<p class="orig" lang="en">Each frame of an environment is represented as a pair of lists: a list
+of the variables bound in that frame and a list of the associated values.<a name="call_footnote_Temp_544" href="#footnote_Temp_544"><sup><small>14</small></sup></a>
+</p>
+
+
+<p class="trans" lang="ja">
+ある環境のそれぞれのフレームは、リスト——そのフレームで束縛される変数のリストと、関連づけられた値のリスト——の対として、表現される<a href="#footnote_Temp_544"><sup><small>14</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4470"></a>(define (make-frame variables values)
+  (cons variables values))
+<a name="%_idx_4472"></a>(define (frame-variables frame) (car frame))
+<a name="%_idx_4474"></a>(define (frame-values frame) (cdr frame))
+<a name="%_idx_4476"></a>(define (add-binding-to-frame! var val frame)
+  (set-car! frame (cons var (car frame)))
+  (set-cdr! frame (cons val (cdr frame))))
+</p>
+
+<p class="orig" lang="en">
+To extend an environment by a new frame that associates variables with
+values, we make a frame consisting of the list of variables and the
+list of values, and we adjoin this to the environment.  We signal
+an error if the number of variables does not match the number of values.</p>
+
+<p class="trans" lang="ja">
+変数を値に関連づける新たなフレームによって環境を拡張するためには、変数のリストと値のリストからなるフレームを作り、これを環境に付け加える。
+もし、変数の個数が値の個数と一致しなかったら、エラーの合図を送る。
+</p>
+
+
+<p class="lisp"><a name="%_idx_4478"></a>(define (extend-environment vars vals base-env)
+  (if (= (length vars) (length vals))
+      (cons (make-frame vars vals) base-env)
+      (if (&lt; (length vars) (length vals))
+          (error &quot;Too many arguments supplied&quot; vars vals)
+          (error &quot;Too few arguments supplied&quot; vars vals))))
+</p>
+
+<p class="orig" lang="en">
+To look up a variable in an environment, we scan the list of variables
+in the first frame.  If we find the desired variable, we return
+the corresponding element in the list of values.  If we do not find
+the variable in the current frame, we search the enclosing environment,
+and so on.  If we reach the empty environment, we signal an ``unbound
+variable'' error.</p>
+
+<p class="trans" lang="ja">
+環境内で変数を調べるためには、最初のフレームで変数のリストを走査する。
+所望の変数を見つけたら、値のリスト内の対応する要素を返す。
+現在のフレームではその変数が見つからなかったら、外側を囲う環境を探索し、以下同様である。
+もし空の環境にたどり着いたら、「未束縛変数」エラーの合図を出す。
+</p>
+
+<p class="lisp"><a name="%_idx_4480"></a>(define (lookup-variable-value var env)
+  (define (env-loop env)
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (env-loop (enclosing-environment env)))
+            ((eq? var (car vars))
+             (car vals))
+            (else (scan (cdr vars) (cdr vals)))))
+    (if (eq? env the-empty-environment)
+        (error &quot;Unbound variable&quot; var)
+        (let ((frame (first-frame env)))
+          (scan (frame-variables frame)
+                (frame-values frame)))))
+  (env-loop env))
+</p>
+
+
+<p class="orig" lang="en">
+To set a variable to a new value in a specified environment, we scan
+for the variable, just as in <tt>lookup-variable-value</tt>, and change
+the corresponding value when we find it.</p>
+
+<p class="trans" lang="ja">
+指定された環境内で変数を新たな値に設定するには、<tt>lookup-variable-value</tt> におけるのとちょうど同じようにして、その変数を求めて走査し、もしその変数を見つけたら、対応する値を変更する。
+</p>
+
+
+<p class="lisp"><a name="%_idx_4482"></a>(define (set-variable-value! var val env)
+  (define (env-loop env)
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (env-loop (enclosing-environment env)))
+            ((eq? var (car vars))
+             (set-car! vals val))
+            (else (scan (cdr vars) (cdr vals)))))
+    (if (eq? env the-empty-environment)
+        (error &quot;Unbound variable -- SET!&quot; var)
+        (let ((frame (first-frame env)))
+          (scan (frame-variables frame)
+                (frame-values frame)))))
+  (env-loop env))
+</p>
+
+<p class="orig" lang="en">
+To define a variable, we search the first frame for a binding for
+the variable, and change the binding if it exists
+(just as in <tt>set-variable-value!</tt>).  If no such binding
+exists, we adjoin one to the first frame.</p>
+
+<p class="trans" lang="ja">
+変数を定義するには、その変数についての束縛を最初のフレームにおいて探し、もしその変数が存在すれば、束縛を変更する (<tt>set-variable-value!</tt> におけるのとちょうど同じようにする)。
+もしそのような束縛が存在しなければ、そのような束縛を最初のフレームに付け加える。
+</p>
+
+
+<p class="lisp"><a name="%_idx_4484"></a>(define (define-variable! var val env)
+  (let ((frame (first-frame env)))
+    (define (scan vars vals)
+      (cond ((null? vars)
+             (add-binding-to-frame! var val frame))
+            ((eq? var (car vars))
+             (set-car! vals val))
+            (else (scan (cdr vars) (cdr vals)))))
+    (scan (frame-variables frame)
+          (frame-values frame))))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4486"></a>The method described here is only one of many plausible ways to
+represent environments.  Since we used data abstraction to isolate the
+rest of the evaluator from the detailed choice of representation, we
+could change the environment representation if we wanted to.  (See
+exercise <a href="#%_thm_4.11">4.11</a>.)  In a
+production-quality Lisp system, the speed of the evaluator's
+environment operations -- especially that of variable lookup -- has a
+major impact on the performance of the system.  The representation
+described here, although conceptually simple, is not efficient and
+would not ordinarily be used in a production system.<a name="call_footnote_Temp_545" href="#footnote_Temp_545"><sup><small>15</small></sup></a></p>
+
+<p class="trans" lang="ja">
+ここで説明した方法は、環境を表現するための多くのもっともらしい方法のうちの一つにすぎない。
+表現についての詳細な選択肢から、評価器の残りの部分を切り離すために、私たちはデータ抽象化を使ったので、もし望むなら環境の表現を変えることもできただろう (練習問題<a href="#%_thm_4.11">4.11</a>を参照)。
+製品レベルの品質のLispシステムでは、評価器の環境演算の速さ——とりわけ、変数を調べることの速さ——が、システムの性能に対して大きな影響を与える。
+ここで説明した表現は、概念的に簡素ではあるのだが、効率的ではなく、製品システムでは普通は使われないであろう<a href="#footnote_Temp_545"><sup><small>15</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.11"></a>
+<b>Exercise 4.11.</b>  Instead of representing a frame as a pair of lists, we can represent a
+frame as a list of bindings, where each binding is a name-value pair.
+Rewrite the environment operations to use this alternative
+representation.
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.11.</b> フレームをリストの対として表現する代わりに、フレームを束縛のリスト——ただし、各束縛は、名前と値の対である——として表現することができる。
+この代替表現を使うように、環境演算を書き直せ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.12"></a>
+<b>Exercise 4.12.</b>  The procedures <tt>set-variable-value!</tt>, <tt>define-variable!</tt>,
+and <tt>lookup-variable-value</tt> can be expressed in terms of
+more abstract procedures for traversing the environment structure.
+Define abstractions that capture the common patterns and redefine
+the three procedures in terms of these abstractions.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.12.</b>  <tt>set-variable-value!</tt> と <tt>define-variable!</tt> と <tt>lookup-variable-value</tt> という手続きは、環境構造を<ruby><rb>トラバースする</rb><rp> (</rp><rt>あちこちみてまわる</rt><rp>) </rp></ruby>ための、より抽象的な手続きを使って表せる。
+共通のパタンをつかまえる抽象概念を定義し、この抽象概念を使って、上記の三つの手続きを再定義せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.13"></a>
+<b>Exercise 4.13.</b>  Scheme allows us to create new bindings for variables by means of <tt>define</tt>, but provides no way to get rid of bindings.  Implement for
+the evaluator a special form <tt>make-unbound!</tt> that removes the
+binding of a given symbol from the environment in which the
+<tt>make-unbound!</tt> expression is evaluated.
+This problem is not completely specified.  For example,
+should we remove only the binding in the first frame of the
+environment?  Complete the specification and justify any choices you
+make.
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.13.</b> Schemeは、<tt>define</tt> を用いて変数に対する新たな束縛を作成することを可能としているが、束縛を取り除くための方法は何も提供していない。
+<tt>make-unbound!</tt> という特殊形式—— <tt>make-unbound!</tt> 式が評価される環境から、与えられた記号の束縛を除去するもの——を、評価器のために実装せよ。
+この問題は、完全に仕様が指定されているわけではない。
+たとえば、環境の最初のフレーム内の束縛のみを取り除くべきなのか?
+仕様を完成させ、君のおこなったどの選択についても、それが正しいことを示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="%_sec_4.1.4"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.4">4.1.4  Running the Evaluator as a Program</a></h3>
+<h3 class="trans" lang="ja">4.1.4 評価器をプログラムとして実行する</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_4492"></a>
+Given the evaluator, we have in our hands a description
+(expressed in Lisp) of the process
+by which Lisp expressions are evaluated.  One advantage of expressing the
+evaluator as a program is that we can run the program.  This gives us,
+running within Lisp, a working model of how Lisp itself evaluates
+expressions.  This can serve as a framework for experimenting with
+evaluation rules, as we shall do later in this chapter.</p>
+
+<p class="trans" lang="ja">
+評価器が与えられると、私たちは、Lisp式を評価するプロセスの、(Lisp で表現された) 説明書を手にしていることになる。
+評価器をプログラムとして表すことの一つの利点は、そのプログラムを実行できる点だ。
+Lisp内で<!--実行すると-->動作しているとき、これは、Lisp自体がどのようにして式を評価するのか、ということについての、きちんと機能するモデルを与えてくれる。
+このことは、評価規則を使って実験を行うための枠組みとして、役立つことができる——本章で後に私たちが行うことになるとおりに。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_4494"></a>Our evaluator program reduces expressions ultimately to the
+application of primitive procedures.  Therefore, all that we need to
+run the evaluator is to create a mechanism that calls on the underlying
+Lisp system to model the application of primitive procedures.</p>
+
+<p class="trans" lang="ja">
+私たちの評価器プログラムは、式を、究極的には原始的手続きの適用にまで還元する。
+したがって、評価器を実行するために私たちが必要としていることは、ただ、根底にあるLispシステムに対して、原始的手続きの適用をモデル化してくれるように依頼する仕組みを作成することだけなのだ。
+</p>
+
+<p class="orig" lang="en">
+There must be a binding for each primitive procedure name, so that when
+<tt>eval</tt> evaluates the operator of an application of a primitive, it
+will find an object to pass to <tt>apply</tt>.  We thus set up a <a name="%_idx_4496"></a><a name="%_idx_4498"></a>global
+environment that associates unique objects with the names of the
+primitive procedures that can appear
+in the expressions we will be evaluating.  The
+global environment also includes bindings for the symbols <a name="%_idx_4500"></a><tt>true</tt> and
+<tt>false</tt>, so that they can be used as variables in expressions
+to be evaluated.</p>
+
+<p class="trans" lang="ja">
+それぞれの原始的手続き名に対して束縛があるはずであり、その結果、<tt>eval</tt> は、プリミティブの適用の演算子を評価するときに、<tt>apply</tt> に渡すべきオブジェクトを見つけることになるだろう。
+よって、私たちが評価しているであろう式の中に現れることが可能な原始的手続きの名前に一意なオブジェクトを関連づける大域環境を、私たちは設定する。
+大域環境は、<tt>true</tt> および <tt>false</tt> という記号に対する束縛も含み、その結果、それらの記号を、評価されることになる式の中で変数として使うことが可能となる。
+</p>
+
+<p class="lisp"><a name="%_idx_4502"></a>(define (setup-environment)
+  (let ((initial-env
+         (extend-environment (primitive-procedure-names)
+                             (primitive-procedure-objects)
+                             the-empty-environment)))
+    (define-variable! 'true true initial-env)
+    (define-variable! 'false false initial-env)
+    initial-env))
+<a name="%_idx_4504"></a>(define the-global-environment (setup-environment))
+</p>
+
+<p class="orig" lang="en">
+It does not matter how we represent the primitive procedure objects,
+so long as <tt>apply</tt> can identify and apply them by using the
+procedures <tt>primitive-procedure?</tt> and <tt>apply-primitive-procedure</tt>.  We have chosen to represent a primitive
+procedure as a list beginning with the symbol <tt>primitive</tt> and
+containing a procedure in the underlying Lisp that implements that primitive.</p>
+
+<p class="trans" lang="ja">
+原始的手続きオブジェクトをどのように表現するのか、ということは、<tt>primitive-procedure?</tt> および <tt>apply-primitive-procedure</tt> という手続きを使って <tt>apply</tt> がそれら原始的手続きオブジェクトを識別して適用することができる限りにおいて、重要ではない。
+私たちは原始的手続きを、<tt>primitive</tt> という記号で始まり、かつ、そのプリミティブを実装している、根底にあるLispでの手続きを含んでいるようなリストとして、表現することを選んだ。
+</p>
+
+<p class="lisp"><a name="%_idx_4506"></a>(define (primitive-procedure? proc)
+  (tagged-list? proc 'primitive))
+
+<a name="%_idx_4508"></a>(define (primitive-implementation proc) (cadr proc))
+</p>
+
+
+<p class="orig" lang="en">
+<tt>Setup-environment</tt> will get the primitive names and implementation
+procedures from a list:<a name="call_footnote_Temp_549" href="#footnote_Temp_549"><sup><small>16</small></sup></a></p>
+
+<p class="trans" lang="ja">
+<tt>setup-environment</tt> は、プリミティブ名と実装手続きとをリストから取得するだろう<a href="#footnote_Temp_549"><sup><small>16</small></sup></a>。
+</p>
+
+<p class="lisp">(define primitive-procedures
+  (list (list 'car car)
+        (list 'cdr cdr)
+        (list 'cons cons)
+        (list 'null? null?)
+        &lt;<em>more primitives</em>&gt;
+        ))
+<a name="%_idx_4510"></a>(define (primitive-procedure-names)
+  (map car
+       primitive-procedures))
+
+(define (primitive-procedure-objects)
+<a name="%_idx_4512"></a>  (map (lambda (proc) (list 'primitive (cadr proc)))
+       primitive-procedures))
+</p>
+
+<p class="orig" lang="en">
+To apply a primitive procedure, we simply apply the implementation
+procedure to the arguments, using the underlying Lisp system:<a name="call_footnote_Temp_550" href="#footnote_Temp_550"><sup><small>17</small></sup></a></p>
+
+<p class="trans" lang="ja">
+原始的手続きを適用するためには、単に、根底にあるLispシステムを使って、実装手続きを実引数に適用する<a href="#footnote_Temp_550"><sup><small>17</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_4514"></a>(define (apply-primitive-procedure proc args)
+  (apply-in-underlying-scheme
+   (primitive-implementation proc) args))
+</p>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4516"></a><a name="%_idx_4518"></a>For convenience in running the metacircular evaluator, we provide a <em>driver loop</em> that models the read-eval-print loop of the underlying
+Lisp system.  It prints a <a name="%_idx_4520"></a><em>prompt</em>, reads an input expression,
+evaluates this expression in the global environment, and prints the
+result.  We precede each printed result by an <em>output prompt</em> so
+as to distinguish the value of the expression from other
+output that may be printed.<a name="call_footnote_Temp_551" href="#footnote_Temp_551"><sup><small>18</small></sup></a></p>
+
+<p class="trans" lang="ja">
+メタ循環的な評価器を実行する便宜上、私たちは、根底にあるLispシステムの<ruby><rb>読み込み・評価・印字</rb><rp> (</rp><rt>read - eval - print</rt><rp>) </rp></ruby>ループをモデル化する<em>ドライバ・ループ</em>を提供する。
+これは、<em>プロンプト</em>を印字し、入力式を読み込み、この式を大域環境内で評価し、その結果を印字する。
+その式の値を、印字される可能性のある他の出力とは区別するように、それぞれの印字される結果に先立って、<em>出力プロンプト</em>を置く<a href="#footnote_Temp_551"><sup><small>18</small></sup></a>。
+</p>
+
+
+<p class="lisp"><a name="%_idx_4530"></a>(define input-prompt &quot;;;; M-Eval input:&quot;)
+(define output-prompt &quot;;;; M-Eval value:&quot;)
+<a name="%_idx_4532"></a>(define (driver-loop)
+  (prompt-for-input input-prompt)
+  (let ((input (read)))
+    (let ((output (eval input the-global-environment)))
+      (announce-output output-prompt)
+      (user-print output)))
+  (driver-loop))
+<a name="%_idx_4534"></a>(define (prompt-for-input string)
+  (newline) (newline) (display string) (newline))
+
+<a name="%_idx_4536"></a>(define (announce-output string)
+  (newline) (display string) (newline))
+</p>
+
+<p class="orig" lang="en">We use a special printing procedure, <tt>user-print</tt>, to avoid printing the
+environment part of a compound procedure, which may be a very long list
+(or may even contain cycles).</p>
+
+<p class="trans" lang="ja">
+複合的な式のうちの環境の部分——非常に長いリストであるかもしれない (あるいは、循環を含むことさえあり得る) ——を印字することを避けるために、特殊な印字手続き——すなわち、<tt>user-print</tt> ——を使う。
+</p>
+
+<p class="lisp"><a name="%_idx_4538"></a>(define (user-print object)
+  (if (compound-procedure? object)
+      (display (list 'compound-procedure
+                     (procedure-parameters object)
+                     (procedure-body object)
+                     '&lt;procedure-env&gt;))
+      (display object)))
+</p>
+
+<p class="orig" lang="en">
+Now all we need to do to run the evaluator is to initialize the
+global environment and start the driver loop.  Here is a sample
+interaction:</p>
+
+<p class="trans" lang="ja">
+さて今や、評価器を実行するためにせねばならないことは、ただ、大域環境を初期化してドライバ・ループを開始させることのみである。
+ここに例示のやりとりを示す。
+</p>
+
+
+<p class="lisp">(define the-global-environment (setup-environment))
+(driver-loop)
+<i>;;; M-Eval input:</i>
+(define (append x y)
+  (if (null? x)
+      y
+      (cons (car x)
+            (append (cdr x) y))))
+<i>;;; M-Eval value:</i>
+<i>ok</i>
+<i>;;; M-Eval input:</i>
+(append '(a b c) '(d e f))
+<i>;;; M-Eval value:</i>
+<i>(a b c d e f)</i>
+</p>
+
+
+<p class="orig" lang="en">
+<a name="%_thm_4.14"></a>
+<b>Exercise 4.14.</b>  Eva Lu Ator and Louis Reasoner are each experimenting with the
+metacircular evaluator.  Eva types in the definition of <tt>map</tt>, and
+runs some test programs that use it.  They work fine.  Louis, in contrast,
+has installed the system version of <tt>map</tt> as a primitive for the
+metacircular evaluator.  When he tries it, things go terribly
+wrong.  Explain why Louis's <tt>map</tt> fails even though Eva's works.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.14.</b> エヴァ・リュ・エイタとルイス・リーズナは、各々、メタ循環的な評価器を使って実験をしているところだ。
+エヴァは <tt>map</tt> の定義を打ち込み、それを使ういくつかのテストプログラムを実行する。
+それらのテストプログラムはうまく動く。
+一方、ルイスはメタ循環的な評価器用のプリミティブとして、システム版の <tt>map</tt> を取り入れた。
+ルイスがその <tt>map</tt> を試してみると、状況はひどくまずくなってしまう。
+なぜ、エヴァの <tt>map</tt> がうまく機能するにもかかわらず、ルイスの <tt>map</tt> はうまくいかないのか、ということを説明せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+
+<a name="%_sec_4.1.5"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.5">4.1.5  Data as Programs</a></h3>
+<h3 class="trans" lang="ja">4.1.5 プログラムとしてのデータ</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_4540"></a><a name="%_idx_4542"></a>
+In thinking about a Lisp program that evaluates Lisp expressions, an
+analogy might be helpful.  One operational view of the meaning of a
+program is that a <a name="%_idx_4544"></a>program is a description of an abstract (perhaps
+infinitely large) machine.  For example, consider the familiar
+program to compute factorials:</p>
+
+
+<p class="trans" lang="ja">
+Lisp式を評価するLispプログラムについて考える際、類推が役立つかもしれない。
+プログラムの意味についての一つの操作的な見方は、プログラムとは抽象的な (おそらくは無限に大きい) 機械の説明書なのだ、というものである。
+たとえば、階乗を計算するためのおなじみのプログラムを考えよう。
+</p>
+
+
+<p class="lisp">(define (factorial n)
+  (if (= n 1)
+      1
+      (* (factorial (- n 1)) n)))
+</p>
+
+
+<p class="orig" lang="en"><a name="%_idx_4546"></a>We may regard this program as the description of a machine containing
+parts that decrement, multiply, and test for equality, together with a
+two-position switch and another factorial machine. (The factorial
+machine is infinite because it contains another factorial machine
+within it.)  Figure <a href="#%_fig_4.2">4.2</a> is a flow diagram for the
+factorial machine, showing how the parts are wired together.</p>
+
+<p class="trans" lang="ja">
+私たちは、このプログラムを、デクリメントを行う部分と、乗算を行う部分と、等価性を検査する部分とを含む機械——二つの位置があるスイッチと、もう一つの階乗機械も含む——の、説明書だと見なしてもよいのだ
+(階乗機械は、その中に別の階乗機械を含むので、無限である)。
+図<a href="#%_fig_4.2">4.2</a>は、階乗機械のための流れ図であり、部分同士がどのように配線されて繋がれるのかを示している。
+</p>
+
+<a name="%_fig_4.2"></a>
+<figure>
+<img src="ch4-Z-G-2.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 4.2:</b>  The factorial program, viewed as an abstract machine.</figcaption>
+<figcaption class="trans" lang="ja"><b>図4.2:</b> 抽象的機械として見た階乗プログラム</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+<a name="%_idx_4548"></a>In a similar way, we can regard the evaluator as a very special
+machine that takes as input a description of a machine.  Given this
+input, the evaluator configures itself to emulate the machine
+described.  For example, if we feed our evaluator the definition of
+<tt>factorial</tt>, as shown in figure <a href="#%_fig_4.3">4.3</a>, the
+evaluator will be able to compute factorials.</p>
+
+<p class="trans" lang="ja">
+同様にして、評価器のことを、機械の説明書を入力として取るような非常に特殊な機械だ、と見なすことが可能だ。
+この<span class="note"> (機械の説明書という) </span>入力が与えられると、評価器は、記述された機械を<ruby><rb>模倣</rb><rp> (</rp><rt>エミュレート</rt><rp>) </rp></ruby>するように、自分自身を構成する。
+たとえば、もし、図<a href="#%_fig_4.3">4.3</a>に示すように、私たちの評価器に <tt>factorial</tt> の定義を与えたら、評価器は階乗を計算できるようになるだろう。
+</p>
+
+<a name="%_fig_4.3"></a>
+<figure>
+<img src="ch4-Z-G-3.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 4.3:</b>  The evaluator emulating a factorial machine.</figcaption>
+<figcaption class="trans" lang="ja"><b>図4.3:</b> 階乗機械をエミュレートする評価器</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+<a name="%_idx_4550"></a><a name="%_idx_4552"></a>From this perspective, our evaluator is seen to be a <em>universal machine</em>.
+It mimics other machines when these are described as Lisp programs.<a name="call_footnote_Temp_553" href="#footnote_Temp_553"><sup><small>19</small></sup></a>
+This is striking. Try to imagine an analogous evaluator for electrical
+circuits.  This would be a circuit that takes as input a signal
+encoding the plans for some other circuit, such as a filter.  Given
+this input, the circuit evaluator would then behave like a filter with
+the same description.  Such a universal electrical circuit is
+almost unimaginably complex.  It is remarkable that the program
+evaluator is a rather simple program.<a name="call_footnote_Temp_554" href="#footnote_Temp_554"><sup><small>20</small></sup></a></p>
+
+<p class="trans" lang="ja">
+この観点からすると、私たちの評価器は、<em>普遍機械</em>だと見なされる。
+他の機械がLispプログラムとして記述されると、普遍機械は、それらの他の機械をエミュレートする<a href="#footnote_Temp_553"><sup><small>19</small></sup></a>。
+これは魅力的だ。
+電気回路についての類似の評価器を想像しようとしてみたまえ。
+これは、たとえばフィルタなどの他の何らかの回路の配置図面を符号化している信号を入力としてとる回路であろう。
+この入力が与えられると、回路評価器は、同じ説明書の付いたフィルタと同様に振る舞うことだろう。
+そうした普遍的な電気回路は、ほとんど想像できないくらい複雑である。
+<span class="note">(でもまあFPGAとかそんな感じなのでは?)</span>
+プログラム評価器がかなり単純なプログラムであるということは、驚くべきことである<a href="#footnote_Temp_554"><sup><small>20</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+Another striking aspect of the evaluator is that it acts as a bridge
+between the data objects that are manipulated by our programming
+language and the programming language itself.  Imagine that the
+evaluator program (implemented in Lisp) is running, and that a user is
+typing expressions to the evaluator and observing the results.  From
+the perspective of the user, an input expression such as <tt>(* x x)</tt>
+is an expression in the programming language, which the evaluator
+should execute.  From the perspective of the evaluator, however, the
+expression is simply a list (in this case, a list of three symbols:
+<tt>*</tt>, <tt>x</tt>, and <tt>x</tt>) that is to be manipulated according to
+a well-defined set of rules.</p>
+
+<p class="trans" lang="ja">
+評価器の別の魅力的な側面は、評価器が、私たちのプログラミング言語により操作されるデータオブジェクトと、プログラミング言語自体との間の架け橋としてはたらく、ということである。
+評価器プログラム (Lispで実装されている) が実行中であり、ユーザが、その評価器に対して式を打ち込んで結果を観察しているところである、と想像せよ。
+ユーザの視点からすると、<tt>(* x x)</tt> といった入力式は、そのプログラミング言語での式であり、評価器が実行すべきものである。
+しかし、評価器の視点からすると、その式は単に、きちんと定義された一揃いの規則にしたがって操作されるべきリスト (ここでは、三つの記号、すなわち、<tt>*</tt> と <tt>x</tt> と <tt>x</tt> のリスト) である。
+</p>
+
+<p class="orig" lang="en">
+That the user's programs are the evaluator's data need not be a source
+of confusion.  In fact, it is sometimes convenient to ignore this
+distinction, and to give the user the ability to explicitly evaluate a
+data object as a Lisp expression, by making <tt>eval</tt> available for
+use in programs.  Many Lisp dialects provide a <a name="%_idx_4572"></a><a name="%_idx_4574"></a>primitive <tt>eval</tt>
+procedure that takes as arguments an expression and an environment and
+evaluates the expression relative to the environment.<a name="call_footnote_Temp_555" href="#footnote_Temp_555"><sup><small>21</small></sup></a>
+Thus,</p>
+
+
+<p class="trans" lang="ja">
+ユーザのプログラムが評価器のデータである、ということは、混乱の元であるとは限らない。
+実際、この差異を無視して、データオブジェクトをLisp式として明示的に評価する能力をユーザに与える——プログラム中での使用のために <tt>eval</tt> を使えるようにしておくことによって、そうする——ことが、ときには便利なのだ。
+多くのLisp方言は、式と環境を引数としてとってその式をその環境に関して評価する、原始的な <tt>eval</tt> 手続きを、提供している<a href="#footnote_Temp_555"><sup><small>21</small></sup></a>。
+したがって、
+</p>
+
+<p class="lisp">(eval '(* 5 5) user-initial-environment)
+</p>
+
+<p class="orig" lang="en">and</p>
+
+<p class="trans" lang="ja">
+と
+</p>
+
+<p class="lisp">(eval (cons '* (list 5 5)) user-initial-environment)
+</p>
+
+<p class="orig" lang="en">will both return 25.<a name="call_footnote_Temp_556" href="#footnote_Temp_556"><sup><small>22</small></sup></a></p>
+
+<p class="trans" lang="ja">
+は、ともに25を返すだろう<a href="#footnote_Temp_556"><sup><small>22</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.15"></a>
+<b>Exercise 4.15.</b>  <a name="%_idx_4588"></a>Given a one-argument procedure <tt>p</tt> and an object <tt>a</tt>, <tt>p</tt>
+is said to ``halt'' on <tt>a</tt> if evaluating the expression <tt>(p
+a)</tt> returns a value (as opposed to terminating with an error message
+or running forever).  Show that it is impossible to write a procedure
+<tt>halts?</tt> that correctly determines whether <tt>p</tt> halts on <tt>a</tt> for any procedure <tt>p</tt> and object <tt>a</tt>.  Use the following
+reasoning: If you had such a procedure <tt>halts?</tt>, you could
+implement the following program:
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.15.</b> 一引数の <tt>p</tt> という手続きと <tt>a</tt> というオブジェクトが与えられた場合に、もし <tt>(p a)</tt> という式を評価することで、(エラーメッセージとともに終了したり、あるいは永遠に動作中だったりするのとは違って) 値が返るならば、<tt>p</tt> は <tt>a</tt> に関して「停止する」と言われる。
+任意の手続き <tt>p</tt> とオブジェクト <tt>a</tt> に対して、<tt>p</tt> が <tt>a</tt> に関して停止するかどうかを正しく判定するような <tt>halts?</tt> という手続きを書くことは不可能である、と示せ。
+以下の推論を使いたまえ。すなわち、もしそのような <tt>halts?</tt> という手続きがあったら、君は次のようなプログラムを実装できるだろう。
+</p>
+
+
+<p class="lisp">(define (run-forever) (run-forever))
+
+(define (try p)
+  (if (halts? p p)
+      (run-forever)
+      'halted))
+</p>
+
+<p class="orig" lang="en">Now consider evaluating the expression <tt>(try try)</tt> and show that
+any possible outcome (either halting or running forever) violates the
+intended behavior of <tt>halts?</tt>.<a name="call_footnote_Temp_558" href="#footnote_Temp_558"><sup><small>23</small></sup></a>
+</p>
+
+
+<p class="trans" lang="ja">
+ここで、<tt>(try try)</tt> という式を評価することを考えよ。そして、いかなる可能な結果も (停止するのであれ、あるいは永遠に動作中となるのであれ)、<tt>halts?</tt> の意図した振る舞いに違反する、と示せ<a href="#footnote_Temp_558"><sup><small>23</small></sup></a>。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="%_sec_4.1.6"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.6">4.1.6  Internal Definitions</a></h3>
+<h3 class="trans" lang="ja">4.1.6 内部定義</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_4598"></a><a name="%_idx_4600"></a>
+<a name="%_idx_4602"></a>Our environment model of evaluation and our metacircular evaluator execute
+definitions in sequence, extending the environment frame one
+definition at a time.  This is particularly convenient for interactive
+program development, in which the programmer needs to freely mix the
+application of procedures with the definition of new procedures.
+However, if we think carefully about the internal definitions
+used to implement block structure (introduced in
+section <a href="10_sec1_1.html#%_sec_1.1.8">1.1.8</a>), we will find that name-by-name extension
+of the environment may not be the best way to define local variables.</p>
+
+<p class="trans" lang="ja">
+評価についての私たちの環境モデルと私たちのメタ循環的な評価器は、一度に一つの定義のぶんだけ環境フレームを拡張しながら、定義を順に実行する。
+これは、反復的プログラム開発——プログラマは、手続きの適用を、新たな手続きの定義と自由に混ぜ合わせる必要がある——にとって、特に便利である。
+しかし、ブロック構造を実装するのに使われる内部定義 (<a href="10_sec1_1.html#%_sec_1.1.8">1.1.8</a>節で導入した) について、もし注意深く考えるならば、私たちは、名前ごとに環境を拡張することが局所変数を定義するための最善の方法ではないかもしれない、と気づくだろう。
+</p>
+
+<p class="orig" lang="en">
+Consider a procedure with internal definitions, such as</p>
+
+<p class="trans" lang="ja">
+以下のように、内部定義のある手続きを考えよ。
+</p>
+
+<p class="lisp">(define (f x)
+  (define (even? n)
+    (if (= n 0)
+        true
+        (odd? (- n 1))))
+  (define (odd? n)
+    (if (= n 0)
+        false
+        (even? (- n 1))))
+  &lt;<em>rest of body of <tt>f</tt></em>&gt;)
+</p>
+
+<p class="orig" lang="en">Our intention here is that the name <tt>odd?</tt> in the body of the
+procedure <tt>even?</tt> should refer to the procedure <tt>odd?</tt> that is
+defined after <tt>even?</tt>.  The scope of the name <tt>odd?</tt> is the
+entire body of <tt>f</tt>, not just the portion of the body of <tt>f</tt>
+starting at the point where the <tt>define</tt> for <tt>odd?</tt> occurs.
+Indeed, when we consider that <tt>odd?</tt> is itself defined in terms of
+<tt>even?</tt> -- so that <tt>even?</tt> and <tt>odd?</tt> are mutually
+recursive procedures -- we see that the only satisfactory
+interpretation of the two <tt>define</tt>s is to regard them as if the
+names <tt>even?</tt> and <tt>odd?</tt> were being added to the environment
+simultaneously.
+More generally, in block structure, the scope of a local name is the
+entire procedure body in which the <tt>define</tt> is evaluated.</p>
+
+<p class="trans" lang="ja">
+ここでの私たちの意図とは、<tt>even?</tt> という手続きの本体での <tt>odd?</tt> という名前は、<tt>even?</tt> の後に定義される <tt>odd?</tt> という手続きを指すべきだ、ということである。
+<tt>odd?</tt> という名前の<ruby><rb>範囲</rb><rp> (</rp><rt>スコープ</rt><rp>) </rp></ruby>は、<tt>f</tt> の本体全体なのであり、<tt>f</tt> の本体のうちの、<tt>odd?</tt> についての <tt>define</tt> が現れる点から始まる部分だけなのではない。
+実際、<tt>odd?</tt> 自体が <tt>even?</tt> を使って定義される—— <tt>even?</tt> と <tt>odd?</tt> が相互に再帰的な手続きとなるように——ということを考えてみると、二つの <tt>define</tt> についての申し分のない唯一の解釈とは、それら二つの <tt>define</tt> を、あたかも <tt>even?</tt> と <tt>odd?</tt> という名前が同時に環境に加えられたかのように、見なすことなのだ。
+より一般的には、ブロック構造においては局所的な名前のスコープは、<tt>define</tt> が評価される手続き本体全体である。
+</p>
+
+<p class="orig" lang="en">
+As it happens, our interpreter will evaluate calls to <tt>f</tt>
+correctly, but for an ``accidental'' reason: Since the definitions of
+the internal procedures come first, no calls to these procedures will
+be evaluated until all of them have been defined.  Hence, <tt>odd?</tt>
+will have been defined by the time <tt>even?</tt> is executed.  In fact,
+our sequential evaluation mechanism will give the same result as a
+mechanism that directly implements simultaneous definition for any
+procedure in which the <a name="%_idx_4604"></a>internal definitions come first in a body and
+evaluation of the value expressions for the defined variables doesn't
+actually use any of the defined variables.
+(For an example of a procedure that doesn't obey these restrictions,
+so that sequential definition isn't equivalent to simultaneous definition,
+see exercise <a href="#%_thm_4.19">4.19</a>.)<a name="call_footnote_Temp_559" href="#footnote_Temp_559"><sup><small>24</small></sup></a></p>
+
+<p class="trans" lang="ja">
+たまたま、私たちのインタプリタは、「偶然の」理由を除けば、<tt>f</tt> に対する呼び出しを正しく評価するだろう。
+つまり、内部的手続きの定義が最初に来ているので、これらの手続きのすべてが定義済みになるまでは、これらの手続きに対する呼び出しは何も評価されないだろう。
+よって、<tt>odd?</tt> は、<tt>even?</tt> が実行される時点までには定義済みとなるだろう。
+内部定義が本体の最初に来て、かつ、定義された変数についての、値の式の評価が、定義された変数のうちのいずれをも実際には使わないような、どの手続きに対しても直接的に同時的定義を実装する仕組みと、私たちの逐次的評価の仕組みは、実際のところ、同じ結果をもたらすであろう
+(これらの制約に従わず、そのため、逐次的定義が同時的定義とは等価でないような手続きの例については、練習問題<a href="#%_thm_4.19">4.19</a>を参照のこと)<a href="#footnote_Temp_559"><sup><small>24</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+There is, however, a simple way to treat definitions so that
+internally defined names have truly simultaneous scope -- just create
+all local variables that will be in the current environment before
+evaluating any of the value expressions.  One way to do this is by a
+syntax transformation on <tt>lambda</tt> expressions.  Before evaluating
+the body of a <tt>lambda</tt> expression, we <a name="%_idx_4606"></a><a name="%_idx_4608"></a>``scan out'' and eliminate
+all the internal definitions in the body.  The internally defined
+variables will be created with a <tt>let</tt> and then set to their
+values by assignment.  For example, the procedure</p>
+
+<p class="trans" lang="ja">
+しかし、内部的に定義された名前が真に同時的なスコープを有するように、定義を取り扱うための簡単な方法がある——ただ単に、現在の環境の中に存在することになるであろうすべての局所変数を、値の式のいずれかを評価する前に作ればよい。
+こうするための一つの方法は、<tt>lambda</tt> 式に対する文法変形によるものである。
+<tt>lambda</tt> 式の本体を評価する前に、その本体の中のすべての内部定義を、「走査しつくし」て削除するのだ。
+内部的に定義された変数は、<tt>let</tt> を使って作成され、それから、<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>により、それら変数の値へと設定されることだろう。
+たとえば、次の手続きは、
+</p>
+
+<p class="lisp">(lambda &lt;<em>vars</em>&gt;
+  (define u &lt;<em>e1</em>&gt;)
+  (define v &lt;<em>e2</em>&gt;)
+  &lt;<em>e3</em>&gt;)
+</p>
+
+<p class="orig" lang="en">would be transformed into</p>
+
+<p class="trans" lang="ja">
+以下のように変形されるだろう。
+</p>
+
+<p class="lisp">(lambda &lt;<em>vars</em>&gt;
+  (let ((u '*unassigned*)
+        (v '*unassigned*))
+    (set! u &lt;<em>e1</em>&gt;)
+    (set! v &lt;<em>e2</em>&gt;)
+    &lt;<em>e3</em>&gt;))
+</p>
+
+<p class="orig" lang="en">where <tt>*unassigned*</tt> is a special symbol that causes looking up a
+variable to signal an error if an attempt is made to use the value of
+the not-yet-assigned variable.</p>
+
+<p class="trans" lang="ja">
+ただしここで <tt>*unassigned*</tt> は、<ruby><rb>未代入の</rb><rp> (</rp><rt>まだわりあてられていない</rt><rp>) </rp></ruby>変数の値を使うために何らかの試みがなされた場合に、エラーの合図を出すための変数のルックアップを引き起こす、特殊な記号である。
+</p>
+
+<p class="orig" lang="en">
+An alternative strategy for scanning out internal definitions is shown
+in exercise <a href="#%_thm_4.18">4.18</a>.  Unlike the transformation
+shown above, this enforces the restriction that the defined variables'
+values can be evaluated without using any of the variables' values.<a name="call_footnote_Temp_560" href="#footnote_Temp_560"><sup><small>25</small></sup></a></p>
+
+<p class="trans" lang="ja">
+内部定義を走査しつくすための代替的戦略は、練習問題<a href="#%_thm_4.18">4.18</a>に示されている。
+これは、上に示した変形とは違って、定義された変数の値を、それら変数の値のいずれをも使わずに評価できる、という制約を強要する<a href="#footnote_Temp_560"><sup><small>25</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.16"></a>
+<b>Exercise 4.16.</b>  In this exercise we implement the method just described for
+interpreting internal definitions.
+We assume that the evaluator supports <tt>let</tt>
+(see exercise <a href="#%_thm_4.6">4.6</a>).</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.16.</b> この練習問題では、内部定義を解釈するために今説明したばかりの方法を実装する。
+評価器が <tt>let</tt> をサポートするものとする (練習問題<a href="#%_thm_4.6">4.6</a>を参照)。
+</p>
+
+<ol class="orig alph" lang="en">
+<li><a name="%_idx_4612"></a>Change <tt>lookup-variable-value</tt>
+(section <a href="#%_sec_4.1.3">4.1.3</a>) to signal an error if
+the value it finds is the symbol <tt>*unassigned*</tt>.</li>
+
+<li><a name="%_idx_4614"></a> Write a procedure <tt>scan-out-defines</tt> that takes a
+procedure body and returns an equivalent one that has no internal
+definitions, by making the transformation described above.</li>
+
+<li>Install <tt>scan-out-defines</tt> in the interpreter, either in <tt>make-procedure</tt> or in <tt>procedure-body</tt> (see
+section <a href="#%_sec_4.1.3">4.1.3</a>).  Which place is better?
+Why?</li>
+</ol>
+
+
+<ol class="trans alph" lang="ja">
+<li><tt>lookup-variable-value</tt> (<a href="#%_sec_4.1.3">4.1.3</a>節) を変更して、もしこれが見つけた値が <tt>*unassigned*</tt> だったらエラーの合図を出すようにせよ。</li>
+<li>手続き本体をとって、上述の変形を行うことで、内部定義を含まない等価物を返すような、<tt>scan-out-defines</tt> という手続きを書け。</li>
+<li><tt>scan-out-defines</tt> をインタプリタに——  <tt>make-procedure</tt> または <tt>procedure-body</tt>のいずれかに——組み込め (<a href="#%_sec_4.1.3">4.1.3</a>節参照)。
+どちらの場所の方が良いだろう? 
+それはなぜ?</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.17"></a>
+<b>Exercise 4.17.</b>  Draw diagrams of the environment in effect when evaluating the
+expression &lt;<em>e3</em>&gt; in the procedure in the text, comparing how this
+will be structured when definitions are interpreted sequentially with
+how it will be structured if definitions are scanned out as described.
+Why is there an extra frame in the transformed program?  Explain why
+this difference in environment structure can never make a difference
+in the behavior of a correct program.  Design a way to make the
+interpreter implement the ``simultaneous'' scope rule for internal
+definitions without constructing the extra frame.
+
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.17.</b> 本文の手続きの中の &lt;<em class="en">e3</em>&gt; という式を評価するときに有効になっている環境の図を描け——定義が逐次的に解釈される場合にはこの環境がどのように構造化されるだろうか、ということを、上記のように定義が走査しつくされる場合にはこの環境がどのように構造化されるだろうか、ということと比較しながら。
+変形されたプログラムには、なぜ、追加のフレームがあるのだろうか?
+環境構造におけるこの違いが、なぜ、正しいプログラムの振る舞いにおける違いをもたらすことがあり得ないのか、説明せよ。
+インタプリタに、追加のフレームを構築せずに内部定義についての「同時」スコープ規則を実装させるための、方法を設計せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.18"></a>
+<b>Exercise 4.18.</b>  Consider an alternative strategy for scanning out definitions that
+translates the example in the text to
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.18.</b> 本文の例を以下のように変換するような、定義を走査しつくすための代替的戦略について考えよう。
+</p>
+
+<p class="lisp">(lambda &lt;<em>vars</em>&gt;
+  (let ((u '*unassigned*)
+        (v '*unassigned*))
+    (let ((a &lt;<em>e1</em>&gt;)
+          (b &lt;<em>e2</em>&gt;))
+      (set! u a)
+      (set! v b))
+    &lt;<em>e3</em>&gt;))
+</p>
+
+<p class="orig" lang="en">Here <tt>a</tt> and <tt>b</tt> are meant to represent new variable names,
+created by the interpreter, that do not appear in the user's
+program.
+Consider the <tt>solve</tt> procedure from
+section <a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>:</p>
+
+<p class="trans" lang="ja">
+ここで、<tt>a</tt> と <tt>b</tt> は、ユーザのプログラムには現れない新しい変数名——インタプリタにより作成される——を表すつもりのものである。
+<a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>節の <tt>solve</tt> という手続きを考えよう。
+</p>
+
+<p class="lisp"><a name="%_idx_4616"></a>(define (solve f y0 dt)
+  (define y (integral (delay dy) y0 dt))
+  (define dy (stream-map f y))
+  y)
+</p>
+
+<p class="orig" lang="en">Will this procedure work if internal definitions are scanned out as
+shown in this exercise?  What if they are scanned out as shown in the
+text?  Explain.
+</p>
+
+<p class="trans" lang="ja">
+もし、この練習問題に示されたようにして内部定義が走査しつくされたら、この手続きは、うまく動くだろうか?
+もし、本文に示されたようにして内部定義が走査しつくされたら、どうなるだろう?
+説明せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.19"></a>
+<b>Exercise 4.19.</b>  Ben Bitdiddle, Alyssa P. Hacker, and Eva Lu Ator are arguing about
+the desired result of evaluating the expression</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.19.</b> ベン・ビットディドルと、アリッサ・P・ハッカと、エヴァ・リュ・エイタは、以下の式を評価したときの望まれる結果について、議論している。
+</p>
+
+
+<p class="lisp">(let ((a 1))
+  (define (f x)
+    (define b (+ a x))
+    (define a 5)
+    (+ a b))
+  (f 10))
+</p>
+
+<p class="orig" lang="en">Ben asserts that the result should be obtained using the sequential
+rule for <tt>define</tt>: <tt>b</tt> is defined to be 11, then <tt>a</tt> is
+defined to be 5, so the result is 16.  Alyssa objects that mutual
+recursion requires the simultaneous scope rule for internal procedure
+definitions, and that it is unreasonable to treat procedure names
+differently from other names.  Thus, she argues for the mechanism
+implemented in exercise <a href="#%_thm_4.16">4.16</a>.  This would lead to
+<tt>a</tt> being unassigned at the time that the value for <tt>b</tt> is to
+be computed.  Hence, in Alyssa's view the procedure should produce an
+error.  Eva has a third opinion.  She says that if the definitions of
+<tt>a</tt> and <tt>b</tt> are truly meant to be simultaneous, then the value
+5 for <tt>a</tt> should be used in evaluating <tt>b</tt>.  Hence, in Eva's
+view <tt>a</tt> should be 5, <tt>b</tt> should be 15, and the result should
+be 20.  Which (if any) of these viewpoints do you support?  Can you
+devise a way to implement internal definitions so that they behave as
+Eva prefers?<a name="call_footnote_Temp_565" href="#footnote_Temp_565"><sup><small>26</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+ベンは、<tt>define</tt> に対して逐次的な規則を使って、結果が得られるはずだ、と主張する。つまり、<tt>b</tt> は11だと定義され、それから、<tt>a</tt> は5だと定義され、そのため、結果は16だ、というのだ。
+アリッサは、相互的な再帰は内部の手続き定義について同時的スコープの規則を要請するし、手続き名をたの名前とは別の方法で扱うのは不合理だ、と異議を唱える。
+よって、アリッサは、練習問題<a href="#%_thm_4.16">4.16</a>で実装した仕組みに賛成する。
+これは、<tt>b</tt> の値が計算されることになる時点では、<tt>a</tt> がまだ<ruby><rb>代入されて</rb><rp> (</rp><rt>わりあてられて</rt><rp>) </rp></ruby>いない、という事態につながる。
+よって、アリッサの見方では、この手続きはエラーを生み出すはずである。
+エヴァは第三の意見を持っている。
+もし <tt>a</tt> と <tt>b</tt> の定義が本当に同時であることを意図したものなら、<tt>a</tt> に対する5という値が、<tt>b</tt> を評価する際に使われるはずだ、とエヴァは言う。
+よって、エヴァの見方では、<tt>a</tt> は5のはずで、<tt>b</tt> は15のはずで、結果は20のはずである。
+君は、これらの観点のうち (もし支持するものがあれば) いずれを支持するかな?
+エヴァが良いと思っているとおりに内部定義が振る舞うように、内部定義を実装する方法を、君は考案できるかな?<a href="#footnote_Temp_565"><sup><small>26</small></sup></a>
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.20"></a>
+<b>Exercise 4.20.</b>  <a name="%_idx_4618"></a><a name="%_idx_4620"></a>Because internal definitions look sequential but are actually
+simultaneous, some people prefer to avoid them entirely, and use the
+special form <tt>letrec</tt> instead.  <tt>Letrec</tt> looks like <tt>let</tt>,
+so it is not surprising that the variables it binds are bound
+simultaneously and have the same scope as each other.  The sample
+procedure <tt>f</tt> above can be written without internal definitions,
+but with exactly the same meaning, as</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.20.</b> 内部定義は逐次的に見えるが、実際は同時的なので、内部定義を完全に避けてその代わりに <tt>letrec</tt> という特殊形式を使うことを好む人もいる。
+<tt>letrec</tt> は <tt>let</tt> に似ており、そのため、<tt>letrec</tt> の束縛する変数は、同時に束縛されて、お互いに同じスコープを持つのだ、ということは別に驚くに当たらない。
+上記の <tt>f</tt> という例示的手続きは、内部定義なしに、しかしまったく同一の意味を持って、以下のように書ける。
+</p>
+
+<p class="lisp">(define (f x)
+  (letrec ((even?
+            (lambda (n)
+              (if (= n 0)
+                  true
+                  (odd? (- n 1)))))
+           (odd?
+            (lambda (n)
+              (if (= n 0)
+                  false
+                  (even? (- n 1))))))
+    &lt;<em>rest of body of <tt>f</tt></em>&gt;))
+</p>
+
+<p class="orig" lang="en"><tt>Letrec</tt> expressions, which have the form</p>
+
+
+<p class="trans" lang="ja">
+<tt>letrec</tt> 式は、以下のような形式を持つわけだが、
+</p>
+
+<p class="lisp">(letrec ((&lt;<em>var<sub>1</sub></em>&gt; &lt;<em>exp<sub>1</sub></em>&gt;) <tt>...</tt> (&lt;<em>var<sub><em>n</em></sub></em>&gt; &lt;<em>exp<sub><em>n</em></sub></em>&gt;))
+  &lt;<em>body</em>&gt;)
+</p>
+
+<p class="orig" lang="en">are a variation on <tt>let</tt> in which the expressions
+&lt;<em>exp<sub><em>k</em></sub></em>&gt; that provide the initial values for the variables &lt;<em>var<sub><em>k</em></sub></em>&gt;
+are evaluated in an environment that includes all the <tt>letrec</tt>
+bindings.  This permits recursion in the bindings, such as the mutual
+recursion of <tt>even?</tt> and <tt>odd?</tt> in the example above, or
+<a name="%_idx_4622"></a>the evaluation of 10 factorial with</p>
+
+<p class="trans" lang="ja">
+&lt;<em>var<sub>k</sub></em>&gt; という変数に初期値を与える &lt;<em>exp<sub>k</sub></em>&gt; という式が、すべての <tt>letrec</tt> 束縛を含む環境で評価される、という、<tt>let</tt> の変種なのである。
+これによって束縛における再帰——上記の例における、<tt>even?</tt> と <tt>odd?</tt> の相互再帰、あるいは、以下のものを使った10の階乗の評価など——が可能となる。
+</p>
+
+<p class="lisp">(letrec ((fact
+          (lambda (n)
+            (if (= n 1)
+                1
+                (* n (fact (- n 1)))))))
+  (fact 10))
+</p>
+
+
+<ol class="orig alph" lang="en">
+<li>Implement <tt>letrec</tt> as a derived expression, by transforming
+a <tt>letrec</tt> expression into a <tt>let</tt> expression as shown in
+the text above or in exercise <a href="#%_thm_4.18">4.18</a>.
+That is, the <tt>letrec</tt> variables should be created with a <tt>let</tt>
+and then be assigned their values with <tt>set!</tt>.</li>
+
+<li>Louis Reasoner is confused by all this fuss about internal
+definitions.  The way he sees it, if you don't like to use <tt>define</tt> inside a procedure, you can just use <tt>let</tt>.  Illustrate
+what is loose about his reasoning by drawing an environment diagram
+that shows the environment in which the &lt;<em>rest of body of <tt>f</tt></em>&gt;
+is evaluated during evaluation of the expression <tt>(f 5)</tt>, with
+<tt>f</tt> defined as in this exercise.  Draw
+an environment diagram for the same evaluation, but with <tt>let</tt> in
+place of <tt>letrec</tt> in the definition of <tt>f</tt>.
+</li>
+</ol>
+
+<ol class="trans alph" lang="ja">
+<li>上述の本文または練習問題<a href="#%_thm_4.18">4.18</a> に示されているようにして <tt>letrec</tt> 式を <tt>let</tt> 式へと変形することによって、<tt>letrec</tt> を派生式として実装せよ。
+つまり、<tt>letrec</tt> 変数は <tt>let</tt> を使って作成されるはずで、その後、<tt>set!</tt> を使ってその値が<ruby><rb>代入される</rb><rp> (</rp><rt>わりあてられる</rt><rp>) </rp></ruby>はずである。</li>
+<li>ルイス・リーズナは、内部定義についてのこのややこしい手間のすべてに困惑している。
+彼の見方は、もし手続きの内部で <tt>define</tt> を使いたくないなら、ただ <tt>let</tt> が使えるよね、というものだ。
+この練習問題でのように定義された <tt>f</tt> を使ったとして、<tt>(f 5)</tt> という式の評価の最中に 
+<span class="math">&lt;<em class="en">rest of body of <tt>f</tt></em>&gt;</span>
+が評価される環境を示す環境図を描くことによって、ルイスの推論に関して、粗いところを説明せよ。
+<tt>f</tt> の定義において <tt>letrec</tt> の代わりに <tt>let</tt> を使った場合の、同じ評価についての環境図を描け。
+</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.21"></a>
+<b>Exercise 4.21.</b>  <a name="%_idx_4624"></a>Amazingly, Louis's intuition in exercise <a href="#%_thm_4.20">4.20</a>
+is correct.  It is indeed possible to specify recursive procedures
+without using <tt>letrec</tt> (or even <tt>define</tt>), although the method
+for accomplishing this is much more subtle than Louis imagined.  The
+following expression computes 10 factorial by applying a recursive
+<a name="%_idx_4626"></a>factorial procedure:<a name="call_footnote_Temp_568" href="#footnote_Temp_568"><sup><small>27</small></sup></a>
+</p>
+
+
+<p class="trans" lang="ja">
+<b>練習問題4.21.</b> 驚くべきことに、練習問題<a href="#%_thm_4.20">4.20</a>でのルイスの直観は正しい。
+実際、<tt>letrec</tt> を (それどころか <tt>define</tt> さえも) 使わずに、再帰的手続きを規定することが可能である——もっとも、これを達成するための方法は、ルイスが想像したのよりもずっと微妙なものではあるのだが。
+以下の式は、再帰的な階乗手続きを適用することによって、10の階乗を計算する<a href="#footnote_Temp_568"><sup><small>27</small></sup></a>。
+</p>
+
+<p class="lisp">((lambda (n)
+   ((lambda (fact)
+      (fact fact n))
+    (lambda (ft k)
+      (if (= k 1)
+          1
+          (* k (ft ft (- k 1)))))))
+ 10)
+</p>
+
+<ol class="orig alph" lang="en">
+<li>Check (by evaluating the expression) that this really does compute
+factorials.  Devise an analogous expression for computing Fibonacci numbers.
+</li>
+<li>Consider the following procedure, which includes mutually recursive
+internal definitions:
+</li>
+</ol>
+
+<ol class="trans alph" lang="ja">
+<li>(式を評価することによって) これが本当に階乗を計算するのだ、ということを確認せよ。
+フィボナッチ数を計算するための類似の式を考案せよ。</li>
+<li>以下の手続き——相互再帰的な内部定義を含む——を考えよう。</li>
+</ol>
+
+<p class="lisp">(define (f x)
+  (define (even? n)
+    (if (= n 0)
+        true
+        (odd? (- n 1))))
+  (define (odd? n)
+    (if (= n 0)
+        false
+        (even? (- n 1))))
+  (even? x))
+</p>
+
+<p class="orig" lang="en">Fill in the missing expressions to complete an alternative definition
+of <tt>f</tt>, which uses neither internal definitions nor <tt>letrec</tt>:
+</p>
+
+
+<p class="trans" lang="ja">
+***
+</p>
+
+<p class="lisp">(define (f x)
+  ((lambda (even? odd?)
+     (even? even? odd? x))
+   (lambda (ev? od? n)
+     (if (= n 0) true (od? &lt;??&gt; &lt;??&gt; &lt;??&gt;)))
+   (lambda (ev? od? n)
+     (if (= n 0) false (ev? &lt;??&gt; &lt;??&gt; &lt;??&gt;)))))
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="%_sec_4.1.7"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.1.7">4.1.7  Separating Syntactic Analysis from Execution</a></h3>
+<h3 class="trans" lang="ja">4.1.7 文法的な分析を実行から切り離す</h3>
+
+
+<p class="orig" lang="en">
+<a name="%_idx_4634"></a><a name="%_idx_4636"></a><a name="%_idx_4638"></a>
+<a name="%_idx_4640"></a><a name="%_idx_4642"></a>The evaluator implemented above is simple, but it is very
+inefficient, because the syntactic analysis of expressions is interleaved
+with their execution.  Thus if a program is executed many times, its
+syntax is analyzed many times.  Consider, for example, evaluating <tt>(factorial 4)</tt> using the following definition of <tt>factorial</tt>:</p>
+
+<p class="trans" lang="ja">
+上記で実装した評価器は、単純なのだが、式の文法的解析がその式の実行と互い違いになっているため、とても非効率だ。
+よって、プログラムが何回も実行される場合、プログラムの文法が何回も解析される。
+たとえば、以下の <tt>factorial</tt> の定義を使って <tt>(factorial 4)</tt> を評価することを考えよう。
+</p>
+
+<p class="lisp">(define (factorial n)
+  (if (= n 1)
+      1
+      (* (factorial (- n 1)) n)))
+</p>
+
+<p class="orig" lang="en">
+Each time <tt>factorial</tt> is called, the evaluator must determine that
+the body is an <tt>if</tt> expression and extract the predicate.
+Only then can it evaluate the
+predicate and dispatch on its value.  Each time it evaluates the
+expression <tt>(* (factorial (- n 1)) n)</tt>,
+or the subexpressions <tt>(factorial (- n 1))</tt> and <tt>(- n 1)</tt>,
+the evaluator must perform
+the case analysis in <tt>eval</tt> to determine that the expression is an
+application, and must extract its operator and operands.  This
+analysis is expensive.  Performing it repeatedly is wasteful.</p>
+
+<p class="trans" lang="ja">
+<tt>factorial</tt> が呼ばれるたびに、評価器は、本体が <tt>if</tt> 式であると判定せねばならないし、述語を抽出せねばならない。
+そうしてから初めて、評価器は、述語を評価して述語の値に応じて振り分けを行うことができる。
+評価器が <tt>(* (factorial (- n 1)) n)</tt> という式を評価するたびに、あるいは、<tt>(factorial (- n 1))</tt> や <tt>(- n 1)</tt> という部分式を評価するたびに、評価器は、<tt>eval</tt> での場合分け分析を実行して、その式が適用である、と判定せねばならないし、その式のオペレータとオペランドを抽出せねばならない。
+この分析は高くつく。
+この分析を繰り返し実行することは、無駄である。
+</p>
+
+<p class="orig" lang="en">
+We can transform the evaluator to be significantly more efficient by
+arranging things so that syntactic analysis is performed only
+once.<a name="call_footnote_Temp_569" href="#footnote_Temp_569"><sup><small>28</small></sup></a> We split <tt>eval</tt>, which takes an
+expression and an environment, into two parts.  The procedure <tt>analyze</tt> takes only the expression.  It performs the syntactic
+analysis and returns a new procedure, the <a name="%_idx_4652"></a><em>execution procedure</em>, that
+encapsulates the work to be done in executing the analyzed
+expression.  The execution procedure takes an environment as its
+argument and completes the evaluation.  This saves work because <tt>analyze</tt> will be called only once on an expression, while the
+execution procedure may be called many times.</p>
+
+<p class="trans" lang="ja">
+文法的解析がたった一度だけ実行されるように物事を整理することによって、評価器を、著しくより効率的なものに変形することができる<a href="#footnote_Temp_569"><sup><small>28</small></sup></a>。
+<tt>eval</tt> は、式と環境をとるものだが、この <tt>eval</tt> を二つの部分に分ける。
+<tt>analyze</tt> は、式のみをとる。
+<tt>analyze</tt> は、文法的解析のみを行い、分析した式を実行する際に行われるべき作業をカプセル化している新たな手続き、すなわち<em>実行手続き</em>を返す。
+実行手続きは、引数として環境をとり、評価を完成させる。
+これによって作業が節約される。というのも、実行手続きは何度も呼ばれるかもしれないが、<tt>analyze</tt> は一つの式に対してただ一度だけ呼ばれるであろうからである。
+</p>
+
+<p class="orig" lang="en">
+With the separation into analysis and execution, <tt>eval</tt> now becomes</p>
+
+<p class="trans" lang="ja">
+分析と実行への分離を行うと、ここで <tt>eval</tt> は、次のようになる。
+</p>
+
+<p class="lisp"><a name="%_idx_4654"></a>(define (eval exp env)
+  ((analyze exp) env))
+</p>
+
+<p class="orig" lang="en">
+The result of calling <tt>analyze</tt> is the execution procedure to
+be applied to the environment.  The <tt>analyze</tt> procedure is
+the same case analysis as performed by the original <tt>eval</tt> of
+section <a href="#%_sec_4.1.1">4.1.1</a>, except that the procedures to
+which we dispatch perform only analysis, not full evaluation:</p>
+
+<p class="trans" lang="ja">
+<tt>analyze</tt> を呼び出した結果は、環境に対して適用すべき実行手続きである。
+振り分け先の手続きが、分析のみを行い、完全な評価は行わない、という点を除いて、<tt>analyze</tt> という手続きは、<a href="#%_sec_4.1.1">4.1.1</a>節の元の <tt>eval</tt> により行われるのと同じ、場合分け分析である。
+</p>
+
+<p class="lisp"><a name="%_idx_4656"></a>(define (analyze exp)
+  (cond ((self-evaluating? exp) 
+         (analyze-self-evaluating exp))
+        ((quoted? exp) (analyze-quoted exp))
+        ((variable? exp) (analyze-variable exp))
+        ((assignment? exp) (analyze-assignment exp))
+        ((definition? exp) (analyze-definition exp))
+        ((if? exp) (analyze-if exp))
+        ((lambda? exp) (analyze-lambda exp))
+        ((begin? exp) (analyze-sequence (begin-actions exp)))
+        ((cond? exp) (analyze (cond-&gt;if exp)))
+        ((application? exp) (analyze-application exp))
+        (else
+         (error &quot;Unknown expression type -- ANALYZE&quot; exp))))
+</p>
+
+<p class="orig" lang="en">
+Here is the simplest syntactic analysis procedure, which handles
+self-evaluating expressions.  It returns an execution procedure that
+ignores its environment argument and just returns the expression:</p>
+
+<p class="trans" lang="ja">
+ここに、もっとも簡単な文法的解析手続きを示すが、これは、自己評価式を取り扱っている。
+これは、環境引数を無視してただ式を返すだけの、実行手続きを返す。
+</p>
+
+<a name="%_idx_4658"></a><p class="lisp">(define (analyze-self-evaluating exp)
+  (lambda (env) exp))
+</p>
+
+
+<p class="orig" lang="en">
+For a quoted expression, we can gain a little efficiency by
+extracting the text of the quotation only once, in the analysis phase,
+rather than in the execution phase.</p>
+
+<p class="trans" lang="ja">
+引用された式については、実行段階ではなくむしろ分析段階においてただ一回だけ、その引用でのテキストを抽出することで、少し効率を上げられる。
+</p>
+
+
+<p class="lisp">(define (analyze-quoted exp)
+  (let ((qval (text-of-quotation exp)))
+    (lambda (env) qval)))
+</p>
+
+
+<p class="orig" lang="en">
+Looking up a variable value must still be done in the execution phase,
+since this depends upon knowing the environment.<a name="call_footnote_Temp_570" href="#footnote_Temp_570"><sup><small>29</small></sup></a></p>
+
+<p class="trans" lang="ja">
+変数の値を調べることは、環境を知ることに依存するので、依然として、実行段階で行われなくてはならない<a href="#footnote_Temp_570"><sup><small>29</small></sup></a>。
+</p>
+
+<p class="lisp">(define (analyze-variable exp)
+  (lambda (env) (lookup-variable-value exp env)))
+</p>
+
+<p class="orig" lang="en">
+<tt>Analyze-assignment</tt> also must defer actually setting the variable
+until the execution, when the environment has been supplied.  However,
+the fact that the <tt>assignment-value</tt> expression can be
+analyzed (recursively) during analysis is a major gain in efficiency,
+because the <tt>assignment-value</tt> expression will now be analyzed
+only once.  The same holds true for definitions.</p>
+
+<p class="trans" lang="ja">
+<tt>analyze-assignment</tt> も、変数を実際に設定することを、実行時——環境が与えられるとき——まで、延期せねばならない。
+しかし、解析の間に <tt>analyze-value</tt> 式を (再帰的に) 解析できる、という事実は、効率における大きな進歩である。というのも、<tt>analyze-value</tt> 式は今やただ一度だけ解析されるからである。
+同じことは、定義についても成り立つ。
+</p>
+
+<p class="lisp">(define (analyze-assignment exp)
+  (let ((var (assignment-variable exp))
+        (vproc (analyze (assignment-value exp))))
+    (lambda (env)
+      (set-variable-value! var (vproc env) env)
+      'ok)))
+(define (analyze-definition exp)
+  (let ((var (definition-variable exp))
+        (vproc (analyze (definition-value exp))))
+    (lambda (env)
+      (define-variable! var (vproc env) env)
+      'ok)))
+</p>
+
+<p class="orig" lang="en">
+For <tt>if</tt> expressions, we extract and analyze the predicate,
+consequent, and alternative at analysis time.</p>
+
+<p class="trans" lang="ja">
+<tt>if</tt> 式に対しては、解析時に、述語と帰結式と代替式とを抽出および解析する。
+</p>
+
+<p class="lisp">(define (analyze-if exp)
+  (let ((pproc (analyze (if-predicate exp)))
+        (cproc (analyze (if-consequent exp)))
+        (aproc (analyze (if-alternative exp))))
+    (lambda (env)
+      (if (true? (pproc env))
+          (cproc env)
+          (aproc env)))))
+</p>
+
+<p class="orig" lang="en">
+Analyzing a <tt>lambda</tt> expression also achieves a major
+gain in efficiency: We analyze the <tt>lambda</tt> body only once, even though
+procedures resulting from evaluation of the <tt>lambda</tt>
+may be applied many times.</p>
+
+<p class="trans" lang="ja">
+<tt>lambda</tt> 式を解析することも、効率における大きな進歩を達成する。
+たとえ、<tt>lambda</tt> の評価により生じる手続きが、何度も適用されることがあるのだとしても、私たちは、<tt>lambda</tt> 本体をたった一度解析するだけなのだ。
+</p>
+
+<p class="lisp">(define (analyze-lambda exp)
+  (let ((vars (lambda-parameters exp))
+        (bproc (analyze-sequence (lambda-body exp))))
+    (lambda (env) (make-procedure vars bproc env))))
+</p>
+
+<p class="orig" lang="en">
+Analysis of a sequence of expressions (as in a <tt>begin</tt> or the body
+of a <tt>lambda</tt> expression) is more involved.<a name="call_footnote_Temp_571" href="#footnote_Temp_571"><sup><small>30</small></sup></a>
+Each expression
+in the sequence is analyzed, yielding an execution
+procedure.  These execution procedures are combined to produce an
+execution
+procedure that takes an environment as argument and sequentially calls
+each individual execution procedure with the environment as argument.</p>
+
+<p class="trans" lang="ja">
+式の連なり (<tt>begin</tt> の中にあるようなもの、あるいは、<tt>lambda</tt> 式の本体のようなもの) の解析は、より込み入っている<a href="#footnote_Temp_571"><sup><small>30</small></sup></a>。
+その連なりの中のそれぞれの式が解析され、実行手続きを作り出す。
+<!--これらの実行手続きは、以下のような実行手続きを作り出すように結合される。すなわち、引数として環境をとり、個別の各実行手続きを、当該環境を引数として、順に呼び出すような実行手続きである。-->
+<!--引数として環境をとり、個別の各実行手続きを、当該環境を引数として、順に呼び出すような実行手続きを作り出すように、これらの実行手続きが結合される。-->
+これらの実行手続きは、引数として環境をとって当該環境を引数にして個別の各実行手続きを順に呼び出すような一つの実行手続きを作り出すように、結合される。
+</p>
+
+<p class="lisp">(define (analyze-sequence exps)
+  (define (sequentially proc1 proc2)
+    (lambda (env) (proc1 env) (proc2 env)))
+  (define (loop first-proc rest-procs)
+    (if (null? rest-procs)
+        first-proc
+        (loop (sequentially first-proc (car rest-procs))
+              (cdr rest-procs))))
+  (let ((procs (map analyze exps)))
+    (if (null? procs)
+        (error &quot;Empty sequence -- ANALYZE&quot;))
+    (loop (car procs) (cdr procs))))
+</p>
+
+<p class="orig" lang="en">
+To analyze an application, we analyze the operator and operands and
+construct an execution procedure that
+calls the operator execution procedure (to obtain the
+actual procedure to be applied) and the operand execution
+procedures (to obtain the actual arguments).  We then pass these to <tt>execute-application</tt>, which is the analog of <tt>apply</tt> in
+section <a href="#%_sec_4.1.1">4.1.1</a>.
+<tt>Execute-application</tt> differs from <tt>apply</tt> in that the procedure body for a compound procedure has already
+been analyzed, so there is no need to do further analysis.  Instead,
+we just call the execution procedure for the body on the extended
+environment.
+</p>
+
+
+<p class="trans" lang="ja">
+適用を解析するには、オペレータとオペランドを解析し、そして、(適用すべき実際の手続きを得るべく）オペレータの実行的続きを呼び出すとともに (実際の実引数を得るべく) オペランドの実行的続きを呼び出すような実行手続きを、構築する。
+それから、これらを <tt>execute-application</tt> ——<a href="#%_sec_4.1.1">4.1.1</a>節の <tt>apply</tt> の相似物——へと渡す。
+<tt>execute-application</tt> は、複合的手続きの手続き本体がすでに解析されていて、そのため、さらなる解析は不要である、という点で、<tt>apply</tt> とは異なる。
+代わりに、単に拡張された環境上で、本体についての実行手続きを呼び出すだけでよい。
+</p>
+
+<p class="lisp">(define (analyze-application exp)
+  (let ((fproc (analyze (operator exp)))
+        (aprocs (map analyze (operands exp))))
+    (lambda (env)
+      (execute-application (fproc env)
+                           (map (lambda (aproc) (aproc env))
+                                aprocs)))))
+<a name="%_idx_4660"></a>(define (execute-application proc args)
+  (cond ((primitive-procedure? proc)
+         (apply-primitive-procedure proc args))
+        ((compound-procedure? proc)
+         ((procedure-body proc)
+          (extend-environment (procedure-parameters proc)
+                              args
+                              (procedure-environment proc))))
+        (else
+         (error
+          &quot;Unknown procedure type -- EXECUTE-APPLICATION&quot;
+          proc))))
+</p>
+
+<p class="orig" lang="en">
+Our new evaluator uses the same data structures, syntax
+procedures, and run-time support procedures as in
+sections <a href="#%_sec_4.1.2">4.1.2</a>,
+ <a href="#%_sec_4.1.3">4.1.3</a>, and <a href="#%_sec_4.1.4">4.1.4</a>.</p>
+
+<p class="trans" lang="ja">
+新たな評価器は、<a href="#%_sec_4.1.2">4.1.2</a>節や<a href="#%_sec_4.1.3">4.1.3</a>節や<a href="#%_sec_4.1.4">4.1.4</a>節でのものと同じ、データ構造と、文法上の手続きと、実行時のサポート手続きとを用いる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.22"></a>
+<b>Exercise 4.22.</b>  <a name="%_idx_4662"></a>Extend the evaluator in this section to support the special form <tt>let</tt>.
+(See exercise <a href="#%_thm_4.6">4.6</a>.)
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.22.</b> 特殊形式 <tt>let</tt> をサポートするように、本節の評価器を拡張せよ (練習問題<a href="#%_thm_4.6">4.6</a>を参照)。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.23"></a>
+<b>Exercise 4.23.</b>  <a name="%_idx_4664"></a>Alyssa P. Hacker doesn't understand why <tt>analyze-sequence</tt> needs to be
+so complicated.  All the other analysis procedures
+are straightforward transformations of the corresponding evaluation
+procedures (or <tt>eval</tt> clauses) in section <a href="#%_sec_4.1.1">4.1.1</a>.
+She expected <tt>analyze-sequence</tt> to look like this:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.23.</b> アリッサ・P・ハッカは、なぜ <tt>analyze-sequence</tt> があんなに複雑である必要があるのか、理解できない。
+他のすべての解析手続きは、<a href="#%_sec_4.1.1">4.1.1</a>節における、対応する評価手続き (もしくは <tt>eval</tt> 節) の、単純な変形である。
+アリッサは、<tt>analyze-sequence</tt> が以下のようなものだ、と予測していた。
+</p>
+
+
+<p class="lisp">(define (analyze-sequence exps)
+  (define (execute-sequence procs env)
+    (cond ((null? (cdr procs)) ((car procs) env))
+          (else ((car procs) env)
+                (execute-sequence (cdr procs) env))))
+  (let ((procs (map analyze exps)))
+    (if (null? procs)
+        (error &quot;Empty sequence -- ANALYZE&quot;))
+    (lambda (env) (execute-sequence procs env))))
+</p>
+
+<p class="orig" lang="en">Eva Lu Ator explains to Alyssa that the version in the text does more
+of the work of evaluating a sequence at analysis time.  Alyssa's
+sequence-execution procedure, rather than having the calls to the
+individual execution procedures built in, loops through the procedures
+in order to call them: In effect, although the individual expressions
+in the sequence have been analyzed, the sequence itself has not been.</p>
+
+<p class="trans" lang="ja">
+エヴァ・リュ・エイタは、アリッサに対してこう説明する。すなわち、本文中のバージョンは、解析時に、連なりを評価するという作業以上のことをするのだ、と。
+アリッサの連なりについての実行手続きは、個々の実行手続きへの呼び出しが組み込まれているようにする、というよりむしろ、手続きを呼び出すためにそれらの手続きを始めから終わりまでループしている。
+事実上、連なりにおける個々の式が解析されてはいるのだが、その連なりそのものはまだ解析されていないのだ。
+</p>
+
+<p class="orig" lang="en">
+Compare the two versions of <tt>analyze-sequence</tt>.  For example,
+consider the common case (typical of procedure bodies) where the
+sequence has just one expression.  What work will the execution
+procedure produced by Alyssa's program do?  What about the execution
+procedure produced by the program in the text above?  How do the two
+versions compare for a sequence with two expressions?
+</p>
+
+<p class="trans" lang="ja">
+<tt>analyze-sequence</tt> の二つのバージョンを比較せよ。
+たとえば、連なりがただ一つの式だけを有するような、よくある場合 (手続き本体の典型である) を考えよう。
+アリッサのプログラムにより作り出される実行手続きは、どのような作業を行うだろう。
+上記本文中のプログラムにより作り出される実行手続きについては、どうだろう?
+二つの式を持つ連なりについては、この二つのバージョンはどう対比されるだろう?
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_4.24"></a>
+<b>Exercise 4.24.</b>  Design and carry out some experiments to 
+compare the speed of the original metacircular evaluator
+with the version in this section.  Use your results to estimate the fraction
+of time that is spent in analysis versus execution for various
+procedures.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題4.24.</b> 元のメタ循環的評価器の速度を本節のバージョンと比べるための、何らかの実験を設計し、実行せよ。
+君の結果を使って、様々な手続きについて、解析と実行に費やされる時間の割合を見積もれ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span></p>
+
+<a name="footnotes"></a>
+<hr>
+
+<p class="orig" lang="en"><a name="footnote_Temp_510" href="#call_footnote_Temp_510"><sup><small>3</small></sup></a> Even so, there will remain important aspects of
+the evaluation process that are not elucidated by our evaluator.  The
+most important of these are the detailed mechanisms by which
+procedures call other procedures and return values to their callers.
+We will address these issues in chapter 5, where we take a closer look
+at the evaluation process by implementing the evaluator as a simple
+register machine.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_510"><sup><small>3</small></sup></a>
+たとえそうであっても、私たちの評価器によっては明らかにされていないような、評価の重要な側面が、残るであろう。
+これらの側面のうちで最も重要なものは、手続きが他の手続きを呼び出して値を呼び出し元へと返すようにする詳細な仕組みである。
+これらの論点には5章で取り組もう——そこでは、評価器を単純なレジスタマシンとして実装することによって、より綿密に評価プロセスを調べる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_511" href="#call_footnote_Temp_511"><sup><small>4</small></sup></a> If we grant ourselves the ability to apply primitives,
+<a name="%_idx_4222"></a>then what remains for us to implement in the evaluator?  The job of
+the evaluator is not to specify the primitives of the language, but rather
+to provide the connective tissue -- the means of combination and the
+means of abstraction -- that binds a collection of primitives to form a
+language.  Specifically:
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_511"><sup><small>4</small></sup></a>
+もし私たちが、プリミティブを適用する能力を自分自身に与えるなら、私たちが評価器の中に実装すべきものとして何が残っているだろう?
+評価器の仕事は、言語のプリミティブを指定することではなく、むしろ、言語を形成するようにプリミティブの集まりを束縛するような結合組織——結合の手段と抽象化の手段——を提供することである。具体的には、次のとおりである。
+</p>
+
+<ul class="orig" lang="en">
+<li>The evaluator enables us to deal with nested expressions.  For
+example, although simply applying primitives
+would suffice for evaluating
+the expression <tt>(+ 1 6)</tt>, it is not adequate for handling <tt>(+ 1 (* 2
+3))</tt>.  As far as the primitive procedure <tt>+</tt> is concerned,
+its arguments must be numbers, and it would choke if we passed it the
+expression <tt>(* 2 3)</tt> as an argument.  One important role of the
+evaluator is to choreograph procedure composition so that <tt>(* 2
+3)</tt> is reduced to 6 before being passed as an argument to <tt>+</tt>.</li>
+
+<li>The evaluator allows us to use variables.  For example, the
+primitive procedure for addition has no way to deal with expressions such
+as <tt>(+ x 1)</tt>.  We need an evaluator to keep track of variables and
+obtain their values before invoking the primitive
+procedures.</li>
+
+<li>The evaluator allows us to define compound procedures.  This
+involves keeping track of procedure definitions, knowing how to use
+these definitions in evaluating expressions, and providing a mechanism
+that enables procedures to accept arguments.</li>
+
+<li>The evaluator provides the special forms, which must be
+evaluated differently from procedure calls.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>評価器は、入れ子になった式を扱えるようにしてくれる。
+たとえば、<tt>(+ 1 6)</tt> という式を評価するには、単純にプリミティブを適用することだけで十分だが、<tt>(+ 1 (* 2 3))</tt> を扱うには、これは十分満足なものではない。
+
+<tt>+</tt> という原始的手続きに関する限り、これの実引数は数でなくてはならず、もしこれに <tt>(* 2 3)</tt> という式を実引数として渡したら、これは窒息してしまうだろう。
+評価器の、重要な一つの役割は、<tt>(* 2 3)</tt> が、<tt>+</tt> への引数として渡される前に6へと簡約化されるように、手続きの構成を指揮することである。
+</li>
+<li>評価器は、変数を使えるようにしてくれる。
+たとえば、加算のための原始的手続きは、<tt>(+ x 1)</tt> のような式を扱う術を持たない。
+変数を追いかけて把握し、そして、原始的手続きを呼び出す前に変数の値を取得することを、私たちは評価器に求める。</li>
+<li>評価器は、複合的手続きを定義できるようにしてくれる。
+これは、手続きを定義を追いかけて把握することと、式を評価する際にこれらの定義をどのように使うのかを知っていることと、手続きが実引数を受け入れることを可能にする仕組みを提供することを、伴う。</li>
+<li>評価器は、特殊形式——手続き呼び出しとは異なる方法で評価されねばならない——を提供する。</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_518" href="#call_footnote_Temp_518"><sup><small>5</small></sup></a> We could have simplified the <tt>application?</tt> clause in <tt>eval</tt> by using <tt>map</tt>
+(and stipulating that <tt>operands</tt> returns a list) rather than
+writing an explicit <tt>list-of-values</tt> procedure.  We chose not to
+use <tt>map</tt> here to emphasize the fact that the <a name="%_idx_4252"></a><a name="%_idx_4254"></a>evaluator can be
+implemented without any use of higher-order procedures
+(and thus could be written in a language that doesn't have
+higher-order procedures), even though
+the language that it supports will include higher-order procedures.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_518"><sup><small>5</small></sup></a>
+明示的な <tt>list-of-values</tt> の手続きを書くよりもむしろ、<tt>map</tt> を使うことによって (そして、<tt>operands</tt> はリストを返す、と規定することによって)、<tt>eval</tt> における <tt>application?</tt> 節を簡素化することもできたであろう。
+たとえ評価器<span class="note"> (itを評価器と解釈した) </span>がサポートする言語が、高階手続きを含むことになるだろうとしても、高階手続きを何も使わないで評価器を実装できる (よって、高階手続きを持たない言語でも評価器を書けただろう)、という事実を強調するために、私たちは、ここでは <tt>map</tt> を使わないことを選んだ。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_520" href="#call_footnote_Temp_520"><sup><small>6</small></sup></a> In this case, the language being implemented and the
+implementation language are the same.  Contemplation of the meaning of
+<a name="%_idx_4262"></a><tt>true?</tt> here yields expansion of consciousness without the abuse
+of substance.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_520"><sup><small>6</small></sup></a>
+この場合、実装されている言語と実装言語は、同じである。
+ここでの <tt>true?</tt> の意味についての熟考は、実質を侵害することなく、意識の拡大を生み出す。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_523" href="#call_footnote_Temp_523"><sup><small>7</small></sup></a> This implementation of <tt>define</tt> ignores a subtle
+issue in the handling of internal definitions, although it works
+correctly in most cases.  We will see what the problem is and how to
+solve it in section <a href="#%_sec_4.1.6">4.1.6</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_523"><sup><small>7</small></sup></a>
+<tt>define</tt> の実装は、ほとんどの場合において正しく動作するとはいえ、内部定義の取り扱いにおける微妙な論点を無視している。
+問題はなんなのか、そしてその問題をどう解決するのか、については、<a href="#%_sec_4.1.6">4.1.6</a>節で見ることにしよう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_524" href="#call_footnote_Temp_524"><sup><small>8</small></sup></a> As we said when we
+introduced <tt>define</tt> and <tt>set!</tt>, these values
+are implementation-dependent in Scheme -- that is, the implementor
+can choose what value to return.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_524"><sup><small>8</small></sup></a>
+<tt>define</tt> と <tt>set!</tt> を導入したときに言ったとおり、Schemeでは、これらの値は実装依存である。つまり、どんな値を返すのかを実装者が選べるのである。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_526" href="#call_footnote_Temp_526"><sup><small>9</small></sup></a> As mentioned in
+section <a href="16_sec2_3.html#%_sec_2.3.1">2.3.1</a>, the evaluator sees a quoted expression as
+a list beginning with <tt>quote</tt>, even if the
+expression is typed with the quotation mark.  For example, the
+expression <tt>'a</tt> would be seen by the evaluator as <tt>(quote a)</tt>.
+See exercise <a href="16_sec2_3.html#%_thm_2.55">2.55</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_526"><sup><small>9</small></sup></a>
+<a href="16_sec2_3.html#%_sec_2.3.1">2.3.1</a>節で述べたように、評価器は、引用された式を、たとえその式が引用符とともに打ち込まれたものであっても、<tt>quote</tt> で始まるリストとして見る。
+たとえば、<tt>'a</tt> という式は、評価器により、<tt>(quote a)</tt> だと見られるだろう。
+練習問題<a href="16_sec2_3.html#%_thm_2.55">2.55</a>を参照。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_527" href="#call_footnote_Temp_527"><sup><small>10</small></sup></a> The value of an <tt>if</tt> expression when the predicate
+is false and there is no alternative
+is unspecified in Scheme; we have chosen here to make it false.
+We will support the use of the variables <tt>true</tt> and <tt>false</tt>
+in expressions to be evaluated by binding them in the global
+environment.  See section <a href="#%_sec_4.1.4">4.1.4</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_527"><sup><small>10</small></sup></a>
+述語が偽であり、かつ、代替式がない場合の <tt>if</tt> の値は、Schemeでは指定されていない。
+私たちは、ここでは、その値を偽とすることを選んだ。
+私たちは、評価すべき式の中での <tt>true</tt> と <tt>false</tt> という変数の使用を、これらの変数を大域環境において束縛することによって、サポートしよう。
+<a href="#%_sec_4.1.4">4.1.4</a>節を参照のこと。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_528" href="#call_footnote_Temp_528"><sup><small>11</small></sup></a> These selectors for a list of expressions -- and the
+corresponding ones for a list of operands -- are not intended as a data
+abstraction.  They are introduced as mnemonic names for the basic list
+operations in order to make it easier to understand the explicit-control
+evaluator in section <a href="34_sec5_4.html#%_sec_5.4">5.4</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_528"><sup><small>11</small></sup></a>
+式のリストに対するこれらのセレクタ——および、それに対応する、オペランドのリストに対するセレクタ——は、データ抽象化として意図されているわけではない。
+それらは、<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節での明示的制御の<span class="note"> (?) </span>評価器を理解することをより易しくするために、基本的リスト演算に対する記憶しやすい名前として、導入される。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_530" href="#call_footnote_Temp_530"><sup><small>12</small></sup></a> The value of a <tt>cond</tt> expression when all the predicates
+are false and there is no <tt>else</tt> clause
+is unspecified in Scheme; we have chosen here to make it false.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_530"><sup><small>12</small></sup></a>
+すべての述語が偽であり、かつ、<tt>else</tt> 節がない場合の、<tt>cond</tt> 式の値は、Schemeでは指定されていない。
+私たちは、ここでは、その値を偽とすることを選んだ。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_531" href="#call_footnote_Temp_531"><sup><small>13</small></sup></a> Practical Lisp systems provide a
+mechanism that allows a user to add new derived expressions and
+specify their implementation as syntactic transformations without
+modifying the evaluator.  Such a user-defined transformation is called a
+<a name="%_idx_4374"></a><em>macro</em>.
+Although it is easy to add an elementary mechanism for defining macros,
+the resulting language has subtle name-conflict problems.
+There has been much research on mechanisms for macro definition
+that do not cause these difficulties.  See,
+<a name="%_idx_4376"></a><a name="%_idx_4378"></a><a name="%_idx_4380"></a><a name="%_idx_4382"></a>for example, Kohlbecker 1986, Clinger and Rees 1991, and Hanson 1991.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_531"><sup><small>13</small></sup></a>
+ユーザが新たな派生式を加え、評価器を修正せずにその派生式の実装を文法上の変形として指定することを可能とするような仕組みを、実用的なLispシステムは提供している。
+ユーザが定義したそうした変形は、<em>マクロ</em>と呼ばれる。
+マクロを定義するための基本的な仕組みを追加することは簡単だが、結果として生じる言語には、名前衝突の微妙な問題がある。
+このような厄介事を引き起こさないようなマクロ定義用の仕組みについては、たくさんの研究がなされてきた。
+たとえば、Kohlbecker 1986 や、Clinger and Rees 1991 や、Hanson 1991 を参照。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_544" href="#call_footnote_Temp_544"><sup><small>14</small></sup></a> Frames are not really a data abstraction in the following code:
+<tt>Set-variable-value!</tt> and <tt>define-variable!</tt> use <tt>set-car!</tt>
+to directly modify the values in a frame.  The purpose of the frame
+procedures is to make the environment-manipulation procedures easy to read.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_544"><sup><small>14</small></sup></a>
+以下のコードにおいて、フレームは、本当はデータ抽象化ではない。
+すなわち、<tt>set-variable-value!</tt> と <tt>define-variable!</tt> は、<tt>set-car!</tt> を使って直接的にフレーム内の値を変える。
+フレーム手続きの目的は、環境操作手続きを読みやすくすることである。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_545" href="#call_footnote_Temp_545"><sup><small>15</small></sup></a> The drawback of this representation (as well as the variant in
+exercise <a href="#%_thm_4.11">4.11</a>) is that the evaluator
+may have to search through many frames in order to find the binding
+for a given variable.
+<a name="%_idx_4488"></a><a name="%_idx_4490"></a>(Such an approach is referred to as <em>deep binding</em>.) 
+One way to avoid
+this inefficiency is to make use of a strategy called <em>lexical
+addressing</em>, which will be discussed in
+section <a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_545"><sup><small>15</small></sup></a>
+この表現 (練習問題<a href="#%_thm_4.11">4.11</a>での変種も同様) の不利な点は、与えられた変数に対する束縛を見つけるために、評価器が多くのフレームを探し回らねばならない場合がある、という点である
+(そうした手法は<em>深い束縛</em>と呼ばれる)。
+この非効率さを避けるための一法は、<em>レキシカル・アドレシング</em>と呼ばれる戦略を利用することだが、これについては、<a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a>節で議論しよう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_549" href="#call_footnote_Temp_549"><sup><small>16</small></sup></a> Any procedure defined in the underlying Lisp can be used as
+a primitive for the metacircular evaluator.  The name of a
+primitive installed in the evaluator need not be the same as the name
+of its implementation in the underlying Lisp; the names are the same
+here because the metacircular evaluator implements Scheme itself.
+Thus, for example, we could put <tt>(list 'first car)</tt> or <tt>(list
+'square (lambda (x) (* x x)))</tt> in the list of <tt>primitive-procedures</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_549"><sup><small>16</small></sup></a>
+根底にあるLispにおいて定義されているどの手続きも、メタ循環的な評価器用のプリミティブとして使える。
+評価器に組み込まれているプリミティブの名前は、根底にあるLispにおけるそのプリミティブの実装の名前と同じである必要はない。
+ただ、ここでは、メタ循環的な評価器がScheme自体を実装しているので、名前は同じである。
+よって、たとえば、<tt>primitive-procedures</tt> のリストの中に、<tt>(list 'first car)</tt> または <tt>(list 'square (lambda (x) (* x x)))</tt> を入れておくこともできるだろう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_550" href="#call_footnote_Temp_550"><sup><small>17</small></sup></a> <tt>Apply-in-underlying-scheme</tt> is the <tt>apply</tt> procedure
+we have used in earlier chapters.  The metacircular evaluator's <tt>apply</tt> procedure (section <a href="#%_sec_4.1.1">4.1.1</a>) models the
+working of this primitive.  Having two different things called <tt>apply</tt> leads to a technical problem in running the metacircular
+evaluator, because defining the metacircular evaluator's <tt>apply</tt>
+will mask the definition of the primitive.  One way around this is to
+rename the metacircular <tt>apply</tt> to avoid conflict with the name of
+the primitive procedure.  We have assumed instead that we have saved a
+reference to the underlying <tt>apply</tt> by doing
+</p>
+
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_550"><sup><small>17</small></sup></a>
+<tt>apply-in-underlying-scheme</tt> は、以前の章で使った <tt>apply</tt> という手続きである。
+メタ循環的な評価器の <tt>apply</tt> という手続き (<a href="#%_sec_4.1.1">4.1.1</a>節) は、このプリミティブの働きをモデル化している。
+<tt>apply</tt> と呼ばれる二つの異なるものがあると、メタ循環的な評価器を実行する上での技術上の問題を招いてしまう。なぜなら、メタ循環的な評価器 の<tt>apply</tt> を定義することは、プリミティブの定義を覆い隠してしまうだろうからである。
+これにまつわる一つの方法は、メタ循環的な <tt>apply</tt> を改名して、原始的手続きの名前との衝突を避けることである。
+私たちはその代わりに、以下のようにすることで、根底にある <tt>apply</tt> への参照を退避した、と想定した。
+</p>
+
+<p class="lisp">(define apply-in-underlying-scheme apply)
+</p>
+
+
+<p class="orig" lang="en">before defining the metacircular <tt>apply</tt>.  This allows us to
+access the original version of <tt>apply</tt> under a different name.
+</p>
+
+<p class="trans" lang="ja">
+ただしこれは、メタ循環的な <tt>apply</tt> を定義する前に行うものとする。
+これによって私たちは、違う名前のもとで <tt>apply</tt> の元々のバージョンにアクセスすることが可能となる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_551" href="#call_footnote_Temp_551"><sup><small>18</small></sup></a> The primitive procedure <a name="%_idx_4522"></a><a name="%_idx_4524"></a><tt>read</tt> waits for input from the user,
+and returns the next complete expression that is typed.
+For example, if the user types <tt>(+ 23 x)</tt>, <tt>read</tt> returns
+a three-element list containing the symbol <tt>+</tt>, the number 23,
+and the symbol <tt>x</tt>.
+<a name="%_idx_4526"></a><a name="%_idx_4528"></a>If the user types <tt>'x</tt>, <tt>read</tt> returns a two-element list
+containing the symbol <tt>quote</tt> and the symbol <tt>x</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_551"><sup><small>18</small></sup></a>
+<tt>read</tt> という原始的手続きは、ユーザからの入力を待ち、打ち込まれる次の完全な式を返す。
+たとえば、もしユーザが <tt>(+ 23 x)</tt> と打ち込んだら、<tt>read</tt> は、<tt>+</tt> という記号と23という数と <tt>x</tt> という記号とを含む、三要素のリストを返す。
+もしユーザが <tt>'x</tt> と打ち込んだら、<tt>read</tt> は、<tt>quote</tt> という記号と <tt>x</tt> という記号とを含む、二要素のリストを返す。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_553" href="#call_footnote_Temp_553"><sup><small>19</small></sup></a> The fact that the machines are described in Lisp is
+inessential.  If we give our evaluator a Lisp program
+that behaves as an evaluator for
+some other language, say C, the Lisp evaluator will emulate the C
+evaluator, which in turn can emulate any machine described as a C
+program.  Similarly, writing a Lisp evaluator in C produces a C
+program that can execute any Lisp program.  The deep idea here is that
+any evaluator can emulate any other.  Thus, the notion of ``what can
+in principle be computed'' (ignoring practicalities of time and
+memory required) is independent of the language or the computer, and
+instead reflects an underlying notion of <a name="%_idx_4554"></a><em>computability</em>.  This
+was first demonstrated in a clear way by <a name="%_idx_4556"></a>Alan M. Turing (1912-1954),
+whose 1936 paper laid the foundations for theoretical <a name="%_idx_4558"></a>computer
+science.  In the paper, Turing presented a simple computational
+model -- now known as a <a name="%_idx_4560"></a><em>Turing machine</em> -- and argued that any
+``effective process'' can be formulated as a program for such a
+machine.  (This argument is known as the <a name="%_idx_4562"></a><em>Church-Turing thesis</em>.)
+Turing then implemented a universal machine, i.e., a Turing machine
+that behaves as an evaluator for Turing-machine programs.  He used
+this framework to demonstrate that there are well-posed problems that
+cannot be computed by Turing machines (see
+exercise <a href="#%_thm_4.15">4.15</a>), and so by implication cannot be
+formulated as ``effective processes.''  Turing went on to make
+fundamental contributions to practical computer science as well.  For
+example, he invented the idea of <a name="%_idx_4564"></a>structuring programs using
+general-purpose subroutines.  See <a name="%_idx_4566"></a>Hodges 1983 for a biography of
+Turing.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_553"><sup><small>19</small></sup></a>
+機械がLispで記述される、という事実は、非本質的である。
+もし、何らかの他の言語——たとえば C ——の評価器として振る舞うLispプログラムを、私たちの評価器に与えれば、Lisp評価器は、C評価器をエミュレートするだろうし、今度はそのC評価器が、Cプログラムとして記述される任意の機械をエミュレートできるだろう。
+同様に、CでLisp評価器を書くことで、任意のLispプログラムを実行できるCプログラムが作り出される。
+ここでの深遠な考えは、任意の評価器は任意の他の評価器をエミュレートできる、というものだ。
+ゆえに、「原理的に何が計算できるのか」という概念 (必要とされる時間とメモリについての現実的側面は無視する) は、言語ないしコンピュータから独立なのであり、その代わり、<em>計算可能性</em>という、根底にある概念を反映しているのである。
+このことは、アラン・M・チューリング (1912〜1954年) によって初めて明快な方法で立証され、彼の1936年の論文は、理論計算機科学の基礎を築いた。
+その論文で、チューリングは、単純な計算モデル——今では<em>チューリング機械</em>として知られる——を提示し、いかなる「有効なプロセス」もそのような機械のためのプログラムとして定式化することができるのだ、と主張した
+(この主張は、<em>チャーチ・チューリングの定理</em>として知られる)。
+チューリングはそれから、普遍機械——すなわち、チューリング機械のプログラム用の評価器として振る舞うチューリング機械——を実装した。
+彼はこの枠組みを使って、チューリング機械では計算できない——そのため論理包含によっては「有効なプロセス」として定式化できない——良設定問題が存在することを、立証した (練習問題<a href="#%_thm_4.15">4.15</a>を参照)。
+<span class="note">(and so by ... のところの意味がちゃんと取れていないかも。要検討。)</span>
+チューリングは、引き続き、実際的な計算機科学に対しても基礎をなす重要な貢献を行った。
+たとえば、彼は、汎用サブルーチンを使ってプログラムを構造化する、という概念を考案した。
+チューリングの伝記については、Hodges 1983を参照のこと。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_554" href="#call_footnote_Temp_554"><sup><small>20</small></sup></a> Some people find it
+counterintuitive that an evaluator, which is implemented by a
+relatively simple procedure, can emulate programs that are more
+complex than the evaluator itself.  The existence of a universal
+evaluator machine is a deep and wonderful property of computation.
+<a name="%_idx_4568"></a><em>Recursion theory</em>, a branch of mathematical logic, is concerned
+with logical limits of computation.  <a name="%_idx_4570"></a>Douglas Hofstadter's beautiful
+book <em>G&ouml;del, Escher, Bach</em> (1979) explores some of these ideas.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_554"><sup><small>20</small></sup></a>
+評価器——比較的単純な手続きによって実装されている——が、評価器自体よりも複雑なプログラムをエミュレートできることを、直感に反している、と感じる人もいる。
+普遍的エミュレータ機械の存在は、計算の深遠かつ驚異的な性質なのだ。
+<em>再帰理論</em>——数学的論理学の一分野——は、計算の論理的限界に関係する。
+ダグラス・ホフスタッターの『<a href="https://www.amazon.co.jp/ゲーデル、エッシャー、バッハ―あるいは不思議の環-20周年記念版-ダグラス・R-ホフスタッター/dp/4826901259" target="_blank">ゲーデル、エッシャー、バッハ</a>』という素晴らしい本 (1979年) は、これらの概念のうちのいくつかを探求している。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_555" href="#call_footnote_Temp_555"><sup><small>21</small></sup></a> Warning:
+<a name="%_idx_4576"></a>This <tt>eval</tt> primitive is not
+identical to the <tt>eval</tt> procedure we implemented in
+section <a href="#%_sec_4.1.1">4.1.1</a>, because it uses <em>actual</em>
+Scheme environments rather than the sample environment structures we
+built in section <a href="#%_sec_4.1.3">4.1.3</a>.  These actual
+environments cannot be manipulated by the user as ordinary lists; they
+must be accessed via <tt>eval</tt> or other special operations.
+<a name="%_idx_4578"></a>Similarly, the <tt>apply</tt> primitive we saw earlier is not identical
+to the metacircular <tt>apply</tt>, because it uses actual Scheme procedures
+rather than the procedure objects we constructed in
+sections <a href="#%_sec_4.1.3">4.1.3</a> and <a href="#%_sec_4.1.4">4.1.4</a>.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_555"><sup><small>21</small></sup></a>
+警告: この <tt>eval</tt> プリミティブは、<a href="#%_sec_4.1.1">4.1.1</a>節で実装した  <tt>eval</tt> 手続きと同一ではない。なぜなら、この <tt>eval</tt> プリミティブは、<a href="#%_sec_4.1.3">4.1.3</a>節で組み込んだサンプル環境構造ではなく、むしろ、<em>実際の</em>Scheme環境を使うからである。
+こうした実際の環境が、ユーザによって通常のリストとして扱われることはありえない。
+こうした実際の環境は、<tt>eval</tt> または他の特殊な演算を介してアクセスされねばならない。
+同様に、以前に見た <tt>apply</tt> プリミティブは、メタ循環的な <tt>apply</tt> と同一ではない。なぜなら、以前に見た <tt>apply</tt> プリミティブは、<a href="#%_sec_4.1.3">4.1.3</a>節と<a href="#%_sec_4.1.4">4.1.4</a>節で構築した手続きオブジェクトではなく、むしろ、実際のScheme手続きを使うからである。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_556" href="#call_footnote_Temp_556"><sup><small>22</small></sup></a> The MIT
+<a name="%_idx_4580"></a><a name="%_idx_4582"></a><a name="%_idx_4584"></a><a name="%_idx_4586"></a>implementation of Scheme includes <tt>eval</tt>, as well as a symbol <tt>user-initial-environment</tt> that is bound to the initial environment in
+which the user's input expressions are evaluated.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_556"><sup><small>22</small></sup></a>
+SchemeのMITでの実装は、ユーザの入力式が評価される初期環境に束縛されている <tt>user-initial-environment</tt> という記号とともに、<tt>eval</tt> を含んでいる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_558" href="#call_footnote_Temp_558"><sup><small>23</small></sup></a> Although we stipulated that <tt>halts?</tt> is given a procedure object,
+notice that this reasoning still applies even if <tt>halts?</tt> can gain
+access to the procedure's text and its environment.
+<a name="%_idx_4590"></a><a name="%_idx_4592"></a><a name="%_idx_4594"></a><a name="%_idx_4596"></a>This is Turing's celebrated <em>Halting Theorem</em>, which gave
+the first clear example of a <em>non-computable</em> problem, i.e., a
+well-posed task that cannot be carried out as a computational
+procedure.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_558"><sup><small>23</small></sup></a>
+<tt>halts?</tt> には手続きオブジェクトが与えられるのだ、と規定したわけだが、ここでの推論は、たとえ <tt>halts?</tt> がその手続きの文面およびその手続きの環境へのアクセス権を得ることができるのだとしても、依然として成り立つ。
+これがチューリングの著名な<em>停止定理</em>であり、停止定理は、<em>計算不能な</em>問題——すなわち、計算手続きとして実行できない良設定タスク——の最初の明快な例を示した。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_559" href="#call_footnote_Temp_559"><sup><small>24</small></sup></a> Wanting programs to not depend on this evaluation
+mechanism is the reason for the ``management is not
+responsible'' remark in footnote <a href="10_sec1_1.html#footnote_Temp_45">28</a> of chapter 1.
+By insisting that internal definitions come first and do not use each
+other while the definitions are being evaluated, the IEEE standard
+for Scheme leaves implementors some choice in the mechanism used to
+evaluate these definitions.  The choice of one evaluation rule rather
+than another here may seem like a small issue, affecting only the
+interpretation of ``badly formed'' programs.  However, we will see in
+section <a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a> that moving to a model of
+simultaneous scoping for internal definitions avoids some nasty
+difficulties that would otherwise arise in implementing a compiler.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_559"><sup><small>24</small></sup></a>
+この評価の仕組みにプログラムが依存してほしくない、と望んでいることが、1章の脚注<a href="10_sec1_1.html#footnote_Temp_45">28</a>にある「運営側は、責任を持たない」という発言の理由である。
+内部定義は最初に来て、かつ、それらの定義が評価されている最中には互いを使わないのだ、と強く主張することで、SchemeについてのIEEE標準は、これらの定義を評価するのに使われる仕組みについて、ある程度の選択の自由を実装者に残している。
+他でもない一つの評価規則をここで選んだことは、小さな問題のように——「まずく形成された」プログラムの解釈にしか影響しない、と——見えるかもしれない。
+しかし、内部定義について同時に範囲を決める、というモデルへと移ることによって、他の方法だとコンパイラを実装する際に起こるであろう幾つかの厭な厄介事を避けられるのだ、ということを<a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a>節において見ることになるだろう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_560" href="#call_footnote_Temp_560"><sup><small>25</small></sup></a> The IEEE standard for Scheme
+allows for different implementation strategies by specifying that it
+is up to the programmer to obey this restriction, not up to the
+implementation to enforce it.  Some Scheme implementations, including
+<a name="%_idx_4610"></a>MIT Scheme, use the transformation shown above.  Thus, some programs
+that don't obey this restriction will in fact run in such implementations.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_560"><sup><small>25</small></sup></a>
+SchemeについてのIEEE標準は、この制約に従うことはプログラマの責任であって、この制約を強制することは処理系の責任ではない、と明確に規定することによって、異なる実装戦略を想定している。
+MIT Schemeを含むいくつかのScheme処理系は、上に示した変形を使う。
+よって、そうした処理系では、この制約に従わないある種のプログラムが、実際に動作することだろう。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_565" href="#call_footnote_Temp_565"><sup><small>26</small></sup></a> The MIT implementors of Scheme support Alyssa on
+the following grounds: Eva is in principle correct -- the definitions
+should be regarded as simultaneous.  But it seems difficult to
+implement a general, efficient mechanism that does what Eva requires.
+In the absence of such a mechanism, it is better to generate an error
+in the difficult cases of simultaneous definitions (Alyssa's notion)
+than to produce an incorrect answer (as Ben would have it).
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_565"><sup><small>26</small></sup></a>
+SchemeのMITでの処理系は、以下の理由によりアリッサを支持している。
+エヴァは原則として正しい——定義は、同時的だと見なされるべきである。
+しかし、エヴァが要求することを行うような、一般的で効率的な仕組みを実装することは、難しいようだ。
+そうした仕組みがない場合、同時的な定義の難しい事例においては、エラーを生成すること (アリッサの見解) の方が、(ベンが主張したような) 正しくない答えを作り出すことよりも、ましである。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_568" href="#call_footnote_Temp_568"><sup><small>27</small></sup></a> This example illustrates a programming trick for
+formulating recursive procedures without using <tt>define</tt>.  The
+<a name="%_idx_4628"></a>most general trick of this sort is the <em>Y</em> <em>operator</em>, which can
+be used to give a ``pure <img src="book-Z-G-D-6.gif" border="0">-calculus'' implementation of
+<a name="%_idx_4630"></a><a name="%_idx_4632"></a>recursion.  (See Stoy 1977 for details on the lambda calculus, and
+Gabriel 1988 for an exposition of the <em>Y</em> operator in Scheme.)
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_568"><sup><small>27</small></sup></a>
+この例は、<tt>define</tt> を使わないで再帰的手続きを定式化するためのプログラミングの技を例解している。
+この種のものでもっとも一般的な技は、<em class="en">Y</em><em>オペレータ</em>であるが、これは、再帰についての「純粋な&lambda;計算」の実装を与えるために使える
+(ラムダ計算についての詳細については Stoy 1977 を、Schemeにおける<em class="en">Y</em><em>オペレータ</em>の解説については Gabriel 1988 を、参照されたい)。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_569" href="#call_footnote_Temp_569"><sup><small>28</small></sup></a> This technique is an integral part of the compilation
+process, which we shall discuss in chapter 5.  Jonathan Rees wrote a Scheme
+<a name="%_idx_4644"></a><a name="%_idx_4646"></a><a name="%_idx_4648"></a><a name="%_idx_4650"></a>interpreter like this in about 1982 for the T project (Rees and Adams
+1982).  Marc Feeley (1986) (see also Feeley and Lapalme 1987)
+independently invented this technique
+in his master's thesis.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_569"><sup><small>28</small></sup></a>
+この技法は、コンパイル・プロセス——5章で議論することにしよう——における不可欠な部分である。
+ジョナサン・リーズは、このようなSchemeインタプリタを、Tプロジェクトのために1982年前後に書いた (Rees and Adams 1982)。
+それとは独立に、Marc Feeley (1986) (Feeley and Lapalme 1987 も参照) が、彼の修士論文の中でこの技法を考案した。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_570" href="#call_footnote_Temp_570"><sup><small>29</small></sup></a> There is,
+however, an important part of the variable search that <em>can</em> be
+done as part of the syntactic analysis.  As we will show in
+section <a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a>, one can determine the position
+in the environment structure where the value of the variable will be
+found, thus obviating the need to scan the environment for the entry
+that matches the variable.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_570"><sup><small>29</small></sup></a>
+しかし、文法的解析の一部としてなし<em>得る</em>、変数探索の重要な部分がある。
+<a href="35_sec5_5.html#%_sec_5.5.6">5.5.6</a>節で見ることになるとおり、変数の値が見つかるであろう環境構造内の位置を突き止めることが可能であり、よって、変数に合致する<ruby><rb>項目</rb><rp> (</rp><rt>エントリ</rt><rp>) </rp></ruby>を求めて環境を走査する必要をなくせるのだ。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_571" href="#call_footnote_Temp_571"><sup><small>30</small></sup></a> See exercise <a href="#%_thm_4.23">4.23</a> for some insight
+into the processing of sequences.
+</p>
+
+<p class="trans" lang="ja">
+<a href="#call_footnote_Temp_571"><sup><small>30</small></sup></a>
+連なりの処理に対するいくつかの洞察については、練習問題<a href="#%_thm_4.23">4.23</a>を参照。
+</p>
+
+</div>
+
+</body>
+</html>
