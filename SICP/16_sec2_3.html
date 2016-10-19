@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="15_sec2_2.html">前へ</a> |
+<a href="17_sec2_4.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]
+[
+§<a href="#%_sec_2.3">2.3</a>
+§<a href="#%_sec_2.3.1">2.3.1</a>
+📝<a href="#%_thm_2.53">2.53</a>
+📝<a href="#%_thm_2.54">2.54</a>
+📝<a href="#%_thm_2.55">2.55</a>
+§<a href="#%_sec_2.3.2">2.3.2</a>
+📚<a href="#%_sec_Temp_235">&hellip;</a>
+📚<a href="#%_sec_Temp_236">&hellip;</a>
+📝<a href="#%_thm_2.56">2.56</a>
+📝<a href="#%_thm_2.57">2.57</a>
+📝<a href="#%_thm_2.58">2.58</a>
+§<a href="#%_sec_2.3.3">2.3.3</a>
+📚<a href="#%_sec_Temp_241">&hellip;</a>
+📝<a href="#%_thm_2.59">2.59</a>
+📝<a href="#%_thm_2.60">2.60</a>
+📚<a href="#%_sec_Temp_244">&hellip;</a>
+📝<a href="#%_thm_2.61">2.61</a>
+📝<a href="#%_thm_2.62">2.62</a>
+📚<a href="#%_sec_Temp_247">&hellip;</a>
+🎨<a href="#%_fig_2.16">2.16</a>
+🎨<a href="#%_fig_2.17">2.17</a>
+📝<a href="#%_thm_2.63">2.63</a>
+📝<a href="#%_thm_2.64">2.64</a>
+📝<a href="#%_thm_2.65">2.65</a>
+📚<a href="#%_sec_Temp_255">&hellip;</a>
+📝<a href="#%_thm_2.66">2.66</a>
+§<a href="#%_sec_2.3.4">2.3.4</a>
+🎨<a href="#%_fig_2.18">2.18</a>
+📚<a href="#%_sec_Temp_257">&hellip;</a>
+📚<a href="#%_sec_Temp_259">&hellip;</a>
+📚<a href="#%_sec_Temp_260">&hellip;</a>
+📚<a href="#%_sec_Temp_261">&hellip;</a>
+📝<a href="#%_thm_2.67">2.67</a>
+📝<a href="#%_thm_2.68">2.68</a>
+📝<a href="#%_thm_2.69">2.69</a>
+📝<a href="#%_thm_2.70">2.70</a>
+📝<a href="#%_thm_2.71">2.71</a>
+📝<a href="#%_thm_2.72">2.72</a>
+<a href="#footnotes">脚注</a>
+]
+</nav>
+
+</div>
+
+<div class="main-txt">
+
+<a name="%_sec_2.3"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.3">2.3  Symbolic Data</a></h2>
+<h2 class="trans" lang="ja">2.3 記号的データ</h2>
+
+<p class="orig" lang="en">
+<a name="%_idx_1984"></a>
+<a name="%_idx_1986"></a>All the compound data objects we have used so far were constructed
+ultimately from numbers.  In this section we extend the representational
+capability of our language by introducing the ability to work with
+arbitrary symbols as data.</p>
+
+<p class="trans" lang="ja">
+これまでに私たちが使ってきたすべての複合的データオブジェクトは、究極的には数から構築されていた。
+本節では、データとして任意の記号を使って作業する能力を導入することにより、私たちの言語の表現能力を拡張する。
+</p>
+
+<a name="%_sec_2.3.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.3.1">2.3.1  Quotation</a></h3>
+<h3 class="trans" lang="ja">2.3.1 引用</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_1988"></a>
+If we can form compound data using symbols, we can have lists such as
+</p>
+
+<p class="trans" lang="ja">もし記号を使って複合的データを形成できたら、以下のようなリストがあり得る。
+</p>
+
+<p class="lisp"><a name="%_idx_1990"></a>(a b c d)
+(23 45 17)
+((Norah 12) (Molly 9) (Anna 7) (Lauren 6) (Charlotte 4))
+</p>
+
+<p class="orig" lang="en">
+Lists containing symbols can look just like the expressions of our
+language:
+</p>
+
+<p class="trans" lang="ja">
+記号を含むリストは、単に、私たちの言語の式のように見えることがあり得る。
+</p>
+
+<p class="lisp">(* (+ 23 45) (+ x 9))
+
+(define (fact n) (if (= n 1) 1 (* n (fact (- n 1)))))
+</p>
+
+<p class="orig" lang="en">
+In order to manipulate symbols we need a new element in our language:
+the ability to <em>quote</em> a data object.  Suppose we want to
+construct the list <tt>(a b)</tt>.  We can't accomplish this with <tt>(list a b)</tt>, because this expression constructs
+a list of the <em>values</em> of <tt>a</tt> and <tt>b</tt> rather than
+the symbols themselves.  This issue is well known in the context of
+<a name="%_idx_1992"></a><a name="%_idx_1994"></a>natural languages, where words and sentences may be regarded either as
+semantic entities or as character strings (syntactic entities).  The
+common practice in natural languages is to use quotation marks to
+indicate that a word or a sentence is to be treated literally as a
+string of characters.  For instance, the first letter of ``John'' is
+clearly ``J.''  If we tell somebody ``say your name aloud,'' we expect
+to hear that person's name.  However, if we tell somebody ``say `your
+name' aloud,'' we expect to hear the words ``your name.''  Note that
+we are forced to nest quotation marks to describe what somebody else
+might say.<a name="call_footnote_Temp_227" href="#footnote_Temp_227"><sup><small>32</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+記号を操作するためには、私たちの言語に新たな要素が要る——つまり、データオブジェクトを<em>引用</em>する能力が要る。
+<tt>(a b)</tt> というリストを構築したいのだとしよう。
+これを、<tt>(list a b)</tt> を使って達成することは、できない——なぜなら、この式は、<tt>a</tt> と <tt>b</tt> の記号自体というよりもむしろ、その<em>値</em> のリストを構築するからである。
+この論点は、自然言語の文脈でよく知られている——自然言語の文脈では、単語や文は、意味的な実体だと見なされるか、あるいは、文字列 (統語的な実体) だと見なされるかの、いずれかである。
+自然言語での普通の習慣は、単語または文が、書いてあるとおりに文字列として扱われるべきだ、ということを示すために、引用符を使うことである。
+たとえば、「John」の最初の文字は明らかに「J」だ。
+誰かに「あなたの名前を声に出して言って」と言うとき、私たちは、その人物の名前を聞くことを予期している。
+しかし、「『あなたの名前』を声に出して言って」と言うとき、私たちは、「あなたの名前」という言葉を聞くことを予期している。
+誰かほかの人が言うかもしれないことを記述するためには、引用符を入れ子にせざるを得ない、ということに注意してほしい<a href="#footnote_Temp_227"><sup><small>32</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_1998"></a>We can follow this same practice to identify lists and symbols that are
+to be treated as data objects rather than as expressions to be
+evaluated.  However, our format for quoting differs from that of
+natural languages in that we place a quotation mark (traditionally,
+the single <a name="%_idx_2000"></a>quote symbol <tt>'</tt>) only at the beginning of the object
+to be quoted.  We can get away with this in Scheme syntax because we
+rely on blanks and parentheses to delimit objects.  Thus, the meaning
+of the single quote character is to quote the next object.<a name="call_footnote_Temp_228" href="#footnote_Temp_228"><sup><small>33</small></sup></a></p>
+
+<p class="trans" lang="ja">
+評価すべき式として、というよりも、むしろデータオブジェクトとして扱われるべき、リストや記号を識別するために、この同じ習慣に従うことが可能だ。
+しかし、引用のための私たちの形式は、引用すべきオブジェクトの最初にだけ引用符 (伝統的には、<tt>'</tt> という、一重引用記号) を置く、という点において、自然言語での形式とは異なる。
+このことをSchemeの文法でやってのけることができる——なぜなら、オブジェクト同士を区切るのに空白と括弧に頼っているからである。
+よって、一重引用符文字の意味は、次のオブジェクトを引用する、ということである<a href="#footnote_Temp_228"><sup><small>33</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2010"></a>Now we can distinguish between symbols and their values:
+</p>
+
+<p class="trans" lang="ja">
+さて今や私たちは、記号とその値とを区別できる。
+</p>
+
+<p class="lisp">(define a 1)
+
+(define b 2)
+
+(list a b)
+<i>(1 2)</i>
+
+(list 'a 'b)
+<i>(a b)</i>
+
+(list 'a b)
+<i>(a 2)</i>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2012"></a>Quotation also allows us to type in compound objects, using the
+conventional printed representation for lists:<a name="call_footnote_Temp_229" href="#footnote_Temp_229"><sup><small>34</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+引用のおかげで、複合的オブジェクトの形で——リストの、従来どおりの印字された表現を使って——タイプすることが、可能になる<a href="#footnote_Temp_229"><sup><small>34</small></sup></a>。
+</p>
+
+<p class="lisp">(car '(a b c))
+<i>a</i>
+
+(cdr '(a b c))
+<i>(b c)</i>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2018"></a><a name="%_idx_2020"></a>In keeping with this, we can obtain the empty list by evaluating <tt>'()</tt>, and thus dispense with the variable <tt>nil</tt>.</p>
+
+<p class="trans" lang="ja">
+この線に沿うと、私たちは、<tt>'()</tt> を評価することで空リストを得ることができ、ゆえに、<tt>nil</tt> という変数なしで済ますことができる。
+</p>
+
+<p class="orig" lang="en">
+One additional primitive used in manipulating symbols is <a name="%_idx_2022"></a><a name="%_idx_2024"></a><a name="%_idx_2026"></a><a name="%_idx_2028"></a><tt>eq?</tt>,
+which takes two symbols as arguments and tests whether they are the
+same.<a name="call_footnote_Temp_230" href="#footnote_Temp_230"><sup><small>35</small></sup></a> Using <tt>eq?</tt>,
+we can implement a useful procedure called <tt>memq</tt>.  This takes two
+arguments, a symbol and a list.  If the symbol is not contained in the
+list (i.e., is not <tt>eq?</tt> to any item in the list), then <tt>memq</tt> returns false.  Otherwise, it returns the sublist of
+the list beginning with the first occurrence of the symbol:
+</p>
+
+<p class="trans" lang="ja">
+記号を操作するときに使われる追加的なプリミティブの一つは、<tt>eq?</tt> であり、これは、引数として二つの記号を取り、それらが同じかどうかを検査する<a href="#footnote_Temp_230"><sup><small>35</small></sup></a>。
+<tt>eq?</tt> を使うと、<tt>memq</tt> と呼ばれる有用な手続きを実装できる。
+これは、二つの引数——すなわち、記号とリスト——をとる。
+もし、その記号がそのリストに含まれていなければ (つまり、その記号が、そのリスト内のどの項目に対しても <tt>eq?</tt> でなければ)、<tt>memq</tt> は偽を返す。
+それ以外の場合、<tt>memq</tt> は、その記号の最初の出現から始まる、そのリストの部分リストを、返す。
+</p>
+
+<p class="lisp"><a name="%_idx_2030"></a>(define (memq item x)
+  (cond ((null? x) false)
+        ((eq? item (car x)) x)
+        (else (memq item (cdr x)))))
+</p>
+
+<p class="orig" lang="en">
+For example, the value of
+</p>
+
+<p class="trans" lang="ja">
+たとえば、以下のものの値は、
+</p>
+
+<p class="lisp">(memq 'apple '(pear banana prune))
+</p>
+
+<p class="orig" lang="en">
+is false, whereas the value of
+</p>
+
+<p class="trans" lang="ja">
+偽であるのに対し、以下のものの値は、
+</p>
+
+<p class="lisp">(memq 'apple '(x (apple sauce) y apple pear))
+</p>
+
+<p class="orig" lang="en">
+is <tt>(apple pear)</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<tt>(apple pear)</tt> である。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.53"></a>
+<b>Exercise 2.53.</b>  What would the interpreter print in response to evaluating each of the
+following expressions?
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.53.</b> 以下の式の各々を評価するのに応じて、インタプリタは、何を印字するだろうか?
+</p>
+
+<p class="lisp">(list 'a 'b 'c)
+
+(list (list 'george))
+(cdr '((x1 x2) (y1 y2)))
+
+(cadr '((x1 x2) (y1 y2)))
+(pair? (car '(a short list)))
+(memq 'red '((red shoes) (blue socks)))
+
+(memq 'red '(red shoes blue socks))
+</p>
+
+<p class="exercise">&gt; (list 'a 'b 'c)
+<i>(a b c)</i>
+&gt; (list (list 'george))
+<i>((george))</i>
+&gt; (cdr '((x1 x2) (y1 y2)))
+<i>((y1 y2))</i>
+&gt; (cadr '((x1 x2) (y1 y2)))
+<i>(y1 y2)</i>
+&gt; (pair? (car '(a short list)))
+<i>#f</i>
+&gt; (memq 'red '((red shoes) (blue socks)))
+<i>#f</i>
+&gt; (memq 'red '(red shoes blue socks))
+<i>(red shoes blue socks)</i>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.54"></a>
+<b>Exercise 2.54.</b>  Two lists are said to be <a name="%_idx_2032"></a><a name="%_idx_2034"></a><a name="%_idx_2036"></a><tt>equal?</tt> if they contain equal elements
+arranged in the same order.  For example,
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.54.</b> 二つのリストは、同じ順序で並んだ等しい要素を含んでいる場合に、<tt>equal?</tt> であると言われる。
+</p>
+
+<p class="lisp">(equal? '(this is a list) '(this is a list))
+</p>
+
+<p class="orig" lang="en">
+is true, but
+</p>
+
+<p class="trans" lang="ja">
+は真だが、
+</p>
+
+<p class="lisp">(equal? '(this is a list) '(this (is a) list))
+</p>
+
+<p class="orig" lang="en">
+is false.  To be more precise, we can define <tt>equal?</tt>
+recursively in terms of the basic <tt>eq?</tt> equality of symbols by
+saying that <tt>a</tt> and <tt>b</tt> are <tt>equal?</tt> if they are both
+symbols and the symbols are <tt>eq?</tt>, or if they are both lists such
+that <tt>(car a)</tt> is <tt>equal?</tt> to <tt>(car b)</tt> and <tt>(cdr
+a)</tt> is <tt>equal?</tt> to <tt>(cdr b)</tt>.  Using this idea, implement
+<tt>equal?</tt> as a procedure.<a name="call_footnote_Temp_233" href="#footnote_Temp_233"><sup><small>36</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+は偽である。
+より正確には、記号についての基本的な <tt>eq?</tt> 等価性を使って、再帰的に <tt>equal?</tt> を定義できる——<tt>a</tt> と <tt>b</tt> は、ともに記号であり、かつ、その記号同士が <tt>eq?</tt> である場合か、もしくは、<tt>(car a)</tt> が <tt>(car b)</tt> に対して <tt>equal?</tt> であり、かつ、<tt>(cdr a)</tt> が <tt>(cdr b)</tt> に対して <tt>equal?</tt> であるようなリスト同士である場合に、<tt>equal?</tt> である、と言うことによって。
+この考えを使って、<tt>equal?</tt> を手続きとして実装せよ<a href="#footnote_Temp_233"><sup><small>36</small></sup></a>。
+</p>
+
+<p class="exercise">(define (equal? a b)
+  (cond ((and (symbol? a) (symbol? b) (eq? a b)) #t)
+        ((and (null? a) (null? b)) #t)
+        ((and (list? a) (not (null? a)) (list? b) (not (null? b)))
+         (and (equal? (car a) (car b)) (equal? (cdr a) (cdr b))))
+        (else #f)))
+</p>
+
+<p class="exercise"><span class="ex_comment">; 実行例</span>
+gosh&gt; (equal? 1 1)
+#f
+gosh&gt; (equal? 'a 'a)
+#t
+gosh&gt; (equal? 'a 'b)
+#f
+gosh&gt; (equal? 'a '(x y z))
+#f
+gosh&gt; (equal? '(a b) 'z)
+#f
+gosh&gt; (equal? '(a b c) '(a b c))
+#t
+gosh&gt; (equal? '(a (b) (c d)) '(a (b) (c d)))
+#t
+gosh&gt; (equal? '(a (b) (c d)) '(a (bb) (c d)))
+#f
+gosh&gt; (equal? '() '())
+#t
+gosh&gt; (equal? '() '(x y))
+#f
+gosh&gt; (equal? '(x y) '()) 
+#f
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.55"></a>
+<b>Exercise 2.55.</b>  Eva Lu Ator types to the interpreter the expression</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.55.</b> エヴァ・リュ・エイタは、以下の式をインタプリタに対して打ち込む。
+</p>
+
+<p class="lisp">(car ''abracadabra)
+</p>
+
+<p class="orig" lang="en">
+To her surprise, the interpreter prints back <tt>quote</tt>.  Explain.
+</p>
+
+<p class="trans" lang="ja">
+彼女が驚いたことには、インタプリタは、<tt>quote</tt> と印字して返した。
+説明せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">見づらいけれど、これは「二重引用符が一つ」ではなくて「一重引用符が二つ」である。
+つまり、インタプリタに、</span>
+(car (quote (quote abracadabra)))
+<span class="ex_comment">と打ち込まれたのと同じである。</span>
+(quote (quote abracadabra))
+<span class="ex_comment">は、</span>
+(quote abracadabra)
+<span class="ex_comment">というリストそのものなので、このリストの <tt>car</tt> をとったら、</span>
+quote
+<span class="ex_comment">という記号が得られた、というわけだ。</span>
+</p>
+
+<a name="%_sec_2.3.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.3.2">2.3.2  Example: Symbolic Differentiation</a></h3>
+<h3 class="trans" lang="ja">2.3.2 例: 記号微分</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2042"></a><a name="%_idx_2044"></a><a name="%_idx_2046"></a>
+As an illustration of symbol manipulation and a further illustration
+of data abstraction, consider the design of a procedure that performs
+symbolic differentiation of algebraic expressions.  We would like the
+procedure to take as arguments an algebraic expression and a variable
+and to return the derivative of the expression with respect to the
+variable.  For example, if the arguments to the procedure are <em>a</em><em>x</em><sup>2</sup>
+ + <em>b</em><em>x</em>  + <em>c</em> and <em>x</em>, the procedure should return 2<em>a</em><em>x</em> + <em>b</em>.  Symbolic
+differentiation is of special historical significance in Lisp.  It was
+one of the motivating examples behind the development of a computer
+language for symbol manipulation.  Furthermore, it marked the
+beginning of the line of research that led to the development of
+powerful systems for symbolic mathematical work, which are currently
+being used by a growing number of applied mathematicians and
+physicists.</p>
+
+<p class="trans" lang="ja">
+記号操作との例示として、そして、データ抽象化のさらなる例示として、代数式の記号微分を実行する手続きの設計を考えよう。
+その手続きが、引数として代数式と変数とを取り、その代数式の、その変数に関する導関数を返すようにしたい。
+たとえば、その手続きに対する引数が、
+<span class="math"><em class="en">ax</em><sup>2</sup> + <em class="en">bx</em>  + <em class="en">c</em></span>
+と <em class="en">x</em> ならば、その手続きは、
+<span class="math">2<em class="en">ax</em> + <em class="en">b</em></span>
+を返すべきである。
+記号微分には、Lispでは特別な歴史的重要性がある。
+記号微分は、記号操作のためのコンピュータ言語の開発の背後にある、意欲をかきたてる例のうちの、一つであった。
+さらに、記号微分は、記号的な数学的作業のための強力なシステム——現在では、ますます多くの応用数学者と応用物理者により使われている——の開発へとつながるような、研究の道筋の始まりを、しるしたのだ。
+</p>
+
+<p class="orig" lang="en">
+In developing the symbolic-differentiation program, we will follow the
+same strategy of data abstraction that we followed in developing the
+rational-number system of section <a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a>.  That is, we will first
+define a differentiation algorithm that operates on abstract
+objects such as ``sums,'' ``products,'' and ``variables'' without
+worrying about how these are to be represented.  Only afterward will
+we address the representation problem.</p>
+
+<p class="trans" lang="ja">
+記号微分プログラムの開発に際して、私たちは、<a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a>節の有理数システムの開発の際に従ったのと同じデータ抽象化の戦略に従おう。
+つまり、「和」や「積」や「変数」といった抽象的オブジェクトに関して動作する微分アルゴリズムを、これらの抽象的オブジェクトがどのように表現されるべきなのかについて心配することなく、まず定義しよう。
+その後になってはじめて、表現の問題に取り組もう。
+</p>
+
+<a name="%_sec_Temp_235"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_235">The differentiation program with abstract data</a></h4>
+<h4 class="trans" lang="ja">抽象データを用いた微分プログラム</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2048"></a>
+In order to keep things simple, we will consider a very simple
+symbolic-differentiation program that handles expressions that are
+built up using only the operations of addition and multiplication with
+two arguments.  Differentiation of any such expression can be carried
+out by applying the following reduction rules:</p>
+
+<p class="trans" lang="ja">
+物事を簡潔に保つために、二引数の加算および乗算という演算のみを使って構築された式を扱うような、とても簡単な記号微分プログラムを考えることにしよう。
+そういう式の微分は、以下の還元規則を適用することによって、実行することができる。
+</p>
+
+<figure>
+<img src="ch2-Z-G-45.gif" border="0"><br>
+<img src="ch2-Z-G-46.gif" border="0"><br>
+<img src="ch2-Z-G-47.gif" border="0"><br>
+<img src="ch2-Z-G-48.gif" border="0">
+</figure>
+
+<p class="orig" lang="en">
+Observe that the latter two rules are recursive in nature.  That is,
+to obtain the derivative of a sum we first find the derivatives of the
+terms and add them.  Each of the terms may in turn be an
+expression that needs to be decomposed.  Decomposing into smaller and
+smaller pieces will eventually produce pieces that are either
+constants or variables, whose derivatives will be either 0 or 1.</p>
+
+<p class="trans" lang="ja">
+後ろの二つの規則が本質的に再帰的であることに気づいてほしい。
+つまり、和の導関数を得るためには、まず、各項の導関数を求めてから、それらを足す。
+項のそれぞれが、今度は、分解される必要のある式であるかもしれない。
+どんどん小さな単位へと分解してゆくことで、最終的には、定数または変数であるような単位——その導関数は、0か1である——が作り出されるだろう。
+</p>
+
+<p class="orig" lang="en">
+To embody these rules in a procedure we indulge in a little <a name="%_idx_2050"></a>wishful
+thinking, as we did in designing the rational-number implementation.
+If we had a means for representing algebraic expressions, we should be
+able to tell whether an expression is a sum, a product, a constant, or
+a variable.  We should be able to extract the parts of an expression.
+For a sum, for example we want to be able to extract the addend
+(first term) and the augend (second term).  We should also be able to
+construct expressions from parts.  Let us assume that we already have
+procedures to implement the following selectors, constructors, and
+predicates:</p>
+
+<p class="trans" lang="ja">
+これらの規則を手続きの中に具体化するために、私たちは、ちょっとした希望的観測を許そう——有理数の実装を設計する際にそのようにしたのと同様に。
+もし、代数式を表現する手段があったなら、式が和なのか、積なのか、定数なのか、それとも変数なのかを、教えることができるべきだ。
+式の各部分も抜き出すことができるべきだ。
+たとえば、和については、被加数 (第一項) と加数 (第二項) を抜き出せるようでありたい。
+また、部分から式を構築できるべきである。
+以下のセレクタとコンストラクタと述語を実装するための手続きが、既にあるのだ、と想定しよう。
+</p>
+
+<div  class="orig" lang="en">
+<table class="expl">
+<tr><td valign=top ><tt>(variable? e)</tt> </td><td valign=top >Is <tt>e</tt> a variable?</td></tr>
+<tr><td valign=top ><tt>(same-variable? v1 v2)</tt> </td><td valign=top >Are <tt>v1</tt> and <tt>v2</tt> the same variable?</td></tr>
+<tr><td valign=top ><tt>(sum? e)</tt> </td><td valign=top >Is <tt>e</tt> a sum?</td></tr>
+<tr><td valign=top ><tt>(addend e)</tt> </td><td valign=top >Addend of the sum <tt>e</tt>.</td></tr>
+<tr><td valign=top ><tt>(augend e)</tt> </td><td valign=top >Augend of the sum <tt>e</tt>.</td></tr>
+<tr><td valign=top ><tt>(make-sum a1 a2)</tt> </td><td valign=top >Construct the sum of <tt>a1</tt> and <tt>a2</tt>.</td></tr>
+<tr><td valign=top ><tt>(product? e)</tt> </td><td valign=top >Is <tt>e</tt> a product?</td></tr>
+<tr><td valign=top ><tt>(multiplier e)</tt> </td><td valign=top >Multiplier of the product <tt>e</tt>.</td></tr>
+<tr><td valign=top ><tt>(multiplicand e)</tt> </td><td valign=top >Multiplicand of the product <tt>e</tt>.</td></tr>
+<tr><td valign=top ><tt>(make-product m1 m2)</tt> </td><td valign=top >Construct the product of <tt>m1</tt> and <tt>m2</tt>.</td></tr>
+</table>
+</div>
+<br>
+<div class="trans" lang="ja">
+<table class="expl">
+<tr><td valign=top ><tt>(variable? e)</tt> </td><td valign=top ><tt>e</tt> は変数か?</td></tr>
+<tr><td valign=top ><tt>(same-variable? v1 v2)</tt> </td><td valign=top ><tt>v1</tt> と <tt>v2</tt> は同じ変数か?</td></tr>
+<tr><td valign=top ><tt>(sum? e)</tt> </td><td valign=top ><tt>e</tt> は和か?</td></tr>
+<tr><td valign=top ><tt>(addend e)</tt> </td><td valign=top >和 <tt>e</tt> の被加数</td></tr>
+<tr><td valign=top ><tt>(augend e)</tt> </td><td valign=top >和 <tt>e</tt> の加数</td></tr>
+<tr><td valign=top ><tt>(make-sum a1 a2)</tt> </td><td valign=top ><tt>a1</tt> と <tt>a2</tt> の和を構築する</td></tr>
+<tr><td valign=top ><tt>(product? e)</tt> </td><td valign=top ><tt>e</tt> は積か?</td></tr>
+<tr><td valign=top ><tt>(multiplier e)</tt> </td><td valign=top >積 <tt>e</tt> の乗数</td></tr>
+<tr><td valign=top ><tt>(multiplicand e)</tt> </td><td valign=top >積 <tt>e</tt> の被乗数</td></tr>
+<tr><td valign=top ><tt>(make-product m1 m2)</tt> </td><td valign=top ><tt>m1</tt> と <tt>m2</tt> の積を構築する</td></tr>
+</table>
+</div>
+
+<p class="orig" lang="en">
+Using these, and the primitive predicate <tt>number?</tt>,
+<a name="%_idx_2052"></a><a name="%_idx_2054"></a>which identifies numbers, we can express the differentiation rules as the
+following procedure:
+</p>
+
+<p class="trans" lang="ja">
+これらと、原始的述語の <tt>number?</tt>——数を確認する——とを使って、以下の手続きのように微分規則を表せる。
+</p>
+
+<p class="lisp"><a name="%_idx_2056"></a>(define (deriv exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp)
+         (if (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+           (make-product (multiplier exp)
+                         (deriv (multiplicand exp) var))
+           (make-product (deriv (multiplier exp) var)
+                         (multiplicand exp))))
+        (else
+         (error &quot;unknown expression type -- DERIV&quot; exp))))
+</p>
+
+<p class="orig" lang="en">
+This <tt>deriv</tt> procedure incorporates the complete differentiation algorithm.
+Since it is expressed in terms of abstract data, it will work no
+matter how we choose to represent algebraic expressions, as long as we
+design a proper set of selectors and constructors.  This is the issue
+we must address next.</p>
+
+<p class="trans" lang="ja">
+この <tt>deriv</tt> という手続きは、完全な微分アルゴリズムを取り入れている。
+これは、抽象データを使って表現されているので、私たちがセレクタとコンストラクタの適切な一式を設計する限りは、代数式をどう表現することを選ぼうとも、これはうまく動くだろう。
+このことが、私たちが次に取り組まなくてはならない問題である。
+</p>
+
+<a name="%_sec_Temp_236"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_236">Representing algebraic expressions</a></h4>
+<h4 class="trans" lang="ja">代数式を表現する</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2058"></a>
+We can imagine many ways to use list structure to represent algebraic
+expressions.  For example, we could use lists of symbols that mirror
+the usual algebraic notation, representing <em>a</em><em>x</em> + <em>b</em> as the list <tt>(a
+* x + b)</tt>.  However, one especially straightforward choice is to use
+the same parenthesized prefix notation that Lisp uses for
+combinations; that is, to represent <em>a</em><em>x</em> + <em>b</em> as <tt>(+ (* a x) b)</tt>.
+Then our data representation for the differentiation problem is as
+follows:</p>
+
+<p class="trans" lang="ja">
+代数式を表現するためにリスト構造を使うような、多くの方法を想像することが可能だ。
+たとえば、普通の代数的表記法を反映した、記号のリストを使うこともできるだろう——つまり、
+<span class="math"><em class="en">ax</em> + <em class="en">b</em></span>
+を
+<tt>(a * x + b)</tt>
+というリストとして表現するわけだ。
+しかし、特に分かりやすい一つの選択肢は、Lispがコンビネーションについて使っているのと同じ、括弧で括られた前置記法を、使うことである。
+つまり、
+<span class="math"><em class="en">ax</em> + <em class="en">b</em></span>
+を
+<tt>(+ (* a x) b)</tt>
+と表現することである。
+すると、微分の問題のための私たちのデータ表現は、以下のようになる。
+</p>
+
+<ul class="orig" lang="en">
+<li>The variables are symbols.  They are identified by the primitive predicate
+<a name="%_idx_2060"></a><a name="%_idx_2062"></a><tt>symbol?</tt>:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>変数は記号である。
+変数は、<tt>symbol?</tt> という原始的述語により識別される。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2064"></a>(define (variable? x) (symbol? x))
+</p>
+
+<ul class="orig" lang="en">
+<li>Two variables are the same if the symbols representing them are
+<tt>eq?</tt>:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>二つの変数は、それらを表現する記号同士が <tt>eq?</tt> であるときに、同一である。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2066"></a>(define (same-variable? v1 v2)
+  (and (variable? v1) (variable? v2) (eq? v1 v2)))
+</p>
+
+<ul class="orig" lang="en">
+<li>Sums and products are constructed as lists:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>和と積は、リストとして構築される。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2068"></a>(define (make-sum a1 a2) (list '+ a1 a2))
+
+<a name="%_idx_2070"></a>(define (make-product m1 m2) (list '* m1 m2))
+</p>
+
+<ul class="orig" lang="en">
+<li>A sum is a list whose first element is the symbol <tt>+</tt>:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>和は、その最初の要素が <tt>+</tt> という記号であるような、リストである。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2072"></a>(define (sum? x)
+  (and (pair? x) (eq? (car x) '+)))
+</p>
+
+<ul class="orig" lang="en">
+<li>The addend is the second item of the sum list:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>被加数は、和のリストの2番目の項目である。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2074"></a>(define (addend s) (cadr s))
+</p>
+
+<ul class="orig" lang="en">
+<li>The augend is the third item of the sum list:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>加数は、和のリストの3番目の項目である。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2076"></a>(define (augend s) (caddr s))
+</p>
+
+<ul class="orig" lang="en">
+<li>A product is a list whose first element is the symbol <tt>*</tt>:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>積は、その最初の要素が <tt>*</tt> という記号であるような、リストである。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2078"></a>(define (product? x)
+  (and (pair? x) (eq? (car x) '*)))
+</p>
+
+<ul class="orig" lang="en">
+<li>The multiplier is the second item of the product list:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>乗数は、積のリストの2番目の項目である。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2080"></a>(define (multiplier p) (cadr p))
+</p>
+
+<ul class="orig" lang="en">
+<li>The multiplicand is the third item of the product list:</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>被乗数は、積のリストの3番目の項目である。</li>
+</ul>
+
+<p class="lisp"><a name="%_idx_2082"></a>(define (multiplicand p) (caddr p))
+</p>
+
+<p class="orig" lang="en">
+Thus, we need only combine these with the algorithm as embodied by
+<tt>deriv</tt> in order to have a working symbolic-differentiation
+program.  Let us look at some examples of its behavior:
+</p>
+
+<p class="trans" lang="ja">
+したがって、叩き台となる記号微分プログラムを得るためには、これらを、<tt>deriv</tt> により具体化されたとおりのアルゴリズムと組み合わせるだけでよい。
+</p>
+
+<p class="lisp">(deriv '(+ x 3) 'x)
+<i>(+ 1 0)</i>
+(deriv '(* x y) 'x)
+<i>(+ (* x 0) (* 1 y))</i>
+(deriv '(* (* x y) (+ x 3)) 'x)
+<i>(+ (* (* x y) (+ 1 0))
+   (* (+ (* x 0) (* 1 y))
+      (+  x 3)))</i>
+</p>
+
+<p class="orig" lang="en">
+The program produces answers that are correct; however, they are
+unsimplified.  It is true that</p>
+
+<p class="trans" lang="ja">
+このプログラムは、正しい答えを出す。
+しかし、それらの答えは、簡略化されていない。
+以下のことは真である
+</p>
+
+<figure><img src="ch2-Z-G-49.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+but we would like the program to know that <em>x</em> &middot;  0  =  0, 1 &middot;  <em>y</em>  = 
+<em>y</em>, and 0 + <em>y</em> = <em>y</em>.  The answer for the second example should have been
+simply <tt>y</tt>.  As the third example shows, this becomes a serious
+issue when the expressions are complex.</p>
+
+<p class="trans" lang="ja">
+が、プログラムには、
+<span class="math"><em class="en">x</em> &middot;  0  =  0</span>
+であり、
+<span class="math">1 &middot;  <em class="en">y</em>  = <em class="en">y</em></span>
+であり、
+<span class="math">0 + <em class="en">y</em> = <em class="en">y</em></span>
+である、ということを知っていてほしいのだ。
+2番目の例の答えは、簡潔に、<tt>y</tt> となるべきだった。
+3番目の例が示すとおり、これは、式が複雑な場合には深刻な問題となる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2084"></a><a name="%_idx_2086"></a>Our difficulty is much like the one we encountered with the
+rational-number implementation: we haven't reduced answers to simplest
+form.  To accomplish the rational-number reduction, we needed to
+change only the constructors and the selectors of the implementation.
+We can adopt a similar strategy here.  We won't change <tt>deriv</tt> at
+all.  Instead, we will change <tt>make-sum</tt> so that if both summands
+are numbers, <tt>make-sum</tt> will add them and return their sum.  Also,
+if one of the summands is 0, then <tt>make-sum</tt> will return the other
+summand.
+</p>
+
+<p class="trans" lang="ja">
+私たちにとっての困難は、有理数の実装のときに直面したのとほとんど同じものだ——私たちはまだ、もっとも簡潔な形式へと答えを還元していない。
+有理数の約分を達成するためには、実装のうち、コンストラクタとセレクタのみを変更する必要があった。
+ここで似たような戦略を採用することができる。
+<tt>deriv</tt> は、まったく変更したくない。
+代わりに、足されるものが二つとも数ならば、<tt>make-sum</tt> がそれらを足してその和を返すように、<tt>make-sum</tt> を変更しよう。
+また、足されるもののうちの一方が0ならば、<tt>make-sum</tt> は、他方を返すだろう。
+</p>
+
+<p class="lisp"><a name="%_idx_2088"></a>(define (make-sum a1 a2)
+  (cond ((=number? a1 0) a2)
+        ((=number? a2 0) a1)
+        ((and (number? a1) (number? a2)) (+ a1 a2))
+        (else (list '+ a1 a2))))
+</p>
+
+<p class="orig" lang="en">
+This uses the procedure <tt>=number?</tt>, which checks whether an
+expression is equal to a given number:
+</p>
+
+<p class="trans" lang="ja">
+これは、<tt>=number?</tt> という述語——式が、与えられた数と等しいかどうかを検査する——を使っている。
+</p>
+
+<p class="lisp"><a name="%_idx_2090"></a>(define (=number? exp num)
+  (and (number? exp) (= exp num)))
+</p>
+
+<p class="orig" lang="en">
+Similarly, we will change <tt>make-product</tt> to build in the rules that 0
+times anything is 0 and 1 times anything is the thing itself:
+</p>
+
+<p class="trans" lang="ja">
+同様に、何でもその0倍は0であり、かつ、何でも1倍はそのもの自身である、という規則を織り込むように、<tt>make-product</tt> を変更しよう。
+</p>
+
+<p class="lisp"><a name="%_idx_2092"></a>(define (make-product m1 m2)
+  (cond ((or (=number? m1 0) (=number? m2 0)) 0)
+        ((=number? m1 1) m2)
+        ((=number? m2 1) m1)
+        ((and (number? m1) (number? m2)) (* m1 m2))
+        (else (list '* m1 m2))))
+</p>
+
+<p class="orig" lang="en">
+Here is how this version works on our three examples:
+</p>
+
+<p class="trans" lang="ja">
+私たちの三つの例に関して、このバージョンがどう動くかを、ここに示す。
+</p>
+
+<p class="lisp">(deriv '(+ x 3) 'x)
+<i>1</i>
+(deriv '(* x y) 'x)
+<i>y</i>
+(deriv '(* (* x y) (+ x 3)) 'x)
+<i>(+ (* x y) (* y (+ x 3)))</i>
+</p>
+
+<p class="orig" lang="en">
+Although this is quite an improvement, the third example shows that
+there is still a long way to go before we get a program that puts
+expressions into a form that we might agree is ``simplest.''  The
+problem of algebraic simplification is complex because, among other
+reasons, a form that may be simplest for one purpose may not be for
+another.
+</p>
+
+<p class="trans" lang="ja">
+これは大変な改善だけれども、式を、私たちが「もっとも簡潔だね」と同意するであろうような形式にしてくれるプログラムを得るまでには、まだまだ長い道のりがある、ということを、3番目の例は示している。
+代数的な簡潔化の問題は、複雑である。なぜなら——他の理由もあるが、その中でもとりわけ——ある一つの目的にとってもっとも簡潔かもしれない形式は、他の目的にとってはそうでないかもしれないからである。
+</p>
+
+<p class="orig" lang="en"><a name="%_thm_2.56"></a>
+<b>Exercise 2.56.</b>  <a name="%_idx_2094"></a>Show how to extend the basic differentiator to handle more kinds of
+expressions.  For instance, implement the differentiation rule</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.56.</b> 基本的な微分演算子を、より多くの種類の式を扱うように拡張する方法を示せ。
+たとえば、以下の微分規則を実装せよ
+</p>
+
+<figure><img src="ch2-Z-G-50.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+by adding a new clause to the <tt>deriv</tt> program
+and defining
+appropriate procedures <tt>exponentiation?</tt>, <tt>base</tt>, <tt>exponent</tt>,
+and <tt>make-exponentiation</tt>.  (You may use the symbol <tt>**</tt> to denote
+exponentiation.)
+Build in the rules that anything raised to the power 0 is 1 and
+anything raised to the power 1 is the thing itself.
+</p>
+
+<p class="trans" lang="ja">
+——<tt>deriv</tt> のプログラムに新たな節を追加し、かつ、<tt>exponentiation?</tt> と <tt>base</tt> と <tt>exponent</tt> と <tt>make-exponentiation</tt> という適宜の手続きを定義することによって。
+(累乗を表すのに <tt>**</tt> という記号を使ってもよいよ。)
+0乗されたものは何でも1であり、かつ、1乗されたものは何でもそれ自身である、という規則を織り込むようにね。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.57"></a>
+<b>Exercise 2.57.</b>  Extend the differentiation program to handle sums and products of
+arbitrary numbers of (two or more) terms.
+Then the last example above could be expressed as</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.57.</b> 微分プログラムを、(2以上の) 任意の個数の項の和と積を扱うように、拡張せよ。
+すると、上記の最後の例は、以下のように表現できるだろう。
+</p>
+
+<p class="lisp">(deriv '(* x y (+ x 3)) 'x)
+</p>
+
+<p class="orig" lang="en">
+Try to do this by changing only the
+representation for sums and products, without changing the <tt>deriv</tt> procedure at all.  For example, the <tt>addend</tt> of a sum would
+be the first term, and the <tt>augend</tt> would be the sum of the rest
+of the terms.
+</p>
+
+<p class="trans" lang="ja">
+<tt>deriv</tt> の手続きをまったく変えずに、和と積の表現のみを変えることによって、このような拡張を行ってみよ。
+たとえば、和の <tt>addend</tt> は、最初の項だろうし、<tt>augend</tt> は残りの項の和だろう。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.58"></a>
+<b>Exercise 2.58.</b>  <a name="%_idx_2096"></a><a name="%_idx_2098"></a>Suppose we want to modify the differentiation program so that it works
+with ordinary mathematical notation, in which <tt>+</tt> and <tt>*</tt> are
+infix rather than prefix operators.  Since the differentiation program
+is defined in terms of abstract data, we can modify it to work with
+different representations of expressions solely by changing the
+predicates, selectors, and constructors that define the representation
+of the algebraic expressions on which the differentiator is to
+operate.</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.58.</b> 微分プログラムを、普通の数学的表記——そこでは <tt>+</tt> や <tt>*</tt> が、前置演算子ではなく中置演算子である——に対して動くように、修正したいのだとしよう。
+微分プログラムは抽象データを使って定義されているため、私たちは、ただ、微分演算子が動作する対象である代数式の表現を定義している述語・セレクタ・コンストラクタを変更するだけで、微分プログラムを、式の別表現に対して動くように、修正することができる。
+</p>
+
+<ol start="1" class="orig" lang="en" style="list-style-type: lower-alpha">
+<li>
+Show how to do this in order to differentiate algebraic
+expressions presented in infix form, such as <tt>(x + (3 * (x + (y + 2))))</tt>.
+To simplify the task, assume that <tt>+</tt> and <tt>*</tt> always
+take two arguments and that expressions are fully parenthesized.
+</li>
+</ol>
+
+<ol start="1" class="trans" lang="ja" style="list-style-type: lower-alpha">
+<li>
+たとえば <tt>(x + (3 * (x + (y + 2))))</tt> のように中置形式で提示された代数式を微分するために、以上のような修正を行う方法を示せ。
+課題を簡潔化するために、<tt>+</tt> と <tt>*</tt> が常に二つの引数をとるものとし、かつ、式は漏れなく括弧で括られているものとせよ。
+</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<ol start="2" class="orig" lang="en" style="list-style-type: lower-alpha">
+<li>
+The problem becomes substantially harder if we allow standard
+algebraic notation, such as <tt>(x + 3 * (x + y + 2))</tt>, which drops
+unnecessary parentheses and assumes that multiplication is done before
+addition.  Can you design appropriate predicates, selectors, and
+constructors for this notation such that our derivative program still
+works?
+</li>
+</ol>
+
+
+<ol start="2" class="trans" lang="ja" style="list-style-type: lower-alpha">
+<li>
+たとえば <tt>(x + 3 * (x + y + 2))</tt> のような、標準的な代数的表記——不必要な括弧は使わず、加算の前に乗算が実行されることを前提とする——を許すことにしたら、問題は相当に難しくなる。
+それでもなお私たちの微分プログラムが動くように、君は、この表記のための適切な述語・セレクタ・コンストラクタを設計することができるかな?
+</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_2.3.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.3.3">2.3.3  Example: Representing Sets</a></h3>
+<h3 class="trans" lang="ja">2.3.3 例: 集合を表現する</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2100"></a>
+In the previous examples we built representations for two kinds of
+compound data objects: rational numbers and algebraic expressions.  In
+one of these examples we had the choice of simplifying (reducing) the
+expressions at either construction time or selection time, but other
+than that the choice of a representation for these structures in terms
+of lists was straightforward. When we turn to the representation of
+sets, the choice of a representation is not so obvious.  Indeed, there
+are a number of possible representations, and they differ
+significantly from one another in several ways.</p>
+
+<p class="trans" lang="ja">
+今までの例で、私たちは、2種類の複合データオブジェクト——つまり、有理数と代数式——の表現を構築した。
+これらの例のうちの一つでは、構築時と選択時のどちらにおいて式を簡潔化する (還元する) のか、という選択の余地があったが、リストを用いたこれらの構造体のための表現についての選択肢は、単純明快だった。
+集合の表現に目を向けるとき、表現についての選択肢は、それほど自明なものではない。
+実際、可能な表現がいくつもあるし、それらは色々な面で互いに著しく異なっている。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2102"></a>Informally, a set is simply a collection of distinct objects.  To give
+a more precise definition we can employ the method of data
+abstraction.  That is, we define ``set'' by specifying the operations
+that are to be used on sets.  These are <tt>union-set</tt>,
+<tt>intersection-set</tt>, <tt>element-of-set?</tt>, and <tt>adjoin-set</tt>.
+<a name="%_idx_2104"></a><tt>Element-of-set?</tt> is a predicate that determines whether a given
+element is a member of a set.  <a name="%_idx_2106"></a><tt>Adjoin-set</tt> takes an object and a
+set as arguments and returns a set that contains the elements of the
+original set and also the adjoined element.  <a name="%_idx_2108"></a><tt>Union-set</tt> computes
+the union of two sets, which is the set containing each element that
+appears in either argument.  <a name="%_idx_2110"></a><tt>Intersection-set</tt> computes the
+intersection of two sets, which is the set containing only elements
+that appear in both arguments.  From the viewpoint of data abstraction, we
+are free to design any representation that implements these operations
+in a way consistent with the interpretations given above.<a name="call_footnote_Temp_240" href="#footnote_Temp_240"><sup><small>37</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+くだけた言い方をすると、集合とは、異なるオブジェクトの集まりである。
+より正確な定義を与えるためには、データ抽象化の方法を使うことができる。
+つまり、集合上で使われるべき演算子を指定することにより、「集合」を定義するのだ。
+これらの演算子とは、<tt>union-set</tt> と <tt>intersection-set</tt> と <tt>element-of-set?</tt> と <tt>adjoin-set</tt> である。
+<tt>element-of-set?</tt> は、与えられた要素が集合の構成要素かどうかを判定する述語である。
+<tt>adjoin-set</tt> は、オブジェクトと集合を引数としてとり、元の集合の要素と、追加された要素とを含むような、集合を返す。
+<tt>union-set</tt> は、二つの集合の和集合——いずれかの引数の中に現れる各要素を含む集合のことだ——を計算する。
+<tt>intersection-set</tt> は、二つの集合の積集合——両方の引数の中に現れる要素のみを含む集合のことだ——を計算する。
+データ抽象化の観点からは、以上のように与えられた解釈と整合性がとれた方法でこれらの演算子を実装するような、どんな表現でも、自由に設計できる<a href="#footnote_Temp_240"><sup><small>37</small></sup></a>。
+</p>
+
+<a name="%_sec_Temp_241"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_241">Sets as unordered lists</a></h4>
+<h4 class="trans" lang="ja">順序付けされていないリストとしての集合</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2112"></a><a name="%_idx_2114"></a>
+One way to represent a set is as a list of its elements in which no
+element appears more than once.  The empty set is represented by the
+empty list.  In this representation, <tt>element-of-set?</tt> is similar
+to the procedure <tt>memq</tt> of section <a href="#%_sec_2.3.1">2.3.1</a>.  It uses <tt>equal?</tt>
+instead of <tt>eq?</tt> so that the set elements need not be symbols:
+</p>
+
+<p class="trans" lang="ja">
+集合を表現する一つの方法は、その集合の要素のリストであって、その中に1回より多く現れる要素がないようなものとして、表現することである。
+空集合は、空リストにより表現される。
+この表現では、<tt>element-of-set?</tt> は、<a href="#%_sec_2.3.1">2.3.1</a>節の <tt>memq</tt> という手続きに似ている。
+<tt>element-of-set?</tt> は、集合の要素が記号でなくても構わないように、<tt>eq?</tt> の代わりに <tt>equal?</tt> を使う。
+</p>
+
+<p class="lisp"><a name="%_idx_2116"></a>(define (element-of-set? x set)
+  (cond ((null? set) false)
+        ((equal? x (car set)) true)
+        (else (element-of-set? x (cdr set)))))
+</p>
+
+<p class="orig" lang="en">
+Using this, we can write <tt>adjoin-set</tt>.  If the object to be adjoined
+is already in the set, we just return the set.  Otherwise, we use
+<tt>cons</tt> to add the object to the list that represents the set:
+</p>
+
+<p class="trans" lang="ja">
+これを使って、<tt>adjoin-set</tt> を書ける。
+もし、追加されるべきオブジェクトが既にその集合の中にあれば、その集合を返すだけだ。
+それ以外の場合、<tt>cons</tt> を使って、そのオブジェクトを、その集合を表現するリストに、追加する。
+</p>
+
+<p class="lisp"><a name="%_idx_2118"></a>(define (adjoin-set x set)
+  (if (element-of-set? x set)
+      set
+      (cons x set)))
+</p>
+
+<p class="orig" lang="en">
+For <tt>intersection-set</tt> we can use a recursive strategy.  If we
+know how to form the intersection of <tt>set2</tt> and the <tt>cdr</tt>
+of <tt>set1</tt>, we only need to decide whether to include
+the <tt>car</tt> of <tt>set1</tt> in this.  But this depends on whether <tt>(car
+set1)</tt> is also in <tt>set2</tt>.  Here is the resulting procedure:
+</p>
+
+<p class="trans" lang="ja">
+<tt>intersection-set</tt> については、再帰的な戦略が使える。
+もし、<tt>set2</tt> と、<tt>set1</tt> の <tt>cdr</tt> との積集合を形成する方法が分かっているなら、<tt>set1</tt> の <tt>car</tt> をこの積集合の中に含めるべきかどうかを決めるだけでよい。
+しかしこれは、<tt>(car set1)</tt> も <tt>set2</tt> の中にあるのかどうか、ということに依存する。
+その結果できる手続きを、ここに示す。
+</p>
+
+<p class="lisp"><a name="%_idx_2120"></a>(define (intersection-set set1 set2)
+  (cond ((or (null? set1) (null? set2)) '())
+        ((element-of-set? (car set1) set2)        
+         (cons (car set1)
+               (intersection-set (cdr set1) set2)))
+        (else (intersection-set (cdr set1) set2))))
+</p>
+
+<p class="orig" lang="en">
+In designing a representation, one of the issues we should be
+concerned with is efficiency.  Consider the number of steps required by our set
+operations.  Since they all use <tt>element-of-set?</tt>, the speed
+of this operation has a major impact on the efficiency of the set
+implementation as a whole.  Now, in order to check whether an object
+is a member of a set, <tt>element-of-set?</tt> may have to scan the
+entire set. (In the worst case, the object turns out not to be in the
+set.)  Hence, if the set has <em>n</em> elements, <tt>element-of-set?</tt>
+might take up to <em>n</em> steps.  Thus, the number of steps
+required grows as <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>).
+The number of steps required by <tt>adjoin-set</tt>, which uses this operation,
+also grows as <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>).  For <tt>intersection-set</tt>, which does an <tt>element-of-set?</tt> check for each element of <tt>set1</tt>, the number of steps
+required grows as the product of the sizes of the sets involved, or
+<img src="book-Z-G-D-3.gif" border="0">(<em>n</em><sup>2</sup>) for two sets of size <em>n</em>.  The same will be true of <tt>union-set</tt>.</p>
+
+<p class="trans" lang="ja">
+表現を設計するにあたって、関心を寄せるべき論点の一つは、効率である。
+私たちの集合演算が必要とするステップ数を考えよ。
+これらの集合演算はどれも <tt>element-of-set?</tt> を利用するため、全体としては、この演算の速さが、集合の実装の効率に対して主要な影響を与える。
+さて、あるオブジェクトがある集合の構成要素かどうかを検査するためには、<tt>element-of-set?</tt> は、集合全体を走査しなくてはならないことがある。
+(最悪の場合、そのオブジェクトがその集合の中にないと判明する。)
+よって、もし集合が <em class="en">n</em> 個の要素を持つならば、<tt>element-of-set?</tt> は、<em class="en">n</em> ステップまでかかるかもしれない。
+したがって、必要なステップ数は、&Theta;(<em class="en">n</em>) で増大する。
+<tt>adjoin-set</tt> ——この <tt>element-of-set?</tt> という演算を使う——で必要なステップ数も、&Theta;(<em class="en">n</em>) で増大する。
+<tt>intersection-set</tt> ——<tt>element-of-set?</tt> の検査を <tt>set1</tt> の各要素に対して行う——については、必要なステップ数は、当該両集合の大きさ同士の積に応じて——つまり、大きさが <em class="en">n</em> の二つの集合に対しては &Theta;(<em class="en">n</em><sup>2</sup>) で——増大する。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.59"></a>
+<b>Exercise 2.59.</b>  Implement the <a name="%_idx_2122"></a><tt>union-set</tt> operation for the unordered-list
+representation of sets.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.59.</b> 集合の、順序なしリスト表現のための、<tt>union-set</tt> 演算を実装せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.60"></a>
+<b>Exercise 2.60.</b>  We specified that a set would be represented as a list with no
+duplicates.  Now suppose we allow duplicates.  For instance,
+the set {1,2,3} could be represented as the list <tt>(2 3 2 1 3 2
+2)</tt>.  Design procedures <tt>element-of-set?</tt>, <tt>adjoin-set</tt>, <tt>union-set</tt>, and <tt>intersection-set</tt> that operate on this
+representation.  How does the efficiency of each compare with the
+corresponding procedure for the non-duplicate representation?  Are
+there applications for which you would use this representation in
+preference to the non-duplicate one?
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.60.</b> 私たちは、集合は複製のないリストとして表現されるだろう、と指定した。
+ここで、複製を許すものと想定せよ。
+たとえば、
+<span class="math">{1, 2, 3}</span>
+という集合は、
+<tt>(2 3 2 1 3 2 2)</tt>
+というリストとして表現され得る。
+この表現の上で動作するような、<tt>element-of-set?</tt> と <tt>adjoin-set</tt> と <tt>union-set</tt> と <tt>intersection-set</tt> の手続きを、設計せよ。
+各々の手続きの効率は、複製なしの表現における、それに相当する手続きと比べて、どうだろうか?
+複製なしのものよりも優先して、この表現を使うだろうな、というような応用が、あるだろうか?
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_Temp_244"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_244">Sets as ordered lists</a></h4>
+<h4 class="trans" lang="ja">順序付けリストとしての集合</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2124"></a><a name="%_idx_2126"></a>
+One way to speed up our set operations is to change the representation
+so that the set elements are listed in increasing order.  To do this,
+we need some way to compare two objects so that we can say which is
+bigger.  For example, we could compare symbols lexicographically, or
+we could agree on some method for assigning a unique number to an
+object and then compare the elements by comparing the corresponding
+numbers.  To keep our discussion simple, we will consider only the
+case where the set elements are numbers, so that we can compare
+elements using <tt>&gt;</tt> and <tt>&lt;</tt>.  We will represent a set of
+numbers by listing its elements in increasing order.  Whereas our
+first representation above allowed us to represent the set
+{1,3,6,10} by listing the elements in any order, our new
+representation allows only the list <tt>(1 3 6 10)</tt>.</p>
+
+<p class="trans" lang="ja">
+私たちの集合演算を高速化するための一つの方法は、集合の要素が昇順にリストされるように、表現を変えることだ。
+これを行うためには、私たちには、二つのオブジェクトのうちのどちらが大きいのかを言えるように、それらを比べるための何らかの方法が必要だ。
+たとえば、記号同士を辞書順で比べることができるだろうし、あるいは、オブジェクトに対して一意な数を割りあてるための何らかの方法に同意して、要素同士を、対応する数同士を比較することによって、比較することもできるだろう。
+議論を簡潔に保っておくために、集合の要素が数であるような場合のみを考えることにしよう——そうすれば、<tt>&gt;</tt> と <tt>&lt;</tt> を用いて、要素同士を比較できる。
+数の集合を、その要素を昇順でリスト化することによって、表現することにしよう。
+<span class="math">{1,3,6,10}</span>
+という集合を、どのような順序で要素をリスト化することで表現しても、上記の最初の表現では許されたわけだが、私たちの新たな表現では、<tt>(1 3 6 10)</tt> というリストのみが許される。
+</p>
+
+<p class="orig" lang="en">
+One advantage of ordering shows up in <tt>element-of-set?</tt>: In
+checking for the presence of an item, we no longer have to scan the
+entire set.  If we reach a set element that is larger than the item we
+are looking for, then we know that the item is not in the set:
+</p>
+
+<p class="trans" lang="ja">
+順序づけの利点の一つは、<tt>element-of-set?</tt> において現れる。
+ある項目が存在するかを調べる際に、集合全体を走査する必要は、もはや、ないのだ。
+もし、探している項目よりも大きな集合要素にたどり着いたら、その項目がその集合の中にはないことが分かる。
+</p>
+
+<p class="lisp"><a name="%_idx_2128"></a>(define (element-of-set? x set)
+  (cond ((null? set) false)
+        ((= x (car set)) true)
+        ((&lt; x (car set)) false)
+        (else (element-of-set? x (cdr set)))))
+</p>
+
+<p class="orig" lang="en">
+How many steps does this save?  In the worst case, the item we are
+looking for may be the largest one in the set, so the number of steps
+is the same as for the unordered representation.  On the other hand,
+if we search for items of many different sizes we can expect that
+sometimes we will be able to stop searching at a point near the
+beginning of the list and that other times we will still need to
+examine most of the list.  On the average we should expect to have to
+examine about half of the items in the set.  Thus, the average
+number of steps required will be about <em>n</em>/2.
+This is still <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>) growth, but
+it does save us, on the average, a factor of 2 in number of steps over the
+previous implementation.</p>
+
+<p class="trans" lang="ja">
+これによって、どれくらい多くのステップを節約できるだろう?
+最悪の場合では、探している項目が、その集合の中で最大のものかもしれず、すると、ステッブ数は、順序づけしていない表現のときと同じである。
+他方、もし多くの異なる大きさの項目を探すなら、私たちは、ときにはリストの始めの近くの場所で探索を止めることができるだろう、と予想できるし、ほかの場合にはやはりリストのほとんどを検査せねばならないだろう、とも予想できる。
+平均としては、集合内の約半分の項目を検査する必要がある、と予想すべきである。
+よって、平均必要ステップ数は、およそ、<em class="en">n</em>/2 になるだろう。
+これは、依然として &Theta;(<em class="en">n</em>) の増大ではあるが、平均的には、以前の実装に対してステップ数の2分の1を省いてくれるのだ。
+</p>
+
+<p class="orig" lang="en">
+We obtain a more impressive speedup with <tt>intersection-set</tt>.  In
+the unordered representation this operation required
+<img src="book-Z-G-D-3.gif" border="0">(<em>n</em><sup>2</sup>) steps, because we performed a complete scan of <tt>set2</tt> for
+each element of <tt>set1</tt>.  But with the ordered representation, we
+can use a more clever method.  Begin by comparing the initial
+elements, <tt>x1</tt> and <tt>x2</tt>, of the two sets.  If <tt>x1</tt>
+equals <tt>x2</tt>, then that gives an element of the intersection, and
+the rest of the intersection is the intersection of the <tt>cdr</tt>s of
+the two sets.  Suppose, however, that <tt>x1</tt> is less than <tt>x2</tt>.
+Since <tt>x2</tt> is the smallest element in <tt>set2</tt>, we can
+immediately conclude that <tt>x1</tt> cannot appear anywhere in <tt>set2</tt> and hence is not in the intersection.  Hence, the intersection
+is equal to the intersection of <tt>set2</tt> with the <tt>cdr</tt> of <tt>set1</tt>.  Similarly, if <tt>x2</tt> is less than <tt>x1</tt>, then the
+intersection is given by the intersection of <tt>set1</tt> with the <tt>cdr</tt> of <tt>set2</tt>.  Here is the procedure:
+</p>
+
+<p class="trans" lang="ja">
+<tt>intersection-set</tt> については、より印象深い高速化が達成される。
+順序づけされていない表現では、この演算は &Theta;(<em class="en">n</em><sup>2</sup>) 回のステップを要した。なぜなら、<tt>set1</tt> の各要素に対して <tt>set2</tt> の完全な走査を実行したからである。
+しかし、順序づけされた表現では、より賢い方法が使える。
+二つの集合の最初の要素同士——<tt>x1</tt> と <tt>x2</tt>——を比べることから、始めよう。
+もし、<tt>x1</tt> が <tt>x2</tt> に等しければ、それが積集合の要素を与えており、この積集合の残りは、二つの集合の <tt>cdr</tt> 同士の積集合である。
+その一方で、<tt>x1</tt> が <tt>x2</tt> より小さい、と仮定してみよう。
+<tt>x2</tt> は <tt>set2</tt> のうちで最小の要素なので、私たちは直ちに、<tt>x1</tt> は<tt>set2</tt> のどこにも現れるはずがなく、したがって、積集合に含まれない、と結論づけることができる。
+よって、その積集合は、<tt>set2</tt> と、<tt>set1</tt> の <tt>cdr</tt> との積集合に等しい。
+同様に、もし、<tt>x2</tt> が <tt>x1</tt> より小さければ、その積集合は、<tt>set1</tt> と、<tt>set2</tt> の <tt>cdr</tt> との積集合により与えられる。
+ここに手続きを示す。
+</p>
+
+<p class="lisp"><a name="%_idx_2130"></a>(define (intersection-set set1 set2)
+  (if (or (null? set1) (null? set2))
+      '()    
+      (let ((x1 (car set1)) (x2 (car set2)))
+        (cond ((= x1 x2)
+               (cons x1
+                     (intersection-set (cdr set1)
+                                       (cdr set2))))
+              ((&lt; x1 x2)
+               (intersection-set (cdr set1) set2))
+              ((&lt; x2 x1)
+               (intersection-set set1 (cdr set2)))))))
+</p>
+
+<p class="orig" lang="en">
+To estimate the number of steps required by this process, observe that at each
+step we reduce the intersection problem to computing intersections of
+smaller sets -- removing the first element from <tt>set1</tt> or <tt>set2</tt> or both.  Thus, the number of steps required is at most the sum
+of the sizes of <tt>set1</tt> and <tt>set2</tt>, rather than the product of
+the sizes as with the unordered representation.  This is <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>) growth
+rather than <img src="book-Z-G-D-3.gif" border="0">(<em>n</em><sup>2</sup>) -- a considerable speedup, even for sets of
+moderate size.</p>
+
+<p class="trans" lang="ja">
+このプロセスが必要とするステップの数を見積もるために気づいてほしいのは、積集合の問題を、各ステップで、より小さな集合同士の積集合を求めることへと還元している——<tt>set1</tt> もしくは <tt>set2</tt> またはその双方から、最初の要素を取り除いている——ということである。
+よって、必要なステップの数は、せいぜい多くても <tt>set1</tt> と <tt>size2</tt> の大きさ同士の和である——順序づけられていない表現のときのような、大きさ同士の積ではなく。
+これは、&Theta;(<em class="en">n</em><sup>2</sup>) ではなく &Theta;(<em class="en">n</em>) の増大である——つまり、ほどほどの大きさの集合に対してでさえ、かなりの高速化だ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.61"></a>
+<b>Exercise 2.61.</b>  Give an implementation of <a name="%_idx_2132"></a><tt>adjoin-set</tt> using the ordered
+representation.  By analogy with <tt>element-of-set?</tt> show how to
+take advantage of the ordering to produce a procedure that requires on
+the average about half as many steps as with the unordered
+representation.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.61.</b> 順序づけされた表現を使って、<tt>adjoin-set</tt> の実装を示せ。
+順序づけられていない表現のときの約半分のステップしか平均的には必要としないような手続きを作り出すために、どのように順序づけを利用するのか、ということを、<tt>element-of-set?</tt> との類似により示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.62"></a>
+<b>Exercise 2.62.</b>  Give a <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>) implementation of <a name="%_idx_2134"></a><tt>union-set</tt> for sets
+represented as ordered lists.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.62.</b> 順序づけられたリストとして表現された集合に対する、<tt>union-set</tt> の &Theta;(<em class="en">n</em>) の実装を与えよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_Temp_247"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_247">Sets as binary trees</a></h4>
+<h4 class="trans" lang="ja">二分木としての集合</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2136"></a><a name="%_idx_2138"></a><a name="%_idx_2140"></a><a name="%_idx_2142"></a><a name="%_idx_2144"></a><a name="%_idx_2146"></a>
+We can do better than the ordered-list representation by arranging the
+set elements in the form of a tree.  Each node of the tree holds one
+element of the set, called the ``entry'' at that node, and a link to
+each of two other (possibly empty) nodes.  The ``left'' link points to
+elements smaller than the one at the node, and the ``right'' link to
+elements greater than the one at the node.
+Figure <a href="#%_fig_2.16">2.16</a> shows some trees that represent the set
+{1,3,5,7,9,11}.  The same set may be represented by a tree in a
+number of different ways.  The only thing we require for a valid
+representation is that all elements in the left subtree be smaller
+than the node entry and that all elements in the right subtree be
+larger.</p>
+
+<p class="trans" lang="ja">
+集合要素を木の形に配置することで、順序づけリスト表現のときよりも、うまくやれる。
+木の各ノードは、集合の一つの要素——そのノードにおける「エントリ」と呼ばれる——と、他の二つの (空の可能性もある) ノードの各々へのリンクとを、保持する。
+「左」のリンクは、そのノードの要素より小さい要素を指し、「右」のリンクは、そのノードの要素より大きい要素を指す。
+図<a href="#%_fig_2.16">2.16</a>は、
+<span class="math">{1, 3, 5, 7, 9, 11}</span>
+という集合を表現する、いくつかの木を示している。
+同じ集合が、いくつもの異なるやり方の木によって、表現される可能性がある。
+有効な表現に対して求めることは、ただ、左の部分木の中のすべての要素が当該ノードのエントリより小さいことと、右の部分木の中のすべての要素が当該ノードのエントリより大きいことだけなのだ。
+</p>
+
+<figure>
+<a name="%_fig_2.16"></a>
+<img src="ch2-Z-G-51.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.16:</b>  Various binary trees that represent the set { 1,3,5,7,9,11 }.</figcaption>
+<figcaption class="trans" lang="ja"><b>図2.16:</b> {1, 3, 5, 7, 9, 11} という集合を表現する様々な二分木</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+The advantage of the tree representation is this: Suppose we want to
+check whether a number <em>x</em> is contained in a set.  We begin by
+comparing <em>x</em> with the entry in the top node.  If <em>x</em> is less than
+this, we know that we need only search the left subtree; if <em>x</em> is
+greater, we need only search the right subtree.  Now, if the tree is
+``balanced,'' each of these subtrees will be about half the size of
+the original.  Thus, in one step we have reduced the problem of
+searching a tree of size <em>n</em> to searching a tree of size <em>n</em>/2.  Since
+the size of the tree is halved at each step, we should expect that the
+number of steps needed to search a tree of size <em>n</em> grows as <img src="book-Z-G-D-3.gif" border="0">(<tt>log</tt>
+<em>n</em>).<a name="call_footnote_Temp_248" href="#footnote_Temp_248"><sup><small>38</small></sup></a> For large sets, this will
+be a significant speedup over the previous representations.</p>
+
+<p class="trans" lang="ja">
+木の表現の利点は以下のとおりだ。
+<em class="en">x</em> という数が、ある集合の中に含まれるかどうかを検査したいのだとしよう。
+<em class="en">x</em> を一番上のノードのエントリと比べることから始める。
+もし、<em class="en">x</em> がこれより小さければ、左の部分木を探すだけでよい、と分かる。
+もし、<em class="en">x</em> がこれより大きければ、右の部分木を探すだけでよい。
+さて、もし木が「均衡がとれている」なら、これらの部分木の各々は、元の木の約半分の大きさであろう。
+こうして、大きさが <em class="en">n</em> の木を探索するという問題を、大きさが <em class="en">n</em>/2 の木を探索するという問題へと、一つのステップで還元したわけだ。
+各ステップで木の大きさが半分になるため、私たちは、大きさが <em class="en">n</em> の木を探索するのに必要なステップの数は &Theta;(<tt>log</tt><em class="en">n</em>) で増大する、と予想するはずだ<a href="#footnote_Temp_248"><sup><small>38</small></sup></a>。
+このことは、大きな集合に対しては、以前の表現と比べて顕著な高速化となるだろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2150"></a>We can represent trees by using lists.  Each node will be a list of
+three items: the entry at the node, the left subtree, and the right
+subtree.  A left or a right subtree of the empty list will indicate
+that there is no subtree connected there.  We can describe this
+representation by the following procedures:<a name="call_footnote_Temp_249" href="#footnote_Temp_249"><sup><small>39</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+私たちは、リストを使って木を表現できる。
+各ノードは、三つの項目——つまり、そのノードのエントリと、左の部分木と、右の部分木——のリストだろう。
+空リストであるような、左または右の部分木は、そこにつながった部分木がない、ということを示すだろう。
+以下の手続きにより、この表現を記述できる<a href="#footnote_Temp_249"><sup><small>39</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_2152"></a>(define (entry tree) (car tree))
+<a name="%_idx_2154"></a>(define (left-branch tree) (cadr tree))
+<a name="%_idx_2156"></a>(define (right-branch tree) (caddr tree))
+<a name="%_idx_2158"></a>(define (make-tree entry left right)
+  (list entry left right))
+</p>
+
+<p class="orig" lang="en">
+Now we can write the <tt>element-of-set?</tt> procedure using the strategy
+described above:
+</p>
+
+<p class="trans" lang="ja">
+さて今や、上記の戦略を使って、<tt>element-of-set?</tt> の手続きを書くことが可能だ。
+</p>
+
+<p class="lisp"><a name="%_idx_2160"></a>(define (element-of-set? x set)
+  (cond ((null? set) false)
+        ((= x (entry set)) true)
+        ((&lt; x (entry set))
+         (element-of-set? x (left-branch set)))
+        ((&gt; x (entry set))
+         (element-of-set? x (right-branch set)))))
+</p></p>
+
+<p class="orig" lang="en">
+Adjoining an item to a set is implemented similarly and also requires
+<img src="book-Z-G-D-3.gif" border="0">(<tt>log</tt> <em>n</em>) steps.  To adjoin an item <tt>x</tt>, we compare <tt>x</tt> with
+the node entry to determine whether <tt>x</tt> should be added to the
+right or to the left branch, and having adjoined <tt>x</tt> to the
+appropriate branch we piece this newly constructed branch together
+with the original entry and the other branch.  If <tt>x</tt> is equal to
+the entry, we just return the node.  If we are asked to adjoin
+<tt>x</tt> to an empty tree, we generate a tree that has <tt>x</tt> as the
+entry and empty right and left branches.  Here is the procedure:
+</p>
+
+<p class="trans" lang="ja">
+集合への項目の追加も、同様に実装され、これも &Theta;(<tt>log</tt> <em class="en">n</em>) のステップを要する。
+<tt>x</tt> という項目を追加するために、私たちは、<tt>x</tt> をノードのエントリと比べて、<tt>x</tt> を右の分岐へ追加すべきか、それとも左の分岐へ追加すべきかを判定し、そして、<tt>x</tt> を適切な分岐へと追加したら、この新たに構成された分岐を、元のエントリおよび他方の分岐と、まとめる。
+もし、<tt>x</tt> が当該エントリと等しければ、ただそのノードを返すだけだ。
+もし、<tt>x</tt> を空の木に追加するように求められたら、<tt>x</tt> をエントリとして有し、かつ、空の左右の分岐を有するような木を、生成する。
+ここに手続きを示す。
+</p>
+
+<p class="lisp"><a name="%_idx_2162"></a>(define (adjoin-set x set)
+  (cond ((null? set) (make-tree x '() '()))
+        ((= x (entry set)) set)
+        ((&lt; x (entry set))
+         (make-tree (entry set) 
+                    (adjoin-set x (left-branch set))
+                    (right-branch set)))
+        ((&gt; x (entry set))
+         (make-tree (entry set)
+                    (left-branch set)
+                    (adjoin-set x (right-branch set))))))
+</p>
+
+<p class="orig" lang="en">
+The above claim that searching the tree can be performed in a logarithmic
+number of steps
+rests on the assumption that the tree is <a name="%_idx_2164"></a><a name="%_idx_2166"></a>``balanced,'' i.e., that the
+left and the right subtree of every tree have approximately the same
+number of elements, so that each subtree contains about half the
+elements of its parent.  But how can we be certain that the trees we
+construct will be balanced?  Even if we start with a balanced tree,
+adding elements with <tt>adjoin-set</tt> may produce an unbalanced
+result.  Since the position of a newly adjoined element depends on how
+the element compares with the items already in the set, we can expect
+that if we add elements ``randomly'' the tree will tend to be balanced
+on the average.  But this is not a guarantee.  For example, if we
+start with an empty set and adjoin the numbers 1 through 7 in sequence
+we end up with the highly unbalanced tree shown in
+figure <a href="#%_fig_2.17">2.17</a>.  In this tree all the left subtrees
+are empty, so it has no advantage over a simple ordered list.  One
+way to solve this problem is to define an operation that transforms an
+arbitrary tree into a balanced tree with the same elements.  Then we
+can perform this transformation after every few <tt>adjoin-set</tt>
+operations to keep our set in balance.  There are also other ways to
+solve this problem, most of which involve designing new data
+structures for which searching and insertion both can be done in
+<img src="book-Z-G-D-3.gif" border="0">(<tt>log</tt> <em>n</em>) steps.<a name="call_footnote_Temp_250" href="#footnote_Temp_250"><sup><small>40</small></sup></a></p>
+
+<p class="trans" lang="ja">
+木の探索が対数的なステップ数で実行可能だ、という上記の主張は、木が「均衡している」——つまり、どの木の左と右の部分木も、おおよそは同じ数の要素を有しており、よって、各部分木は自身の親の約半分の要素を含む——という仮説に頼っている。
+しかし、私たちが構築する木は均衡しているだろう、ということを、どうしたら確かなことにできるのか?
+たとえ均衡のとれた木から始めるとしても、<tt>adjoin-set</tt> を使って要素を足していくと、不均衡な結果が生み出されるかもしれない。
+新たに追加される要素の位置は、その要素が既に集合内にある項目とどのように比べられるのか、ということにかかっているので、私たちは、もし要素を「ランダムに」木に追加していったら、平均的には木が均衡する傾向があるだろう、と予想できる。
+しかしこれは、保証されたことではない。
+たとえば、もし空集合から始めて、1から7という数を順に追加したら、最終的には、図<a href="#%_fig_2.17">2.17</a>に示した、とても不均衡な木に至る。
+この木では、すべての左部分木は空であり、ゆえに、単純な順序づけリストに対する何の利点もない。
+この問題を解決する一つの方法は、任意の木を同じ要素を持った均衡のとれた木へと変形する演算を、定義することだ。
+すると、均衡のとれた状態に集合を保つために、私たちは、数回の <tt>adjoin-set</tt> 演算が済むたびに、この変形を実行することができる。
+この問題を解決する別の方法もあるが、それらの方法のほとんどは、探索と挿入がどちらも &Theta;(<tt>log</tt> <em class="en">n</em>) のステップで行えるような新しいデータ構造を設計することを、伴っている<a href="#footnote_Temp_250"><sup><small>40</small></sup></a>。
+</p>
+
+<figure>
+<a name="%_fig_2.17"></a>
+<img src="ch2-Z-G-52.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.17:</b>  Unbalanced tree produced by adjoining 1 through 7 in sequence.</figcaption>
+<figcaption class="trans" lang="ja"><b>図2.17:</b> 1から7までを順に追加することで作り出された、不均衡な木</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.63"></a>
+<b>Exercise 2.63.</b>  Each of the following two procedures converts a <a name="%_idx_2182"></a><a name="%_idx_2184"></a>binary tree to a list.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.63.</b> 以下の二つの手続きのそれぞれは、二分木をリストに変換する。
+</p>
+
+<p class="lisp"><a name="%_idx_2186"></a>(define (tree-&gt;list-1 tree)
+  (if (null? tree)
+      '()
+      (append (tree-&gt;list-1 (left-branch tree))
+              (cons (entry tree)
+                    (tree-&gt;list-1 (right-branch tree))))))
+(define (tree-&gt;list-2 tree)
+  (define (copy-to-list tree result-list)
+    (if (null? tree)
+        result-list
+        (copy-to-list (left-branch tree)
+                      (cons (entry tree)
+                            (copy-to-list (right-branch tree)
+                                          result-list)))))
+  (copy-to-list tree '()))
+</p>
+
+<ol class="orig" lang="en">
+<li>Do the two procedures produce the same result for every tree?  If
+not, how do the results differ?  What lists do the two procedures
+produce for the trees in figure <a href="#%_fig_2.16">2.16</a>?</li>
+<li>Do the two procedures have the same order of growth in the number
+of steps required to convert a balanced tree with <em>n</em> elements to a list?
+If not, which one grows more slowly?</li>
+</ol>
+
+<ol class="trans" lang="ja">
+<li>どの木に対しても、二つの手続きは同じ結果を生み出すだろうか?
+もしそうでないなら、結果はどのように異なるか?
+図<a href="#%_fig_2.16">2.16</a>の木に対して、二つの手続きは、どういうリストを作り出すか?</li>
+<li><em class="en">n</em> 個の要素を持った均衡木をリストに変換するのに必要なステップ数の増大のオーダは、二つの手続きで同じだろうか?</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.64"></a>
+<b>Exercise 2.64.</b>  <a name="%_idx_2188"></a><a name="%_idx_2190"></a>The following procedure <tt>list-&gt;tree</tt> converts an ordered list to a
+balanced binary tree.  The helper procedure <tt>partial-tree</tt> takes
+as arguments an integer <em>n</em> and list of at least <em>n</em> elements and
+constructs a balanced tree containing the first <em>n</em> elements of the
+list.  The result returned by <tt>partial-tree</tt> is a pair (formed
+with <tt>cons</tt>) whose <tt>car</tt> is the constructed tree and whose
+<tt>cdr</tt> is the list of elements not included in the tree.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.64.</b> 以下の <tt>list-&gt;tree</tt> という手続きは、順序づけされたリストを均衡二分木に変換する。
+<tt>partial-tree</tt> というヘルパ手続きは、引数として、<em class="en">n</em> という整数と、少なくとも <em class="en">n</em> 個の要素からなるリストとをとり、そのリストの最初の <em class="en">n</em> 個のリストを含む均衡木を構築する。
+<tt>partial-tree</tt> が返す結果は、(<tt>cons</tt> により形成される) 対であって、その <tt>car</tt> が構築済みの木であり、かつ、その <tt>cdr</tt> がその木に含まれていない要素のリストであるようなもの、である。
+</p>
+
+<p class="lisp"><a name="%_idx_2192"></a>(define (list-&gt;tree elements)
+  (car (partial-tree elements (length elements))))
+
+(define (partial-tree elts n)
+  (if (= n 0)
+      (cons '() elts)
+      (let ((left-size (quotient (- n 1) 2)))
+        (let ((left-result (partial-tree elts left-size)))
+          (let ((left-tree (car left-result))
+                (non-left-elts (cdr left-result))
+                (right-size (- n (+ left-size 1))))
+            (let ((this-entry (car non-left-elts))
+                  (right-result (partial-tree (cdr non-left-elts)
+                                              right-size)))
+              (let ((right-tree (car right-result))
+                    (remaining-elts (cdr right-result)))
+                (cons (make-tree this-entry left-tree right-tree)
+                      remaining-elts))))))))
+</p>
+
+<ol class="orig" lang="en">
+<li>Write a short paragraph explaining as clearly as you can how <tt>partial-tree</tt> works.  Draw the tree produced by <tt>list-&gt;tree</tt> for
+the list <tt>(1 3 5 7 9 11)</tt>.</li>
+<li>What is the order of growth in the number of steps required by <tt>list-&gt;tree</tt> to convert a list of <em>n</em> elements?</li>
+</ol>
+
+<ol class="trans" lang="ja">
+<li><tt>partial-tree</tt> がどう動くのかをできるだけ明確に説明する、短いパラグラフを書け。
+<tt>(1 3 5 7 9 11)</tt> というリストに対して <tt>list-&gt;tree</tt> により作り出される木を描け。</li>
+<li><em class="en">n</em> 個の要素のリストを変換するのに <tt>list-&gt;tree</tt> が必要とするステップの数の増大のオーダは、いかほどか?</li>
+</ol>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.65"></a>
+<b>Exercise 2.65.</b>  <a name="%_idx_2194"></a><a name="%_idx_2196"></a>Use the results of exercises <a href="#%_thm_2.63">2.63</a> and
+ <a href="#%_thm_2.64">2.64</a> to give <img src="book-Z-G-D-3.gif" border="0">(<em>n</em>) implementations of <tt>union-set</tt> and <tt>intersection-set</tt> for sets implemented as
+(balanced) binary trees.<a name="call_footnote_Temp_254" href="#footnote_Temp_254"><sup><small>41</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.65.</b> 練習問題<a href="#%_thm_2.63">2.63</a>と<a href="#%_thm_2.64">2.64</a>の結果を使って、
+(均衡) 二分木として実装された集合に対する、<tt>union-set</tt> と <tt>intersection-set</tt> の、&Theta;(<em class="en">n</em>) の実装を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_Temp_255"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_255">Sets and information retrieval</a></h4>
+<h4 class="trans" lang="ja">集合と情報検索</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2200"></a>
+We have examined options for using lists to represent sets and have
+seen how the choice of representation for a data object can have a
+large impact on the performance of the programs that use the data.
+Another reason for concentrating on sets is that the techniques
+discussed here appear again and again in applications involving
+information retrieval.</p>
+
+<p class="trans" lang="ja">
+私たちは、集合を表現するのにリストを用いる選択肢をいくつか吟味してきた。そして、データオブジェクトの表現についての選択が、そのデータを使うプログラムの性能に対して、どれほど大きな影響を与え得るのか、ということを見てきた。
+集合に精神を集中させているもう一つの理由は、ここで議論している技法が、情報検索を伴うアプリケーションの中で、何度も何度も現れるからだ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2202"></a>Consider a data base containing a large number of individual records,
+<a name="%_idx_2204"></a>such as the personnel files for a company or the transactions in an
+accounting system.  A typical data-management system spends a large
+amount of time accessing or modifying the data in the records and
+therefore requires an efficient method for accessing records.  This is
+done by identifying a part of each record to serve as an identifying
+<a name="%_idx_2206"></a><em>key</em>.  A key can be anything that uniquely identifies the
+record.  For a personnel file, it might be an employee's ID number.
+For an accounting system, it might be a transaction number.  Whatever
+the key is, when we define the record as a data structure we should
+include a <a name="%_idx_2208"></a><tt>key</tt> selector procedure that retrieves the key
+associated with a given record.</p>
+
+<p class="trans" lang="ja">
+たとえば、会社の個人記録や、口座システムでの取引などの、多数の個別レコードを含むデータベースを考えてみよう。
+典型的なデータ管理システムは、レコード内のデータにアクセスしたり修正を加えたりするのに、多くの時間を費やしており、ゆえに、レコードにアクセスするための効率的な手法を必要としている。
+これは、識別<em>キー</em>としてはたらくように各レコードの一部を識別することにより、なされる。
+キーは、そのレコードを一意に識別するものなら何でもよい。
+個人記録なら、キーは、従業員のID番号かもしない。
+口座システムなら、キーは、取引番号かもしない。
+キーが何であろうが、レコードをデータ構造として定義する際には、私たちは、与えられたレコードに対応づけられたキーを取り出すような、<tt>key</tt> というセレクタ手続きを含めるべきだ。
+</p>
+
+<p class="orig" lang="en">
+Now we represent the data base as a set of records. To locate the
+record with a given key we use a procedure <tt>lookup</tt>, which takes
+as arguments a key and a data base and which returns the record that
+has that key, or false if there is no such record.  <tt>Lookup</tt>
+is implemented in almost the same way as <tt>element-of-set?</tt>.  For
+example, if the set of records is implemented as an unordered list, we
+could use
+</p>
+
+<p class="trans" lang="ja">
+さて、データベースをレコードの集合として表現する。
+与えられたキーを持つレコードを突きとめるためには、<tt>lookup</tt> という手続きを使うが、これは、引数としてキーとデータベースとを取り、そのキーを持つレコードを返すか、あるいは、そういうレコードがないときは偽を返す。
+<tt>lookup</tt> は、<tt>element-of-set?</tt> とほとんど同じ方法で実装される。
+たとえば、もしレコードの集合が、順序づけされていないリストとして実装されているならば、以下のものを使えるだろう。
+</p>
+
+<p class="lisp"><a name="%_idx_2210"></a>(define (lookup given-key set-of-records)
+  (cond ((null? set-of-records) false)
+        ((equal? given-key (key (car set-of-records)))
+         (car set-of-records))
+        (else (lookup given-key (cdr set-of-records)))))
+</p>
+
+<p class="orig" lang="en">
+Of course, there are better ways to represent large sets than as
+unordered lists.  Information-retrieval systems in which records have
+to be ``randomly accessed'' are typically implemented by a tree-based
+method, such as the binary-tree representation discussed previously.
+In designing such a system the methodology of data abstraction
+can be a great help.  The designer can create an initial
+implementation using a simple, straightforward representation such as
+unordered lists.  This will be unsuitable for the eventual system, but
+it can be useful in providing a ``quick and dirty'' data base with
+which to test the rest of the system.  Later on, the data
+representation can be modified to be more sophisticated.  If the data
+base is accessed in terms of abstract selectors and constructors, this
+change in representation will not require any changes to the rest of
+the system.</p>
+
+<p class="trans" lang="ja">
+もちろん、大きな集合を、順序づけされていないリストとして表現するよりも、より良い表現方法はある。
+レコードが「ランダムにアクセスされ」なくてはならない情報検索システムは、典型的には、木に基づく方法——前に議論した、二分木表現など——により、実装されている。
+そういうシステムを設計する際には、データ抽象化の方法論が、大きな助けとなり得る。
+設計者は、順序づけされていないリストなどの、簡単でわかりやすい表現を使った、最初の実装を作成できる。
+これは、最終的なシステムには適していないだろうが、システムの残りを検査する際に使う「やっつけの」データベースを提供するのには、役立ち得るのだ。
+後で、データ表現は、より洗練された形へと修正され得る。
+もしデータベースが、抽象的なセレクタとコンストラクタを使ってアクセスされるなら、表現についてのこの変更のせいで、システムの残りに対する何らかの変更が必要となることは、ないだろう。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.66"></a>
+<b>Exercise 2.66.</b>  Implement the <tt>lookup</tt> procedure for the case
+where the set of records is structured as a binary tree, ordered by
+the numerical values of the keys.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.66.</b> キーの数値により順序づけられた二分木としてレコードの集合が構造化されている場合における、<tt>lookup</tt> の手続きを実装せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<a name="%_sec_2.3.4"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.3.4">2.3.4  Example: Huffman Encoding Trees</a></h3>
+<h3 class="trans" lang="ja">2.3.4 例: ハフマン符号化木</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2212"></a>
+This section provides practice in the use of list structure and data
+abstraction to manipulate sets and trees.  The application is to
+methods for representing data as sequences of ones and zeros (bits).
+For example, the <a name="%_idx_2214"></a><a name="%_idx_2216"></a>ASCII standard code used to represent text in
+computers encodes each <a name="%_idx_2218"></a>character as a sequence of seven bits.  Using
+seven bits allows us to distinguish 2<sup>7</sup>, or 128, possible different
+characters.  In general, if we want to distinguish <em>n</em> different
+symbols, we will need to use <tt>log</tt><sub>2</sub> <em>n</em> bits per symbol.  If all our
+messages are made up of the eight symbols A, B, C, D, E, F, G, and H,
+we can choose a code with three bits per character, for example</p>
+
+<p class="trans" lang="ja">
+本節では、集合と木を操作するためのリスト構造とデータ抽象化の使用における実践を示す。
+適用先は、1と0 (つまりビット) の列としてデータを表現するための方法である。
+たとえば、コンピュータでテキストを表現するのに使われているASCII標準符号は、各文字を7ビットの列として符号化している。
+7ビットを使うことで、2<sup>7</sup>個、つまり128個の、可能な異なる文字を区別できる。
+一般的には、<em class="en">n</em>個の異なるシンボルを区別したいなら、一つのシンボルあたり
+<span class="math"><tt>log</tt><sub>2</sub> <em class="en">n</em></span>
+ビットを使う必要があるだろう。
+もし、すべてのメッセージが、A、B、C、D、E、F、G、H という8個のシンボルから成り立っているのなら、一文字あたり3ビットの符号を選ぶことができる。たとえば、以下のように。
+</p>
+
+<figure>
+<table class="common"><tr><td valign=top >A 000 </td><td valign=top >C 010 </td><td valign=top >E 100 </td><td valign=top >G 110</td></tr>
+<tr><td valign=top >B 001 </td><td valign=top >D 011 </td><td valign=top >F 101 </td><td valign=top >H 111
+</td></tr></table>
+</figure>
+
+<p class="orig" lang="en">
+With this code, the message
+</p>
+
+<p class="trans" lang="ja">
+この符号を使うと、以下のメッセージは、
+</p>
+
+<p class="lisp">BACADAEAFABBAAAGAH</p>
+
+<p class="orig" lang="en">
+is encoded as the string of 54 bits</p>
+
+<p class="trans" lang="ja">
+次のような54ビットの列として、符号化される。
+</p>
+
+<p class="lisp">001000010000011000100000101000001001000000000110000111</p>
+
+
+<p class="orig" lang="en">
+Codes such as ASCII and the A-through-H code above are known as <a name="%_idx_2220"></a><a name="%_idx_2222"></a><em>fixed-length</em> codes, because they represent each symbol in the message
+with the same number of bits.  It is sometimes advantageous to use
+<a name="%_idx_2224"></a><a name="%_idx_2226"></a><em>variable-length</em> codes, in which different symbols may be
+represented by different numbers of bits.  For example, <a name="%_idx_2228"></a><a name="%_idx_2230"></a>Morse code
+does not use the same number of dots and dashes for each letter of the
+alphabet.  In particular, E, the most frequent letter, is represented
+by a single dot.  In general, if our messages are such that some
+symbols appear very frequently and some very rarely, we can encode
+data more efficiently (i.e., using fewer bits per message) if we
+assign shorter codes to the frequent symbols.  Consider the following
+alternative code for the letters A through H:
+</p>
+
+<p class="trans" lang="ja">
+ASCIIや上記のA〜H符号などの符号は、<em>固定長</em>符号として知られる。というのも、それらの符号は、メッセージ内の各シンボルを同数のビットで表現するからだ。
+ときには、<em>可変長</em>符号——異なるシンボルが、異なる個数のビットで表現される可能性がある——を使うのが有利である。
+たとえば、モールス符号は、アルファベットの各文字に対して、同じ個数の点と線を使ってはいない。
+特に、E——最頻出の文字——は、一つの点により表現される。
+一般的には、ある一部のシンボルはとても頻繁に出現する一方で、ある一部のシンボルはとても稀にしか出現しないように、メッセージができている場合、より短い符号を頻出するシンボルに割り当てれば、より効率よく (つまり、一メッセージあたり、より少ないビットだけを使って) データを符号化できる。
+AからHまでの文字に対する、以下の代替符号を考えよう。
+</p>
+
+<figure>
+<table class="common"><tr><td valign=top >A 0 </td><td valign=top >C 1010 </td><td valign=top >E 1100 </td><td valign=top >G 1110</td></tr>
+<tr><td valign=top >B 100 </td><td valign=top >D 1011 </td><td valign=top >F 1101 </td><td valign=top >H 1111
+</td></tr></table>
+</figure>
+
+<p class="orig" lang="en">
+With this code, the same message as above is encoded as the string</p>
+
+<p class="trans" lang="ja">
+この符号を使うと、上記と同じメッセージは、以下の列のように符号化される。
+</p>
+
+<p class="lisp">100010100101101100011010100100000111001111</p>
+
+<p class="orig" lang="en">
+This string contains 42 bits, so it saves more than 20% in space in
+comparison with the fixed-length code shown above.</p>
+
+<p class="trans" lang="ja">
+この列は42ビットを含み、よって、上記の固定長符号と比べると、空間を20%以上も節約できる。
+</p>
+
+<p class="orig" lang="en">
+One of the difficulties of using a variable-length code is knowing
+when you have reached the end of a symbol in reading a sequence of
+zeros and ones.  Morse code solves this problem by using a special
+<a name="%_idx_2232"></a><em>separator code</em> (in this case, a pause) after the sequence of
+dots and dashes for each letter.  Another solution is to design the
+code in such a way that no complete code for any symbol is the
+beginning (or <em>prefix</em>) of the code for another symbol.  Such a
+code is called a <a name="%_idx_2234"></a><a name="%_idx_2236"></a><em>prefix code</em>.  In the example above, A is
+encoded by 0 and B is encoded by 100, so no other symbol can have a
+code that begins with 0 or with 100.</p>
+
+<p class="trans" lang="ja">
+可変長符号を使うことの難しさの一つは、0と1の並びを読んでいく中で、いつシンボルの終わりに達したのかを知ることである。モールス符号では、各文字の点と線の並びの後で空間的な<em>セパレータ</em> (ここでは<ruby><rb>小休止</rb><rp> (</rp><rt>ポーズ</rt><rp>) </rp></ruby>) を使うことにより、この問題を解決している。
+別の解決法は、どのシンボルについての符号全体も、別のシンボルの符号の始まりの部分 (つまり<em>プレフィクス</em>) ではないようなやり方で、符号を設計することである。
+そのような符号は、<em>プレフィクス符号</em>と呼ばれる。
+上記の例では、Aが0に符号化され、Bが100に符号化されているから、他のどのシンボルも、0または100から始まる符号にはなれない。
+</p>
+
+<p class="orig" lang="en">
+In general, we can attain significant savings if we use
+variable-length prefix codes that take advantage of the relative
+frequencies of the symbols in the messages to be encoded.  One
+particular scheme for doing this is called the Huffman encoding
+method, after its discoverer, <a name="%_idx_2238"></a>David Huffman.  A Huffman code can be
+represented as a <a name="%_idx_2240"></a><a name="%_idx_2242"></a>binary tree whose leaves are the symbols that are
+encoded.  At each non-leaf node of the tree there is a set containing
+all the symbols in the leaves that lie below the node.  In addition,
+each symbol at a leaf is assigned a weight (which is its
+relative frequency), and each non-leaf
+node contains a weight that is the sum of all the weights of the
+leaves lying below it.  The weights are not used in the encoding or
+the decoding process.  We will see below how they are used to help
+construct the tree.</p>
+
+<p class="trans" lang="ja">
+一般には、符号化すべきメッセージ内での各シンボルの相対頻度を利用するような可変長プレフィクス符号を使うときに、顕著な節約を達成できる。
+こうするための一つの格別な体系は、ハフマン符号化法と呼ばれる——その発見者たるデイヴィッド・ハフマンにちなんで。
+ハフマン符号は、葉が、符号化されるシンボルであるような二分木として、表現できる。
+木のうち葉ではない各ノードには、そのノードの配下にある葉にある全てのシンボルを含むような集合がある。
+さらに、葉にある各シンボルには、重み (そのシンボルの相対頻度)  が割り当てられており、葉ではない各ノードは、その配下にある全ての葉の重みの和であるような重みを含む。
+重みは、符号化プロセスでも復号プロセスでも使われない。
+木を構築する助けとするために、どのように重みが使われるのか、ということを、これから見よう。
+</p>
+
+<figure>
+<a name="%_fig_2.18"></a>
+<img src="ch2-Z-G-53.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.18:</b>  A Huffman encoding tree.</figcaption>
+<figcaption class="trans" lang="ja"><b>図2.18:</b>  ハフマン符号化の木</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+Figure <a href="#%_fig_2.18">2.18</a> shows the Huffman tree for the A-through-H 
+code given above.  The weights at the leaves
+indicate that the tree was designed for messages in which A appears
+with relative frequency 8, B with relative frequency 3, and the
+other letters each with relative frequency 1.</p>
+
+<p class="trans" lang="ja">
+図<a href="#%_fig_2.18">2.18</a>は、上記のA〜H符号用のハフマン木をを示している。
+葉の重みが示しているのは、この木は、8という相対頻度でAが現れ、3という相対頻度でBが現れ、残りの文字がそれぞれ1という相対頻度で現れるようなメッセージ用に設計された、ということだ。
+</p>
+
+<p class="orig" lang="en">
+Given a Huffman tree, we can find the encoding of any symbol by
+starting at the root and moving down until we reach the leaf that
+holds the symbol.  Each time we move down a left branch we add a 0 to
+the code, and each time we move down a right branch we add a 1.  (We
+decide which branch to follow by testing to see which branch either is
+the leaf node for the symbol or contains the symbol in its set.)  For
+example, starting from the root of the tree in
+figure <a href="#%_fig_2.18">2.18</a>, we arrive at the leaf for D by following a
+right branch, then a left branch, then a right branch, then a right
+branch; hence, the code for D is 1011.</p>
+
+<p class="trans" lang="ja">
+ハフマン木が与えられると、私たちは、どのシンボルの符号化の仕方であっても、根から始めて、当該シンボルを保持する葉に到るまで降りてゆくことによって、その仕方がわかるのである。
+左の分岐を降りるたびに、0を符号に加え、右の分岐を降りるたびに、1を加える。
+(当該シンボルの葉ノードであるか、または、その集合内に当該シンボルを含んでいるのは、どちらの分岐なのか、ということを調べることで、どちらの分岐をたどるべきなのかを決める。)
+たとえば、図<a href="#%_fig_2.18">2.18</a>の根から始めて、右の分岐、それから左の分岐、それから右の分岐、それから右の分岐、とたどることで、Dの葉にたどりつく。よって、Dの符号は1011だ。
+</p>
+
+<p class="orig" lang="en">
+To decode a bit sequence using a Huffman tree, we begin at the root
+and use the successive zeros and ones of the bit sequence to determine
+whether to move down the left or the right branch.  Each time we come
+to a leaf, we have generated a new symbol in the message, at which
+point we start over from the root of the tree to find the next symbol.
+For example, suppose we are given the tree above and the sequence
+10001010.  Starting at the root, we move down the right branch, (since
+the first bit of the string is 1), then down the left branch (since
+the second bit is 0), then down the left branch (since the third bit
+is also 0).  This brings us to the leaf for B, so the first symbol of
+the decoded message is B.  Now we start again at the root, and we make
+a left move because the next bit in the string is 0.  This brings us
+to the leaf for A.  Then we start again at the root with the rest of
+the string 1010, so we move right, left, right, left and reach C.
+Thus, the entire message is BAC.</p>
+
+<p class="trans" lang="ja">
+ハフマン木を使ってビット列を復号するには、根から始め、そして、そのビット列の、次に続く0と1とを使って、左の分岐を降りるべきか、それとも右の分岐を降りるべきかを、判定する。
+葉に達するたびに、メッセージ内の新たなシンボルを生成したことになり、その時点で、次のシンボルを見つけるために、木の根からやり直す。
+たとえば、上記の木と、10001010という列が与えられたとしよう。
+根から始めて、右の分岐を降り (この列の1番目のビットが1だから)、それから左の分岐を降り (2番目のビットが0だから)、それから左の分岐を降りる (3番目のビットが0だから)。
+これによってBの葉に到るので、復号されたメッセージの1番目のシンボルは、Bである。
+さて、再び根から始めて、列の次のビットが0なので左へ移動する。
+これによってAの葉に到る。
+次に、残りの1010という列について再び根から始めて、そして、右、左、右、左、と移動して、Cに到着する。
+このとおりなので、メッセージ全体はBACである。
+</p>
+
+<a name="%_sec_Temp_257"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_257">Generating Huffman trees</a></h4>
+<h4 class="trans" lang="ja">ハフマン木を生成する</h4>
+
+<p class="orig" lang="en">
+Given an ``alphabet'' of symbols and their relative frequencies, how
+do we construct the ``best'' code?  (In other words, which tree will
+encode messages with the fewest bits?)  Huffman gave an algorithm for
+doing this and showed that the resulting code is indeed the best
+variable-length code for messages where the relative frequency of the
+symbols matches the frequencies with which the code was constructed.
+<a name="%_idx_2244"></a><a name="%_idx_2246"></a>We will not prove this optimality of Huffman codes here, but we will
+show how Huffman trees are constructed.<a name="call_footnote_Temp_258" href="#footnote_Temp_258"><sup><small>42</small></sup></a></p>
+
+<p class="trans" lang="ja">
+シンボルの「アルファベット」と、それらシンボルの相対頻度とが与えられたとき、どのように「最良」の符号を構築するか?
+(換言すれば、どの木が、メッセージを最少ビットで符号化するのか?)
+ハフマンは、これを行うためのアルゴリズムを示すとともに、シンボルの相対頻度が、符号が構築されるのに使われた頻度と一致するようなメッセージに対しては、結果として生じる符号が、実際に最良の可変長符号である、と示した。
+ここでは、ハフマン符号のこの最適性を証明しないことにするが、ハフマン木がどのように構築されるのか、については示そう<a href="#footnote_Temp_258"><sup><small>42</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+The algorithm for generating a Huffman tree is very simple. The idea
+is to arrange the tree so that the symbols with the lowest frequency
+appear farthest away from the root. Begin with the set of leaf nodes,
+containing symbols and their frequencies, as determined by the initial data
+from which the code is to be constructed. Now find two leaves with
+the lowest weights and merge them to produce a node that has these
+two nodes as its left and right branches. The weight of the new node
+is the sum of the two weights. Remove the two leaves from the
+original set and replace them by this new node. Now continue this
+process. At each step, merge two nodes with the smallest weights,
+removing them from the set and replacing them with a node that has
+these two as its left and right branches. The process stops when
+there is only one node left, which is the root of the entire tree.
+Here is how the Huffman tree of figure <a href="#%_fig_2.18">2.18</a> was generated:</p>
+
+<p class="trans" lang="ja">
+ハフマン木を生成するためのアルゴリズムは、とても簡潔だ。
+その考え方とは、最低頻度のシンボルが、根から最も遠く離れたところに現れるように、木を整える、ということである。
+符号を構築する元になるべき初期データにより決定されるとおりの、葉ノード——シンボルとその頻度を含む——の集合から、始めよう。
+さて、最小の重みの二つの葉を見つけ、これらを併合して、これら二つのノードを自分の左右の分岐として有するようなノードを作り出そう。
+新しいノードの重みは、二つの重みの和である。
+元の集合から、これら二つの葉を取り除き、これらを、新しいノードで置き換えよう。
+そしてこのプロセスを続ける。
+各ステップで、最小の重みの二つのノードを併合せよ——そして、これらを集合から取り除くとともに、これら二つを自分の左右の分岐として有するノードで、これらを置き換えるのだ。
+このプロセスは、たった一つのノードだけが残ったときに停止し、そのたった一つのノードは木全体の根である。
+図<a href="#%_fig_2.18">2.18</a>のハフマン木がどのように生成されたのかを、ここに示す。
+</p>
+
+<figure>
+<table class="common">
+<tr><td valign=top >Initial leaves </td><td valign=top><tt>{(A 8)  (B 3)  (C 1) (D 1)  (E 1)  (F 1)  (G 1)  (H 1)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)  (B 3)  ({C D} 2)  (E 1)  (F 1)  (G 1)  (H 1)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)  (B 3)  ({C D} 2) ({E F} 2)  (G 1)  (H 1)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)  (B 3)  ({C D} 2) ({E F} 2)   ({G H} 2)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)   (B 3)  ({C D} 2)  ({E F G H} 4)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)  ({B C D} 5)  ({E F G H} 4)}</tt></td></tr>
+<tr><td valign=top >Merge </td><td valign=top><tt>{(A 8)  ({B C D E F G H} 9)}</tt></td></tr>
+<tr><td valign=top >Final merge </td><td valign=top><tt>{({A B C D E F G H} 17)}</tt></td></tr>
+</table>
+</figure>
+
+<p class="orig" lang="en">
+The algorithm does not always specify a unique tree, because there may
+not be unique smallest-weight nodes at each step.  Also, the choice of
+the order in which the two nodes are merged (i.e., which will be the
+right branch and which will be the left branch) is arbitrary.</p>
+
+<p class="trans" lang="ja">
+このアルゴリズムは、いつでも一意な木を特定するわけではない。というのも、各ステップで、一意な最小重みのノードがあるとは限らないからだ。
+さらに、二つのノードを併合する順序の選択 (つまり、どちらが右の分岐になり、どちらが左の分岐になるか) も任意なのだ。
+</p>
+
+<a name="%_sec_Temp_259"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_259">Representing Huffman trees</a></h4>
+<h4 class="trans" lang="ja">ハフマン木を表現する</h4>
+
+<p class="orig" lang="en">
+In the exercises below we will work with a system that uses
+Huffman trees to encode and decode messages and generates Huffman
+trees according to the algorithm outlined above.  We will begin by
+discussing how trees are represented.</p>
+
+<p class="trans" lang="ja">
+以下の練習問題では、メッセージを符号化したり復号したりするのにハフマン木を使い、かつ、上記で概説したアルゴリズムにしたがってハフマン木を生成するようなシステムを用いて、作業を行うことにする。
+木がどのように表現されるのかを議論することから始めよう。
+</p>
+
+<p class="orig" lang="en">
+Leaves of the tree are represented by a list consisting of the
+symbol <tt>leaf</tt>, the symbol at the leaf, and the weight:
+</p>
+
+<p class="trans" lang="ja">
+木の葉は、<tt>leaf</tt> というシンボルと、その葉のシンボルと、重みとからなるリストにより、表現される。
+</p>
+
+<p class="lisp"><a name="%_idx_2250"></a>(define (make-leaf symbol weight)
+  (list 'leaf symbol weight))
+<a name="%_idx_2252"></a>(define (leaf? object)
+  (eq? (car object) 'leaf))
+<a name="%_idx_2254"></a>(define (symbol-leaf x) (cadr x))
+<a name="%_idx_2256"></a>(define (weight-leaf x) (caddr x))
+</p>
+
+<p class="orig" lang="en">
+A general tree will be a list of a left branch, a right branch, a set
+of symbols, and a weight.  The set of symbols will be simply a list of
+the symbols, rather than some more sophisticated set representation.
+When we make a tree by merging two nodes, we obtain the weight of the
+tree as the sum of the weights of the nodes, and the set of symbols as
+the union of the sets of symbols for the nodes.  Since our symbol sets are
+represented as lists, we can form the union by using the <tt>append</tt>
+procedure we defined in section <a href="15_sec2_2.html#%_sec_2.2.1">2.2.1</a>:
+</p>
+
+<p class="trans" lang="ja">
+一般的な木は、左の分岐と、右の分岐と、シンボルの集合と、重みとからなるリストになるだろう。
+シンボルの集合は、単純に、シンボルのリストになるだろう——より洗練された何らかの表現ではなく。
+二つのノードを併合することで木を作るとき、それらのノードの重みの和としての、木の重みを得るとともに、それらのノードのシンボルの集合同士の和集合としての、シンボルの集合を得る。
+シンボル集合がリストで表現されているため、和集合は、<a href="15_sec2_2.html#%_sec_2.2.1">2.2.1</a>節で定義した <tt>append</tt> という手続きを使って形成できる。
+</p>
+
+<p class="lisp"><a name="%_idx_2258"></a>(define (make-code-tree left right)
+  (list left
+        right
+        (append (symbols left) (symbols right))
+        (+ (weight left) (weight right))))
+</p>
+
+<p class="orig" lang="en">
+If we make a tree in this way, we have the following selectors:
+</p>
+
+<p class="trans" lang="ja">
+もしこのやり方で木を作るなら、以下のセレクタがあることになる。
+</p>
+
+<p class="lisp"><a name="%_idx_2260"></a>(define (left-branch tree) (car tree))
+
+<a name="%_idx_2262"></a>(define (right-branch tree) (cadr tree))
+<a name="%_idx_2264"></a>(define (symbols tree)
+  (if (leaf? tree)
+      (list (symbol-leaf tree))
+      (caddr tree)))
+<a name="%_idx_2266"></a>(define (weight tree)
+  (if (leaf? tree)
+      (weight-leaf tree)
+      (cadddr tree)))
+</p>
+
+<p class="orig" lang="en">
+The procedures <tt>symbols</tt> and <tt>weight</tt> must do something
+slightly different depending on whether they are called with a leaf or
+a general tree.  These are simple examples of <a name="%_idx_2268"></a><a name="%_idx_2270"></a><em>generic
+procedures</em> (procedures that can handle more than one kind of data),
+which we will have much more to say about in
+sections <a href="17_sec2_4.html#%_sec_2.4">2.4</a> and <a href="18_sec2_5.html#%_sec_2.5">2.5</a>.</p>
+
+<p class="trans" lang="ja">
+<tt>symbols</tt> と  <tt>weight</tt> という手続きは、葉について呼ばれたのか、それとも一般的な木について呼ばれたのかによって、少し異なる何かを行わなくてはならない。
+これらは、<em>総括的な手続き</em> (1種類より多い種類のデータを取り扱える手続き) ——これについては、<a href="17_sec2_4.html#%_sec_2.4">2.4</a>節と<a href="18_sec2_5.html#%_sec_2.5">2.5</a>節で、言うべきことがもっとずっと多く出てくるだろう——の単純な例である。
+</p>
+
+<a name="%_sec_Temp_260"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_260">The decoding procedure</a></h4>
+<h4 class="trans" lang="ja">復号手続き</h4>
+
+<p class="orig" lang="en">
+The following procedure implements the decoding algorithm.
+It takes as arguments a list of zeros and ones, together with
+a Huffman tree.
+</p>
+
+<p class="trans" lang="ja">
+以下の手続きは、復号アルゴリズムを実装している。
+これは、0と1の連なりを、ハフマン木とともに、引数としてとる。
+</p>
+
+<p class="lisp"><a name="%_idx_2272"></a>(define (decode bits tree)
+  (define (decode-1 bits current-branch)
+    (if (null? bits)
+        '()
+        (let ((next-branch
+               (choose-branch (car bits) current-branch)))
+          (if (leaf? next-branch)
+              (cons (symbol-leaf next-branch)
+                    (decode-1 (cdr bits) tree))
+              (decode-1 (cdr bits) next-branch)))))
+  (decode-1 bits tree))
+(define (choose-branch bit branch)
+  (cond ((= bit 0) (left-branch branch))
+        ((= bit 1) (right-branch branch))
+        (else (error &quot;bad bit -- CHOOSE-BRANCH&quot; bit))))
+</p>
+
+<p class="orig" lang="en">
+The procedure <tt>decode-1</tt> takes two arguments: the list of remaining bits
+and the current position in the tree.  It keeps moving
+``down'' the tree, choosing a left or a right branch according to
+whether the next bit in the list is a zero or a one.  (This is done
+with the procedure <tt>choose-branch</tt>.)  When it reaches a leaf, it
+returns the symbol at that leaf as the next symbol in the message by
+<tt>cons</tt>ing it onto the result of decoding
+the rest of the message, starting at the root of the tree.
+Note the error check in the final clause of <tt>choose-branch</tt>, which
+complains if the procedure finds something other than a zero or a one in the
+input data.</p>
+
+<p class="trans" lang="ja">
+<tt>decode-1</tt> という手続きは二つの引数を取る。すなわち、残りのビットの連なりと、木の中での現在位置である。
+この手続きは、木を「下へと降りて」いき、上記の連なりにおける次のビットが0なのか1なのかに応じて、左または右の分岐を選ぶ、ということを続ける。
+(この選択は、<tt>choose-branch</tt> という手続きを使って行われる。)
+<tt>decode-1</tt> という手続きは、木の根から開始するのだが、葉に到達すると、その葉のシンボルを、メッセージの残りを復号した結果の前に <tt>cons</tt> することにより、その葉のシンボルを、メッセージ中の次のシンボルとして返す。
+<tt>choose-branch</tt> の最後の節でのエラーチェック——この手続きが0または1以外の何かを入力データ中に見つけたら、文句を言う——に注意しよう。
+</p>
+
+<a name="%_sec_Temp_261"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_261">Sets of weighted elements</a></h4>
+<h4 class="trans" lang="ja">重みづけされた要素の集合</h4>
+
+<p class="orig" lang="en">
+In our representation of trees, each non-leaf node contains a set of
+symbols, which we have represented as a simple list.  However, the
+tree-generating algorithm discussed above requires that we also work
+with sets of leaves and trees, successively merging the two smallest
+items.  Since we will be required to repeatedly find the smallest item
+in a set, it is convenient to use an ordered representation for this
+kind of set.</p>
+
+<p class="trans" lang="ja">
+私たちの木の表現では、葉ではない各ノードがシンボルの集合を含んでいるわけだが、そのシンボルの集合を私たちは単純なリストとして表現してきた。
+しかし、上記で議論した、木を生成するアルゴリズムは、次々と最小の二つのものを併合しながら、葉と木の集合を使って作業することも、必要としている。
+繰り返し、集合内で最小の二つのものを見つけていくことが、求められるだろうから、この種の集合については、順序づけされた表現を使うのが便利だ。
+</p>
+
+<p class="orig" lang="en">
+We will represent a set of leaves and trees as a list of elements,
+arranged in increasing order of weight.  The following <tt>adjoin-set</tt> procedure for constructing sets is similar to the one
+described in exercise <a href="#%_thm_2.61">2.61</a>; however, items are compared
+by their weights, and the element being added to the set is
+never already in it.
+</p>
+
+<p class="trans" lang="ja">
+葉と木の集合を、重みの昇順で並べられた要素のリストとして、表現しよう。
+集合を構築するための、以下の <tt>adjoin-set</tt> という手続きは、練習問題<a href="#%_thm_2.61">2.61</a>で述べたものに似ている。しかし、項目同士は、重みにより比較され、その集合に追加される要素は、決して、その集合の中に既に存在しているものではない。
+</p>
+
+<p class="lisp"><a name="%_idx_2274"></a>(define (adjoin-set x set)
+  (cond ((null? set) (list x))
+        ((&lt; (weight x) (weight (car set))) (cons x set))
+        (else (cons (car set)
+                    (adjoin-set x (cdr set))))))
+</p>
+
+<p class="orig" lang="en">
+The following procedure takes a list of
+symbol-frequency pairs such as <tt>((A 4) (B 2) (C 1) (D 1))</tt> and
+constructs an initial ordered set of leaves, ready to be merged
+according to the Huffman algorithm:
+</p>
+
+<p class="trans" lang="ja">
+以下の手続きは、<tt>((A 4) (B 2) (C 1) (D 1))</tt> のような、シンボルと頻度の対のリストをとり、葉の順序付き初期集合を構築する。
+</p>
+
+<p class="lisp"><a name="%_idx_2276"></a>(define (make-leaf-set pairs)
+  (if (null? pairs)
+      '()
+      (let ((pair (car pairs)))
+        (adjoin-set (make-leaf (car pair)    <em>; symbol</em>
+                               (cadr pair))  <em>; frequency</em>
+                    (make-leaf-set (cdr pairs))))))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.67"></a>
+<b>Exercise 2.67.</b>  Define an encoding tree and a sample message:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.67.</b> 符号化木とサンプル・メッセージを定義しよう。
+</p>
+
+<p class="lisp">(define sample-tree
+  (make-code-tree (make-leaf 'A 4)
+                  (make-code-tree
+                   (make-leaf 'B 2)
+                   (make-code-tree (make-leaf 'D 1)
+                                   (make-leaf 'C 1)))))
+
+(define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+</p>
+
+<p class="orig" lang="en">
+Use the <tt>decode</tt> procedure to decode the
+message, and give the result.</p>
+
+<p class="trans" lang="ja">
+<tt>decode</tt> の手続きを使って、このメッセージを復号し、その結果を示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.68"></a>
+<b>Exercise 2.68.</b>  The <tt>encode</tt> procedure takes as arguments a message and a tree and
+produces the list of bits that gives the encoded message.</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.68.</b> <tt>encode</tt> の手続きは、メッセージと木を引数としてとり、符号化したメッセージを示すビットの連なりを作り出す。
+</p>
+
+<p class="lisp"><a name="%_idx_2278"></a>(define (encode message tree)
+  (if (null? message)
+      '()
+      (append (encode-symbol (car message) tree)
+              (encode (cdr message) tree))))
+</p>
+
+<p class="orig" lang="en">
+<tt>Encode-symbol</tt> is a procedure, which you must write, that returns
+the list of bits that encodes a given symbol according to a given
+tree.  You should design <tt>encode-symbol</tt> so that it signals an
+error if the symbol is not in the tree at all.  Test your procedure by
+encoding the result you obtained in exercise <a href="#%_thm_2.67">2.67</a> with
+the sample tree and seeing whether it is the same as the original
+sample message.
+</p>
+
+<p class="trans" lang="ja">
+<tt>encode-symbol</tt> は、与えられた木にしたがって、与えられた記号を符号化している、ビットの連なりを、返す手続きであって、君はこれを書かねばならない。
+もし、記号が木の中にまったく存在していなければ、エラーの合図を送るように、 <tt>encode-symbol</tt> を設計すべきである。
+練習問題<a href="#%_thm_2.67">2.67</a>でサンプル木を使って得た結果を符号化することにより、そして、その符号化したものが元のサンプル・メッセージと同じかどうかを調べることにより、君の手続きを検査したまえ。
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.69"></a>
+<b>Exercise 2.69.</b>  The following procedure takes as its argument a list of
+symbol-frequency pairs (where no symbol appears in more than one pair)
+and generates a Huffman encoding tree according to the Huffman
+algorithm.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.69.</b> 以下の手続きは、記号と頻度の対のリスト (このリストの中では、どの記号も、一つより多くの対には出現しない) を引数としてとり、ハフマン・アルゴリズムにしたがって、ハフマン符号化木を生成する。
+</p>
+
+<p class="lisp"><a name="%_idx_2280"></a>(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+</p>
+
+<p class="orig" lang="en">
+<tt>Make-leaf-set</tt> is the procedure given above that transforms the
+list of pairs into an ordered set of leaves.  <tt>Successive-merge</tt>
+is the procedure you must write, using <tt>make-code-tree</tt> to
+successively merge the smallest-weight elements of the set until there
+is only one element left, which is the desired Huffman tree.  (This
+procedure is slightly tricky, but not really complicated.  If you find
+yourself designing a complex procedure, then you are almost certainly
+doing something wrong.  You can take significant advantage of the fact
+that we are using an ordered set representation.)
+</p>
+
+<p class="trans" lang="ja">
+<tt>make-leaf-set</tt> は、対のリストを葉の順序付き集合に変換する、上記の手続きである。
+<tt>successive-merge</tt> は、君が書かねばならない手続きであり、<tt>make-code-tree</tt> を使って、ただ一つの要素しか残っていないようになるまで、集合内で最小の重みの要素同士を次々と合併してゆくもので、その結果が所望のハフマン木となる。
+(この手続きは、少し手が込んではいるが、本当に複雑なわけではない。
+自分が複雑な手続きを設計しているな、と気づく場合は、ほとんど確実に、何か間違ったことをしているのだ。
+順序付き集合の表現を使っていることを、君は、十分に利用できるのだよ。)
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.70"></a>
+<b>Exercise 2.70.</b>  <a name="%_idx_2282"></a>The following eight-symbol alphabet with associated relative
+frequencies was designed to efficiently encode the lyrics of 1950s
+rock songs.  (Note that the ``symbols'' of an ``alphabet'' need not be
+individual letters.)</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.70.</b> 関連する相対頻度付きの、八つの記号からなる以下のアルファベットは、1950年代のロックの歌の歌詞を効率よく符号化するために設計された。
+(「アルファベット」の「記号」は、個々の文字でなくても構わないことに注意。)
+</p>
+
+<figure>
+<table class="common">
+<tr><td valign=top >A    </td><td valign=top >2 </td><td valign=top >NA  </td><td valign=top >16</td></tr>
+<tr><td valign=top >BOOM </td><td valign=top >1 </td><td valign=top >SHA </td><td valign=top >3</td></tr>
+<tr><td valign=top >GET  </td><td valign=top >2 </td><td valign=top >YIP </td><td valign=top >9</td></tr>
+<tr><td valign=top >JOB  </td><td valign=top >2 </td><td valign=top >WAH </td><td valign=top >1
+</td></tr></table>
+</figure>
+
+<p class="orig" lang="en">
+Use <tt>generate-huffman-tree</tt> (exercise <a href="#%_thm_2.69">2.69</a>)
+to generate a corresponding Huffman tree, and use
+<tt>encode</tt> (exercise <a href="#%_thm_2.68">2.68</a>)
+to encode the following message:</p>
+
+<p class="trans" lang="ja">
+<tt>generate-huffman-tree</tt> (練習問題<a href="#%_thm_2.69">2.69</a>) を使って、対応するハフマン木を生成せよ。そして、<tt>encode</tt> (練習問題<a href="#%_thm_2.68">2.68</a>) を使って、以下のメッセージを符号化せよ。
+</p>
+
+<p class="lisp">Get a job
+Sha na na na na na na na na
+Get a job
+Sha na na na na na na na na
+Wah yip yip yip yip yip yip yip yip yip
+Sha boom</p>
+
+<p class="orig" lang="en">
+How many bits are required for the encoding?  What is the smallest
+number of bits that would be needed to encode this song if we 
+used a fixed-length code for the eight-symbol alphabet?
+</p>
+
+<p class="trans" lang="ja">
+符号化には何ビットが必要か?
+八つの記号からなるアルファベット用の固定長符号を使っていた場合に、この歌を符号化するのに必要となったであろう最少のビット数は、いくつか?
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.71"></a>
+<b>Exercise 2.71.</b>  Suppose we have a Huffman tree for an alphabet of <em>n</em> symbols, and
+that the relative frequencies of the symbols are 1, 2, 4, <tt>...</tt>,
+2<sup><em>n</em>-1</sup>.  Sketch the tree for <em>n</em>=5; for <em>n</em>=10.  In such a tree
+(for general <em>n</em>) how many bits are required to encode the most
+frequent symbol?  the least frequent symbol?
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.71.</b> <em class="en">n</em> 個の記号からなるアルファベット用の、ハフマン木があるものとし、それらの記号の相対頻度が、
+1, 2, 4, <tt>...</tt>, 2<sup><em class="en">n</em>&minus;1</sup>
+であるとしよう。
+<em class="en">n</em>=5 の場合、および、<em class="en">n</em>=10 の場合について、木を簡単に描け。
+そのような木においては、(一般の <em class="en">n</em> に対して) 最も頻度が高い記号を符号化するのに何ビットが必要か? 
+最も頻度が低い記号には何ビットが必要か?
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.72"></a>
+<b>Exercise 2.72.</b>  <a name="%_idx_2284"></a>Consider the encoding procedure that you designed in
+exercise <a href="#%_thm_2.68">2.68</a>.  What is the order of growth in the
+number of steps needed to encode a symbol?  Be sure to include the
+number of steps needed to search the symbol list at each node
+encountered.  To answer this question in general is difficult.
+Consider the special case where the relative frequencies of the <em>n</em>
+symbols are as described in exercise <a href="#%_thm_2.71">2.71</a>, and give
+the order of growth (as a function of <em>n</em>) of the number of steps
+needed to encode the most frequent and least frequent symbols in the
+alphabet.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.72.</b> 練習問題<a href="#%_thm_2.68">2.68</a>で設計した符号化手続きを考えよう。
+ある一つの記号を符号化するのに必要なステップの数の、増大のオーダは、どれくらいか?
+
+出くわした各ノードにおいて記号リストを探索するのに必要なステップの数を含めることを、忘れないように。
+この問題に対して一般的に答えることは、難しい。
+<em class="en">n</em> 個の記号の相対頻度が、練習問題<a href="#%_thm_2.71">2.71</a>で述べたとおりであるような、特殊な場合を考え、そして、アルファベットの中で最も頻度が高い記号と最も頻度が低い記号を符号化するのに必要なステップの数の、増大のオーダを、(<em class="en">n</em> の関数として) 示せ。
+
+</p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+
+<a name="footnotes"></a>
+<hr>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_227" href="#call_footnote_Temp_227"><sup><small>32</small></sup></a> Allowing quotation in a language wreaks havoc
+with the ability to reason about the language in simple terms, because
+it destroys the notion that equals can be substituted for equals.  For
+example, three is one plus two, but the word ``three'' is not the
+phrase ``one plus two.''  Quotation is powerful because it gives us a way
+to build expressions that manipulate other expressions (as we will see
+when we write an interpreter in chapter 4). But allowing statements in
+a language that talk about other statements in that language makes it
+very difficult to maintain any coherent principle of what ``equals can
+be substituted for equals'' should mean.  For example, if we know that
+<a name="%_idx_1996"></a>the evening star is the morning star, then from the statement ``the
+evening star is Venus'' we can deduce ``the morning star is Venus.''
+However, given that ``John knows that the evening star is Venus'' we
+cannot infer that ``John knows that the morning star is Venus.''
+</p>
+
+<p class="trans" lang="ja">
+ある言語で引用を許すことは、簡単な用語でその言語について考える能力を、大混乱に陥れる。というのも、等価なものは等価なもの代わりにできる、という概念を破壊するからだ。
+たとえば、三は、一足す二だが、「三」という単語は、「一足す二」という句ではない。
+引用は、(4章でインタプリタを書くときに見ることになるとおり) 他の式を操作するような式を構築する方法を与えてくれるので、強力である。
+しかし、ある言語において、他の陳述について当該言語で語るような陳述を許すと、「等価なものは等価なもの代わりにできる」が何を意味すべきかということについての、首尾一貫した何らかの方針を維持することが、とても難しくなる。
+たとえば、宵の明星は明けの明星だということを私たちが知っていれば、「宵の明星は金星だ」という陳述から、私たちは、「明けの明星は金星だ」と演繹できる。
+しかし、「宵の明星は金星だ、とジョンは知っている」と言われたとして、私たちは、「明けの明星は金星だ、とジョンは知っている」と推論することはできないのだ。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_228" href="#call_footnote_Temp_228"><sup><small>33</small></sup></a> The single quote is different <a name="%_idx_2002"></a><a name="%_idx_2004"></a><a name="%_idx_2006"></a><a name="%_idx_2008"></a>from the double quote we have
+been using to enclose character strings to be printed.  Whereas the
+single quote can be used to denote lists or symbols, the double quote
+is used only with character strings.  In this book, the only use for
+character strings is as items to be printed.
+</p>
+
+<p class="trans" lang="ja">
+一重引用符は、印字すべき文字列を囲うために私たちが使ってきている二重引用符とは、異なる。
+一重引用符が、リストまたは記号を示すのに使えるのに対し、二重引用符は、文字列を引用するのにだけ使われる。
+本書では、文字列の唯一の使い道は、印字すべき項目としてのものである。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_229" href="#call_footnote_Temp_229"><sup><small>34</small></sup></a> Strictly, our
+use of the quotation mark violates the general rule that all compound
+expressions in our language should be delimited by parentheses
+and look like lists.  We
+<a name="%_idx_2014"></a><a name="%_idx_2016"></a>can recover this consistency by introducing a special form <tt>quote</tt>, which serves the same purpose as the quotation mark.  Thus, we
+would type <tt>(quote a)</tt> instead of <tt>'a</tt>, and we would type <tt>(quote (a b c))</tt> instead of <tt>'(a b c)</tt>.  This is precisely how the
+interpreter works.  The quotation mark is just a single-character
+abbreviation for wrapping the next complete expression with <tt>quote</tt> to form <tt>(quote &lt;<em>expression</em>&gt;)</tt>.  This is important
+because it maintains the principle that any expression seen by the
+interpreter can be manipulated as a data object.  For instance, we
+could construct the expression
+<tt>(car '(a b c))</tt>, which is the same as <tt>(car (quote (a b c)))</tt>,
+by evaluating <tt>(list 'car (list 'quote '(a b c)))</tt>.
+</p>
+
+<p class="trans" lang="ja">
+厳密には、私たちの引用符の使い方は、私たちの言語におけるすべての複合的な式は括弧で境界を定められるべきであり、かつ、リストのように見えるべきである、という一般的規則に違反している。
+<tt>quote</tt> という特殊形式——引用符としての同じ目的にかなう——を導入することで、この整合性を取り戻せる。
+よって、私たちは、<tt>'a</tt> の代わりに <tt>(quote a)</tt> と打ってもよいし、<tt>'(a b c)</tt> の代わりに <tt>(quote (a b c))</tt> と打ってもよい。
+これは、まさにインタプリタの動き方である。
+引用符は、まさにちょうど、<tt>quote</tt> で次の完全な式を包み込んで <tt>(quote &lt;<em>expression</em>&gt;)</tt> を形成することに対する、一文字の略称なのだ。
+このことは重要だ。なぜなら、インタプリタから見える任意の式はデータオブジェクトとして操作され得る、という原則が、このことによって維持されるからだ。
+たとえば、<tt>(list 'car (list 'quote '(a b c)))</tt> を評価することで、<tt>(car '(a b c))</tt> という式—— <tt>(car (quote (a b c)))</tt> と等しい——を、構築できるだろう。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_230" href="#call_footnote_Temp_230"><sup><small>35</small></sup></a> We can consider two symbols to be ``the same'' if they
+consist of the same characters in the same order.  Such a definition
+skirts a deep issue that we are not yet ready to address: the meaning
+of ``sameness'' in a programming language.  We will return to this in
+chapter 3 (section <a href="20_sec3_1.html#%_sec_3.1.3">3.1.3</a>).
+</p>
+
+<p class="trans" lang="ja">
+二つの記号が、もし、同じ順序で並んだ同じ文字から成り立っているならば、それら二つの記号が「同じ」だと見なせる。
+このような定義は、私たちがまだ取り組む準備のできていない深遠な問題——プログラミング言語における「同一性」の意味——を回避している。
+このことについては、3章 (<a href="20_sec3_1.html#%_sec_3.1.3">3.1.3</a>節) で立ち戻ることにしよう。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_233" href="#call_footnote_Temp_233"><sup><small>36</small></sup></a> In practice, programmers
+use <tt>equal?</tt> to compare lists that contain numbers as well as
+symbols.  Numbers are not considered to be symbols.  The question
+<a name="%_idx_2038"></a><a name="%_idx_2040"></a>of whether two numerically equal numbers (as tested by <tt>=</tt>) are also
+<tt>eq?</tt> is highly implementation-dependent.  A better definition
+of <tt>equal?</tt> (such as the one that comes as a primitive in Scheme)
+would also stipulate that if <tt>a</tt> and <tt>b</tt> are
+both numbers, then <tt>a</tt> and <tt>b</tt> are <tt>equal?</tt> if they are
+numerically equal.
+</p>
+
+<p class="trans" lang="ja">
+実際には、プログラマたちは、記号だけでなく数を含むリスト同士を比べるのにも、<tt>equal?</tt> を使う。
+数は、記号とは見なされない。
+数的に等しい (<tt>=</tt> により検査されるような) 二つの数は、<tt>eq?</tt> でもあるのか、という疑問は、非常に実装依存である。
+<tt>equal?</tt> のより良い定義 (Schemeでプリミティブとして現れているものなど) では、「もし <tt>a</tt> と <tt>b</tt> がともに数なら、両者が数的に等しいときに、<tt>a</tt> と <tt>b</tt> は <tt>equal?</tt> である」とも規定しているだろう。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_240" href="#call_footnote_Temp_240"><sup><small>37</small></sup></a> If
+we want to be more formal, we can specify ``consistent with the
+interpretations given above'' to mean that the operations satisfy a
+collection of rules such as these:</p>
+
+<p class="trans" lang="ja">
+もし、より形式的に言いたければ、「以上のように与えられた解釈と整合性がとれた」とは、上記の諸演算が以下のような規則の集まりを満たすことを意味するのだ、と指定してもよい。
+</p>
+
+<ul class="orig" lang="en">
+<li>For any set <tt>S</tt> and any object <tt>x</tt>,
+<tt>(element-of-set? x (adjoin-set x S))</tt>
+is true (informally: ``Adjoining an object to a 
+set produces a set that contains the object'').</li>
+<li>For any sets <tt>S</tt> and <tt>T</tt> and any object <tt>x</tt>,
+<tt>(element-of-set? x (union-set S T))</tt>
+is equal to
+<tt>(or (element-of-set? x S) (element-of-set? x T))</tt>
+(informally: ``The elements of <tt>(union S T)</tt> are the elements that
+are in <tt>S</tt> or in <tt>T</tt>'').</li>
+<li>For any object <tt>x</tt>,
+<tt>(element-of-set? x '())</tt>
+is false (informally: ``No object is an element of the empty set'').</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li>任意の集合 <tt>S</tt> と任意のオブジェクト <tt>x</tt> に対して、
+<tt>(element-of-set? x (adjoin-set x S))</tt>
+は真である。
+(くだけて言えば、「あるオブジェクトをある集合に追加することで、そのオブジェクトを含む集合が作り出される」ということ。)</li>
+<li>任意の集合 <tt>S</tt> と <tt>T</tt> ならびに任意のオブジェクト <tt>x</tt> に対して、
+<tt>(element-of-set? x (union-set S T))</tt>
+は、
+<tt>(or (element-of-set? x S) (element-of-set? x T))</tt>
+に等しい。
+(くだけて言えば、「<tt>(union S T)</tt> の要素は、<tt>S</tt> か <tt>T</tt> の要素である」ということ。)</li>
+<li>任意のオブジェクト <tt>x</tt> に対して、
+<tt>(element-of-set? x '())</tt>
+は偽である。
+(くだけて言えば、「いかなるオブジェクトも、空集合の要素ではない」ということ。)</li>
+</ul>
+
+<p class="orig" lang="en">
+<a name="footnote_Temp_248" href="#call_footnote_Temp_248"><sup><small>38</small></sup></a> Halving the size of the problem at each step is the
+distinguishing characteristic of <a name="%_idx_2148"></a>logarithmic growth, as we saw with
+the fast-exponentiation algorithm of section <a href="11_sec1_2.html#%_sec_1.2.4">1.2.4</a>
+and the half-interval search method of
+section <a href="12_sec1_3.html#%_sec_1.3.3">1.3.3</a>.
+</p>
+
+<p class="trans" lang="ja">
+各ステップで問題の大きさを半分にすることは、対数的な増大の際立った特徴である——<a href="11_sec1_2.html#%_sec_1.2.4">1.2.4</a>節の高速冪乗アルゴリズムや、<a href="12_sec1_3.html#%_sec_1.3.3">1.3.3</a>節の半区間探索法で見たとおり。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_249" href="#call_footnote_Temp_249"><sup><small>39</small></sup></a> We are
+representing sets in terms of trees, and trees in terms of lists -- in
+effect, a data abstraction built upon a data abstraction.  We can
+regard the procedures <tt>entry</tt>, <tt>left-branch</tt>, <tt>right-branch</tt>, and <tt>make-tree</tt> as a way of isolating the
+abstraction of a ``binary tree'' from the particular way we might wish
+to represent such a tree in terms of list structure.
+</p>
+
+<p class="trans" lang="ja">
+私たちは、木を使って集合を表現しており、リストを使って木を表現している——実際、データ抽象化のうえに築かれたデータ抽象化である。
+<tt>entry</tt>、<tt>left-branch</tt>、<tt>right-branch</tt>、<tt>make-tree</tt>という手続きは、「二分木」についての抽象化を、そういう木をリスト構造を用いて表現するようにと私たちが望むかもしれない特定の方法から、隔離しておく方法である、と見なせる。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_250" href="#call_footnote_Temp_250"><sup><small>40</small></sup></a> Examples of such structures include
+<a name="%_idx_2168"></a><a name="%_idx_2170"></a><a name="%_idx_2172"></a><a name="%_idx_2174"></a><em>B-trees</em> and <em>red-black trees</em>.  There is a large literature on
+data structures devoted to this problem.  See Cormen,
+<a name="%_idx_2176"></a><a name="%_idx_2178"></a><a name="%_idx_2180"></a>Leiserson, and Rivest 1990.
+</p>
+
+<p class="trans" lang="ja">
+このような構造の例としては、<em>B木</em>や<em>赤黒木</em>などがある。
+この問題を専門とする、データ構造についての大部の文献がある。
+Cormen, Leiserson, and Rivest 1990 を参照のこと。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_254" href="#call_footnote_Temp_254"><sup><small>41</small></sup></a> Exercises <a href="#%_thm_2.63">2.63</a>-<a href="#%_thm_2.65">2.65</a>
+<a name="%_idx_2198"></a>are due to Paul Hilfinger.
+</p>
+
+<p class="trans" lang="ja">
+練習問題<a href="#%_thm_2.63">2.63</a>〜<a href="#%_thm_2.65">2.65</a>は、ポール・ヒルフィンガによる。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_258" href="#call_footnote_Temp_258"><sup><small>42</small></sup></a> See Hamming 1980
+<a name="%_idx_2248"></a>for a discussion of the mathematical properties of Huffman codes.
+</p>
+
+<p class="trans" lang="ja">
+ハフマン符号の数学的性質についての議論に関しては、Hamming 1980 を参照せよ。
+</p>
+
+
+</div>
+
+</body>
+</html>

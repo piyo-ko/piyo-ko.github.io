@@ -1,0 +1,2602 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="sicp.css" type="text/css">
+	<base target="_top">
+	<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+</head>
+
+<body>
+
+<div class="idx-bar">
+<nav>
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<span class="status">推敲待ち</span>
+[
+<a href="00_cover.html">先頭へ</a> |
+<a href="17_sec2_4.html">前へ</a> |
+<a href="19_chap3.html">次へ</a> | 
+<a href="04_toc.html#%_toc_start">目次</a> |
+<a href="38_index.html#%_index_start">索引</a>
+] [<a href="99_about.html">この対訳版について</a> | <a href="../index.html">ホーム</a>]<br>
+[
+§<a href="#%_sec_2.5">2.5</a>
+🎨<a href="#%_fig_2.23">2.23</a>
+§<a href="#%_sec_2.5.1">2.5.1</a>
+🎨<a href="#%_fig_2.24">2.24</a>
+📝<a href="#%_thm_2.77">2.77</a>
+📝<a href="#%_thm_2.78">2.78</a>
+📝<a href="#%_thm_2.79">2.79</a>
+📝<a href="#%_thm_2.80">2.80</a>
+§<a href="#%_sec_2.5.2">2.5.2</a>
+📚<a href="#%_sec_Temp_284">&hellip;</a>
+📚<a href="#%_sec_Temp_287">&hellip;</a>
+🎨<a href="#%_fig_2.25">2.25</a>
+🎨<a href="#%_fig_2.26">2.26</a>
+📚<a href="#%_sec_Temp_288">&hellip;</a>
+📝<a href="#%_thm_2.81">2.81</a>
+📝<a href="#%_thm_2.82">2.82</a>
+📝<a href="#%_thm_2.83">2.83</a>
+📝<a href="#%_thm_2.84">2.84</a>
+📝<a href="#%_thm_2.85">2.85</a>
+📝<a href="#%_thm_2.86">2.86</a>
+§<a href="#%_sec_2.5.3">2.5.3</a>
+📚<a href="#%_sec_Temp_297">&hellip;</a>
+📚<a href="#%_sec_Temp_302">&hellip;</a>
+📝<a href="#%_thm_2.87">2.87</a>
+📝<a href="#%_thm_2.88">2.88</a>
+📝<a href="#%_thm_2.89">2.89</a>
+📝<a href="#%_thm_2.90">2.90</a>
+📝<a href="#%_thm_2.91">2.91</a>
+📚<a href="#%_sec_Temp_310">&hellip;</a>
+📝<a href="#%_thm_2.92">2.92</a>
+📚<a href="#%_sec_Temp_312">&hellip;</a>
+📝<a href="#%_thm_2.93">2.93</a>
+📝<a href="#%_thm_2.94">2.94</a>
+📝<a href="#%_thm_2.95">2.95</a>
+📝<a href="#%_thm_2.96">2.96</a>
+📝<a href="#%_thm_2.97">2.97</a>
+<a href="#footnotes">脚注</a>
+]</nav>
+</div>
+
+<div class="main-txt">
+<a name="%_sec_2.5"></a>
+<h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.5">2.5  Systems with Generic Operations</a></h2>
+<h2 class="trans" lang="ja">2.5 総称的演算を使ったシステム</h2>
+
+<p class="orig" lang="en">
+<a name="%_idx_2496"></a>In the previous section, we saw how to design systems in which data
+objects can be represented in more than one way.  The key idea is to
+link the code that specifies the data operations to the several
+representations by means of generic interface procedures.  Now we will
+see how to use this same idea not only to define operations that are
+generic over different representations but also to define operations
+that are generic over different kinds of arguments.  We have already
+seen several different packages of arithmetic operations: the primitive
+arithmetic (<tt>+</tt>, <tt>-</tt>, <tt>*</tt>, <tt>/</tt>) built into our
+language, the rational-number arithmetic (<tt>add-rat</tt>, <tt>sub-rat</tt>, <tt>mul-rat</tt>, <tt>div-rat</tt>) of
+section <a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a>, and the complex-number arithmetic that we
+implemented in section <a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>.  We will now use
+data-directed techniques to construct a package of arithmetic
+operations that incorporates all the arithmetic packages we have already
+constructed.</p>
+
+<p class="trans" lang="ja">
+前節では、二通り以上の<!--一つよりも多い-->方法でデータオブジェクトを表現できるシステムの、設計の仕方を見た。
+鍵となる考え方は、データ演算を指定するコードを、総称的なインタフェイス手続きを用いて、いくつかの表現に結びつけることだ。
+今度は、どのようにしてこの同じ考え方を、様々な表現に対して総称的であるような演算を定義するためだけでなく、様々な引数の種類に対して総称的であるような演算を定義するためにも使うのか、ということを見てゆこう。
+私たちは既に、算術演算のいくつかの異なるパッケージ——私たちの言語に組み込まれている原始的な算術 (<tt>+</tt> と <tt>-</tt> と <tt>*</tt> と <tt>/</tt>) や、<a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a>節の有理数の算術 (<tt>add-rat</tt> と <tt>sub-rat</tt> と <tt>mul-rat</tt> と <tt>div-rat</tt>) や、<a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>節で実装した複素数の算術——を見てきた。
+今度は、データ指向の技法を使い、今までに構築してきたすべての算術パッケージを取り込んだ算術演算のパッケージを構築する。
+</p>
+
+<p class="orig" lang="en">
+Figure <a href="#%_fig_2.23">2.23</a> shows the structure of the system we
+shall build.  Notice the <a name="%_idx_2498"></a>abstraction barriers.  From the perspective
+of someone using ``numbers,'' there is a single procedure <tt>add</tt>
+that operates on whatever numbers are supplied.  <tt>Add</tt> is part of
+a generic interface that allows the separate ordinary-arithmetic,
+rational-arithmetic, and complex-arithmetic packages to be accessed
+uniformly by programs that use numbers.  Any individual arithmetic
+package (such as the complex package) may itself be accessed through
+generic procedures (such as <tt>add-complex</tt>) that combine packages
+designed for different representations (such as rectangular and
+polar).  Moreover, the structure of the system is additive, so
+that one can design the individual arithmetic packages separately and
+combine them to produce a generic arithmetic system.
+</p>
+
+<p class="trans" lang="ja">
+図<a href="#%_fig_2.23">2.23</a>は、私たちが作ることになるシステムの構成を示している。
+抽象化の防壁に注意せよ。
+「数」を使う誰かの視点からすると、どんな数が与えられようとも動作する <tt>add</tt> という単一の手続きがある訳だ。
+<tt>add</tt> は、普通の算術・有理数の算術・複素数の算術という別々のパッケージを、数を使うプログラムから一律な方法でアクセスできるようにする、総称的なインタフェイスの、一部である。
+個別のどのパッケージも (たとえば複素数パッケージ)、それ自体が、異なる表現 (たとえば直交表現と極表現) 用に設計されたパッケージ同士を結びつける総称的な手続き (たとえば <tt>add-complex</tt>) を通じて、アクセスされる可能性がある。
+さらに、システムの構造が加法的なので、個々の算術パッケージを別々に設計することができるし、それらを結合して総称的な算術システムを作り出すことができる。
+</p>
+
+<a name="%_fig_2.23"></a>
+<figure>
+<img src="ch2-Z-G-64.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.23:</b>  Generic arithmetic system.</figcaption>
+<a name="%_idx_2500"></a>
+<figcaption class="trans" lang="ja"><b>2.23:</b> 総称的な算術システム</figcaption>
+</figure>
+
+
+<a name="%_sec_2.5.1"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.5.1">2.5.1  Generic Arithmetic Operations</a></h3>
+<h3 class="trans" lang="ja">2.5.1 総称的な算術演算</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2502"></a>
+The task of designing generic arithmetic operations is analogous to
+that of designing the generic complex-number operations.  We would
+like, for instance, to have a generic addition procedure <tt>add</tt> that
+acts like ordinary primitive addition <tt>+</tt> on ordinary numbers,
+like <tt>add-rat</tt> on rational numbers, and like <tt>add-complex</tt> on
+complex numbers.  We can implement <tt>add</tt>, and the other generic
+arithmetic operations, by following the same strategy we used in
+section <a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a> to implement the generic selectors for
+complex numbers.  We will attach a type tag to each kind of
+number and cause the generic procedure to dispatch to an appropriate
+package according to the data type of its arguments.</p>
+
+<p class="trans" lang="ja">
+総称的な算術演算を設計するという課題は、総称的な複素数演算を設計するという課題に似ている。
+私たちは、たとえば、普通の数の上での普通の原始的な加算である <tt>+</tt> や、有理数上の <tt>add-rat</tt> や、複素数上の <tt>add-complex</tt> であるかのように振る舞う、<tt>add</tt> という総称的な加算手続きが、欲しいのだ。
+私たちは <tt>add</tt> やその他の総称的な算術演算を実装できる——複素数用の総称的セレクタを実装するために<a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>節で使ったのと同じ戦略にしたがうことによって。
+どの種類の数にも型タグを付けることにして、総称的な手続きには、引数のデータ型に応じて適切なパッケージへと振り分けを行うようにさせよう。
+</p>
+
+<p class="orig" lang="en">
+The generic arithmetic procedures are defined as follows:</p>
+
+<p class="trans" lang="ja">
+総称的な算術手続きは、以下のように定義される。
+</p>
+
+<p class="lisp"><a name="%_idx_2504"></a>(define (add x y) (apply-generic 'add x y))
+<a name="%_idx_2506"></a>(define (sub x y) (apply-generic 'sub x y))
+<a name="%_idx_2508"></a>(define (mul x y) (apply-generic 'mul x y))
+<a name="%_idx_2510"></a>(define (div x y) (apply-generic 'div x y))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2512"></a><a name="%_idx_2514"></a>We begin by installing a package for handling <em>ordinary</em> numbers,
+that is, the primitive numbers of our language.  We will tag these
+with the symbol <tt>scheme-number</tt>.  The arithmetic operations in this
+package are the primitive arithmetic procedures (so there is no need to
+define extra procedures to handle the untagged numbers).  Since
+these operations each take two arguments, they are installed in the
+table keyed by the list <tt>(scheme-number scheme-number)</tt>:
+<a name="%_idx_2516"></a><a name="%_idx_2518"></a>
+</p>
+
+<p class="trans" lang="ja">
+<em>普通の</em>数——つまり、私たちの言語の原始的な数——を扱うためのパッケージをインストールすることから始める。
+これらの数に、<tt>scheme-number</tt> という記号のタグを付けよう。
+このパッケージでの算術演算は、原始的な算術手続きである (だから、タグを外した数を扱うための追加的な手続きを定義する必要がない)。
+これらの演算は各々二つの引数をとるので、これらの演算は、<tt>(scheme-number scheme-number)</tt> というリストによるキーが与えられている表にインストールされる<a name="%_idx_2516"></a><a name="%_idx_2518"></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_2520"></a>(define (install-scheme-number-package)
+  (define (tag x)
+    (attach-tag 'scheme-number x))    
+  (put 'add '(scheme-number scheme-number)
+       (lambda (x y) (tag (+ x y))))
+  (put 'sub '(scheme-number scheme-number)
+       (lambda (x y) (tag (- x y))))
+  (put 'mul '(scheme-number scheme-number)
+       (lambda (x y) (tag (* x y))))
+  (put 'div '(scheme-number scheme-number)
+       (lambda (x y) (tag (/ x y))))
+  (put 'make 'scheme-number
+       (lambda (x) (tag x)))
+  'done)
+</p>
+
+<p class="orig" lang="en">
+Users of the Scheme-number package
+will create (tagged) ordinary numbers by means of the procedure:</p>
+
+<p class="trans" lang="ja">
+scheme-numberパッケージの利用者は、以下の手続きを用いて、(タグ付けされた) 普通の数を作り出すだろう。
+</p>
+
+<p class="lisp"><a name="%_idx_2522"></a>(define (make-scheme-number n)
+  ((get 'make 'scheme-number) n))
+</p>
+
+<p class="orig" lang="en">
+Now that the framework of the generic arithmetic system is in place,
+we can readily include new kinds of numbers.  Here is a package that
+performs rational arithmetic.  Notice that, as a benefit of
+additivity, we can use without modification the rational-number code
+from section <a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a> as the internal procedures in the
+package:
+<a name="%_idx_2524"></a><a name="%_idx_2526"></a><a name="%_idx_2528"></a></p>
+
+<p class="trans" lang="ja">
+さて今や、総称的算術システムの枠組みの準備が整ったので、新しい種類の数をすぐにでも含めることができる。
+ここに、有理数の算術を実行するパッケージを示す。
+加法性の利点として、私たちは、<a href="14_sec2_1.html#%_sec_2.1.1">2.1.1</a>節から持ってきた有理数に関するコードを、修正することなく、パッケージ内の内部手続きとして使える。
+</p>
+
+<p class="lisp"><a name="%_idx_2530"></a>(define (install-rational-package)
+  <em>;; internal procedures</em>
+  (define (numer x) (car x))
+  (define (denom x) (cdr x))
+  (define (make-rat n d)
+    (let ((g (gcd n d)))
+      (cons (/ n g) (/ d g))))
+  (define (add-rat x y)
+    (make-rat (+ (* (numer x) (denom y))
+                 (* (numer y) (denom x)))
+              (* (denom x) (denom y))))
+  (define (sub-rat x y)
+    (make-rat (- (* (numer x) (denom y))
+                 (* (numer y) (denom x)))
+              (* (denom x) (denom y))))
+  (define (mul-rat x y)
+    (make-rat (* (numer x) (numer y))
+              (* (denom x) (denom y))))
+  (define (div-rat x y)
+    (make-rat (* (numer x) (denom y))
+              (* (denom x) (numer y))))
+  <em>;; interface to rest of the system</em>
+  (define (tag x) (attach-tag 'rational x))
+  (put 'add '(rational rational)
+       (lambda (x y) (tag (add-rat x y))))
+  (put 'sub '(rational rational)
+       (lambda (x y) (tag (sub-rat x y))))
+  (put 'mul '(rational rational)
+       (lambda (x y) (tag (mul-rat x y))))
+  (put 'div '(rational rational)
+       (lambda (x y) (tag (div-rat x y))))
+
+  (put 'make 'rational
+       (lambda (n d) (tag (make-rat n d))))
+  'done)
+<a name="%_idx_2532"></a>(define (make-rational n d)
+  ((get 'make 'rational) n d))
+</p>
+
+<p class="orig" lang="en">
+We can install a similar package to handle complex numbers, using the
+tag <tt>complex</tt>.  In creating the package, we extract from the table
+the operations <tt>make-from-real-imag</tt> and <tt>make-from-mag-ang</tt>
+that were defined by the rectangular and polar packages.  <a name="%_idx_2534"></a>Additivity
+permits us to use, as the internal operations, the same <tt>add-complex</tt>, <tt>sub-complex</tt>, <tt>mul-complex</tt>, and <tt>div-complex</tt> procedures from
+section <a href="17_sec2_4.html#%_sec_2.4.1">2.4.1</a>.
+<a name="%_idx_2536"></a><a name="%_idx_2538"></a><a name="%_idx_2540"></a></p>
+
+<p class="trans" lang="ja">
+複素数を扱うために、<tt>complex</tt> というタグを使って、同様のパッケージをインストールすることができる。
+パッケージを作成する際には、直交パッケージと極パッケージにより定義された <tt>make-from-real-imag</tt> と <tt>make-from-mag-ang</tt> という演算を、表から抜き出す。
+加法性のおかげで、私たちは、<a href="17_sec2_4.html#%_sec_2.4.1">2.4.1</a>節から持ってきたのと同じ、<tt>add-complex</tt> と <tt>sub-complex</tt> と <tt>mul-complex</tt> と <tt>div-complex</tt> という手続きを、内部手続きとして使える。
+</p>
+
+<p class="lisp"><a name="%_idx_2542"></a>(define (install-complex-package)
+  <em>;; imported procedures from rectangular and polar packages</em>
+  (define (make-from-real-imag x y)
+    ((get 'make-from-real-imag 'rectangular) x y))
+  (define (make-from-mag-ang r a)
+    ((get 'make-from-mag-ang 'polar) r a))
+  <em>;; internal procedures</em>
+  (define (add-complex z1 z2)
+    (make-from-real-imag (+ (real-part z1) (real-part z2))
+                         (+ (imag-part z1) (imag-part z2))))
+  (define (sub-complex z1 z2)
+    (make-from-real-imag (- (real-part z1) (real-part z2))
+                         (- (imag-part z1) (imag-part z2))))
+  (define (mul-complex z1 z2)
+    (make-from-mag-ang (* (magnitude z1) (magnitude z2))
+                       (+ (angle z1) (angle z2))))
+  (define (div-complex z1 z2)
+    (make-from-mag-ang (/ (magnitude z1) (magnitude z2))
+                       (- (angle z1) (angle z2))))
+  <em>;; interface to rest of the system</em>
+  (define (tag z) (attach-tag 'complex z))
+  (put 'add '(complex complex)
+       (lambda (z1 z2) (tag (add-complex z1 z2))))
+  (put 'sub '(complex complex)
+       (lambda (z1 z2) (tag (sub-complex z1 z2))))
+  (put 'mul '(complex complex)
+       (lambda (z1 z2) (tag (mul-complex z1 z2))))
+  (put 'div '(complex complex)
+       (lambda (z1 z2) (tag (div-complex z1 z2))))
+  (put 'make-from-real-imag 'complex
+       (lambda (x y) (tag (make-from-real-imag x y))))
+  (put 'make-from-mag-ang 'complex
+       (lambda (r a) (tag (make-from-mag-ang r a))))
+  'done)
+</p>
+
+<p class="orig" lang="en">
+Programs outside the complex-number package can construct complex
+numbers either from real and imaginary parts or from magnitudes and
+angles.  Notice how the underlying procedures, originally defined in
+the rectangular and polar packages, are exported to the complex
+package, and exported from there to the outside world.
+</p>
+
+<p class="trans" lang="ja">
+複素数パッケージの外部のプログラムは、実部と虚部から、または、大きさと角度から、複素数を構築できる。
+背後にある手続き——もとは、直交パッケージと極パッケージで定義されていた——が、どのようにして複素数パッケージにエクスポートされ、さらにそこからどのようにして外の世界へエクスポートされるのか、ということに注目してほしい。
+</p>
+
+<p class="lisp"><a name="%_idx_2544"></a>(define (make-complex-from-real-imag x y)
+  ((get 'make-from-real-imag 'complex) x y))
+<a name="%_idx_2546"></a>(define (make-complex-from-mag-ang r a)
+  ((get 'make-from-mag-ang 'complex) r a))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2548"></a>What we have here is a two-level tag system.  A typical complex number,
+such as 3 + 4<em>i</em> in rectangular form, would be
+represented as shown in figure <a href="#%_fig_2.24">2.24</a>.
+The outer tag (<tt>complex</tt>) is used to direct the number to the
+complex package.  Once within the complex package, the next tag (<tt>rectangular</tt>) is used to direct the number to the rectangular package.
+In a large and complicated system there might be many levels, each
+interfaced with the next by means of generic operations.  As a data
+object is passed ``downward,'' the outer tag that is used to direct
+it to the appropriate package is stripped off (by applying <tt>contents</tt>) and the next level of tag (if any) becomes visible to be used for
+further dispatching.</p>
+
+<p class="trans" lang="ja">
+ここにあるものは、二段階のタグシステムだ。
+直交形式の
+<span class="math">3 + 4<em class="en">i</em></span>
+などの、典型的な複素数は、図<a href="#%_fig_2.24">2.24</a>に示すように表現されるだろう。
+外側のタグ (<tt>complex</tt>) は、この数を複素数パッケージへ導くのに使われる。
+一旦複素数パッケージに入ると、次のタグ (<tt>rectangular</tt>) が、この数を直交パッケージへ導くのに使われる。
+大規模で複雑なシステムでは、総称的演算を用いて各レベルが次のレベルと結びつけられているような、多くのレベルがあるかもしれない。
+データオブジェクトが「下に向かって」渡される際には、そのデータオブジェクトを適切なパッケージに導くのに使われた外側のタグが、(<tt>contents</tt> を適用することによって) 剥ぎ取られて、次のレベルのタグが (もしあれば)、更なる振り分けに使うために、見えるようになる。
+</p>
+
+<figure>
+<a name="%_fig_2.24"></a>
+<img src="ch2-Z-G-65.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.24:</b>  Representation of 3 + 4<em>i</em> in rectangular form.</figcaption>
+<figcaption class="trans" lang="ja"><b>Figure 2.24:</b>  直交形式での 3 + 4<em class="en">i</em> の表現</figcaption>
+</figure>
+
+<p class="orig" lang="en">
+In the above packages, we used <tt>add-rat</tt>, <tt>add-complex</tt>, and
+the other arithmetic procedures exactly as originally written.
+Once these definitions are internal to different installation procedures,
+however, they no longer need names that are distinct from each other:
+we could simply name them <tt>add</tt>, <tt>sub</tt>, <tt>mul</tt>, and <tt>div</tt>
+in both packages.</p>
+
+<p class="trans" lang="ja">
+上記の諸パッケージでは、元々書かれたのとまったく同じ、<tt>add-rat</tt> や <tt>add-complex</tt> やその他の算術手続きを使った。
+しかし、一旦、これらの定義が、異なるインストール手続きに対して内部的なものとなった暁には、これらの定義は、もはや互いに異なる名前を必要とはしない——つまり、双方のパッケージで、これらを <tt>add</tt> や <tt>sub</tt> や <tt>mul</tt> や <tt>div</tt> と名付けることが可能なのだ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.77"></a>
+<b>Exercise 2.77.</b>  Louis Reasoner tries to evaluate the
+expression <tt>(magnitude z)</tt> where <tt>z</tt> is the object
+shown in figure <a href="#%_fig_2.24">2.24</a>.  To his
+surprise, instead of the answer 5
+he gets an error message from <tt>apply-generic</tt>,
+saying there is no method for the operation <tt>magnitude</tt>
+on the types <tt>(complex)</tt>.
+He shows this interaction to Alyssa P. Hacker, who says
+``The problem is that the complex-number selectors were never
+defined for <tt>complex</tt> numbers, just for <tt>polar</tt> and <tt>rectangular</tt>
+numbers.  All you have to do to make this work is add the following
+to the <tt>complex</tt> package:''</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.77</b> ルイス・リーズナは、<tt>(magnitude z)</tt> という式を評価しようとする——ここで、<tt>z</tt> は、図<a href="#%_fig_2.24">2.24</a>に示したオブジェクトである。
+彼が驚いたことには、5という答えの代わりに、<tt>(complex)</tt> という型に対する <tt>magnitude</tt> という演算のための方法は存在しません、という、<tt>apply-generic</tt> からのエラーメッセージをもらってしまうのだ。
+彼がこのやりとりをアリッサ・P・ハッカに見せると、彼女は
+「問題は、複素数のセレクタが <tt>complex</tt> 型の数に対してはまったく定義されていなくて、ただ、<tt>polar</tt> 型と <tt>rectangular</tt> 型の数に対してだけ定義されたことだよ。
+これを動作させるために君がしなきゃいけないことは、ただ、以下のものを <tt>complex</tt> パッケージに足すことだけだよ」
+と言う。
+</p>
+
+<p class="lisp">(put 'real-part '(complex) real-part)
+(put 'imag-part '(complex) imag-part)
+(put 'magnitude '(complex) magnitude)
+(put 'angle '(complex) angle)
+</p>
+
+<p class="orig" lang="en">
+Describe in detail why this works.  As an example, trace through all
+the procedures called in evaluating the expression <tt>(magnitude z)</tt>
+where <tt>z</tt> is the object shown in
+figure <a href="#%_fig_2.24">2.24</a>.  In particular, how many
+times is <tt>apply-generic</tt> invoked?  What procedure is dispatched to
+in each case?
+</p>
+
+<p class="trans" lang="ja">
+なぜこれがうまくいくのか、詳しく説明せよ。
+例として、<tt>(magnitude z)</tt> という式——ここで、<tt>z</tt> は、図<a href="#%_fig_2.24">2.24</a>に示したオブジェクトである——を評価する際に呼ばれるすべての手続きを、始めから終わりまでトレースせよ。
+特に、<tt>apply-generic</tt> が何回呼び出されるか?
+それぞれの場合において、どの手続きに振り分けられるか?
+<span class="note">(文脈からするとこうなのだが、それだと、What procedure is it dispatched to? とか To what procedure does <tt>apply-generic</tt> dispatch the process? とか書かれてしかるべきなような気が……)</span>
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.78"></a>
+<b>Exercise 2.78.</b>  <a name="%_idx_2550"></a><a name="%_idx_2552"></a><a name="%_idx_2554"></a><a name="%_idx_2556"></a><a name="%_idx_2558"></a><a name="%_idx_2560"></a><a name="%_idx_2562"></a>The internal procedures in the <tt>scheme-number</tt> package are essentially
+nothing more than calls to the primitive procedures <tt>+</tt>, <tt>-</tt>,
+etc.  It was not possible to use the primitives of the language
+directly because our type-tag system requires that each data
+object have a type attached to it.  In fact, however, all Lisp
+implementations do have a type system, which they use internally.
+Primitive predicates such as <tt>symbol?</tt> and <tt>number?</tt>
+determine whether data objects have particular types.  Modify the
+definitions of <tt>type-tag</tt>, <tt>contents</tt>, and <tt>attach-tag</tt>
+from section <a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a> so that our generic system takes
+advantage of Scheme's internal type system.  That is to say, the system
+should work as before except that ordinary numbers should be
+represented simply as Scheme numbers rather than as pairs whose <tt>car</tt> is
+the symbol <tt>scheme-number</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.78</b> <tt>scheme-number</tt> パッケージ内の内部手続きは、本質的に、<tt>+</tt> や <tt>-</tt> などの原始的手続きの呼び出しに過ぎない。
+私たちの型タグの体系は、各データオブジェクトがそのデータオブジェクトにくっつけられた型を持つことを要するため、言語のプリミティブを直接使うことはできなかった。
+しかし、実際のところ、すべてのLispの実装には型システムが確かにあり、それをLispの実装が内部的に利用している。
+<tt>symbol?</tt> や <tt>number?</tt> などの原始的述語は、データオブジェクトが特定の型かどうかを判定する。
+私たちの総称的システムがSchemeの内部的型システムを利用するように、<tt>type-tag</tt> と <tt>contents</tt> と <tt>attach-tag</tt> の定義を、<a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a>節のものから修正せよ。
+つまり、<tt>car</tt> が <tt>scheme-number</tt> という記号であるような対として、というよりもむしろ、Schemeの数として、普通の数が単純に表現されるべきである、という点を除いて、システムは以前と同様に動くべきである。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.79"></a>
+<b>Exercise 2.79.</b>  <a name="%_idx_2564"></a><a name="%_idx_2566"></a>Define a generic equality predicate <tt>equ?</tt> that tests the equality
+of two numbers, and install it in the generic arithmetic
+package.  This operation should work for ordinary numbers, rational numbers, and
+complex numbers.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.79</b> 二つの数の等価性を検査する、<tt>equ?</tt> という総称的な等価性の述語を定義し、それを総称的算術パッケージに組み込め。
+この演算は、普通の数、有理数、複素数に対して動作すべきである。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.80"></a>
+<b>Exercise 2.80.</b>  <a name="%_idx_2568"></a><a name="%_idx_2570"></a>Define a generic
+predicate <tt>=zero?</tt> that tests if its argument is zero,
+and install it in the generic arithmetic package.  This
+operation should work for ordinary numbers, rational numbers, and
+complex numbers.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.80</b> 引数がゼロかどうかを検査する、<tt>=zero?</tt> という総称的述語を定義し、それを総称的算術パッケージに組み込め。
+この演算は、普通の数、有理数、複素数に対して動作すべきである。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<a name="%_sec_2.5.2"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.5.2">2.5.2  Combining Data of Different Types</a></h3>
+<h3 class="trans" lang="ja">2.5.2 異なる型のデータを結合する</h3>
+
+<p class="orig" lang="en">
+We have seen how to define a unified arithmetic system that
+encompasses ordinary numbers, complex numbers, rational numbers, and
+any other type of number we might decide to invent, but we have
+ignored an important issue.  The operations we have defined so far
+treat the different data types as being completely independent.  Thus,
+there are separate packages for adding, say, two ordinary numbers, or
+two complex numbers.  What we have not yet considered is the fact that
+it is meaningful to define operations that cross the type boundaries,
+such as the addition of a complex number to an ordinary number.  We
+have gone to great pains to introduce barriers between parts of our
+programs so that they can be developed and understood separately.  We
+would like to introduce the cross-type operations in some carefully
+controlled way, so that we can support them
+without seriously violating our module boundaries.</p>
+
+<p class="trans" lang="ja">
+普通の数、複素数、有理数、そして、私たちが考案することに決めるかもしれない他のどんな数をも包含するような、統一された算術システムをどのように定義するのか、について見てきたが、重要な論点を無視してきた。
+ここまで私たちが定義してきた演算は、異なるデータ型同士を完全に独立したものとして取り扱っている。
+よって、たとえば、二つの普通の数、または二つの複素数を足すための、別々のパッケージがある。
+これまでにまだ考慮していないこととは、たとえば普通の数への複素数の加算などの、型の境界を横断する演算を定義することは有意義だ、という事実だ。
+私たちは、自分たちのプログラムの部分同士が別々に開発・理解され得るように、苦心して自分たちのプログラムの部分同士の間に障壁を導入してきた。
+注意深く統制されたなんらかの方法で、型横断的な演算を導入したい——そうすれば、モジュール障壁を深刻に破ることなく、型横断的な演算をサポートできる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2572"></a><a name="%_idx_2574"></a><a name="%_idx_2576"></a>One way to handle cross-type operations is to design a different
+procedure for each possible combination of types for which the
+operation is valid.  For example, we could extend the complex-number
+package so that it provides a procedure for adding complex numbers to
+ordinary numbers and installs this in the table using the tag <tt>(complex scheme-number)</tt>:<a name="call_footnote_Temp_283" href="#footnote_Temp_283"><sup><small>49</small></sup></a></p>
+
+<p class="trans" lang="ja">
+型横断的な演算を扱うための一つの方法は、演算が有効である型同士の可能な組み合わせそれぞれに対して、異なる手続きを設計することだ。
+たとえば、複素数を普通の数に足すための手続きを複素数パッケージが提供するよう、複素数パッケージを拡張できるだろうし、<tt>(complex scheme-number)</tt> というタグを使ってこの手続きを表の中に組み入れられるだろう<a name="call_footnote_Temp_283" href="#footnote_Temp_283"><sup><small>49</small></sup></a>。
+</p>
+
+<p class="lisp"><em>;; to be included in the complex package</em>
+<a name="%_idx_2578"></a>(define (add-complex-to-schemenum z x)
+  (make-from-real-imag (+ (real-part z) x)
+                       (imag-part z)))
+(put 'add '(complex scheme-number)
+     (lambda (z x) (tag (add-complex-to-schemenum z x))))
+</p>
+
+<p class="orig" lang="en">
+This technique works, but it is cumbersome.  With such a system, the
+cost of introducing a new type is not just the construction of the
+package of procedures for that type but also the construction and
+installation of the procedures that implement the cross-type
+operations.  This can easily be much more code than is needed to
+define the operations on the type itself.  The method also undermines
+our ability to combine separate packages additively, or
+least to limit the extent to which the implementors of the individual
+packages need to take account of other packages.  For instance, in the
+example above, it seems reasonable that handling mixed operations on
+complex numbers and ordinary numbers should be the responsibility of
+the complex-number package.  Combining rational numbers and complex
+numbers, however, might be done by the complex package, by the
+rational package, or by some third package that uses operations
+extracted from these two packages.  Formulating coherent policies on the
+division of responsibility among packages can be an overwhelming task
+in designing systems with many packages and many cross-type
+operations.</p>
+
+<p class="trans" lang="ja">
+この技法はうまくいくが、面倒で能率が悪い。
+そんなシステムを使ったら、単にその型のための手続きのパッケージを構築することだけでなく、型横断的な演算を実装する手続きを構築して組み込むことも、新たな型を導入するコストになる。
+これは、大抵は、その型自体に対する演算を定義するのに必要となるのよりもずっと多量のコードとなり得る。
+この方法は、別々のパッケージを加法的に組み合わせられる力——つまり、個々のパッケージの実装が他のパッケージを考慮に入れる必要がある範囲を最小限に制限できる力——を、蝕みもする。
+<span class="note">(leastの訳し方はこれでいいのかな……)</span>
+たとえば、上記の例では、複素数と普通の数に対する混合演算を扱うことは複素数パッケージの責任であるべきだ、ということが、理にかなっているように思える。
+だが、有理数と複素数を組み合わせることは、複素数パッケージによってか、有理数パッケージによってか、あるいは、これら二つのパッケージから抽出される演算を使うような何か第三のパッケージによって、なされるかもしれない。
+パッケージ間での責任の分担についての一貫した方針を定式化することは、多くのパッケージと多くの型横断的な演算をともなうシステムを設計する際の、とてつもない課題となり得る。
+
+</p>
+
+<a name="%_sec_Temp_284"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_284">Coercion</a></h4>
+<h4 class="trans" lang="ja">強制</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2580"></a>
+In the general situation of completely unrelated operations acting on
+completely unrelated types, implementing explicit cross-type
+operations, cumbersome though it may be, is the best that one can hope
+for.  Fortunately, we can usually do better by taking advantage of
+additional structure that may be latent in our type system.  Often the
+different data types are not completely independent, and there may be
+ways by which objects of one type may be viewed as being of another
+type.  This process is called <em>coercion</em>.  For example, if we are
+asked to arithmetically combine an ordinary number with a complex
+number, we can view the ordinary number as a complex number whose
+imaginary part is zero.  This transforms the problem to that of
+combining two complex numbers, which can be handled in the ordinary
+way by the complex-arithmetic package.</p>
+
+<p class="trans" lang="ja">
+まったく無関係な型に対して動く、まったく無関係な演算という、一般的な状況下では、明示的な型横断型の演算を実装することは、面倒で能率が悪いかもしれないものの、期待し得る中の最善策である。
+さいわい、私たちの型システムに潜んでいるかもしれない付加的な構造を利用することにより、大抵は、もっとうまくできる。
+多くの場合、異なるデータ型同士が完全に独立しているというわけではなく、ある一つの型のオブジェクトを別の型の存在だと見なし得るような方法があるかもしれない。
+このプロセスは、<em>強制</em>と呼ばれる。
+たとえば、普通の数と複素数を算術的に結合するように求められたとしたら、普通の数を、虚部がゼロの複素数だと見なすことができる。
+これは、当該問題を、二つの複素数を結合するという問題——複素数算術パッケージにより普通のやり方で扱うことができる——へと変形する。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2582"></a>In general, we can implement this idea by designing coercion
+procedures that transform an object of one type into an equivalent
+object of another type.  Here is a typical coercion procedure, which
+transforms a given ordinary number to a complex number with that real
+part and zero imaginary part:</p>
+
+<p class="trans" lang="ja">
+一般に、ある一つの型のオブジェクトを、別の型の等価なオブジェクトへと変換するような、強制手続きを設計することによって、この考えを実装できる。
+ここに、典型的な強制手続きを示すが、これは、与えられた普通の数を、その数の実部とゼロの虚部とを有する複素数へと変換する。
+</p>
+
+<p class="lisp"><a name="%_idx_2584"></a>(define (scheme-number-&gt;complex n)
+  (make-complex-from-real-imag (contents n) 0))
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2586"></a><a name="%_idx_2588"></a>We install these coercion procedures in a special coercion table,
+indexed under the names of the two types:
+</p>
+
+<p class="trans" lang="ja">
+こういった強制手続きを、特別な強制の表——二つの型の名前により索引づけられている——に、組み込む。
+</p>
+
+<p class="lisp">(put-coercion 'scheme-number 'complex scheme-number-&gt;complex)
+</p>
+
+<p class="orig" lang="en">
+(We assume that there are <tt>put-coercion</tt> and <tt>get-coercion</tt>
+procedures available for manipulating this table.)  Generally some of
+the slots in the table will be empty, because it is not generally
+possible to coerce an arbitrary data object of each type into all
+other types.  For example, there is no way to coerce an arbitrary
+complex number to an ordinary number, so there will be no general <tt>complex-&gt;scheme-number</tt> procedure included in the table.</p>
+
+<p class="trans" lang="ja">
+(この表を操作するために使える、<tt>put-coercion</tt> と <tt>get-coercion</tt> という手続きがあるものと想定している。)
+一般には、この表におけるいくつかのスロットは空であろう——というのも、各型の任意のデータオブジェクトを他のすべての型へと強制することは、一般的には不可能なので。
+たとえば、任意の複素数を普通の数へと強制する方法はなく、よって、この表に含まれる一般的な <tt>complex-&gt;scheme-number</tt> なる手続きは存在しないだろう。
+</p>
+
+<p class="orig" lang="en">
+Once the coercion table has been set up, we can handle coercion in a
+uniform manner by modifying the <tt>apply-generic</tt> procedure of
+section <a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>.  When asked to apply an operation, we
+first check whether the operation is defined for the arguments' types,
+just as before.  If so, we dispatch to the procedure found in the
+operation-and-type table.
+Otherwise, we try coercion.  For simplicity, we consider only the case
+where there are two arguments.<a name="call_footnote_Temp_285" href="#footnote_Temp_285"><sup><small>50</small></sup></a>  We
+check the coercion table to see if objects of the first type can
+be coerced to the second type.  If so, we coerce the first argument and try the
+operation again.  If objects of the first type cannot in general be coerced to
+the second type, we try the coercion the other way around to see if there is a
+way to coerce the second argument to the type of the first argument.
+Finally, if there
+is no known way to coerce either type to the other type, we give up.
+Here is the procedure:</p>
+
+<p class="trans" lang="ja">
+一旦、強制の表が設定されると、<a href="17_sec2_4.html#%_sec_2.4.3">2.4.3</a>節の <tt>apply-generic</tt> の手続きを手直しすることによって、一律なやり方で強制を扱える。
+ある演算を適用するよう求められた場合、以前とまったく同様に、まず、その演算がその引数の型に対して定義されているかどうかを調べる。
+もし定義されていれば、演算と型の表において見つかった手続きへと送り出す。
+そうでないときは、強制を試す。
+簡単のために、二つの引数がある場合のみを考える<a name="call_footnote_Temp_285" href="#footnote_Temp_285"><sup><small>50</small></sup></a>。
+強制の表を調べて、第一の型のオブジェクトを第二の型へと強制できるかどうかを確かめる。
+もし強制できるなら、第一引数を強制して、当該演算をもう一度試す。
+もし、第一の型のオブジェクトを一般的には第二の型へと強制することができないなら、あべこべのやり方で強制を試して、第二引数を第一引数の型へと強制する方法があるかどうかを確かめる。
+最後に、もし、いずれの型も他方の型へと強制する既知の方法がなければ、諦める。
+ここにその手続きを示す。
+</p>
+
+<p class="lisp"><a name="%_idx_2590"></a>(define (apply-generic op . args)
+  (let ((type-tags (map type-tag args)))
+    (let ((proc (get op type-tags)))
+      (if proc
+          (apply proc (map contents args))
+          (if (= (length args) 2)
+              (let ((type1 (car type-tags))
+                    (type2 (cadr type-tags))
+                    (a1 (car args))
+                    (a2 (cadr args)))
+                (let ((t1-&gt;t2 (get-coercion type1 type2))
+                      (t2-&gt;t1 (get-coercion type2 type1)))
+                  (cond (t1-&gt;t2
+                         (apply-generic op (t1-&gt;t2 a1) a2))
+                        (t2-&gt;t1
+                         (apply-generic op a1 (t2-&gt;t1 a2)))
+                        (else
+                         (error &quot;No method for these types&quot;
+                                (list op type-tags))))))
+              (error &quot;No method for these types&quot;
+                     (list op type-tags)))))))
+</p>
+
+<p class="orig" lang="en">
+This coercion scheme has many advantages over the method of defining
+explicit cross-type operations, as outlined above.  Although we still
+need to write coercion procedures to relate the types (possibly <em>n</em><sup>2</sup>
+procedures for a system with <em>n</em> types), we need to write only one
+procedure for each pair of types rather than a different procedure for
+each collection of types and each generic operation.<a name="call_footnote_Temp_286" href="#footnote_Temp_286"><sup><small>51</small></sup></a>  What we are counting on here is the fact that the
+appropriate transformation between types depends only on the types
+themselves, not on the operation to be applied.</p>
+
+<p class="trans" lang="ja">
+この強制の制度には、上記で概説したように明示的な型横断型の演算を定義する方法よりも、多くの利点がある。
+型同士を関連づけるための強制手続き (<em class="en">n</em> 種類の型があるシステム用には、ことによると <em class="en">n</em><sup>2</sup> 個の手続き) を書く必要は、依然としてある。だが、型の集まりのそれぞれと総称的な演算のそれぞれに対して、異なる手続きを書く必要があるというよりもむしろ、型同士の対のそれぞれに対して、ただ一つの手続きを書くだけでよいのである<a name="call_footnote_Temp_286" href="#footnote_Temp_286"><sup><small>51</small></sup></a>。
+ここで当てにしていることは、型と型の間での適切な変換は、それらの型自体にのみ依存しており、適用されることになる演算には依存しない、という事実だ。
+</p>
+
+<p class="orig" lang="en">
+On the other hand, there may be applications for which our coercion
+scheme is not general enough.  Even when neither of the objects to be
+combined can be converted to the type of the other it may still be
+possible to perform the operation by converting both objects to a
+third type.  In order to deal with such complexity and still preserve
+modularity in our programs, it is usually necessary to build systems
+that take advantage of still further structure in the relations among
+types, as we discuss next.</p>
+
+<p class="trans" lang="ja">
+一方で、私たちの強制の制度が十分には一般的でないような応用分野があるかもしれない。
+結合すべきどちらのオブジェクトも他方の型に変換できないときでさえ、両方のオブジェクトを第三の型へと変換することで、演算を実行することが依然として可能かもしれないのだ。
+そういう複雑さを扱うため、そして、プログラムにおけるモジュール性を依然として保つためには、次に議論するとおり、型の間の関係における更なる構造を利用するシステムを構築することが、普通は必要である。
+</p>
+
+<a name="%_sec_Temp_287"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_287">Hierarchies of types</a></h4>
+<h4 class="trans" lang="ja">型の階層構造</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2592"></a><a name="%_idx_2594"></a>
+The coercion scheme presented above relied on the existence of natural
+relations between pairs of types.  Often there is more ``global''
+structure in how the different types relate to each other.  For
+instance, suppose we are building a generic arithmetic system to
+handle integers, rational numbers, real numbers, and complex numbers.
+In such a system, it is quite natural to regard an integer as a
+special kind of rational number, which is in turn a special kind of
+real number, which is in turn a special kind of complex number.  What
+we actually have is a so-called <em>hierarchy of types</em>, in which,
+for example, integers are a <a name="%_idx_2596"></a><a name="%_idx_2598"></a><em>subtype</em> of rational numbers (i.e.,
+any operation that can be applied to a rational number can
+automatically be applied to an integer).  Conversely, we say that
+rational numbers form a <a name="%_idx_2600"></a><a name="%_idx_2602"></a><em>supertype</em> of integers.  The particular
+hierarchy we have here is of a very simple kind, in which each type
+has at most one supertype and at most one subtype.  Such a structure,
+called a <em>tower</em>, is illustrated in figure <a href="#%_fig_2.25">2.25</a>.</p>
+
+<p class="trans" lang="ja">
+上記で提示した強制制度は、型同士の対の間にある自然な関係の存在を当てにしている。
+異なる型がお互いにどう関連するのかという点における、より「大域的な」構造が、しばしば存在する。
+たとえば、整数と有理数と実数と複素数を扱う総称的算術システムを、構築しているところだと想定しよう。
+そういうシステムでは、整数を有理数の特別な種類だと見なすことは、とても自然であり、そして今度は、有理数が実数の特別な種類であり、さらに今度は、実数が複素数の特別な種類なのである。
+実際にあるものは、いわゆる<em>型の階層構造</em>である——型の階層構造においては、たとえば整数は、有理数の<em><ruby><rb>下位の型</rb><rp> (</rp><rt>サブタイプ</rt><rp>) </rp></ruby></em>である (つまり、有理数に適用可能な任意の演算は、自動的に、整数に適用可能である)。
+逆に、有理数は整数の<em><ruby><rb>上位の型</rb><rp> (</rp><rt>スーパタイプ</rt><rp>) </rp></ruby></em>となる、と言う。
+ここにある特定の階層構造はとても簡潔な種類のもので、それぞれの型には高々一つのスーパタイプと高々一つのサブタイプがあるだけだ。
+そういう構造——<em>塔</em>と呼ばれる——が、図<a href="#%_fig_2.25">2.25</a>に示されている。
+</p>
+
+<figure>
+<a name="%_fig_2.25"></a>
+<img src="ch2-Z-G-66.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.25:</b>  A tower of types.</figcaption>
+<figcaption class="trans" lang="ja"><b>Figure 2.25:</b>  型の塔</figcaption>
+<a name="%_idx_2604"></a><a name="%_idx_2606"></a>
+</figure>
+
+<p class="orig" lang="en">
+If we have a tower structure, then we can greatly simplify the problem
+of adding a new type to the hierarchy, for we need only specify how
+the new type is embedded in the next supertype above it and how it is
+the supertype of the type below it.  For example, if we want to add an
+integer to a complex number, we need not explicitly define a special
+coercion procedure <tt>integer-&gt;complex</tt>.  Instead, we define how an
+integer can be transformed into a rational number, how a rational
+number is transformed into a real number, and how a real number is
+transformed into a complex number.  We then allow the system to
+transform the integer into a complex number through these steps and
+then add the two complex numbers.</p>
+
+<p class="trans" lang="ja">
+もし塔構造があれば、新しい型を階層構造に付け加えるという問題を、非常に簡単にすることができる——というのも、その新しい型が、それの上にある次のスーパタイブにどう組み込まれているのか、そして、その新しい型が、どんなふうにして、それの下にある型のスーパタイプになっているのか、ということさえ指定すればよいからだ。
+たとえば、整数を複素数に足したい場合、<tt>integer-&gt;complex</tt> という特別な強制手続きを明示的に定義する必要はない。
+代わりに、どうやったら整数を有理数に変換できるのか、どうやったら有理数を実数に変換できるのか、どうやったら実数を複素数に変換できるのか、を定義する。
+そして、システムに、これらの手段を通じて整数を複素数に変換させ、それから二つの複素数を足させる。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2608"></a><a name="%_idx_2610"></a>We can redesign our <tt>apply-generic</tt> procedure in the following
+way: For each type, we need to supply a <tt>raise</tt> procedure, which
+``raises'' objects of that type one level in the tower.  Then when the
+system is required to operate on objects of different types it can
+successively raise the lower types until all the objects are at
+the same level in the tower.  (Exercises <a href="#%_thm_2.83">2.83</a>
+and  <a href="#%_thm_2.84">2.84</a>
+concern the details of implementing such a strategy.)</p>
+
+<p class="trans" lang="ja">
+以下の方法で、<tt>apply-generic</tt> の手続きを設計し直すことができる。
+それぞれの型に対して、<tt>raise</tt> という手続き——その型のオブジェクトを、塔におけるレベル一つ分だけ「格上げする」——を提供する必要がある。
+そして、異なる型のオブジェクト同士に対して作用するようにシステムが求められたときには、システムは、すべてのオブジェクトが塔における同一レベルになるまで、下位の型を次々に格上げする。
+(練習問題<a href="#%_thm_2.83">2.83</a>と<a href="#%_thm_2.84">2.84</a>は、そういう戦略を実装することの詳細に関係する。)
+</p>
+
+<p class="orig" lang="en">
+Another advantage of a tower is that we can easily implement the
+notion that every type ``inherits'' all operations defined on a
+supertype.  For instance, if we do not supply a special procedure for
+finding the real part of an integer, we should nevertheless expect
+that <tt>real-part</tt> will be defined for integers by virtue of the
+fact that integers are a subtype of complex numbers.  In a tower, we
+can arrange for this to happen in a uniform way by modifying <tt>apply-generic</tt>.  If the required operation is not directly defined for
+the type of the object given, we raise the object to its supertype and
+try again.  We thus crawl up the tower, transforming our argument as we
+go, until we either find a level at which the desired operation can be
+performed or hit the top (in which case we give up).</p>
+
+<p class="trans" lang="ja">
+塔のもう一つの利点は、どの型もみな、スーパタイプ上で定義されたすべての演算を「継承」するのだ、という概念を、簡単に実装できることである。
+たとえば、たとえ整数の実部を求めるための特別な手続きを提供していなくても、それでもなお私たちは、整数は複素数のサブタイプだという事実のおかげで、<tt>real-part</tt> が整数に対して定義されるだろうと予期するはずである。
+これが一律な方法で起きることが可能となるように、私たちは、<tt>apply-generic</tt> を修正することによって、手筈を整えることができる。
+もし要求された演算が、与えられたオブジェクトの型に対して直接的に定義されていなければ、そのオブジェクトをスーパタイプに格上げして再度試す。
+所望の演算を実行できるレベルを見出すか、または頂上に到達する (この場合、諦める) まで、こうして塔を這い登る——進むにつれて引数を変換しつつ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2612"></a>Yet another advantage of a tower over a more general hierarchy is that
+it gives us a simple way to ``lower'' a data object to the simplest
+representation.  For example, if we add 2 + 3<em>i</em> to 4 - 3<em>i</em>, it would be
+nice to obtain the answer as the integer 6 rather than as the complex
+number 6 + 0<em>i</em>.  Exercise <a href="#%_thm_2.85">2.85</a> discusses a way to implement
+such a lowering operation.  (The trick is that we need a general way
+to distinguish those objects that can be lowered, such as 6 + 0<em>i</em>, from
+those that cannot, such as 6 + 2<em>i</em>.)</p>
+
+<p class="trans" lang="ja">
+より一般的な階層構造に対する、塔の更に別の利点は、データオブジェクトを最も簡潔な表現へと「落とし込む」ための簡単な方法を与えてくれる点である。
+たとえば、
+<span class="math">2 + 3<em class="en">i</em></span>
+を
+<span class="math">4 &minus; 3<em class="en">i</em></span>
+に足す場合、
+<span class="math">6 + 0<em class="en">i</em></span>
+という複素数として、というよりもむしろ、6という整数として、答えを得ることが良いだろう。
+練習問題<a href="#%_thm_2.85">2.85</a>では、そういう落とし込み演算を実装する方法を議論する。
+(その要諦は、<span class="math">6 + 0<em class="en">i</em></span>
+のような落とし込み可能なオブジェクトを、
+<span class="math">6 + 2<em class="en">i</em></span>
+のような落とし込み不可能なものから区別するための一般的な方法が必要だ、という点にある。)
+</p>
+
+<figure>
+<a name="%_fig_2.26"></a>
+<img src="ch2-Z-G-67.gif" border="0">
+<figcaption class="orig" lang="en"><b>Figure 2.26:</b>  Relations among types of geometric figures.</figcaption>
+<figcaption class="trans" lang="ja"><b>図2.26:</b> 幾何図形の型の間の関係</figcaption>
+</figure>
+
+<p class="exercise">　　　　　　　　　多　角　形
+　　　　　　　　╱　　　　　╲
+　　　　　　　╱　　　　　　　四角形
+　　　　　　╱　　　　　　　　│　╲
+　　　三角形　　　　　　　　　│　　╲
+　　　╱　　╲　　　　　　　台形　　　凧形
+　　╱　　　　╲　　　　　　　╲　　　　　│
+　╱　　　　　　╲　　　　　　　╲　　　　│
+二等辺三角形　　直角三角形　　平行四辺形　│
+　│　　╲　　　　│　　　　　　╱　　　╲　│
+　│　　　╲　　　│　　　　長方形　　　　菱形
+　│　　　　╲　　│　　　　　　╲　　　╱
+正三角形　　二等辺直角三角形　　正方形
+</p>
+
+<a name="%_sec_Temp_288"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_288">Inadequacies of hierarchies</a></h4>
+<h4 class="trans" lang="ja">階層構造の不十分さ</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2614"></a>
+If the data types in our system can be naturally arranged in a tower,
+this greatly simplifies the problems of dealing with generic operations
+on different types, as we have seen.  Unfortunately, this is usually
+not the case.  Figure <a href="#%_fig_2.26">2.26</a> illustrates a
+more complex arrangement of mixed types, this one showing relations
+among different types of geometric figures.  We see that, in general,
+<a name="%_idx_2616"></a><a name="%_idx_2618"></a><a name="%_idx_2620"></a>a type may have more than one subtype.  Triangles and quadrilaterals,
+for instance, are both subtypes of polygons.  In addition, a type may
+have more than one supertype.  For example, an isosceles right
+triangle may be regarded either as an isosceles triangle or as a right
+triangle.  This multiple-supertypes issue is particularly thorny,
+since it means that there is no unique way to ``raise'' a type in the
+hierarchy.  Finding the ``correct'' supertype in which to apply an
+operation to an object may involve considerable searching through the
+entire type network on the part of a procedure such as <tt>apply-generic</tt>.  Since there generally are multiple subtypes for a
+type, there is a similar problem in coercing a value ``down'' the type
+hierarchy.  Dealing with large numbers of interrelated types while
+still preserving modularity in the design of large systems is very
+difficult, and is an area of much current research.<a name="call_footnote_Temp_289" href="#footnote_Temp_289"><sup><small>52</small></sup></a></p>
+
+<p class="trans" lang="ja">
+システム内のデータ型を自然に塔の形に並べることができるなら、このことにより、ここまで見てきたとおり、異なる型に対する総称的演算を扱うという問題が非常に簡単になる。
+しかしあいにく、これは普通は当てはまらない。
+図<a href="#%_fig_2.26">2.26</a>は、種々混じり合った型の、より複雑な取り合わせを例示している——これは、幾何図形の異なる型同士の間の関係を示している。
+一般に、型には一つよりも多くのサブタイプがあり得る、ということが分かる。
+たとえば、三角形と四角形は、双方とも多角形のサブタイプだ。
+さらに、型には一つよりも多くのスーパタイプがあり得る。
+たとえば、直角二等辺三角形は、二等辺三角形と見なされるかもしれないし、あるいは、直角三角形と見なされるかもしれない。
+このような複数のスーパタイブの問題は、とりわけ厄介だ——というのも、これは、型を階層構造の中で「格上げする」ための一意な方法がないことを意味しているからだ。
+オブジェクトにここで演算を適用すべきだという、「正しい」スーパタイブを見つけることは、<tt>apply-generic</tt> などの手続きの側での、型の網目状構造の全体をくまなく巡る、相当大変な探索を伴うことがある。
+一般に型には複数のサブタイプがあるので、型の階層構造を「下って」ある値を強制する際にも、類似の問題がある。
+大規模システムの設計におけるモジュール性を依然として保ちながらも、互いに関係がある多数の型を扱うということは、とても難しく、かつ、これは現在多くの研究が行われている分野である<a href="#footnote_Temp_289"><sup><small>52</small></sup></a>。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.81"></a>
+<b>Exercise 2.81.</b>  <a name="%_idx_2626"></a>Louis Reasoner has noticed that <tt>apply-generic</tt> may try to
+coerce the arguments to each other's type even if they already have
+the same type.  Therefore, he reasons, we need to put procedures
+in the coercion table to &quot;coerce&quot; arguments of each type to their
+own type.  For example, in addition to the <tt>scheme-number-&gt;complex</tt>
+coercion shown above, he would do:</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.81</b> 引数同士がたとえ既に同じ型であっても、<tt>apply-generic</tt> がそれら引数をお互いの型へと強制しようと試みることがある、とルイス・リーズナは気づいた。
+よって——と、彼は推論する——それぞれの型の引数を、それら引数自体の型へと「強制」するために、強制の表に手続きを記入する必要がある。
+たとえば、先に示した <tt>scheme-number-&gt;complex</tt> という強制に加えて、彼は以下のように実行するだろう。
+</p>
+
+<p class="lisp"><a name="%_idx_2628"></a>(define (scheme-number-&gt;scheme-number n) n)
+<a name="%_idx_2630"></a>(define (complex-&gt;complex z) z)
+(put-coercion 'scheme-number 'scheme-number
+              scheme-number-&gt;scheme-number)
+(put-coercion 'complex 'complex complex-&gt;complex)
+</p>
+
+<p class="orig" lang="en">
+a. With Louis's coercion procedures installed, what happens if <tt>apply-generic</tt>
+is called with two arguments of type <tt>scheme-number</tt> or two arguments of
+type <tt>complex</tt> for an operation that is not found in the table for those
+types?  For example, assume that we've defined a generic exponentiation
+operation:</p>
+
+<p class="trans" lang="ja">
+a. <tt>scheme-number</tt> 型の二つの引数または <tt>complex</tt> 型の二つの引数をともなって、それらの型に対しては表の中に見あたらない演算が呼び出されたとき、もしルイスの強制手続きを組み込んでいたら、何が起きるか?
+たとえば、以下の総称的指数演算が定義済みだと仮定し、
+</p>
+
+<p class="lisp">(define (exp x y) (apply-generic 'exp x y))
+</p>
+
+<p class="orig" lang="en">
+and have put a procedure for exponentiation in the Scheme-number
+package but not in any other package:</p>
+
+<p class="trans" lang="ja">
+指数用の手続きを、Schemeの数のパッケージには入れたが、他にはどのパッケージにも入れていないものと仮定せよ。
+</p>
+
+
+<p class="lisp"><em>;; following added to Scheme-number package</em>
+(put 'exp '(scheme-number scheme-number)
+     (lambda (x y) (tag (expt x y)))) <em>; using primitive <tt>expt</tt></em>
+</p>
+
+<p class="orig" lang="en">
+What happens if we call <tt>exp</tt> with two complex numbers as arguments?</p>
+
+<p class="trans" lang="ja">
+もし引数として二つの複素数をともなって <tt>exp</tt> を呼び出したら、何が起こるか?
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+b. Is Louis correct that something had to be done about
+coercion with arguments of the same type, or does <tt>apply-generic</tt>
+work correctly as is?</p>
+
+<p class="trans" lang="ja">
+b. 同じ型の引数を使った強制について何かをせねばならなかったのだ、というルイスの考えは正しいのだろうか? あるいは、<tt>apply-generic</tt> はそのままでも正しく動くのだろうか?
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+c. Modify <tt>apply-generic</tt> so that it doesn't try coercion if
+the two arguments have the same type.
+</p>
+
+<p class="trans" lang="ja">
+c. 二つの引数が同じ型のときには強制を試さないように、<tt>apply-generic</tt> を修正せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.82"></a>
+<b>Exercise 2.82.</b>  <a name="%_idx_2632"></a>Show how to generalize <tt>apply-generic</tt> to handle
+coercion in the general case of multiple arguments.  One strategy is
+to attempt to coerce all the arguments to the type of the first argument, then
+to the type of the second argument, and so on.  Give an example of a situation
+where this strategy (and likewise the two-argument version given
+above) is not sufficiently general.  (Hint: Consider the case where
+there are some suitable mixed-type operations present in the table
+that will not be tried.)
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.82</b> 複数個の引数があるという、一般的な場合における強制を扱うために、<tt>apply-generic</tt> をどのように一般化すればよいかを示せ。
+一つの戦略は、すべての引数を第一引数の型へと強制しようと試みて、それから、すべての引数を第二引数の型へと強制しようと試みて、というふうにすることだ。
+この戦略が (そして上記の二引数版も同様に) 十分には一般的でないような状況の例を挙げよ。
+(ヒント: 試みられなくなるだろうような、何らかの適切な型混合の演算が、表の中にある、という場合を考えよ。)
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.83"></a>
+<b>Exercise 2.83.</b>  <a name="%_idx_2634"></a>Suppose you are designing a generic arithmetic system for dealing with
+the tower of types shown in figure <a href="#%_fig_2.25">2.25</a>:
+integer, rational, real, complex.  For
+each type (except complex), design a procedure that raises objects of
+that type one level in the tower.  Show how to install a generic <tt>raise</tt> operation that will work for each type (except complex).
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.83</b> 図<a href="#%_fig_2.25">2.25</a>に示した型の塔——つまり、整数、有理数、実数、複素数——を扱うための、総称的算術システムを設計しているところだとしよう。
+それぞれの型 (ただし複素数を除く) に対して、その型のオブジェクトを塔の中で一段、格上げする手続きを、設計せよ。
+それぞれの型 (ただし複素数を除く) に対して動くであろう、<tt>raise</tt> という総称的な演算を、どのように組み込むのかを示せ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.84"></a>
+<b>Exercise 2.84.</b>  <a name="%_idx_2636"></a>Using the <tt>raise</tt> operation of exercise <a href="#%_thm_2.83">2.83</a>, modify the <tt>apply-generic</tt> procedure so that it coerces its arguments to have the
+same type by the method of successive raising, as discussed in this
+section.  You will need to devise a way to test which of two types is
+higher in the tower.  Do this in a manner that is ``compatible'' with
+the rest of the system and will not lead to problems in adding new
+levels to the tower.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.84</b> <tt>apply-generic</tt> の手続きが、本節で議論したような連続する格上げの手法によって、その引数同士を、同じ型となるよう強制するように、練習問題<a href="#%_thm_2.83">2.83</a>の <tt>raise</tt> という演算を使って <tt>apply-generic</tt> の手続きを修正せよ。
+二つの型のうち、どちらの方が塔のより上の方にあるのかを調べる方法を、考案する必要があるだろう。
+これを、システムの残りの部分と「互換性がある」ような、かつ、塔に新たな階層を追加する際の問題を招く結果とならないような方法で、行え。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.85"></a>
+<b>Exercise 2.85.</b>  <a name="%_idx_2638"></a><a name="%_idx_2640"></a>This section mentioned a method for ``simplifying'' a data object
+by lowering it in the tower of types as far as possible.  Design
+a procedure <tt>drop</tt> that accomplishes this for the tower described
+in exercise <a href="#%_thm_2.83">2.83</a>.  The key is to decide, in some general way, whether
+an object can be lowered.  For example, the complex number 1.5 + 0<em>i</em>
+can be lowered as far as <tt>real</tt>, the complex number 1 + 0<em>i</em> can be
+lowered as far as <tt>integer</tt>, and the complex number 2 + 3<em>i</em> cannot
+be lowered at all.  Here is a plan for determining whether an object
+can be lowered: Begin by defining a generic operation <tt>project</tt>
+that ``pushes'' an object down in the tower.  For example, projecting
+a complex number would involve throwing away the imaginary part.  Then
+a number can be dropped if, when we <tt>project</tt> it and <tt>raise</tt>
+the result back to the type we started with, we end up with something
+equal to what we started with.  Show how to implement this idea in
+detail, by writing a <tt>drop</tt> procedure that drops an object as far
+as possible.  You will need to design the various projection
+operations<a name="call_footnote_Temp_295" href="#footnote_Temp_295"><sup><small>53</small></sup></a> and install <tt>project</tt> as a generic operation in
+the system.  You will also need to make use of a generic equality
+predicate, such as described in exercise <a href="#%_thm_2.79">2.79</a>.  Finally, use <tt>drop</tt>
+to rewrite <tt>apply-generic</tt> from exercise <a href="#%_thm_2.84">2.84</a> so that it
+``simplifies'' its answers.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.85</b> データオブジェクトを可能な限り型の塔において降ろすことにより、そのデータオブジェクトを「簡潔化する」ための方法について、本節で言及した。
+これを、練習問題<a href="#%_thm_2.83">2.83</a>で述べた塔に対して成し遂げるような、<tt>drop</tt> という手続きを設計せよ。
+大事なことは、オブジェクトが降ろせるかどうかを、何らかの一般的な方法で判断することである。
+例えば、
+<span class="math">1.5 + 0<em class="en">i</em></span>
+という複素数は <tt>real</tt> まで降ろせて、
+<span class="math">1 + 0<em class="en">i</em></span>
+という複素数は <tt>integer</tt> まで降ろせて、
+<span class="math">2 + 3<em class="en">i</em></span>
+という複素数はまったく降ろせない。
+ここに、オブジェクトが降ろせるかどうかを判定するための案がある。
+塔においてオブジェクトを下へと「押し込む」ような、 <tt>project</tt> という総称的な演算を定義することから、始めよう。
+たとえば、複素数を射影することは、虚部を捨て去ることを伴うだろう。
+すると、数を <tt>project</tt> して、その結果を始めの型へと <tt>raise</tt> して返したときに、もし、最終的には、始めにあったものと等しい何かになるのであれば、その数を下へ降ろすことが可能だ。
+この考えをどのように実装するのかを、詳しく示せ——オブジェクトを可能な限り降ろすような <tt>drop</tt> の手続きを書くことによって。
+様々な射影演算を設計する必要があるだろうし<a href="#footnote_Temp_295"><sup><small>53</small></sup></a>、総称的演算として <tt>project</tt> をシステムに組み込む必要もあるだろう。
+さらに、総称的な等価性述語——練習問題<a href="#%_thm_2.79">2.79</a>で述べたものなど——を、利用する必要もあるだろう。
+最後に、<tt>apply-generic</tt> が自分の答えを「簡潔化する」ように、<tt>drop</tt> を用いて、<tt>apply-generic</tt> を練習問題<a href="#%_thm_2.84">2.84</a>のものから書き直せ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.86"></a>
+<b>Exercise 2.86.</b>  Suppose we want to handle complex numbers whose real
+parts, imaginary parts, magnitudes, and angles can be either ordinary
+numbers, rational numbers, or other numbers we might wish to add to
+the system.  Describe and implement the changes to the system needed
+to accommodate this.  You will have to define operations such as <tt>sine</tt> and <tt>cosine</tt> that are generic over ordinary numbers and
+rational numbers. 
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.86</b> 実部と虚部と大きさと角度が、普通の数か、有理数か、もしくは私たちがシステムに追加したいと望むかもしれない他の数であるような、複素数を扱いたいのだとしよう。
+これを達成するために必要な、システムに対する変更を、記述して実装せよ。
+普通の数と有理数に対して総称的な、<tt>sine</tt> および <tt>cosine</tt> のような演算を定義する必要があるだろう。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<a name="%_sec_2.5.3"></a>
+<h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_2.5.3">2.5.3  Example: Symbolic Algebra</a></h3>
+<h3 class="trans" lang="ja">2.5.3 例: 記号代数</h3>
+
+<p class="orig" lang="en">
+<a name="%_idx_2646"></a>
+The manipulation of symbolic algebraic expressions is a complex
+process that illustrates many of the hardest problems that occur in
+the design of large-scale systems.  An algebraic expression, in
+<a name="%_idx_2648"></a>general, can be viewed as a hierarchical structure, a tree of
+operators applied to operands.  We can construct algebraic expressions
+by starting with a set of primitive objects, such as constants and
+variables, and combining these by means of algebraic operators, such
+as addition and multiplication.  As in other languages, we form
+abstractions that enable us to refer to compound objects in simple
+terms.  Typical abstractions in symbolic algebra are ideas such as
+linear combination, polynomial, rational function, or trigonometric
+function.  We can regard these as compound ``types,'' which are often
+useful for directing the processing of expressions.  For example, we
+could describe the expression</p>
+
+<p class="trans" lang="ja">記号代数式の操作は、大規模システムの設計で起きる最も困難な問題の多くを例示する、複雑な工程だ。
+代数式は、一般に、階層的な構造体——つまり、オペランドに適用される演算子の木——だと見なせる。
+定数や変数のような原始的オブジェクトの集まりから始めて、これらを加算や乗算のような代数的演算子を用いて結合することにより、代数式を構築することができる。
+他の言語と同様に、複合的オブジェクトを簡潔な用語で参照できるようにしてくれる抽象概念を、私たちは形作っている。
+記号代数における典型的な抽象概念は、線形結合、多項式、有理関数、あるいは三角関数といった概念だ。
+私たちは、これらのものを複合的な「型」だと見なせる——こうすることは、式の処理を指図するのに有益なことが多い。
+たとえば、以下の式を、
+</p>
+
+<figure><img src="ch2-Z-G-68.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+as a polynomial in <em>x</em> with coefficients that are trigonometric
+functions of polynomials in <em>y</em> whose coefficients are integers.</p>
+
+<p class="trans" lang="ja">
+係数が整数であるような <em class="en">y</em> についての多項式の三角関数であるような係数をともなった、<em class="en">x</em> についての多項式として、記述することができるだろう。
+</p>
+
+<p class="orig" lang="en">
+We will not attempt to develop a complete algebraic-manipulation
+system here.  Such systems are exceedingly complex programs, embodying
+deep algebraic knowledge and elegant algorithms.  What we will do is
+look at a simple but important part of algebraic manipulation: the
+arithmetic of polynomials.  We will illustrate the kinds of decisions
+the designer of such a system faces, and how to apply the ideas of
+abstract data and generic operations to help organize this effort.</p>
+
+<p class="trans" lang="ja">
+ここでは、完全な代数操作システムを開発しようと試みるつもりはない。
+そういうシステムは、非常に複雑なプログラムであり、深い代数的知識と簡潔で洗練されたアルゴリズムとを体現するものだ。
+私たちが行おうとすることは、代数操作のうち、簡単だが重要な部分——すなわち、多項式の算術——に注目することだ。
+私たちは、そういうシステムの設計者が直面する何種類かの決断を示し、また、この骨折り作業を組織化するのを助けるためには抽象データと総称的演算という考え方をどのように適用するのかを示すことにしよう。
+</p>
+
+
+<a name="%_sec_Temp_297"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_297">Arithmetic on polynomials</a></h4>
+<h4 class="trans" lang="ja">多項式上の算術</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2650"></a><a name="%_idx_2652"></a>
+Our first task in designing a system for performing arithmetic on
+polynomials is to decide just what a polynomial is.  Polynomials are
+normally defined relative to certain variables (the <a name="%_idx_2654"></a><a name="%_idx_2656"></a><em>indeterminates</em> of the polynomial).  For simplicity, we will restrict
+ourselves to polynomials having just one indeterminate (<a name="%_idx_2658"></a><a name="%_idx_2660"></a><em>univariate polynomials</em>).<a name="call_footnote_Temp_298" href="#footnote_Temp_298"><sup><small>54</small></sup></a> We will define a polynomial to be a
+sum of terms, each of which is either a coefficient, a power of the
+indeterminate, or a product of a coefficient and a power of the
+indeterminate.  A coefficient is defined as an algebraic expression
+that is not dependent upon the indeterminate of the polynomial.  For
+example,</p>
+
+<p class="trans" lang="ja">
+多項式上の算術を行うためのシステムを設計する際の最初の課題は、まさに、多項式とは何か、ということを決めることである。
+多項式は普通、ある特定の変数 (その多項式の <em>仲介物</em>) に関して定義される。
+簡単のため、仲介物がただ一つだけの多項式 (<em>一変数多項式</em>) のみに限定することにしよう<a href="#footnote_Temp_298"><sup><small>54</small></sup></a>。
+多項式とは項の和である、と定義しよう——ここで、項の各々は、係数か、仲介物の累乗か、または、係数と仲介物の累乗との積である。
+係数は、その多項式の仲介物に依存しない代数式である、と定義される。
+たとえば、
+</p>
+
+
+<figure><img src="ch2-Z-G-69.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+is a simple polynomial in <em>x</em>, and
+</p>
+
+<p class="trans" lang="ja">
+は、<em class="en">x</em> についての単純な多項式であり、
+</p>
+
+<figure><img src="ch2-Z-G-70.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+is a polynomial in <em>x</em> whose coefficients are polynomials in <em>y</em>.
+</p>
+
+<p class="trans" lang="ja">
+は、<em class="en">y</em> についての多項式を係数とするような、<em class="en">x</em> についての多項式である。
+</p>
+
+<p class="orig" lang="en">
+Already we are skirting some thorny issues.  Is the first of these
+polynomials the same as the polynomial 5<em>y</em><sup>2</sup>  + 3<em>y</em>  + 7, or not?  A
+reasonable answer might be ``yes, if we are considering a polynomial
+purely as a mathematical function, but no, if we are considering a
+polynomial to be a syntactic form.''  The second polynomial is
+algebraically equivalent to a polynomial in <em>y</em> whose coefficients are
+polynomials in <em>x</em>.  Should our system recognize this, or not?
+Furthermore, there are other ways to represent a polynomial -- for
+example, as a product of factors, or (for a univariate polynomial) as
+the set of roots, or as a listing of the values of the polynomial at a
+specified set of points.<a name="call_footnote_Temp_299" href="#footnote_Temp_299"><sup><small>55</small></sup></a>
+We can finesse these questions by deciding that in our
+algebraic-manipulation system a ``polynomial'' will be a
+particular syntactic form, not its underlying mathematical meaning.</p>
+
+<p class="trans" lang="ja">
+私たちは既に厄介な問題にぶつかっている。
+これらの多項式のうちの最初のものは、
+<span class="math">5<em class="en">y</em><sup>2</sup>  + 3<em class="en">y</em>  + 7</span>
+と同じか否か?
+理にかなった答えは、「もし多項式を純粋に数学的関数と見なしているならば、はい。でも、もし多項式を統語的形式だと見なしているなら、いいえ」というものかもしれない。
+2番目の多項式は、代数的には、<em class="en">x</em> についての多項式を係数とするような、<em class="en">y</em> についての多項式と等価である。
+私たちのシステムは、このことを認識するべきか否か?
+さらに、多項式を表現するための他の方法がある——たとえば、因子の積としてだったり、(一変数多項式に関しては) 根の集合としてだったり、あるいは、指定された点の集合における当該多項式の値の一覧としてだったり、というふうに<a href="#footnote_Temp_299"><sup><small>55</small></sup></a>。
+私たちの代数操作システムにおいて、「多項式」とは、特定の統語的形式であって、その根底にある数学的な意味ではない、ということにしよう、と決断することにより、これらの疑問を巧妙に乗りきることができる。
+</p>
+
+<p class="orig" lang="en">
+Now we must consider how to go about doing arithmetic on polynomials.
+In this simple system, we will consider only addition and
+multiplication.  Moreover, we will insist that two polynomials to be
+combined must have the same indeterminate.</p>
+
+<p class="trans" lang="ja">
+さて今や、多項式上の算術の実行にどう取り組むかを考えねばならない。
+この単純なシステムでは、加算と乗算のみを考えることにしよう。
+また、結合されることになる二つの多項式には同じ仲介物がなくてはならない、と主張しよう。
+</p>
+
+<p class="orig" lang="en">
+We will approach the design of our system by following the familiar
+discipline of data abstraction.  We will represent polynomials using a
+data structure called a <a name="%_idx_2664"></a><em>poly</em>, which consists of a variable and a
+<a name="%_idx_2666"></a>collection of terms.  We assume that we have selectors <tt>variable</tt>
+and <tt>term-list</tt> that extract those parts from a poly and
+a constructor <tt>make-poly</tt> that assembles a
+poly from a given variable and a term list.
+A variable will be just a symbol, so we can use the <a name="%_idx_2668"></a><tt>same-variable?</tt>
+procedure of section <a href="16_sec2_3.html#%_sec_2.3.2">2.3.2</a> to compare variables.
+<a name="%_idx_2670"></a><a name="%_idx_2672"></a>The following procedures define addition and multiplication of polys:
+</p>
+
+<p class="trans" lang="ja">
+データ抽象化という慣れ親しんだ規律に従うことで、システムの設計に着手しよう。
+<em>poly</em> と呼ばれるデータ構造——ある一つの変数と、項の集まりと、からなる——を用いて、多項式を表現しよう。
+poly から変数と項リストを抽出する <tt>variable</tt> および <tt>term-list</tt>というセレクタがあり、かつ、与えられた変数と項リストから poly を組み立てる <tt>make-poly</tt> というコンストラクタがある、と想定する。
+変数は単なる記号となるはずだから、変数同士を比較するために、<a href="16_sec2_3.html#%_sec_2.3.2">2.3.2</a>節の <tt>same-variable?</tt> という手続きが使える。
+以下の手続きは、poly 同士の加算と乗算を定義している。
+</p>
+
+<p class="lisp"><a name="%_idx_2674"></a>(define (add-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+      (make-poly (variable p1)
+                 (add-terms (term-list p1)
+                            (term-list p2)))
+      (error &quot;Polys not in same var -- ADD-POLY&quot;
+             (list p1 p2))))
+<a name="%_idx_2676"></a>(define (mul-poly p1 p2)
+  (if (same-variable? (variable p1) (variable p2))
+      (make-poly (variable p1)
+                 (mul-terms (term-list p1)
+                            (term-list p2)))
+      (error &quot;Polys not in same var -- MUL-POLY&quot;
+             (list p1 p2))))
+</p>
+
+<p class="orig" lang="en">
+To incorporate polynomials into our generic arithmetic system, we need
+to supply them with type tags.  We'll use the tag <tt>polynomial</tt>,
+and install appropriate operations on tagged polynomials in
+the operation table.  We'll embed all our code
+in an installation procedure for the polynomial package,
+similar to the ones in
+section <a href="#%_sec_2.5.1">2.5.1</a>:
+<a name="%_idx_2678"></a><a name="%_idx_2680"></a><a name="%_idx_2682"></a></p>
+
+<p class="trans" lang="ja">
+私たちの総称的算術システムに多項式を組み込むには、多項式に型タグを与えねばならない。
+<tt>polynomial</tt> というタグを使うことにして、タグ付けされた多項式上の適宜の演算を、演算の表に組み込もう。
+多項式パッケージ——<a href="#%_sec_2.5.1">2.5.1</a>節の諸パッケージと似たもの——用のインストレーション手続きの中に、すべてのコードを埋めこもう。
+</p>
+
+<p class="lisp"><a name="%_idx_2684"></a><a name="%_idx_2686"></a><a name="%_idx_2688"></a><a name="%_idx_2690"></a>(define (install-polynomial-package)
+  <em>;; internal procedures</em>
+  <em>;; representation of poly</em>
+  (define (make-poly variable term-list)
+    (cons variable term-list))
+  (define (variable p) (car p))
+  (define (term-list p) (cdr p))
+  &lt;<em>procedures <tt>same-variable?</tt> and <tt>variable?</tt> from section <a href="16_sec2_3.html#%_sec_2.3.2">2.3.2</a></em>&gt;
+  <em>;; representation of terms and term lists</em>
+  &lt;<em>procedures <tt>adjoin-term <tt>...</tt><tt>coeff</tt></tt> from text below</em>&gt;
+
+  <em>;; continued on next page</em>
+
+  (define (add-poly p1 p2) <tt>...</tt>)
+  &lt;<em>procedures used by <tt>add-poly</tt></em>&gt;
+  (define (mul-poly p1 p2) <tt>...</tt>)
+  &lt;<em>procedures used by <tt>mul-poly</tt></em>&gt;
+  <em>;; interface to rest of the system</em>
+  (define (tag p) (attach-tag 'polynomial p))
+  (put 'add '(polynomial polynomial) 
+       (lambda (p1 p2) (tag (add-poly p1 p2))))
+  (put 'mul '(polynomial polynomial) 
+       (lambda (p1 p2) (tag (mul-poly p1 p2))))
+  (put 'make 'polynomial
+       (lambda (var terms) (tag (make-poly var terms))))
+  'done)
+</p>
+
+<p class="orig" lang="en">
+Polynomial addition is performed termwise.  Terms of the same order
+(i.e., with the same power of the indeterminate) must be combined.
+This is done by forming a new term of the same order whose coefficient
+is the sum of the coefficients of the addends.  Terms in one addend
+for which there are no terms of the same order in the other addend are
+simply accumulated into the sum polynomial being constructed.</p>
+
+<p class="trans" lang="ja">
+多項式の加算は、項ごとに行われる。
+同じ次数 (つまり、仲介物の、同じ累乗) の項同士が、結合されねばならない。
+これは、足されるものの係数同士の和を係数とするような、同じ次数の新たな項を作り出すことで、なされる。
+足されるもののうち一方の側の項であって、足される他方の側には同じ次数の項が存在しないようなものは、いま構築中の和の多項式の中に単純に蓄積される。
+</p>
+
+<p class="orig" lang="en">
+In order to manipulate term lists, we will assume that we have a
+constructor <a name="%_idx_2692"></a><tt>the-empty-termlist</tt> that returns an empty term list
+and a constructor <a name="%_idx_2694"></a><tt>adjoin-term</tt> that adjoins a new term to a term
+list.  We will also assume that we have a predicate <a name="%_idx_2696"></a><tt>empty-termlist?</tt> that tells if a given term list is empty, a selector
+<a name="%_idx_2698"></a><tt>first-term</tt> that extracts the highest-order term from a term
+list, and a selector <a name="%_idx_2700"></a><tt>rest-terms</tt> that returns all but the highest-order
+term.  To manipulate terms, we will suppose that we have a
+constructor <a name="%_idx_2702"></a><tt>make-term</tt> that constructs a term with given
+order and coefficient, and selectors <a name="%_idx_2704"></a><tt>order</tt> and <a name="%_idx_2706"></a><tt>coeff</tt> that return, respectively, the order and the
+coefficient of the term.  These operations allow us to consider both
+terms and term lists as data abstractions, whose concrete
+representations we can worry about separately.</p>
+
+<p class="trans" lang="ja">
+項リストを操作するために、空の項リストを返す <tt>the-empty-termlist</tt> というコンストラクタと、項リストに新たな項を付け加える <tt>adjoin-term</tt> がある、と想定しよう。
+また、与えられた項リストが空かどうかを知らせる <tt>empty-termlist?</tt> という述語と、項リストから最高次の項を抽出する <tt>first-term</tt> というセレクタと、最高次の項以外のすべてを返す <tt>rest-terms</tt> というセレクタもある、と想定しよう。
+項を操作するために、与えられた次数と係数を有する項を構築する <tt>make-term</tt> というコンストラクタと、項の次数と係数をそれぞれ返す <tt>order</tt> および <tt>coeff</tt> というセレクタがある、という前提を設けよう。
+これらの演算のおかげで、私たちは、項と項リストの双方を、データ抽象化物——具体的な表現は、別途、気にかければよい——として考えられる。
+</p>
+
+<p class="orig" lang="en">
+Here is the procedure that constructs the term list for the sum of two
+polynomials:<a name="call_footnote_Temp_300" href="#footnote_Temp_300"><sup><small>56</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+ここに、二つの多項式の和のための項リストを構築する手続きを示す<a href="#footnote_Temp_300"><sup><small>56</small></sup></a>。
+</p>
+
+<p class="lisp"><a name="%_idx_2708"></a>(define (add-terms L1 L2)
+  (cond ((empty-termlist? L1) L2)
+        ((empty-termlist? L2) L1)
+        (else
+         (let ((t1 (first-term L1)) (t2 (first-term L2)))
+           (cond ((&gt; (order t1) (order t2))
+                  (adjoin-term
+                   t1 (add-terms (rest-terms L1) L2)))
+                 ((&lt; (order t1) (order t2))
+                  (adjoin-term
+                   t2 (add-terms L1 (rest-terms L2))))
+                 (else
+                  (adjoin-term
+                   (make-term (order t1)
+                              (add (coeff t1) (coeff t2)))
+                   (add-terms (rest-terms L1)
+                              (rest-terms L2)))))))))
+</p>
+
+<p class="orig" lang="en">
+The most important point to note here is that we used the generic
+addition procedure <a name="%_idx_2710"></a><tt>add</tt> to add together the coefficients of the
+terms being combined.  This has powerful consequences, as we will see
+below.</p>
+
+<p class="trans" lang="ja">
+ここで特記すべき最重要点は、結合される項の係数を足し合わせるために、<tt>add</tt> という総称的加算手続きを使ったことである。
+これは、後で見ることになるとおり、強力な結果をもたらす。
+</p>
+
+<p class="orig" lang="en">
+In order to multiply two term lists, we multiply each term of the
+first list by all the terms of the other list, repeatedly using
+<tt>mul-term-by-all-terms</tt>, which multiplies a given term by
+all terms in a given term list.  The resulting term lists (one for
+each term of the first list) are accumulated into a sum.  Multiplying
+two terms forms a term whose order is the sum of the orders of the
+factors and whose coefficient is the product of the coefficients of
+the factors:
+</p>
+
+<p class="trans" lang="ja">
+二つの項リストを掛け合わせるためには、<tt>mul-term-by-all-terms</tt>——与えられた項に、与えられた項リストのすべての項を掛ける——を繰り返し使いながら、最初のリストのそれぞれの項に、他方のリストのすべての項を掛ける。
+結果として得られる項リスト群 (最初のリストのそれぞれの項ごとに一つの項リスト) は、足し上げられ、和となる。
+二つの項を掛けることによって、それら因子の次数同士の和を次数とし、かつ、それら因子の係数同士の積を係数とするような項が、作られる。
+</p>
+
+<p class="lisp"><a name="%_idx_2712"></a>(define (mul-terms L1 L2)
+  (if (empty-termlist? L1)
+      (the-empty-termlist)
+      (add-terms (mul-term-by-all-terms (first-term L1) L2)
+                 (mul-terms (rest-terms L1) L2))))
+(define (mul-term-by-all-terms t1 L)
+  (if (empty-termlist? L)
+      (the-empty-termlist)
+      (let ((t2 (first-term L)))
+        (adjoin-term
+         (make-term (+ (order t1) (order t2))
+                    (mul (coeff t1) (coeff t2)))
+         (mul-term-by-all-terms t1 (rest-terms L))))))
+</p>
+
+<p class="orig" lang="en">
+This is really all there is to polynomial addition and multiplication.
+<a name="%_idx_2714"></a><a name="%_idx_2716"></a>Notice that, since we operate on terms using the generic procedures
+<tt>add</tt> and <tt>mul</tt>, our polynomial package is automatically able
+to handle any type of coefficient that is known about by the generic
+arithmetic package.  If we include a <a name="%_idx_2718"></a>coercion mechanism such as one of
+those discussed in section <a href="#%_sec_2.5.2">2.5.2</a>,
+then we also are automatically able to handle operations on
+polynomials of different coefficient types, such as
+</p>
+
+<p class="trans" lang="ja">
+多項式の加算と乗算については、本当にこれがすべてなのだ。
+<tt>add</tt> と <tt>mul</tt> という総称的手続きを使って項の上で演算を行っているために、私たちの多項式パッケージは必然的に、総称的算術パッケージの知っている任意の型の係数を扱うことができるのだ、ということに注意してほしい。
+もし、たとえば<a href="#%_sec_2.5.2">2.5.2</a>節で論じたもののうちの一つのごとき、強制の仕組みを含めるならば、以下のように係数の型が様々な多項式の上での演算も、必然的に、扱うことができる。
+</p>
+
+<figure><img src="ch2-Z-G-71.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+Because we installed the polynomial addition and
+multiplication procedures <tt>add-poly</tt> and <tt>mul-poly</tt> in the generic
+arithmetic system as the <tt>add</tt> and <tt>mul</tt> operations
+for type <tt>polynomial</tt>, our system is also
+automatically able to handle polynomial operations such as
+</p>
+
+<p class="trans" lang="ja">
+<tt>add-poly</tt> と <tt>mul-poly</tt> という、多項式の加算と乗算の手続きを、<tt>polynomial</tt> 型に対する <tt>add</tt> と <tt>mul</tt> の演算として、総称的算術システムに取り込んだので、
+私たちのシステムは、必然的に、以下のような多項式も扱うことができる。
+</p>
+
+<figure><img src="ch2-Z-G-72.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+The reason is that when the system tries to combine coefficients, it
+will dispatch through <tt>add</tt> and <tt>mul</tt>.  Since the coefficients
+are themselves polynomials (in <em>y</em>), these will be combined using <tt>add-poly</tt> and <tt>mul-poly</tt>.  The result is a kind of <a name="%_idx_2720"></a><a name="%_idx_2722"></a>``data-directed
+recursion'' in which, for example, a call to <tt>mul-poly</tt> will result
+in recursive calls to <tt>mul-poly</tt> in order to multiply the
+coefficients.  If the coefficients of the coefficients were themselves
+polynomials (as might be used to represent polynomials in three
+variables), the data direction would ensure that the system would
+follow through another level of recursive calls, and so on through as
+many levels as the structure of the data dictates.<a name="call_footnote_Temp_301" href="#footnote_Temp_301"><sup><small>57</small></sup></a></p>
+
+<p class="trans" lang="ja">
+その理由は、システムが係数同士を結合しようとするときに、システムが <tt>add</tt> と <tt>mul</tt> を通じて振り分けを行うからである。
+係数自体が (<em class="en">y</em> についての) 多項式であるため、これらの係数は、<tt>add-poly</tt> と <tt>mul-poly</tt> を用いて結合されることになる。
+その結果は、「データ指向の再帰」である——データ指向の再帰においては、たとえば、<tt>mul-poly</tt> の呼び出しは、係数同士を掛け合わせるための <tt>mul-poly</tt> の再帰的呼び出しという結果になるだろう。
+もし、(三変数の多項式を表現するために使われるかもしれないように) 係数の係数自体が多項式だったら、システムが再帰呼び出しのもう一段を続けるだろう……などなど、データの構造が決めるのと同じだけ多くの段数を、システムは続けるだろう、ということが、データ指向により確実になるだろう<a href="#footnote_Temp_301"><sup><small>57</small></sup></a>。
+</p>
+
+<a name="%_sec_Temp_302"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_302">Representing term lists</a></h4>
+<h4 class="trans" lang="ja">項リストを表現する</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2724"></a>
+Finally, we must confront the job of implementing a good
+representation for term lists.  A term list is, in effect, a set of
+coefficients keyed by the order of the term.  Hence, any of the
+methods for representing sets, as discussed in
+section <a href="16_sec2_3.html#%_sec_2.3.3">2.3.3</a>, can be applied to this task.  On
+the other hand, our procedures <tt>add-terms</tt> and <tt>mul-terms</tt> always
+access term lists sequentially from highest to lowest order.  Thus, we
+will use some kind of ordered list representation.</p>
+
+<p class="trans" lang="ja">
+最後に、項リスト用の良い表現を実装するという仕事に直面しなくてはならない。
+項リストは、実際には、項の次数によるキーが付けられた係数の集合である。
+よって、集合を表現するための方法——<a href="16_sec2_3.html#%_sec_2.3.3">2.3.3</a>節で論じたようなもの——のいずれであっても、この課題に適用できる。
+一方で、私たちの <tt>add-terms</tt> と <tt>mul-terms</tt> という手続きは、常に、最も高い次数から最も低い次数へと順に、項リストにアクセスする。
+よって、何らかの順序付きリスト表現を使おう。
+</p>
+
+<p class="orig" lang="en">
+How should we structure the list that represents a term list?  One
+consideration is the ``density'' of the polynomials we intend to
+manipulate.  A polynomial is said to be <a name="%_idx_2726"></a><a name="%_idx_2728"></a><em>dense</em> if it has nonzero
+coefficients in terms of most orders.  If it has many zero terms it
+is said to be <a name="%_idx_2730"></a><a name="%_idx_2732"></a><em>sparse</em>.  For example,</p>
+
+<p class="trans" lang="ja">
+項リストを表現するリストを、どのように構築すべきか?
+考慮すべき点の一つは、操作するつもりの多項式の「密度」だ。
+多項式は、ほとんどの次数について非ゼロの係数をもっているとき、<em>密だ</em>と言われる。
+もし多くのゼロ項があれば、その多項式は、<em>疎だ</em>と言われる。
+たとえば、
+</p>
+
+<figure><img src="ch2-Z-G-74.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+is a dense polynomial, whereas
+</p>
+
+<p class="trans" lang="ja">
+は密な多項式であるのに対し、
+</p>
+
+<figure><img src="ch2-Z-G-75.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+is sparse.
+</p>
+
+<p class="trans" lang="ja">
+は疎である。
+</p>
+
+<p class="orig" lang="en">
+The term lists of dense polynomials are most efficiently represented
+as lists of the coefficients.  For example, <em>A</em> above would be nicely
+represented as <tt>(1 2 0 3 -2 -5)</tt>.  The order of a term in this
+representation is the length of the sublist beginning with that term's
+coefficient, decremented by 1.<a name="call_footnote_Temp_303" href="#footnote_Temp_303"><sup><small>58</small></sup></a>  This would be a terrible representation for a
+sparse polynomial such as <em>B</em>: There would be a giant list of zeros
+punctuated by a few lonely nonzero terms.  A more reasonable
+representation of the term list of a sparse polynomial is as a list of
+the nonzero terms, where each term is a list containing the order of the
+term and the coefficient for that order.  In such a scheme, polynomial
+<em>B</em> is efficiently represented as <tt>((100 1) (2 2) (0 1))</tt>.  As
+most polynomial manipulations are performed on sparse polynomials, we
+will use this method.  We will assume that term lists are represented
+as lists of terms, arranged from highest-order to lowest-order term.
+Once we have made this decision, implementing the selectors and
+constructors for terms and term lists is straightforward:<a name="call_footnote_Temp_304" href="#footnote_Temp_304"><sup><small>59</small></sup></a>
+</p>
+
+
+<p class="trans" lang="ja">
+密な多項式の項リストは、係数のリストとして最も効率的に表現される。
+たとえば、上記の <em class="en">A</em> は、<tt>(1 2 0 3 -2 -5)</tt> のようにうまく表現されるだろう。
+この表現における、ある項の次数は、その項の係数から始まる部分リストの長さを、1だけ減らしたものである<a href="#footnote_Temp_303"><sup><small>58</small></sup></a>。
+これは、<em class="en">B</em> のような疎な多項式にとっては、ひどい表現である。
+少数の孤立した非ゼロの項によって中断された、ゼロの巨大なリストが存在することになるだろう。
+疎な多項式の項リストの、もっと合理的な表現は、非ゼロの項のリストとしてのものであり、そのリストにおいては、それぞれの項は、その項の次数と、その次数の係数とを含むリストである。
+そういう体系だと、多項式 <em class="en">B</em> は、<tt>((100 1) (2 2) (0 1))</tt> のように効率よく表現される。
+ほとんどの多項式操作は疎な多項式に対して行われるので、私たちは、この方法を使おう。
+項リストは、項のリスト——最も高い次数から最も低い次数へと並べられたもの——として表現されている、と想定しよう。
+一旦この決定を下したら、項と項リストのためのセレクタとコンストラクタを実装することは、単純なことだ<a href="#footnote_Temp_304"><sup><small>59</small></sup></a>。
+</p>
+
+
+<p class="lisp"><a name="%_idx_2734"></a>(define (adjoin-term term term-list)
+  (if (=zero? (coeff term))
+      term-list
+      (cons term term-list)))
+<a name="%_idx_2736"></a>(define (the-empty-termlist) '())
+<a name="%_idx_2738"></a>(define (first-term term-list) (car term-list))
+<a name="%_idx_2740"></a>(define (rest-terms term-list) (cdr term-list))
+<a name="%_idx_2742"></a>(define (empty-termlist? term-list) (null? term-list))
+<a name="%_idx_2744"></a>(define (make-term order coeff) (list order coeff))
+<a name="%_idx_2746"></a>(define (order term) (car term))
+<a name="%_idx_2748"></a>(define (coeff term) (cadr term))
+</p>
+
+<p class="orig" lang="en">
+where <tt>=zero?</tt> is as defined in
+exercise <a href="#%_thm_2.80">2.80</a>.  (See also exercise <a href="#%_thm_2.87">2.87</a> below.)</p>
+
+<p class="trans" lang="ja">
+ここで、<tt>=zero?</tt> は、練習問題<a href="#%_thm_2.80">2.80</a>のように定義される。
+(以下の練習問題<a href="#%_thm_2.87">2.87</a>も参照のこと。)
+</p>
+
+<p class="orig" lang="en">
+Users of the polynomial package
+will create (tagged) polynomials by means of the procedure:
+</p>
+
+<p class="trans" lang="ja">
+この多項式パッケージを使う人たちは、次の手続きを使って、(タグ付けされた) 多項式を作成するだろう。
+</p>
+
+
+<p class="lisp"><a name="%_idx_2750"></a>(define (make-polynomial var terms)
+  ((get 'make 'polynomial) var terms))
+</p>
+
+
+
+<p class="orig" lang="en">
+<a name="%_thm_2.87"></a>
+<b>Exercise 2.87.</b>  <a name="%_idx_2752"></a><a name="%_idx_2754"></a>Install <tt>=zero?</tt> for polynomials in the generic arithmetic
+package.  This will allow <tt>adjoin-term</tt> to work for polynomials
+with coefficients that are themselves polynomials.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.87</b> 多項式用の <tt>=zero?</tt> を、総称的算術パッケージに組み込め。
+これにより、それ自体が多項式であるような係数を持った多項式に対して <tt>adjoin-term</tt> がうまく働くようにできる。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.88"></a>
+<b>Exercise 2.88.</b>  <a name="%_idx_2756"></a>Extend the polynomial system to include subtraction of polynomials.
+(Hint: You may find it helpful to define a generic negation operation.)
+
+
+<p class="trans" lang="ja">
+<b>練習問題2.88</b> 多項式の減算を含むように、多項式システムを拡張せよ。
+(ヒント: 総称的な正否反転演算を定義することが役に立つ、と思うかもね。)
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.89"></a>
+<b>Exercise 2.89.</b>  Define procedures that implement the term-list representation
+described above as appropriate for dense polynomials.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.89</b> 密な多項式にとって適したものとして上記で説明した項リストの表現を実装する、手続き群を定義せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.90"></a>
+<b>Exercise 2.90.</b>  Suppose we want to have a polynomial system that is efficient for both
+sparse and dense polynomials.  One way to do this is to allow both
+kinds of term-list representations in our system.  The situation is
+analogous to the complex-number example of section <a href="17_sec2_4.html#%_sec_2.4">2.4</a>,
+where we allowed both rectangular and polar representations.
+To do this we must distinguish different types of term lists and make
+the operations on term lists generic.  Redesign the polynomial system
+to implement this generalization.  This is a major effort, not a local
+change.
+</p> 
+
+<p class="trans" lang="ja">
+<b>練習問題2.90</b> 疎な多項式と密な多項式の双方に対して効率の良い多項式システムが欲しいのだと仮定せよ。
+これを行うための一つの方法は、両方の種類の項リスト表現をシステム内で許容することだ。
+この状況は、<a href="17_sec2_4.html#%_sec_2.4">2.4</a>節における複素数の例——直交表現と極表現の双方を許容した——に類似している。
+これを行うためには、異なる種類の項リスト同士を区別しなくてはならないし、項リストに対する演算を総称的なものにせねばならない。
+この一般化を実装するために、多項式システムを設計し直せ。
+これは深刻な骨折り仕事であり、局所的な変更ではないよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.91"></a>
+<b>Exercise 2.91.</b>  <a name="%_idx_2758"></a>A univariate polynomial can be divided by another one to produce a
+polynomial quotient and a polynomial remainder.  For example,</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.91</b> 一変数多項式は、他の一変数多項式で割ることができて、すると、多項式の商と多項式の剰余が得られる。
+たとえば以下のように。
+</p>
+
+<figure>
+<img src="ch2-Z-G-76.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+Division can be performed via long division.
+That is, divide the highest-order term of the dividend by
+the highest-order term of the divisor.  The result is the first term of the
+quotient.  Next, multiply the result by the divisor, subtract that
+from the dividend, and produce the rest of the answer by recursively
+dividing the difference by the divisor.  Stop when the order of the
+divisor exceeds the order of the dividend and declare the dividend to
+be the remainder.  Also, if the dividend ever becomes zero, return
+zero as both quotient and remainder.</p>
+
+<p class="trans" lang="ja">
+除算は、長除法により行うことができる。
+つまり、割られる側の最高次の項を、割る側の最高次の項で割りたまえ。
+その結果は、商の最初の項である。
+次に、その結果に割る側を掛けて、それを割られる側から引き、そして、その差を割る側で再帰的に割ることで、答えの残りの部分を生み出したまえ。
+割る側の次数が、割られる側の次数を超えたら、停止せよ。そして、その割られる側が剰余である、と宣言せよ。
+また、いつであろうとも、もし割られる側が0になったら、商と剰余の両方として0を返したまえ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2760"></a>We can design a <tt>div-poly</tt> procedure on the model of <tt>add-poly</tt> and
+<tt>mul-poly</tt>. The procedure checks to see if the two polys have
+the same variable.  If so, <tt>div-poly</tt> strips off the variable and
+passes the problem to <tt>div-terms</tt>, which performs the division
+operation on term lists. <tt>Div-poly</tt> finally reattaches the variable
+to the result supplied by <tt>div-terms</tt>.  It is convenient
+to design <tt>div-terms</tt> to compute both the quotient and the remainder
+of a division.  <tt>Div-terms</tt> can take two term lists as arguments and
+return a list of the quotient term list and the remainder term list.</p>
+
+<p class="trans" lang="ja">
+<tt>add-poly</tt> と <tt>mul-poly</tt> のモデル上の、<tt>div-poly</tt> という手続きを、私たちは設計できる。
+この手続きは、二つの poly が同じ変数を持つかどうかを調べる。
+もしそうなら、<tt>div-poly</tt> はその変数を剥ぎ取って、問題を <tt>div-terms</tt>——項リスト上の除算を実行する——へと受け渡す。
+最後に<tt>div-poly</tt> は、<tt>div-terms</tt> から与えられた結果に変数をくっつけ直す。
+除算の商と剰余の双方を計算するように <tt>div-terms</tt> を設計すると便利である。
+<tt>div-terms</tt> は引数として二つの項リストを取ることができ、商の項リストと剰余の項リストからなるリストを返すことができる。
+</p>
+
+<p class="orig" lang="en">
+Complete the following definition of <tt>div-terms</tt> by filling in the
+missing expressions.  Use this to implement <tt>div-poly</tt>, which takes
+two polys as arguments and returns a list of the quotient and
+remainder polys.
+</p>
+
+<p class="trans" lang="ja">
+欠けている式を埋めることにより、以下の <tt>div-terms</tt> の定義を完成させよ。
+これを使って、<tt>div-poly</tt> ——二つの poly を引数として取り、商の poly と剰余の poly からなるリストを返す——を実装せよ。
+</p>
+
+<p class="lisp"><a name="%_idx_2762"></a>(define (div-terms L1 L2)
+  (if (empty-termlist? L1)
+      (list (the-empty-termlist) (the-empty-termlist))
+      (let ((t1 (first-term L1))
+            (t2 (first-term L2)))
+        (if (&gt; (order t2) (order t1))
+            (list (the-empty-termlist) L1)
+            (let ((new-c (div (coeff t1) (coeff t2)))
+                  (new-o (- (order t1) (order t2))))
+              (let ((rest-of-result
+                     &lt;<em>compute rest of result recursively</em>&gt;
+                     ))
+                &lt;<em>form complete result</em>&gt;
+                ))))))
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<a name="%_sec_Temp_310"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_310">Hierarchies of types in symbolic algebra</a></h4>
+<h4 class="trans" lang="ja">記号代数における型の階層</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2764"></a><a name="%_idx_2766"></a><a name="%_idx_2768"></a>
+Our polynomial system illustrates how objects of one type
+(polynomials) may in fact be complex objects that have objects of many
+different types as parts.  This poses no real difficulty in defining
+generic operations.  We need only install appropriate generic operations
+for performing the necessary manipulations of the parts of the
+compound types.  In fact, we saw that polynomials form a kind of
+``recursive data abstraction,'' in that parts of a polynomial may
+themselves be polynomials.  Our generic operations and our
+data-directed programming style can handle this complication without
+much trouble.</p>
+
+<p class="trans" lang="ja">
+いかにして一つの型のオブジェクト (多項式) が、実際に、多くの異なる型のオブジェクトを部品として含むような複雑なオブジェクトであり得るか、ということを、私たちの多項式システムは例示している。
+このことは、総称的演算を定義する際には、何ら実際の困難をもたらしはしない。
+複合型の部品についての必要な操作を行うための、適切な総称的演算を組み込むだけでよいのである。
+実際、ある多項式の部品がそれ自体多項式であり得る、という点において、多項式は一種の「再帰的なデータ抽象化物」を構成するのだ、ということを私たちは見た。
+私たちの総称的演算とデータ指向プログラミングの流儀は、この厄介な状況を、大した問題もなく扱うことができるのだ。
+</p>
+
+<p class="orig" lang="en">
+On the other hand, polynomial algebra is a system for which the data
+types cannot be naturally arranged in a tower.  For instance, it is
+possible to have polynomials in <em>x</em> whose coefficients are polynomials
+in <em>y</em>.  It is also possible to have polynomials in <em>y</em> whose
+coefficients are polynomials in <em>x</em>.  Neither of these types is
+``above'' the other in any natural way, yet it is often necessary to
+add together elements from each set.  There are several ways to do
+this.  One possibility is to convert one polynomial to the type of the
+other by expanding and rearranging terms so that both polynomials have
+the same principal variable.  One can impose a towerlike structure on
+this by ordering the variables and thus always converting any
+polynomial to a <a name="%_idx_2770"></a><a name="%_idx_2772"></a>``canonical form'' with the highest-priority variable
+dominant and the lower-priority variables buried in the coefficients.
+This strategy works fairly well, except that the conversion may expand
+a polynomial unnecessarily, making it hard to read and perhaps less
+efficient to work with.  The tower strategy is certainly not natural
+for this domain or for any domain where the user can invent new types
+dynamically using old types in various combining forms, such as
+trigonometric functions, power series, and integrals.</p>
+
+<p class="trans" lang="ja">
+一方、多項式の代数は、データ型を塔の形に並べることが自然にはできないような体系である。
+たとえば、係数が <em class="en">y</em> についての多項式であるような、<em class="en">x</em> についての多項式があり得る。
+また、係数が <em class="en">x</em> についての多項式であるような、<em class="en">y</em> についての多項式も、あり得る。
+これらの種類のもののうちのどちらも、どんな自然な方法においても、他方より「上」ではないし、それぞれの組からの要素同士を足し合わせることがしばしば必要であったりさえもする。
+これを行うための幾つかの方法がある。
+一つの可能な選択肢は、両方の多項式が同じ主要変数を有するように、項を展開して並べ直すことによって、一方の多項式を他方の型へと変換することである。
+これには、塔に似た構造を課すことが可能だ——変数を順序づけ、よって、任意の多項式を常に、優先度が最高の変数が主となっていて優先度がより低い変数が係数の中に埋められた「正準形式」へと変換することによって。
+この戦略はかなりうまくいく——ただし、変換によって多項式を不必要に展開する場合があって、それによって、多項式を読みにくく、かつ、おそらくは動作するには効率が落ちたものにしてしまう、という点を除いて。
+塔の戦略は、確かに、この分野にとって、あるいは、ユーザが様々な結合形式の古い型を使って動的に新しい型を案出できるような任意の分野——三角関数、冪級数、積分など——にとっては、自然ではない。
+</p>
+
+<p class="orig" lang="en">
+It should not be surprising that controlling <a name="%_idx_2774"></a>coercion is a serious
+problem in the design of large-scale algebraic-manipulation systems.
+Much of the complexity of such systems is concerned with relationships
+among diverse types.  Indeed, it is fair to say that we do not yet
+completely understand coercion.  In fact, we do not yet completely
+understand the concept of a data type.  Nevertheless, what we know
+provides us with powerful structuring and modularity principles to
+support the design of large systems.</p>
+
+<p class="trans" lang="ja">
+大規模な代数操作システムの設計において、強制を制御することが重大な問題である、ということは、驚くにあたらないはずである。
+そうしたシステムの複雑さの大部分は、多様な型同士の間の関係についてのものである。
+私たちは強制についてまだ完全に理解していないのだ、と言うことが、確かに妥当である。
+実際、私たちはまだ完全にはデータ型の概念を理解していない。
+それにもかかわらず、私たちの知っていることは、大きなシステムの設計を支援するための強力な構造化・モジュール性の原則を、私たちに与えてくれるのだ。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.92"></a>
+<b>Exercise 2.92.</b>  By imposing an ordering on variables, extend the polynomial package so
+that addition and multiplication of polynomials works for polynomials
+in different variables.  (This is not easy!)
+</p> 
+
+<p class="trans" lang="ja">
+<b>練習問題2.92</b> 異なる変数についての多項式に対して、多項式の加算と乗算がうまく機能するように、変数に対して順序づけを課すことによって多項式パッケージを拡張せよ。
+(これは簡単じゃないよ!)
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<a name="%_sec_Temp_312"></a>
+<h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_312">Extended exercise: Rational functions</a></h4>
+<h4 class="trans" lang="ja">派生練習問題: 有理関数</h4>
+
+<p class="orig" lang="en">
+<a name="%_idx_2776"></a><a name="%_idx_2778"></a><a name="%_idx_2780"></a>We can extend our generic arithmetic system to include <em>rational
+functions</em>.  These are ``fractions'' whose numerator and denominator
+are polynomials, such as</p>
+
+<p class="trans" lang="ja">
+<em>有理関数</em>を含むように、私たちの総称的算術システムを拡張することができる。
+有利関数は、分子と分母が多項式であるような「分数」であり、たとえば以下のようなものだ。
+</p>
+
+<figure><img src="ch2-Z-G-77.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+The system should be able to add, subtract, multiply, and divide
+rational functions, and to perform such computations as
+</p>
+
+<p class="trans" lang="ja">
+システムは、有理関数の加算・減算・乗算・除算ができるべきであり、以下のような計算を行えるべきである。
+</p>
+
+<figure><img src="ch2-Z-G-78.gif" border="0"></figure>
+<p class="exercise">
+<img src="ch2-Z-G-78_ext.png">
+</p>
+<!--
+\begin{eqnarray*}
+ &\frac{x+1}{x^3-1}+\frac{x}{x^2-1}\\
+=&\frac{x+1}{(x-1)(x^2+x+1)}+\frac{x}{(x+1)(x-1)}\\
+=&\frac{(x+1)^2+x(x^2+x+1)}{(x+1)(x-1)(x^2+x+1)}\\
+=&\frac{x^2+2x+1+x^3+x^2+x}{(x^2-1)(x^2+x+1)}\\
+=&\frac{x^3+2x^2+3x+1}{x^4+x^3+x^2-x^2-x-1}\\
+=&\frac{x^3+2x^2+3x+1}{x^4+x^3-x-1}
+\end{eqnarray*}
+-->
+<!--http://hooktail.maxwell.jp/cgi-bin/mathimg.cgi-->
+
+<p class="orig" lang="en">
+(Here the sum has been simplified by removing common factors.
+Ordinary ``cross multiplication'' would have produced a 
+fourth-degree polynomial over a fifth-degree polynomial.)</p>
+
+<p class="trans" lang="ja">
+(ここで、和は、共通因子を取り除くことで簡潔化された。
+普通の「交差した乗算」なら、5次多項式を分母とし4次多項式を分子とするものとなっただろう。)
+</p>
+
+<p class="orig" lang="en">
+If we modify our rational-arithmetic package so that it uses generic
+operations, then it will do what we want, except for the problem
+of reducing fractions to lowest terms.</p>
+
+<p class="trans" lang="ja">
+もし総称的演算を使うように有理数算術パッケージを修正すれば、有理数算術パッケージは、私たちの望むことを行うようになるだろう——分数を既約にするという問題を除いては。
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.93"></a>
+<b>Exercise 2.93.</b>  Modify the rational-arithmetic package to use generic operations, but
+change <tt>make-rat</tt> so that it does not attempt to reduce fractions
+to lowest terms.  Test your system by calling <tt>make-rational</tt> on
+two polynomials to produce a rational function
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.93</b> 総称的演算を使うように、有理数算術パッケージを修正せよ——でもまあとにかく、<tt>make-rat</tt> を、分数の約分を試みないように変更しなさい。
+<span class="note">(butの訳し方はこれでいいのかな……)</span>
+有理関数を作り出すべく、二つの多項式に対して <tt>make-rational</tt> を呼び出すことにより、君のシステムを検査せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">; とりあえず言われたように変更</span>
+(define (make-rat ...***
+</p>
+
+
+<p class="lisp">(define p1 (make-polynomial 'x '((2 1)(0 1))))
+(define p2 (make-polynomial 'x '((3 1)(0 1))))
+(define rf (make-rational p2 p1))
+</p>
+
+<p class="exercise"><span class="ex_comment">p1 = x<sup>2</sup>+1
+p2 = x<sup>3</sup>+1
+rf = (x<sup>3</sup>+1)/(x<sup>2</sup>+1) = ((x+1)(x<sup>2</sup>&minus;x+1))/(x<sup>2</sup>+1)
+ということですね。</span>
+</p>
+
+<p class="orig" lang="en">
+Now add <tt>rf</tt> to itself, using <tt>add</tt>. You will observe that
+this addition procedure does not reduce fractions to lowest terms.
+</p>
+
+<p class="trans" lang="ja">
+ここで、<tt>add</tt> を用いて、<tt>rf</tt> をそれ自身に足せ。
+この加算手続きでは、分数が約分されないことに気づくだろう。
+</p>
+
+<p class="orig" lang="en">
+We can reduce polynomial fractions to lowest terms using the same idea
+we used with integers: modifying <tt>make-rat</tt> to divide both the
+numerator and the denominator by their greatest common divisor.  The
+notion of <a name="%_idx_2782"></a><a name="%_idx_2784"></a>``greatest common divisor'' makes sense for polynomials.  In
+fact, we can compute the GCD of two polynomials using essentially the
+same Euclid's Algorithm that works for integers.<a name="call_footnote_Temp_314" href="#footnote_Temp_314"><sup><small>60</small></sup></a>  The
+integer version is</p>
+
+<p class="trans" lang="ja">
+整数を扱ったときに使ったのと同じ考え方を使って、多項式の分数を既約にできる。つまり、分子と分母の双方を、これらの最大公約数で割るように、<tt>make-rat</tt> を修正するのだ。
+「最大公約数」の概念は、多項式に対して意味を持つ。
+実際、整数に対して機能するのと本質的には同じユークリッドの互除法を使って、二つの多項式の GCD (最大公約数) を計算できる<a href="#footnote_Temp_314"><sup><small>60</small></sup></a>。
+整数版は以下のとおり。
+</p>
+
+<p class="lisp">(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+</p>
+
+<p class="orig" lang="en">
+Using this, we could make the obvious modification to define a GCD
+operation that works on term lists:
+</p>
+
+<p class="trans" lang="ja">
+これを使うと、項リストに対して機能するGCD演算を定義するための自明な修正を行うことができるだろう。
+</p>
+
+
+<p class="lisp"><a name="%_idx_2794"></a>(define (gcd-terms a b)
+  (if (empty-termlist? b)
+      a
+      (gcd-terms b (remainder-terms a b))))
+</p>
+
+<p class="orig" lang="en">
+where <tt>remainder-terms</tt> picks out the remainder component of the
+list returned by the term-list division operation <tt>div-terms</tt> that
+was implemented in exercise <a href="#%_thm_2.91">2.91</a>.</p>
+
+<p class="trans" lang="ja">
+ここで、<tt>remainder-terms</tt> は、練習問題<a href="#%_thm_2.91">2.91</a>節で実装された <tt>div-terms</tt> という項リストの除算演算によって返されたリストの、剰余成分を選び出す。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.94"></a>
+<b>Exercise 2.94.</b>  <a name="%_idx_2796"></a><a name="%_idx_2798"></a>Using <tt>div-terms</tt>, implement the procedure <tt>remainder-terms</tt> and
+use this to define <tt>gcd-terms</tt> as above.  Now write a procedure
+<tt>gcd-poly</tt> that computes the polynomial GCD of two polys.
+(The procedure should signal an error if the two polys are not
+in the same variable.)  Install in the system a generic operation <tt>greatest-common-divisor</tt> that reduces to <tt>gcd-poly</tt> for polynomials
+and to ordinary <tt>gcd</tt> for ordinary numbers.  As a test, try
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.94</b> <tt>div-terms</tt> を使って、<tt>remainder-terms</tt> という手続きを実装し、これを使って上記のように <tt>gcd-terms</tt> を定義せよ。
+さてここで、二つの poly の多項式GCDを計算する、<tt>gcd-poly</tt> という手続きを書け。
+(この手続きは、もし二つの poly が同じ変数についてのものでなければ、エラーの合図をよこすべきである。)
+多項式に対しては <tt>gcd-poly</tt> へと還元され、かつ、普通の数に対しては普通の <tt>gcd</tt> に還元されるような、<tt>greatest-common-divisor</tt> という総称的演算を、システムに組み込め。
+検査として、以下のものを試し、
+</p>
+
+<p class="lisp">(define p1 (make-polynomial 'x '((4 1) (3 -1) (2 -2) (1 2))))
+(define p2 (make-polynomial 'x '((3 1) (1 -1))))
+(greatest-common-divisor p1 p2)
+</p>
+
+<p class="orig" lang="en">
+and check your result by hand.
+</p>
+
+<p class="trans" lang="ja">
+そして、君の結果を手作業で確かめよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">p1 = x<sup>4</sup>&minus;x<sup>3</sup>&minus;2x<sup>2</sup>+2x = x (x<sup>3</sup>&minus;x<sup>2</sup>&minus;2x+2) = x (x&minus;1) (x<sup>2</sup>&minus;2)
+p2 = x<sup>3</sup>&minus;x = x (x<sup>2</sup>&minus;1) = x (x+1) (x&minus;1)
+なので、p1とp2のGCDは、
+x (x&minus;1) = x<sup>2</sup>&minus;x
+である。</span></p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.95"></a>
+<b>Exercise 2.95.</b>  Define <em>P</em><sub>1</sub>, <em>P</em><sub>2</sub>, and <em>P</em><sub>3</sub> to be the polynomials</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.95</b> <em class="en">P</em><sub>1</sub> と <em class="en">P</em><sub>2</sub> と <em class="en">P</em><sub>3</sub> を、以下のとおりの多項式である、と定義せよ。
+
+</p>
+
+<figure>
+<img src="ch2-Z-G-79.gif" border="0"><br>
+<img src="ch2-Z-G-80.gif" border="0"><br>
+<img src="ch2-Z-G-81.gif" border="0">
+</figure>
+
+<p class="orig" lang="en">
+Now define <em>Q</em><sub>1</sub> to be the product of <em>P</em><sub>1</sub> and <em>P</em><sub>2</sub> and <em>Q</em><sub>2</sub> to
+be the product of <em>P</em><sub>1</sub> and <em>P</em><sub>3</sub>, and use <tt>greatest-common-divisor</tt>
+(exercise <a href="#%_thm_2.94">2.94</a>) to
+compute the GCD of <em>Q</em><sub>1</sub> and <em>Q</em><sub>2</sub>.
+Note that the answer is not the same as <em>P</em><sub>1</sub>.
+This example introduces noninteger
+operations into the computation, causing difficulties with the GCD
+algorithm.<a name="call_footnote_Temp_317" href="#footnote_Temp_317"><sup><small>61</small></sup></a>
+To understand what is happening,
+try tracing <tt>gcd-terms</tt> while computing the GCD or
+try performing the division by hand.
+</p>
+
+<p class="trans" lang="ja">
+ここで、<em class="en">Q</em><sub>1</sub> を、<em class="en">P</em><sub>1</sub> と <em class="en">P</em><sub>2</sub> の積であるものと定義し、<em class="en">Q</em><sub>2</sub> を、<em class="en">P</em><sub>1</sub> と <em class="en">P</em><sub>3</sub> の積であるものと定義し、<tt>greatest-common-divisor</tt>
+(練習問題<a href="#%_thm_2.94">2.94</a>) を用いて、<em class="en">Q</em><sub>1</sub> と <em class="en">Q</em><sub>2</sub> のGCDを計算せよ。
+答えが <em class="en">P</em><sub>1</sub> と同じではないことに注意せよ。
+この例は、計算に非整数の演算を導入するものであり、GCDアルゴリズムにまつわる困難を引き起こす<a href="#footnote_Temp_317"><sup><small>61</small></sup></a>。
+何が起きているのかを理解するために、GCDを計算している間 <tt>gcd-terms</tt> をトレースしてみるか、または、この除算を手作業で行ってみよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">とりあえず手作業でやってみる。
+Q<sub>1</sub> = (x<sup>2</sup>&minus;2x+1) (11x<sup>2</sup>+7) 
+     = 11x<sup>4</sup>+7x<sup>2</sup>&minus;22x<sup>3</sup>&minus;14x+11x<sup>2</sup>+7 
+     = 11x<sup>4</sup>&minus;22x<sup>3</sup>+18x<sup>2</sup>&minus;14x+7
+Q<sub>2</sub> = (x<sup>2</sup>&minus;2x+1) (13x+5) 
+     = 13x<sup>3</sup>+5x<sup>2</sup>&minus;26x<sup>2</sup>&minus;10x+13x+5 
+     = 13x<sup>3</sup>&minus;21x<sup>2</sup>+3x+5
+R<sub>1</sub> = Q<sub>1</sub>&minus;(11/13)x&middot;Q<sub>2</sub> 
+     = 11x<sup>4</sup>&minus;(286/13)x<sup>3</sup>+(234/13)x<sup>2</sup>&minus;(182/13)x+7&minus;11x<sup>4</sup>+(231/13)x<sup>3</sup>&minus;(33/13)x<sup>2</sup>&minus;(55/13)x 
+     = &minus;(55/13)x<sup>3</sup>+(201/13)x<sup>2</sup>&minus;(237/13)x+7
+R<sub>2</sub> = Q<sub>2</sub>+(13<sup>2</sup>/55)R<sub>1</sub>
+     =13x<sup>3</sup>&minus;(1155/55)x<sup>2</sup>+(165/55)x+(275/55)&minus;13x<sup>3</sup>+(2613/55)x<sup>2</sup>&minus;(3081/55)x+(1183/55)
+     = (1458/55)x<sup>2</sup>&minus;(2916/55)x+(1458/55)
+R<sub>3</sub> = R<sub>1</sub>+(55<sup>2</sup>/(1458&middot;13))x&middot;R<sub>2</sub>
+     = &minus;(55/13)x<sup>3</sup>+((1458&middot;201)/(1458&middot;13))x<sup>2</sup>&minus;(237/13)x+7
+          +(55/13)x<sup>3</sup>&minus;((55&middot;2916)/(1458&middot;13))x<sup>2</sup>+(55/13)x
+     = (132678/(2&middot;3<sup>6</sup>&middot;13))x<sup>2</sup>&minus;(182/13)x+7
+     = ((2&middot;3<sup>6</sup>&middot;7&middot;13)/(2&middot;3<sup>6</sup>&middot;13))x<sup>2</sup>&minus;14x+7
+     = 7x<sup>2</sup>&minus;14x+7
+R<sub>4</sub> = R<sub>2</sub>&minus;(1458/(55&middot;7))R<sub>3</sub>
+     = (1458/55)x<sup>2</sup>&minus;(2916/55)x+(1458/55)
+       &minus;(1458/55)x<sup>2</sup>+((1458&middot;2)/55)x&minus;(1458/55)
+     = 0
+というわけで、GCDは、
+R<sub>3</sub> = 7x<sup>2</sup>&minus;14x+7 = 7P<sub>1</sub> 
+ってことになる。あら不思議。
+</span></p>
+
+<p class="orig" lang="en">
+We can solve the problem exhibited in exercise <a href="#%_thm_2.95">2.95</a> if
+we use the following modification of the GCD algorithm (which really
+works only in the case of polynomials with integer coefficients).
+Before performing any polynomial division in the GCD computation, we
+multiply the dividend by an integer constant factor, chosen to
+guarantee that no fractions will arise during the division process.
+Our answer will thus differ from the actual GCD by an integer constant
+factor, but this does not matter in the case of reducing rational
+functions to lowest terms; the GCD will be used to divide both the
+numerator and denominator, so the integer constant factor will cancel
+out.</p>
+
+<p class="trans" lang="ja">
+GCDアルゴリズム (実のところ、整数の係数を有する多項式の場合にのみ、うまく動く) についての以下の修正を利用すれば、練習問題<a href="#%_thm_2.95">2.95</a>で示された問題を解決できる。
+GCDの計算において、どの多項式除算を行うよりも前に、割られる側に対して整数定数の因子——除算過程の間に分数が生じないことを保証するように、選ばれている——を掛ける。
+よって、私たちの答えは、整数定数の因子のぶんだけ、実際のGCDとは異なるだろうが、これは、有理関数を約分する場合には問題ではない。というのも、GCDは、分子と分母の双方を割るのに使われるだろうし、その結果、整数定数の因子は相殺されるだろうから。
+</p>
+
+<p class="orig" lang="en">
+More precisely, if <em>P</em> and <em>Q</em> are polynomials, let <em>O</em><sub>1</sub> be the
+order of <em>P</em> (i.e., the order of the largest term of <em>P</em>) and let
+<em>O</em><sub>2</sub> be the order of <em>Q</em>.  Let <em>c</em> be the leading coefficient of
+<em>Q</em>.  Then it can be shown that, if we multiply <em>P</em> by the <a name="%_idx_2800"></a><em>integerizing factor</em> <em>c</em><sup>1+<em>O</em><sub>1</sub> -<em>O</em><sub>2</sub></sup>, the resulting polynomial can
+be divided by <em>Q</em> by using the <tt>div-terms</tt> algorithm without
+introducing any fractions.  The operation of multiplying the dividend
+by this constant and then dividing is sometimes called the <a name="%_idx_2802"></a><a name="%_idx_2804"></a><em>pseudodivision</em> of <em>P</em> by <em>Q</em>.  The remainder of the division is
+called the <em>pseudoremainder</em>.</p>
+
+<p class="trans" lang="ja">
+より正確には、<em class="en">P</em> と <em class="en">Q</em> が多項式のとき、
+<em class="en">O</em><sub>1</sub> を <em class="en">P</em> の次数 (つまり、<em class="en">P</em> の最高の項の次数) とし、かつ、
+<em class="en">O</em><sub>2</sub> を <em class="en">Q</em> の次数とする。
+<em class="en">c</em> を <em class="en">Q</em> の先頭の係数とする。
+すると、
+<span class="math"><em class="en">c</em><sup>1+<em class="en">O</em><sub>1</sub>&minus;<em class="en">O</em><sub>2</sub></sup></span>
+という<em>整数化因子</em>を <em class="en">P</em> に掛けると、結果として得られる多項式は、何も分数を持ち込むことなく、<tt>div-terms</tt> のアルゴリズムを使って <em class="en">Q</em> で割り切れる。
+割られる側にこの定数を掛けて、それから割り算を行う、というこの演算は、ときとして、<em class="en">P</em> の <em class="en">Q</em> による<em>擬似除算</em>、と呼ばれる。
+その除算での剰余は、<em>擬似剰余</em>と呼ばれる。
+</p>
+
+
+<p class="orig" lang="en">
+<a name="%_thm_2.96"></a>
+<b>Exercise 2.96.</b>  a.    Implement the procedure <tt>pseudoremainder-terms</tt>, which is just like
+<tt>remainder-terms</tt> except that it multiplies the dividend by
+the integerizing factor described above before calling <tt>div-terms</tt>.
+Modify <tt>gcd-terms</tt> to use <tt>pseudoremainder-terms</tt>, and verify
+that <tt>greatest-common-divisor</tt> now produces an answer with integer
+coefficients on the example in exercise <a href="#%_thm_2.95">2.95</a>.</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.96</b> a. <tt>pseudoremainder-terms</tt> ——<tt>div-terms</tt> を呼び出す前に、割られる側に、上記の整数化因子を掛ける、という点を除いて、
+<tt>remainder-terms</tt> とそっくりである——という手続きを実装せよ。
+<tt>pseudoremainder-terms</tt> を使うように <tt>gcd-terms</tt> を修正し、そして、 <tt>greatest-common-divisor</tt> が今や、練習問題<a href="#%_thm_2.95">2.95</a>の例にある、整数係数をともなった答えを作り出すのだ、ということを検証せよ。</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+b.    The GCD now has integer coefficients, but they are larger than those
+of <em>P</em><sub>1</sub>.  Modify <tt>gcd-terms</tt> so that it removes common factors from
+the coefficients of the answer by dividing all the coefficients by their
+(integer) greatest common divisor.
+</p>
+
+<p class="trans" lang="ja">
+b. GCDはここで整数係数を有するが、それらの整数係数は、<em class="en">P</em><sub>1</sub> の整数係数よりも大きい。
+答えにおける係数同士の (整数の) 最大公約数によってすべての係数を割ることにより、答えにおける係数から共通因子を取り除くように、 <tt>gcd-terms</tt> を修正せよ。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_idx_2806"></a><a name="%_idx_2808"></a>Thus, here is how to reduce a rational function to lowest terms:</p>
+
+<p class="trans" lang="ja">
+このようにして、有理関数を既約にする方法がここに得られる。
+</p>
+
+<ul class="orig" lang="en">
+<li>Compute the GCD of the numerator and denominator, using
+the version of <tt>gcd-terms</tt> from exercise <a href="#%_thm_2.96">2.96</a>.</li>
+
+<li>When you obtain the GCD, multiply both numerator and
+denominator by the same integerizing factor before dividing through by
+the GCD, so that division by the GCD will not introduce any noninteger
+coefficients.  As the factor you can use the leading coefficient of
+the GCD raised to the power 1 + <em>O</em><sub>1</sub>  - <em>O</em><sub>2</sub>, where <em>O</em><sub>2</sub> is the order
+of the GCD and <em>O</em><sub>1</sub> is the maximum of the orders of the numerator
+and denominator.  This will ensure that dividing the numerator and
+denominator by the GCD will not introduce any fractions.</li>
+
+<li>The result of this operation will be a numerator and denominator
+with integer coefficients.  The coefficients will normally be very
+large because of all of the integerizing factors, so the last step is
+to remove the redundant factors by computing the (integer) greatest
+common divisor of all the coefficients of the numerator and the
+denominator and dividing through by this factor.</li>
+</ul>
+
+<ul class="trans" lang="ja">
+<li><tt>gcd-terms</tt> の、練習問題<a href="#%_thm_2.96">2.96</a>から採った版を用いて、分子と分母のGCDを計算せよ。</li>
+<li>GCDを得たら、GCDで割っていく前に、分子と分母の双方に同じ整数化因子を掛けて、その結果、GCDによる除算が非整数の係数を何も持ち込まないようにせよ。
+その因子としては、GCDの先頭の係数の、
+<span class="math">1 + <em class="en">O</em><sub>1</sub> &minus; <em class="en">O</em><sub>2</sub></span>
+乗が使える——なおここで、<em class="en">O</em><sub>2</sub> はGCDの次数であり、<em class="en">O</em><sub>1</sub> は分子と分母の次数のうちの最大値である。
+これにより、分子と分母をGCDで割ることによっては何も小数が持ち込まれないだろう、ということが保証されよう。</li>
+<li>この演算の結果は、整数係数を有する分子と分母となるだろう。
+その係数は、通常、整数化因子すべてのせいでとても大きいだろうから、最後の一歩は、分子と分母の係数すべての (整数の) 最大公約数を計算して、この因子によって割り算を遂行することによって、余計な因子を取り除くことである。</li>
+</ul>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+<a name="%_thm_2.97"></a>
+<b>Exercise 2.97.</b>  a. Implement this algorithm as a procedure <tt>reduce-terms</tt> that takes two
+term lists <tt>n</tt> and <tt>d</tt> as arguments and returns a list <tt>nn</tt>, <tt>dd</tt>, which are <tt>n</tt> and <tt>d</tt> reduced to lowest terms
+via the algorithm given above.
+Also write a procedure <tt>reduce-poly</tt>, analogous to <tt>add-poly</tt>,
+that checks to see if the two polys have
+the same variable.  If so, <tt>reduce-poly</tt> strips off the variable and
+passes the problem to <tt>reduce-terms</tt>, then reattaches the variable
+to the two term lists supplied by <tt>reduce-terms</tt>.
+</p>
+
+<p class="trans" lang="ja">
+<b>練習問題2.97</b> a. このアルゴリズムを <tt>reduce-terms</tt> という手続きとして実装せよ。<tt>reduce-terms</tt> は、<tt>n</tt> と <tt>d</tt> という二つの項リストを引数として取り、 <tt>nn</tt> と <tt>dd</tt> ——上記のアルゴリズムを通じて約分された <tt>n</tt> と <tt>d</tt> ——のリストを返す。
+<span class="note">(a list <u>of</u> <tt>nn</tt>[[,]] <u>and</u> <tt>dd</tt>, which are... の書き間違い?)</span>
+さらに、<tt>add-poly</tt> と類似の、二つの poly が同じ変数を持つかどうかを調べる、<tt>reduce-poly</tt> という手続きを書け。
+もしそうなら、<tt>reduce-poly</tt> は変数を剥ぎ取り、問題を <tt>reduce-terms</tt> へ受け渡し、そして、<tt>reduce-terms</tt> により与えられる二つの項リストに、変数を再度くっつける。
+</p>
+
+<p class="exercise"><span class="ex_comment"></span>
+</p>
+
+<p class="orig" lang="en">
+b. Define a procedure analogous to <tt>reduce-terms</tt>
+that does what the original <tt>make-rat</tt> did for integers:
+</p>
+
+<p class="trans" lang="ja">
+b. 元の <tt>make-rat</tt> が整数に対して行っていたことを行うような、<tt>reduce-terms</tt> と類似の手続きを定義せよ。
+</p>
+
+<p class="lisp">(define (reduce-integers n d)
+  (let ((g (gcd n d)))
+    (list (/ n g) (/ d g))))
+</p>
+
+<p class="orig" lang="en">
+and define
+<tt>reduce</tt> as a generic operation that calls <tt>apply-generic</tt> to
+dispatch to either <tt>reduce-poly</tt> (for <tt>polynomial</tt> arguments)
+or <tt>reduce-integers</tt> (for <tt>scheme-number</tt> arguments).
+You can now easily make the
+rational-arithmetic package reduce fractions to lowest terms by
+having <tt>make-rat</tt> call <tt>reduce</tt> before combining the given
+numerator and denominator to form a rational number.
+The system now
+handles rational expressions in either integers or polynomials.
+To test your program, try the example at the beginning of this
+extended exercise:
+</p>
+
+<p class="trans" lang="ja">
+そして、<tt>reduce-poly</tt> (<tt>polynomial</tt> の引数の場合) または <tt>reduce-integers</tt> (<tt>scheme-number</tt> の引数の場合) のいずれかへの振り分けを行うべく <tt>apply-generic</tt> を呼び出すような、総称的な演算として、<tt>reduce</tt> を定義せよ。
+与えられた分子と分母を、有理数を形成するために結合するよりも前に、<tt>make-rat</tt> に <tt>reduce</tt> を呼び出させることによって、有理数算術パッケージに分数を約分させることが、今や簡単にできる。
+システムは今や、整数または多項式のいずれかの有理式を扱う。
+君のプログラムを検査するために、この派生練習問題の最初の例を試してみよ。
+</p>
+
+<p class="lisp">(define p1 (make-polynomial 'x '((1 1)(0 1))))
+(define p2 (make-polynomial 'x '((3 1)(0 -1))))
+(define p3 (make-polynomial 'x '((1 1))))
+(define p4 (make-polynomial 'x '((2 1)(0 -1))))
+
+(define rf1 (make-rational p1 p2))
+(define rf2 (make-rational p3 p4))
+
+(add rf1 rf2)
+</p>
+
+<p class="orig" lang="en">
+See if you get the correct answer, correctly reduced to lowest terms.
+</p> 
+
+<p class="trans" lang="ja">
+正しい答え——正しく約分されているもの——を得られるか、確かめよ。
+</p>
+
+<p class="exercise"><span class="ex_comment">とりあえず手作業。
+p1 = x+1
+p2 = x<sup>3</sup>&minus;1 = (x&minus;1) (x<sup>2</sup>+x+1)
+p3 = x
+p4 = x<sup>2</sup>&minus;1 = (x&minus;1) (x+1)
+rf1 = p1/p2
+rf2 = p3/p4<!--
+rf1+rf2 = ((x+1)<sup>2</sup>+x (x<sup>2</sup>+x+1)) / ((x&minus;1) (x<sup>2</sup>+x+1) (x+1))
+       = (x<sup>2</sup>+2x+1+x<sup>3</sup>+x<sup>2</sup>+x) / ((x&minus;1) (x<sup>2</sup>+x+1) (x+1))
+       = (x<sup>3</sup>+2x<sup>2</sup>+3x+1) / ((x&minus;1) (x<sup>2</sup>+x+1) (x+1))-->
+なので、rf1+rf2 は以下のとおり (つまりこれは、この派生練習問題の最初に出てきた足し算である)。</span>
+<img src="ch2-Z-G-78_ext.png">
+</p>
+
+<p class="orig" lang="en">
+The GCD computation is at the heart of any system that does operations
+on rational functions.  The algorithm used above, although
+mathematically straightforward, is extremely slow.  The slowness is
+due partly to the large number of division operations and partly to
+the enormous size of the intermediate coefficients generated by the
+pseudodivisions.  One of the active areas in the development of
+algebraic-manipulation systems is the design of better algorithms for
+computing polynomial GCDs.<a name="call_footnote_Temp_320" href="#footnote_Temp_320"><sup><small>62</small></sup></a>
+</p>
+
+<p class="trans" lang="ja">
+有理関数上の演算を行うどのシステムでも、その核心にはGCDの計算がある。
+上記で使ったアルゴリズムは、数学的に分かりやすいものではあるが、非常に遅い。
+その遅さは、部分的には、多数回の除算の演算のせいであり、部分的には、擬似除算により作り出される中間的な係数のとてつもない大きさのせいである。
+代数的操作のシステムの開発における活発な分野の一つは、多項式のGCDを計算するためのより良いアルゴリズムの設計である<a href="#footnote_Temp_320"><sup><small>62</small></sup></a>。
+</p>
+
+<a name="footnotes"></a>
+<hr>
+<p class="orig" lang="en"><a name="footnote_Temp_283" href="#call_footnote_Temp_283"><sup><small>49</small></sup></a> We also have to supply an almost identical
+procedure to handle the types <tt>(scheme-number complex)</tt>.</p>
+
+<p class="trans" lang="ja">
+<tt>(scheme-number complex)</tt> という型を扱うための、ほとんど同一の手続きも、供給せねばならない。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_285" href="#call_footnote_Temp_285"><sup><small>50</small></sup></a> See
+exercise <a href="#%_thm_2.82">2.82</a> for generalizations.</p>
+
+<p class="trans" lang="ja">
+一般化については練習問題<a href="#%_thm_2.82">2.82</a>を参照せよ。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_286" href="#call_footnote_Temp_286"><sup><small>51</small></sup></a> If we are
+clever, we can usually get by with fewer than <em>n</em><sup>2</sup> coercion
+procedures.  For instance, if we know how to convert from type 1 to
+type 2 and from type 2 to type 3, then we can use this knowledge to
+convert from type 1 to type 3.  This can greatly decrease the number
+of coercion procedures we need to supply explicitly when we add a new
+type to the system.  If we are willing to build the required amount of
+sophistication into our system, we can have it search the ``graph'' of
+relations among types and automatically generate those coercion
+procedures that can be inferred from the ones that are supplied
+explicitly.</p>
+
+<p class="trans" lang="ja">
+もし私たちが賢ければ、普通は <em class="en">n</em><sup>2</sup> 個よりも少ない強制手続きで間にあわせることができる。
+たとえば、もし、型 1 から型 2 への変換の仕方と型 2 から型 3 への変換の仕方を知っていれば、この知識を、型 1 から型 3 への変換のために使える。
+これにより、システムに新たな型を追加するときに明示的に供給する必要がある強制手続きの数を、非常に減らすことができる。
+もし、必要な量の精巧さをシステム内に構築することにやぶさかでなければ、型同士の間の関係の「グラフ」を探索させて、明示的に供給された強制手続きから推論することが可能な強制手続きを、自動的に生成させることができる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_289" href="#call_footnote_Temp_289"><sup><small>52</small></sup></a> This statement, which also appears in the first edition of this book,
+is just as true now as it was when we wrote it twelve years ago.
+Developing a useful, general framework for expressing the relations
+among different types of entities (what philosophers call
+``ontology'') seems intractably difficult.  The main difference
+between the confusion that existed ten years ago and the confusion
+that exists now is that now a variety of inadequate ontological
+theories have been embodied in a plethora of correspondingly
+inadequate programming languages.  For example, much of the complexity
+of <a name="%_idx_2622"></a><a name="%_idx_2624"></a>object-oriented programming languages -- and the subtle and
+confusing differences among contemporary object-oriented
+languages -- centers on the treatment of generic operations on
+interrelated types.  Our own discussion of computational objects in
+chapter 3 avoids these issues entirely.  Readers familiar with
+object-oriented programming will notice that we have much to say in
+chapter 3 about local state, but we do not even mention ``classes'' or
+``inheritance.''  In fact, we suspect that these problems cannot be
+adequately addressed in terms of computer-language design alone,
+without also drawing on work in knowledge representation and automated
+reasoning.</p>
+
+<p class="trans" lang="ja">
+この陳述は、本書の第一版にも見えるのだが、12年前に私たちが書いたときに真実であったのとちょうど同じように、今も真実である。
+実体の様々な型の間の関係 (哲学者が「オントロジ」と呼ぶもの) を表現するための、有用で一般的な枠組みを開発することは、手に負えないほど難しいようである。
+10年前に存在していた混乱と、いま存在している混乱との間にある主たる差異は、今や種々の不適切なオントロジ的理論が、これに対応して不適切な、過剰な量のプログラミング言語の中に既に埋め込まれていることである。
+たとえば、オブジェクト指向プログラミング言語の複雑さのほとんど——そして、現代のオブジェクト指向言語同士の間の、微妙で紛らわしい違い——は、互いに関連する型同士に対する総称的な演算の取り扱いに集中している。
+第3章での計算オブジェクトについての私たち自身の議論は、これらの論点をまったく避けている。
+オブジェクト指向プログラミングに慣れ親しんでいる読者は、3章では局所状態について言うことがたくさんあるのに「クラス」や「継承」については述べてさえいない、ということに気づくだろう。
+実際、これらの問題には、コンピュータ言語の設計の観点だけでは——知識表現と自動化推論も利用することなしには——、適切に対処できないのではないか、と思っている。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_295" href="#call_footnote_Temp_295"><sup><small>53</small></sup></a> A real number can be projected to an integer
+using the <a name="%_idx_2642"></a><a name="%_idx_2644"></a><tt>round</tt> primitive, which returns the closest integer
+to its argument.
+</p>
+
+<p class="trans" lang="ja">
+実数は、<tt>round</tt> というプリミティブ——引数に最も近い整数を返す——を使って、整数へと射影できる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_298" href="#call_footnote_Temp_298"><sup><small>54</small></sup></a> On the other hand, we will allow
+polynomials whose coefficients are themselves polynomials in other
+variables.  This will give us essentially the same representational
+power as a full multivariate system, although it does lead to coercion
+problems, as discussed below.
+</p>
+
+<p class="trans" lang="ja">
+一方で、係数自体が他の変数についての多項式であるような多項式も許そう。
+これによって、完全な多変数システムと本質的に同じ表現力が得られるだろう——以下に述べるとおり、確かに強制の問題につながってしまうのだが。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_299" href="#call_footnote_Temp_299"><sup><small>55</small></sup></a> For univariate polynomials, giving
+the value of a polynomial at a given set of points can be a
+particularly good representation.  This makes polynomial arithmetic
+extremely simple.  To obtain, for example, the sum of two polynomials
+represented in this way, we need only add the values of the
+polynomials at corresponding points.  To transform back to a more
+familiar representation, we can use the <a name="%_idx_2662"></a>Lagrange interpolation
+formula, which shows how to recover the coefficients of a polynomial
+of degree <em>n</em> given the values of the polynomial at <em>n</em> + 1 points.
+</p>
+
+<p class="trans" lang="ja">
+一変数多項式については、与えられた点の集合における多項式の値を与えることは、とりわけ良い表現だ。
+これにより多項式の算術は非常に簡潔になる。
+たとえば、この方法で表現された二つの多項式の和を求めるためには、対応する点におけるこれらの多項式の値同士を足すだけでよい。
+より慣れ親しんだ表現へと変換して戻すためには、ラグランジュの補間公式——
+<span class="math"><em class="en">n</em> + 1</span>
+箇所の点においてその多項式の値が与えられている、<em class="en">n</em> 次の多項式の係数を、回復する方法を示す——を使うことができる。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_300" href="#call_footnote_Temp_300"><sup><small>56</small></sup></a> This operation is very much like the ordered
+<tt>union-set</tt> operation we developed in exercise  <a href="16_sec2_3.html#%_thm_2.62">2.62</a>.
+In fact, if we think of the terms of the polynomial as a set ordered
+according to the power of the indeterminate, then the program that
+produces the term list for a sum is almost identical to <tt>union-set</tt>.
+</p>
+
+<p class="trans" lang="ja">
+この演算は、練習問題<a href="16_sec2_3.html#%_thm_2.62">2.62</a>で開発した、順序付きの <tt>union-set</tt> という演算ととてもよく似ている。
+実際、もし多項式の項を、仲介物の指数にしたがって順序づけられた集合だと見なせば、和のための項リストを生成するプログラムは、<tt>union-set</tt> とほとんど同一である。
+</p>
+
+<p class="orig" lang="en"><a name="footnote_Temp_301" href="#call_footnote_Temp_301"><sup><small>57</small></sup></a> To make
+this work completely smoothly, we should also add to our generic
+arithmetic system the ability to coerce a ``number'' to a polynomial
+by regarding it as a polynomial of degree zero whose coefficient is
+the number.  This is necessary if we are going to perform operations
+such as</p>
+
+<p class="trans" lang="ja">
+これを完全に円滑に動かすためには、「数」を、係数がその数であるような0次の多項式と見なすことにより、多項式へと強制する能力も、総称的算術システムに追加すべきである。
+これは、以下のような演算を行うつもりの場合に必要だ。
+</p>
+
+<figure><img src="ch2-Z-G-73.gif" border="0"></figure>
+
+<p class="orig" lang="en">
+which requires adding the coefficient <em>y</em> + 1 to the coefficient 2.
+</p>
+
+<p class="trans" lang="ja">
+これには、
+<span class="math"><em class="en">y</em> + 1</span>
+という係数を、2という係数に足すことが必要である。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_303" href="#call_footnote_Temp_303"><sup><small>58</small></sup></a> In these polynomial examples,
+we assume that we have implemented the generic arithmetic system using
+the type mechanism suggested in exercise <a href="#%_thm_2.78">2.78</a>.
+Thus, coefficients that are ordinary numbers will be represented as
+the numbers themselves rather than as pairs whose <tt>car</tt> is the
+symbol <tt>scheme-number</tt>.
+</p>
+
+<p class="trans" lang="ja">
+これらの多項式の例においては、練習問題<a href="#%_thm_2.78">2.78</a>で提案された型の仕組みを使った総称的算術システムを既に実装しているものと仮定している。
+よって、普通の数であるような係数は、<tt>car</tt> が <tt>scheme-number</tt> という記号であるような対として、というよりもむしろ、その数自体として、表現されることだろう。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_304" href="#call_footnote_Temp_304"><sup><small>59</small></sup></a> Although
+we are assuming that term
+lists are ordered, we have implemented <tt>adjoin-term</tt> to simply
+<tt>cons</tt> the new term onto the existing term list.  We can get away
+with this so long as we guarantee that the procedures (such as <tt>add-terms</tt>) that use <tt>adjoin-term</tt> always call it with a higher-order
+term than appears in the list.  If we did not want to make such a
+guarantee, we could have implemented <tt>adjoin-term</tt> to be similar
+to the <tt>adjoin-set</tt> constructor for the ordered-list
+representation of sets (exercise <a href="16_sec2_3.html#%_thm_2.61">2.61</a>).
+</p>
+
+<p class="trans" lang="ja">
+私たちは、項リストが順序付けられているものとここで想定しているのだが、その一方で、<tt>adjoin-term</tt> は、既存の項リストに単に新たな項を <tt>cons</tt> するように実装したのだった。
+このようにしても、<tt>adjoin-term</tt> を使う手続き (<tt>add-terms</tt> など) が常に <tt>adjoin-term</tt> を、そのリストに現れるものよりも高次の項とともに呼び出すことを保証する限り、問題にならずに済ませられる。
+もし、そういう保証をしたくなければ、集合の順序付きリスト表現のための <tt>adjoin-set</tt> というコンストラクタ (練習問題<a href="16_sec2_3.html#%_thm_2.61">2.61</a>) に似たようなものとなるように、<tt>adjoin-term</tt> を実装することもできた。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_314" href="#call_footnote_Temp_314"><sup><small>60</small></sup></a> The fact
+that <a name="%_idx_2786"></a><a name="%_idx_2788"></a>Euclid's Algorithm works for polynomials is formalized in algebra
+by saying that polynomials form a kind of algebraic domain called a
+<a name="%_idx_2790"></a><a name="%_idx_2792"></a><em>Euclidean ring</em>.  A Euclidean ring is a domain that admits
+addition, subtraction, and commutative multiplication, together with a
+way of assigning to each element <em>x</em> of the ring a positive integer
+``measure'' <em>m</em>(<em>x</em>) with the properties that <em>m</em>(<em>x</em><em>y</em>)<u>&gt;</u> <em>m</em>(<em>x</em>) for
+any nonzero <em>x</em> and <em>y</em> and that, given any <em>x</em> and <em>y</em>, there exists
+a <em>q</em> such that <em>y</em> = <em>q</em><em>x</em> + <em>r</em> and either <em>r</em> = 0 or <em>m</em>(<em>r</em>)&lt; <em>m</em>(<em>x</em>).  From an
+abstract point of view, this is what is needed to prove that Euclid's
+Algorithm works.  For the domain of integers, the measure <em>m</em> of an
+integer is the absolute value of the integer itself.  For the domain
+of polynomials, the measure of a polynomial is its degree.
+</p>
+
+<p class="trans" lang="ja">
+ユークリッドの互除法が多項式に対してもうまく機能する、という事実は、<em>ユークリッド環</em>と呼ばれる代数域の一種を多項式が形成している、と述べることにより、代数学において定式化されている。
+ユークリッド環は、加算と減算と可換な乗算を許す域であって、
+任意の非ゼロの <em class="en">x</em> と <em class="en">y</em> に対して 
+<span class="math"><em class="en">m</em>(<em class="en">x</em><em class="en">y</em>) &ge; <em class="en">m</em>(<em class="en">x</em>) </span>
+である、という性質と、
+任意の <em class="en">x</em> と <em class="en">y</em> が与えられると、
+<span class="math"><em class="en">y</em> = <em class="en">q</em><em class="en">x</em> + <em class="en">r</em></span> 
+であるとともに
+<span class="math"><em class="en">r</em> = 0</span> 
+または
+<span class="math"><em class="en">m</em>(<em class="en">r</em>) &lt; <em class="en">m</em>(<em class="en">x</em>)</span>
+であるような <em class="en">q</em> が存在する、という性質とを備えた、正整数の「尺度」<span class="math"><em class="en">m</em>(<em class="en">x</em>)</span> を、環の各要素 <em class="en">x</em> に対して割り当てる方法がある。
+抽象的な観点からすると、これは、ユークリッドの互除法がうまく機能するのだと証明するのに必要なことである。
+整数の域については、ある整数の尺度 <em class="en">m</em> とは、その整数自体の絶対値である。
+多項式の域については、ある多項式の尺度 <em class="en">m</em> とは、その多項式の次数である。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_317" href="#call_footnote_Temp_317"><sup><small>61</small></sup></a> In an implementation like MIT Scheme, this produces a polynomial
+that is indeed a divisor of <em>Q</em><sub>1</sub> and <em>Q</em><sub>2</sub>, but with rational coefficients.
+In many other Scheme systems, in which division of integers can produce
+limited-precision decimal numbers, we may fail to get a valid divisor.
+</p>
+
+<p class="trans" lang="ja">
+MIT Schemeのような実装においては、これにより、実際に <em class="en">Q</em><sub>1</sub> と <em class="en">Q</em><sub>2</sub> の約数ではあるが有理数の係数を持つような多項式が、得られる。
+他の多くの Schemeシステム——整数同士の除算により、限定された精度の小数が作り出され得る——では、妥当な約数を得られないかもしれない。
+</p>
+
+
+<p class="orig" lang="en"><a name="footnote_Temp_320" href="#call_footnote_Temp_320"><sup><small>62</small></sup></a> One extremely efficient and
+elegant method for computing <a name="%_idx_2810"></a><a name="%_idx_2812"></a><a name="%_idx_2814"></a><a name="%_idx_2816"></a>polynomial GCDs was discovered by <a name="%_idx_2818"></a>Richard
+Zippel (1979).  The method is a probabilistic algorithm, as is the
+fast test for primality that we discussed in chapter 1.  Zippel's book
+(1993) describes this method, together with other ways to compute
+polynomial GCDs.
+</p>
+
+<p class="trans" lang="ja">
+多項式のGCDを計算するための、非常に効率的で洗練された方法の一つは、Richard Zippel (1979) により発見された。
+その方法は、確率的なアルゴリズムである——1章で論じた、素数性の高速判定法と同様に。
+ジッペルの書籍 (1993年) では、多項式のGCDを計算するための他の方法とともに、この方法を説明している。
+</p>
+
+</div>
+
+</body>
+</html>
