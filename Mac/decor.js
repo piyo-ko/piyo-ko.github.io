@@ -1,20 +1,24 @@
-function decor_0(uL, uL_len, uR, uR_len) {
-  var h=document.getElementById('left_col').clientHeight;
-  var n=Math.floor(h*3/4/24);
-  
+function decor_0(Lstr, Rstr, line_height) { // line_height is specified in point
+  var h=document.getElementById('main').clientHeight; // in pixel
+  // the number of characters to be written (cf. 3pt==4px)
+  var n=Math.floor(h*3/4/line_height);
+  var c=Lstr.split(' ');
+  console.log("length of c: [" + c.length + "]");
   var t="";
-  for (var i=0; i < n/uL_len; i++) {
-    t+=uL;
+  for (var i=0; i < n; i++) {
+    t+= c[i%(c.length - 1)] + '<br>';
   }
-  document.getElementById('left_col').textContent=t;
-  t="";
-  for (var i=0; i < n/uR_len; i++) {
-    t+=uR;
-  }
-  document.getElementById('right_col').textContent=t;
-}
+  document.getElementById('left_col').innerHTML=t;
 
-var decor=function () { decor_0("💚 🍎 💛 🍏 ", 4, "💜 🍏 💙 🍎 ", 4); };
+  c=Rstr.split(' ');
+  console.log("length of c: [" + c.length + "]");
+  t="";
+  for (var i=0; i < n; i++) {
+    t+= (c[i%(c.length - 1)] + '<br>');
+  }
+  document.getElementById('right_col').innerHTML=t;
+}
+var decor=function () { decor_0("💚 🍎 💛 🍏 ", "💜 🍏 💙 🍎 ", 30); };
 window.onload=decor;
 
 var rt;
@@ -22,5 +26,5 @@ window.addEventListener('resize', function () {
   if (rt) {
     clearTimeout(rt);
   }
-  rt=setTimeout(decor, 400);
+  rt=setTimeout(decor, 800);
 });
