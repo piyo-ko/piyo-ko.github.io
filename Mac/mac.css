@@ -6,10 +6,10 @@
 	width: 30pt;
 	height: 100vh;
 	text-align: center;
-    font-size: 24pt;
-    line-height: 30pt;
-    margin: 0;
-    padding-bottom: 30pt;
+	font-size: 24pt;
+	line-height: 30pt;
+	margin: 0;
+	padding-bottom: 30pt;
 }
 #main {
 	background-color: hsl(50, 100%, 80%);
@@ -26,7 +26,7 @@
 	padding-top: 0pt;
 	padding-bottom: 80pt;
 	margin-bottom: 10pt;
-    margin-top: 0pt;
+	margin-top: 0pt;
 	font-family: "游明朝体", YuMin-Medium, serif;
 	overflow: auto;
 }
@@ -34,14 +34,14 @@
 	background-color: hsla(230, 100%, 75%, 0.7);
 	position: fixed;
 	top: 0;
-    right: 0;
+	right: 0;
 	width: 30pt;
 	height: 100vh;
 	text-align: center;
-    font-size: 24pt;
-    line-height: 30pt;
-    margin: 0;
-    padding-bottom: 30pt;
+	font-size: 24pt;
+	line-height: 30pt;
+	margin: 0;
+	padding-bottom: 30pt;
 }
 
 ::selection {
@@ -53,14 +53,14 @@
 	color: hsl(40, 100%, 80%);
 }
 a:link {
-	color: hsl(300, 100%, 50%);
+	color: hsl(20, 100%, 50%);
 }
 a:visited {
-	color: hsl(300, 100%, 50%);
+	color: hsl(20, 100%, 50%);
 }
-a:hover {
+a:hover, a:hover > em {
 	color: white;
-	background: hsl(300, 100%, 25%);
+	background: hsl(120, 100%, 25%);
 }
 
 nav {
@@ -73,28 +73,44 @@ h1, h2, h3 {
 h1 {
 	font-size: x-large;
 	text-align: center;
-  border-bottom: 2px dotted;
+	border-bottom: 2px dotted;
 }
 h2 {
 	font-size: large;
 	text-align: center;
-  border-bottom: 2px dotted;
+	border-bottom: 2px dotted;
 }
 h3 {
 	font-size: medium;
-	text-align: left;
+	text-align: center; /*left;*/
+	/*text-decoration: underline red;*/
+	padding-left: 1em;
+	margin-top: 40pt;
 }
+/*
+h3:before {
+	content: "🍎 ";
+}
+*/
 code {
 	font-family: Monaco, monospace;
 	background-color: hsl(50, 80%, 90%);
 	white-space: pre;
-    padding-left: 1ex;
-    padding-right: 1ex;
+	padding-left: 1ex;
+	padding-right: 1ex;
 	display: inline-block;
 }
 dt {
 	font-family: "筑紫B丸ゴシック", sans-serif;
+	text-decoration: underline hsl(20, 100%, 50%);
 }
 dt:before {
 	content: "🍏 ";
+}
+p {
+	text-indent: 1em;
+}
+em {
+	background-color: hsl(50, 100%, 60%);
+	font-style: normal;
 }
