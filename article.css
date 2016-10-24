@@ -7,7 +7,15 @@ body {
 	color: hsl(215,100%,15%);
 	font-family: serif;
 }
-
+h1 {
+	font-size: x-large;
+}
+h2 {
+	font-size: large;
+}
+h1, h2 {
+	text-align: center;
+}
 p {
 	text-indent: 1em;
 }
@@ -71,7 +79,9 @@ body.main-text-only {
 body.main-text-only nav {
 	text-align: right;
 }
-
+nav {
+	text-align: right;
+}
 nav ul {
 	padding-left: 1em;
 	margin-top: 0;
@@ -111,5 +121,23 @@ code .res {
 
 tt {
 	font-family: "Ricty Discord", "Ricty", "Courier New", monospace;
+}
+
+table, td, th {
+	border-collapse: collapse;
+	border: solid 1px hsl(215,100%,25%);
+}
+th {
+	color: hsl(215,100%,45%);
+	background: hsl(170, 80%, 55%);
+	font-family: '筑紫B丸ゴシック', 'クレー', sans-serif;
+	padding-right: 6pt;
+	padding-left: 6pt;
+}
+td {
+	overflow: auto;
+}
+ruby {
+	line-height: 200%;
 }
 
