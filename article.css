@@ -79,7 +79,7 @@ body.main-text-only {
 body.main-text-only nav {
 	text-align: right;
 }
-nav {
+nav.right {
 	text-align: right;
 }
 nav ul {
@@ -133,11 +133,29 @@ th {
 	font-family: '筑紫B丸ゴシック', 'クレー', sans-serif;
 	padding-right: 6pt;
 	padding-left: 6pt;
+	white-space: nowrap;
 }
-td {
+/*以下、本についての記事向け*/
+table.idx td {
+	text-align: center;
+}
+table.bk td {
 	overflow: auto;
+	max-width: 30em;
+	max-height: 5em;
+	vertical-align: top;
 }
 ruby {
 	line-height: 200%;
+}
+span.netabare {
+	display: none;
+}
+span.key {
+	font-size: larger;
+	padding: 4pt;
+}
+span.key:hover {
+	background: hsl(250,75%,85%);
 }
 
