@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>英語あれこれ: 対になっている動詞</title>
+<link rel="stylesheet" href="en.css" type="text/css">
+</head>
+
+<body>
+
+<h1>英語あれこれ: 対になっている動詞</h1>
+<nav class="top">
+英語あれこれ: 
+#動詞
+#対義語
+</nav>
+
+<p>対になっている動詞なんて山ほどあるわけだが、情報通信系でよく使うものを、とりあえず思いつく範囲で列挙してみる。</p>
+
+<h2>en- / de- 型</h2>
+<table>
+<tr><th>encapsulate</th><th>decapsulate</th><td>「カプセル化する」の方はよく使う。decapsulate という単語は存在するのだが、encapsulate と対にしてよく使うかというと、あまり使用例を見ないような気がする。</td></tr>
+
+<tr><th>encode</th><th>decode</th><td>「符号化する」と「復号する」。</td></tr>
+
+<tr><th>encrypt</th><th>decrypt</th><td>「暗号化する」と「復号する」。なお、ほとんどの場合、<a href="http://www.ipa.go.jp/security/rfc/RFC2828-03EJA.html#encipher">encipher</a> と <a href="http://www.ipa.go.jp/security/rfc/RFC2828-03DJA.html#decipher">decipher</a> は使うべきではない。</td></tr>
+
+<tr><th>enqueue</th><th>dequeue</th><td>「キュー (の末尾) に追加する」と「キュー (の先頭) から取り出す」。キューではなくてスタックが対象だと、動詞は push と pop を使う。リストや文字列の操作だと、prepend A to B (Bの先頭にAを追加する) と append A to B (Bの末尾にAを追加する) と concatenate A and B (AとBを連結する) を使う。と、このように、特定のデータ構造と動詞が分かち難く結びついていることがある。push だって、スタックとは別の文脈なら、その対義語が pull だったりするし (情報配信などで「プッシュ型」と「プル型」と言ったりするし、git のコマンドでも push と pull は対義語的だし)。</td></tr>
+</table>
+
+<h2>- / de- 型</h2>
+<table>
+<tr><th>compress</th><th>decompress</th><td>「圧縮する」と「解凍する」。「解凍」ではなく「伸張」または「展開」を使うこともある。</td></tr>
+
+<tr><th>identify</th><th>de-identify</th><td>「識別する、特定する、同定する、突き止める、見分ける」(色々な文脈で使える言い方) と「無名化する」(プライバシの文脈で使う言い方)。de-identify とは、連結不可能匿名化、ということだろうか? (pseudonymize とか anonymize とか、似た概念があり、ややこしくて把握しきれていない)。場所に関することなら、identify の代わりに locate を使えることもある (位置を突き止める、といった意味で locate を使える)。</td></tr>
+
+<tr><th>interleave</th><th>deinterleave</th><td>「インタリーブする」と「デインタリーブする」。</td></tr>
+
+<tr><th>modulate</th><th>demodulate</th><td>「変調する」と「復調する」。</td></tr>
+
+<tr><th>serialize</th><th>deserialize</th><td>「シリアライズする」と「デシリアライズする」。</td></tr>
+
+<tr><th>spread</th><th>despread</th><td>(スペクトラム拡散の文脈で)「拡散する」と「逆拡散する」。</td></tr>
+</table>
+
+
+<h2>- / dis- 型</h2>
+<table>
+<tr><th>charge</th><th>discharge</th><td>「充電する」と「放電する」。双方とも、これ以外の意味も色々とある。</td></tr>
+
+<tr><th>connect</th><th>disconnect</th><td>「接続する」と「切断する、遮断する、接続を切る」。</td></tr>
+
+<tr><th>continue</th><th>discontinue</th><td>「続く、続ける」と「途絶える、中止する」。discontinue という動詞よりも、discontinuity (不連続) という名詞や discontinuous (不連続な) という形容詞の方が (数学の分野などで) よく見るかもしれない。</td></tr>
+</table>
+
+<h2>- / in- 型</h2>
+<table>
+<tr><th>activate</th><th>inactivate</th><td>「起動させる、作動させる、活性化する」と「作動しないようにする、不活性化する」。</td></tr>
+<tr><th>validate</th><th>invalidate</th><td>「有効にする、妥当性を立証する」と「無効にする、間違いだと立証する」。</td></tr>
+</table>
+
+<h2>- / un- 型</h2>
+<table>
+<tr><th>comment out</th><th>uncomment</th><td>「コメントアウトする」と「アンコメントする」。</td></tr>
+
+<tr><th>install</th><th>uninstall</th><td>「インストールする」と「アンインストールする」。</td></tr>
+</table>
+
+<h2>a- / di- または de- 型</h2>
+<table>
+<tr><th>associate</th><th>dissociate</th><td>「関連づける」と「関連づけを解除する」。</td></tr>
+
+<tr><th>attach</th><th>detach</th><td>「取り付ける」と「取り外す」。</td></tr>
+</table>
+
+<h2>その他のパタン</h2>
+<table>
+<tr><th>enable</th><th>disable</th><td>コンピュータの機能などを「有効にする、作動させる」と「無効にする、作動しないようにする」。</td></tr>
+<tr><th>set</th><th>reset</th><td>文脈によって色々に訳せるけれど、「セットする」と「リセットする」とするのが楽だし問題も生じない、という場合が多いかな。</td></tr>
+</table>
+
+<!--
+<table>
+<tr><th></th><th></th><td>「」と「」。</td></tr>
+</table>
+-->
+<nav class="bottom">
+<a href="index.html">「英語あれこれ」目次</a> | <a href="../index.html">ホーム</a> 
+</nav>
+
+</body>
+</html>
+
+
