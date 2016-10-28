@@ -149,6 +149,7 @@ ruby {
 	line-height: 200%;
 }
 .netabare {
+	color: hsl(300,80%,40%);
 	display: none;
 }
 span.key {
