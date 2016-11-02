@@ -359,7 +359,6 @@ order to make logical deductions.</p>
 この言語によって、人事情報へのパタン指向のアクセス権が提供され、また、この言語は、論理的演繹を行うために一般的規則を利用することができる。
 </p>
 
-<p class="extra" id="translating">**ここから</p>
 <a name="%_sec_Temp_649"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_649">A sample data base</a></h4>
 <h4 class="trans" lang="ja">サンプル・データベース</h4>
@@ -371,6 +370,8 @@ contains <em>assertions</em> about company personnel.  Here is the
 information about Ben Bitdiddle, the resident computer wizard:</p>
 
 <p class="trans" lang="ja">
+マイクロシャフト社の人事データベースは、会社職員についての<em><ruby><rb>言明</rb><rp> (</rp><rt>アサーション</rt><rp>) </rp></ruby></em>を含む。
+ここに、専任コンピュータ魔術師のベン・ビットディドルについての情報がある。
 </p>
 
 <p class="lisp">(address (Bitdiddle Ben) (Slumerville (Ridge Road) 10))
@@ -378,10 +379,18 @@ information about Ben Bitdiddle, the resident computer wizard:</p>
 (salary (Bitdiddle Ben) 60000)
 </p>
 
+<!--
+<p class="exercise ex_comment">(住所 (ビットディドル ベン) (スラマーヴィル (リッジ街) 10))
+(仕事 (ビットディドル ベン) (コンピュータ 魔術師))
+(給与 (ビットディドル ベン) 60000)
+</p>
+-->
+
 <p class="orig" lang="en">Each assertion is a list (in this case a triple) whose elements can
 themselves be lists.</p>
 
 <p class="trans" lang="ja">
+各言明は、その要素自体もリストであり得るようなリスト (この例では三つ組) である。
 </p>
 
 <p class="orig" lang="en">
@@ -390,6 +399,8 @@ division, and he supervises two programmers and one technician.  Here
 is the information about them:</p>
 
 <p class="trans" lang="ja">
+専任魔術師として、ベンは、会社のコンピュータ部門に責任があり、二人のプログラマと一人の技師を指揮監督している。
+ここに、その人たちについての情報がある。
 </p>
 
 <p class="lisp">(address (Hacker Alyssa P) (Cambridge (Mass Ave) 78))
@@ -409,8 +420,8 @@ is the information about them:</p>
 <p class="orig" lang="en">There is also a programmer trainee, who is supervised by Alyssa:
 </p>
 
-
 <p class="trans" lang="ja">
+プログラマ見習いもいて、その人はアリッサにより監督されている。
 </p>
 
 <p class="lisp">(address (Reasoner Louis) (Slumerville (Pine Tree Road) 80))
@@ -423,6 +434,7 @@ is the information about them:</p>
 word <tt>computer</tt> as the first item in their job descriptions.</p>
 
 <p class="trans" lang="ja">
+これらの人たちのすべては、仕事の記述における1番目の項目としての <tt>computer</tt> という語によって示されるとおり、コンピュータ部門にいる。
 </p>
 
 <p class="orig" lang="en">
@@ -430,6 +442,8 @@ Ben is a high-level employee.  His supervisor is the company's big
 wheel himself:</p>
 
 <p class="trans" lang="ja">
+ベンは上級社員である。
+彼の上司は、その人自体がこの会社の大物である。
 </p>
 
 <p class="lisp">(supervisor (Bitdiddle Ben) (Warbucks Oliver))
@@ -445,6 +459,7 @@ accounting division, consisting of a chief accountant and his
 assistant:</p>
 
 <p class="trans" lang="ja">
+ベンにより監督されているコンピュータ部門のほかに、この会社には会計部門があり、主席会計士と彼の助手から構成されている。
 </p>
 
 <p class="lisp">(address (Scrooge Eben) (Weston (Shady Lane) 10))
@@ -457,9 +472,11 @@ assistant:</p>
 (supervisor (Cratchet Robert) (Scrooge Eben))
 </p>
 
+
 <p class="orig" lang="en">There is also a secretary for the big wheel:</p>
 
 <p class="trans" lang="ja">
+大物のための秘書もいる。
 </p>
 
 <p class="lisp">(address (Aull DeWitt) (Slumerville (Onion Square) 5))
@@ -475,6 +492,8 @@ computer wizard can do the jobs of both a computer programmer and a
 computer technician:</p>
 
 <p class="trans" lang="ja">
+このデータベースは、他の仕事を抱えている人たちによってどの種類の仕事をなし得るのか、ということについての言明も含む。
+たとえば、コンピュータ魔術師は、コンピュータ・プログラマとコンピュータ技師の双方の仕事を行うことができる。
 </p>
 
 <p class="lisp">(can-do-job (computer wizard) (computer programmer))
@@ -485,6 +504,7 @@ computer technician:</p>
 </p>
 
 <p class="trans" lang="ja">
+コンピュータ・プログラマは、見習いの代わりができるだろう。
 </p>
 
 <p class="lisp">(can-do-job (computer programmer)
@@ -495,6 +515,7 @@ computer technician:</p>
 </p>
 
 <p class="trans" lang="ja">
+また、以下のことはよく知られているとおりである。
 </p>
 
 <p class="lisp">(can-do-job (administration secretary)
@@ -503,7 +524,7 @@ computer technician:</p>
 
 <a name="%_sec_Temp_650"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_650">Simple queries</a></h4>
-<h4 class="trans" lang="ja">単純なクエリ</h4>
+<h4 class="trans" lang="ja">単純クエリ</h4>
 
 
 <p class="orig" lang="en">
@@ -513,6 +534,8 @@ base by posing queries in response to the system's prompt.  For
 example, to find all computer programmers one can say</p>
 
 <p class="trans" lang="ja">
+クエリ言語によって、ユーザは、システムのプロンプトに応答してクエリを提示することでデータベースから情報を検索することが可能となる。
+たとえば、すべてのコンピュータ・プログラマを見つけるために、次のように言うことができる。
 </p>
 
 <p class="lisp"><i>;;; Query input:</i>
@@ -522,6 +545,7 @@ example, to find all computer programmers one can say</p>
 <p class="orig" lang="en">The system will respond with the following items:</p>
 
 <p class="trans" lang="ja">
+システムは、以下の項目で応答するだろう。
 </p>
 
 <p class="lisp"><i>;;; Query results:</i>
@@ -543,6 +567,12 @@ to represent ``anything.''  The system responds to a simple query by
 showing all entries in the data base that match the specified pattern.</p>
 
 <p class="trans" lang="ja">
+入力クエリは、ある<em>パタン</em>に合致する、データベース内のエントリを探しているところなのだ、ということを指定している。
+この例では、そのパタンは、3項目からなるエントリを指定しており、それら3項目のうち、1番目は <tt>job</tt> というリテラル記号であり、2番目は<!-- 任意のものであってよく -->何でもよく、3番目は <tt>(computer programmer)</tt> というリテラル・リストである。
+マッチング・リストにおける2番目の項目になり得る「<!-- 任意のもの -->何か」は、<em>パタン変数</em>により、すなわち、<tt>?x</tt> により、指定されている。
+パタン変数の一般形は、疑問符が先に付いていて、変数の名前としてとられるべき、記号である。
+「<!-- 任意のもの -->何か」を表現するのに、単に <tt>?</tt> をパタンの中に置くのではなく、<!--むしろ-->パタン変数の名前を指定することが、なぜ有用なのかは、後に分かるだろう。
+単純クエリに対してシステムは、指定されたパタンに合致する、データベース内の全エントリを示すことによって、応答する。
 </p>
 
 <p class="orig" lang="en">
@@ -550,6 +580,7 @@ A pattern can have more than one variable.  For example, the query
 </p>
 
 <p class="trans" lang="ja">
+パタンは、変数を一つより多く含み得る。たとえば、以下のクエリは、
 </p>
 
 <p class="lisp">(address ?x ?y)
@@ -558,6 +589,7 @@ A pattern can have more than one variable.  For example, the query
 <p class="orig" lang="en">will list all the employees' addresses.</p>
 
 <p class="trans" lang="ja">
+全職員の住所を列挙するだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -566,7 +598,10 @@ determines whether that pattern is an entry in the data base.  If so,
 there will be one match; if not, there will be no matches.</p>
 
 <p class="trans" lang="ja">
+パタンに変数がないこともあり得て、その場合、クエリは単に、そのパタンがデータベース内のエントリであるかどうかを判定する。
+もしそうなら、一つの一致があるだろうし、そうでなければ、何も一致がないだろう。
 </p>
+
 
 <p class="orig" lang="en">
 The same pattern variable can appear more than once in a query,
@@ -574,6 +609,9 @@ specifying that the same ``anything'' must appear in each position.
 This is why variables have names.  For example,</p>
 
 <p class="trans" lang="ja">
+同じ「何か」が各位置に現れなくてはならない、と指定するために、同じパタン変数がクエリ内に一度より多く現れることも可能である。
+これが、変数に名前がついている理由である。
+たとえば、
 </p>
 
 <p class="lisp">(supervisor ?x ?x)
@@ -583,13 +621,16 @@ This is why variables have names.  For example,</p>
 assertions in our sample data base).</p>
 
 <p class="trans" lang="ja">
+は、自分自身を指揮監督しているすべての人たちを見つける (私たちのサンプル・データベースにはそういう言明は存在しないけれども)。
 </p>
+
 
 <p class="orig" lang="en">
 The query
 </p>
 
 <p class="trans" lang="ja">
+以下のクエリは、
 </p>
 
 <p class="lisp">(job ?x (computer ?type))
@@ -599,6 +640,7 @@ The query
 first item is <tt>computer</tt>:</p>
 
 <p class="trans" lang="ja">
+1番目の項目が <tt>computer</tt> であるような2要素リストを3番目の項目としている、すべての仕事エントリに、合致する。
 </p>
 
 <p class="lisp">(job (Bitdiddle Ben) (computer wizard))
@@ -611,10 +653,13 @@ first item is <tt>computer</tt>:</p>
 </p>
 
 <p class="trans" lang="ja">
+この同じパタンは、以下のものには合致<em>しない</em>。
 </p>
 
 <p class="lisp">(job (Reasoner Louis) (computer programmer trainee))
 </p>
+
+
 
 <p class="orig" lang="en">because the third item in the entry is a list of three elements, and
 the pattern's third item specifies that there should be two elements.
@@ -622,6 +667,8 @@ If we wanted to change the pattern so that the third item could be any
 list beginning with <tt>computer</tt>, we could specify<a name="%_idx_5116"></a><a name="call_footnote_Temp_651" href="#footnote_Temp_651"><sup><small>62</small></sup></a></p>
 
 <p class="trans" lang="ja">
+なぜなら、このエントリの3番目の項目は、3個の要素からなるリストであり、かつ、上記パタンの3番目の項目は、2個の要素があるべき旨を指定しているからである。
+もし、3番目の項目が <tt>computer</tt> から始まる任意のリストであってもよいように、パタンを変更したかったら、次のように指定できるだろう<a href="#footnote_Temp_651"><sup><small>62</small></sup></a>。
 </p>
 
 <p class="lisp">(job ?x (computer . ?type))
@@ -631,6 +678,7 @@ list beginning with <tt>computer</tt>, we could specify<a name="%_idx_5116"></a>
 </p>
 
 <p class="trans" lang="ja">
+たとえば、
 </p>
 
 <p class="lisp">(computer . ?type)
@@ -639,15 +687,19 @@ list beginning with <tt>computer</tt>, we could specify<a name="%_idx_5116"></a>
 <p class="orig" lang="en">matches the data</p>
 
 <p class="trans" lang="ja">
+は、次のデータに合致し、
 </p>
 
 <p class="lisp">(computer programmer trainee)
 </p>
 
+
 <p class="orig" lang="en">with <tt>?type</tt> as the list <tt>(programmer trainee)</tt>.  It also
 matches the data</p>
 
 <p class="trans" lang="ja">
+その際、<tt>?type</tt> は <tt>(programmer trainee)</tt> というリストである。
+これは、次のデータにも合致し、
 </p>
 
 <p class="lisp">(computer programmer)
@@ -656,22 +708,29 @@ matches the data</p>
 <p class="orig" lang="en">with <tt>?type</tt> as the list <tt>(programmer)</tt>, and matches the data</p>
 
 <p class="trans" lang="ja">
+その際、<tt>?type</tt> は <tt>(programmer)</tt> というリストである。また、以下のデータにも合致し、
 </p>
 
 <p class="lisp">(computer)
 </p>
 
-<p class="orig" lang="en">with <tt>?type</tt> as the empty list <tt>()</tt>.</p>
+<p class="orig" lang="en">
+with <tt>?type</tt> as the empty list <tt>()</tt>.
+</p>
 
 <p class="trans" lang="ja">
+その際、<tt>?type</tt> は空リスト <tt>()</tt> である。
 </p>
+
 
 <p class="orig" lang="en">
 We can describe the query language's processing of simple queries as
 follows:</p>
 
 <p class="trans" lang="ja">
+このクエリ言語の、単純クエリの処理は、次のように記述できる。
 </p>
+
 
 <ul class="orig" lang="en">
 <li>The system finds all assignments to variables in the query
@@ -684,8 +743,8 @@ query pattern with the variable assignments that satisfy it.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>パタンを<em>満たす</em>ような、クエリ・パタン内の変数へのすべての<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>——つまり、もしパタン変数がその値<em>でインスタンス化された</em> (その値に置き換えられた) としたら、その結果はデータベース内にあるよ、というような、変数に対する値の集合すべて——を、システムは見つける。</li>
+<li>クエリ・パタンを満たす変数<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>での、クエリ・パタンのすべての<ruby><rb>インスタンス化</rb><rp> (</rp><rt>具体例</rt><rp>) </rp></ruby>を列挙することによって、システムはクエリに応答する。</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -695,7 +754,10 @@ empty assignment, which assigns no values to variables, satisfies that
 pattern for that data base.</p>
 
 <p class="trans" lang="ja">
+もしパタンに変数がなければ、クエリは、そのパタンがデータベース内にあるか否かという判定へと帰着するのだ、ということに注意してほしい。
+もしあれば、空の<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>——変数に何の値も割り当てない——が、そのデータベースについてのそのパタンを満たす。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_4.55"></a>
@@ -703,6 +765,7 @@ pattern for that data base.</p>
 data base:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.55.</b> データベースから以下の情報を検索する単純クエリを示せ。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -713,18 +776,28 @@ in Slumerville.</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li>ベン・ビットディドルにより指揮監督されているすべての人たち</li>
+<li>会計部門のすべての人たちの名前と仕事</li>
+<li>スラマーヴィルに住んでいるすべての人たちの名前と仕事</li>
 </ol>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise"><span class="ex_comment">; a</span>
+(supervisor ?name (Bitdiddle Ben))
+
+<span class="ex_comment">; b</span>
+(job ?name (accounting . ?type))
+
+<span class="ex_comment">; cについては、クエリをこのように単に並べる形で良いのか疑問だが、とりあえず。
+; 本当にこれ、単純クエリで対処できるんだろうか?
+; 複合クエリでないと駄目なのでは?</span>
+(address ?name (Slumerville . ?x))
+(job ?name ?job-description)</p>
 
 <a name="%_sec_Temp_653"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_653">Compound queries</a></h4>
 <h4 class="trans" lang="ja">複合クエリ</h4>
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5122"></a>
 Simple queries form the primitive operations of the query language.
@@ -882,6 +955,7 @@ $30,000 we could write<a name="call_footnote_Temp_655" href="#footnote_Temp_655"
 <b>Exercise 4.56.</b>  Formulate compound queries that retrieve the following information:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.5.</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1028,6 +1102,7 @@ the same person. Using your rule, give queries that find the
 following:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.5.</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1053,6 +1128,7 @@ works in the division.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.5.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1068,6 +1144,7 @@ asserting the following:
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.5.</b> 
 </p>
 
 <p class="lisp">(meeting accounting (Monday 9am))
@@ -1131,6 +1208,7 @@ what query should she make to find this out?</li>
 
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp">(lives-near ?person (Hacker Alyssa P))
@@ -1290,6 +1368,7 @@ adjacent elements of a list:
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp"><a name="%_idx_5164"></a>(rule (?x next-to ?y in (?x ?y . ?u)))
@@ -1322,6 +1401,7 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1333,6 +1413,7 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 descendants of Ada back to Adam, by way of Cain:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp">(son Adam Cain)
@@ -1864,7 +1945,7 @@ bindings and evaluating the rule or procedure body relative to these.
 
 <a name="%_sec_Temp_679"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_679">Simple queries</a></h4>
-<h4 class="trans" lang="ja">単純なクエリ</h4>
+<h4 class="trans" lang="ja">単純クエリ</h4>
 
 
 <p class="orig" lang="en">
@@ -2205,6 +2286,7 @@ he realizes this, he quickly reinstalls it.  Unfortunately, he makes a
 slight change in the rule, and types it in as</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp">(rule (outranked-by ?staff-person ?boss)
@@ -2239,6 +2321,7 @@ organization, gives a query to find all the wheels
 (using the <tt>wheel</tt> rule of section <a href="#%_sec_4.4.1">4.4.1</a>):</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp">(wheel ?who)
@@ -2273,6 +2356,7 @@ about the company.  For example, to find the total salaries of all the
 computer programmers one will be able to say</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="lisp">(sum ?amount
@@ -2331,6 +2415,7 @@ modify the system to include your loop detector.)
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2346,6 +2431,7 @@ Can your rules answer both
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2368,6 +2454,7 @@ Check your rules on queries such as
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.6.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3254,6 +3341,7 @@ Hint: Recall the definition of the infinite stream of ones in
 section <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>: <tt>(define ones (cons-stream 1 ones))</tt>.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="lisp">(define (add-assertion! assertion)
@@ -3526,6 +3614,7 @@ procedures (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>) are implemented using
 explicit <tt>delay</tt> operations, rather than being defined as follows:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="lisp">(define (simple-query query-pattern frame-stream)
@@ -3561,6 +3650,7 @@ section <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>?)
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3574,6 +3664,7 @@ What would be wrong with defining it as follows:
 
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="lisp">(define (flatten-stream stream)
@@ -3597,6 +3688,7 @@ in these cases always produces either the empty stream or a singleton
 stream, so no interleaving is needed when combining these streams.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -3633,6 +3725,7 @@ stream, so no interleaving is needed when combining these streams.</p>
 in the data base satisfying a specified query.  For example,</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="lisp">(unique (job ?x (computer wizard)))
@@ -3730,6 +3823,7 @@ factor of <em>k</em> fewer than the number of matches required in our current
 method.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -3761,6 +3855,7 @@ intermediate frames generated.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3781,6 +3876,7 @@ difference?
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3793,6 +3889,7 @@ we saw how to use local environments to avoid name conflicts between
 the parameters of procedures.  For example, in evaluating</p>
 
 <p class="trans" lang="ja">
+<b>練習問題4.7.</b> 
 </p>
 
 <p class="lisp">(define (square x)
@@ -3943,6 +4040,7 @@ exercise <a href="15_sec2_2.html#%_thm_2.20">2.20</a>.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_651"><sup><small>62</small></sup></a>
+これは、練習問題<a href="15_sec2_2.html#%_thm_2.20">2.20</a>で導入した、末尾にドットがついた記法を使っている。
 </p>
 
 <p class="orig" lang="en">
