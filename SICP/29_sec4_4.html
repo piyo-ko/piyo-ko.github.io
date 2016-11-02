@@ -157,7 +157,6 @@ symbolic pattern matching called <em>unification</em>.<a name="call_footnote_Tem
 論理プログラミングは、この考えを、プログラミングについての関係型の見方と、<em><ruby><rb>単一化</rb><rp> (</rp><rt>ユニフィケーション</rt><rp>) </rp></ruby></em>と呼ばれる強力な種類の記号的パタン・マッチングとを組み合わせることによって、拡張する<a name="call_footnote_Temp_645" href="#footnote_Temp_645"><sup><small>58</small></sup></a>。
 </p>
 
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5070"></a><a name="%_idx_5072"></a>This approach, when it works, can be a very powerful way to write
@@ -171,6 +170,10 @@ basic list constructor <tt>cons</tt>, as we did in
 section <a href="15_sec2_2.html#%_sec_2.2.1">2.2.1</a>:</p>
 
 <p class="trans" lang="ja">
+この手法は、うまくゆくときには、プログラムを書くためのとても強力な方法になれる。
+その力の一部は、一つの「何なのか」という事実が、異なる「どうやって」という構成要素を持ちうる多数の異なる問題を解くのに使える、という事実に由来する。
+例として、<tt>append</tt> 操作——引数として二つのリストをとって、それらの要素を結合して一つのリストを形成する——を考えてみよう。
+Lispのような手続き的言語では、<a href="15_sec2_2.html#%_sec_2.2.1">2.2.1</a>節で行ったように、<tt>cons</tt> という基本的なリスト・コンストラクタを使って <tt>append</tt> を定義できるだろう。
 </p>
 
 <p class="lisp">(define (append x y)
@@ -179,12 +182,14 @@ section <a href="15_sec2_2.html#%_sec_2.2.1">2.2.1</a>:</p>
       (cons (car x) (append (cdr x) y))))
 </p>
 
+
 <p class="orig" lang="en">This procedure can be regarded as a translation into Lisp of the
 following two rules, the first of which covers the case where the
 first list is empty and the second of which handles the case of a
 nonempty list, which is a <tt>cons</tt> of two parts:</p>
 
 <p class="trans" lang="ja">
+この手続きは、以下の二つの規則のLispへの翻訳だと見なせるのだが、これら規則のうち1番目のものは、1番目のリストが空の場合を扱っており、2番目のものは、非空リスト——二つの部分の <tt>cons</tt> である——の場合を扱っている。
 </p>
 
 <ul class="orig" lang="en">
@@ -196,15 +201,29 @@ if <tt>v</tt> and <tt>y</tt> <tt>append</tt> to form <tt>z</tt>.<a name="call_fo
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>任意のリスト <tt>y</tt> について、空リストと <tt>y</tt> は、<tt>append</tt> して <tt>y</tt> となる。</li>
+<li>任意の <tt>u</tt> と <tt>v</tt> と <tt>y</tt> と <tt>z</tt> について、もし <tt>v</tt> と <tt>y</tt> が <tt>append</tt> して <tt>z</tt> となるなら、<tt>(cons u v)</tt> と <tt>y</tt> は、<tt>append</tt> して <tt>(cons u z)</tt> となる<a href="#footnote_Temp_646"><sup><small>59</small></sup></a>。</li>
 </ul>
+
+<div class="exercise">
+<table class="expl ex_comment">
+<tr><th colspan="2"><tt>x</tt> が非空の場合の対応表</th></tr>
+<tr><th>手続き</th><th>規則</th></tr>
+<tr><td><tt>x</tt></td><td><tt>(cons u v)</tt></td></tr>
+<tr><td><tt>y</tt></td><td><tt>y</tt></td></tr>
+<tr><td><tt>(car x)</tt></td><td><tt>u</tt></td></tr>
+<tr><td><tt>(cdr x)</tt></td><td><tt>v</tt></td></tr>
+<tr><td><tt>(append (cdr x) y)</tt><br>&nbsp;</td><td><tt>(append v y)</tt> すなわち<br><tt>z</tt></td></tr>
+<tr><td><tt>(append x y)</tt> すなわち<br><tt>(cons (car x) (append (cdr x) y))</tt></td><td><tt>(append (cons u v) y)</tt> すなわち<br><tt>(cons u z)</tt></td></tr>
+</table>
+</div>
 
 <p class="orig" lang="en">
 Using the <tt>append</tt> procedure, we can answer questions such as
 </p>
 
 <p class="trans" lang="ja">
+この <tt>append</tt> の手続きを使うと、以下のような質問に答えられる。
 </p>
 
 <blockquote class="orig" lang="en">
@@ -212,6 +231,7 @@ Find the <tt>append</tt> of <tt>(a b)</tt> and <tt>(c d)</tt>.
 </blockquote>
 
 <blockquote class="trans" lang="ja">
+<tt>(a b)</tt> と <tt>(c d)</tt> の <tt>append</tt> を求めよ。
 </blockquote>
 
 <p class="orig" lang="en">
@@ -219,6 +239,7 @@ But the same two rules are also sufficient for answering the following
 sorts of questions, which the procedure can't answer:</p>
 
 <p class="trans" lang="ja">
+しかし、以下のような種類の質問——この手続きでは答えられないもの——に答えるためにも、同じ二つの規則で十分なのだ。
 </p>
 
 <blockquote class="orig" lang="en">
@@ -226,6 +247,7 @@ sorts of questions, which the procedure can't answer:</p>
 Find a list <tt>y</tt> that <tt>append</tt>s with <tt>(a b)</tt> 
 to produce <tt>(a b c d)</tt>.
 </div>
+<br>
 <div>
 Find all <tt>x</tt> and <tt>y</tt> that <tt>append</tt> to form <tt>(a b c
 d)</tt>.
@@ -234,8 +256,11 @@ d)</tt>.
 
 <blockquote class="trans" lang="ja">
 <div>
+<tt>(a b)</tt> に <tt>append</tt> して <tt>(a b c d)</tt> を作り出すような、<tt>y</tt> というリストを求めよ。
 </div>
+<br>
 <div>
+<tt>append</tt> して <tt>(a b c d)</tt> を作り出すような、すべての <tt>x</tt> と <tt>y</tt> を求めよ。
 </div>
 </blockquote>
 
@@ -247,6 +272,8 @@ allow this single pair of rules to be used to answer all three types
 of questions about <tt>append</tt>.<a name="call_footnote_Temp_647" href="#footnote_Temp_647"><sup><small>60</small></sup></a></p>
 
 <p class="trans" lang="ja">
+論理プログラミング言語では、プログラマは、上記のような <tt>append</tt> についての二つの規則を述べることによって、<tt>append</tt> の「手続き」を書く。
+「どうやって」の知識は、このたった一対の規則を <tt>append</tt> についての三つすべての種類の質問に答えるのに使えるようにするよう、インタプリタによって自動的に与えられる<a href="#footnote_Temp_647"><sup><small>60</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -257,7 +284,12 @@ undesirable behavior.
 Logic programming is an active field of research in computer science.<a name="call_footnote_Temp_648" href="#footnote_Temp_648"><sup><small>61</small></sup></a></p>
 
 <p class="trans" lang="ja">
+現代の論理プログラミング言語 (ここで私たちが実装するものも含む) には、それら言語の一般的な「どうやって」の方法のせいでそれら言語が見かけ上の無限ループまたは他の望ましからぬ振る舞いへと陥りかねない、<!--それら言語の一般的な「どうやって」の方法が、見かけ上の無限ループまたは他の望ましからぬ振る舞いへと、それら言語を導いていきかねない-->という意味において、相当な欠陥がある。
+論理プログラミングは、計算機科学における活発な研究領域である<a href="#footnote_Temp_648"><sup><small>61</small></sup></a>。
 </p>
+
+
+
 
 <p class="orig" lang="en">
 Earlier in this chapter we explored the technology of implementing
@@ -289,6 +321,15 @@ that we make substantial use of streams, which were introduced in
 chapter 3.</p>
 
 <p class="trans" lang="ja">
+本章の最初の方で、私たちは、インタプリタを実装する技術を探査し、Lisp 的な言語のインタプリタにとって (実は、従来のどの言語のインタプリタにとっても) 必須の要素について記述した。
+さてここからは、論理プログラミング言語のインタプリタについて議論するために、これらの考え方を適用しよう。
+この言語のことを、<em>クエリ言語</em>と呼ぶ。なぜなら、この言語は、この言語で表現された<em>クエリ</em>——すなわち質問——を定式化することでデータベースから情報を検索するのに、大変有用だからである。
+たとえクエリ言語が Lisp とは全然違っていてさえも、この言語を、私たちが最初からずっと使ってきている同じ一般的な枠組みで記述するのが——つまり、単純な要素同士を結合してより複雑な要素を作ることを可能にしてくれる結合手段と、複雑な要素を単一の概念的単位と見なすことを可能にしてくれる抽象化手段とを備えた、原始的要素の集まりとして、記述することが——便利だということに、私たちは気づくことになるだろう。
+論理プログラミング言語のインタプリタは、Lisp のような言語のインタプリタよりも、ずっと複雑である。
+それにもかかわらず、私たちのクエリ言語用インタプリタが、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節のインタプリタに見られるのと同じ要素のうちの多くを含むということを、私たちは見ることになるだろう。
+とりわけ、型にしたがって式を分類する「<ruby><rb>評価</rb><rp> (</rp><rt>eval</rt><rp>) </rp></ruby>」部分と、言語の抽象化機構を実装する「<ruby><rb>適用</rb><rp> (</rp><rt>apply</rt><rp>) </rp></ruby>」部分 (Lisp の場合には手続きであり、論理プログラミングの場合には<em>規則</em>である) が存在するであろう。
+また、中心的役割は、フレーム・データ構造——<ruby><rb>記号</rb><rp> (</rp><rt>シンボル</rt><rp>) </rp></ruby>とそれに関連づけられた値との対応関係を決定する——において果たされる。
+私たちのクエリ言語の実装の、一つの付加的な面白い側面は、ストリーム——3章で導入したもの——を事実上利用する、という点である。
 </p>
 
 <a name="%_sec_4.4.1"></a>
@@ -301,6 +342,8 @@ information retrieval.  The query language we shall implement in this
 chapter is designed to be used in this way.</p>
 
 <p class="trans" lang="ja">
+論理プログラミングは、情報検索用のデータベースに対するインタフェイスを提供することに秀でている。
+私たちが本章で実装することになるクエリ言語は、こうした方法で使われるように設計されている。
 </p>
 
 <p class="orig" lang="en">
@@ -312,8 +355,11 @@ personnel information and can also take advantage of general rules in
 order to make logical deductions.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムが何をするのかを例解するために、私たちは、ボストン地区の成長中のハイテク企業であるマイクロシャフト社のための人事記録のデータベースを管理するのにクエリ・システムをどのように使えるのか、ということを示そう。
+この言語によって、人事情報へのパタン指向のアクセス権が提供され、また、この言語は、論理的演繹を行うために一般的規則を利用することができる。
 </p>
 
+<p class="extra" id="translating">**ここから</p>
 <a name="%_sec_Temp_649"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_649">A sample data base</a></h4>
 <h4 class="trans" lang="ja">サンプル・データベース</h4>
@@ -3821,6 +3867,7 @@ his brilliant but impenetrable Ph.D. thesis.  For a history of logic
 <a name="%_idx_5068"></a>programming, see Robinson 1983.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_645"><sup><small>58</small></sup></a> 
 論理プログラミングは、自動定理証明についての研究の長い歴史の中から、成長してきた。
 初期の定理証明プログラムは、可能な証明の空間を網羅的に探索したので、ほんのわずかのことしか達成できなかった。
 そうした探索を見込みのあるものにした主要な<ruby><rb>大躍進</rb><rp> (</rp><rt>ブレークスルー</rt><rp>) </rp></ruby>は、1960年代初期における、<em>ユニフィケーション・アルゴリズム</em>と<em>導出原理</em> (Robinson 1965) の発見であった。
@@ -3843,6 +3890,7 @@ see the correspondence between the rules and the procedure, let <tt>x</tt> in th
 <tt>append</tt> of <tt>(cdr x)</tt> and <tt>y</tt>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_646"><sup><small>59</small></sup></a> 
 規則と手続きとの間の対応関係を見るためには、手続き中の <tt>x</tt> (ただし <tt>x</tt> は非空) が規則中の <tt>(cons u v)</tt> に対応するものとせよ。
 すると、規則中の <tt>z</tt> は、<tt>(cdr x)</tt> と <tt>y</tt> の <tt>append</tt> に対応する。
 </p>
@@ -3857,8 +3905,9 @@ compute an answer.  For example, consider the problem of computing the
 <em>y</em> such that <em>y</em><sup>2</sup>  =  <em>x</em>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_647"><sup><small>60</small></sup></a>
 なるほど、これは、答えをどのように計算するのかという問題全体から、ユーザを解放してくれる、というわけではない。
-<tt>append</tt> 関係を定式化するための、数学的には等価な多くの異なる規則集合が存在するが、それらのうちのいくつかだけしか、いずれかの方向に計算するための有効な道具だとは判明し得ないのだ。
+<tt>append</tt> 関係を定式化するための、数学的には等価な多くの異なる規則集合が存在するが、<!--それらのうちのいくつかだけしか、いずれかの方向に計算するための有効な道具だとは判明し得ないのだ。-->それらのうちの一部しか、どの方向であれ、計算するための有効な道具にはなり得ないのだ。
 さらに、「何であるか」という情報は、ときとして、「どうやって」答えを計算するのか、について何の手がかりも与えてくれない。
 たとえば、
 <span class="math"><em class="en">y</em><sup>2</sup>  =  <em class="en">x</em></span>
@@ -3881,12 +3930,19 @@ constraints such as the ones illustrated in the constraint-propagation
 system of section <a href="22_sec3_3.html#%_sec_3.3.5">3.3.5</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_648"><sup><small>61</small></sup></a>
+論理プログラミング言語を実行するために最適化された超高速コンピュータを構築することを目標にした野心的なプロジェクトを日本政府が開始した1980年代の始めに、論理プログラミングへの関心は最高潮に達した。
+そうしたコンピュータの速度は、FLOPS (1秒あたりの浮動小数点数演算回数) ではなく、むしろ、LIPS (1秒あたりの論理推論回数) で計測されるべきであった。
+プロジェクトは、当初計画されたようなハードウェアとソフトウェアを開発することに成功したのだが、国際的なコンピュータ産業は、別の方向へと動いた。
+日本のプロジェクトの概要的評価については、Feigenbaum and Shrobe 1993 を参照のこと。
+論理プログラミング界も、<a href="22_sec3_3.html#%_sec_3.3.5">3.3.5</a>節の制約伝播システムにおいて例示したもののような数量的制約を扱う能力など、単純なパタン・マッチングではない技法に基づく<ruby><rb>関係</rb><rp> (</rp><rt>リレーショナル</rt><rp>) </rp></ruby>プログラミングを考慮するように、進歩してきた。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_651" href="#call_footnote_Temp_651"><sup><small>62</small></sup></a> This uses the dotted-tail notation introduced in
 exercise <a href="15_sec2_2.html#%_thm_2.20">2.20</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_651"><sup><small>62</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3895,6 +3951,7 @@ is more complex.  We will examine <tt>not</tt>'s peculiarities in
 sections <a href="#%_sec_4.4.2">4.4.2</a> and <a href="#%_sec_4.4.3">4.4.3</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_654"><sup><small>63</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3905,6 +3962,7 @@ query language is designed to do) or inequality (since that can
 be done with the <tt>same</tt> rule shown below).</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_655"><sup><small>64</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3920,6 +3978,7 @@ different pattern variables does not force different values to appear.
 different.)</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_658"><sup><small>65</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3927,6 +3986,7 @@ different.)</p>
 conclusion is satisfied by any values of the variables.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_659"><sup><small>66</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3943,6 +4003,7 @@ section <a href="#%_sec_4.4.4">4.4.4</a>, contains a
 simple-minded form of such an optimization.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_670"><sup><small>67</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3951,6 +4012,7 @@ queries because the added conditions tend to reduce rather than expand
 the number of frames produced.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_672"><sup><small>68</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3959,6 +4021,7 @@ systems that is concerned with how to handle complex queries
 efficiently.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_673"><sup><small>69</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3967,6 +4030,7 @@ implementation of <tt>not</tt> and the usual meaning of <tt>not</tt> in
 mathematical logic.  See section <a href="#%_sec_4.4.3">4.4.3</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_674"><sup><small>70</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3975,6 +4039,7 @@ contain pattern variables are explicit and already solved for the
 unknown (the pattern variable).</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_676"><sup><small>71</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3986,6 +4051,7 @@ For our implementation, it is more convenient to think of the result
 of unification as a frame rather than a pattern.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_677"><sup><small>72</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3996,6 +4062,7 @@ simple matcher, however, illustrates how matching (as opposed to
 full-blown unification) can be useful in its own right.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_680"><sup><small>73</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_682" href="#call_footnote_Temp_682"><sup><small>74</small></sup></a> The reason we use streams (rather than lists) of frames is that the
@@ -4006,6 +4073,7 @@ responses one by one as they are generated, regardless of whether
 there are a finite or infinite number of responses.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_682"><sup><small>74</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_683" href="#call_footnote_Temp_683"><sup><small>75</small></sup></a> That a particular method of inference is
@@ -4017,6 +4085,7 @@ true and <em>A implies B</em> is true, then we may conclude that <em>B</em>
 is true.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_683"><sup><small>75</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_684" href="#call_footnote_Temp_684"><sup><small>76</small></sup></a> We must qualify this statement by
@@ -4036,6 +4105,7 @@ to achieve more consistency with mathematical logic without unduly
 sacrificing expressive power.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_684"><sup><small>76</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_686" href="#call_footnote_Temp_686"><sup><small>77</small></sup></a> This is not a problem of the logic but one of the
@@ -4056,6 +4126,7 @@ the form ``To show <em>P</em>(<em>x</em>) is true, show that <em>P</em>(<em>f</e
 some suitably chosen function <em>f</em>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_686"><sup><small>77</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_688" href="#call_footnote_Temp_688"><sup><small>78</small></sup></a> Consider the query <tt>(not (baseball-fan (Bitdiddle Ben)))</tt>.  The system finds that <tt>(baseball-fan (Bitdiddle Ben))</tt> is not in the data base, so the empty
@@ -4064,12 +4135,14 @@ initial stream of frames.  The result of the query is thus the empty
 frame, which is used to instantiate the input query to produce <tt>(not (baseball-fan (Bitdiddle Ben)))</tt>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_688"><sup><small>78</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_689" href="#call_footnote_Temp_689"><sup><small>79</small></sup></a> A discussion and justification of this
 <a name="%_idx_5274"></a>treatment of <tt>not</tt> can be found in the article by Clark (1978).</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_689"><sup><small>79</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_700" href="#call_footnote_Temp_700"><sup><small>80</small></sup></a> In general, unifying <tt>?y</tt> with an expression involving
@@ -4088,6 +4161,7 @@ Beginning with the expression 1  +  <em>y</em>/2 and repeatedly substituting 1
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_700"><sup><small>80</small></sup></a>
 </p>
 
 
@@ -4140,6 +4214,7 @@ the sake of clarity we have included the transformation procedure here
 explicitly.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_702"><sup><small>81</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
