@@ -778,7 +778,7 @@ in Slumerville.</li>
 <ol class="trans alph" lang="ja">
 <li>ベン・ビットディドルにより指揮監督されているすべての人たち</li>
 <li>会計部門のすべての人たちの名前と仕事</li>
-<li>スラマーヴィルに住んでいるすべての人たちの名前と仕事</li>
+<li>スラマーヴィルに住んでいるすべての人たちの名前と住所</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">; a</span>
@@ -787,17 +787,14 @@ in Slumerville.</li>
 <span class="ex_comment">; b</span>
 (job ?name (accounting . ?type))
 
-<span class="ex_comment">; cについては、クエリをこのように単に並べる形で良いのか疑問だが、とりあえず。
-; 本当にこれ、単純クエリで対処できるんだろうか?
-; 複合クエリでないと駄目なのでは?</span>
+<span class="ex_comment">; c</span>
 (address ?name (Slumerville . ?x))
-(job ?name ?job-description)</p>
+</p>
 
 <a name="%_sec_Temp_653"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_653">Compound queries</a></h4>
 <h4 class="trans" lang="ja">複合クエリ</h4>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5122"></a>
 Simple queries form the primitive operations of the query language.
@@ -809,6 +806,9 @@ the Lisp primitives, but rather operations built into the query
 language.)</p>
 
 <p class="trans" lang="ja">
+単純クエリは、クエリ言語の原始的演算を形成している。
+複合的演算を形成するために、クエリ言語は結合手段を提供する。
+クエリ言語を論理プログラミング言語たらしめる一つの事柄は、その結合手段が、論理式を形成するのに使われる結合手段——すなわち、<tt>and</tt> と <tt>or</tt> と <tt>not</tt>——を反映していることである (ここでの <tt>and</tt> と <tt>or</tt> と <tt>not</tt> は、Lispのプリミティブではなくて、クエリ言語に組み込まれている演算である)。
 </p>
 
 <p class="orig" lang="en">
@@ -816,6 +816,7 @@ language.)</p>
 computer programmers:</p>
 
 <p class="trans" lang="ja">
+コンピュータ・プログラマ全員の住所を求めるために、<tt>and</tt> を次のように使うことができる。
 </p>
 
 <p class="lisp">(and (job ?person (computer programmer))
@@ -826,6 +827,7 @@ computer programmers:</p>
 </p>
 
 <p class="trans" lang="ja">
+その結果得られる出力は、以下のとおりだ。
 </p>
 
 <p class="lisp">(and (job (Hacker Alyssa P) (computer programmer))
@@ -838,7 +840,7 @@ computer programmers:</p>
 </p>
 
 <p class="trans" lang="ja">
-</p>
+一般に、</p>
 
 <p class="lisp">(and &lt;<em>query<sub>1</sub></em>&gt; &lt;<em>query<sub>2</sub></em>&gt; <tt>...</tt> &lt;<em>query<sub><em>n</em></sub></em>&gt;)
 </p>
@@ -847,6 +849,10 @@ computer programmers:</p>
 simultaneously satisfy &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>query<sub><em>n</em></sub></em>&gt;.</p>
 
 <p class="trans" lang="ja">
+は、
+&lt;<em class="en">query<sub>1</sub></em>&gt; <tt>...</tt> 
+&lt;<em class="en">query<sub>n</sub></em>&gt;
+を同時に満たすような、パタン変数に対する値の集合のすべてによって、満たされる。
 </p>
 
 <p class="orig" lang="en">
@@ -855,6 +861,7 @@ finding all assignments to the pattern variables that satisfy the
 query, then displaying instantiations of the query with those values.</p>
 
 <p class="trans" lang="ja">
+単純クエリ<!-- については -->についてと同様に、システムは、複合クエリを、そのクエリを満たすパタン変数へのすべての<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>を求めることによって、処理し、それから、それらの値を使ってのクエリのインスタンス化を表示する。
 </p>
 
 <p class="orig" lang="en">
@@ -862,6 +869,8 @@ query, then displaying instantiations of the query with those values.</p>
 For example,</p>
 
 <p class="trans" lang="ja">
+複合クエリを構築するもう一つの手段は、<tt>or</tt> によるものである。
+たとえば、
 </p>
 
 <p class="lisp">(or (supervisor ?x (Bitdiddle Ben))
@@ -873,6 +882,7 @@ will find all employees supervised by Ben Bitdiddle or Alyssa P.
 Hacker:</p>
 
 <p class="trans" lang="ja">
+は、ベン・ビットディドルまたはアリッサ・P・ハッカによって指揮監督されているすべての職員を見つけ出すだろう。
 </p>
 
 <p class="lisp">(or (supervisor (Hacker Alyssa P) (Bitdiddle Ben))
@@ -889,6 +899,7 @@ Hacker:</p>
 </p>
 
 <p class="trans" lang="ja">
+一般に、
 </p>
 
 <p class="lisp">(or &lt;<em>query<sub>1</sub></em>&gt; &lt;<em>query<sub>2</sub></em>&gt; <tt>...</tt> &lt;<em>query<sub><em>n</em></sub></em>&gt;)
@@ -898,6 +909,10 @@ Hacker:</p>
 satisfy at least one of &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>query<sub><em>n</em></sub></em>&gt;.</p>
 
 <p class="trans" lang="ja">
+は、
+&lt;<em class="en">query<sub>1</sub></em>&gt; <tt>...</tt> 
+&lt;<em class="en">query<sub>n</sub></em>&gt;
+のうち少なくとも一つを満たすような、パタン変数に対する値の集合のすべてによって、満たされる。 
 </p>
 
 <p class="orig" lang="en">
@@ -905,6 +920,8 @@ satisfy at least one of &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>
 </p>
 
 <p class="trans" lang="ja">
+複合クエリは、<tt>not</tt> を用いて形成されることもあり得る。
+たとえば、
 </p>
 
 <p class="lisp">(and (supervisor ?x (Bitdiddle Ben))
@@ -915,6 +932,8 @@ satisfy at least one of &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>
 programmers.  In general,</p>
 
 <p class="trans" lang="ja">
+は、ベン・ビットディドルにより指揮監督される、コンピュータ・プログラマではない、すべての人たちを見つけ出す。
+一般に、
 </p>
 
 <p class="lisp">(not &lt;<em>query<sub>1</sub></em>&gt;)
@@ -924,7 +943,11 @@ programmers.  In general,</p>
 satisfy &lt;<em>query<sub>1</sub></em>&gt;.<a name="call_footnote_Temp_654" href="#footnote_Temp_654"><sup><small>63</small></sup></a></p>
 
 <p class="trans" lang="ja">
+は、
+&lt;<em class="en">query<sub>1</sub></em>&gt;
+を満たさないような、パタン変数に対する<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>のすべてによって、満たされる<a href="#footnote_Temp_654"><sup><small>63</small></sup></a>。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5132"></a>The final combining form is called <tt>lisp-value</tt>.  When <tt>lisp-value</tt> is the first element of a pattern, it specifies that the
@@ -932,6 +955,9 @@ next element is a Lisp predicate to be applied to the rest of the
 (instantiated) elements as arguments.  In general,</p>
 
 <p class="trans" lang="ja">
+最後の結合形式は、<tt>lisp-value</tt> と呼ばれる。
+<tt>lisp-value</tt> がパタンの第1要素であるとき、これは、その次の要素が、残りの (インスタンス化された) 要素を引数として適用されるべき Lisp 述語である、ということを指定している。
+一般に、
 </p>
 
 <p class="lisp">(lisp-value &lt;<em>predicate</em>&gt; &lt;<em>arg<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>arg<sub><em>n</em></sub></em>&gt;)
@@ -944,6 +970,13 @@ is true.  For example, to find all people whose salary is greater than
 $30,000 we could write<a name="call_footnote_Temp_655" href="#footnote_Temp_655"><sup><small>64</small></sup></a></p>
 
 <p class="trans" lang="ja">
+は、インスタンス化された
+&lt;<em class="en">arg<sub>1</sub></em>&gt; <tt>...</tt> 
+&lt;<em class="en">arg<sub>n</sub></em>&gt;
+に適用された
+&lt;<em class="en">predicate</em>&gt; 
+が真となるような、パタン変数に対する<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>によって、満たされるだろう。
+たとえば、給与が3万ドルを超えるようなすべての人たちを見つけるには、次のように書けるだろう<a href="#footnote_Temp_655"><sup><small>64</small></sup></a>。
 </p>
 
 <p class="lisp">(and (salary ?person ?amount)
@@ -955,7 +988,7 @@ $30,000 we could write<a name="call_footnote_Temp_655" href="#footnote_Temp_655"
 <b>Exercise 4.56.</b>  Formulate compound queries that retrieve the following information:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.5.</b> 
+<b>練習問題4.56.</b> 以下の情報を検索する複合クエリを定式化せよ。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -970,20 +1003,38 @@ division, together with the supervisor's name and job.</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li>ベン・ビットディドルにより指揮監督されているすべての人たちの名前を、その人たちの住所と一緒に。</li>
+<li>ベン・ビットディドルよりも給与が低いすべての人たちを、その人たちの給与およびベン・ビットディドルの給与と一緒に。</li>
+<li>コンピュータ部門にいない誰かによって指揮監督されているすべての人たちを、上司の名前および仕事と一緒に。</li>
 </ol>
 
+<p class="exercise"><span class="ex_comment">; a</span>
+(and (supervisor ?who (Bitdiddle Ben))
+     (address ?who ?where))
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<span class="ex_comment">; b</span>
+(and (salary ?person ?amount)
+     (salary (Bitdiddle Ben) ?amount-of-Ben)
+     (lisp-value &lt; ?amount ?amount-of-Ben))
+
+<span class="ex_comment">; c</span>
+(and (supervisor ?who ?boss)
+     (not (job ?boss (computer . ?x)))
+     (job ?boss ?job-of-boss))
+<span class="ex_comment">; 以下のように書きたくなるが、
+;「等価性の検査に lisp-value を使うな」と脚注64にあるので、
+; 上記のような回答案にしてみた。</span>
+(and (supervisor ?who ?boss)
+     (job ?boss (?division ?job-detail))
+     (not (lisp-value = ?division 'computer)))
+</p>
 
 <a name="%_sec_Temp_657"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_657">Rules</a></h4>
 <h4 class="trans" lang="ja">規則</h4>
 
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5136"></a>
 <a name="%_idx_5138"></a>In addition to primitive queries and compound queries, the query
@@ -4050,6 +4101,9 @@ sections <a href="#%_sec_4.4.2">4.4.2</a> and <a href="#%_sec_4.4.3">4.4.3</a>.<
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_654"><sup><small>63</small></sup></a>
+実際は、<tt>not</tt> についてのこの記述は、単純な場合についてのみ妥当である。
+<tt>not</tt> の現実の振る舞いは、もっと複雑だ。
+<tt>not</tt> の妙な性質については、<a href="#%_sec_4.4.2">4.4.2</a>節と<a href="#%_sec_4.4.3">4.4.3</a>節で吟味しよう。
 </p>
 
 <p class="orig" lang="en">
@@ -4061,6 +4115,8 @@ be done with the <tt>same</tt> rule shown below).</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_655"><sup><small>64</small></sup></a>
+<tt>lisp-value</tt> は、クエリ言語では提供されていない演算を実行するためにだけ使われるべきである。
+特に、等価性を検査するためにこれを使うべきではないし (なぜなら、それこそが、クエリ言語におけるマッチングがそれを行うべく設計されている対象の事柄だからである)、あるいは、不等価性を検査するためにも使うべきではない (なぜなら、それは、後に示す <tt>same</tt> 規則を使って行われるからである)。
 </p>
 
 <p class="orig" lang="en">
