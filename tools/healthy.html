@@ -39,7 +39,7 @@ if (!("Notification" in window)) {
 	console.log("パーミッションが明示的に拒否になっていた\n");
 } else {
 	console.log("許可してくれるかどうかをユーザに尋ねます\n");
-	Notification.requestPermission(function(result) {
+	Notification.requestPermission().then(function(result) {
 		console.log("いま尋ねていますよ (どきどき)\n");
 		if (result === 'granted') {
 			n_ok=true;
@@ -80,6 +80,7 @@ if (n_ok) {
 </p>
 
 <ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Notification/requestPermission" target="_blank">Notification.requestPermission()の仕様変更</a>に応じて、ちょっと書き換えてみました (2016-11-05)。</li>
 <li><a href="https://developer.mozilla.org/ja/docs/WebAPI/Using_Web_Notifications" target="_blank">Web Notifications API</a>を使った
 「<a href="http://qiita.com/tomoki1207/items/c11bad49b7dc40667adb" target="_blank">残業を防ぐHTMLが通知してくる</a>」
 という記事が面白かったので、作ってみたものです。</li>
@@ -96,14 +97,7 @@ if (n_ok) {
 	<li>idx: なんとなく大域配列を使っていますが、その添字の指定用です。とりあえず、0, 1, 2, &hellip; と、呼び出しごとに別々の値を指定しておいてください。</li>
 	</ul>
 </li>
-<li><em>ローカルにこのページのコピーを置いて使っても良いのですが、環境によってはうまく動かないかもしれません</em>。<!--
-	<ul>
-	<li>Mac OS X + Firefox だとうまくいったので、多分、Firefoxはデフォルトで通知を許可しているのだと思われます。</li>
-	<li>Mac OS X + Operaは、ちらっと試しただけですが、うまく動きませんでした。でもまあOperaとはもうさようならした方が良さそうだし、どうでもいいかも。</li>
-	<li>Mac OS X + Safariは、条件によって挙動が違うようです。[環境設定]の[詳細]タブで、[メニューバーに&ldquo;開発&rdquo;メニューを表示]をチェックして、[開発]メニューを表示しておき、本ページを呼び出す直前に、[ローカルファイルの制限を無効にする]を、チェックなしの状態からチェックありの状態に切り換えると、うまくいくみたい。切り換えてから本ページをリロードしても可。チェックマークが元から付いた状態で本ページを呼び出したら、うまくいかない模様。不可解です。</li>
-	<li>他のOSのことは知りません。</li>
-	</ul>
---></li>
+<li><em>ローカルにこのページのコピーを置いて使っても良いのですが、環境によってはうまく動かないかもしれません</em>。</li>
 </ul>
 
 <nav>
