@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>Wax and wane of the Moon</title>
+<style>
+body {
+  color: white;
+  background: black;
+}
+.moon {
+  font-size: 180pt;
+  text-align: center;
+  margin-top: 20pt;
+}
+</style>
+<script>
+const moon_icons=['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+const num_icons=moon_icons.length;
+var cur_idx=0;
+
+function wax_and_wane(interval_in_sec) {
+  setInterval(function () {
+    cur_idx=(++cur_idx)%num_icons;
+    document.getElementById('wwm').textContent = moon_icons[cur_idx];
+  }, interval_in_sec*1000);
+}
+window.onload=function () {
+  document.getElementById('wwm').textContent = moon_icons[cur_idx];
+  wax_and_wane(0.8);
+}
+</script>
+</head>
+<body>
+
+<p class="moon" id="wwm"></p>
+
+</body>
+</html>
