@@ -1034,7 +1034,6 @@ division, together with the supervisor's name and job.</li>
 <h4 class="trans" lang="ja">規則</h4>
 
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5136"></a>
 <a name="%_idx_5138"></a>In addition to primitive queries and compound queries, the query
@@ -1042,6 +1041,9 @@ language provides means for abstracting queries.  These are given by
 <em>rules</em>.  The rule</p>
 
 <p class="trans" lang="ja">
+原始的クエリと複合クエリに加えて、クエリ言語は、クエリを抽象化する手段を提供する。
+これらは、<em>規則</em>により与えられる。
+以下の規則は、
 </p>
 
 <p class="lisp"><a name="%_idx_5140"></a>(rule (lives-near ?person-1 ?person-2)
@@ -1056,6 +1058,9 @@ that all people live near themselves.  The <tt>same</tt> relation is
 defined by a very simple rule:<a name="call_footnote_Temp_658" href="#footnote_Temp_658"><sup><small>65</small></sup></a></p>
 
 <p class="trans" lang="ja">
+二人の人は、もし同じ町に住んでいれば、お互いに近くに住んでいるのだ、と規定している。
+最後の <tt>not</tt> 節は、すべての人は自分の近くに住んでいる、と規則が述べるのを防いでいる。
+<tt>same</tt> 関係は、とても単純な規則により定義される<a href="#footnote_Temp_658"><sup><small>65</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_5142"></a>(rule (same ?x ?x))
@@ -1066,6 +1071,7 @@ The following rule declares that a person is a ``wheel'' in an
 organization if he supervises someone who is in turn a supervisor:</p>
 
 <p class="trans" lang="ja">
+以下の規則は、次のように宣言している。すなわち、人は、もし誰かを指揮監督していて、その誰かがまたさらに指揮監督者であるならば、組織における「大物」である、と。
 </p>
 
 <p class="lisp"><a name="%_idx_5144"></a>(rule (wheel ?person)
@@ -1078,6 +1084,7 @@ The general form of a rule is
 </p>
 
 <p class="trans" lang="ja">
+規則の一般形は、
 </p>
 
 <p class="lisp">(rule &lt;<em>conclusion</em>&gt; &lt;<em>body</em>&gt;)
@@ -1096,6 +1103,12 @@ query
 </p>
 
 <p class="trans" lang="ja">
+であり、ここで、&lt;<em class="en">conclusion</em>&gt; (帰結部) はパタンであり、&lt;<em class="en">body</em>&gt; (本体) は任意のクエリである<a href="#footnote_Temp_659"><sup><small>66</small></sup></a>。
+規則のことを、言明の多数通りの (無限通りでさえある) 組——すなわち、規則本体を満たすような変数<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>での、規則帰結部のすべてのインスタンス化——を表しているものと、見なすことが可能である。
+単純クエリ (パタン) を説明したときに、私たちは、もしインスタンス化されたパタンがデータベース内にあれば、変数への<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>はパタンを満たす、と言った。
+しかし、パタンは、言明のように明示的にデータベース内にある必要はない。
+それは、規則によって暗示される暗黙的な言明であり得る。
+たとえば、以下のクエリは、
 </p>
 
 <p class="lisp">(lives-near ?x (Bitdiddle Ben))
@@ -1105,6 +1118,7 @@ query
 </p>
 
 <p class="trans" lang="ja">
+以下のような結果になる。
 </p>
 
 <p class="lisp">(lives-near (Reasoner Louis) (Bitdiddle Ben))
@@ -1116,6 +1130,7 @@ ask
 </p>
 
 <p class="trans" lang="ja">
+ベン・ビットディドルの近くに住んでいるすべてのプログラマを見つけるために、次のように尋ねることができる。
 </p>
 
 <p class="lisp">(and (job ?x (computer programmer))
@@ -1129,6 +1144,8 @@ or even be defined recursively.  For instance, the rule
 </p>
 
 <p class="trans" lang="ja">
+複合手続きの場合と同様に、規則を、(上記の <tt>lives-near</tt> の規則について見たとおり) 他の規則の一部として使うことができるし、あるいは、再帰的に定義することすらできる。
+たとえば、次の規則は、
 </p>
 
 <p class="lisp"><a name="%_idx_5152"></a>(rule (outranked-by ?staff-person ?boss)
@@ -1142,7 +1159,9 @@ the boss is the person's supervisor or (recursively) if the person's
 supervisor is outranked by the boss.</p>
 
 <p class="trans" lang="ja">
+組織内では、ある職員と上役について、その上役がその職員の指揮監督者である場合、または、(再帰的に) その職員の指揮監督者よりもその上役の方が高い地位にある場合は、その職員よりもその上役の方が高い地位にある、と言っている。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_4.57"></a>
@@ -1153,7 +1172,8 @@ the same person. Using your rule, give queries that find the
 following:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.5.</b> 
+<b>練習問題4.57.</b> 人物1 が人物2 と同じ仕事をしているか、または、人物1 と同じ仕事をしている誰かが人物2 の仕事もできる場合、かつ、人物1 と人物2 が同一人物ではない場合に、人物1 が人物2 の代わりを務められる、と述べる規則を、定義せよ。
+君の規則を使って、以下のものを見つけるクエリを示せ。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1164,8 +1184,8 @@ are, together with the two salaries.</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li>サイ・D・フェクトの代わりができる、すべての人たち。</li>
+<li>自分より高い給与をもらっている誰かの代わりを務められる、すべての人たちを、それら二人の給与とともに。</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
@@ -1179,12 +1199,14 @@ works in the division.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.5.</b> 
+<b>練習問題4.58.</b> もし、ある人がある部門で働いているものの、当人には当該部門で働く指揮監督者がいなければ、その人は当該部門における「お偉方」である、と述べる規則を、定義せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
+
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.59"></a>
 <b>Exercise 4.59.</b>  Ben Bitdiddle has missed one meeting too many.
@@ -1195,7 +1217,7 @@ asserting the following:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.5.</b> 
+<b>練習問題4.59.</b> 
 </p>
 
 <p class="lisp">(meeting accounting (Monday 9am))
@@ -1259,7 +1281,7 @@ what query should she make to find this out?</li>
 
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.60.</b> 
 </p>
 
 <p class="lisp">(lives-near ?person (Hacker Alyssa P))
@@ -4133,6 +4155,10 @@ different.)</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_658"><sup><small>65</small></sup></a>
+二つのものを同一とするためには、<tt>same</tt> を必要とはしないのだ、ということに注意せよ。それぞれについて同じパタン変数を使いさえすればよいのだ。実際、そもそもは、二つのものではなく、一つのものがある訳だ。
+たとえば、<tt>lives-near</tt> の規則における <tt>?town</tt> や、以下の <tt>wheel</tt> の規則における <tt>?middle-manager</tt> を参照せよ
+<tt>same</tt> は、<tt>lives-near</tt> の規則における <tt>?person-1</tt> と <tt>?person-2</tt> のように、二つのものを強制的に異なるものとしたい場合に、有用である。
+クエリの二つの部分で同じパタン変数を使うことは、同じ値が両方の場所に現れることを強いるが、異なるパタン変数を使うことは、異なる値が現れることを強いる訳ではない (異なるパタン変数に<ruby><rb>代入された</rb><rp> (</rp><rt>わりあてられた</rt><rp>) </rp></ruby>値は、同じかもしれないし、あるいは、違うかもしれないのだ)。
 </p>
 
 <p class="orig" lang="en">
@@ -4141,6 +4167,7 @@ conclusion is satisfied by any values of the variables.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_659"><sup><small>66</small></sup></a>
+<tt>same</tt> でのような、本体のない規則も許可しよう。そして、そういった規則を、変数の任意の値によって当該規則の帰結が満たされることを意味するものとして、解釈しよう。
 </p>
 
 <p class="orig" lang="en">
