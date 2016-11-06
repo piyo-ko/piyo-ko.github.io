@@ -98,7 +98,17 @@ code {
 	white-space: pre;
 	padding-left: 1ex;
 	padding-right: 1ex;
+	text-indent: 0;
 	display: inline-block;
+}
+code.block {
+	display: block;
+	overflow: auto;
+	max-width: 90%;
+}
+code span.com, code.com {
+	font-style: italic;
+	color: hsl(20, 100%, 50%);
 }
 dt {
 	font-family: "筑紫B丸ゴシック", sans-serif;
