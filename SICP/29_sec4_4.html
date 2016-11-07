@@ -755,7 +755,7 @@ pattern for that data base.</p>
 
 <p class="trans" lang="ja">
 もしパタンに変数がなければ、クエリは、そのパタンがデータベース内にあるか否かという判定へと帰着するのだ、ということに注意してほしい。
-もしあれば、空の<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>——変数に何の値も割り当てない——が、そのデータベースについてのそのパタンを満たす。
+もし<span class="note"> (そのパタンがデータベース内に) </span>あれば、空の<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>——変数に何の値も割り当てない——が、そのデータベースについての当該パタンを満たす。
 </p>
 
 
@@ -1188,9 +1188,27 @@ are, together with the two salaries.</li>
 <li>自分より高い給与をもらっている誰かの代わりを務められる、すべての人たちを、それら二人の給与とともに。</li>
 </ol>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
-
+<p class="exercise"><span class="ex_comment">; 規則の定義</span>
+(rule (can-replace ?persson1 ?person2)
+  (and
+    (or
+       <span class="ex_comment">; 人物1 と人物2 が同じ仕事 (?job1) をしている。</span>
+      (and (job ?person1 ?job1) (job ?person2 ?job1))
+       <span class="ex_comment">; 人物1 がしている仕事 (?job1) をしている人は一般的に、</span>
+       <span class="ex_comment">; 人物2 がしている仕事 (?job2) を行うことが可能である。</span>
+      (and (job ?person1 ?job1) (job ?person2 ?job2) (can-do-job ?job1 ?job2)))
+     <span class="ex_comment">; 人物1 と人物2 は別人である。</span>
+    (not (same ?person1 ?person2))))
+<span class="ex_comment">; a</span>
+(can-replace ?who (Fect Cy D))
+<span class="ex_comment">; b</span>
+(and (can-replace ?who ?more-paid-person)
+     (salary ?who ?s1) (salary ?more-paid-person ?s2)
+     (lisp-value &lt; ?s1 ?s2))
+</p>
+<!--
+      (and (job ?person1 ?job1) (job ?someone ?job1)  (job ?person2 ?job2) (can-do-job ?job1 ?job2)
+-->
 <p class="orig" lang="en">
 <a name="%_thm_4.58"></a>
 <b>Exercise 4.58.</b>  Define a rule that says that a person is a ``big shot'' in a division
@@ -1202,11 +1220,14 @@ works in the division.
 <b>練習問題4.58.</b> もし、ある人がある部門で働いているものの、当人には当該部門で働く指揮監督者がいなければ、その人は当該部門における「お偉方」である、と述べる規則を、定義せよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise">(is-big-shot ?who
+  (and (job ?who (?division1 . ?j1))
+       (supervisor ?who ?supervisor)
+       (job ?supervisor (?division2 . ?j2))
+       (not (same ?divison1 ?division2))))
+</p>
 
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.59"></a>
 <b>Exercise 4.59.</b>  Ben Bitdiddle has missed one meeting too many.
@@ -1217,7 +1238,9 @@ asserting the following:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.59.</b> 
+<b>練習問題4.59.</b> ベン・ビットディドルは、これまで何度も会議に行きそこねてきた<span class="note"> (oneがうまく解釈できない)</span>。
+会議を忘れるという自分の癖は、厄介事を自分にもたらしかねない、と懸念して、ベンは、これに関して何かしよう、と決意する。
+以下のように言明することによって、彼は、会社の毎週の会議をすべて、マイクロシャフト社のデータベースに加える。
 </p>
 
 <p class="lisp">(meeting accounting (Monday 9am))
@@ -1232,6 +1255,9 @@ divisions.  All of the company's employees attend this meeting.
 </p>
 
 <p class="trans" lang="ja">
+上記の言明のそれぞれは、部門全体の会議についてのものである。
+ベンは、全部門にまたがる全社的会議についてのエントリも加える。
+会社の全従業員がこの会議に出席する。
 </p>
 
 <p class="lisp">(meeting whole-company (Wednesday 4pm))
@@ -1243,8 +1269,11 @@ that occur that day.  What query should he use?</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
+<li>金曜日の朝、ベンは、その日にある全部の会議について、データベースに質問したいと思う。
+彼はどのようなクエリを使うべきだろう?</li>
 </ol>
+
+<p class="exercise">(meeting ?div (Friday ?time))</p>
 
 <ol class="orig alph" start="2" lang="en">
 <li>Alyssa P. Hacker is unimpressed.  She thinks it would be much more
@@ -1254,11 +1283,19 @@ Fill in the body of Alyssa's rule.</li>
 </ol>
 
 <ol class="trans alph" start="2" lang="ja">
-<li></li>
+<li>アリッサ・P・ハッカは、感心できないな、と思っている。
+彼女は、自分の名前を指定することで自分の会議について求めることができれば、もっとずっと有用だろうに、と考えている。
+そこで彼女は、次のように述べる規則を設計する。すなわち、ある人の会議とは、<tt>whole-company</tt> のすべての会議と、その人の部門のすべての会議とを含むのだ、と。
+アリッサの規則の本体を埋めよ。</li>
 </ol>
 
 <p class="lisp">(rule (meeting-time ?person ?day-and-time)
       &lt;<em>rule-body</em>&gt;)
+</p>
+
+<p class="exercise">(rule (meeting-time ?person ?day-and-time)
+  (or (meeting whole-company ?day-and-time)
+      (and (job ?person (?division . ?x)) (meeting ?division ?day-and-time))))
 </p>
 
 <ol class="orig alph" start="3" lang="en">
@@ -1268,11 +1305,11 @@ what query should she make to find this out?</li>
 </ol>
 
 <ol class="trans alph" start="3" lang="ja">
-<li></li>
+<li>アリッサは、水曜日の朝に職場に着く。そして、この日に自分はどの会議に出席せねばならないんだっけ、と考える。
+上記の規則を定義済みだとして、彼女がこれについて知るためには、どのようなクエリを作るべきだろうか?</li>
 </ol>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise">(meeting-time (Hacker Alyssa P) (Wednesday . ?time))</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.60"></a>
@@ -1281,7 +1318,7 @@ what query should she make to find this out?</li>
 
 
 <p class="trans" lang="ja">
-<b>練習問題4.60.</b> 
+<b>練習問題4.60.</b> 次のクエリを与えることで、
 </p>
 
 <p class="lisp">(lives-near ?person (Hacker Alyssa P))
@@ -1292,6 +1329,8 @@ she can ride to work.  On the other hand, when she tries to find all
 pairs of people who live near each other by querying</p>
 
 <p class="trans" lang="ja">
+アリッサ・P・ハッカは、自分の近所に住んでいる人たち——自動車に相乗りして通勤できる相手——を見つけられる。
+その一方で、彼女は、お互いの近所に住んでいるすべての二人組を、以下のように質問することで見つけようとしたときに、
 </p>
 
 <p class="lisp">(lives-near ?person-1 ?person-2)
@@ -1301,6 +1340,8 @@ pairs of people who live near each other by querying</p>
 listed twice; for example,</p>
 
 <p class="trans" lang="ja">
+お互いの近所に住んでいる二人組の各々が二度列挙されている、ということに気づく。
+たとえば、以下のように。
 </p>
 
 <p class="lisp">(lives-near (Hacker Alyssa P) (Fect Cy D))
@@ -1313,14 +1354,41 @@ which each pair appears only once?  Explain.
 </p>
 
 <p class="trans" lang="ja">
+なぜこういうことが起きるのか?
+お互いの近所に住んでいる人たちの一覧を見つけつつ、そこでは各組が一度だけ現れている、といった方法は存在するだろうか?
+説明せよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment"><a href="#%_idx_5140"><tt>lives-near</tt> の定義</a>は、二人の人物に関してまったく対称である。よって、
+もしAさんとBさんが近所に住んでいれば (AさんとBさんは別人とする)、
+
+  * <tt>?person-1</tt> というパタン変数にAさん (の氏名) が代入され、かつ、
+    <tt>?person-2</tt> というパタン変数にBさん (の氏名) が代入される、というインスタンス化と、
+
+  * <tt>?person-1</tt> というパタン変数にBさん (の氏名) が代入され、かつ、
+    <tt>?person-2</tt> というパタン変数にAさん (の氏名) が代入される、というインスタンス化
+
+のそれぞれによって、<tt>lives-near</tt> は満たされる。したがって、上記のように、
+どの「ご近所二人組」も二度出現してしまう。
+
+これを防ぐには、<tt>lives-near</tt> の本体に、<tt>and</tt> でつなげて条件を追加すればよい 
+(または、<tt>lives-near</tt> に <tt>and</tt> で別の条件をつないだ、ラッパ的な規則ないしクエリを作ればよい)。
+つまり対称性を壊せばよい。
+具体的には、氏名同士の間に (文字列の辞書順とかで適当に) 順序関係を定義してやって、
+<tt>?person-1</tt> は <tt>?person-2</tt> よりも「順序」が前だ、という条件を加えればよい。
+もしその「順序」を、「&le; 的な関係」ではなくて「&lt; 的な関係」として定義するなら、
+<tt>(not (same ?person-1 ?person-2))</tt> は省略可能となる。
+
+……とまあ、理屈の上ではそうなんだが、記号 (シンボル) 同士の間に順序付けを
+するような組み込み述語ってあったかな? あるいは、シンボル名を表現する文字列を
+取得するような組み込み関数とか (それで文字列同士の大小比較に持ち込む)。
+ちょっと実際の実装までは考えていない。
 </span></p>
 
 <a name="%_sec_Temp_664"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_664">Logic as programs</a></h4>
 <h4 class="trans" lang="ja">プログラムとしての論理</h4>
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5156"></a>
