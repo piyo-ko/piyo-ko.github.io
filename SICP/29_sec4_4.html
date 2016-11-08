@@ -1388,7 +1388,6 @@ which each pair appears only once?  Explain.
 <a name="%_sec_Temp_664"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_664">Logic as programs</a></h4>
 <h4 class="trans" lang="ja">プログラムとしての論理</h4>
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5156"></a>
@@ -1400,6 +1399,10 @@ section <a href="#%_sec_4.4">4.4</a>.  As we said, <tt>append</tt> can be
 characterized by the following two rules:</p>
 
 <p class="trans" lang="ja">
+規則を、一種の論理的含意と見なすこともできる。つまり、<em>もし</em>パタン変数に対する値の<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>が本体を満たす<em>なら</em>、その<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>は帰結部を満たす、という論理的含意である。
+その結果、クエリ言語を、規則に基づく<em>論理的演繹</em>を実行する能力を備えたものと見なせる。
+例として、<a href="#%_sec_4.4">4.4</a>節の最初で説明した <tt>append</tt> の演算を考えてみよ。
+言ったとおり、以下の二つの規則により <tt>append</tt> を特徴づけることができる。
 </p>
 
 <ul class="orig" lang="en">
@@ -1411,8 +1414,8 @@ if <tt>v</tt> and <tt>y</tt> <tt>append</tt> to form <tt>z</tt>.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>任意のリスト <tt>y</tt> について、空リストと <tt>y</tt> は、<tt>append</tt> して <tt>y</tt> となる。</li>
+<li>任意の <tt>u</tt> と <tt>v</tt> と <tt>y</tt> と <tt>z</tt> について、もし <tt>v</tt> と <tt>y</tt> が <tt>append</tt> して <tt>z</tt> となるなら、<tt>(cons u v)</tt> と <tt>y</tt> は、<tt>append</tt> して <tt>(cons u z)</tt> となる。</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -1420,17 +1423,17 @@ To express this in our query language, we define two rules for a
 relation
 </p>
 
-
 <p class="trans" lang="ja">
+私たちのクエリ言語でこれを表すには、以下の関係について二つの規則を定義する。
 </p>
 
-<p class="lisp">(append-to-form x y z)
-</p>
+<p class="lisp">(append-to-form x y z)</p>
 
 <p class="orig" lang="en">which we can interpret to mean ``<tt>x</tt> and <tt>y</tt> <tt>append</tt> to
 form <tt>z</tt>'':</p>
 
 <p class="trans" lang="ja">
+なおこれは、「<tt>x</tt> と <tt>y</tt> は <tt>append</tt> して <tt>z</tt> となる」を意味するものと解釈できる。
 </p>
 
 <p class="lisp"><a name="%_idx_5158"></a>(rule (append-to-form () ?y ?y))
@@ -1443,14 +1446,16 @@ any value of <tt>?y</tt>.  Note how the second rule makes use of
 <a name="%_idx_5162"></a>dotted-tail notation to name the <tt>car</tt> and <tt>cdr</tt> of a list.</p>
 
 <p class="trans" lang="ja">
+1番目の規則には本体がなく、そのことは、<tt>?y</tt> の任意の値に対して帰結部が成り立つことを意味する。
+どのようにして2番目の規則が、末尾にドットがついた記法を利用してリストの <tt>car</tt> と <tt>cdr</tt> を名付けているのか、ということに注意してほしい。
 </p>
 
 <p class="orig" lang="en">
 Given these two rules, we can formulate queries that compute the <tt>append</tt> of two lists:
 </p>
 
-
 <p class="trans" lang="ja">
+これら二つの規則が与えられると、二つのリストの <tt>append</tt> を計算するクエリを定式化できる。
 </p>
 
 <p class="lisp"><i>;;; Query input:</i>
@@ -1464,8 +1469,9 @@ Given these two rules, we can formulate queries that compute the <tt>append</tt>
 This is done as follows:
 </p>
 
-
 <p class="trans" lang="ja">
+さらに素晴らしいことには、「<tt>(a b)</tt> に <tt>append</tt> された場合に <tt>(a b c d)</tt> を作り出すのはどのリストか?」という質問に答えるのに、同じ規則を使えるのである。
+これは、次のように行われる。
 </p>
 
 <p class="lisp"><i>;;; Query input:</i>
@@ -1478,6 +1484,7 @@ This is done as follows:
 </p>
 
 <p class="trans" lang="ja">
+<tt>append</tt> して <tt>(a b c d)</tt> になるような、リスト同士の対をすべて求めることもできる。
 </p>
 
 <p class="lisp"><i>;;; Query input:</i>
@@ -1500,7 +1507,11 @@ general methods may break down in more complex cases, as we will see
 in section <a href="#%_sec_4.4.3">4.4.3</a>.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムは、上記のクエリへの答えを演繹するのに規則を用いる際に、かなりの知性を示すように見えるかもしれない。
+実際、次の節で見るように、このシステムは、諸規則を解きほぐす際に、きちんと定められたアルゴリズムに従っている。
+しかしあいにく、<tt>append</tt> の場合にはシステムが印象的にうまく動くとは言え、より複雑な場合では、<a href="#%_sec_4.4.3">4.4.3</a>節で見ることになるように、一般的な方法ではうまくいかないかもしれない。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_4.61"></a>
@@ -1509,7 +1520,7 @@ adjacent elements of a list:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.61.</b> 以下の規則は、リストのうちの隣り合う要素を見つけ出す、<tt>next-to</tt> という関係を実装している。
 </p>
 
 <p class="lisp"><a name="%_idx_5164"></a>(rule (?x next-to ?y in (?x ?y . ?u)))
@@ -1522,6 +1533,7 @@ adjacent elements of a list:
 </p>
 
 <p class="trans" lang="ja">
+以下のクエリに対して、応答はどうなるだろうか?
 </p>
 
 <p class="lisp">(?x next-to ?y in (1 (2 3) 4))
@@ -1529,8 +1541,12 @@ adjacent elements of a list:
 (?x next-to 1 in (2 1 3 1))
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise">(1 next-to (2 3) in (1 (2 3) 4))
+((2 3) next-to 4 in (1 (2 3) 4))
+
+(2 next-to 1 in (2 1 3 1))
+(3 next-to 1 in (2 1 3 1))
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.62"></a>
@@ -1542,11 +1558,14 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.62.</b> 練習問題<a href="15_sec2_2.html#%_thm_2.17">2.17</a>の <tt>last-pair</tt> 演算——非空リストの最後の要素を含むリストを返す——を実装するための規則を定義せよ。
+<tt>(last-pair (3) ?x)</tt> や <tt>(last-pair (1 2 3) ?x)</tt> や <tt>(last-pair (2 ?x) (3))</tt> といったクエリについて、君の規則を点検してみたまえ。
+<tt>(last-pair ?x (3))</tt> のようなクエリに対して、君の規則は正しく動くかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_4.63"></a>
@@ -1554,7 +1573,7 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 descendants of Ada back to Adam, by way of Cain:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.63.</b> 以下のデータベース (創世記4章を参照) は、カインを通じてアダムにまで遡る、アダの子孫の系図をなぞっている。
 </p>
 
 <p class="lisp">(son Adam Cain)
@@ -1568,6 +1587,7 @@ descendants of Ada back to Adam, by way of Cain:</p>
 (son Ada Jubal)
 </p>
 
+
 <p class="orig" lang="en">Formulate rules such as ``If <em>S</em> is the son of <em>F</em>, and <em>F</em> is the son of <em>G</em>, then <em>S</em> is the grandson of <em>G</em>''
 and ``If <em>W</em> is the wife of <em>M</em>, and <em>S</em> is the son of
 <em>W</em>, then <em>S</em> is the son of <em>M</em>'' (which was supposedly
@@ -1576,10 +1596,16 @@ system to find the grandson of Cain; the sons of Lamech; the grandsons
 of Methushael.
 (See exercise <a href="#%_thm_4.69">4.69</a> for some rules to
 deduce more complicated relationships.)
-
 </p>
 
 <p class="trans" lang="ja">
+カインの孫息子や、レメクの息子たちや、メトサエルの孫息子たちをクエリ・システムが見つけられるようにするであろう、
+「もし <em class="en">S</em> が <em class="en">F</em> の息子であり、かつ、 <em class="en">F</em> が <em class="en">G</em> の息子であるならば、 <em class="en">S</em> は <em class="en">G</em> の孫息子である」
+および
+「もし <em class="en">W</em> が <em class="en">M</em> の妻であり、かつ、 <em class="en">S</em> が <em class="en">W</em> の息子であるならば、 <em class="en">S</em> は <em class="en">M</em> の息子である」
+(これは、おそらくは、聖書の時代においては現代よりも真実性があった)
+のような規則を、定式化せよ
+(より込み入った関係を演繹するためのいくつかの規則については、練習問題<a href="#%_thm_4.69">4.69</a>を参照)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1588,6 +1614,8 @@ deduce more complicated relationships.)
 <a name="%_sec_4.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
 <h3 class="trans" lang="ja">4.4.2 クエリ・システムはどう動くのか</h3>
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5172"></a>
 In section <a href="#%_sec_4.4.4">4.4.4</a> we will present an
