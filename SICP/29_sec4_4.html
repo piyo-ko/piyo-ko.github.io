@@ -1615,7 +1615,6 @@ deduce more complicated relationships.)
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
 <h3 class="trans" lang="ja">4.4.2 クエリ・システムはどう動くのか</h3>
 
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5172"></a>
 In section <a href="#%_sec_4.4.4">4.4.4</a> we will present an
@@ -1628,6 +1627,9 @@ of the subtle ways in which the query language's logical operations
 differ from the operations of mathematical logic.</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_4.4.4">4.4.4</a>節で、クエリ・インタプリタの実装を、手続きの集まりとして提示しよう。
+本節では、低水準の実装の詳細とは独立な、システムの全般的な構造を説明する概要を示す。
+インタプリタの実装を説明した後には、私たちは、その限界のうちのいくらかと、クエリ言語の論理演算が数学的論理の演算とは異なっている微妙な点のうちのいくらかについて、理解できる立場にいることだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -1641,6 +1643,10 @@ the search with the aid of streams.  Our implementation follows this
 second approach.</p>
 
 <p class="trans" lang="ja">
+データベース中の事実および規則に対してクエリを一致させるために、クエリ評価器がある種の探索を実行せねばならない、ということは明白なはずである。
+この探索を行うための一つの方法は、<a href="28_sec4_3.html#%_sec_4.3">4.3</a>節の <tt>amb</tt> 評価器を使って、非決定的なプログラムとしてクエリ・システムを実装することであろう (練習問題<a href="#%_thm_4.78">4.78</a>を参照)。
+もう一つの可能性は、ストリームの助けを借りて、なんとかうまく探索を行うことだ。
+私たちの実装は、この2番目の手法に従っている。
 </p>
 
 <p class="orig" lang="en">
@@ -1656,12 +1662,18 @@ analogous to the way <tt>eval</tt> classifies expressions for the
 interpreter described in section <a href="26_sec4_1.html#%_sec_4.1">4.1</a>.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムは、<em>パタン・マッチング</em>と<em><ruby><rb>単一化</rb><rp> (</rp><rt>ユニフィケーション</rt><rp>) </rp></ruby></em>と呼ばれる、二つの中心的な操作を巡って組織化されている。
+最初に、パタン・マッチングについて説明する。そして、この操作が、フレームのストリームを用いた情報の組織化とあいまって、どのようにして単純クエリと複合クエリの双方を実装できるようにしてくれるのか、ということを説明する。
+次に、ユニフィケーション——すなわち、規則を実装するのに必要とされる、パタン・マッチングの一般化——について議論する。
+最後に、どのようにしてクエリ・インタプリタ全体が、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節で説明したインタプリタのために <tt>eval</tt> が式を分類した方法と類似のやり方で式を分類する手続きを通じて、うまくまとまるのか、ということを示す。
 </p>
 
 <a name="%_sec_Temp_668"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_668">Pattern matching</a></h4>
 <h4 class="trans" lang="ja">パタン・マッチング</h4>
 
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5174"></a><a name="%_idx_5176"></a>
