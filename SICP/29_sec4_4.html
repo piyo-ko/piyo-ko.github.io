@@ -1672,9 +1672,6 @@ interpreter described in section <a href="26_sec4_1.html#%_sec_4.1">4.1</a>.</p>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_668">Pattern matching</a></h4>
 <h4 class="trans" lang="ja">パタン・マッチング</h4>
 
-
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_idx_5174"></a><a name="%_idx_5176"></a>
 A <em>pattern matcher</em> is a program that tests whether some datum
@@ -1688,7 +1685,13 @@ since that pattern specifies a list whose second element is the symbol
 <tt>a</tt>.</p>
 
 <p class="trans" lang="ja">
+<em>パタン・マッチャ</em>は、あるデータが、指定されたパタンに合うかどうかを調べるプログラムである。
+たとえば、<tt>((a b) c (a b))</tt> は <tt>(?x c ?x)</tt> というパタンにマッチし、その際、<tt>?x</tt> というパタン変数は <tt>(a b)</tt> に束縛される。
+同じデータリストは、<tt>(?x ?y ?z)</tt> というパタンにマッチし、その際、<tt>?x</tt> と <tt>?z</tt> は両方とも <tt>(a b)</tt> に束縛され、<tt>?y</tt> は <tt>c</tt> に束縛される。
+これは、<tt>((?x ?y) c (?x ?y))</tt> というパタンにもマッチし、その際、<tt>?x</tt> は <tt>a</tt> に束縛され、<tt>?y</tt> は <tt>b</tt> に束縛される。
+しかし、これは <tt>(?x a ?y)</tt> というパタンにはマッチしない。なぜなら、このパタンは、第2要素が <tt>a</tt> という<ruby><rb>記号</rb><rp> (</rp><rt>シンボル</rt><rp>) </rp></ruby>であるようなリストを指定しているためである。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5178"></a><a name="%_idx_5180"></a>The pattern matcher used by the query system takes as inputs a
@@ -1700,6 +1703,10 @@ that may have been determined by the match.  Otherwise, it indicates
 that the match has failed.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムにより使われるパタン・マッチャは、入力として、パタンと、データと、種々のパタン変数に対する束縛を指定する<em>フレーム</em>をとる。
+パタン・マッチャは、フレーム内に既にある束縛と整合性のある方法でデータがパタンと合致するかどうかを、調べる。
+もし合致すれば、パタン・マッチャは、そのマッチにより拡張された、与えられたフレームを返す。
+それ以外の場合、パタン・マッチャは、マッチが失敗した旨を示す。
 </p>
 
 <p class="orig" lang="en">
@@ -1713,7 +1720,11 @@ to <tt>b</tt> and <tt>?x</tt> is unbound will return the given frame
 augmented by a binding of <tt>?x</tt> to <tt>a</tt>.</p>
 
 <p class="trans" lang="ja">
+たとえば、空フレームが与えられたとして、<tt>(?x ?y ?x)</tt> というパタンを使って、<tt>(a b a)</tt> と<ruby><rb>一致</rb><rp> (</rp><rt>マッチ</rt><rp>) </rp></ruby>させると、<tt>?x</tt> が <tt>a</tt> に束縛されており、かつ、<tt>?y</tt> が <tt>b</tt> に束縛されている、と指定するフレームが返されるだろう。
+同じパタンと、同じデータと、<tt>?y</tt> が <tt>a</tt> に束縛されていると指定するフレームとを使って、そのマッチを試してみると、失敗するだろう。
+同じパタンと、同じデータと、<tt>?y</tt> が <tt>b</tt> に束縛されていて <tt>?x</tt> が束縛されていないフレームとを使って、そのマッチを試してみると、<tt>?x</tt> の <tt>a</tt> への束縛によって拡張された、与えられたフレームを返すだろう。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5182"></a>The pattern matcher is all the mechanism that is needed to process
@@ -1721,6 +1732,9 @@ simple queries that don't involve rules.  For instance, to process the
 query</p>
 
 <p class="trans" lang="ja">
+<!--パタン・マッチャは、規則を含まない単純クエリを処理するのに必要な仕組みのすべてである。-->
+規則を含まない単純クエリを処理するのに必要な仕組みは、ただパタン・マッチャのみである。
+たとえば、以下のクエリを処理するには、
 </p>
 
 <p class="lisp">(job ?x (computer programmer))
@@ -1734,6 +1748,8 @@ the pattern with a value for <tt>?x</tt>.
 
 
 <p class="trans" lang="ja">
+データベース内のすべての言明を走査し、最初は空のフレームに関して、パタンと合う言明を選ぶ。
+見つけたそれぞれのマッチについて、そのマッチにより返されたフレームを使って、<tt>?x</tt> に対する値でパタンをインスタンス化する。
 </p>
 
 <a name="%_sec_Temp_669"></a>
@@ -1753,6 +1769,11 @@ that extend the given frame via a match to some assertion in the data
 base.<a name="call_footnote_Temp_670" href="#footnote_Temp_670"><sup><small>67</small></sup></a></p>
 
 <p class="trans" lang="ja">
+フレームに対してパタンを試すことは、ストリームの使用を通じて整理される。
+一つのフレームが与えられると、マッチング・プロセスは、データベースのエントリを一つずつざっと点検してゆく。
+データベースのエントリそれぞれについて、マッチャは、マッチが失敗したことを示す特殊記号か、フレームの拡張の、いずれかを生成する。
+データベースのエントリすべてに対する結果が集められてストリームにされ、そのストリームは、失敗を取り除くためのフィルタを通して、受け渡される。
+その結果は、データベース内の何らかの言明に対する<ruby><rb>一致</rb><rp> (</rp><rt>マッチ</rt><rp>) </rp></ruby>を介して、与えられたフレームを拡張するようなすべてのフレームからなる、ストリームである<a name="call_footnote_Temp_670" href="#footnote_Temp_670"><sup><small>67</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -1766,6 +1787,10 @@ contains all possible extensions of every frame in the input stream.
 This stream is the output of the query.</p>
 
 <p class="trans" lang="ja">
+図<a href="#%_fig_4.4">4.4</a>に示すように、私たちのシステムでは、クエリが、フレームの入力ストリームをとり、ストリーム内のすべてのフレームについて上記のマッチング操作を実行する。
+つまり、入力ストリーム内の各フレームについて、クエリは、データベース内の言明との<ruby><rb>一致</rb><rp> (</rp><rt>マッチ</rt><rp>) </rp></ruby>による、当該フレームに対するすべての拡張からなる、新たなストリームを生成する。
+それから、すべてのこれらのストリームは、結合されて一つの大きなストリームとなるのだが、それは、入力ストリーム内のすべてのフレームの、あり得るすべての拡張を含む。
+このストリームが、そのクエリの出力である。
 </p>
 
 <figure>
@@ -1774,6 +1799,7 @@ This stream is the output of the query.</p>
 <figcaption class="orig" lang="en"><b>Figure 4.4:</b>  A query processes a stream of frames.</figcaption>
 <figcaption class="trans" lang="ja"><b>図4.4:</b> クエリがフレームのストリームを処理する</figcaption>
 </figure>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5194"></a>To answer a simple query, we use the query with an input stream
@@ -1785,6 +1811,9 @@ instantiated by the values in each frame, and this is the stream that
 is finally printed.</p>
 
 <p class="trans" lang="ja">
+単純クエリに応えるためには、単一の空フレームからなる入力ストリームとともに、そのクエリを使う。
+結果として生じる出力ストリームは、空フレームに対するすべての拡張 (つまり、我らがクエリに対するすべての答え) を含む。
+このフレームのストリームは、それから、各フレーム内の値によって変数がインスタンス化された元のクエリ・パタンのコピーからなるストリームを生成するのに使われ、これ <span class="note">(こうして生成されたストリーム)</span> が、最後に印字されるストリームである。
 </p>
 
 <a name="%_sec_Temp_671"></a>
@@ -1799,6 +1828,8 @@ queries makes use of the ability of our matcher to demand that a match
 <a name="%_idx_5198"></a>be consistent with a specified frame.  For example, to handle the <tt>and</tt> of two queries, such as</p>
 
 <p class="trans" lang="ja">
+フレームのストリームを使った実装の真の洗練ぶりは、複合クエリを扱うときに明らかとなる。指定されたフレームに対して整合性が取れているように、とマッチに対して要求できる、私たちのマッチャの能力を、複合クエリの処理では利用する。
+たとえば、以下のような二つのクエリの <tt>and</tt> を扱うには
 </p>
 
 <p class="lisp">(and (can-do-job ?x (computer programmer trainee))
@@ -1810,6 +1841,7 @@ programmer trainee''), we first find all entries that match the
 pattern</p>
 
 <p class="trans" lang="ja">
+(これは、くだけて言うと、「コンピュータ・プログラマ見習いの仕事ができる、すべての人たちを求めよ」である)、まず以下のパタンに合致するすべてのエントリを求める。
 </p>
 
 <p class="lisp">(can-do-job ?x (computer programmer trainee))
@@ -1820,6 +1852,8 @@ pattern</p>
 match</p>
 
 <p class="trans" lang="ja">
+これはフレームのストリームを作り出し、それらフレームの各々は、<tt>?x</tt> に対する束縛を含む。
+そして、ストリーム内の各フレームについて、以下に合致するすべてのエントリを求める
 </p>
 
 <p class="lisp">(job ?person ?x)
@@ -1833,6 +1867,10 @@ figure <a href="#%_fig_4.5">4.5</a>.  The frames that pass through the first
 query filter are filtered and further extended by the second query.</p>
 
 <p class="trans" lang="ja">
+—— <tt>?x</tt> に対する、与えられた束縛と整合性の取れた方法で合致する、すべてのエントリを求めるのである。
+そのような各マッチは、<tt>?x</tt> と <tt>?person</tt> に対する束縛を含むフレームを作り出すだろう。
+二つのクエリの <tt>and</tt> は、図 <a href="#%_fig_4.5">4.5</a>に示されるように、二つの成分クエリの直列の組み合わせだと見なせる。
+1番目のクエリのフィルタを通るフレームが、2番目のクエリにより、さらにフィルタにかけられ、拡張されるのである。
 </p>
 
 
@@ -1841,8 +1879,10 @@ query filter are filtered and further extended by the second query.</p>
 <img src="ch4-Z-G-5.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 4.5:</b>  The <tt>and</tt> combination of two queries is
 produced by operating on the stream of frames in series.</figcaption>
-<figcaption class="trans" lang="ja"><b>図4.5:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図4.5:</b> 二つのクエリの <tt>and</tt> 結合は、フレームのストリームに対して直列に操作を加えることにより、作り出される。</figcaption>
 </figure>
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5200"></a>Figure <a href="#%_fig_4.6">4.6</a> shows the analogous method for computing the
@@ -4293,6 +4333,13 @@ simple-minded form of such an optimization.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_670"><sup><small>67</small></sup></a>
+マッチングは一般的にはとても高くつくので、データベースのどの要素に対しても完全なマッチャを適用することは避けたい。
+これの手筈は、普通、プロセスを高速で粗いマッチと最終的なマッチへと分解することにより、整えられる。
+粗いマッチは、データベースをフィルタにかけて、最終的なマッチに対する候補の小さな集合を作り出す。
+注意すれば、私たちは、候補を選択したいときではなくデータベースが構築されるときに粗いマッチングの作業のうちのいくらかを行えるように、自分のデータベースを整えられる。
+これは、データベースの<em><ruby><rb>索引づけ</rb><rp> (</rp><rt>インデクシング</rt><rp>) </rp></ruby></em>と呼ばれる。
+データベースのインデクシング方式をめぐって構築された、おびただしい技術がある。
+私たちの実装は、<a href="#%_sec_4.4.4">4.4.4</a>節で説明するが、そうした最適化の単純な形を含んでいる。
 </p>
 
 <p class="orig" lang="en">
