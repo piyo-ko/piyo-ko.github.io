@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="sicp.css" type="text/css">
 <base target="_top">
-<title>Structure and Interpretation of Computer Programs: SICP私訳</title>
+<title>SICP私訳: 4.4 論理プログラミング</title>
 </head>
 <body>
 
@@ -1769,7 +1769,7 @@ that extend the given frame via a match to some assertion in the data
 base.<a name="call_footnote_Temp_670" href="#footnote_Temp_670"><sup><small>67</small></sup></a></p>
 
 <p class="trans" lang="ja">
-フレームに対してパタンを試すことは、ストリームの使用を通じて整理される。
+フレームに対してパタンを試すことは、ストリームの使用を通じて体系化される。
 一つのフレームが与えられると、マッチング・プロセスは、データベースのエントリを一つずつざっと点検してゆく。
 データベースのエントリそれぞれについて、マッチャは、マッチが失敗したことを示す特殊記号か、フレームの拡張の、いずれかを生成する。
 データベースのエントリすべてに対する結果が集められてストリームにされ、そのストリームは、失敗を取り除くためのフィルタを通して、受け渡される。
@@ -1869,7 +1869,7 @@ query filter are filtered and further extended by the second query.</p>
 <p class="trans" lang="ja">
 —— <tt>?x</tt> に対する、与えられた束縛と整合性の取れた方法で合致する、すべてのエントリを求めるのである。
 そのような各マッチは、<tt>?x</tt> と <tt>?person</tt> に対する束縛を含むフレームを作り出すだろう。
-二つのクエリの <tt>and</tt> は、図 <a href="#%_fig_4.5">4.5</a>に示されるように、二つの成分クエリの直列の組み合わせだと見なせる。
+二つのクエリの <tt>and</tt> は、図 <a href="#%_fig_4.5">4.5</a>に示されるように、二つの成分クエリの直列の結合だと見なせる。
 1番目のクエリのフィルタを通るフレームが、2番目のクエリにより、さらにフィルタにかけられ、拡張されるのである。
 </p>
 
@@ -1882,8 +1882,6 @@ produced by operating on the stream of frames in series.</figcaption>
 <figcaption class="trans" lang="ja"><b>図4.5:</b> 二つのクエリの <tt>and</tt> 結合は、フレームのストリームに対して直列に操作を加えることにより、作り出される。</figcaption>
 </figure>
 
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_idx_5200"></a>Figure <a href="#%_fig_4.6">4.6</a> shows the analogous method for computing the
 <tt>or</tt> of two queries as a parallel combination of the two component
@@ -1892,6 +1890,9 @@ query.  The two resulting streams are then merged to produce the final
 output stream.</p>
 
 <p class="trans" lang="ja">
+図<a href="#%_fig_4.6">4.6</a>は、二つのクエリの <tt>or</tt> を二つの成分クエリの並列な結合として計算するための、類似の方法を示している。
+入力された、フレームのストリームは、それぞれのクエリによって別々に拡張される。
+結果として生じる二つのストリームは、その後、併合されて最終出力ストリームを作り出す。
 </p>
 
 <figure>
@@ -1900,8 +1901,9 @@ output stream.</p>
 <figcaption class="orig" lang="en"><b>Figure 4.6:</b>  The <tt>or</tt> combination of two queries is produced by 
 operating on the stream of frames in parallel and merging the
 results.</figcaption>
-<figcaption class="trans" lang="ja"><b>図4.6: </b></figcaption>
+<figcaption class="trans" lang="ja"><b>図4.6: 二つのクエリの <tt>or</tt> 結合は、フレームのストリームに対して並列に操作を加え、その結果同士を併合することによって、作り出される。</b></figcaption>
 </figure>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5202"></a>Even from this high-level description, it is apparent that the
@@ -1915,6 +1917,9 @@ Though systems for handling only simple queries are quite practical,
 dealing with complex queries is extremely difficult.<a name="call_footnote_Temp_673" href="#footnote_Temp_673"><sup><small>69</small></sup></a></p>
 
 <p class="trans" lang="ja">
+この高いレベルの記述からですら、複合クエリの処理が遅くなり得ることは明白だ。
+たとえば、クエリは、各入力フレームに対して一つよりも多い出力フレームを作り出すことがあるので、そしてまた、<tt>and</tt> 内の各クエリは、自身の入力フレームを前のクエリから取得するので、最悪の場合、<tt>and</tt> クエリは、クエリの数に対して指数関数的な回数のマッチを実行せねばならない、ということになり兼ねない (練習問題<a href="#%_thm_4.76">4.76</a>を参照)<a href="#footnote_Temp_672"><sup><small>68</small></sup></a>。
+単純なクエリのみを扱うシステムはとても現実的だが、複雑なクエリを扱うことは非常に困難である<a href="#footnote_Temp_673"><sup><small>69</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -1923,6 +1928,8 @@ as a filter that removes all frames for which the query can be
 satisfied.  For instance, given the pattern</p>
 
 <p class="trans" lang="ja">
+フレームのストリームの観点からは、ある種のクエリの <tt>not</tt> は、そのクエリを満たせるすべてのフレームを取り除くフィルタとして振る舞う。
+たとえば、以下のパタンが与えられると、
 </p>
 
 <p class="lisp">(not (job ?x (computer programmer)))
@@ -1936,6 +1943,14 @@ binding for <tt>?x</tt> does not satisfy <tt>(job ?x (computer
 programmer))</tt>.  For example, in processing the query</p>
 
 <p class="trans" lang="ja">
+入力ストリーム中の各フレームに対して、
+<tt>(job ?x (computer programmer))</tt>
+を満たす拡張フレームを作り出そうと試みる。
+そうした拡張が存在するようなすべてのフレームを、入力ストリームから取り除く。
+その結果は、<tt>?x</tt> に対する束縛が
+<tt>(job ?x (computer programmer))</tt>
+を満たさないようなフレームのみからなるストリームである。
+たとえば、以下のクエリを処理する際に、
 </p>
 
 <p class="lisp">(and (supervisor ?x ?y)
@@ -1949,6 +1964,8 @@ satisfies the restriction that <tt>?x</tt> is a computer
 programmer.<a name="call_footnote_Temp_674" href="#footnote_Temp_674"><sup><small>70</small></sup></a></p>
 
 <p class="trans" lang="ja">
+1番目の節は、<tt>?x</tt> と <tt>?y</tt> に対する束縛を有するフレームを生成するだろう。
+それから、<tt>not</tt> 節がこれらフレームをフィルタにかけるだろう—— <tt>?x</tt> はコンピュータ・プログラマだという制約を、<tt>?x</tt> に対する束縛が満たしているようなすべてのフレームを取り除くことによって<a href="#footnote_Temp_674"><sup><small>70</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -1959,7 +1976,11 @@ from the input stream all frames for which the predicate fails.
 </p>
 
 <p class="trans" lang="ja">
+<tt>lisp-value</tt> 特殊形式は、フレーム・ストリームに対する類似のフィルタとして実装される。
+パタン内の任意の変数をインスタンス化するのに、私たちは、ストリーム内の各フレームを用い、それから、Lisp 述語を適用する。
+述語が失敗するようなすべてのフレームを、私たちは入力ストリームから取り除く。
 </p>
+
 
 <a name="%_sec_Temp_675"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_675">Unification</a></h4>
@@ -1975,6 +1996,8 @@ matching -- called <em>unification</em> -- in which both the ``pattern''
 and the ``datum'' may contain variables.</p>
 
 <p class="trans" lang="ja">
+クエリ言語での規則を扱うためには、与えられたクエリ・パタンに帰結部が合致するような規則を求めることができなくてはならない。
+規則の帰結部は、変数を含むことができるという点を除いて言明と似ており、したがって、「パタン」と「データ」の双方が変数を含むことのあり得る、パタン・マッチングの一般化——<em>ユニフィケーション</em>と呼ばれる——が、必要となるだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -1992,6 +2015,11 @@ like the pattern matcher, takes a frame as input and performs
 unifications that are consistent with this frame.</p>
 
 <p class="trans" lang="ja">
+<ruby><rb>統一器</rb><rp> (</rp><rt>ユニファイア</rt><rp>) </rp></ruby>は、二つのパタン——その各々は定数と変数を含む——をとり、そして、二つのパタンを等価にするように値を変数に<ruby><rb>代入する</rb><rp> (</rp><rt>わりあてる</rt><rp>) </rp></ruby>ことが可能かどうかを、判定する。<!-- <span class="note">(ここの that は so that の略)</span> -->
+もし可能なら、ユニファイアは、これらの束縛を含むフレームを返す。
+たとえば、<tt>(?x a ?y)</tt> と <tt>(?y ?z a)</tt> を<ruby><rb>統一</rb><rp> (</rp><rt>ユニファイ</rt><rp>) </rp></ruby>することで、<tt>?x</tt> と <tt>?y</tt> と <tt>?z</tt> のすべてが <tt>a</tt> に束縛されているはずのフレームを指定することになるだろう。
+他方、<tt>(?x ?y a)</tt> と <tt>(?x b ?y)</tt> のユニファイは失敗するだろう。なぜなら、二つのパタンを等しくすることの可能な、<tt>?y</tt> に対する値は存在しないためである (パタンの2番目の要素を等しくするためには、<tt>?y</tt> は <tt>b</tt> でなくてはならないだろう。しかし、3番目の要素を等しくするためには、<tt>?y</tt> は <tt>a</tt> でなくてはならないだろう)。
+クエリ・システムで使われるユニファイアは、パタン・マッチャと同様に、入力としてフレームをとり、このフレームと整合性のとれたユニフィケーションを実行する。
 </p>
 
 <p class="orig" lang="en">
@@ -2008,6 +2036,12 @@ solve.<a name="call_footnote_Temp_676" href="#footnote_Temp_676"><sup><small>71<
 simultaneous equations</p>
 
 <p class="trans" lang="ja">
+ユニフィケーション・アルゴリズムは、クエリ・システムのうちで最も技術的に困難な部分である。
+複雑なパタンがある場合、ユニフィケーションの実行は、演繹を必要とするように見えるかもしれない。
+たとえば、<tt>(?x ?x)</tt> と <tt>((a ?y c) (a b ?z))</tt> をユニファイするには、アルゴリズムは、 <tt>?x</tt> が <tt>(a b c)</tt> である筈、かつ、<tt>?y</tt> が <tt>b</tt> である筈、かつ、<tt>?z</tt> が <tt>c</tt> である筈、と推測せねばならない。
+このプロセスは、パタン成分同士の間の方程式の集合を解くことだと見なせる。
+一般に、これらは連立方程式であり、特には相当な操作が必要となる場合がある<a href="#footnote_Temp_676"><sup><small>71</small></sup></a>。
+たとえば、<tt>(?x ?x)</tt> と <tt>((a ?y c) (a b ?z))</tt> をユニファイすることを、以下の連立方程式を指定することだと見なしてもよい。
 </p>
 
 <p class="lisp">?x  =  (a ?y c)
@@ -2017,6 +2051,7 @@ simultaneous equations</p>
 <p class="orig" lang="en">These equations imply that</p>
 
 <p class="trans" lang="ja">
+これらの方程式は、以下を暗示しており、
 </p>
 
 <p class="lisp">(a ?y c)  =  (a b ?z)
@@ -2025,6 +2060,7 @@ simultaneous equations</p>
 <p class="orig" lang="en">which in turn implies that</p>
 
 <p class="trans" lang="ja">
+これが、今度は以下を暗示しており、
 </p>
 
 <p class="lisp">a  =  a, ?y  =  b, c  =  ?z,
@@ -2033,6 +2069,7 @@ simultaneous equations</p>
 <p class="orig" lang="en">and hence that</p>
 
 <p class="trans" lang="ja">
+したがって、以下も暗示している。
 </p>
 
 <p class="lisp">?x  =  (a b c)
@@ -2047,6 +2084,9 @@ determine the variable values; some variables may remain unbound and
 others may be bound to values that contain variables.</p>
 
 <p class="trans" lang="ja">
+成功するパタン・マッチでは、すべてのパタン変数が束縛されるようになり、それらのパタン変数が束縛される値は、定数のみを含む。
+このことは、これまでに私たちが見てきたユニフィケーションのすべての例に当てはまる。
+しかし、一般には、成功するユニフィケーションが変数の値を完全に決定するとは限らない。いくつかの変数は、束縛されないままかもしれず、他の変数も、変数を含む値に束縛されているかもしれない。
 </p>
 
 <p class="orig" lang="en">
@@ -2065,12 +2105,21 @@ refer to this value.<a name="call_footnote_Temp_677" href="#footnote_Temp_677"><
 </p>
 
 <p class="trans" lang="ja">
+<tt>(?x a)</tt> と <tt>((b ?y) ?z)</tt> のユニフィケーションを考えよう。
+<tt>?x = (b ?y)</tt> かつ <tt>a = ?z</tt> だと演繹できるが、<tt>?x</tt> についても <tt>?y</tt> についてもさらに解くことはできない。
+<tt>?x</tt> と <tt>?y</tt> に値を<ruby><rb>代入する</rb><rp> (</rp><rt>わりあてる</rt><rp>) </rp></ruby>ことで二つのパタンを等しくすることが確かに可能なので、ユニフィケーションは失敗しない。
+このマッチは、<tt>?y</tt> が帯びることのできる値を決して制限しないので、<tt>?y</tt> に対する束縛は何も結果フレームに表現されない。
+しかし、マッチは、確かに <tt>?x</tt> の値を制限する。
+<tt>?y</tt> がいかなる値を持とうと、<tt>?x</tt> は <tt>(b ?y)</tt> でなくてはならないのだ。
+<tt>(b ?y)</tt> というパタンへの <tt>?x</tt> の束縛は、したがって、フレームに表現される。
+もし後に、(このフレームと整合性が取れていることを要求されるような、パタン・マッチまたはユニフィケーションによって) <tt>?y</tt> に対する値が決定され、フレームに追加されたら、先に束縛された <tt>?x</tt> は、この値を参照するだろう <a href="#footnote_Temp_677"><sup><small>72</small></sup></a>。
 </p>
 
 <a name="%_sec_Temp_678"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_678">Applying rules</a></h4>
 <h4 class="trans" lang="ja">規則を適用する</h4>
 
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5216"></a>
@@ -4349,6 +4398,7 @@ the number of frames produced.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_672"><sup><small>68</small></sup></a>
+しかし、この種の指数関数的爆発は、<tt>and</tt> クエリでよくあることではない。なぜなら、追加される条件は、作り出されるフレームの数を増やすより、むしろ減らす傾向があるためである。
 </p>
 
 <p class="orig" lang="en">
@@ -4358,6 +4408,7 @@ efficiently.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_673"><sup><small>69</small></sup></a>
+複雑なクエリを効率よく扱う方法に関する、データベース管理システムについての大量の文献がある。
 </p>
 
 <p class="orig" lang="en">
@@ -4367,6 +4418,8 @@ mathematical logic.  See section <a href="#%_sec_4.4.3">4.4.3</a>.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_674"><sup><small>70</small></sup></a>
+<tt>not</tt> についての、このフィルタ式の実装と、数学的論理における <tt>not</tt> の通常の意味との間には、微妙な差異がある。
+<a href="#%_sec_4.4.3">4.4.3</a>節を参照のこと。
 </p>
 
 <p class="orig" lang="en">
@@ -4376,6 +4429,7 @@ unknown (the pattern variable).</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_676"><sup><small>71</small></sup></a>
+一方的なパタン・マッチングにおいては、パタン変数を含むすべての方程式は、陽であり<span class="note"> (陽関数の「陽」)</span>、かつ、未知数 (パタン変数) について既に解かれている。
 </p>
 
 <p class="orig" lang="en">
@@ -4388,6 +4442,9 @@ of unification as a frame rather than a pattern.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_677"><sup><small>72</small></sup></a>
+ユニフィケーションのことを考える別の方法は、二つの入力パタンの特殊化であるような最も一般的なパタンをユニフィケーションが生成する、というものである。
+つまり、<tt>(?x a)</tt> と <tt>((b ?y) ?z)</tt> のユニフィケーションは <tt>((b ?y) a)</tt> であり、<tt>(?x a ?y)</tt> と <tt>(?y ?z a)</tt> のユニフィケーション——上記で議論したもの——は <tt>(a a a)</tt> である。
+私たちの実装にとっては、ユニフィケーションの結果を、パタンでなくフレームと見なすことが、より便利である。
 </p>
 
 <p class="orig" lang="en">
