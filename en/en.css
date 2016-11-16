@@ -118,6 +118,21 @@ dt:before {
 	content: "🍀 ";/*🍏🌵🍀🌻*/
 }
 
+ul.para li {
+	margin-bottom: 12pt;
+}
+/*
+dt {
+	margin-bottom: 0;
+}
+dd {
+	margin-top: 0;
+}
+*/
+dd > ul {
+	margin-top: 4pt;
+	margin-bottom: 4pt;
+}
 dd > ul > li {
 	display: inline;
 	margin-right: 1em;
