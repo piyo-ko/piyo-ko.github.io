@@ -2119,8 +2119,6 @@ refer to this value.<a name="call_footnote_Temp_677" href="#footnote_Temp_677"><
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_678">Applying rules</a></h4>
 <h4 class="trans" lang="ja">規則を適用する</h4>
 
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_idx_5216"></a>
 Unification is the key to the component of the query system that makes
@@ -2128,6 +2126,8 @@ inferences from rules. To see how this is accomplished, consider
 processing a query that involves applying a rule, such as</p>
 
 <p class="trans" lang="ja">
+ユニフィケーションは、規則から推論を行う、クエリ・システムの構成要素への、鍵である。
+これをどのように達成するのかを見るために、以下のような、規則の適用を伴う、クエリの処理について考えよう。
 </p>
 
 <p class="lisp">(lives-near ?x (Hacker Alyssa P))
@@ -2142,6 +2142,10 @@ pattern with the conclusion of each rule.  We find that the pattern
 unifies with the conclusion of the rule</p>
 
 <p class="trans" lang="ja">
+このクエリを処理するには、まず、このパタンに合致する言明が何かデータベース内にあるかどうかを見るために、上記のような通常のパタン・マッチ手続きを使う
+(この場合は何もないだろう。なぜなら、誰が誰の近くに住んでいるかについての直接的言明を、私たちのデータベースは何も含んでいないためである)。
+次の段階は、クエリ・パタンを各規則の帰結部とユニファイすることを試みることである。
+このパタンが、以下の規則の帰結部とユニファイする、ということが分かり、
 </p>
 
 <p class="lisp">(rule (lives-near ?person-1 ?person-2)
@@ -2158,6 +2162,9 @@ matches will extend this frame by providing a binding for <tt>?person-1</tt>, an
 instantiate the original query pattern.</p>
 
 <p class="trans" lang="ja">
+これは、<tt>?person-2</tt> が <tt>(Hacker Alyssa P)</tt> に束縛されていて <tt>?x</tt> は <tt>?person-1</tt> に束縛される (これと同じ値を有する) べきである、と指定するフレームを結果としてもたらすものである。
+さてここで、このフレームに関して、私たちは、規則の本体部により与えられた構成要素クエリを評価する。
+うまくいくマッチは、<tt>?person-1</tt> に対する束縛を、そしてその結果として <tt>?x</tt> に対する値——元のクエリ・パタンをインスタンス化するのに使える——を、与えることによって、このフレームを拡張するだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -2166,6 +2173,7 @@ rule when trying to establish a query pattern in a frame that
 specifies bindings for some of the pattern variables:</p>
 
 <p class="trans" lang="ja">
+一般に、クエリ評価器は、パタン変数のうちの一部に対する束縛を指定するフレーム内でクエリ・パタンを成立させようと試みる際に、以下の方法を使って規則を適用する。
 </p>
 
 <ul class="orig" lang="en">
@@ -2177,8 +2185,8 @@ the body of the rule.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>クエリを規則の帰結部とユニファイして、もしそれがうまくいけば、元のフレームの拡張を形成せよ。</li>
+<li>拡張されたフレームに関して、規則の本体部により形成されるクエリを評価せよ。</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -2187,6 +2195,7 @@ the <tt>eval</tt>/<tt>apply</tt> evaluator for Lisp:
 </p>
 
 <p class="trans" lang="ja">
+これが、Lisp用の <tt>eval</tt>/<tt>apply</tt> 評価器において手続きを適用する方法と、いかに似ているのか、ということに気づいてほしい。
 </p>
 
 <ul class="orig" lang="en">
@@ -2198,8 +2207,8 @@ formed by the body of the procedure.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>手続きの仮引数を実引数に束縛して、元の手続き環境を拡張するフレームを形成せよ。</li>
+<li>拡張された環境に関して、手続きの本体部により形成される式を評価せよ。</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -2211,13 +2220,16 @@ bindings and evaluating the rule or procedure body relative to these.
 </p>
 
 <p class="trans" lang="ja">
+二つの評価器の類似性は、何の驚きでもないはずだ。
+手続き定義がLispにおける抽象化の手段であるのとちょうど同じように、規則定義はクエリ言語における抽象化の手段である。
+それぞれの場合において、私たちは、適切な束縛を作り出すことと、これらの束縛に関して規則または手続きの本体を評価することによって、抽象化を解きほぐすのだ。
 </p>
 
 <a name="%_sec_Temp_679"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_679">Simple queries</a></h4>
 <h4 class="trans" lang="ja">単純クエリ</h4>
 
-
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5220"></a>
 We saw earlier in this section how to evaluate simple queries in the
