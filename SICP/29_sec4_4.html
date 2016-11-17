@@ -2229,7 +2229,6 @@ bindings and evaluating the rule or procedure body relative to these.
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_679">Simple queries</a></h4>
 <h4 class="trans" lang="ja">単純クエリ</h4>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5220"></a>
 We saw earlier in this section how to evaluate simple queries in the
@@ -2238,6 +2237,8 @@ describe how to evaluate simple queries by using both rules and
 assertions.</p>
 
 <p class="trans" lang="ja">
+本節の初めの方では、規則なしで単純クエリをどのようにして評価するのかを見た。
+今や私たちは、規則をどのように適用するのかを既に見た訳なので、規則と言明の双方を用いることで単純クエリをどのようにして評価するのか、ということを記述できる。
 </p>
 
 <p class="orig" lang="en">
@@ -2245,6 +2246,7 @@ Given the query pattern and a stream of frames, we produce, for each
 frame in the input stream, two streams:</p>
 
 <p class="trans" lang="ja">
+クエリ・パタンと、フレームのストリームとを与えられると、私たちは、入力ストリーム内の各フレームについて、次の二つのストリームを作り出す。
 </p>
 
 <ul class="orig" lang="en">
@@ -2257,8 +2259,8 @@ possible rules (using the unifier).<a name="call_footnote_Temp_680" href="#footn
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>データベース内のすべての言明に対してパタンをマッチさせることによって得られる、拡張されたフレームからなる、ストリーム。</li>
+<li>すべての可能な規則を (ユニファイアを用いて) 適用することによって得られる、拡張されたフレームからなる、ストリーム<a href="#footnote_Temp_680"><sup><small>73</small></sup></a>。</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -2270,6 +2272,8 @@ consists of all the ways that any of the frames in the original input
 stream can be extended to produce a match with the given pattern.</p>
 
 <p class="trans" lang="ja">
+これら二通りのストリームをつなげることで、元のフレームと整合性を保ちつつも与えられたパタンを満たせるような、すべての方法からなるストリームが、作り出される。
+これらのストリーム (入力ストリーム内の各フレームにつき、一つある) は、今や、すべてが結合されて、一つの巨大なストリームを形成し、したがってその巨大なストリームは、元の入力ストリーム内のフレームのうちのどれかを、与えられたパタンとのマッチを作り出すように拡張することが可能な、すべての方法からなる。
 </p>
 
 
@@ -2277,6 +2281,8 @@ stream can be extended to produce a match with the given pattern.</p>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_681">The query evaluator and the driver loop</a></h4>
 <h4 class="trans" lang="ja">クエリの評価器とドライバ・ループ</h4>
 
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5226"></a>
@@ -4468,6 +4474,8 @@ full-blown unification) can be useful in its own right.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_680"><sup><small>73</small></sup></a>
+ユニフィケーションはマッチングの一般化なので、私たちは、双方のストリームを作り出すのにユニファイアを使うことによって、システムを簡素化できただろう。
+しかし、単純なマッチャで簡単な場合を取り扱うことで、(本格的ユニフィケーションではなく) マッチングがそれ自体の能力でどのように有益たり得るのか、ということが例示されるのだ。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_682" href="#call_footnote_Temp_682"><sup><small>74</small></sup></a> The reason we use streams (rather than lists) of frames is that the
