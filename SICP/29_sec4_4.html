@@ -2281,9 +2281,6 @@ stream can be extended to produce a match with the given pattern.</p>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_681">The query evaluator and the driver loop</a></h4>
 <h4 class="trans" lang="ja">クエリの評価器とドライバ・ループ</h4>
 
-
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_idx_5226"></a>
 Despite the complexity of the underlying matching operations, the
@@ -2299,6 +2296,12 @@ is a procedure for each special form (<tt>and</tt>, <tt>or</tt>, <tt>not</tt>,
 and <tt>lisp-value</tt>) and one for simple queries.</p>
 
 <p class="trans" lang="ja">
+根底にあるマッチング演算の複雑さにもかかわらず、システムは、任意の言語の評価器とほとんど同様に体系化されている。
+マッチング演算を調整する手続きは <tt>qeval</tt> と呼ばれ、これは、Lispに対する <tt>eval</tt> 手続きの役割と似た役割を果たす。
+<tt>qeval</tt> は、クエリと、フレームのストリームとを、入力としてとる。
+これの出力は、図<a href="#%_fig_4.4">4.4</a>に示したように、入力ストリーム内の何らかのフレームを拡張するようなフレームのストリーム——クエリ・パタンに対する、成功したマッチに対応している——である。
+<tt>eval</tt> と同様に <tt>qeval</tt> も、異なる種類の式 (クエリ) を分類し、それぞれについて、適切な手続きへの振り分けを行う。
+各特殊形式  (<tt>and</tt> と <tt>or</tt> と <tt>not</tt> と <tt>lisp-value</tt>) に対して手続きがあり、単純クエリに対して一つの手続きがある。
 </p>
 
 <p class="orig" lang="en">
@@ -2312,6 +2315,11 @@ original query using the values of the variables found in the frame.
 This stream of instantiated queries is then printed.<a name="call_footnote_Temp_682" href="#footnote_Temp_682"><sup><small>74</small></sup></a></p>
 
 <p class="trans" lang="ja">
+ドライバ・ループは、本章での別の評価器用の <tt>driver-loop</tt> 手続きと似ているのだが、これは、クエリを端末から読み込む。
+各クエリに対して、ドライバ・ループは、当該クエリと、単一の空フレームからなるストリームとともに、<tt>qeval</tt> を呼び出す。
+これは、すべての可能なマッチ (空フレームに対する、すべての可能な拡張) のストリームを作り出すだろう。
+結果として生じるストリームの中の各フレームについて、ドライバ・ループは、当該フレーム内で見つかる変数の値を用いて、元のクエリをインスタンス化する。
+インスタンス化されたクエリの、このストリームが、それから印字される <a href="#footnote_Temp_682"><sup><small>74</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -2320,6 +2328,8 @@ signals that the input is not a query but rather an assertion or rule
 to be added to the data base.  For instance,</p>
 
 <p class="trans" lang="ja">
+ドライバは、<tt>assert!</tt> という特殊命令——入力がクエリではなくて、むしろデータベースに追加されるべき言明または規則なのだ、と合図をよこして知らせる——も、確認する。
+たとえば、以下のようなものである。
 </p>
 
 <p class="lisp">(assert! (job (Bitdiddle Ben) (computer wizard)))
@@ -2332,6 +2342,7 @@ to be added to the data base.  For instance,</p>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.3">4.4.3  Is Logic Programming Mathematical Logic?</a></h3>
 <h3 class="trans" lang="ja">4.4.3 論理プログラミングは数学的な論理学なのか?</h3>
 
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5244"></a><a name="%_idx_5246"></a>
 The means of combination used in the query language may at first seem
@@ -4487,6 +4498,9 @@ there are a finite or infinite number of responses.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_682"><sup><small>74</small></sup></a>
+フレームの (リストでなく) ストリームを使う理由は、規則の再帰的適用が、クエリを満たす無限個の値を生成する可能性があるためである。
+ストリームにおいて具現化されている遅延評価が、ここでは必要不可欠なのだ。
+有限個の応答があるのか、それとも無限個の応答があるのか、ということに関係なく、システムは、応答が生成されるのにつれて、応答を一つずつ印字するだろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_683" href="#call_footnote_Temp_683"><sup><small>75</small></sup></a> That a particular method of inference is
