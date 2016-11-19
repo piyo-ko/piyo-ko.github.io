@@ -1563,7 +1563,38 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 <tt>(last-pair ?x (3))</tt> のようなクエリに対して、君の規則は正しく動くかな?
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise">(last-pair (?last) (?last))
+(rule (last-pair (?x . ?y) ?last)
+      (last-pair ?y ?last))
+
+<span class="ex_comment">(last-pair (3) ?x) は、1番目の規則を使うと、(?last) が (3) で、?x が (?last) つまり (3) 
+になる。よって、(last-pair (3) (3)) という応答が得られる。
+
+(last-pair (1 2 3) ?x) は、2番目の規則を使って、(last-pair (2 3) ?x) を解くことに
+帰着される。今度はこれを2番目の規則を使って解くことになり、それは、
+(last-pair (3) ?x) を解くことに帰着される。これは、上記のとおり、1番目の規則で
+解くことになり、?x が (3) になる。
+というわけで、(last-pair (1 2 3) ?x) の ?x も (3) と解かれる。
+つまり、(last-pair (1 2 3) (3)) という応答が得られる。
+
+(last-pair (2 ?x) (3)) は、2番目の規則を使って、(last-pair (?x) (3)) を解くことに
+帰着される。今度はこれを1番目の規則を使って解くことになるから、?x が 3 に
+なる。よって、(last-pair (2 3) (3)) という応答が得られる。
+
+(last-pair ?x (3)) に対しては、1番目の規則から、?x が (3) という結果が得られる
+(?last が 3 になり、?x が ?last になるから)。
+つまり、(last-pair (3) (3)) という応答が得られる。
+でも、意味的に考えると、?x は、最後の要素が 3 でありさえすれば、どんな長さ
+でも良いし、最後の要素以外は任意である。つまり、?x に該当するリストは、
+無限にあるということ。
+これらの無限に存在し得るリストは、クエリ・システムの実装によっては、
+(last-pair (? 3) (3))
+(last-pair (? ? 3) (3))
+(last-pair (? ? ? 3) (3))
+   :
+   :
+みたいな、不定のパタン変数を含む形で順に得られるかもしれないが、
+まあ、どうだろうね……?
 </span></p>
 
 
@@ -1608,8 +1639,11 @@ deduce more complicated relationships.)
 (より込み入った関係を演繹するためのいくつかの規則については、練習問題<a href="#%_thm_4.69">4.69</a>を参照)。
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise">(rule (grandson ?G ?S)
+      (and (son ?G ?F) (son ?F ?S)))
+
+(rule (son ?M ?S)
+      (and (wife ?M ?W) (son ?W ?S)))</p>
 
 <a name="%_sec_4.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
@@ -2340,9 +2374,8 @@ to be added to the data base.  For instance,</p>
 
 <a name="%_sec_4.4.3"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.3">4.4.3  Is Logic Programming Mathematical Logic?</a></h3>
-<h3 class="trans" lang="ja">4.4.3 論理プログラミングは数学的な論理学なのか?</h3>
+<h3 class="trans" lang="ja">4.4.3 論理プログラミングは数学的論理なのか?</h3>
 
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5244"></a><a name="%_idx_5246"></a>
 The means of combination used in the query language may at first seem
@@ -2357,6 +2390,10 @@ For example, to find all of the supervisors of programmers we could
 formulate a query in either of two logically equivalent forms:</p>
 
 <p class="trans" lang="ja">
+クエリ言語で使われる結合手段は、最初は、数学的論理の <tt>and</tt> と <tt>or</tt> と <tt>not</tt> という演算と同一なように見えるかもしれないし、クエリ言語の規則の適用は、実際、推論の正当な方法を通じて達成される<a href="#footnote_Temp_683"><sup><small>75</small></sup></a>。
+しかし、このようにクエリ言語を数学的論理と同一視することは、現実には、妥当ではない。なぜなら、クエリ言語は、論理的な<ruby><rb>文</rb><rp> (</rp><rt>ステートメント</rt><rp>) </rp></ruby>を手続き的に解釈する<em>制御構造</em>を提供するからである。
+私たちはしばしばこの制御構造を利用することができる。
+たとえば、プログラマたちのすべての上司を見つけるには、論理的に等価な二つの形のいずれかで、クエリを定式化することができるだろう。
 </p>
 
 
@@ -2368,6 +2405,7 @@ formulate a query in either of two logically equivalent forms:</p>
 </p>
 
 <p class="trans" lang="ja">
+または
 </p>
 
 
@@ -2381,6 +2419,7 @@ because the data base must be scanned for each intermediate result
 (frame) produced by the first clause of the <tt>and</tt>.</p>
 
 <p class="trans" lang="ja">
+もしプログラマよりもずっと多くの上司たちが会社にいるなら (通常の場合)、2番目の形ではなく、1番目の形を使う方が良い。なぜなら、<tt>and</tt> の最初の節によって作り出されるそれぞれの中間結果 (フレーム) について、データベースを走査しなくてはならないからだ。
 </p>
 
 <p class="orig" lang="en">
@@ -2402,6 +2441,12 @@ computation (``what'' to compute) as a simple consequence of the laws
 of logic.</p>
 
 <p class="trans" lang="ja">
+論理プログラミングの目的は、計算にまつわる問題を、二つの別々の問題——「何を」計算すべきなのかということと、これを「どのようにして」計算すべきなのかということ——へと分解するための技法を、プログラマに提供することである。
+これは、人が計算したがるかもしれないものを何でも記述可能であるために十分なほど強力だが、それでも、制御可能な手続き的解釈があるという程度には十分に弱いような、数学的論理の<ruby><rb>文</rb><rp> (</rp><rt>ステートメント</rt><rp>) </rp></ruby>の部分集合を選ぶことによって、達成される。
+ここでの意図は、こうである。すなわち、一方では、論理プログラミング言語で詳細を記述されるプログラムは、コンピュータによって実行できるような、有効なプログラムであるべきである。
+制御 (「どうやって」計算するか) は、言語の評価の順序を利用することで、達成される。
+有効かつ効率的だと思われる順序で計算が行われるように、私たちは、節の順序と、それぞれの節の中の下位目標の順序を、整えることができるべきである。
+同時に、私たちは、計算の結果 (「何を」計算すべきか) を、論理の法則の簡単な結果として見ることができるべきなのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -2418,13 +2463,19 @@ the same result could be obtained by working entirely within
 mathematical logic.<a name="call_footnote_Temp_684" href="#footnote_Temp_684"><sup><small>76</small></sup></a></p>
 
 <p class="trans" lang="ja">
+私たちのクエリ言語は、まさに、数学的論理の、手続き的に解釈可能な部分集合だと見なせる。
+言明は、単純な事実 (原始的な命題) を表す。
+規則は、当該規則の本体部が成り立つ場合には当該規則の帰結部が成り立つ、という含意を表す。
+規則には自然な手続き的解釈がある。つまり、その規則の帰結部を成り立たせるためには、その規則の本体部を成り立たせよ、というものだ。
+したがって、規則は、計算の明細を規定している。
+しかし、規則を数学的論理の文と見なすこともできるので、私たちは、論理プログラムにより達成される、どの「推論」も、正当化できる——完全に数学的論理の範囲内で作業することによっても、同じ結果が得られるだろう、と主張することによって<a href="#footnote_Temp_684"><sup><small>76</small></sup></a>。
 </p>
 
 <a name="%_sec_Temp_685"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_685">Infinite loops</a></h4>
 <h4 class="trans" lang="ja">無限ループ</h4>
 
-
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5260"></a>
 A consequence of the procedural interpretation of logic programs is
@@ -4513,6 +4564,9 @@ is true.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_683"><sup><small>75</small></sup></a>
+推論の特定の手法が正当である、ということは、瑣末な主張ではない。
+人は、もし真の前提から開始するなら真の結論のみを導出できる、ということを証明せねばならない。
+規則適用により表される推論の手法は、<em class="en">modus ponens</em> ——もし <em class="en">A</em> が真であり、かつ、<em class="en">B</em> が真であることを <em class="en">A</em> が<em>含意する</em>ならば、<em class="en">B</em> が真だと結論づけてよい、と述べる、おなじみの推論手法——である。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_684" href="#call_footnote_Temp_684"><sup><small>76</small></sup></a> We must qualify this statement by
@@ -4533,6 +4587,12 @@ sacrificing expressive power.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_684"><sup><small>76</small></sup></a>
+私たちは、この陳述を和らげねばならない——論理プログラムにより達成される「推論」に言及する際に、私たちは、計算が終了すると想定している、と同意することによって。
+あいにく、この和らげた陳述でさえも、私たちが <tt>not</tt> と <tt>lisp-value</tt> を使うせいで、クエリ言語の私たちによる実装にとっては、偽である (そしてまた、Prolog や、他のほとんどの現在の論理プログラミング言語で書かれたプログラムにとっても、偽である)。
+この後に述べるとおり、クエリ言語で実装される <tt>not</tt> は、常に数学的論理の <tt>not</tt> と整合性があるわけではないし、<tt>lisp-value</tt> はさらなるややこしさをもたらす。
+単に、言語から <tt>not</tt> と <tt>lisp-value</tt> を取り除くとともに、単純クエリと <tt>and</tt> と <tt>or</tt> のみを使ってプログラムを書くことに同意することによって、私たちは、数学的論理と整合性のある言語を実装できたであろう。
+しかし、これは言語の表現力を非常に制限してしまう。
+論理プログラミングにおける研究の主要な関心事のうちの一つは、過度に表現力を犠牲にすることなく、数学的論理とのさらなる整合性を達成する方法を、見つけ出すことである。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_686" href="#call_footnote_Temp_686"><sup><small>77</small></sup></a> This is not a problem of the logic but one of the
