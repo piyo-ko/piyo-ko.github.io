@@ -2475,7 +2475,6 @@ mathematical logic.<a name="call_footnote_Temp_684" href="#footnote_Temp_684"><s
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_685">Infinite loops</a></h4>
 <h4 class="trans" lang="ja">無限ループ</h4>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5260"></a>
 A consequence of the procedural interpretation of logic programs is
@@ -2486,6 +2485,9 @@ simple example, suppose we are setting up a data base of famous
 marriages, including</p>
 
 <p class="trans" lang="ja">
+論理プログラムの手続き的解釈からくる結論は、ある種の問題を解くための絶望的に非効率なプログラムを構築することが可能だ、ということである。
+演繹を行う際にシステムが無限ループに陥る場合に、非効率性の極端な事例が生じる。
+単純な例として、以下のものを含む、有名な婚姻のデータベースを設定しているところだとしよう。
 </p>
 
 
@@ -2496,6 +2498,7 @@ marriages, including</p>
 <p class="orig" lang="en">If we now ask</p>
 
 <p class="trans" lang="ja">
+もし、いま以下のように尋ねると、
 </p>
 
 <p class="lisp">(married Mickey ?who)
@@ -2505,6 +2508,8 @@ marriages, including</p>
 is married to <em>B</em>, then <em>B</em> is married to <em>A</em>.  So we assert the rule</p>
 
 <p class="trans" lang="ja">
+私たちは何の応答も得ないだろう。なぜなら、もし <em class="en">A</em> が <em class="en">B</em> と結婚しているなら <em class="en">B</em> は <em class="en">A</em> と結婚している、ということをシステムは知らないためである。
+そこで、私たちは以下の規則を言明し、
 </p>
 
 <p class="lisp">(assert! (rule (married ?x ?y)
@@ -2514,6 +2519,7 @@ is married to <em>B</em>, then <em>B</em> is married to <em>A</em>.  So we asser
 <p class="orig" lang="en">and again query</p>
 
 <p class="trans" lang="ja">
+再び以下のように尋ねる。
 </p>
 
 <p class="lisp">(married Mickey ?who)
@@ -2524,6 +2530,7 @@ Unfortunately, this will drive the system into an infinite loop, as
 follows:</p>
 
 <p class="trans" lang="ja">
+あいにく、これは、以下のようにシステムを無限ループに追いやるだろう。
 </p>
 
 <ul class="orig" lang="en">
@@ -2544,10 +2551,12 @@ equivalent to <tt>(married Mickey ?who)</tt>.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li>システムは、<tt>married</tt> の規則が適用可能だと気づく。つまり、 <tt>(married ?x ?y)</tt> という規則帰結部が <tt>(married Mickey ?who)</tt> というクエリ・パタンとうまくユニファイして、フレーム—— <tt>?x</tt> が <tt>Mickey</tt> に束縛されており、かつ、<tt>?y</tt> が <tt>?who</tt> に束縛されているフレーム——を作り出す。
+するとインタプリタは、このフレームの中で <tt>(married ?y ?x)</tt> という規則本体部を評価し始める——事実上は、<tt>(married ?who Mickey)</tt> というクエリを処理しだすという訳だ。</li>
+<li>データベース内に、言明として直接的に一つの答えが現れている。つまり、<tt>(married Minnie Mickey)</tt> である。</li>
+<li><tt>married</tt> の規則も適用可能であり、したがって、インタプリタは、再び規則本体部を評価するのだが、これは今度は <tt>(married Mickey ?who)</tt> と等価である。</li>
 </ul>
+
 
 <p class="orig" lang="en">
 The system is now in an infinite loop.  Indeed, whether the system
@@ -2563,12 +2572,18 @@ processes queries.<a name="call_footnote_Temp_686" href="#footnote_Temp_686"><su
 </p>
 
 <p class="trans" lang="ja">
+システムは今や無限ループの中にいる。
+実際、システムがループに入る前に <tt>(married Minnie Mickey)</tt> という単純な答えを見つけるかどうかは、システムがデータベース内の項目を調べる順序に関する、実装の詳細に依存する。
+これは、起こり得るループの種類のうちの、非常に単純な例である。
+互いに関連し合う規則の集まりは、予見するのがもっとずっと困難なループを引き起こし得るし、ループの出現は、<tt>and</tt> の中の節の順序に (練習問題<a href="#%_thm_4.64">4.64</a>を参照)、または、システムがクエリを処理する順序に関する低水準の詳細に、依存し得る<a href="#footnote_Temp_686"><sup><small>77</small></sup></a>。
 </p>
 
 <a name="%_sec_Temp_687"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_687">Problems with <tt>not</tt></a></h4>
 <h4 class="trans" lang="ja"><tt>not</tt> にまつわる問題</h4>
 
+
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5266"></a>
 <a name="%_idx_5268"></a>Another quirk in the query system concerns <tt>not</tt>.  Given the data
@@ -4614,6 +4629,16 @@ some suitably chosen function <em>f</em>.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_686"><sup><small>77</small></sup></a>
+これは論理の問題ではなく、私たちのインタプリタにより提供される、論理の手続き的解釈の問題である。
+ここではループに陥らないだろう、というインタプリタを、私たちは書くことができるだろう。
+例えば、私たちは、自分の言明と規則から導出可能なすべての証明を、深さ優先順ではなく幅優先順で、数え上げることができるだろう。
+しかし、そうしたシステムは、私たちのプログラムでの演繹の順序を利用することを、より困難にしてしまう。
+そうしたプログラムの中に洗練された制御を組み込むための一つの試みは、deKleer et al. 1977 に説明されている。
+もう一つ別の技法は、そういう深刻な制御の問題を引き起こさないものなのだが、特定の種類のループに対する検出器のような、特殊な知識を提示することである (練習問題<a href="#%_thm_4.67">4.67</a>)。
+しかし、システムが演繹を実行する際に無限の経路を降りてゆくのを、期待どおりに防ぐための一般的な体系など、あり得ない。
+ある適切に選ばれた <em class="en">f</em> という関数について、
+「<em class="en">P</em>(<em class="en">x</em>) が真だと示すためには、<em class="en">P</em>(<em class="en">f</em>(<em class="en">x</em>)) が真だと示せ」
+という形式の、邪悪な規則を想像してみたまえ。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_688" href="#call_footnote_Temp_688"><sup><small>78</small></sup></a> Consider the query <tt>(not (baseball-fan (Bitdiddle Ben)))</tt>.  The system finds that <tt>(baseball-fan (Bitdiddle Ben))</tt> is not in the data base, so the empty
