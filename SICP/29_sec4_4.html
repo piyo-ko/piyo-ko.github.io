@@ -1643,8 +1643,32 @@ deduce more complicated relationships.)
       (and (son ?G ?F) (son ?F ?S)))
 
 (rule (son ?M ?S)
-      (and (wife ?M ?W) (son ?W ?S)))</p>
+      (and (wife ?M ?W) (son ?W ?S)))
 
+<span class="inline-aa">
+アダム─カイン─エノク─イラデ─メホヤエル─メトサエル─レメク
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　├─┬ヤバル
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　アダ　└ユバル
+
+</span></p>
+
+<!--
+　アダム
+　　│
+　カイン
+　　│
+　エノク
+　　│
+　イラデ
+　　│
+メホヤエル
+　　│
+メトサエル
+　　│
+　レメク╤アダ
+　　┌─┤
+ヤバル　ユバル
+-->
 <a name="%_sec_4.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
 <h3 class="trans" lang="ja">4.4.2 クエリ・システムはどう動くのか</h3>
@@ -2583,7 +2607,6 @@ processes queries.<a name="call_footnote_Temp_686" href="#footnote_Temp_686"><su
 <h4 class="trans" lang="ja"><tt>not</tt> にまつわる問題</h4>
 
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5266"></a>
 <a name="%_idx_5268"></a>Another quirk in the query system concerns <tt>not</tt>.  Given the data
@@ -2591,6 +2614,8 @@ base of section <a href="#%_sec_4.4.1">4.4.1</a>, consider the
 following two queries:</p>
 
 <p class="trans" lang="ja">
+クエリ・システムにおける、もう一つの奇抜さは、<tt>not</tt> に関する。
+<a href="#%_sec_4.4.1">4.4.1</a>節のデータベースが与えられたとして、以下の二つのクエリを考えよう。
 </p>
 
 <p class="lisp">(and (supervisor ?x ?y)
@@ -2598,6 +2623,8 @@ following two queries:</p>
 (and (not (job ?x (computer programmer)))
      (supervisor ?x ?y))
 </p>
+
+
 
 <p class="orig" lang="en">These two queries do not produce the same result.  The first query
 begins by finding all entries in the data base that match <tt>(supervisor ?x ?y)</tt>, and then filters the resulting frames by removing
@@ -2612,6 +2639,12 @@ and returns an empty stream of frames.  Consequently, the entire
 compound query returns an empty stream.</p>
 
 <p class="trans" lang="ja">
+これら二つのクエリは、同じ結果を生み出さない。
+1番目のクエリは、<tt>(supervisor ?x ?y)</tt> に合致する、データベース内の全エントリを見つけることから取りかかり、その後、結果としてできたフレームを、<tt>?x</tt> の値が <tt>(job ?x (computer programmer))</tt> を満たすものを除くことにより、フィルタにかける。
+2番目のクエリは、入力されてくるフレームをフィルタにかけて、<tt>(job ?x (computer programmer))</tt> を満たせるものを除くことから、取りかかる。
+入力されてくる唯一のフレームは空なので、<tt>(job ?x (computer programmer))</tt> を満たすパタンが何かあるかどうかを知るために、データベースを調べる。
+大抵はこの形のエントリがあるので、<tt>not</tt> 節は、空フレームをフィルタで除去し、フレームの空ストリームを返す。
+その結果、複合クエリ全体は、空ストリームを返す。
 </p>
 
 <p class="orig" lang="en">
@@ -2624,7 +2657,13 @@ produce unexpected results. Similar problems occur with the use of
 arguments are unbound.  See exercise <a href="#%_thm_4.77">4.77</a>.</p>
 
 <p class="trans" lang="ja">
+厄介な点は、私たちの <tt>not</tt> の実装が、現実には、変数の値に対するフィルタとして働くようにはなっていない点である。
+もし <tt>not</tt> 節が、(上記の例において <tt>?x</tt> がそうであったように) 変数のうちの一部が束縛されていないまま残っているようなフレームと一緒に処理されると、システムは、予期せぬ結果を生み出す。
+似たような問題は、<tt>lisp-value</tt> を使用するときにも起こる—— Lisp の述語は、その引数のうちの一部が束縛されていない場合には、うまく動作できないのだ。
+練習問題<a href="#%_thm_4.77">4.77</a>を参照のこと。
 </p>
+
+
 
 <p class="orig" lang="en">
 There is also a much more serious way in which the <tt>not</tt> of the
@@ -2642,6 +2681,11 @@ the data base.<a name="call_footnote_Temp_689" href="#footnote_Temp_689"><sup><s
 </p>
 
 <p class="trans" lang="ja">
+クエリ言語の <tt>not</tt> が数学的な論理の <tt>not</tt> と異なっている、もっとずっと深刻な点もある。
+論理学では、「not <em class="en">P</em>」という<ruby><rb>文</rb><rp> (</rp><rt>ステートメント</rt><rp>) </rp></ruby>を、<em class="en">P</em> が真でないことを意味するものと解釈する。
+しかし、クエリ・システムでは、「not <em class="en">P</em>」は、データベース内の知識からは <em class="en">P</em> が<!--演繹可能ではない-->演繹できないことを意味するのだ。
+たとえば、<a href="#%_sec_4.4.1">4.4.1</a>節での人事データベースが与えられると、システムは、ベン・ビットディドルが野球ファンではない、とか、外では雨が降っていない、とか、2+2 は 4 ではない、というような、あらゆる種類の <tt>not</tt> 文を、運よく演繹するであろう<a href="#footnote_Temp_688"><sup><small>78</small></sup></a>。
+換言すれば、論理プログラミング言語の <tt>not</tt> は、関連性のある全情報がデータベース内にすでに含められているのだ、という、いわゆる<em>閉世界仮説</em>を反映しているのである<a href="#footnote_Temp_689"><sup><small>79</small></sup></a>。
 </p>
 
 <a name="%_thm_4.64"></a>
@@ -2651,7 +2695,9 @@ he realizes this, he quickly reinstalls it.  Unfortunately, he makes a
 slight change in the rule, and types it in as</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.64.</b> ルイス・リーズナは、間違えてデータベースから <tt>outranked-by</tt> の規則 (<a href="#%_sec_4.4.1">4.4.1</a> 節) を削除してしまう。
+このことに気づくと、彼は素早くこの規則を再び組み入れる。
+あいにく、彼は規則にちょっとした変更を加えてしまい、それを以下のように打ち込む。
 </p>
 
 <p class="lisp">(rule (outranked-by ?staff-person ?boss)
@@ -2665,6 +2711,8 @@ Aull comes by to find out who outranks Ben Bitdiddle. He issues
 the query</p>
 
 <p class="trans" lang="ja">
+ルイスがこの情報をシステムに打ち込んだすぐ後に、誰がベン・ビットディドルより上の職位にあるのかを知るために、ドゥウィット・オールが立ち寄る。
+ドゥウィットは以下のクエリを発行する。
 </p>
 
 <p class="lisp">(outranked-by (Bitdiddle Ben) ?who)
@@ -2674,6 +2722,7 @@ the query</p>
 </p>
 
 <p class="trans" lang="ja">
+回答した後、システムは、無限ループに陥る。なぜなのかを説明せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2686,7 +2735,7 @@ organization, gives a query to find all the wheels
 (using the <tt>wheel</tt> rule of section <a href="#%_sec_4.4.1">4.4.1</a>):</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.65.</b> サイ・D・フェクトは、組織内で昇格する日を楽しみにしていて、大物たちすべてを見つけるために (<a href="#%_sec_4.4.1">4.4.1</a>節の <tt>wheel</tt> の規則を使って) クエリを与える。
 </p>
 
 <p class="lisp">(wheel ?who)
@@ -2695,6 +2744,7 @@ organization, gives a query to find all the wheels
 <p class="orig" lang="en">To his surprise, the system responds</p>
 
 <p class="trans" lang="ja">
+彼が驚いたことには、システムは次のように応答するのだ。
 </p>
 
 <p class="lisp"><i>;;; Query results:</i>
@@ -2709,6 +2759,7 @@ organization, gives a query to find all the wheels
 </p>
 
 <p class="trans" lang="ja">
+なぜオリバー・ウォーバックスが4回列挙されているのだろう?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2721,7 +2772,8 @@ about the company.  For example, to find the total salaries of all the
 computer programmers one will be able to say</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.66.</b> ベンは、会社についての統計値を提供するために、クエリ・システムの一般化をずっと行っている。
+たとえば、コンピュータ・プログラマ全員の給与総額を知るためには、以下のように述べることが可能となるだろう。
 </p>
 
 <p class="lisp">(sum ?amount
@@ -2732,6 +2784,7 @@ computer programmers one will be able to say</p>
 <p class="orig" lang="en">In general, Ben's new system allows expressions of the form</p>
 
 <p class="trans" lang="ja">
+一般に、ベンの新システムは、以下の形の式を許し、
 </p>
 
 <p class="lisp">(accumulation-function &lt;<em>variable</em>&gt;
@@ -2752,6 +2805,13 @@ response, Ben groans, ``Oh, no, my simple accumulation scheme won't
 work!''</p>
 
 <p class="trans" lang="ja">
+ここで、<tt>accumulation-function</tt> は、<tt>sum</tt> や、<tt>average</tt> や、あるいは <tt>maximum</tt> のようなものとすることができる。
+ベンは、これを実装するのは朝飯前のはずだ、と推測する。
+彼は、単純にクエリ・パタンを <tt>qeval</tt> へと与えるだろう。
+これは、フレームのストリームを作り出すだろう。
+彼は、それから、ストリーム内の各フレームから指定された変数の値を抽出するマッピング関数を通じて、このストリームを受け渡し、そして、結果として得られる値のストリームを、累積関数に与えるだろう。
+ベンがちょうど実装を完了して、まさにその実装を試してみようとするときに、サイが通りかかったのだが、サイは、練習問題<a href="#%_thm_4.65">4.65</a>での <tt>wheel</tt> のクエリの結果に、まだ頭を悩ませている。
+サイがベンにシステムの応答を見せると、ベンは「あちゃー、僕の単純な累積のやり方はうまくいかないよ!」とうめく。
 </p>
 
 <p class="orig" lang="en">
@@ -2760,10 +2820,13 @@ salvage the situation.
 </p>
 
 <p class="trans" lang="ja">
+ちょうど今、ベンは何に気づいたところなのだろう?
+状況を救い出すために彼が使える方法について、概要を述べよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_4.67"></a>
@@ -2780,7 +2843,9 @@ modify the system to include your loop detector.)
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.67.</b> 本文と練習問題<a href="#%_thm_4.64">4.64</a>において例示されている単純なループの類を避けるように、クエリ・システム内にループ検出器を組み入れる方法を、考案せよ。
+一般的な考え方は、システムは自分の現在の演繹の連鎖についての、ある種の履歴を維持すべきであり、かつ、すでにそれについて作業したことのあるクエリを、処理し始めるべきではない、というものだ。
+どのような種類の情報 (パタンとフレーム) がこの履歴に含まれるのか、そして、どのようにして確認が行われるべきなのか、ということを説明せよ (君は、クエリ・システムの実装の詳細について<a href="#%_sec_4.4.4">4.4.4</a>節で研究した後、自分のループ検出器を含めるようにシステムを改変したいと思うかもしれないね)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2796,7 +2861,8 @@ Can your rules answer both
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.68.</b> 練習問題<a href="15_sec2_2.html#%_thm_2.18">2.18</a>の <tt>reverse</tt> 演算——与えられたリストと同じ要素を逆順で含むリストを返す——を実装するための規則を定義せよ (ヒント: <a href="#%_idx_5158"><tt>append-to-form</tt></a> を使え)。
+君の規則は、<tt>(reverse (1 2 3) ?x)</tt> と <tt>(reverse ?x (1 2 3))</tt> の両方に答えられるかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2819,10 +2885,24 @@ Check your rules on queries such as
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.6.</b> 
+<b>練習問題4.69.</b> 練習問題<a href="#%_thm_4.63">4.63</a>で君が定式化したデータベースと規則から始めて、孫息子関係に<!-- 「<ruby><rb>曾</rb><rp> (</rp><rt>ひ</rt><rp>) </rp></ruby>」 -->「一世代離れた (great-)」を付け加えるための規則を、考案せよ。
+これによって、システムが、イラデはアダムの曾孫である、とか、あるいは、ヤバルとユバルはアダムの<ruby><rb>仍孫</rb><rp> (</rp><rt>じょうそん</rt><rp>) </rp></ruby>である、と演繹することができるようになるはずだ
+(ヒント: たとえばイラデについての事実を、<tt>((great grandson) Adam Irad)</tt> と表現せよ。<tt>grandson</tt> という語でリストが終わっているかどうかを判定する規則を書け。これを用いて、<tt>((great .  ?rel) ?x ?y)</tt> という関係を導出できるようにする規則を表せ。なおここで、<tt>?rel</tt> は <tt>grandson</tt> で終わるリストである)。
+<tt>((great grandson) ?g ?ggs)</tt> や <tt>(?relationship Adam Irad)</tt> のようなクエリに対して、君の規則を確認せよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise">
+
+<span class="inline-aa">
+　　　　　子　　　孫　　曾孫　　　玄孫　　　　来孫　　　昆孫　　<ruby><rb>仍孫</rb><rp> (</rp><rt>じょうそん</rt><rp>) </rp></ruby>
+
+アダム─カイン─エノク─イラデ─メホヤエル─メトサエル─レメク
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　├─┬ヤバル
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　アダ　└ユバル
+
+</span>
+
+<span class="ex_comment">
 </span></p>
 
 <a name="%_sec_4.4.4"></a>
@@ -2834,6 +2914,8 @@ works. Now we fill in the details by presenting a complete
 implementation of the system.</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_4.4.2">4.4.2</a>節では、クエリ・システムがどう動くのかを説明した。
+今や、私たちは、システムの完全な実装を提示することにより、詳細を埋める。
 </p>
 
 <a name="%_sec_4.4.4.1"></a>
@@ -2841,6 +2923,7 @@ implementation of the system.</p>
 <h4 class="trans" lang="ja">4.4.4.1 ドライバ・ループとインスタンス化</h4>
 
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5288"></a><a name="%_idx_5290"></a>The driver loop for the query system repeatedly reads input
 expressions.  If the expression is a rule or assertion to be added to
@@ -3706,7 +3789,7 @@ Hint: Recall the definition of the infinite stream of ones in
 section <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>: <tt>(define ones (cons-stream 1 ones))</tt>.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.70.</b> 
 </p>
 
 <p class="lisp">(define (add-assertion! assertion)
@@ -3979,7 +4062,7 @@ procedures (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>) are implemented using
 explicit <tt>delay</tt> operations, rather than being defined as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.71.</b> 
 </p>
 
 <p class="lisp">(define (simple-query query-pattern frame-stream)
@@ -4015,7 +4098,7 @@ section <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>?)
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.72.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4029,7 +4112,7 @@ What would be wrong with defining it as follows:
 
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.73.</b> 
 </p>
 
 <p class="lisp">(define (flatten-stream stream)
@@ -4053,7 +4136,7 @@ in these cases always produces either the empty stream or a singleton
 stream, so no interleaving is needed when combining these streams.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.74.</b> 
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -4090,7 +4173,7 @@ stream, so no interleaving is needed when combining these streams.</p>
 in the data base satisfying a specified query.  For example,</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.75.</b> 
 </p>
 
 <p class="lisp">(unique (job ?x (computer wizard)))
@@ -4188,7 +4271,7 @@ factor of <em>k</em> fewer than the number of matches required in our current
 method.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.76.</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -4220,7 +4303,7 @@ intermediate frames generated.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.77.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4241,7 +4324,7 @@ difference?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.78.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4254,7 +4337,7 @@ we saw how to use local environments to avoid name conflicts between
 the parameters of procedures.  For example, in evaluating</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.7.</b> 
+<b>練習問題4.79.</b> 
 </p>
 
 <p class="lisp">(define (square x)
@@ -4648,6 +4731,9 @@ frame, which is used to instantiate the input query to produce <tt>(not (basebal
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_688"><sup><small>78</small></sup></a>
+<tt>(not (baseball-fan (Bitdiddle Ben)))</tt> というクエリを考えよう。
+システムは、<tt>(baseball-fan (Bitdiddle Ben))</tt> データベース内に存在しないと知り、よって、空フレームは、このパタンを満たさず、フレームの初期ストリームから除外されない。
+したがって、クエリの結果は空フレームであり、この空フレームは、入力クエリをインスタンス化して <tt>(not (baseball-fan (Bitdiddle Ben)))</tt> を作り出すのに使われる。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_689" href="#call_footnote_Temp_689"><sup><small>79</small></sup></a> A discussion and justification of this
@@ -4655,6 +4741,7 @@ frame, which is used to instantiate the input query to produce <tt>(not (basebal
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_689"><sup><small>79</small></sup></a>
+<tt>not</tt> のこうした取り扱いについての議論と正当化は、Clark (1978) による論文に見いだすことができる。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_700" href="#call_footnote_Temp_700"><sup><small>80</small></sup></a> In general, unifying <tt>?y</tt> with an expression involving
