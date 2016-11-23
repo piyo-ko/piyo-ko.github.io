@@ -16,7 +16,16 @@
 
 <h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
 
-<h2><tt>.bash_profile</tt> の巻</h2>
+<h2><tt>.bash_profile</tt> と <tt>.bashrc</tt> の巻</h2>
+<p><em>[追記ここから]</em> <tt>.bash_profile</tt> と <tt>.bashrc</tt> を使い分けよう、という話もあるのだが、プライベートでゆるふわな使い方をしているぶんには、別に <tt>.bash_profile</tt> に全部の設定を書いておいても害はないかな、と思って、この記事ではそういうふうな書き方をしている。でも、たとえば「環境変数の設定は <tt>.bash_profile</tt> で行い、それ以外は <tt>.bashrc</tt> に書いておく」といった使い分けをしても良いかもしれない。その場合、<a href="http://osksn2.hep.sci.osaka-u.ac.jp/~taku/osx/bash_profile.html">もっと詳しいページ</a>を参考にして、<tt>.bashrc</tt> の読み込み・実行のために、<tt>.bash_profile</tt> の末尾にでも、<br>
+<code>if [ &quot;$TERM_PROGRAM&quot; = &quot;Apple_Terminal&quot; ]; then
+    if [ -f ~/.bashrc ]; then
+        source ~/.bashrc
+    fi
+fi</code>
+<br>
+と書いておくと良さそう。<em>[追記ここまで]</em></p>
+
 <p><tt>.bash_profile</tt> での便利な設定 (と思うもの) をGistに書いておいたので、このページに埋め込んでみた。プロンプト文字列のカラー表示については、<a href="https://github.com/piyo-ko/color_demo">ANSIカラーについてのリポジトリ</a>で、使用例の1番目のところに詳しく説明してある。</p>
 
 <script src="https://gist.github.com/piyo-ko/030dc71622222e9016ffae8a1861968e.js"></script>
@@ -68,6 +77,7 @@ alias hoge='cd ~/Documents/hoge/hoge/project/'
 「ほげほげプロジェクトはちょっと何週間か中断だわ〜」というときなどは、
 <code class="com">#: << 'COMMENT'</code> と <code class="com">#COMMENT</code> という2行をアンコメントすれば、今度は逆に複数行コメントアウトが有効になる。
 </p>
+<p>もちろん、こういうふうにコメントアウトに頼るやり方をしないで、一連のコマンドの実行を関数として定義してしまうという方法もあるし、その方がすっきりするかもしれないのだけれど……。</p>
 
 
 <nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
