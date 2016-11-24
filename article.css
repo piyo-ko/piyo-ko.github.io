@@ -9,11 +9,17 @@ body {
 }
 h1 {
 	font-size: x-large;
+	font-weight: bold;
 }
 h2 {
 	font-size: large;
+	font-weight: bold;
 }
-h1, h2 {
+h3 {
+	font-size: large;
+	font-weight: normal;
+}
+h1, h2, h3 {
 	text-align: center;
 }
 p {
