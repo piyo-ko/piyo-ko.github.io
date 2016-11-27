@@ -2695,7 +2695,7 @@ he realizes this, he quickly reinstalls it.  Unfortunately, he makes a
 slight change in the rule, and types it in as</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.64.</b> ルイス・リーズナは、間違えてデータベースから <tt>outranked-by</tt> の規則 (<a href="#%_sec_4.4.1">4.4.1</a> 節) を削除してしまう。
+<b>練習問題4.64.</b> ルイス・リーズナは、間違えてデータベースから <a href="#%_idx_5152"><tt>outranked-by</tt> の規則</a> (<a href="#%_sec_4.4.1">4.4.1</a> 節) を削除してしまう。
 このことに気づくと、彼は素早くこの規則を再び組み入れる。
 あいにく、彼は規則にちょっとした変更を加えてしまい、それを以下のように打ち込む。
 </p>
@@ -2725,8 +2725,34 @@ the query</p>
 回答した後、システムは、無限ループに陥る。なぜなのかを説明せよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise"><span class="ex_comment">まず確認しておくと、ルイスは、and の二つの引数の順序を逆にした。
+
+さて、システムは、まず、データベースにある</span>
+(supervisor (Bitdiddle Ben) (Warbucks Oliver))
+<span class="ex_comment">という言明を見つける。これが or の一つ目の引数のパタンにマッチする。よって、システムは</span>
+(outranked-by (Bitdiddle Ben) (Warbucks Oliver))
+<span class="ex_comment">という回答を返す。が、その後、ルイスの変更のせいで、以下のように、
+outranked-by の再帰的な呼び出しが無限に深まるループにはまり込んでしまう
+(つまり、(1)を打ち込むと、(2)の出力は得られるが、(3)以下が実行されていく
+無限ループにはまり、(*)は実行されず、ということ)。</span>
+
+outranked-by (1)
+ |
+ +-- supervisor (2)
+ OR
+ +-- outranked-by (3) --AND-- supervisor (*)
+      |
+      +-- supervisor (4)
+      OR
+      +-- outranked-by (5) --AND-- supervisor (*)
+           |
+           +-- supervisor (6)
+           OR
+           +-- outranked-by (7) --AND-- supervisor(*)
+                |
+                :
+
+<span class="ex_comment">と、雑に考えたんだが、どうだろう。</span></p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.65"></a>
@@ -2735,7 +2761,7 @@ organization, gives a query to find all the wheels
 (using the <tt>wheel</tt> rule of section <a href="#%_sec_4.4.1">4.4.1</a>):</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.65.</b> サイ・D・フェクトは、組織内で昇格する日を楽しみにしていて、大物たちすべてを見つけるために (<a href="#%_sec_4.4.1">4.4.1</a>節の <tt>wheel</tt> の規則を使って) クエリを与える。
+<b>練習問題4.65.</b> サイ・D・フェクトは、組織内で昇格する日を楽しみにしていて、大物たちすべてを見つけるために (<a href="#%_sec_4.4.1">4.4.1</a>節の <a href="#%_idx_5144"><tt>wheel</tt> の規則</a>を使って) クエリを与える。
 </p>
 
 <p class="lisp">(wheel ?who)
@@ -2762,7 +2788,55 @@ organization, gives a query to find all the wheels
 なぜオリバー・ウォーバックスが4回列挙されているのだろう?
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment">まず、wheel の規則の本体の and 節の中の</span>
+(supervisor ?middle-manager ?person)
+<span class="ex_comment">にマッチする言明として、以下のものが見つかる。便宜上、番号を振っておく。
+これらの言明の第2引数が、「大物」の候補ということ。</span>
+
+(supervisor (Hacker Alyssa P) (Bitdiddle Ben))    <span class="ex_comment">(1)</span>
+(supervisor (Fect Cy D) (Bitdiddle Ben))          <span class="ex_comment">(2)</span>
+(supervisor (Tweakit Lem E) (Bitdiddle Ben))      <span class="ex_comment">(3)</span>
+(supervisor (Reasoner Louis) (Hacker Alyssa P))   <span class="ex_comment">(4)</span>
+(supervisor (Bitdiddle Ben) (Warbucks Oliver))    <span class="ex_comment">(5)</span>
+(supervisor (Scrooge Eben) (Warbucks Oliver))     <span class="ex_comment">(6)</span>
+(supervisor (Cratchet Robert) (Scrooge Eben))     <span class="ex_comment">(7)</span>
+(supervisor (Aull DeWitt) (Warbucks Oliver))      <span class="ex_comment">(8)</span>
+
+<span class="ex_comment">図で示すと、以下の通りの上下関係。</span>
+Warbucks Oliver
+  |
+  +-- Bitdiddle Ben
+  |     |
+  |     +-- Hacker Alyssa P
+  |     |     |
+  |     |     +-- Reasoner Louis
+  |     |
+  |     +-- Fect Cy D
+  |     +-- Tweakit Lem E
+  |
+  +-- Scrooge Eben
+  |     |
+  |     +-- Cratchet Robert
+  |
+  +-- Aull DeWitt
+
+<span class="ex_comment">wheel の規則は、誰かの二段上の人を wheel (大物) と定義しているわけだから、
+  * アリッサの二段上にいる職員としての、オリバー
+  * ルイスの二段上にいる職員としての、ベン
+  * サイの二段上にいる職員としての、オリバー
+  * レムの二段上にいる職員としての、オリバー
+  * ロバートの二段上にいる職員としての、オリバー
+が答えとして出てくる。ということで、応答にはオリバーが4回含まれる。
+
+実際、上記(1)〜(7)それぞれによって変数が束縛されてできた各フレームで、</span>
+(supervisor ?x ?middle-manager)
+<span class="ex_comment">にマッチする言明は、以下のとおりである。
+  * (1)からできたフレームでは、(4)がマッチする。よって、ベンは大物。
+  * (2)、(3)、(4)の各々からできたフレームでは、このパタンにマッチするものがない。
+  * (5)からできたフレームでは、(1)、(2)、(3)がマッチする。
+    よって、オリバーは大物。また、三つにマッチしたので、オリバーは3回、応答に出現する。
+  * (6)からできたフレームでは、(7)がマッチする。よって、オリバーは大物。
+  * (7)、(8)の各々からできたフレームでは、マッチするものがない。
 </span></p>
 
 <p class="orig" lang="en">
@@ -2773,7 +2847,7 @@ computer programmers one will be able to say</p>
 
 <p class="trans" lang="ja">
 <b>練習問題4.66.</b> ベンは、会社についての統計値を提供するために、クエリ・システムの一般化をずっと行っている。
-たとえば、コンピュータ・プログラマ全員の給与総額を知るためには、以下のように述べることが可能となるだろう。
+たとえば、コンピュータ・プログラマ全員の給与総額を知るためには、以下のように述べることが可能となることだろう。
 </p>
 
 <p class="lisp">(sum ?amount
@@ -2824,8 +2898,22 @@ salvage the situation.
 状況を救い出すために彼が使える方法について、概要を述べよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise"><span class="ex_comment">練習問題<a href="#%_thm_4.65">4.65</a>でオリバーが4回出現したことを考慮すると、
+もし、上記のベンの実装で</span>
+(sum ?amount (and (wheel ?x) (salary ?x ?amount)))
+<span class="ex_comment">とすると、所望の「大物たちの給与総額」は得られず、オリバーの給与が4回数えられてしまう。
+
+つまり、クエリに <tt>or</tt> が含まれていなくてさえも、
+  * ある一つのクエリ (たとえば (wheel ?x) ) と、
+  * その中の一つの変数 (たとえば ?x) と、
+  * そのクエリを満たすような、その変数に対する特定の一つの値 (たとえば (Warbucks Oliver) )
+の組み合わせを導き出すようなフレームが、複数存在する場合がある、ということ。
+多分、ベンはそのことに気づいたところなのだろう。
+
+解決策は、累積関数に値のストリームを与える前に、このストリームから、重複した値を
+取り除くこと。そして、値の重複のないストリームを、累積関数に与えること
+(具体的にどう実装するかはともかくとして)。
+</p>
 
 
 <p class="orig" lang="en">
@@ -2844,7 +2932,7 @@ modify the system to include your loop detector.)
 
 <p class="trans" lang="ja">
 <b>練習問題4.67.</b> 本文と練習問題<a href="#%_thm_4.64">4.64</a>において例示されている単純なループの類を避けるように、クエリ・システム内にループ検出器を組み入れる方法を、考案せよ。
-一般的な考え方は、システムは自分の現在の演繹の連鎖についての、ある種の履歴を維持すべきであり、かつ、すでにそれについて作業したことのあるクエリを、処理し始めるべきではない、というものだ。
+一般的な考え方は、システムは自分の現在の演繹の連鎖についての、ある種の履歴を維持すべきであり、かつ、そのシステムが既に<!-- それについて作業したことのある -->作業対象としているクエリを、処理し始めるべきではない、というものだ。
 どのような種類の情報 (パタンとフレーム) がこの履歴に含まれるのか、そして、どのようにして確認が行われるべきなのか、ということを説明せよ (君は、クエリ・システムの実装の詳細について<a href="#%_sec_4.4.4">4.4.4</a>節で研究した後、自分のループ検出器を含めるようにシステムを改変したいと思うかもしれないね)。
 </p>
 
@@ -2865,7 +2953,52 @@ Can your rules answer both
 君の規則は、<tt>(reverse (1 2 3) ?x)</tt> と <tt>(reverse ?x (1 2 3))</tt> の両方に答えられるかな?
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment">; とりあえず、以下の定義をクエリ言語に翻訳しようかな。</span>
+(define (reverse arg-list)
+  (if (or (null? arg-list) (null? (cdr arg-list)))
+      arg-list
+      (append (reverse (cdr arg-list)) (list (car arg-list)))))
+
+<span class="ex_comment">; 場合分けにしたがって、規則を書き並べてみた。</span>
+(rule (reverse () ()))
+(rule (reverse (?x) (?x)))
+(rule (reverse (?given-car . ?given-cdr) ?reversed-list)
+      (and (reverse ?given-cdr ?reversed-cdr)
+           (append-to-form ?reversed-cdr (?given-car) ?reversed-list)))
+
+<span class="ex_comment">; このような定義でうまく動くのかを考える。
+(a) (reverse (1 2 3) ?x) は、3番目の規則にマッチする。
+    ここで、「?given-car が 1 に束縛され、?given-cdr が (2 3) に束縛され、
+    ?reversed-list が ?x に束縛されたフレーム」(F1 とする) ができる。
+(b) 次は F1 での (reverse (2 3) ?reversed-cdr) のユニフィケーションだが、
+    これも3番目の規則にマッチする。変数の名前が同じなのでややこしいが、
+    F1 に対する子フレーム (F2 とする) の側では、?given-car が 2 に束縛され、
+    ?given-cdr が (3) に束縛され、?reversed-list は F1 での ?reversed-cdr に
+    束縛される。
+(c) すると今度は F2 での (reverse (3) ?reversed-cdr) のユニフィケーションだが、
+    これは2番目の規則にマッチし、(この規則における) ?x が 3 に束縛される。
+    そして、F2における ?reversed-cdr が (3) に束縛される。
+(d) 次は、and 節の2番目のクエリについての、F2 でのユニフィケーション。
+     つまり、(append-to-form (3) (2) ?reversed-list) のユニフィケーションを行う。
+     append-to-form 内部の途中経過は省略すると、これにより、?reversed-list が
+     (3 2) に束縛される。
+(e) よって、(and (reverse (3) (3)) (append-to-form (3) (2) (3 2))) だから、
+     F2 において (reverse (2 3) (3 2)) という結果が得られる。
+(f) また、F2 の ?reversed-list は F1 での ?reversed-cdr に束縛されているから、
+    次は、F1 での (append-to-form (3 2) (1) ?reversed-list) のユニフィケーション。
+    append-to-form 内部の途中経過は省略すると、これにより、?reversed-list が
+    (3 2 1) に束縛される。
+(g) すでに (a) で述べたように、F1 においては ?reversed-list が ?x に束縛されて
+    いるから、つまりは (reverse (1 2 3) ?x) の ?x は (3 2 1) だということ。
+    ちゃんと解けた。
+
+(h) では逆に、(reverse ?x (1 2 3)) というクエリだったらどうなるか。
+    これは3番目の規則にマッチする。そして、「(?given-car . ?given-cdr) という
+    対が ?x に束縛され、?reversed-list が (1 2 3) に束縛されたフレーム」
+    (G1 とする) ができる。
+(i) 次は G1 でのユニフィケーションだが、
+    ……と、ここで思ったが、2番目の規則があると無限ループ行きかもしれない。
+    ちゃんと考えないと分からないが、なんか危険な気がするな。
 </span></p>
 
 <p class="orig" lang="en">
@@ -2923,7 +3056,6 @@ implementation of the system.</p>
 <h4 class="trans" lang="ja">4.4.4.1 ドライバ・ループとインスタンス化</h4>
 
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5288"></a><a name="%_idx_5290"></a>The driver loop for the query system repeatedly reads input
 expressions.  If the expression is a rule or assertion to be added to
@@ -2938,6 +3070,12 @@ variables are instantiated with values supplied by the stream of
 frames, and this final stream is printed at the terminal:</p>
 
 <p class="trans" lang="ja">
+クエリ・システムのためのドライバ・ループは、繰り返し、入力された式を読む。
+もし式が、データベースに追加すべき規則か言明だったら、その情報が追加される。
+それ以外の場合、その式は、クエリだと想定される。
+ドライバは、このクエリを、単一の空フレームからなる初期フレーム・ストリームと一緒に、<tt>qeval</tt> という評価器へと渡す。
+評価の結果は、データベース内で見つかった変数値でクエリを満たすことにより生成される、フレームのストリームである。
+これらのフレームは、フレームのストリームにより与えられる値で変数がインスタンス化された状態の元のクエリの複製からなる、新たなストリームを形成するのに使われる。そして、この最終的なストリームが、端末に印字される。
 </p>
 
 <p class="lisp"><a name="%_idx_5292"></a>(define input-prompt &quot;;;; Query input:&quot;)
@@ -2972,6 +3110,9 @@ is given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.
 <tt>Add-rule-or-assertion!</tt> is defined in section <a href="#%_sec_4.4.4.5">4.4.4.5</a>.</p>
 
 <p class="trans" lang="ja">
+ここで、本章の他の評価器におけるのと同様に、クエリ言語の式のための抽象的<ruby><rb>文法</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby>を使う。
+式の文法の実装—— <tt>assertion-to-be-added?</tt> という述語と <tt>add-assertion-body</tt> というセレクタを含む——は、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
+<tt>add-rule-or-assertion!</tt> は<a href="#%_sec_4.4.4.5">4.4.4.5</a>節で定義される。
 </p>
 
 <p class="orig" lang="en">
@@ -2985,6 +3126,10 @@ printed.  These transformations are performed by the two procedures
 (section  <a href="#%_sec_4.4.4.7">4.4.4.7</a>).</p>
 
 <p class="trans" lang="ja">
+入力された式に対して何か処理を行う前に、ドライバ・ループは、その式を、処理をより効率的にする形式へと、文法的に変形する。
+これは、パタン変数の表現を変更することを含む。
+クエリがインスタンス化されるとき、束縛されていないままで残っているどの変数も、印字される前には、変形されて、入力された表現へと戻される。
+これらの変形は、<tt>query-syntax-process</tt> と <tt>contract-question-mark</tt> という二つの手続きにより実行される (<a href="#%_sec_4.4.4.7">4.4.4.7</a>節)。
 </p>
 
 <p class="orig" lang="en">
@@ -2997,6 +3142,9 @@ take if a variable cannot be instantiated is given by a procedural
 argument to <tt>instantiate</tt>.</p>
 
 <p class="trans" lang="ja">
+式をインスタンス化するには、その式をコピーし、その際、その式の中のどの変数も、与えられたフレーム内での当該変数の値に置換する。
+値は、それ自体がインスタンス化され<!--てい-->る。というのも、それらの値は、変数を含み得るからだ (たとえば、<tt>exp</tt> の中の <tt>?x</tt> がユニフィケーションの結果として <tt>?y</tt> に束縛されており、そして今度は <tt>?y</tt> が 5 に束縛されている場合などに)。
+変数をインスタンス化できなかったら<!-- 取るべき行動 -->行うべき動作は、<tt>instantiate</tt> に対する手続き的引数により、提示される。
 </p>
 
 <p class="lisp"><a name="%_idx_5304"></a>(define (instantiate exp frame unbound-var-handler)
@@ -3017,6 +3165,7 @@ section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.
 </p>
 
 <p class="trans" lang="ja">
+束縛を操作する手続きは、<a href="#%_sec_4.4.4.8">4.4.4.8</a>節で定義される。
 </p>
 
 
@@ -3024,6 +3173,7 @@ section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.4.2">4.4.4.2  The Evaluator</a></h4>
 <h4 class="trans" lang="ja">4.4.4.2 評価器</h4>
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5306"></a>The <tt>qeval</tt> procedure, called by the <tt>query-driver-loop</tt>, is
 the basic evaluator of the query system.  It takes as inputs a query
