@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: git diff で差分を文字単位でカラー表示する</title>
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>git diff</tt> で差分を文字単位でカラー表示する</h2>
+<p><b>要旨:</b> <code>diff-highlight</code> を使おう。以上。</p>
+
+<h3>まず念のための下調べ</h3>
+<p>Homebrewを使っていると、Macにもともと入っているgitと、Homebrewでまめに更新されるgitの両方が入っていると思うので、一応確認する。私の環境だと、</p>
+
+<code class="block">$ which -a git
+/usr/local/bin/git
+/usr/bin/git</code>
+
+<p>となっている。1行目は、Homebrewで管理されている方で、実際は 
+<code>/usr/local/Cellar/git/2.10.2/bin/git</code> 
+へのシンボリックリンクである (2.10.2 というバージョンは、この記事を書いている時点のもの)。
+2行目が、Macにもともと入っているgit。
+環境変数の PATH を、<code>/usr/local/bin</code> が <code>/usr/bin</code> より前になるように設定してあるので、こういう順で出てくる (そのため、単に <code>git</code> と打てば、前者が呼び出されるという訳だ)。ちなみに、<code>$ /usr/bin/git --version</code> とすれば、Macにもともと入っているgitの方が確かにバージョンが古い、と確認できる。</p>
+
+<p>で、肝心の <code>diff-highlight</code> (実行可能ファイル) だが、
+<code>$ ls -l /usr/local/share/git-core</code>
+とすれば、このディレクトリがシンボリックリンクであると分かり、
+<code>/usr/local/Cellar/git/2.10.2/share/git-core</code>
+を指していると分かる。
+ということで、<em>目的の
+<code>/usr/local/share/git-core/contrib/diff-highlight/diff-highlight</code>
+が、まめに更新される方のgitに付随したものだ、と確認</em>できた。これで安心。</p>
+
+<h3><tt>diff-highlight</tt> にパスを通す</h3>
+<p>次に、パスの通っている適当なディレクトリに、この <code>diff-highlight</code> へのシンボリックリンクを作る。たとえば、以下のようにする。それにより、まめに更新される方のgitに付随した <code>diff-highlight</code> に、パスが通る。</p>
+<code class="block">$ ln -s /usr/local/share/git-core/contrib/diff-highlight/diff-highlight /usr/local/bin</code>
+
+<h3><tt>~/.gitconfig</tt> の設定</h3>
+<p><code>core.pager</code> を設定する。<code>~/.gitconfig</code> の <code>[core]</code> のセクションで次のように <code>pager</code> の値を設定すればよい (<code>git config</code> コマンドで設定してもよい)。</p>
+
+<code class="block">[core]
+    pager = diff-highlight | less -r</code>
+
+<p>なお、<code>-r</code> オプションは、私の環境だと、なくても大丈夫のようだ。あれば、絵文字が絵文字として表示される、といったありがたみが追加される模様。</p>
+
+<h3>これでカラー表示ができる!</h3>
+<p>以上により、<code>git diff</code> では文字単位で変更箇所が反転表示されるようになり、大変便利 (100％完全とはいかないようだが、格段に利便性が向上する)。また、<code>core.pager</code> を設定する形にしてあるので、<code>git log -p</code> でも同様のカラー表示となり、便利である。</p>
+
+<h3>詳しい情報</h3>
+<p>色のカスタマイズ法などの詳しい情報は、<code>/usr/local/share/git-core/contrib/diff-highlight/README</code> に載っている。読んでいないが。</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
