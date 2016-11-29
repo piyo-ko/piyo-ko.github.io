@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: ~/.gitconfig の最低限の設定</title>
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>~/.gitconfig</tt> の最低限の設定</h2>
+
+<p>どうせローカルでしかgitを使わないよ、と思っていても、そのうちGitHubなんかを使いたくなるかもしれないし、一応、ユーザ名とメールアドレスは、公開してもさしつかえのないものを設定しておくのが安心。</p>
+
+<code class="block">$ git config --global user.name <span class="com">公開してもさしつかえのない名前</span>
+$ git config --global user.email <span class="com">公開してもさしつかえのないアドレス</span>
+</code>
+
+<p>いちいちコマンドを打つのが面倒だったら、<code>~/.gitconfig</code>を直接編集してもよい。下記は、カラー設定と、エディタ設定と、常に管理対象から外しておきたいものを指定するための設定と、いくつかのエイリアスの設定の例。以下のように設定したうえで、<code>~/.gitignore_global</code>に<code>.DS_Store</code>と書いておけば、「知らぬ間になぜか.DS_Storeができていて、それがgitの管理対象に入っている」という事態にならない筈。なお、エディタは、最初は大好きな<a href="https://www.mimikaki.net/">mi</a>にしたかったんだが、パッケージ型のエディタであるせいか、うまく呼び出せなかったので、emacsを設定してみた。</p>
+
+<code class="block">[color]
+	ui = auto
+[core]
+	editor = emacs
+	excludesfile = <span class="com">ホームディレクトリへのパス</span>/.gitignore_global
+[alias]
+	com = commit
+	br = branch
+	st = status
+	co = checkout
+	sh = show
+</code>
+
+<p><code>git diff</code>のカラー表示のための設定については、<a href="0006_git-diff.html">別ページ</a>に書いた。</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
