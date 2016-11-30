@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: git で管理していなくったって、DocDiff を使えば文字単位で差分を見られるよ</title>
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2>git で管理していなくったって、DocDiff を使えば文字単位で差分を見られるよ</h2>
+
+<p>……という、タイトルがすべての記事なんだが、一応、詳細も書いておく。git で管理している場合は、<a href="0006_git-diff.html"><tt>diff-highlight</tt> を使えばよい</a>。</p>
+
+<h3>DocDiff にたどりつくまで</h3>
+<p>git で管理するほどのものではなくても、何かの拍子にファイルの更新の差分を見たいときがある。あるいは、フィルタに通した後の結果 (sed にかけた結果とか) が所望のものになっているかどうか確認するために、フィルタへの入力と出力の差分を見たいときがある (sed に不慣れだと、正規表現の指定の仕方がまずくて、予期せぬ変なところで変換されて、ぎゃふんとなったりするのよ)。</p>
+
+<p>しかも、普通の diff だと不便なことも多い。具体的には「英語を単語単位でハイライトしてほしい」「日本語を文字単位でハイライトしてほしい」といったあたりの不満を感じることがある。というわけで、DocDiff を試してみた。</p>
+
+<p>そもそも「検索してみたら、なんだか DocDiff っていうのが良さそう」となるんだが、以下の三つのサイトが見つかって、「どこからインストールすればいいのかしらん?」が第一関門。</p>
+
+<ul>
+<li><a href="http://docdiff.sourceforge.net/readme.ja.html">http://docdiff.sourceforge.net/readme.ja.html</a></li>
+<li><a href="https://github.com/hisashim/docdiff">https://github.com/hisashim/docdiff</a></li>
+<li><a href="http://www.kt.rim.or.jp/~hisashim/docdiff/">http://www.kt.rim.or.jp/~hisashim/docdiff/</a></li>
+</ul>
+
+<p>が、<a href="http://blog.msyk.net/?p=484">gem でインストールできる、という情報</a>を発見。
+ということで、第一関門の問題は消えた。
+まあ、Ruby をまったく知らないので、「gem って何それおいしいの」状態だ、という第二関門はあるんだが、「とにかく実行しちゃえ」で乗り越えた (おい……)。</p>
+
+<code class="block">$ sudo gem install docdiff</code>
+
+<p>と実行するだけである。これでインストールは終了。もう使える。Хорошо!</p>
+
+<h3>使ってみる</h3>
+<p>何か困ったら <code>$ docdiff --help</code> を実行すればよい。オプションの指定の仕方次第で、単語単位や行単位でも差分をとれるとか、テキストエンコーディングを指定できるとか、出力形式を指定できるとか、色々書いてある。</p>
+
+<p>見やすい形でじっくり差分を見るには、</p>
+
+<code class="block">$ docdiff --char <span class="com">旧ファイル</span> <span class="com">新ファイル</span> &gt; <span class="com">結果出力先.html</span></code>
+
+<p>と実行して、生成されたHTMLファイルをブラウザで開くと良い (なお、私の環境だと
+「Thread.exclusive is deprecated, use Mutex」
+といったエラーメッセージが何度も出力されてしまうが、HTMLファイル自体は生成されているので、細かいことは気にしない)。</p>
+
+
+<p>設定ファイルのサンプルというのは、多分、</p>
+<code class="block">/usr/local/lib/ruby/gems/2.3.0/gems/docdiff-0.5.0/docdiff.conf.example</code>
+<p>のことですね。とりあえずはいじらなくても良いかな……。</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
