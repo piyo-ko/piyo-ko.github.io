@@ -516,11 +516,80 @@ computer technician:</p>
 </p>
 
 <p class="trans" lang="ja">
-また、以下のことはよく知られているとおりである。
+また、以下のことはよく知られているとおりである<span class="note"> (ここは笑うところだよ)</span>。
 </p>
 
 <p class="lisp">(can-do-job (administration secretary)
             (administration big wheel))
+</p>
+
+<p class="extra">
+ここから先は Prolog で答え合わせをしながら読むといいかな、と思う (とりあえず GNU Prolog を使う)。
+そこで、以下のような<a href="personnel_db.pl">ファイル</a> (<tt>personnel_db.pl</tt>) を作った。
+</p>
+
+<p class="extra_code"><span class="ex_comment">% GNU Prologでは、同じ述語を連続して (まとめて) 記述しておかないと
+% 「discontiguous predicate address/2 - clause ignored」
+% のようなエラーが出るので、それを回避するためのおまじない。</span>
+:- discontiguous(address/2, job/2, salary/2, supervisor/2, can_do_job/2).
+
+address(['Bitdiddle', 'Ben'], ['Slumerville', ['Ridge', 'Road'], 10]).
+job(['Bitdiddle', 'Ben'], [computer, wizard]).
+salary(['Bitdiddle', 'Ben'], 60000).
+
+address(['Hacker', 'Alyssa', 'P'], ['Cambridge', ['Mass', 'Ave'], 78]).
+job(['Hacker', 'Alyssa', 'P'], [computer, programmer]).
+salary(['Hacker', 'Alyssa', 'P'], 40000).
+supervisor(['Hacker', 'Alyssa', 'P'], ['Bitdiddle', 'Ben']).
+
+address(['Fect', 'Cy', 'D'], ['Cambridge', ['Ames', 'Street'], 3]).
+job(['Fect', 'Cy', 'D'], [computer, programmer]).
+salary(['Fect', 'Cy', 'D'], 35000).
+supervisor(['Fect', 'Cy', 'D'], ['Bitdiddle', 'Ben']).
+
+address(['Tweakit', 'Lem', 'E'], ['Boston', ['Bay', 'State', 'Road'], 22]).
+job(['Tweakit', 'Lem', 'E'], [computer, technician]).
+salary(['Tweakit', 'Lem', 'E'], 25000).
+supervisor(['Tweakit', 'Lem', 'E'], ['Bitdiddle', 'Ben']).
+
+address(['Reasoner', 'Louis'], ['Slumerville', ['Pine', 'Tree', 'Road'], 80]).
+job(['Reasoner', 'Louis'], [computer, programmer, trainee]).
+salary(['Reasoner', 'Louis'], 30000).
+supervisor(['Reasoner', 'Louis'], ['Hacker', 'Alyssa', 'P']).
+
+supervisor(['Bitdiddle', 'Ben'], ['Warbucks', 'Oliver']).
+
+address(['Warbucks', 'Oliver'], ['Swellesley', ['Top', 'Heap', 'Road']]).
+job(['Warbucks', 'Oliver'], [administration, big, wheel]).
+salary(['Warbucks', 'Oliver'], 150000).
+
+address(['Scrooge', 'Eben'], ['Weston', ['Shady', 'Lane'], 10]).
+job(['Scrooge', 'Eben'], [accounting, chief, accountant]).
+salary(['Scrooge', 'Eben'], 75000).
+supervisor(['Scrooge', 'Eben'], ['Warbucks', 'Oliver']).
+
+address(['Cratchet', 'Robert'], ['Allston', ['N', 'Harvard', 'Street'], 16]).
+job(['Cratchet', 'Robert'], [accounting, scrivener]).
+salary(['Cratchet', 'Robert'], 18000).
+supervisor(['Cratchet', 'Robert'], ['Scrooge', 'Eben']).
+
+address(['Aull', 'DeWitt'], ['Slumerville', ['Onion', 'Square'], 5]).
+job(['Aull', 'DeWitt'], [administration, secretary]).
+salary(['Aull', 'DeWitt'], 25000).
+supervisor(['Aull', 'DeWitt'], ['Warbucks', 'Oliver']).
+
+can_do_job([computer, wizard], [computer, programmer]).
+can_do_job([computer, wizard], [computer, technician]).
+can_do_job([computer, programmer], [computer, programmer, trainee]).
+can_do_job([administration, secretary], [administration, big, wheel]).
+</p>
+
+<p class="extra">以下のように実行し、ファイルを読み込む。
+<br><br>
+<tt>$ gprolog<br>
+| ?- consult('personnel_db.pl').</tt>  <span class="ex_comment">← ここで Control+D</span><br>
+<br>
+ここから先は、クエリを打ち込むと答えが出てくる。
 </p>
 
 <a name="%_sec_Temp_650"></a>
@@ -573,7 +642,7 @@ showing all entries in the data base that match the specified pattern.</p>
 マッチング・リストにおける2番目の項目になり得る「<!-- 任意のもの -->何か」は、<em>パタン変数</em>により、すなわち、<tt>?x</tt> により、指定されている。
 パタン変数の一般形は、疑問符が先に付いていて、変数の名前としてとられるべき、記号である。
 「<!-- 任意のもの -->何か」を表現するのに、単に <tt>?</tt> をパタンの中に置くのではなく、<!--むしろ-->パタン変数の名前を指定することが、なぜ有用なのかは、後に分かるだろう。
-単純クエリに対してシステムは、指定されたパタンに合致する、データベース内の全エントリを示すことによって、応答する。
+単純クエリに対して、システムは、指定されたパタンに合致する、データベース内の全エントリを示すことによって、応答する。
 </p>
 
 <p class="orig" lang="en">
