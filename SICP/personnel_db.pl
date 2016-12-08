@@ -8,6 +8,7 @@
 % のようなエラーが出るので、それを回避するためのおまじない。
 :- discontiguous(address/2, job/2, salary/2, supervisor/2, can_do_job/2).
 
+% 以下、人事データベース。
 address(['Bitdiddle', 'Ben'], ['Slumerville', ['Ridge', 'Road'], 10]).
 job(['Bitdiddle', 'Ben'], [computer, wizard]).
 salary(['Bitdiddle', 'Ben'], 60000).
@@ -57,3 +58,20 @@ can_do_job([computer, wizard], [computer, programmer]).
 can_do_job([computer, wizard], [computer, technician]).
 can_do_job([computer, programmer], [computer, programmer, trainee]).
 can_do_job([administration, secretary], [administration, big, wheel]).
+
+
+% 規則
+lives_near(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    \+(same(Rest_1, Rest_2)).
+same(X, X).
+
+wheel(Person) :- 
+    supervisor(Middle_manager, Person), 
+    supervisor(X, Middle_manager).
+
+outranked_by(Staff_person, Boss) :-
+    supervisor(Staff_person, Boss);
+    (supervisor(Staff_person, Middle_manager), 
+     outranked_by(Middle_manager, Boss)).

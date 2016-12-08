@@ -525,7 +525,7 @@ computer technician:</p>
 
 <p class="extra">
 ここから先は Prolog で答え合わせをしながら読むといいかな、と思う (とりあえず GNU Prolog を使う)。
-そこで、以下のような<a href="personnel_db.pl">ファイル</a> (<tt>personnel_db.pl</tt>) を作った。
+そこで、以下のような記述を含む<a href="personnel_db.pl">ファイル</a> (<tt>personnel_db.pl</tt>) を作った。なお、このファイルには後出の規則も含めてある。
 </p>
 
 <p class="extra_code"><span class="ex_comment">% GNU Prologでは、同じ述語を連続して (まとめて) 記述しておかないと
@@ -587,8 +587,8 @@ can_do_job([administration, secretary], [administration, big, wheel]).
 <p class="extra">以下のように実行し、ファイルを読み込む。
 <br><br>
 <tt>$ gprolog<br>
-| ?- consult('personnel_db.pl').</tt>  <span class="ex_comment">← ここで Control+D</span><br>
-<br>
+| ?- consult('personnel_db.pl').</tt> 
+<br><br>
 ここから先は、クエリを打ち込むと答えが出てくる。
 </p>
 
@@ -615,13 +615,22 @@ example, to find all computer programmers one can say</p>
 <p class="orig" lang="en">The system will respond with the following items:</p>
 
 <p class="trans" lang="ja">
-システムは、以下の項目で応答するだろう。
+システムは、以下の項目でもって応答するだろう。
 </p>
 
 <p class="lisp"><i>;;; Query results:</i>
 (job (Hacker Alyssa P) (computer programmer))
 (job (Fect Cy D) (computer programmer))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, programmer]).
+
+X = ['Hacker','Alyssa','P'] ? ;
+
+X = ['Fect','Cy','D'] ? ;
+
+no</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5112"></a>The input query specifies that we are looking for entries in the data
@@ -662,6 +671,38 @@ A pattern can have more than one variable.  For example, the query
 全職員の住所を列挙するだろう。
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- address(X, Y).
+
+X = ['Bitdiddle','Ben']
+Y = ['Slumerville',['Ridge','Road'],10] ? ;
+
+X = ['Hacker','Alyssa','P']
+Y = ['Cambridge',['Mass','Ave'],78] ? ;
+
+X = ['Fect','Cy','D']
+Y = ['Cambridge',['Ames','Street'],3] ? ;
+
+X = ['Tweakit','Lem','E']
+Y = ['Boston',['Bay','State','Road'],22] ? ;
+
+X = ['Reasoner','Louis']
+Y = ['Slumerville',['Pine','Tree','Road'],80] ? ;
+
+X = ['Warbucks','Oliver']
+Y = ['Swellesley',['Top','Heap','Road']] ? ;
+
+X = ['Scrooge','Eben']
+Y = ['Weston',['Shady','Lane'],10] ? ;
+
+X = ['Cratchet','Robert']
+Y = ['Allston',['N','Harvard','Street'],16] ? ;
+
+X = ['Aull','DeWitt']
+Y = ['Slumerville',['Onion','Square'],5]
+
+(1 ms) yes</p>
+
 <p class="orig" lang="en">
 A pattern can have no variables, in which case the query simply
 determines whether that pattern is an entry in the data base.  If so,
@@ -669,7 +710,7 @@ there will be one match; if not, there will be no matches.</p>
 
 <p class="trans" lang="ja">
 パタンに変数がないこともあり得て、その場合、クエリは単に、そのパタンがデータベース内のエントリであるかどうかを判定する。
-もしそうなら、一つの一致があるだろうし、そうでなければ、何も一致がないだろう。
+もしそうなら<span class="note"> (そのパタンがデータベース内のエントリであるならば)</span>、一つの一致があるだろうし、そうでなければ、何も一致がないだろう。
 </p>
 
 
@@ -694,6 +735,11 @@ assertions in our sample data base).</p>
 は、自分自身を指揮監督しているすべての人たちを見つける (私たちのサンプル・データベースにはそういう言明は存在しないけれども)。
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, X).
+
+no
+</p>
 
 <p class="orig" lang="en">
 The query
@@ -717,6 +763,24 @@ first item is <tt>computer</tt>:</p>
 (job (Hacker Alyssa P) (computer programmer))
 (job (Fect Cy D) (computer programmer))
 (job (Tweakit Lem E) (computer technician))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, Type]).
+
+Type = wizard
+X = ['Bitdiddle','Ben'] ? ;
+
+Type = programmer
+X = ['Hacker','Alyssa','P'] ? ;
+
+Type = programmer
+X = ['Fect','Cy','D'] ? ;
+
+Type = technician
+X = ['Tweakit','Lem','E'] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">This same pattern does <em>not</em> match
@@ -743,6 +807,26 @@ list beginning with <tt>computer</tt>, we could specify<a name="%_idx_5116"></a>
 
 <p class="lisp">(job ?x (computer . ?type))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer | Type]).
+
+Type = [wizard]
+X = ['Bitdiddle','Ben'] ? ;
+
+Type = [programmer]
+X = ['Hacker','Alyssa','P'] ? ;
+
+Type = [programmer]
+X = ['Fect','Cy','D'] ? ;
+
+Type = [technician]
+X = ['Tweakit','Lem','E'] ? ;
+
+Type = [programmer,trainee]
+X = ['Reasoner','Louis'] ? ;
+
+no</p>
 
 <p class="orig" lang="en">For example,
 </p>
@@ -852,14 +936,50 @@ in Slumerville.</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">; a</span>
-(supervisor ?name (Bitdiddle Ben))
+(supervisor ?name (Bitdiddle Ben))</p>
 
-<span class="ex_comment">; b</span>
-(job ?name (accounting . ?type))
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Name, ['Bitdiddle', 'Ben']).
 
-<span class="ex_comment">; c</span>
+Name = ['Hacker','Alyssa','P'] ? ;
+
+Name = ['Fect','Cy','D'] ? ;
+
+Name = ['Tweakit','Lem','E'] ? ;
+
+no</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
+(job ?name (accounting . ?type))</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(Name, [accounting | Type]).
+
+Name = ['Scrooge','Eben']
+Type = [chief,accountant] ? ;
+
+Name = ['Cratchet','Robert']
+Type = [scrivener] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; c</span>
 (address ?name (Slumerville . ?x))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- address(Name, ['Slumerville' | X]).
+
+Name = ['Bitdiddle','Ben']
+X = [['Ridge','Road'],10] ? ;
+
+Name = ['Reasoner','Louis']
+X = [['Pine','Tree','Road'],80] ? ;
+
+Name = ['Aull','DeWitt']
+X = [['Onion','Square'],5]
+
+yes</p>
 
 <a name="%_sec_Temp_653"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_653">Compound queries</a></h4>
@@ -905,6 +1025,17 @@ computer programmers:</p>
 (and (job (Fect Cy D) (computer programmer))
      (address (Fect Cy D) (Cambridge (Ames Street) 3)))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(Person, [computer, programmer]), address(Person, Where).
+
+Person = ['Hacker','Alyssa','P']
+Where = ['Cambridge',['Mass','Ave'],78] ? ;
+
+Person = ['Fect','Cy','D']
+Where = ['Cambridge',['Ames','Street'],3] ? ;
+
+(1 ms) no</p>
 
 <p class="orig" lang="en"><a name="%_idx_5126"></a>In general,
 </p>
@@ -965,6 +1096,19 @@ Hacker:</p>
     (supervisor (Reasoner Louis) (Hacker Alyssa P)))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, ['Bitdiddle', 'Ben']); supervisor(X, ['Hacker', 'Alyssa', 'P']).
+
+X = ['Hacker','Alyssa','P'] ? ;
+
+X = ['Fect','Cy','D'] ? ;
+
+X = ['Tweakit','Lem','E'] ? ;
+
+X = ['Reasoner','Louis'] ? ;
+
+(1 ms) no</p>
+
 <p class="orig" lang="en">In general,
 </p>
 
@@ -998,6 +1142,13 @@ satisfy at least one of &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>
      (not (job ?x (computer programmer))))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, ['Bitdiddle', 'Ben']), \+(job(X, [computer, programmer])).
+
+X = ['Tweakit','Lem','E'] ? ;
+
+no</p>
+
 <p class="orig" lang="en">finds all people supervised by Ben Bitdiddle who are not computer
 programmers.  In general,</p>
 
@@ -1005,6 +1156,7 @@ programmers.  In general,</p>
 は、ベン・ビットディドルにより指揮監督される、コンピュータ・プログラマではない、すべての人たちを見つけ出す。
 一般に、
 </p>
+
 
 <p class="lisp">(not &lt;<em>query<sub>1</sub></em>&gt;)
 </p>
@@ -1053,6 +1205,26 @@ $30,000 we could write<a name="call_footnote_Temp_655" href="#footnote_Temp_655"
      (lisp-value &gt; ?amount 30000))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog で擬似的に真似すると以下のとおり。</span>
+| ?- salary(Person, Amount), Amount > 30000.
+
+Amount = 60000
+Person = ['Bitdiddle','Ben'] ? ;
+
+Amount = 40000
+Person = ['Hacker','Alyssa','P'] ? ;
+
+Amount = 35000
+Person = ['Fect','Cy','D'] ? ;
+
+Amount = 150000
+Person = ['Warbucks','Oliver'] ? ;
+
+Amount = 75000
+Person = ['Scrooge','Eben'] ? ;
+
+(1 ms) no</p>
+
 <p class="orig" lang="en">
 <a name="%_thm_4.56"></a>
 <b>Exercise 4.56.</b>  Formulate compound queries that retrieve the following information:</p>
@@ -1075,29 +1247,94 @@ division, together with the supervisor's name and job.</li>
 <ol class="trans alph" lang="ja">
 <li>ベン・ビットディドルにより指揮監督されているすべての人たちの名前を、その人たちの住所と一緒に。</li>
 <li>ベン・ビットディドルよりも給与が低いすべての人たちを、その人たちの給与およびベン・ビットディドルの給与と一緒に。</li>
-<li>コンピュータ部門にいない誰かによって指揮監督されているすべての人たちを、上司の名前および仕事と一緒に。</li>
+<li>コンピュータ部門にいない誰かによって指揮監督されているすべての人たちを、<!-- 上司 -->指揮監督者の名前および仕事と一緒に。</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">; a</span>
 (and (supervisor ?who (Bitdiddle Ben))
-     (address ?who ?where))
+     (address ?who ?where))</p>
 
-<span class="ex_comment">; b</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Who, ['Bitdiddle', 'Ben']), address(Who, Where).
+
+Where = ['Cambridge',['Mass','Ave'],78]
+Who = ['Hacker','Alyssa','P'] ? ;
+
+Where = ['Cambridge',['Ames','Street'],3]
+Who = ['Fect','Cy','D'] ? ;
+
+Where = ['Boston',['Bay','State','Road'],22]
+Who = ['Tweakit','Lem','E'] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
 (and (salary ?person ?amount)
      (salary (Bitdiddle Ben) ?amount-of-Ben)
-     (lisp-value &lt; ?amount ?amount-of-Ben))
+     (lisp-value &lt; ?amount ?amount-of-Ben))</p>
 
-<span class="ex_comment">; c</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- salary(Person, Amount), salary(['Bitdiddle', 'Ben'], Amount_of_Ben), Amount < Amount_of_Ben.
+
+Amount = 40000
+Amount_of_Ben = 60000
+Person = ['Hacker','Alyssa','P'] ? ;
+
+Amount = 35000
+Amount_of_Ben = 60000
+Person = ['Fect','Cy','D'] ? ;
+
+Amount = 25000
+Amount_of_Ben = 60000
+Person = ['Tweakit','Lem','E'] ? ;
+
+Amount = 30000
+Amount_of_Ben = 60000
+Person = ['Reasoner','Louis'] ? ;
+
+Amount = 18000
+Amount_of_Ben = 60000
+Person = ['Cratchet','Robert'] ? ;
+
+Amount = 25000
+Amount_of_Ben = 60000
+Person = ['Aull','DeWitt'] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; c</span>
 (and (supervisor ?who ?boss)
      (not (job ?boss (computer . ?x)))
      (job ?boss ?job-of-boss))
+
 <span class="ex_comment">; 以下のように書きたくなるが、
-;「等価性の検査に lisp-value を使うな」と脚注64にあるので、
+;「等価性の検査に lisp-value を使うな」と<a  href="#footnote_Temp_655">脚注64</a>にあるので、
 ; 上記のような回答案にしてみた。</span>
 (and (supervisor ?who ?boss)
      (job ?boss (?division ?job-detail))
      (not (lisp-value = ?division 'computer)))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Who, Boss), \+(job(Boss, [computer | X])), job(Boss, Job_of_Boss).
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Bitdiddle','Ben'] ? ;
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Scrooge','Eben'] ? ;
+
+Boss = ['Scrooge','Eben']
+Job_of_Boss = [accounting,chief,accountant]
+Who = ['Cratchet','Robert'] ? ;
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Aull','DeWitt'] ? ;
+
+(1 ms) no</p>
 
 <a name="%_sec_Temp_657"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_657">Rules</a></h4>
@@ -1136,6 +1373,14 @@ defined by a very simple rule:<a name="call_footnote_Temp_658" href="#footnote_T
 <p class="lisp"><a name="%_idx_5142"></a>(rule (same ?x ?x))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+lives_near(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    \+(same(Rest_1, Rest_2)).
+same(X, X).
+</p>
+
 <p class="orig" lang="en">
 The following rule declares that a person is a ``wheel'' in an
 organization if he supervises someone who is in turn a supervisor:</p>
@@ -1147,6 +1392,12 @@ organization if he supervises someone who is in turn a supervisor:</p>
 <p class="lisp"><a name="%_idx_5144"></a>(rule (wheel ?person)
       (and (supervisor ?middle-manager ?person)
            (supervisor ?x ?middle-manager)))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+wheel(Person) :- 
+    supervisor(Middle_manager, Person), 
+    supervisor(X, Middle_manager).
 </p>
 
 <p class="orig" lang="en">
@@ -1195,6 +1446,16 @@ query
 (lives-near (Aull DeWitt) (Bitdiddle Ben))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(X, ['Bitdiddle', 'Ben']).
+
+X = ['Reasoner','Louis'] ? ;
+
+X = ['Aull','DeWitt'] ? ;
+
+(1 ms) no
+</p>
+
 <p class="orig" lang="en">To find all computer programmers who live near Ben Bitdiddle, we can
 ask
 </p>
@@ -1205,6 +1466,12 @@ ask
 
 <p class="lisp">(and (job ?x (computer programmer))
      (lives-near ?x (Bitdiddle Ben)))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, programmer]), lives_near(X, ['Bitdiddle', 'Ben']).
+
+no
 </p>
 
 <p class="orig" lang="en">
@@ -1222,6 +1489,13 @@ or even be defined recursively.  For instance, the rule
       (or (supervisor ?staff-person ?boss)
           (and (supervisor ?staff-person ?middle-manager)
                (outranked-by ?middle-manager ?boss))))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+outranked_by(Staff_person, Boss) :-
+    supervisor(Staff_person, Boss);
+    (supervisor(Staff_person, Middle_manager), 
+     outranked_by(Middle_manager, Boss)).
 </p>
 
 <p class="orig" lang="en">says that a staff person is outranked by a boss in the organization if
@@ -1453,6 +1727,9 @@ which each pair appears only once?  Explain.
 するような組み込み述語ってあったかな? あるいは、シンボル名を表現する文字列を
 取得するような組み込み関数とか (それで文字列同士の大小比較に持ち込む)。
 ちょっと実際の実装までは考えていない。
+
+[追記] Gaucheのeq-compareを使う手がありそう。
+あるいは、symbol-&gt;stringとstring&lt;?の合わせ技かな。
 </span></p>
 
 <a name="%_sec_Temp_664"></a>
@@ -4751,7 +5028,7 @@ different.)</p>
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_658"><sup><small>65</small></sup></a>
 二つのものを同一とするためには、<tt>same</tt> を必要とはしないのだ、ということに注意せよ。それぞれについて同じパタン変数を使いさえすればよいのだ。実際、そもそもは、二つのものではなく、一つのものがある訳だ。
-たとえば、<tt>lives-near</tt> の規則における <tt>?town</tt> や、以下の <tt>wheel</tt> の規則における <tt>?middle-manager</tt> を参照せよ
+たとえば、<tt>lives-near</tt> の規則における <tt>?town</tt> や、以下の <tt>wheel</tt> の規則における <tt>?middle-manager</tt> を参照せよ。
 <tt>same</tt> は、<tt>lives-near</tt> の規則における <tt>?person-1</tt> と <tt>?person-2</tt> のように、二つのものを強制的に異なるものとしたい場合に、有用である。
 クエリの二つの部分で同じパタン変数を使うことは、同じ値が両方の場所に現れることを強いるが、異なるパタン変数を使うことは、異なる値が現れることを強いる訳ではない (異なるパタン変数に<ruby><rb>代入された</rb><rp> (</rp><rt>わりあてられた</rt><rp>) </rp></ruby>値は、同じかもしれないし、あるいは、違うかもしれないのだ)。
 </p>
@@ -4762,7 +5039,7 @@ conclusion is satisfied by any values of the variables.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_659"><sup><small>66</small></sup></a>
-<tt>same</tt> でのような、本体のない規則も許可しよう。そして、そういった規則を、変数の任意の値によって当該規則の帰結が満たされることを意味するものとして、解釈しよう。
+<tt>same</tt> に見られるような、本体のない規則も許可しよう。そして、そういった規則を、変数の任意の値によって当該規則の帰結が満たされることを意味するものとして、解釈しよう。
 </p>
 
 <p class="orig" lang="en">
@@ -4781,7 +5058,7 @@ simple-minded form of such an optimization.</p>
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_670"><sup><small>67</small></sup></a>
 マッチングは一般的にはとても高くつくので、データベースのどの要素に対しても完全なマッチャを適用することは避けたい。
-これの手筈は、普通、プロセスを高速で粗いマッチと最終的なマッチへと分解することにより、整えられる。
+これ<span class="note"> (完全なマッチャの適用を避けること) </span>の手筈は、普通、プロセスを、高速で粗いマッチと最終的なマッチへと分解することにより、整えられる。
 粗いマッチは、データベースをフィルタにかけて、最終的なマッチに対する候補の小さな集合を作り出す。
 注意すれば、私たちは、候補を選択したいときではなくデータベースが構築されるときに粗いマッチングの作業のうちのいくらかを行えるように、自分のデータベースを整えられる。
 これは、データベースの<em><ruby><rb>索引づけ</rb><rp> (</rp><rt>インデクシング</rt><rp>) </rp></ruby></em>と呼ばれる。
@@ -4952,7 +5229,7 @@ frame, which is used to instantiate the input query to produce <tt>(not (basebal
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_688"><sup><small>78</small></sup></a>
 <tt>(not (baseball-fan (Bitdiddle Ben)))</tt> というクエリを考えよう。
-システムは、<tt>(baseball-fan (Bitdiddle Ben))</tt> データベース内に存在しないと知り、よって、空フレームは、このパタンを満たさず、フレームの初期ストリームから除外されない。
+システムは、<tt>(baseball-fan (Bitdiddle Ben))</tt> がデータベース内に存在しないと知り、よって、空フレームは、このパタンを満たさず、フレームの初期ストリームから除外されない。
 したがって、クエリの結果は空フレームであり、この空フレームは、入力クエリをインスタンス化して <tt>(not (baseball-fan (Bitdiddle Ben)))</tt> を作り出すのに使われる。
 </p>
 
