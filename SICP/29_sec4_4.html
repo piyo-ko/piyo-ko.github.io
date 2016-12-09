@@ -585,11 +585,16 @@ can_do_job([administration, secretary], [administration, big, wheel]).
 </p>
 
 <p class="extra">以下のように実行し、ファイルを読み込む。
-<br><br>
+<br>
 <tt>$ gprolog<br>
 | ?- consult('personnel_db.pl').</tt> 
-<br><br>
+<br>
 ここから先は、クエリを打ち込むと答えが出てくる。
+あるいは、
+<br>
+<tt>$ gprolog --consult-file personnel_db.pl</tt>
+<br>
+としてもよい。
 </p>
 
 <a name="%_sec_Temp_650"></a>
@@ -1543,16 +1548,49 @@ are, together with the two salaries.</li>
       (and (job ?person1 ?job1) (job ?person2 ?job2) (can-do-job ?job1 ?job2)))
      <span class="ex_comment">; 人物1 と人物2 は別人である。</span>
     (not (same ?person1 ?person2))))
-<span class="ex_comment">; a</span>
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+can_replace(Person1, Person2) :-
+    ( (job(Person1, Job1), job(Person2, Job1)) ;
+      (job(Person1, Job1), job(Person2, Job2), can_do_job(Job1, Job2)) ),
+    \+(same(Person1, Person2)).
+</p>
+
+<p class="exercise"><span class="ex_comment">; a</span>
 (can-replace ?who (Fect Cy D))
-<span class="ex_comment">; b</span>
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- can_replace(Who, ['Fect', 'Cy', 'D']).
+
+Who = ['Hacker','Alyssa','P'] ? ;
+
+Who = ['Bitdiddle','Ben'] ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
 (and (can-replace ?who ?more-paid-person)
      (salary ?who ?s1) (salary ?more-paid-person ?s2)
      (lisp-value &lt; ?s1 ?s2))
 </p>
-<!--
-      (and (job ?person1 ?job1) (job ?someone ?job1)  (job ?person2 ?job2) (can-do-job ?job1 ?job2)
--->
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- can_replace(Who, More_Paid_Person), salary(Who, S1), salary(More_Paid_Person, S2), S1 < S2.
+
+More_Paid_Person = ['Hacker','Alyssa','P']
+S1 = 35000
+S2 = 40000
+Who = ['Fect','Cy','D'] ? ;
+
+More_Paid_Person = ['Warbucks','Oliver']
+S1 = 25000
+S2 = 150000
+Who = ['Aull','DeWitt'] ? ;
+
+(1 ms) no
+</p>
+
 <p class="orig" lang="en">
 <a name="%_thm_4.58"></a>
 <b>Exercise 4.58.</b>  Define a rule that says that a person is a ``big shot'' in a division
@@ -1564,13 +1602,41 @@ works in the division.
 <b>練習問題4.58.</b> もし、ある人がある部門で働いているものの、当人には当該部門で働く指揮監督者がいなければ、その人は当該部門における「お偉方」である、と述べる規則を、定義せよ。
 </p>
 
-<p class="exercise">(is-big-shot ?who
+<p class="exercise"><span class="ex_comment">; 二つの場合があるので、二つの規則に分けて記述する。
+
+; ある人 (?who) には指揮監督者 (?supervisor) がいるけれど、指揮監督者は別部門に属している。</span>
+(rule (is-big-shot ?who ?division1)
   (and (job ?who (?division1 . ?j1))
        (supervisor ?who ?supervisor)
        (job ?supervisor (?division2 . ?j2))
        (not (same ?divison1 ?division2))))
-</p>
 
+<span class="ex_comment">; ある人 (?who) は実在していて、どこかの部門 (?div) で働いているのだが、
+; そもそもこの人には (同部門であれ別部門であれ) 指揮監督者 (?someone-else)などいない。</span>
+(rule (is-big-shot ?who ?div)
+  (and (job ?who (?div . ?j)) (not (supervisor ?who ?someone-else))))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+is_big_shot(Who, Division1) :-
+    job(Who, [Division1 |_]), supervisor(Who, Supervisor),
+    job(Supervisor, [Division2 |_]), \+(same(Division1, Division2)).
+is_big_shot(Who, Div) :-
+    job(Who, [Div |_]), \+(supervisor(Who, Someone_else)).
+
+<span class="ex_comment">% クエリを実行してみると以下のとおり。</span>
+| ?- is_big_shot(Who, Div).
+
+Div = computer
+Who = ['Bitdiddle','Ben'] ? ;
+
+Div = accounting
+Who = ['Scrooge','Eben'] ? ;
+
+Div = administration
+Who = ['Warbucks','Oliver'] ? ;
+
+no
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.59"></a>
@@ -1582,7 +1648,7 @@ asserting the following:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.59.</b> ベン・ビットディドルは、これまで何度も会議に行きそこねてきた<span class="note"> (oneがうまく解釈できない)</span>。
+<b>練習問題4.59.</b> ベン・ビットディドルは、これまで会議に出席しそこねることがちょっと多すぎた。
 会議を忘れるという自分の癖は、厄介事を自分にもたらしかねない、と懸念して、ベンは、これに関して何かしよう、と決意する。
 以下のように言明することによって、彼は、会社の毎週の会議をすべて、マイクロシャフト社のデータベースに加える。
 </p>
@@ -1591,6 +1657,12 @@ asserting the following:
 (meeting administration (Monday 10am))
 (meeting computer (Wednesday 3pm))
 (meeting administration (Friday 1pm))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting(accounting, ['Monday', '9am']).
+meeting(administration, ['Monday', '10am']).
+meeting(computer, ['Wednesday', '3pm']).
+meeting(administration, ['Friday', '1pm']).
 </p>
 
 <p class="orig" lang="en">Each of the above assertions is for a meeting of an entire division.
@@ -1606,6 +1678,9 @@ divisions.  All of the company's employees attend this meeting.
 
 <p class="lisp">(meeting whole-company (Wednesday 4pm))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting(whole_company, ['Wednesday', '4pm']).
+</p>
 
 <ol class="orig alph" lang="en">
 <li>On Friday morning, Ben wants to query the data base for all the meetings
@@ -1618,6 +1693,14 @@ that occur that day.  What query should he use?</li>
 </ol>
 
 <p class="exercise">(meeting ?div (Friday ?time))</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- meeting(Div, ['Friday', Time]).
+
+Div = administration
+Time = '1pm' ? ;
+
+no
+</p>
 
 <ol class="orig alph" start="2" lang="en">
 <li>Alyssa P. Hacker is unimpressed.  She thinks it would be much more
@@ -1641,6 +1724,11 @@ Fill in the body of Alyssa's rule.</li>
   (or (meeting whole-company ?day-and-time)
       (and (job ?person (?division . ?x)) (meeting ?division ?day-and-time))))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting_time(Person, Day_and_Time) :-
+    meeting(whole_company, Day_and_Time) ;
+    job(Person, [Division |_]), meeting(Division, Day_and_Time).
+</p>
 
 <ol class="orig alph" start="3" lang="en">
 <li>Alyssa arrives at work on Wednesday morning and wonders what meetings she 
@@ -1653,19 +1741,40 @@ what query should she make to find this out?</li>
 上記の規則を定義済みだとして、彼女がこれについて知るためには、どのようなクエリを作るべきだろうか?</li>
 </ol>
 
-<p class="exercise">(meeting-time (Hacker Alyssa P) (Wednesday . ?time))</p>
+<p class="exercise"><span class="ex_comment">; 何時に会議があるか、だけでなくて、
+; その会議がどこの部署のものか、を知りたいかと思って、and で二つをつないでみた。</span>
+(and (meeting-time (Hacker Alyssa P) (Wednesday . ?time))
+     (meeting ?div (Wednesday . ?time)))</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- meeting_time(['Hacker','Alyssa','P'], ['Wednesday' | Time]), 
+meeting(Div, ['Wednesday' | Time]).
+
+Div = whole_company
+Time = ['4pm'] ? ;
+
+Div = computer
+Time = ['3pm'] ? ;
+
+(1 ms) no
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.60"></a>
 <b>Exercise 4.60.</b>  <a name="%_idx_5154"></a>By giving the query
 </p>
 
-
 <p class="trans" lang="ja">
 <b>練習問題4.60.</b> 次のクエリを与えることで、
 </p>
 
 <p class="lisp">(lives-near ?person (Hacker Alyssa P))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(Person, ['Hacker','Alyssa','P']).
+
+Person = ['Fect','Cy','D'] ? ;
+
+no
 </p>
 
 <p class="orig" lang="en">Alyssa P. Hacker is able to find people who live near her, with whom
@@ -1690,6 +1799,35 @@ listed twice; for example,</p>
 
 <p class="lisp">(lives-near (Hacker Alyssa P) (Fect Cy D))
 (lives-near (Fect Cy D) (Hacker Alyssa P))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(Person_1, Person_2).
+
+Person_1 = ['Bitdiddle','Ben']
+Person_2 = ['Reasoner','Louis'] ? ;
+
+Person_1 = ['Bitdiddle','Ben']
+Person_2 = ['Aull','DeWitt'] ? ;
+
+Person_1 = ['Hacker','Alyssa','P']
+Person_2 = ['Fect','Cy','D'] ? ;
+
+Person_1 = ['Fect','Cy','D']
+Person_2 = ['Hacker','Alyssa','P'] ? ;
+
+Person_1 = ['Reasoner','Louis']
+Person_2 = ['Bitdiddle','Ben'] ? ;
+
+Person_1 = ['Reasoner','Louis']
+Person_2 = ['Aull','DeWitt'] ? ;
+
+Person_1 = ['Aull','DeWitt']
+Person_2 = ['Bitdiddle','Ben'] ? ;
+
+Person_1 = ['Aull','DeWitt']
+Person_2 = ['Reasoner','Louis'] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">Why does this happen?
@@ -1728,9 +1866,51 @@ which each pair appears only once?  Explain.
 取得するような組み込み関数とか (それで文字列同士の大小比較に持ち込む)。
 ちょっと実際の実装までは考えていない。
 
-[追記] Gaucheのeq-compareを使う手がありそう。
-あるいは、symbol-&gt;stringとstring&lt;?の合わせ技かな。
+[追記] <a href="http://practical-scheme.net/gauche/index-j.html">Gauche</a>の<a href="http://practical-scheme.net/gauche/man/?l=ja&p=eq-compare"><tt>eq-compare</tt></a>を使う手がありそう。
+あるいは、<a href="http://practical-scheme.net/gauche/man/?l=ja&p=symbol->string"><tt>symbol-&gt;string</tt></a>と<a href="http://practical-scheme.net/gauche/man/?l=ja&p=string>?"><tt>string&lt;?</tt></a>の合わせ技かな。
 </span></p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% 2通りの方法 (規則の本体を書き換える方法と、ラッパ規則を作る方法) を示す。</span>
+lives_near_ver2(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    Person_1 @&lt; Person_2.
+lives_near_ver3(Person_1, Person_2) :- 
+    lives_near(Person_1, Person_2), Person_1 @&lt; Person_2.
+
+<span class="ex_comment">% クエリを実行してみると以下のとおり。</span>
+| ?- lives_near_ver2(A, B).
+
+A = ['Bitdiddle','Ben']
+B = ['Reasoner','Louis'] ? ;
+
+A = ['Fect','Cy','D']
+B = ['Hacker','Alyssa','P'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Bitdiddle','Ben'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Reasoner','Louis'] ? ;
+
+no
+| ?- lives_near_ver3(A, B).
+
+A = ['Bitdiddle','Ben']
+B = ['Reasoner','Louis'] ? ;
+
+A = ['Fect','Cy','D']
+B = ['Hacker','Alyssa','P'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Bitdiddle','Ben'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Reasoner','Louis'] ? ;
+
+(1 ms) no
+</p>
 
 <a name="%_sec_Temp_664"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_664">Logic as programs</a></h4>
@@ -1787,6 +1967,8 @@ form <tt>z</tt>'':</p>
 (rule (append-to-form (?u . ?v) ?y (?u . ?z))
       (append-to-form ?v ?y ?z))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
 <p class="orig" lang="en"><a name="%_idx_5160"></a>The first rule has no body, which means that the conclusion holds for
 any value of <tt>?y</tt>.  Note how the second rule makes use of
@@ -1810,6 +1992,8 @@ Given these two rules, we can formulate queries that compute the <tt>append</tt>
 <i>;;; Query results:</i>
 (append-to-form (a b) (c d) (a b c d))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
 <p class="orig" lang="en">What is more striking, we can use the same rules to ask the question
 ``Which list, when <tt>append</tt>ed to <tt>(a b)</tt>, yields <tt>(a b c d)</tt>?''
@@ -1825,6 +2009,8 @@ This is done as follows:
 (append-to-form (a b) ?y (a b c d))
 <i>;;; Query results:</i>
 (append-to-form (a b) (c d) (a b c d))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
 </p>
 
 <p class="orig" lang="en">We can also ask for all pairs of lists that <tt>append</tt> to form <tt>(a b c d)</tt>:
@@ -1842,6 +2028,8 @@ This is done as follows:
 (append-to-form (a b) (c d) (a b c d))
 (append-to-form (a b c) (d) (a b c d))
 (append-to-form (a b c d) () (a b c d))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
 </p>
 
 <p class="orig" lang="en">
@@ -1875,6 +2063,8 @@ adjacent elements of a list:
 (rule (?x next-to ?y in (?v . ?z))
       (?x next-to ?y in ?z))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
 <p class="orig" lang="en">What will the response be to the following queries?
 </p>
@@ -1887,12 +2077,16 @@ adjacent elements of a list:
 
 (?x next-to 1 in (2 1 3 1))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
 <p class="exercise">(1 next-to (2 3) in (1 (2 3) 4))
 ((2 3) next-to 4 in (1 (2 3) 4))
 
 (2 next-to 1 in (2 1 3 1))
 (3 next-to 1 in (2 1 3 1))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
 </p>
 
 <p class="orig" lang="en">
@@ -1943,7 +2137,8 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 みたいな、不定のパタン変数を含む形で順に得られるかもしれないが、
 まあ、どうだろうね……?
 </span></p>
-
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.63"></a>
@@ -1963,6 +2158,11 @@ descendants of Ada back to Adam, by way of Cain:</p>
 (wife Lamech Ada)
 (son Ada Jabal)
 (son Ada Jubal)
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% なお、以下の記述を含む<a href="bible_db.pl">ファイル</a> (<tt>bible_db.pl</tt>) を作ってある。
+% このファイルには、後出の規則も含めてある。</span>
+
 </p>
 
 
@@ -1998,24 +2198,9 @@ deduce more complicated relationships.)
 　　　　　　　　　　　　　　　　　　　　　　　　　　　　アダ　└ユバル
 
 </span></p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+</p>
 
-<!--
-　アダム
-　　│
-　カイン
-　　│
-　エノク
-　　│
-　イラデ
-　　│
-メホヤエル
-　　│
-メトサエル
-　　│
-　レメク╤アダ
-　　┌─┤
-ヤバル　ユバル
--->
 <a name="%_sec_4.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
 <h3 class="trans" lang="ja">4.4.2 クエリ・システムはどう動くのか</h3>
@@ -2246,7 +2431,7 @@ programmer trainee''), we first find all entries that match the
 pattern</p>
 
 <p class="trans" lang="ja">
-(これは、くだけて言うと、「コンピュータ・プログラマ見習いの仕事ができる、すべての人たちを求めよ」である)、まず以下のパタンに合致するすべてのエントリを求める。
+(これは、くだけた言い方をするなら、「コンピュータ・プログラマ見習いの仕事ができる、すべての人たちを求めよ」である)、まず以下のパタンに合致するすべてのエントリを求める。
 </p>
 
 <p class="lisp">(can-do-job ?x (computer programmer trainee))

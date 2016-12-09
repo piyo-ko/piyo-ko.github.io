@@ -75,3 +75,34 @@ outranked_by(Staff_person, Boss) :-
     supervisor(Staff_person, Boss);
     (supervisor(Staff_person, Middle_manager), 
      outranked_by(Middle_manager, Boss)).
+
+%練習問題4.57.
+can_replace(Person1, Person2) :-
+    ( (job(Person1, Job1), job(Person2, Job1)) ;
+      (job(Person1, Job1), job(Person2, Job2), can_do_job(Job1, Job2)) ),
+    \+(same(Person1, Person2)).
+
+%練習問題4.58.
+is_big_shot(Who, Division1) :-
+    job(Who, [Division1 |_]), supervisor(Who, Supervisor),
+    job(Supervisor, [Division2 |_]), \+(same(Division1, Division2)).
+is_big_shot(Who, Div) :-
+    job(Who, [Div |_]), \+(supervisor(Who, Someone_else)).
+
+%練習問題4.59.
+meeting(accounting, ['Monday', '9am']).
+meeting(administration, ['Monday', '10am']).
+meeting(computer, ['Wednesday', '3pm']).
+meeting(administration, ['Friday', '1pm']).
+meeting(whole_company, ['Wednesday', '4pm']).
+meeting_time(Person, Day_and_Time) :-
+    meeting(whole_company, Day_and_Time) ;
+    job(Person, [Division |_]), meeting(Division, Day_and_Time).
+
+%練習問題4.60
+lives_near_ver2(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    Person_1 @< Person_2.
+lives_near_ver3(Person_1, Person_2) :- 
+    lives_near(Person_1, Person_2), Person_1 @< Person_2.
