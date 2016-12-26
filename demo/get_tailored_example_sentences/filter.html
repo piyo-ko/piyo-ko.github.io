@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="filter_page.css" type="text/css">
+<base target="_top">
+<title>Let's get your tailored example sentences for learning a foreign language! / 自分向けの例文を抽出しよう!</title>
+<script type="text/javascript" src="general_preprocess.js"></script>
+<script type="text/javascript" src="zh_filters.js"></script>
+<script type="text/javascript" src="ru_filters.js"></script>
+</head>
+
+<body>
+<div class="help" style="display:none;" id="help_txt">
+<p class="right"><span class="call_help" onclick="COM_FUNC.toggle_help()">📖→📘</span></p>
+
+<p class="ui" lang="ja">
+外国語の文法事項を学習する際の例文として、自分の興味のある文書から抽出した文を使いたい、と思ったので、その抽出を手助けするツールのプロトタイプを作ってみました。
+抽出の精度はそれほど高くありませんが、ある程度多くの文を入力として与えれば、抽出される文の中には、目的の文法事項に合致する文がいくつか含まれているだろう、と期待しています。
+</p>
+<p class="ui" lang="en">
+This is a prototype of a tool to help a user to extract, from a specific document that the user is interested in, example sentences for learning a grammatical rule of a foreign language.
+The sentences thus extracted can help the user keep his/her motivation.
+Although the precision of the extraction is not so high, I expect that, if an input that includes enough sentences is provided, the result of the extraction will include several sentences that actually match the target grammatical rule.
+</p>
+
+<p class="ui" lang="ja">
+このブラウザ版に必要な入力は、各行に「ID、タブ、文 (などの、ある程度の塊)」を書いたテキストファイルのみです。
+中国語のサンプルとして、
+<a href="https://zh.wikisource.org/wiki/%E5%9C%A8%E9%85%92%E6%A8%93%E4%B8%8A" target="_blank">Wikisource</a>から元データを取得して加工した、魯迅の「在酒樓上」という小説の<a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/zh_LuXun.txt">テキストファイル</a>を置いておきます。
+また、ロシア語のサンプルとして、
+<a href="https://ru.wikisource.org/wiki/%D0%A3%D0%BF%D1%8B%D1%80%D1%8C_(%D0%90._%D0%9A._%D0%A2%D0%BE%D0%BB%D1%81%D1%82%D0%BE%D0%B9)" target="_blank">Wikisource</a>から元データを取得して加工した、A. K. トルストイの「吸血鬼」(<span lang="ru">Упырь</span>) という小説の<a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/ru_AKTolstoy.txt">テキストファイル</a>を置いておきます。
+これらのテキストファイルをダウンロードしてローカルに保存し、本ページで入力ファイルとして指定してみると、例文抽出を簡単に体験できます。
+</p>
+<p class="ui" lang="en">
+You only need, as an input, a text file in which each line consists of an ID, a tab character, and a sentence (or some chunk of words forming some part of a sentence).
+</p>
+<p class="ui" lang="en">
+As a Chinese sample, <a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/zh_LuXun.txt">a text file</a> which has been created by obtaining the original data from <a href="https://zh.wikisource.org/wiki/%E5%9C%A8%E9%85%92%E6%A8%93%E4%B8%8A" target="_blank">Wikisource</a> and processing the data.  This sample is of the novel titled &quot;在酒樓上&quot;, written by Lu Xun (魯迅).
+As a Russian sample, <a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/ru_AKTolstoy.txt">a text file</a> which has been created by obtaining the original data from <a href="https://ru.wikisource.org/wiki/%D0%A3%D0%BF%D1%8B%D1%80%D1%8C_(%D0%90._%D0%9A._%D0%A2%D0%BE%D0%BB%D1%81%D1%82%D0%BE%D0%B9)" target="_blank">Wikisource</a> and processing the data.  This sample is of the novel titled &quot;Vampire&quot; (<span lang="ru">Упырь</span>) written by A. K. Tolstoy.
+</p>
+<p class="ui" lang="en">
+You can readily experience the extraction of example sentences for foreign language learning, only by downloading one of these files, saving it as a local file on your computer, and specify the local file as an input to this page.
+</p>
+
+<p class="ui" lang="ja">
+ブラウザ版に実装されている機能は、
+<a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/filter.html">デモページ</a>で試せます。
+ブラウザ版にない機能を含め、ソースファイルはすべて
+<a href="https://github.com/piyo-ko/get_tailored_example_sentences" target="_blank">GitHub</a>に置いてありますので、よかったらカスタマイズしてお使いください。
+</p>
+<p class="ui" lang="en">
+The features implemented by the on-browser version can be tested on the <a href="https://piyo-ko.github.io/demo/get_tailored_example_sentences/filter.html" target="_blank">demonstration page</a>.
+All the source files, including files for features not implemented by the on-browser version, are available on <a href="https://github.com/piyo-ko/get_tailored_example_sentences" target="_blank">GitHub</a>.
+You can readily customize the source files.
+</p>
+</div>
+
+<form name="f">
+
+<p>[
+User Interface: 
+<input type="button" value="日本語" onclick="COM_FUNC.set_UI_lang('ja')" />
+<input type="button" value="English" onclick="COM_FUNC.set_UI_lang('en')" />
+] [
+<span onclick="COM_FUNC.toggle_help()" class="call_help">
+<span class="ui" lang="ja">ヘルプ</span>
+<span class="ui" lang="en">Help</span>
+</span>
+]
+</p>
+
+<h1>
+<span class="ui" lang="ja">複数の言語に共通する処理</span>
+<span class="ui" lang="en">Steps common to multiple languages</span>
+</h1>
+
+<ol>
+<li><span class="ui" lang="ja">番号付き例文集合のファイルを選択して</span>
+<span class="ui" lang="en">Select a file</span>
+(<input type="file" id="input_txt_file" name="input_txt_file" />) 
+<span class="ui" lang="ja">、そのファイルを</span>
+<span class="ui" lang="en">of a set of example sentences, each with its ID assigned, 
+ and then, </span>
+<input type="button" value="read and display" data-en-value="read and display" data-ja-value="読み込んで表示" onclick="COM_FUNC.read_in()" />
+<span class="ui" lang="ja">してください。</span>
+<span class="ui" lang="en">the file.</span>
+</li>
+
+<li>
+<span class="ui" lang="ja">必要だったら、言語別のフォント設定にしてください。</span>
+<span class="ui" lang="en">You can change the font of the sentences to the one suitable to your target language.</span>
+
+<input type="button" value="繁體中文" onclick="COM_FUNC.set_font('zh-Hant')" />
+<input type="button" value="简体中文" onclick="COM_FUNC.set_font('zh-Hant')" />
+<input type="button" value="日本語" onclick="COM_FUNC.set_font('ja')" />
+<input type="button" value="English" onclick="COM_FUNC.set_font('en')" />
+<input type="button" value="Русский" onclick="COM_FUNC.set_font('ru')" />
+</li>
+
+<li>
+<span class="ui" lang="ja">文の長さ (文字数) を</span>
+<span class="ui" lang="en">You can constrain the number of characters, as a measure of the length of a sentence, to be more than or equal to</span>
+<input type="text" name="min_chars" size="4" value="1" />
+<span class="ui" lang="ja">文字以上</span>
+<span class="ui" lang="en">and less than or equal to</span>
+<input type="text" name="max_chars" size="4" value="1000" />
+<span class="ui" lang="ja">文字以下に</span>
+<span class="ui" lang="en">.  </span>
+<input type="button" value="Try it!" data-en-value="Try it!" data-ja-value="制限する" onclick="COM_FUNC.constrain_num_of_chars()">
+<span class="ui" lang="ja">こともできます。</span>
+</li>
+
+<li>
+<span class="ui" lang="ja">単語間に空白を置く言語の場合は、文の長さ (単語数) を</span>
+<span class="ui" lang="en">For languages written with whitespace characters between words, you can constrain the number of words, as a measure of the length of a sentence, to be more than or equal to</span>
+<input type="text" name="min_words" size="4" value="1" />
+<span class="ui" lang="ja">個以上</span>
+<span class="ui" lang="en">and less than or equal to</span>
+<input type="text" name="max_words" size="4" value="1000" />
+<span class="ui" lang="ja">個以下に</span>
+<span class="ui" lang="en">.  </span>
+<input type="button" value="Try it!" data-en-value="Try it!" data-ja-value="制限する" onclick="COM_FUNC.constrain_num_of_words()">
+<span class="ui" lang="ja">こともできます。</span>
+</li>
+
+</ol>
+
+<p class="box">
+<span class="ui" lang="ja">フィルタをかける対象:</span>
+<span class="ui" lang="en">The target set of sentences to which a selected filter will be applied is:<br></span>
+
+<input type="radio" name="base_set" value="whole" id="use_whole_sentences" checked />
+<label for="use_whole_sentences">
+<span class="ui" lang="ja">すべての文</span>
+<span class="ui" lang="en">the whole set of sentences<br></span>
+</label>
+
+<input type="radio" name="base_set" value="len_lim" id="use_length_limited_sentences" disabled />
+<label for="use_length_limited_sentences">
+<span class="ui" lang="ja">長さを制限した文</span>
+<span class="ui" lang="en">the length-limited sentences<br></span>
+</label>
+
+<input type="radio" name="base_set" value="specific_pattern" id="use_specific_pattern" disabled />
+<label for="use_specific_pattern">
+<span class="ui" lang="ja">フィルタで直近に抽出済みの特定の表現を含む文</span>
+<span class="ui" lang="en">the sentences including the specific pattern that have last been extracted by the filter you selected</span>
+</label>
+
+</p>
+
+<p class="count">
+〘<span class="ui" lang="ja">文の数</span><span class="ui" lang="en">The number of sentences</span> = <span id="sentence_counter">?</span>〙
+<input type="button" value="Print"  data-en-value="Print" data-ja-value="印刷" onclick="window.print(); return(false);" /></p>
+<p id="output_area" class="out"><!--この中を動的に書き換える--></p>
+
+<h1>
+<span class="ui" lang="ja">中国語用フィルタ</span>
+<span class="ui" lang="en">Filters specific to Chinese</span>
+<span class="toggle" onclick="COM_FUNC.hide_or_display('Chinese_block')">📘⇄📖</span>
+</h1>
+
+<div id="Chinese_block"style="display: none">
+
+<p>
+<span class="ui" lang="en">Let </span>
+<select id="zh_filters">
+<option value="ZH.repetitive_question" data-en-value="interrogatives with a repetitive expression" data-ja-value="反復疑問文">interrogatives with a repetitive expression</option>
+<option value="ZH.le">「了」</option>
+<option value="ZH.shi_de">「是〜的」</option>
+<option value="ZH.you_you">「又〜又〜」</option>
+<option value="ZH.yue_yue">「越〜越〜」</option>
+<option value="ZH.numerical" data-en-value="numerical expressions" data-ja-value="数値表現">numerical expressions</option>
+<option value="ZH.passive" data-en-value="passive voice" data-ja-value="受け身">passive voice</option>
+</select>
+<span class="ui" lang="ja">を</span>
+<span class="ui" lang="en">be </span>
+<input type="button" value="extracted" data-en-value="extracted" data-ja-value="抽出する" onclick="COM_FUNC.call_filter_of('zh_filters',true)">
+<span class="ui" lang="ja">。</span>
+<span class="ui" lang="en">.</span>
+</p>
+
+</div>
+
+<h1>
+<span class="ui" lang="ja">ロシア語用フィルタ</span>
+<span class="ui" lang="en">Filters specific to Russian</span>
+<span class="toggle" onclick="COM_FUNC.hide_or_display('Russian_block')">📘⇄📖</span>
+</h1>
+
+<div id="Russian_block" style="display: none">
+
+<p class="ui" lang="ja"><a href="http://cblle.tufs.ac.jp/dic/ru/index.php">外大ロシア語辞書</a>もおすすめです。</p>
+
+<div>
+<input type="button" value="Extract personal pronouns" data-en-value="Extract personal pronouns" data-ja-value="人称代名詞を抽出する" onclick="COM_FUNC.call_filter_of('RU.pronouns',false)" />
+<span class="ui" lang="ja">(ただし同形のもの同士は区別できません)</span>
+<span class="ui" lang="en">(although semantically/grammatically different personal pronouns of an identical form cannot be distinguished from each other)</span>
+
+<table class="in" lang="ru" id="ru_pronouns">
+<tr>
+<th></th>
+<th><span class="ui" lang="ja">主格</span><span class="ui" lang="en">nominative</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_nom','1st_pl_nom','2nd_sg_nom','2nd_pl_nom','3rd_m_sg_nom','3rd_f_sg_nom','3rd_n_sg_nom','3rd_pl_nom'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_nom','1st_pl_nom','2nd_sg_nom','2nd_pl_nom','3rd_m_sg_nom','3rd_f_sg_nom','3rd_n_sg_nom','3rd_pl_nom'],false)" /></th>
+<th><span class="ui" lang="ja">生格 (属格)</span><span class="ui" lang="en">genitive</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_gen','1st_pl_gen','2nd_sg_gen','2nd_pl_gen','3rd_m_sg_gen','3rd_f_sg_gen','3rd_n_sg_gen','3rd_pl_gen'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_gen','1st_pl_gen','2nd_sg_gen','2nd_pl_gen','3rd_m_sg_gen','3rd_f_sg_gen','3rd_n_sg_gen','3rd_pl_gen'],false)" /></th>
+<th><span class="ui" lang="ja">与格</span><span class="ui" lang="en">dative</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_dat','1st_pl_dat','2nd_sg_dat','2nd_pl_dat','3rd_m_sg_dat','3rd_f_sg_dat','3rd_n_sg_dat','3rd_pl_dat'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_dat','1st_pl_dat','2nd_sg_dat','2nd_pl_dat','3rd_m_sg_dat','3rd_f_sg_dat','3rd_n_sg_dat','3rd_pl_dat'],false)" /></th>
+<th><span class="ui" lang="ja">対格</span><span class="ui" lang="en">accusative</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_acc','1st_pl_acc','2nd_sg_acc','2nd_pl_acc','3rd_m_sg_acc','3rd_f_sg_acc','3rd_n_sg_acc','3rd_pl_acc'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_acc','1st_pl_acc','2nd_sg_acc','2nd_pl_acc','3rd_m_sg_acc','3rd_f_sg_acc','3rd_n_sg_acc','3rd_pl_acc'],false)" /></th>
+<th><span class="ui" lang="ja">造格 (具格)</span><span class="ui" lang="en">instrumental</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_inst','1st_pl_inst','2nd_sg_inst','2nd_pl_inst','3rd_m_sg_inst','3rd_f_sg_inst_1','3rd_f_sg_inst_2','3rd_n_sg_inst','3rd_pl_inst'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_inst','1st_pl_inst','2nd_sg_inst','2nd_pl_inst','3rd_m_sg_inst','3rd_f_sg_inst_1','3rd_f_sg_inst_2','3rd_n_sg_inst','3rd_pl_inst'],false)" /></th>
+<th><span class="ui" lang="ja">前置詞格</span><span class="ui" lang="en">prepositional</span><br>
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_prep','1st_pl_prep','2nd_sg_prep','2nd_pl_prep','3rd_m_sg_prep','3rd_f_sg_prep','3rd_n_sg_prep','3rd_pl_prep'],true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_prep','1st_pl_prep','2nd_sg_prep','2nd_pl_prep','3rd_m_sg_prep','3rd_f_sg_prep','3rd_n_sg_prep','3rd_pl_prep'],false)" /></th>
+</tr>
+
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_sg_nom','1st_sg_gen','1st_sg_dat','1st_sg_acc','1st_sg_inst','1st_sg_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_sg_nom','1st_sg_gen','1st_sg_dat','1st_sg_acc','1st_sg_inst','1st_sg_prep'],false)" />
+</td>
+<td><input type="checkbox" id="1st_sg_nom" value="я" checked />
+<label for="1st_sg_nom">я</label></td>
+<td><input type="checkbox" id="1st_sg_gen" value="меня" checked />
+<label for="1st_sg_gen">меня</label></td>
+<td><input type="checkbox" id="1st_sg_dat" value="мне" checked />
+<label for="1st_sg_dat">мне</label></td>
+<td><input type="checkbox" id="1st_sg_acc" value="меня" checked />
+<label for="1st_sg_acc">меня</label></td>
+<td><input type="checkbox" id="1st_sg_inst" value="мной" checked />
+<label for="1st_sg_inst">мной</label></td>
+<td><input type="checkbox" id="1st_sg_prep" value="мне" checked />
+<label for="1st_sg_prep">мне</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['1st_pl_nom','1st_pl_gen','1st_pl_dat','1st_pl_acc','1st_pl_inst','1st_pl_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['1st_pl_nom','1st_pl_gen','1st_pl_dat','1st_pl_acc','1st_pl_inst','1st_pl_prep'],false)" />
+</td>
+<td><input type="checkbox" id="1st_pl_nom" value="мы" checked />
+<label for="1st_pl_nom">мы</label></td>
+<td><input type="checkbox" id="1st_pl_gen" value="нас" checked />
+<label for="1st_pl_gen">нас</label></td>
+<td><input type="checkbox" id="1st_pl_dat" value="нам" checked />
+<label for="1st_pl_dat">нам</label></td>
+<td><input type="checkbox" id="1st_pl_acc" value="нас" checked />
+<label for="1st_pl_acc">нас</label></td>
+<td><input type="checkbox" id="1st_pl_inst" value="нами" checked />
+<label for="1st_pl_inst">нами</label></td>
+<td><input type="checkbox" id="1st_pl_prep" value="нас" checked />
+<label for="1st_pl_prep">нас</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['2nd_sg_nom','2nd_sg_gen','2nd_sg_dat','2nd_sg_acc','2nd_sg_inst','2nd_sg_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['2nd_sg_nom','2nd_sg_gen','2nd_sg_dat','2nd_sg_acc','2nd_sg_inst','2nd_sg_prep'],false)" />
+</td>
+<td><input type="checkbox" id="2nd_sg_nom" value="ты" checked />
+<label for="2nd_sg_nom">ты</label></td>
+<td><input type="checkbox" id="2nd_sg_gen" value="тебя" checked />
+<label for="2nd_sg_gen">тебя</label></td>
+<td><input type="checkbox" id="2nd_sg_dat" value="тебе" checked />
+<label for="2nd_sg_dat">тебе</label></td>
+<td><input type="checkbox" id="2nd_sg_acc" value="тебя" checked />
+<label for="2nd_sg_acc">тебя</label></td>
+<td><input type="checkbox" id="2nd_sg_inst" value="тобой" checked />
+<label for="2nd_sg_inst">тобой</label></td>
+<td><input type="checkbox" id="2nd_sg_prep" value="тобою" checked />
+<label for="2nd_sg_prep">тобою</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['2nd_pl_nom','2nd_pl_gen','2nd_pl_dat','2nd_pl_acc','2nd_pl_inst','2nd_pl_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['2nd_pl_nom','2nd_pl_gen','2nd_pl_dat','2nd_pl_acc','2nd_pl_inst','2nd_pl_prep'],false)" />
+</td>
+<td><input type="checkbox" id="2nd_pl_nom" value="вы" checked />
+<label for="2nd_pl_nom">вы</label></td>
+<td><input type="checkbox" id="2nd_pl_gen" value="вас" checked />
+<label for="2nd_pl_gen">вас</label></td>
+<td><input type="checkbox" id="2nd_pl_dat" value="вам" checked />
+<label for="2nd_pl_dat">вам</label></td>
+<td><input type="checkbox" id="2nd_pl_acc" value="вас" checked />
+<label for="2nd_pl_acc">вас</label></td>
+<td><input type="checkbox" id="2nd_pl_inst" value="вами" checked />
+<label for="2nd_pl_inst">вами</label></td>
+<td><input type="checkbox" id="2nd_pl_prep" value="вас" checked />
+<label for="2nd_pl_prep">вас</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['3rd_m_sg_nom','3rd_m_sg_gen','3rd_m_sg_dat','3rd_m_sg_acc','3rd_m_sg_inst','3rd_m_sg_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['3rd_m_sg_nom','3rd_m_sg_gen','3rd_m_sg_dat','3rd_m_sg_acc','3rd_m_sg_inst','3rd_m_sg_prep'],false)" />
+</td>
+<td><input type="checkbox" id="3rd_m_sg_nom" value="он" checked />
+<label for="3rd_m_sg_nom">он</label></td>
+<td><input type="checkbox" id="3rd_m_sg_gen" value="его" checked />
+<label for="3rd_m_sg_gen">его</label></td>
+<td><input type="checkbox" id="3rd_m_sg_dat" value="ему" checked />
+<label for="3rd_m_sg_dat">ему</label></td>
+<td><input type="checkbox" id="3rd_m_sg_acc" value="его" checked />
+<label for="3rd_m_sg_acc">его</label></td>
+<td><input type="checkbox" id="3rd_m_sg_inst" value="им" checked />
+<label for="3rd_m_sg_inst">им</label></td>
+<td><input type="checkbox" id="3rd_m_sg_prep" value="нём" checked />
+<label for="3rd_m_sg_prep">нём</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['3rd_f_sg_nom','3rd_f_sg_gen','3rd_f_sg_dat','3rd_f_sg_acc','3rd_f_sg_inst_1','3rd_f_sg_inst_2','3rd_f_sg_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['3rd_f_sg_nom','3rd_f_sg_gen','3rd_f_sg_dat','3rd_f_sg_acc','3rd_f_sg_inst_1','3rd_f_sg_inst_2','3rd_f_sg_prep'],false)" />
+</td>
+<td><input type="checkbox" id="3rd_f_sg_nom" value="она" checked />
+<label for="3rd_f_sg_nom">она</label></td>
+<td><input type="checkbox" id="3rd_f_sg_gen" value="её" checked />
+<label for="3rd_f_sg_gen">её</label></td>
+<td><input type="checkbox" id="3rd_f_sg_dat" value="ей" checked />
+<label for="3rd_f_sg_dat">ей</label></td>
+<td><input type="checkbox" id="3rd_f_sg_acc" value="её" checked />
+<label for="3rd_f_sg_acc">её</label></td>
+<td><input type="checkbox" id="3rd_f_sg_inst_1" value="ей" checked />
+<label for="3rd_f_sg_inst_1">ей</label> /
+<input type="checkbox" id="3rd_f_sg_inst_2" value="ею" checked />
+<label for="3rd_f_sg_inst_2">ею</label></td>
+<td><input type="checkbox" id="3rd_f_sg_prep" value="ней" checked />
+<label for="3rd_f_sg_prep">ней</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['3rd_n_sg_nom','3rd_n_sg_gen','3rd_n_sg_dat','3rd_n_sg_acc','3rd_n_sg_inst','3rd_n_sg_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['3rd_n_sg_nom','3rd_n_sg_gen','3rd_n_sg_dat','3rd_n_sg_acc','3rd_n_sg_inst','3rd_n_sg_prep'],false)" />
+</td>
+<td><input type="checkbox" id="3rd_n_sg_nom" value="оно" checked />
+<label for="3rd_n_sg_nom">оно</label></td>
+<td><input type="checkbox" id="3rd_n_sg_gen" value="его" checked />
+<label for="3rd_n_sg_gen">его</label></td>
+<td><input type="checkbox" id="3rd_n_sg_dat" value="ему" checked />
+<label for="3rd_n_sg_dat">ему</label></td>
+<td><input type="checkbox" id="3rd_n_sg_acc" value="его" checked />
+<label for="3rd_n_sg_acc">его</label></td>
+<td><input type="checkbox" id="3rd_n_sg_inst" value="им" checked />
+<label for="3rd_n_sg_inst">им</label></td>
+<td><input type="checkbox" id="3rd_n_sg_prep" value="нём" checked />
+<label for="3rd_n_sg_prep">нём</label></td>
+</tr>
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['3rd_pl_nom','3rd_pl_gen','3rd_pl_dat','3rd_pl_acc','3rd_pl_inst','3rd_pl_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="COM_FUNC.set_at_once(['3rd_pl_nom','3rd_pl_gen','3rd_pl_dat','3rd_pl_acc','3rd_pl_inst','3rd_pl_prep'],false)" />
+</td>
+<td><input type="checkbox" id="3rd_pl_nom" value="они" checked />
+<label for="3rd_pl_nom">они</label></td>
+<td><input type="checkbox" id="3rd_pl_gen" value="их" checked />
+<label for="3rd_pl_gen">их</label></td>
+<td><input type="checkbox" id="3rd_pl_dat" value="им" checked />
+<label for="3rd_pl_dat">им</label></td>
+<td><input type="checkbox" id="3rd_pl_acc" value="их" checked />
+<label for="3rd_pl_acc">их</label></td>
+<td><input type="checkbox" id="3rd_pl_inst" value="ими" checked />
+<label for="3rd_pl_inst">ими</label></td>
+<td><input type="checkbox" id="3rd_pl_prep" value="них" checked />
+<label for="3rd_pl_prep">них</label></td>
+</tr>
+</table>
+</div>
+
+<div>
+<input type="button" value="Extract interrogative pronouns" data-en-value="Extract interrogative pronouns" data-ja-value="疑問詞を抽出する" onclick="COM_FUNC.call_filter_of('RU.interrogatives',false)" />
+<table class="in" lang="ru" id="ru_interrogatives">
+<tr>
+<th></th>
+<th><span class="ui" lang="ja">主格</span><span class="ui" lang="en">nominative</span></th>
+<th><span class="ui" lang="ja">生格 (属格)</span><span class="ui" lang="en">genitive</span></th>
+<th><span class="ui" lang="ja">与格</span><span class="ui" lang="en">dative</span></th>
+<th><span class="ui" lang="ja">対格</span><span class="ui" lang="en">accusative</span></th>
+<th><span class="ui" lang="ja">造格 (具格)</span><span class="ui" lang="en">instrumental</span></th>
+<th><span class="ui" lang="ja">前置詞格</span><span class="ui" lang="en">prepositional</span></th>
+</tr>
+
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['what_nom','what_gen','what_dat','what_acc','what_inst','what_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Unheck" onclick="COM_FUNC.set_at_once(['what_nom','what_gen','what_dat','what_acc','what_inst','what_prep'],false)" /></td>
+<td><input type="checkbox" id="what_nom" value="что" checked />
+<label for="what_nom">что</label></td>
+<td><input type="checkbox" id="what_gen" value="чего" checked />
+<label for="what_gen">чего</label></td>
+<td><input type="checkbox" id="what_dat" value="чему" checked />
+<label for="what_dat">чему</label></td>
+<td><input type="checkbox" id="what_acc" value="что" checked />
+<label for="what_acc">что</label></td>
+<td><input type="checkbox" id="what_inst" value="чем" checked />
+<label for="what_inst">чем</label></td>
+<td><input type="checkbox" id="what_prep" value="чём" checked />
+<label for="what_prep">чём</label></td>
+</tr>
+
+<tr>
+<td><input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="COM_FUNC.set_at_once(['who_nom','who_gen','who_dat','who_acc','who_inst','who_prep'],true)" />
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Unheck" onclick="COM_FUNC.set_at_once(['who_nom','who_gen','who_dat','who_acc','who_inst','who_prep'],false)" /></td>
+<td><input type="checkbox" id="who_nom" value="кто" checked />
+<label for="who_nom">кто</label></td>
+<td><input type="checkbox" id="who_gen" value="кого" checked />
+<label for="who_gen">кого</label></td>
+<td><input type="checkbox" id="who_dat" value="кому" checked />
+<label for="who_dat">кому</label></td>
+<td><input type="checkbox" id="who_acc" value="кого" checked />
+<label for="who_acc">кого</label></td>
+<td><input type="checkbox" id="who_inst" value="кем" checked />
+<label for="who_inst">кем</label></td>
+<td><input type="checkbox" id="who_prep" value="ком" checked />
+<label for="who_prep">ком</label></td>
+</tr>
+
+</table>
+
+<!--
+какой男性単数主格, какого男性単数属格, какому男性単数与格, какого男性単数対格, какой男性単数対格, каким男性単数具格, каком男性単数前置詞格, 
+какая女性単数主格, какой女性単数属格, какой女性単数与格, какую女性単数対格, какой女性単数具格, какой女性単数前置詞格, 
+какое中性単数主格, какого中性単数属格, какому中性単数与格, какое中性単数対格, каким中性単数具格, каком中性単数前置詞格, 
+какие複数主格, каких複数属格, каким複数与格, какие複数対格, каких複数対格, какими複数具格, каких複数前置詞格
+
+который男性単数主格, которого男性単数属格, которому男性単数与格, которого男性単数対格, который男性単数対格, которым男性単数具格, котором男性単数前置詞格, которая女性単数主格, которой女性単数属格, которой女性単数与格, которую女性単数対格, которой女性単数具格, которой女性単数前置詞格, которое中性単数主格, которого中性単数属格, которому中性単数与格, которое中性単数対格, которым中性単数具格, котором中性単数前置詞格, которые複数主格, которых複数属格, которым複数与格, которые複数対格, которых複数対格, которыми複数具格, которых複数前置詞格
+ -->
+</div>
+
+
+<div>
+前置詞を抽出する
+<!-- в
+за
+к
+на
+о
+от
+с
+у -->
+</div>
+
+<div>
+数値表現を抽出する
+</div>
+</div>
+
+
+</form>
+</body>
+</html>
