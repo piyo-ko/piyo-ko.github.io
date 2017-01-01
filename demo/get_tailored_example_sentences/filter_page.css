@@ -4,31 +4,31 @@ body {
   padding: 1em;
   font-family: "Palatino", "Times New Roman", "クレー", "游明朝体", serif;
 }
+body.setting {
+  background: hsl(210, 100%, 25%);
+  padding: 0;
+}
 
 :lang(ja) {
   font-family: "クレー", "游明朝体", serif;
 }
 :lang(zh), :lang(zh-Hans) {
   font-family: "Kaiti SC", "Libian SC", "STFangsong", serif;
-  /*font-size: 120%;*/
 }
 :lang(zh-tw), :lang(zh-Hant) {
   font-family: "Kaiti TC", serif;
-  /*font-size: 120%;*/
 }
 :lang(ru) {
   font-family: "PT Serif", "Times New Roman", serif;
-  /*font-size: 120%;*/
 }
 :lang(ar) {
   font-family: "Al Nile", serif;
-  /*font-size: 160%;*/
 }
 
 a:link, a:visited {
 	color: hsl(210, 100%, 70%);
 }
-a:hover, .call_help:hover {
+a:hover, .call_help:hover, .sw_setting:hover {
   background: hsl(130, 100%, 30%);
   color: white;
 }
@@ -48,7 +48,6 @@ div {
 select {
   background: hsl(210, 80%, 80%);
   color: hsl(210, 100%, 20%);
-  /*max-width: 15em;*/
 }
 table {
   border-collapse: collapse;
@@ -58,17 +57,16 @@ table.in {
   vertical-align: top;
 }
 th, td {
-  border: solid 1px hsl(210, 100%, 40%);
+  border: solid 2px hsl(210, 100%, 40%);
   text-align: center;
   padding: 4pt;
 }
 th {
   font-weight: bold;
-  color: hsl(270, 100%, 80%);;
+  color: hsl(270, 100%, 80%);
 }
-p {
-  /*text-indent: 1em;*/
-}
+
+
 p.count {
   margin-bottom: 0;
 }
@@ -110,6 +108,8 @@ label, input[type='checkbox'] {
 input[type='checkbox'] {
   margin-right: 1em;
 }
+
+/* The default user interface (UI) language is English. */ 
 .ui:lang(ja) {
   display: none;
 }
@@ -119,6 +119,10 @@ input[type='checkbox'] {
 p.ui:lang(en) {
   display: block;
 }
+p.ui:lang(ja) {
+  display: none;
+}
+
 .toggle {
   padding: 6pt;
   border: solid 1px hsl(30, 100%, 40%);
@@ -126,6 +130,7 @@ p.ui:lang(en) {
 .toggle:hover {
   background: hsl(30, 100%, 13%);
 }
+
 div.help {
   background: hsla(130, 100%, 15%, 1.0);
   border: 4px dotted hsl(130, 100%, 50%);
@@ -140,5 +145,13 @@ div.help {
   right: 2em;
   bottom: 2em;
   overflow: auto;
+}
+
+#filter_setting {
+  margin-left: 0;
+  width: 96vw;
+  min-height: 50vh;
+  padding: 0;
+  border: none;
 }
 

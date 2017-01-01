@@ -2,7 +2,7 @@
 // by using an Object named RU
 //
 // ロシア語特有のフィルタ用に、擬似的に名前空間を作る。
-var RU = {
+var RU = RU || {
 // Cyrillic alphabet
 // キリル文字アルファベット
 uppercase_alphabet : 
