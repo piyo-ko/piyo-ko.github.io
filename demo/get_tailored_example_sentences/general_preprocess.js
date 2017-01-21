@@ -128,6 +128,7 @@ COM_FUNC.reset_counter = function(c) {
 // Set the font used for the example sentences, depending on 
 // the language of them.  Note that filter_page.css defines some language-
 // dependent fonts.
+//
 // 例文の言語に応じて、例文用のフォントを設定する。
 // filter_page.css で言語ごとのフォントをいくつか定義していることに注意。
 COM_FUNC.set_font = function(lang_name) {
@@ -207,6 +208,7 @@ COM_FUNC.set_font = function(lang_name) {
 // of characters.
 // This is suitable for Chinese or Japanese text, which are written 
 // without whitespace characters between words.
+//
 // 複数の言語に適用可能な、割と一般的なフィルタ。
 // 文の長さ (文字数で測られる) を制約する。
 // これは、中国語や日本語のテキスト (語間に空白文字を置かずに書かれる) に
@@ -294,6 +296,7 @@ COM_FUNC.constrain_num_of_chars = function() {
 // of words.
 // This is suitable for Russian, English, Germany, etc., which are written 
 // with whitespace characters between words.
+//
 // 上記と同様の、複数の言語に適用可能な一般的なフィルタ。
 // 文の長さ (単語数で測られる) を制約する。
 // これは、ロシア語、英語、ドイツ語などのテキスト (語間に空白文字を置いて
@@ -361,23 +364,73 @@ COM_FUNC.constrain_num_of_words = function() {
 // A wrapper function that is called in order to apply a language-
 // specific filter.
 // 言語依存のフィルタを適用するために呼び出される、ラッパ関数。
-COM_FUNC.call_filter_of = function(f_name, is_filter_in_listbox) {
+//
+// f_name: the name of a filter to be applied.
+// is_filter_in_listbox: true if the filter named f_name is that included in
+//    a listbox (i.e., a select element).
+// container_id: either one of f_name and container_id should be a non-empty 
+//    string.  If f_name is an empty string and container_id is not, this means
+//    that simple filtering by keywords in the HTML element whose id is 
+//    container_id should be done.
+//
+// f_name: 適用したいフィルタ名
+// is_filter_in_listbox: それがリストボックス (select 要素) 内のフィルタなら真
+// container_id: f_name と container_id の一方のみが非空文字列とならねば
+//    ならない。f_name が空文字列で container_id が非空文字列の場合は、
+//    id が container_id であるような HTML 要素の中に含まれるキーワードによる
+//    単純なフィルタリングを行え、という意味。
+COM_FUNC.call_filter_of = function(f_name, is_filter_in_listbox, container_id) {
+  // Either one of f_name and container_id should be a non-empty string.
+  // If both or neither is an empty string, it should be an error.
+  // f_name と container_id の一方のみが非空文字列とならねばならない。
+  // 双方とも空文字列だったり、どちらも空文字列ではなかったりしたら、それは
+  // エラー。
+  if ((f_name === '' && container_id === '') ||
+      (f_name !== '' && container_id !== '')) {
+    alert("Error in COM_FUNC.call_filter_of(" + f_name + ', ' + is_filter_in_listbox + ', ' + container_id + ')');
+    return;
+  }
+
+  
   var filter_name;
   const em_tag = /<em>/;
-  if (is_filter_in_listbox) {
-    var op_list = window.top.document.getElementById('filter_setting').contentWindow.document.getElementById(f_name);
-    filter_name = op_list.options[op_list.selectedIndex].value;
-  } else {
-    filter_name = f_name;
+  if (f_name !== '') { // i.e., container_id === ''
+    if (is_filter_in_listbox) {
+      var op_list = window.top.document.getElementById('filter_setting').contentWindow.document.getElementById(f_name);
+      filter_name = op_list.options[op_list.selectedIndex].value;
+    } else {
+      filter_name = f_name;
+    }
+  } else { // i.e., container_id !== ''
+    filter_name = '';
+    // Creating REs_for_replacement, which is a list of RegEx objects for
+    // detecting keywords corresponding to checkboxes which are checked and 
+    // included in an HTML element whose id attribute is container_id.
+    // Also creating replacing_str, which is a list of strings that will 
+    // result from the replacement of those keywords (i.e., strings enclosed
+    // by <em> and </em> tags).
+    // 
+    // id 属性が container_id の HTML 要素の内部にあり、かつ、チェック
+    // されているようなチェックボックスに対応するキーワードを検出するための、
+    // 正規表現オブジェクトのリスト (REs_for_replacement) を作る。
+    // と同時に、そのキーワードの置換後文字列 (em タグで囲んだもの) のリスト
+    // (replacing_str) も作る。
+    var REs_for_replacement = [];
+    var replacing_str = [];
+    var kw = this.get_checked_values(container_id);
+    var k, L;
+    for (k = 0, L = kw.length; k < L; k++) {
+      REs_for_replacement.push(new RegExp(kw[k], 'g'));
+      replacing_str.push('<em>' + kw[k] + '</em>');
+    }
   }
-  //console.log("filter_name : " + filter_name);
+
   var base_type = window.top.document.f.base_set.value;
-  //console.log("base_type: " + base_type);
-  var i, N, L, str, c, elem;
+  var i, N, str, c, elem;
   N = DAT.sentences.length;
-  //console.log("N = " + N);
   str = "";
   c = 0;
+  var check_sentence_result;
   if (base_type == 'specific_pattern') {
     alert("The target is set to be the whole sentences.");
   }
@@ -391,8 +444,14 @@ COM_FUNC.call_filter_of = function(f_name, is_filter_in_listbox) {
     elem.setAttribute('disabled', 'disabled');
 
     for (i = 0; i < N; i++) {
-      var check_sentence_result = eval(filter_name + "(" + i + ")" );
-      //console.log(i + ": " + check_sentence_result);
+      if (filter_name !== '' ) {
+        check_sentence_result = eval(filter_name + "(" + i + ")" );
+      } else {
+        check_sentence_result = DAT.sentences[i];
+        for (k = 0; k < L; k++) {
+          check_sentence_result = check_sentence_result.replace(REs_for_replacement[k], replacing_str[k]);
+        }
+      }
       if (em_tag.test(check_sentence_result)) {
         str += (DAT.id_tags[i] + check_sentence_result + "\n");
         c++;
@@ -406,7 +465,14 @@ COM_FUNC.call_filter_of = function(f_name, is_filter_in_listbox) {
              base_type == 'len_lim') {
     for (i = 0; i < N; i++) {
       if (DAT.is_selected[i]) { // a sentence whose length is as constrained
-        check_sentence_result = eval(filter_name + "(" + i + ")" );
+        if (filter_name !== '' ) {
+          check_sentence_result = eval(filter_name + "(" + i + ")" );
+        } else {
+          check_sentence_result = DAT.sentences[i];
+          for (k = 0; k < L; k++) {
+            check_sentence_result = check_sentence_result.replace(REs_for_replacement[k], replacing_str[k]);
+          }
+        }
         if (em_tag.test(check_sentence_result)) {
           str += (DAT.id_tags[i] + check_sentence_result + "\n");
           c++;
@@ -425,6 +491,7 @@ COM_FUNC.call_filter_of = function(f_name, is_filter_in_listbox) {
 // This can be used to extract the sentences that match any one of the 
 // words/prefixes/suffixes/phrases being selected (i.e., checked by checkboxes) 
 // from among listed ones.
+//
 // id 属性が group_element_id であるような要素の中に含まれている、
 // チェックされた状態のチェックボックス群の、value 属性の配列を得る。
 // これは、列挙されているもののうちで選択されている状態の (チェックボックスで
@@ -445,6 +512,7 @@ COM_FUNC.get_checked_values = function(group_element_id) {
 // Check or uncheck multiple checkboxes at once, where checkbox_ids is 
 // an array of the "id" attributes of the checkboxes and check_or_uncheck is
 // a boolean value.
+//
 // 複数のチェックボックスを、一括選択するか、または一括解除する。
 // なおここで、checkbox_ids は、それらチェックボックスの id 属性の配列であり、
 // check_or_uncheck は真偽値である。
@@ -453,6 +521,28 @@ COM_FUNC.set_at_once = function(checkbox_ids, check_or_uncheck) {
     window.top.document.getElementById('filter_setting').contentWindow.document.getElementById(checkbox_ids[i]).checked = check_or_uncheck;
   }
 };
+
+// Check or uncheck multiple checkboxes at once, where container_id is
+// the "id" attributes of an HTML element containing these checkboxes, and 
+// check_or_uncheck is a boolean value.
+//
+// 複数のチェックボックスを、一括選択するか、または一括解除する。
+// なおここで、container_id は、それらのチェックボックスを包含する HTML 要素の
+// id 属性であり、check_or_uncheck は真偽値である。
+COM_FUNC.set_grouped_items_at_once = function(container_id, check_or_uncheck) {
+  var container = window.top.document.getElementById('filter_setting').contentWindow.document.getElementById(container_id);
+  var boxes = container.getElementsByTagName('input');
+  // a list of IDs of checkboxes to be checked or unchecked
+  var elm = [];
+  for (var i = 0, N = boxes.length; i < N; i++) {
+    if (boxes[i].getAttribute('type') == 'checkbox') {
+      elm.push(boxes[i].id);
+    }
+  }
+
+  this.set_at_once(elm, check_or_uncheck);
+};
+
 
 // Switch the user interface (UI) language.
 // ユーザ・インタフェイス (UI) 用 言語を切り換える。
@@ -528,14 +618,12 @@ COM_FUNC.switch_setting_page = function(src_page, js_file) {
   var N = scr.length;
   var already_exists = false;
   while (i < N) {
-    //console.log(i + "-th script's src : " + scr[i].src);
     if (scr[i].src.substring(scr[i].src.lastIndexOf('/')+1) == js_file) {
       already_exists = true;
       break;
     }
     i++;
   }
-  //console.log("already_exists? : " + already_exists);
   // Read the specified JavaScript source file (js_file) as the source of a new
   // <script> element.
   // 指定された JavaScript ソースファイル (js_file) を、新たな <script> 要素の

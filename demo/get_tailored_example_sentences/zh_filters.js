@@ -67,7 +67,7 @@ passive : function(idx) {
 
 // Extracting sentences including the pattern of "了".
 /*「了」*/
-le : function(idx)  {
+le : function(idx) {
   return(DAT.sentences[idx].replace(/(了)/g, "<em>$1</em>"));
 }
 

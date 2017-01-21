@@ -61,6 +61,9 @@ th, td {
   text-align: center;
   padding: 4pt;
 }
+td.multi {
+  text-align: left;
+}
 th {
   font-weight: bold;
   color: hsl(270, 100%, 80%);
@@ -105,8 +108,14 @@ em {
 label, input[type='checkbox'] {
   cursor: pointer;
 }
+td.multi label {
+  padding-right: 1em;
+}
 input[type='checkbox'] {
-  margin-right: 1em;
+  margin-right: 1ex;
+}
+span.gr {
+  white-space: nowrap;
 }
 
 /* The default user interface (UI) language is English. */ 

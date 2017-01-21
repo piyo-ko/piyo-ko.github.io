@@ -24,10 +24,149 @@
 </select>
 <span class="ui" lang="ja">を</span>
 <span class="ui" lang="en">be </span>
-<input type="button" value="extracted" data-en-value="extracted" data-ja-value="抽出する" onclick="window.parent.COM_FUNC.call_filter_of('zh_filters',true)">
+<input type="button" value="extracted" data-en-value="extracted" data-ja-value="抽出する" onclick="window.parent.COM_FUNC.call_filter_of('zh_filters',true,'')">
 <span class="ui" lang="ja">。</span>
 <span class="ui" lang="en">.</span>
 </p>
+
+<table class="in" lang="zh" id="zh_jieci">
+<tr>
+<th>
+介词 (介詞)
+<input type="button" value="Check" data-ja-value="一括選択" data-en-value="Check" onclick="window.parent.COM_FUNC.set_grouped_items_at_once('jieci_list',true)" /><br>
+<input type="button" value="Uncheck" data-ja-value="一括選択解除" data-en-value="Uncheck" onclick="window.parent.COM_FUNC.set_grouped_items_at_once('jieci_list',false)" />
+<input type="button" value="Extract" data-ja-value="抽出" data-en-value="Extract" onclick="window.parent.COM_FUNC.call_filter_of('',false,'jieci_list')" />
+</th>
+</th>
+<td class="multi" id="jieci_list">
+
+<span class="gr">
+<input type="checkbox" id="jieci_zai" value="在" checked />
+<label for="jieci_zai">在</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_yu" value="于" checked />
+<label for="jieci_yu">于</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_cong_1" value="从" checked />
+<label for="jieci_cong_1">从</label>
+<input type="checkbox" id="jieci_cong_2" value="從" checked />
+<label for="jieci_cong_2">[從]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_zi" value="自" checked />
+<label for="jieci_zi">自</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_li_1" value="离" checked />
+<label for="jieci_li_1">离</label>
+<input type="checkbox" id="jieci_li_2" value="離" checked />
+<label for="jieci_li_2">[離]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_xiang" value="向" checked />
+<label for="jieci_xiang">向</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_wang" value="往" checked />
+<label for="jieci_wang">往</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_chao" value="朝" checked />
+<label for="jieci_chao">朝</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_dui_1" value="对" checked />
+<label for="jieci_dui_1">对</label>
+<input type="checkbox" id="jieci_dui_2" value="対" checked />
+<label for="jieci_dui_2">[対]</label>
+<input type="checkbox" id="jieci_dui_3" value="對" checked />
+<label for="jieci_dui_3">[對]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_gei_1" value="给" checked />
+<label for="jieci_gei_1">给</label>
+<input type="checkbox" id="jieci_gei_2" value="給" checked />
+<label for="jieci_gei_2">[給]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_weile_1" value="为了" checked />
+<label for="jieci_weile_1">为了</label>
+<input type="checkbox" id="jieci_weile_2" value="為了" checked />
+<label for="jieci_weile_2">[為了]</label>
+<input type="checkbox" id="jieci_weile_3" value="爲了" checked />
+<label for="jieci_weile_3">[爲了]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_wei_1" value="为" checked />
+<label for="jieci_wei_1">为</label>
+<input type="checkbox" id="jieci_wei_2" value="為" checked />
+<label for="jieci_wei_2">[為]</label>
+<input type="checkbox" id="jieci_wei_3" value="爲" checked />
+<label for="jieci_wei_3">[爲]</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_gen" value="跟" checked />
+<label for="jieci_gen">跟</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_yi" value="以" checked />
+<label for="jieci_yi">以</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_ba" value="把" checked />
+<label for="jieci_ba">把</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_bi" value="比" checked />
+<label for="jieci_bi">比</label>
+</span>
+<span class="gr">
+<input type="checkbox" id="jieci_bei" value="被" checked />
+<label for="jieci_bei">被</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_chule" value="除了" checked />
+<label for="jieci_chule">除了</label>
+<input type="checkbox" id="jieci_chu" value="除" checked />
+<label for="jieci_chu">除</label>
+</span>
+
+<span class="gr">
+<input type="checkbox" id="jieci_ti" value="替" checked />
+<label for="jieci_ti">替</label>
+</span>
+
+<!-- 
+<input type="checkbox" id="jieci_" value="" checked />
+<label for="jieci_"></label>
+<input type="checkbox" id="jieci_" value="" checked />
+<label for="jieci_"></label>
+ -->
+</td>
+</tr>
+</table>
+
+
+<table class="in" lang="zh" id="zh_directional_complement">
+</table>
 
 </form>
 </body>
