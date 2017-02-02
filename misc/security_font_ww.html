@@ -98,7 +98,7 @@ ins:after {
 などの画像ファイルのURLを直接指定すると、リダイレクトされてしまい、閲覧不可。
 </li>
 
-<li>特開2015-19126号 (<a href="https://patents.google.com/patent/JP2015019126A/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=2015019126A&KC=A&FT=D&ND=&date=20150129&DB=&locale=#">Espacenet</a>) には「セキュリティフォント」という名称が出てくる。しかし、これはアウトラインフォントの形をぐちゃぐちゃにして、人には読みづらくするという発明 (段落0025〜0039など)。おそらく紙での漏洩に対する対策であり、話題のセキュリティフォントとは無関係と思われる。
+<li>特開2015-19126号 (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPA_H27019126/F706D0AE8622646848C90ED5620DC22C">J-PlatPat</a> | <a href="https://patents.google.com/patent/JP2015019126A/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=2015019126A&KC=A&FT=D&ND=&date=20150129&DB=&locale=#">Espacenet</a>) には「セキュリティフォント」という名称が出てくる。しかし、これはアウトラインフォントの形をぐちゃぐちゃにして、人には読みづらくするという発明 (段落0025〜0039など)。おそらく紙での漏洩に対する対策であり、話題のセキュリティフォントとは無関係と思われる。
 発明者は以下のとおり。
   <ul>
   <li>先名健一氏。検索すると、<a href="http://qr-technology.matrix.jp/company.html">「ＱＲテクノロジー」という会社</a>が出てくる。 でも、パッと見は、「フォントぐちゃぐちゃ化」とは関係なさそう。 </li>
@@ -109,7 +109,7 @@ ins:after {
   </ul>
 </li>
 
-<li><em>特許5865565号</em> (<a href="https://patents.google.com/patent/JP5865565B2/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=5865565B2&KC=B2&FT=D&ND=&date=20160217&DB=&locale=#">Espacenet</a>) は、「セキュリティフォント」という名称こそ出てこないが、むしろセキュリティフォントの仕組みに近いと思われる。<em>文字集合内の各文字を (例えばAESによって暗号化するなどして) 変換し、得られた変換文字列をソートキーにして文字を並べ替え、その並び順に従って各文字に数字 (コードポイント) を割り当て直す。これにより換字用の変換表ができる (段落0022〜0031、図3)。</em>AES以外の暗号も段落0027に例示されているが、暗号化のためではなく順序のシャッフルのために暗号化関数を使っているだけ。暗号と無関係な他の方法でシャッフルしてもよい (段落0027、請求項1)。
+<li><em>特許5865565号</em> (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPB_5865565/073AC0D1C4AE299A216BE79EFC704C57">J-PlatPat</a> | <a href="https://patents.google.com/patent/JP5865565B2/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=5865565B2&KC=B2&FT=D&ND=&date=20160217&DB=&locale=#">Espacenet</a>) は、「セキュリティフォント」という名称こそ出てこないが、むしろセキュリティフォントの仕組みに近いと思われる。<em>文字集合内の各文字を (例えばAESによって暗号化するなどして) 変換し、得られた変換文字列をソートキーにして文字を並べ替え、その並び順に従って各文字に数字 (コードポイント) を割り当て直す。これにより換字用の変換表ができる (段落0022〜0031、図3)。</em>AES以外の暗号も段落0027に例示されているが、暗号化のためではなく順序のシャッフルのために暗号化関数を使っているだけ。暗号と無関係な他の方法でシャッフルしてもよい (段落0027、請求項1)。
 もしかすると、「換字表を顧客別にしたい」という目的があって、「暗号鍵を顧客別に変えれば、換字表を顧客別にできる」という発想になったのかもしれない。単に顧客別の換字表を作りたいなら、乱数に適宜のシードを与えるとか、ハードウェア乱数生成器を使うとか、ハッシュ関数にソルトを与えて適当な回数ストレッチするとかで十分だろうにね (ただし、そういう方法も、請求項1の権利範囲に入るという解釈はできる)。
 発明者は以下のとおり。
   <ul>
@@ -120,7 +120,7 @@ ins:after {
   </ul>
 </li>
 
-<li>特許5956092号 (<a href="https://patents.google.com/patent/JP5956092B1/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=5956092B1&KC=B2&FT=D&ND=&date=20160624&DB=&locale=#">Espacenet</a>) 。発明者は、特許5865565号と同じ4名。段落0050〜0063、0109〜0118、図4〜6あたりをざっと見た。<em>換字方式で暗号化されたままのデータを端末で受け取り、端末側では、特別なフォントを使うことで、それを平文に見せかける</em>、という技術のよう。特許5865565号と対になっている感じ。広報資料にあったような、クライアント・サーバ構成においてウェブフォントを使った実装を、想定しているのだと思う。</li>
+<li>特許5956092号 (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPB_5956092/9847E1B81549D4FAEFDC7A7225C2DB04">J-PlatPat</a> | <a href="https://patents.google.com/patent/JP5956092B1/ja">Google Patents</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?CC=JP&NR=5956092B1&KC=B2&FT=D&ND=&date=20160624&DB=&locale=#">Espacenet</a>) 。発明者は、特許5865565号と同じ4名。段落0050〜0063、0109〜0118、図4〜6あたりをざっと見た。<em>換字方式で暗号化されたままのデータを端末で受け取り、端末側では、特別なフォントを使うことで、それを平文に見せかける</em>、という技術のよう。特許5865565号と対になっている感じ。広報資料にあったような、クライアント・サーバ構成においてウェブフォントを使った実装を、想定しているのだと思う。</li>
 
 <li><a href="http://hojin-info.go.jp/hojin/ichiran?hojinBango=1010501026062">法人インフォ</a></li>
 
@@ -143,8 +143,8 @@ ins:after {
 <li><a href="http://www.web-asahi.co.jp/">朝日プロセス株式会社</a>という関連会社がある。</li>
 
 <li><em>話は全然違うが、CCCとの共願が2件あり、両方とも特許されている</em> (
-<a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?FT=D&date=20140625&DB=EPODOC&locale=en_EP&CC=JP&NR=5530416B2&KC=B2&ND=4#">特許5530416号</a> と
-<a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?FT=D&date=20140730&DB=EPODOC&locale=en_EP&CC=JP&NR=5563998B2&KC=B2&ND=4#">特許5563998号</a>)。
+特許5530416号 (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPB_5530416/9999005F008193AC354382D7A0A7A972">J-PlatPat</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?FT=D&date=20140625&DB=EPODOC&locale=en_EP&CC=JP&NR=5530416B2&KC=B2&ND=4#">Espacenet</a>) と
+特許5563998号 (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPB_5563998/12943DC1D71E709AD70E8EB2CF98017E">J-PlatPat</a> | <a href="https://worldwide.espacenet.com/publicationDetails/originalDocument?FT=D&date=20140730&DB=EPODOC&locale=en_EP&CC=JP&NR=5563998B2&KC=B2&ND=4#">Espacenet</a>)。
 パッと検索した感じだと、<em>「TポイントプレゼントQR」</em>というサービスに関連するものみたい。<a href="http://cloud.nifty.com/cs/catalog/cloud_caseinterview/catalog_120501000725_1.htm">2012年の記事</a>が一番詳しい。利用されていると明らかに分かるのは、<a href="http://www.shinseibank.com/powerflex/campaign1402.pdf">2014年の新生銀行</a>が最後かも。
 2011年だと、コニカミノルタビジネスソリューションズとスルガ銀行に関連するニュースとして、<a href="http://www.oalife.co.jp/news/news_2011_10.html">「顧客プレゼント用に、一枚ごとにＱＲコード（二次元コード）を変えた金券を出力するバリアブル印刷で、……」という記事</a>も見つかる。</li>
 <li><a href="http://logoq.net/logoq/contents/logoq/logoq.php">ロゴQのページ</a>の英語は、私の文法知識といろいろ対立している不思議な文で、読み解けない。なんだこれ。</li>
@@ -218,7 +218,7 @@ ins:after {
   </ul>
 </li>
 <li>他に、坂本博史氏および林愛一郎氏という取締役がいる。</li>
-<li>高橋氏が権利を持っている暗号に関する特許第4850351号は、<a href="http://fusionsys.com/licenses/index.shtml">PNG画像で閲覧可能</a>である。</li>
+<li>高橋氏が権利を持っている暗号に関する<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPB_4850351/EB68A817BF7F6D4D63D39138D894B6F9">特許第4850351号</a> (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPA_H14366030/71C78D45E9803190FBFD2E193538FE40">特開2002-366030号</a>に対応) は、FS社のサイト内でも、<a href="http://fusionsys.com/licenses/index.shtml">PNG画像として閲覧可能</a>である。</li>
 </ul>
 
 <h2 id="wf"><a href="http://wfrontier.jp/">ダブルフロンティア株式会社</a> (以下「WF社」)</h2>
@@ -274,7 +274,7 @@ ins:after {
 <ul>
 <li>「セキュリティフォントの九州販売窓口」らしい。</li>
 <li>「福岡市博多区博多駅東1丁目13-17 松岡ビル616号」という所在地はAT社の福岡営業所と同じ。</li>
-<li><a href="https://patents.google.com/patent/JP2014021756A/ja">特開2014-21756号</a>はAT社との共願。</li>
+<li>特開2014-21756号 (<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPA_H26021756/9AD827A1F51F050A91142EF08BBE3ACE">J-PlatPat</a> | <a href="https://patents.google.com/patent/JP2014021756A/ja">Google Patents</a>) はAT社との共願。</li>
 </ul>
 
 
@@ -303,7 +303,7 @@ ins:after {
 <h2 id="lookalike03">そっくりさん?・その3</h2>
 <ul>
 <li>RIXCO (リクスコ) 社の<a href="http://ontoff.com/rixco.jp/fontect.html">FONTECT for Web 1.0 セキュリティ フォント</a>および<a href="http://iphonestage.net/app/575806584/FontTalk+for+Facebook">FontTalk for Facebook</a>。</li>
-<li>前者は、<a href="https://patents.google.com/patent/JP2014160353A/ja">特開2014-160353号</a> (IBMの出願) に「非特許文献１」として挙げられている。</li>
+<li>前者は、<a href="https://www.j-platpat.inpit.go.jp/web/PU/JPA_H26160353/999C4326F72EAF19FCA5C59277BCBD0F">特開2014-160353号</a> (IBMの出願) に「非特許文献１」として挙げられている。</li>
 <li>RIXCO社は韓国の会社のよう。韓国語がわからないのだが、<a href="http://
 www.fontrix.co.kr/default.aspx">FONTRIX</a>というサイトの会社だろうか。</li>
 </ul>
