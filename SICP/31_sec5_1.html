@@ -729,8 +729,6 @@ definition in the register-machine language.
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.3">5.1.3  Subroutines</a></h3>
 <h3 class="trans" lang="ja">5.1.3 サブルーチン</h3>
 
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en"><a name="%_idx_5550"></a><a name="%_idx_5552"></a>
 When designing a machine to perform a computation, we would often
 prefer to arrange for components to be shared by different parts of
@@ -746,8 +744,12 @@ the rest of the machine.  The figure also shows the corresponding
 portions of the machine's controller sequence.</p>
 
 <p class="trans" lang="ja">
+計算を実行するマシンを設計する際、しばしば私たちは、その計算の異なる部分により構成要素が共有されるように手筈を整えることを、それら構成要素を複製するよりも、むしろ好むことだろう。
+二つの GCD 計算—— <tt>a</tt> と <tt>b</tt> というレジスタの中身の GCD を求めるものと、<tt>c</tt> と <tt>d</tt> というレジスタの中身の GCD を求めるもの——を含むマシンを考えよう。
+原始的な <tt>gcd</tt> 演算がある、と仮定するところから始めて、それから、より原始的な演算を用いて、<tt>gcd</tt> の二つの<ruby><rb>具体例</rb><rp> (</rp><rt>インスタンス</rt><rp>) </rp></ruby>を展開する、というふうにしてもよいかもしれない。
+図<a href="#%_fig_5.7">5.7</a>は、結果としてできるマシンのデータ経路のうちの、GCD 部分だけを示していて、それら GCD 部分がマシンの残りの部分にどのように接続しているのかは示していない。
+この図は、このマシンのコントローラ列の、対応する部分も示している。
 </p>
-
 
 <figure>
 <a name="%_fig_5.7"></a>
@@ -773,7 +775,7 @@ after-gcd-2
 </p>
 <figcaption class="orig" lang="en"><b>Figure 5.7:</b>  Portions of the data paths and controller sequence for
 a machine with two GCD computations.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.7.:</b> 二つの GCD 計算を伴うマシンについての、データ経路とコントローラ列のいくつかの部分</figcaption>
 </figure>
 
 
@@ -793,6 +795,11 @@ do this, we obtain the controller sequence shown in
 figure <a href="#%_fig_5.8">5.8</a>.</p>
 
 <p class="trans" lang="ja">
+このマシンには、二つの剰余演算の箱と、等価性を検査するための二つの箱がある。
+もし、複製された構成要素が、剰余の箱のように入り組んでいたら、これは、マシンを構築するのに無駄のないやり方ではないだろう。
+同じ構成要素を双方の GCD 計算に使うことによって、データ経路構成要素を複製することを防げる——ただし、そのようにすることが、より大きなマシンの計算の残りの部分に影響しないだろう、という場合に限って。
+もし、コントローラが <tt>gcd-2</tt> に達する時点まで、<tt>a</tt> と <tt>b</tt> というレジスタの中の値が必要とされないならば (あるいは、もし、これらの値を、安全のために別のレジスタに移動できるならば)、私たちは、第一の GCD を計算する際と同様、第二の GCD を計算する際にも、<tt>c</tt> と <tt>d</tt> というレジスタではなく、むしろ <tt>a</tt> と <tt>b</tt> というレジスタを使うように、マシンを変更できる。
+もし、このようにすれば、私たちは、図<a href="#%_fig_5.8">5.8</a>に示すコントローラ列を得る。
 </p>
 
 <p class="orig" lang="en">
@@ -812,6 +819,12 @@ resulting controller sequence, which includes only a single copy of the
 <tt>gcd</tt> instructions.</p>
 
 <p class="trans" lang="ja">
+(データ経路が再び図<a href="#%_fig_5.1">5.1</a>のようになるように) 重複データ経路構成要素を取り除いたわけだが、今ここで、コントローラには、エントリ・ポイント・ラベルのみが異なる二つの GCD 列がある。
+これら二つの列を、最後には<ruby><rb>本筋</rb><rp> (</rp><rt>メイン</rt><rp>) </rp></ruby>の命令列における正しい場所へと分岐して戻るような一つの列—— <tt>gcd</tt> という<em>サブルーチン</em>——への分岐によって置き換えると、より良いだろう。
+これは次のようにして達成できる。
+<tt>gcd</tt> へと分岐する前に、(0 または 1 といったような) 識別力のある値を、特別なレジスタ——つまり <tt>continue</tt> ——に入れる。
+<tt>gcd</tt> のサブルーチンの最後で、<tt>continue</tt> というレジスタの値によって、<tt>after-gcd-1</tt> か <tt>after-gcd-2</tt> のいずれかへと戻る。
+図<a href="#%_fig_5.9">5.9</a>は、結果としてできるコントローラ列の一部を示しており、これは、<tt>gcd</tt> の命令一式を一組だけしか含まない。
 </p>
 
 <figure>
@@ -838,7 +851,7 @@ after-gcd-2
 <figcaption class="orig" lang="en"><b>Figure 5.8:</b>  Portions of the controller sequence for a machine that
 uses the same data-path components for two different GCD
 computations.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.8.:</b> 二つの異なる GCD 計算に対して同じデータ経路構成要素を用いるマシンについての、コントローラ列の部分</figcaption>
 </figure>
 
 <figure>
@@ -857,11 +870,14 @@ gcd-done
   <img src="book-Z-G-D-18.gif" border="0">
 <em>;; Before branching to <tt>gcd</tt> from the first place where</em>
 <em>;; it is needed, we place 0 in the <tt>continue</tt> register</em>
+<em>;; (<tt>gcd</tt> が必要とされる最初の場所から <tt>gcd</tt> へと分岐する前に </em>
+<em>;;  <tt>continue</tt> というレジスタに 0 を置く)</em>
  (assign continue (const 0))
  (goto (label gcd))
 after-gcd-1
   <img src="book-Z-G-D-18.gif" border="0">
 <em>;; Before the second use of <tt>gcd</tt>, we place 1 in the <tt>continue</tt> register</em>
+<em>;; (<tt>gcd</tt> を二度目に使う前に、<tt>continue</tt> というレジスタに 1 を置く)</em>
  (assign continue (const 1))
  (goto (label gcd))
 after-gcd-2
@@ -869,7 +885,7 @@ after-gcd-2
 
 <figcaption class="orig" lang="en"><b>Figure 5.9:</b>  Using a <tt>continue</tt> register to avoid
 the duplicate controller sequence in figure <a href="#%_fig_5.8">5.8</a>.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.9.:</b> 図<a href="#%_fig_5.8">5.8</a>での重複コントローラ列を避けるために、<tt>continue</tt> というレジスタを使う</figcaption>
 </figure>
 
 <figure>
@@ -886,11 +902,13 @@ gcd-done
    <img src="book-Z-G-D-18.gif" border="0">
 <em>;; Before calling <tt>gcd</tt>, we assign to <tt>continue</tt></em>
 <em>;; the label to which <tt>gcd</tt> should return.</em>
+<em>;; (<tt>gcd</tt> を呼び出す前に、<tt>gcd</tt> が戻るべき先のラベルを <tt>continue</tt> に割り当てる)</em>
  (assign continue (label after-gcd-1))
  (goto (label gcd))
 after-gcd-1
    <img src="book-Z-G-D-18.gif" border="0">
 <em>;; Here is the second call to <tt>gcd</tt>, with a different continuation.</em>
+<em>;; (ここが、<tt>gcd</tt> に対する二度目の呼び出しであり、異なる継続をともなっている)</em>
  (assign continue (label after-gcd-2))
  (goto (label gcd))
 after-gcd-2
@@ -898,9 +916,8 @@ after-gcd-2
 
 <figcaption class="orig" lang="en"><b>Figure 5.10:</b>  Assigning labels to the <tt>continue</tt> register simplifies
 and generalizes the strategy shown in figure <a href="#%_fig_5.9">5.9</a>.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.10.:</b> <tt>continue</tt> というレジスタにラベルを割り当てることで、図<a href="#%_fig_5.9">5.9</a>に示した戦略が簡略化され、かつ一般化される</figcaption>
 </figure>
-
 
 <p class="orig" lang="en">
 This is a reasonable approach for handling small problems, but it
@@ -918,6 +935,11 @@ from the register and used to continue execution at the designated
 entry point.</p>
 
 <p class="trans" lang="ja">
+これは、小さな問題については合理的な手法である。しかし、もし、コントローラ列に多数の GCD 計算があれば、厄介なものになるだろう。
+<tt>gcd</tt> サブルーチンの後で実行を続けるべき場所を決定するためには、<tt>gcd</tt> を使うすべての場所について、データ経路における検査と、コントローラにおける分岐命令とが必要となるだろう。
+サブルーチンを実装するためのより強力な方法は、サブルーチンが終了したときに実行が続くべき箇所である、コントローラ列内のエントリ・ポイントの、ラベルを <tt>continue</tt> レジスタに保持させることである。
+この戦略を実装することは、レジスタ・マシンのデータ経路とコントローラとの間の、新たな種類の接続を要する。
+コントローラ列におけるラベルをレジスタに割り当てるための——しかも、そのレジスタからこの値を取り出すことができ、かつ、指定されたエントリ・ポイントで実行を続行するのにこの値を使うことができるような方法で、割り当てるための——方法が、存在せねばならないのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -932,6 +954,10 @@ a constant label.  Using these new constructs we can terminate the
 figure <a href="#%_fig_5.10">5.10</a>.</p>
 
 <p class="trans" lang="ja">
+この能力を反映するために、レジスタ・マシン言語における <tt>assign</tt> 命令を拡張して、コントローラ列からのラベルを値として (特別な種類の定数として) レジスタに割り当てることができるようにしよう。
+また、<tt>goto</tt> 命令も拡張して、定数ラベルにより記述されるエントリ・ポイントにおいてのみ、というよりもむしろ、レジスタの中身により記述されるエントリ・ポイントにおいて、実行が続行できるようにしよう。
+これらの新たな構成を用いると、<tt>continue</tt> レジスタに記憶されている場所への分岐をともなう形で <tt>gcd</tt> サブルーチンを終わらせることができる。
+これは、図<a href="#%_fig_5.10">5.10</a>に示すコントローラ列、という結果になる。
 </p>
 
 <p class="orig" lang="en">
@@ -947,14 +973,17 @@ subroutine calls.
 </p>
 
 <p class="trans" lang="ja">
+<!-- 一つより多くの -->二つ以上のサブルーチンをともなうマシンが、複数個の継続レジスタ (たとえば、<tt>gcd-continue</tt> や <tt>factorial-continue</tt>) を使うことがあり得る。あるいは、すべてのサブルーチンに、単一の <tt>continue</tt> レジスタを共有させることもできよう。
+共有は、無駄がより少ない。しかし、別のサブルーチン (<tt>sub2</tt>) を呼び出すようなサブルーチン (<tt>sub1</tt>) がある場合は、注意深くあらねばならない。
+<tt>sub2</tt> への呼び出しのために <tt>continue</tt> を設定する前に、<tt>sub1</tt> が <tt>continue</tt> の中身を何らかの別のレジスタに保存するのでない限り、<tt>sub1</tt> は、自分が終了したときにどこへ行けばいいのかが分からないだろう。
+再帰を扱うために次節で開発される仕組みも、入れ子になったサブルーチン呼び出しという本問題に対する、より良い解決策を提供してくれる。
 </p>
-
 
 <a name="%_sec_5.1.4"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.4">5.1.4  Using a Stack to Implement Recursion</a></h3>
 <h3 class="trans" lang="ja">5.1.4 再帰を実装するためにスタックを使う</h3>
 
-
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_5560"></a><a name="%_idx_5562"></a><a name="%_idx_5564"></a>
 <a name="%_idx_5566"></a>With the ideas illustrated so far, we can implement any iterative
 process by specifying a register machine that has a register
