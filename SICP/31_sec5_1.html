@@ -246,6 +246,8 @@ controller diagrams for this machine.</p>
   (iter 1 1))
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <a name="%_sec_5.1.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.1">5.1.1  A Language for Describing Register Machines</a></h3>
@@ -485,6 +487,9 @@ the iterative factorial machine of exercise <a href="#%_thm_5.1">5.1</a>.
 <b>練習問題5.2.</b> レジスタ・マシン言語を使って、練習問題<a href="#%_thm_5.1">5.1</a>の反復式の階乗マシンを記述せよ。
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
 <a name="%_sec_Temp_714"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_714">Actions</a></h4>
 <h4 class="trans" lang="ja"><ruby><rb>動作</rb><rp> (</rp><rt>アクション</rt><rp>) </rp></ruby></h4>
@@ -589,8 +594,6 @@ chapter 4.</p>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.2">5.1.2  Abstraction in Machine Design</a></h3>
 <h3 class="trans" lang="ja">5.1.2 マシン設計での抽象化</h3>
 
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en"><a name="%_idx_5546"></a>
 We will often define a machine to include ``primitive'' operations that are
 actually very complex.  For example, in sections <a href="34_sec5_4.html#%_sec_5.4">5.4</a> and
@@ -603,6 +606,11 @@ machine design is unrealistic.  We can always replace the complex
 ``primitives'' by simpler primitive operations.</p>
 
 <p class="trans" lang="ja">
+私たちは、しばしば、実際にはとても複雑な「<ruby><rb>原始的</rb><rp> (</rp><rt>プリミティブ</rt><rp>) </rp></ruby>」演算を含むようにマシンを定義することだろう。
+たとえば、<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節と<a href="35_sec5_5.html#%_sec_5.5">5.5</a>節では、Scheme の環境操作をプリミティブとして取り扱おう。
+そうした抽象化は、有益である。なぜなら、設計の別の側面に集中できるように、マシンの諸部分の詳細を無視することを、可能にしてくれるからである。
+しかし、大量の複雑性を絨毯の下へと掃いて隠したという事実は、マシン設計が非現実的だということを意味するわけではない。
+複雑な「プリミティブ」は、いつでも、より単純な原始的演算に置き換えることができるのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -615,6 +623,10 @@ operations, such as subtraction.  Indeed, we can write a Scheme
 procedure that finds remainders in this way:</p>
 
 <p class="trans" lang="ja">
+GCD マシンを考えよう。
+このマシンには、<tt>a</tt> と <tt>b</tt> というレジスタの中身の剰余を計算して結果を <tt>t</tt> というレジスタに割り当てる命令がある。
+もし、原始的剰余演算を使わずに GCD マシンを構築したければ、減算のような、より単純な演算を用いて剰余を計算する方法を指定しなくてはならない。
+確かに、こうした方法で剰余を求める Scheme 手続きを、書くことができる。
 </p>
 
 <p class="lisp">(define (remainder n d)
@@ -630,13 +642,16 @@ for the elaborated machine.
 The instruction</p>
 
 <p class="trans" lang="ja">
+よって、GCD マシンのデータ経路における剰余演算を、減算演算と比較検査に置き換えられる。
+図<a href="#%_fig_5.5">5.5</a>は、複雑化したマシンについての、データ経路とコントローラを示している。
+次の命令は、
 </p>
 
 <figure>
 <a name="%_fig_5.5"></a>
 <img src="ch5-Z-G-4.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 5.5:</b>  Data paths and controller for the elaborated GCD  machine.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5.5.:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.5.:</b> 複雑化した GCD マシンについての、データ経路とコントローラ</figcaption>
 </figure>
 
 <p class="lisp">(assign t (op rem) (reg a) (reg b))
@@ -647,6 +662,7 @@ instructions that contains a loop, as shown in
 figure <a href="#%_fig_5.6">5.6</a>.</p>
 
 <p class="trans" lang="ja">
+GCD コントローラ定義において、図<a href="#%_fig_5.6">5.6</a>に示されるように、ループを含む命令列に置き換えられる。
 </p>
 
 <figure>
@@ -669,7 +685,7 @@ figure <a href="#%_fig_5.6">5.6</a>.</p>
 </p>
 <figcaption class="orig" lang="en"><b>Figure 5.6:</b>  Controller instruction sequence for the GCD machine in
 figure <a href="#%_fig_5.5">5.5</a>.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.6.:</b> 図<a href="#%_fig_5.5">5.5</a>の GCD マシンについての、コントローラ命令列</figcaption>
 </figure>
 
 <p class="orig" lang="en">
@@ -678,7 +694,7 @@ figure <a href="#%_fig_5.5">5.5</a>.</figcaption>
 described in section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.3.</b> <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>節で説明したようなニュートン法を使って二乗根を計算するマシンを設計せよ。
 </p>
 
 <p class="lisp">(define (sqrt x)
@@ -701,13 +717,19 @@ definition in the register-machine language.
 </p>
 
 <p class="trans" lang="ja">
+<tt>good-enough?</tt> と <tt>improve</tt> の演算がプリミティブとして利用可能だ、と仮定するところから始めよ。
+その後、これらの演算を、算術演算を用いて展開する方法を示せ。
+データ経路図を描くこと、および、コントローラ定義をレジスタ・マシン言語で書くことによって、<tt>sqrt</tt> マシン設計の各バージョンを記述せよ。
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <a name="%_sec_5.1.3"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.3">5.1.3  Subroutines</a></h3>
 <h3 class="trans" lang="ja">5.1.3 サブルーチン</h3>
 
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5550"></a><a name="%_idx_5552"></a>
 When designing a machine to perform a computation, we would often
@@ -1273,6 +1295,9 @@ and draw a diagram showing the data paths.</p>
   (expt-iter n 1))
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
 <p class="orig" lang="en">
 <a name="%_thm_5.5"></a>
 <b>Exercise 5.5.</b>  Hand-simulate the factorial and Fibonacci machines, using some
@@ -1285,6 +1310,9 @@ execution.
 <b>練習問題5..</b> 
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
 <p class="orig" lang="en">
 <a name="%_thm_5.6"></a>
 <b>Exercise 5.6.</b>  Ben Bitdiddle observes that the Fibonacci machine's controller sequence
@@ -1295,6 +1323,9 @@ removed to make a faster machine.  Where are these instructions?
 <p class="trans" lang="ja">
 <b>練習問題5..</b> 
 </p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <a name="%_sec_5.1.5"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.5">5.1.5  Instruction Summary</a></h3>
@@ -1383,7 +1414,7 @@ glosses over a great deal of complexity.  Usually a large portion of
 the implementation of a Lisp system is dedicated to making reading
 and printing work.</p>
 
-<p class="trans" lang="ja">
+<p class="trans" lang="ja"><a href="#call_footnote_Temp_715"><sup><small>1</small></sup></a>
 この仮定は、大量の複雑性をごまかしている。
 普通、Lisp システムの実装の大部分は、読み込みと印字の作業に捧げられる。
 </p>
