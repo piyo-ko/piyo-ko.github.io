@@ -50,9 +50,6 @@
 <a href="#footnotes">脚注</a>
 ]</nav>
 
-<!--
-$ curl -o ch5-Z-G-#1.gif https://mitpress.mit.edu/sicp/full-text/book/ch5-Z-G-[1-9].gif
--->
 </div>
 
 <div class="main-txt">
@@ -61,8 +58,6 @@ $ curl -o ch5-Z-G-#1.gif https://mitpress.mit.edu/sicp/full-text/book/ch5-Z-G-[1
 <h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1">5.1  Designing Register Machines</a></h2>
 <h2 class="trans" lang="ja">5.1 レジスタ・マシンを設計する</h2>
 
-
-<p class="extra" id="translating">**ここから</p>
 <a name="%_idx_5462"></a><a name="%_idx_5464"></a><a name="%_idx_5466"></a><a name="%_idx_5468"></a><a name="%_idx_5470"></a><a name="%_idx_5472"></a>
 
 <p class="orig" lang="en">
@@ -75,6 +70,9 @@ machine, let us examine Euclid's Algorithm, which is used to compute
 process, as specified by the following procedure:</p>
 
 <p class="trans" lang="ja">
+レジスタ・マシンを設計するには、その<em>データ<ruby><rb>経路</rb><rp> (</rp><rt>パス</rt><rp>) </rp></ruby></em> (レジスタおよび演算）と、これらの演算を順番に並べる <em>コントローラ</em> とを、設計しなくてはならない。
+単純なレジスタ・マシンの設計を例示するために、ユークリッドの<ruby><rb>互除法</rb><rp> (</rp><rt>アルゴリズム</rt><rp>) </rp></ruby> ——二つの整数の最大公約数 (GCD) を計算するのに使われる——を吟味しよう。
+<a href="11_sec1_2.html#%_sec_1.2.5">1.2.5</a>節で見たとおり、以下の手続きにより規定されるような反復的プロセスによって、ユークリッドの互除法を実行できる。
 </p>
 
 
@@ -105,7 +103,15 @@ in <tt>a</tt>, and finally the remainder stored in <tt>t</tt> will be placed
 in <tt>b</tt>.)</p>
 
 <p class="trans" lang="ja">
+このアルゴリズムを実行するためのマシンは、二つの数、つまり <em class="en">a</em> と <em class="en">b</em> を、把握し続けねばならない。そこで、これら二つの数が、その名前のレジスタに格納されるものだと仮定しよう。
+必要とされる基本的演算は、レジスタ <tt>b</tt> の中身がゼロかどうかを検査することと、レジスタ <tt>b</tt> の中身でレジスタ <tt>a</tt> の中身を割った余りを計算することである。
+剰余演算は複雑なプロセスだが、しばらくの間は、剰余を計算するプリミティブな装置があるものと仮定しよう。
+GCD アルゴリズムの各サイクルにおいて、レジスタ <tt>a</tt> の中身をレジスタ <tt>b</tt> の中身で置き換えねばならず、レジスタ <tt>b</tt> の古い中身でレジスタ <tt>a</tt> の古い中身を割った余りで、レジスタ <tt>b</tt> の中身を置き換えねばならない。
+もし、これらの置き換えが同時にできれば便利だろうが、私たちのレジスタ・マシンのモデルでは、各ステップにおいて一つのレジスタにしか新たな値を割り当てられないものと仮定しよう。
+置き換えを達成するために、私たちのマシンは、第三の「一時的な」レジスタ—— <tt>t</tt> と呼ぶ——を使うことだろう
+(まず、余りを <tt>t</tt> に置き、それから、<tt>b</tt> の中身を <tt>a</tt> に置き、最後に、<tt>t</tt> に格納されている余りを <tt>b</tt> に置くことになるだろう)。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5478"></a><a name="%_idx_5480"></a>We can illustrate the registers and operations required for this
@@ -127,6 +133,13 @@ cannot be changed, represented in a data-path diagram by a triangle
 containing the constant).</p>
 
 <p class="trans" lang="ja">
+このマシンに必要なレジスタと演算を、図<a href="#%_fig_5.1">5.1</a>に示すデータ経路図を用いて図示することができる。
+この図では、レジスタ (<tt>a</tt> と <tt>b</tt> と <tt>t</tt>) を矩形で表している。
+レジスタに値を割り当てるためのそれぞれの道筋は、データ源から当該レジスタに向かっている、先端部の後ろに <tt>X</tt> のついた矢印によって、示されている。
+<tt>X</tt> は、ボタンだと——それが押されたときには、源にある値が、指定されたレジスタへと「流れる」ことを可能とする、そういったボタンだと——見なせる。
+各ボタンの隣にあるラベルは、そのボタンを参照するときに私たちが使うつもりの名前である。
+名前は任意であり、記憶しやすい値となるように選べる (たとえば、<tt>a&lt;-b</tt> は、レジスタ <tt>b</tt> の中身をレジスタ <tt>a</tt> に割り当てるボタンを押すことを示す)。
+レジスタに対するデータ源は、(<tt>a&lt;-b</tt> の割り当てにおけるごとく) 別のレジスタということもあり得るし、(<tt>t&lt;-r</tt> の割り当てにおけるごとく) 演算結果ということもあり得るし、または、定数 (変更不能な組み込み値であり、データ経路図では、その定数を含む三角形によって表されている) ということもあり得る。
 </p>
 
 <p class="orig" lang="en">
@@ -150,17 +163,22 @@ switches, the data-path diagram is very like the wiring diagram for a
 machine that could be constructed from electrical components.</p>
 
 <p class="trans" lang="ja">
+定数やレジスタの中身から値を計算する演算は、データ経路図では、その演算の名前を含む台形によって表されている。
+たとえば、図<a href="#%_fig_5.1">5.1</a>で <tt>rem</tt> という印がつけられた箱は、この箱が接続されているレジスタ <tt>a</tt> と <tt>b</tt> の中身の剰余を計算する演算を表す。
+(ボタンなしの) 矢印が、入力レジスタや定数から箱に向かっており、矢印が演算の出力値をレジスタへとつないでいる。
+検査は、その検査の名前を含む円により表されている。
+たとえば、私たちの GCD マシンには、レジスタ <tt>b</tt> の中身がゼロかどうかを検査する演算がある。
+テストにも、その入力のレジスタや定数からの矢印があるのだが、テストには出力矢印がない。テストの値は、データ経路によってではなく、むしろコントローラによって、使われる。
+全体として、データ経路図は、マシンに必要なレジスタおよび演算と、それらをどう接続しなくてはならないのかということとを、示している。
+もし、矢印を配線と見なし、<tt>X</tt> ボタンをスイッチと見なすならば、データ経路図は、電気部品から構築することができるであろうマシンについての配線図と、非常によく似ている。
 </p>
-
-
 
 <figure>
 <a name="%_fig_5.1"></a>
 <img src="ch5-Z-G-1.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 5.1:</b>  Data paths for a GCD machine.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.1.:</b> GCD マシンに対するデータ経路図</figcaption>
 </figure>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5486"></a><a name="%_idx_5488"></a>In order for the data paths to actually compute GCDs, the buttons must
@@ -186,13 +204,26 @@ registers <tt>a</tt> and <tt>b</tt>.  When the controller reaches <tt>done</tt>,
 </p>
 
 <p class="trans" lang="ja">
+このデータ経路が実際に GCD を計算するためには、ボタンが正しい順で押されなくてはならない。
+この順序を、図<a href="#%_fig_5.2">5.2</a>に示したような、コントローラ図の観点から記述しよう。
+コントローラ図の要素は、データ経路構成要素をどのように動作させるべきかを示す。
+コントローラ図での矩形の箱は、押すべきデータ経路ボタンを識別しており、矢印は、一つのステップから次のステップへの並びを記述している。
+図中の菱形は、決定を表している。
+菱形の中で識別されているデータ経路検査の値に応じて、並びを定める二本の矢印のうちの一本を、たどることになる。
+物理との<ruby><rb>類推</rb><rp> (</rp><rt>アナロジー</rt><rp>) </rp></ruby>の観点から、コントローラを解釈できる。
+菱形を、その中でビー玉が転がっている迷路だと見なそう。
+ビー玉が箱の中に転がり込んだら、ビー玉は、その箱により名付けられたデータ経路ボタンを押す。
+ビー玉が (<span class="math"><tt>b</tt> = 0</span> のような) 決定ノードの中に転がり込んだら、ビー玉は、示されている検査の結果により定まる経路で、当該ノードを後にする。
+総合的には、GCD を計算するためのマシンを、データ経路とコントローラが完全に記述している。
+私たちは、レジスタ <tt>a</tt> と <tt>b</tt> に数を入れてから、<tt>start</tt> という印のついた場所で、コントローラ (転がるビー玉) を始動させる。
+コントローラが <tt>done</tt> に到達したときに、私たちは、レジスタ <tt>a</tt> の中に GCD の値を見出すであろう。
 </p>
 
 <figure>
 <a name="%_fig_5.2"></a>
 <img src="ch5-Z-G-2.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 5.2:</b>  Controller for a GCD machine.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.2.:</b> GCD マシンに対するコントローラ</figcaption>
 </figure>
 
 <p class="orig" lang="en">
@@ -202,6 +233,8 @@ algorithm specified by the following procedure.  Draw data-path and
 controller diagrams for this machine.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5.1.</b> 以下の手続きにより規定される反復的アルゴリズムを用いて階乗を計算するマシンを、設計せよ。
+このマシンについての、データ経路図とコントローラ図を描け。
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -216,8 +249,7 @@ controller diagrams for this machine.</p>
 
 <a name="%_sec_5.1.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.1">5.1.1  A Language for Describing Register Machines</a></h3>
-<h3 class="trans" lang="ja"></h3>
-
+<h3 class="trans" lang="ja">5.1.1 レジスタ・マシンを記述するための言語</h3>
 
 <p class="orig" lang="en"><a name="%_idx_5492"></a>
 Data-path and controller diagrams are adequate for representing simple
@@ -228,8 +260,10 @@ form, all the information given by the data-path and controller
 diagrams.  We will start with a notation that directly mirrors the diagrams.</p>
 
 <p class="trans" lang="ja">
+データ経路図とコントローラ図は、GCD のような単純なマシンを表現するのには適切だが、Lisp インタプリタのような大規模マシンを記述するのには、非効率で扱いづらい。
+複雑なマシンを扱うことを可能とするために、私たちは、データ経路図とコントローラ図により与えられる全情報をテキスト形式で表す言語を、作成しよう。
+図を直接的に鏡うつしにする表記法から始めよう。
 </p>
-
 
 <p class="orig" lang="en">
 We define the data paths of a machine by describing the registers and
@@ -242,6 +276,11 @@ To describe an operation, we give
 it a name and specify its inputs (registers or constants).</p>
 
 <p class="trans" lang="ja">
+レジスタと演算を記述することで、マシンのデータ経路を定義する。
+レジスタを記述するためには、そのレジスタに名前を与え、かつ、そのレジスタへの割り当てを制御するボタンを指定する。
+これらのボタンの各々に名前を与え、かつ、当該ボタンの制御のもとで当該レジスタに入るデータの源を指定する
+(その源とは、レジスタか、定数か、または演算である)。
+演算を記述するためには、その演算に名前を与え、かつ、その演算の入力 (レジスタまたは定数) を指定する。
 </p>
 
 <p class="orig" lang="en">
@@ -250,8 +289,9 @@ points</em> in the sequence. An instruction is one of the following:
 </p>
 
 <p class="trans" lang="ja">
+マシンのコントローラを、列の中における<em>エントリ・ポイント</em>を特定する<em>ラベル</em>付きの<em>命令</em>列として、定義する。
+命令とは、以下のもののうちの一つである。
 </p>
-
 
 <ul class="orig" lang="en">
 <li>The name of a data-path button to push to assign a value to
@@ -271,10 +311,15 @@ controller label at which to continue execution.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>レジスタに値を割り当てるために押すべき、データ経路ボタンの名前
+(これは、コントローラ図での箱に対応する)。</li>
+<li>指定された検査を行う、<tt>test</tt> 命令。</li>
+<li>コントローラ・ラベルにより示される場所への、前の検査の結果に基づいた、条件分岐 (<tt>branch</tt> 命令)
+(検査と分岐は、まとめて、コントローラ図での菱形に対応する)。
+もし検査が偽なら、コントローラは、列における次の命令を続行すべきである。
+そうでなければ、コントローラは、当該ラベルの後の命令を続行すべきである。
+</li>
+<li>実行を続行すべき箇所のコントローラ・ラベルの名前を示す、無条件分岐 (<tt>goto</tt> 命令)。</li>
 </ul>
 
 <p class="orig" lang="en">The machine starts at the beginning of the controller instruction
@@ -283,6 +328,8 @@ Except when a branch changes the flow of control, instructions are
 executed in the order in which they are listed.</p>
 
 <p class="trans" lang="ja">
+マシンは、コントローラ命令列の最初から始めて、実行が列の最後に達したら停止する。
+分岐が制御の流れを変える場合を除いて、命令は、それら命令が並べられている順に実行される。
 </p>
 
 <figure>
@@ -316,6 +363,7 @@ executed in the order in which they are listed.</p>
 <figcaption class="trans" lang="ja"><b>図5.3.:</b> GCDマシンの仕様</figcaption>
 </figure>
 
+
 <p class="orig" lang="en">
 Figure <a href="#%_fig_5.3">5.3</a> shows the GCD machine described in
 this way.  This example only hints at the generality of these
@@ -324,6 +372,9 @@ register has only one button, and each button and test is used only
 once in the controller.</p>
 
 <p class="trans" lang="ja">
+図<a href="#%_fig_5.3">5.3</a>は、こうした方法で記述した GCD マシンを示している。
+この例は、単に、こうした記述の一般性をほのめかすのに過ぎない。なぜなら、GCD マシンは非常に単純な事例だからである。
+各レジスタには一つしかボタンがないし、各ボタンと各検査は、コントローラにおいてたった一度しか使われないのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -336,6 +387,9 @@ notation to combine the information from the data-path and controller
 descriptions so that we see it all together.</p>
 
 <p class="trans" lang="ja">
+あいにく、このような記述を読むのは難しい。
+コントローラ命令を理解するためには、絶えずボタン名や演算名の定義へと戻って参照せねばならないし、ボタンが何をするのかを理解するには、演算名の定義を参照しなくてはならないこともある。
+そのため、私たちは、データ経路記述とコントローラ記述からの情報を、すべて一緒に目に入るように結びつけるために、表記法を変形しよう。
 </p>
 
 <p class="orig" lang="en">
@@ -355,6 +409,11 @@ data-path description, leaving only the controller sequence.  Thus,
 the GCD machine is described as follows:</p>
 
 <p class="trans" lang="ja">
+この形式の記述を得るために、任意のボタン名および演算名を、その振る舞いで置き換えよう。
+つまり、(コントローラにおいて)「<tt>t&lt;-r</tt> というボタンを押せ」と述べつつ、別途 (データ経路において)「<tt>t&lt;-r</tt> というボタンは、<tt>rem</tt> という演算の値を、<tt>t</tt> というレジスタに割り当てる」および「<tt>rem</tt> という演算の入力は、<tt>a</tt> と <tt>b</tt> というレジスタの中身である」と述べる、とする代わりに、(コントローラにおいて)「<tt>a</tt> と <tt>b</tt> というレジスタの中身に対する <tt>rem</tt> という演算の値を <tt>t</tt> というレジスタに割り当てるボタンを、押せ」と述べることにしよう。
+同様に、(コントローラにおいて)「<tt>=</tt> の検査を実行せよ」と述べつつ、別途 (データ経路において)「<tt>=</tt> の検査は、<tt>b</tt> というレジスタの中身と、0 という定数とに対して、作用する」と述べる、とする代わりに、「<tt>b</tt> というレジスタの中身と、0 という定数とに対して、<tt>=</tt> の検査を実行せよ」と述べることにしよう。
+私たちは、データ経路記述を省略することになり、するとコントローラ列のみを残すことになる。
+よって、GCD マシンは、次のように記述される。
 </p>
 
 <p class="lisp">(controller
@@ -374,6 +433,7 @@ in figure <a href="#%_fig_5.3">5.3</a>, but it also has disadvantages:
 </p>
 
 <p class="trans" lang="ja">
+この形式の記述は、図<a href="#%_fig_5.3">5.3</a>に示した類の記述よりも読みやすいのだが、欠点もある。
 </p>
 
 <ul class="orig" lang="en">
@@ -396,8 +456,12 @@ operations.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li>大規模なマシンについては、より冗長になってしまう。というのも、データ経路要素の完全な記述が、当該要素がコントローラ命令列の中で言及されるたびに、繰り返されるからである (これは、GCD の事例では問題ではない。なぜなら、各演算と各ボタンが一度しか使われないためである)。
+さらに、データ経路記述を繰り返すことによって、マシンの実際のデータ経路構造を分かりにくくしてしまう。大規模マシンについては、レジスタや演算やボタンがいくつあるのかということや、それらがどのように互いに接続されているのかということが、明らかではない。</li>
+<li>マシン定義におけるコントローラ命令が Lisp 式のように見えるせいで、それらの命令が任意の Lisp 式ではないのだということを忘れやすい。
+それらは、ただ適法なマシン演算を表記できるのにすぎない。
+たとえば、演算は、定数、および、レジスタの中身に対してのみ、直接的に作用することができるのであって、他の演算の結果に対して直接的に作用することができるのではない。
+</li>
 </ul>
 
 <p class="orig" lang="en">In spite of these disadvantages, we will use this register-machine
@@ -407,6 +471,8 @@ connections in data paths.  We should keep in mind,
 however, that data-path design is crucial in designing real machines.</p>
 
 <p class="trans" lang="ja">
+これらの欠点にもかかわらず、私たちは本章全体を通じて、このレジスタ・マシン言語を使うことにしよう。なぜなら、データ経路における要素と接続を理解することよりも、コントローラを理解することの方に、私たちはより多くの関心を持つであろうから。
+しかし、現実のマシンを設計する際にはデータ経路設計が決定的に重要だということは、心に留めておくべきである。
 </p>
 
 <p class="orig" lang="en">
@@ -416,11 +482,13 @@ the iterative factorial machine of exercise <a href="#%_thm_5.1">5.1</a>.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5.2.</b> レジスタ・マシン言語を使って、練習問題<a href="#%_thm_5.1">5.1</a>の反復式の階乗マシンを記述せよ。
 </p>
 
 <a name="%_sec_Temp_714"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_714">Actions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja"><ruby><rb>動作</rb><rp> (</rp><rt>アクション</rt><rp>) </rp></ruby></h4>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5534"></a><a name="%_idx_5536"></a>
@@ -431,6 +499,8 @@ assume (as we do when we use <tt>read</tt> and <tt>display</tt> in Scheme) that
 they are available as primitive operations.<a name="call_footnote_Temp_715" href="#footnote_Temp_715"><sup><small>1</small></sup></a></p>
 
 <p class="trans" lang="ja">
+GCD を求めたい数をタイプ入力できるように、そして、自分の端末に答えを印字できるように、GCD マシンを改修しよう。
+読み込みや印字ができるマシンをどうやって作るのか、ということについては、議論しないでおこう。しかし、(Scheme で <tt>read</tt> と <tt>display</tt> を使うときにそう仮定するのと同じように) 原始的演算として <tt>read</tt> と <tt>display</tt> が利用可能なのだと仮定しよう<a href="#footnote_Temp_715"><sup><small>1</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -443,7 +513,11 @@ behavior, and thus will draw and notate the use of <tt>read</tt> just as
 we do any other operation that computes a value.</p>
 
 <p class="trans" lang="ja">
+<tt>read</tt> は、レジスタに格納できる値を作り出すという点においては、これまで使ってきた諸演算に似ている。
+しかし、<tt>read</tt> は、どのレジスタからの入力も取らない。<tt>read</tt> の値は、私たちが設計中のマシンの諸部品の外側で起こるような何かに、依存するのだ。
+私たちのマシンの演算がそうした振る舞いを有することを許すことにし、したがって、値を計算する任意の他の演算を描いたり表記したりするのとちょうど同じように、<tt>read</tt> の使用を描いたり表記したりしよう。
 </p>
+
 
 <p class="orig" lang="en">
 <a name="%_idx_5540"></a><tt>Print</tt>, on the other hand, differs from the operations we have
@@ -461,6 +535,15 @@ the action of printing the contents of register <tt>a</tt> is represented
 in a controller sequence by the instruction</p>
 
 <p class="trans" lang="ja">
+他方、<tt>print</tt> は、これまで使ってきた諸演算とは根本的な点で異なる。<tt>print</tt> は、レジスタに格納すべき出力値を生み出さないのだ。
+<tt>print</tt> は効果を有するが、この効果は、私たちが設計中のマシンの一部に対するものではない。
+この種の演算を<em>アクション</em>と呼ぶことにしよう。
+データ経路図では、値を計算する演算を表すのとちょうど同じように、アクションを——そのアクションの名前を含む台形として——表すことにしよう。
+矢印は、どの入力 (レジスタか定数) からでも、アクションの箱を指す。
+私たちは、ボタンもアクションに関連づける。
+ボタンを押すことで、そのアクションを起こす。
+コントローラにアクション・ボタンを押させるためには、<tt>perform</tt> と呼ばれる新たな種類の命令を使う。
+よって、<tt>a</tt> というレジスタの中身を印字するというアクションは、コントローラ列において、以下の命令により表される。
 </p>
 
 <p class="lisp">(perform (op print) (reg a))
@@ -475,6 +558,9 @@ This structure is like the driver loops we used in the interpreters of
 chapter 4.</p>
 
 <p class="trans" lang="ja">
+図<a href="#%_fig_5.4">5.4</a>は、新たな GCD マシン用のデータ経路とコントローラを示している。
+答えを印字した後にマシンを停止させる代わりに、私たちは、マシンに最初からやり直させる。するとその結果、マシンは繰り返し、一対の数を読み込み、それらの GCD を計算し、結果を印字する。
+この構造は、4章のインタプリタで使ったドライバ・ループと似ている。
 </p>
 
 <figure>
@@ -496,12 +582,14 @@ chapter 4.</p>
     (goto (label gcd-loop)))
 </p>
 <figcaption class="orig" lang="en"><b>Figure 5.4:</b>  A GCD machine that reads inputs and prints results.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.4.:</b> 入力を読み込んで結果を印字する GCD マシン</figcaption>
 </figure>
 
 <a name="%_sec_5.1.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.2">5.1.2  Abstraction in Machine Design</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.1.2 マシン設計での抽象化</h3>
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_5546"></a>
 We will often define a machine to include ``primitive'' operations that are
@@ -590,6 +678,7 @@ figure <a href="#%_fig_5.5">5.5</a>.</figcaption>
 described in section <a href="10_sec1_1.html#%_sec_1.1.7">1.1.7</a>:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(define (sqrt x)
@@ -1151,6 +1240,7 @@ procedures.  For each machine, write a controller instruction sequence
 and draw a diagram showing the data paths.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -1192,6 +1282,7 @@ execution.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -1202,6 +1293,7 @@ removed to make a faster machine.  Where are these instructions?
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <a name="%_sec_5.1.5"></a>
@@ -1292,6 +1384,8 @@ the implementation of a Lisp system is dedicated to making reading
 and printing work.</p>
 
 <p class="trans" lang="ja">
+この仮定は、大量の複雑性をごまかしている。
+普通、Lisp システムの実装の大部分は、読み込みと印字の作業に捧げられる。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_717" href="#call_footnote_Temp_717"><sup><small>2</small></sup></a> One might argue that we don't need to save the old

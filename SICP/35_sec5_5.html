@@ -584,6 +584,7 @@ of these <tt>save</tt> and <tt>restore</tt> operations are superfluous and
 thus could be eliminated by the compiler's <tt>preserving</tt> mechanism:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(f 'x 'y)
@@ -607,6 +608,7 @@ performs a similar optimization, by treating combinations with no
 operands as a special case.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1745,6 +1747,7 @@ call in the predicate and needed for the procedure call and the
 slightly different from the one given above:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(define (factorial-alt n)
@@ -1766,6 +1769,7 @@ program execute more efficiently than the other?
 <b>Exercise 5.34.</b>  <a name="%_idx_6408"></a><a name="%_idx_6410"></a>Compile the iterative factorial procedure</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -1909,6 +1913,7 @@ after-lambda1
 figure <a href="#%_fig_5.18">5.18</a>?</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <figure>
@@ -1997,6 +2002,7 @@ the argument list?
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2011,6 +2017,7 @@ Compare the code to that generated with the <tt>preserving</tt> mechanism intact
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2034,6 +2041,7 @@ might be compiled into something as simple as <a name="call_footnote_Temp_822" h
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(assign val (op lookup-variable-value) (const a) (reg env))
@@ -2236,6 +2244,7 @@ specified lexical address.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2247,6 +2256,7 @@ described above.  That is, add a compile-time-environment argument to
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2259,6 +2269,7 @@ environment during the compilation of expression &lt;<em>e1</em>&gt; is <tt>((y
 z) (a b c d e) (x y))</tt>.  <tt>Find-variable</tt> should produce</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(find-variable 'c '((y z) (a b c d e) (x y)))
@@ -2290,6 +2301,7 @@ Test the modified compiler on a few simple cases, such as the nested
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2306,6 +2318,7 @@ body.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2321,6 +2334,7 @@ exercise <a href="#%_thm_5.38">5.38</a> would still open-code it as a primitive,
 ignoring the new binding.  For example, consider the procedure</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(lambda (+ * a b x y)
@@ -2560,6 +2574,7 @@ stack use to the performance of a special-purpose machine for the same
 computation gives some indication of the quality of the compiler.</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -2605,6 +2620,7 @@ exercise <a href="#%_thm_5.45">5.45</a> to determine the effectiveness of
 compiling the tree-recursive Fibonacci procedure</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">(define (fib n)
@@ -2643,6 +2659,7 @@ entry point, and add an instruction to initialize it:
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp">  (assign compapp (label compound-apply))
@@ -2669,6 +2686,7 @@ interface by providing a <tt>compile-and-run</tt> primitive that can be
 called from within the explicit-control evaluator as follows:</p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="lisp"><i>;;; EC-Eval input:</i>
@@ -2700,6 +2718,7 @@ operations.''
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2713,6 +2732,7 @@ but getting all the details to work is an instructive exercise.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2726,6 +2746,7 @@ support.
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2737,6 +2758,7 @@ section <a href="26_sec4_1.html#%_sec_4.1">4.1</a> to produce a Scheme interpret
 </p>
 
 <p class="trans" lang="ja">
+<b>練習問題5..</b> 
 </p>
 
 <a name="footnotes"></a>
