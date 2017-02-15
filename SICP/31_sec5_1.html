@@ -975,7 +975,7 @@ subroutine calls.
 <p class="trans" lang="ja">
 <!-- 一つより多くの -->二つ以上のサブルーチンをともなうマシンが、複数個の継続レジスタ (たとえば、<tt>gcd-continue</tt> や <tt>factorial-continue</tt>) を使うことがあり得る。あるいは、すべてのサブルーチンに、単一の <tt>continue</tt> レジスタを共有させることもできよう。
 共有は、無駄がより少ない。しかし、別のサブルーチン (<tt>sub2</tt>) を呼び出すようなサブルーチン (<tt>sub1</tt>) がある場合は、注意深くあらねばならない。
-<tt>sub2</tt> への呼び出しのために <tt>continue</tt> を設定する前に、<tt>sub1</tt> が <tt>continue</tt> の中身を何らかの別のレジスタに保存するのでない限り、<tt>sub1</tt> は、自分が終了したときにどこへ行けばいいのかが分からないだろう。
+<tt>sub2</tt> への呼び出しのために <tt>continue</tt> を設定する前に、<tt>sub1</tt> が <tt>continue</tt> の中身を何らかの別のレジスタに退避するのでない限り、<tt>sub1</tt> は、自分が終了したときにどこへ行けばいいのかが分からないだろう。
 再帰を扱うために次節で開発される仕組みも、入れ子になったサブルーチン呼び出しという本問題に対する、より良い解決策を提供してくれる。
 </p>
 
@@ -983,7 +983,6 @@ subroutine calls.
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.4">5.1.4  Using a Stack to Implement Recursion</a></h3>
 <h3 class="trans" lang="ja">5.1.4 再帰を実装するためにスタックを使う</h3>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_5560"></a><a name="%_idx_5562"></a><a name="%_idx_5564"></a>
 <a name="%_idx_5566"></a>With the ideas illustrated so far, we can implement any iterative
 process by specifying a register machine that has a register
@@ -996,16 +995,20 @@ determined by the contents of the registers (the values of the state
 variables).</p>
 
 <p class="trans" lang="ja">
+ここまで説明してきた考え方を用いると、私たちは、プロセスの各状態変数に対応するレジスタを有するレジスタ・マシンの明細を規定することにより、どのような反復的プロセスも実装できる。
+何らかの終了条件が満たされるまで、マシンは、レジスタの中身を変更しながら、繰り返しコントローラ・ループを実行する。
+コントローラ列における各ポイントにおいて、マシンの状態 (反復的プロセスの状態を表す) は、完全に、レジスタの中身 (状態変数の値) によって定まる。
 </p>
 
 <p class="orig" lang="en">
-
 <a name="%_idx_5568"></a><a name="%_idx_5570"></a><a name="%_idx_5572"></a>Implementing recursive processes, however, requires an additional
 mechanism.  Consider the following recursive method for computing
 factorials, which we first examined in
 section <a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>:</p>
 
 <p class="trans" lang="ja">
+しかし、再帰的プロセスを実装することは、付加的な仕組みを要する。
+階乗を計算するための、以下の再帰的方法——<a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>節で最初に吟味したもの——を考えよう。
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -1018,6 +1021,9 @@ section <a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>:</p>
 (<em>n</em> - 1)!.  Our GCD machine, modeled on the procedure</p>
 
 <p class="trans" lang="ja">
+手続きから見てとれるように、<em class="en">n</em>! を計算することは、
+<span class="math">(<em class="en">n</em> &minus; 1)!</span> を計算することを要する。
+私たちの GCD マシン——以下の手続きについてモデル化されるもの——は、
 </p>
 
 <p class="lisp">(define (gcd a b)
@@ -1038,6 +1044,11 @@ the machine is finished solving the final GCD problem, it has
 completed the entire computation.</p>
 
 <p class="trans" lang="ja">
+同様に、別の GCD を計算せねばならなかった。
+しかし、<tt>gcd</tt> 手続き——元の計算を新たな GCD 計算へと帰着させる——と、<tt>factorial</tt> ——別の階乗を副問題として計算することを要する——との間には、重大な違いがある。
+GCD では、新たな GCD 計算に対する答えは、元の問題に対する答えである。
+次の GCD を計算するためには、単に、GCD マシンの入力レジスタに新たな引数を置いて、同じコントローラ列を実行することによってマシンのデータ経路を再利用するだけである。
+マシンが最終的な GCD 問題を解き終えたとき、マシンは、全体の計算を完了したところである。
 </p>
 
 <p class="orig" lang="en">
@@ -1056,6 +1067,14 @@ machine contains an infinite nest of similar machines and hence cannot
 be constructed from a fixed, finite number of parts.</p>
 
 <p class="trans" lang="ja">
+階乗 (または、任意の再帰的プロセス) の場合、新たな階乗副問題に対する答えは、元の問題に対する答えではない。
+最終的な答えを得るためには、
+<span class="math">(<em class="en">n</em> &minus; 1)!</span> 
+に対して得られた値が、<em class="en">n</em> と掛け合わせられなくてはならない。
+もし、GCD の設計を模倣しよう、そして、<tt>n</tt> レジスタをデクリメントして階乗マシンを再度動作させることで階乗の副問題を解決しよう、と試みたなら、結果に掛けるべき、<tt>n</tt> の古い値を、もはや利用可能に保っておけはしないだろう。
+よって、副問題について動作する第二の階乗マシンが必要である。
+この第二の階乗計算自体にも階乗副問題があり、それが第三の階乗マシンを必要とし、以下同様である。
+各階乗マシンが自身の内部に別の階乗マシンを含むため、全体のマシンは、類似のマシンの無限の入れ子を含み、したがって、固定の有限な個数の部品から構築することができない。
 </p>
 
 <p class="orig" lang="en">
@@ -1072,6 +1091,14 @@ suspend work on the main problem, reuse the same physical parts to
 work on the subproblem, then continue the suspended computation.</p>
 
 <p class="trans" lang="ja">
+それにもかかわらず、もし、マシンの入れ子になった各インスタンスについて同じ構成要素を使うように手筈を整えることができれば、階乗プロセスをレジスタ・マシンとして実装できるのだ。
+具体的には、<em class="en">n</em>! を計算するマシンは、同じ構成要素を使って、
+<span class="math">(<em class="en">n</em> &minus; 1)!</span> 
+を計算するという副問題や、
+<span class="math">(<em class="en">n</em> &minus; 2)!</span> 
+についての副問題などに対して、動作すべきである。
+これは、もっともらしい。というのも、階乗プロセスは、計算を実行するには同じマシンの無制限の個数の複製が必要だと指示しているわけだが、どの特定の時点においても、これらの複製のうちのたった一つしか、<ruby><rb>作動中</rb><rp> (</rp><rt>アクティブ</rt><rp>) </rp></ruby>である必要はないからである。
+マシンが再帰的な副問題に遭遇したら、マシンは、主問題についての作業を中断し、同じ物理的部品を再利用して副問題について動作し、その後、中断した計算を続ける、ということが可能なのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -1086,6 +1113,10 @@ we are finished computing the factorial of the decremented <tt>n</tt>
 register.<a name="call_footnote_Temp_717" href="#footnote_Temp_717"><sup><small>2</small></sup></a></p>
 
 <p class="trans" lang="ja">
+副問題では、レジスタの中身が、主問題のときのものとは異なるだろう 
+(この場合だと、<tt>n</tt> レジスタがデクリメントされる)。
+中断した計算を継続することができるようにするためには、マシンは、副問題が解かれた後に必要になるであろう任意のレジスタの中身を、中断した計算を継続するためにその中身を復元できるように、退避しなくてはならない。
+階乗の場合には、デクリメントした <tt>n</tt> レジスタの階乗を計算し終えたときに復元されるべき、<tt>n</tt> の古い値を、退避しよう<a href="#footnote_Temp_717"><sup><small>2</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -1103,10 +1134,15 @@ has been <tt>save</tt>d on the stack, a sequence of <tt>restore</tt>s will
 retrieve these values in reverse order.<a name="call_footnote_Temp_718" href="#footnote_Temp_718"><sup><small>3</small></sup></a></p>
 
 <p class="trans" lang="ja">
+入れ子になった再帰呼び出しの深さに対する、<em><ruby><rb>先験的</rb><rp> (</rp><rt>アプリオリ</rt><rp>) </rp></ruby></em>な制限は存在しないので、私たちは、任意の個数のレジスタ値を退避する必要があるかもしれない。
+これらの値は、これらの値が退避された順序の逆順で、復元されねばならない。なぜなら、再帰の入れ子では、入れられるべき最後の副問題は、終了すべき最初のものであるからだ。
+このことが、レジスタ値を退避するために、<em>スタック</em>——つまり、「後入れ先出し」のデータ構造——の使用を押し付けてくる。
+二種類の命令を追加することによって、スタックを含むようにレジスタ・マシン言語を拡張できる。
+値は、<tt>save</tt> 命令を用いてスタック上に置かれ、<tt>restore</tt> 命令を用いてスタックから復元される。
+一連の値がスタック上に <tt>save</tt> された後、一連の <tt>restore</tt> が、これらの値を逆順で取り出すだろう<a href="#footnote_Temp_718"><sup><small>3</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
-
 With the aid of the stack, we can reuse a single copy of the factorial
 machine's data paths for each factorial subproblem.  There is a
 similar design issue in reusing the controller sequence that operates
@@ -1130,10 +1166,21 @@ subproblem, but it will need the old value in order to return to the
 place that called it to solve a subproblem.</p>
 
 <p class="trans" lang="ja">
+スタックの助けを借りると、それぞれの階乗副問題に対して、階乗マシンのデータ経路ひとつを使い回すことが可能だ。
+データ経路を操作するコントローラ列を再利用する際における、同様の設計の問題もある。
+階乗計算を再実行するには、コントローラは、反復的プロセスの場合のように単純にループして最初に戻ることはできない。なぜなら、
+<span class="math">(<em class="en">n</em> &minus; 1)!</span>
+の副問題を解いた後、マシンは、依然として、その結果に <em class="en">n</em> を掛けなくてはならないからだ。
+コントローラは、自分の <em class="en">n</em>! の計算を中断し、
+<span class="math">(<em class="en">n</em> &minus; 1)!</span>
+の副問題を解き、それから、自分の <em class="en">n</em>! の計算を続行しなくてはならない。
+階乗計算のこの見方は、<a href="#%_sec_5.1.3">5.1.3</a>節で説明するサブルーチンの仕組み——列のうちの副問題を解く部分へと移り、それから、主問題について中断したところを続けるために、コントローラに <tt>continue</tt> レジスタを使わせる——を使うことを、示唆する。
+私たちは、このようにして、<tt>continue</tt> レジスタに記憶されたエントリ・ポイントへと戻る階乗サブルーチンを作ることができるのだ。
+階乗計算の各「レベル」は同じ <tt>continue</tt> レジスタを使うだろうから、各サブルーチン呼び出しをめぐっては、<tt>n</tt> レジスタを退避・復元するのとまさしく同様に <tt>continue</tt> を退避・復元する。
+つまり、階乗サブルーチンは、副問題のために自分自身を呼び出すときに、新たな値を <tt>continue</tt> に入れなくてはならないのだが、副問題を解くために自分を呼んだ場所へと戻るためには、古い値を必要とするだろう。
 </p>
 
 <p class="orig" lang="en">
-
 Figure <a href="#%_fig_5.11">5.11</a> shows the data paths and controller for
 a machine that implements the recursive <tt>factorial</tt> procedure.
 The machine has a stack and three registers, called <tt>n</tt>, <tt>val</tt>, and <tt>continue</tt>.  To simplify the data-path diagram, we have
@@ -1170,13 +1217,28 @@ computations need the original values of registers that are modified
 during solution of the subproblem (see exercise <a href="#%_thm_5.4">5.4</a>).</p>
 
 <p class="trans" lang="ja">
-</p>
+図<a href="#%_fig_5.11">5.11</a>は、再帰的な <tt>factorial</tt> 手続きを実装するマシンについてのデータ経路とコントローラを示している。
+このマシンには、スタックと、三つのレジスタ—— <tt>n</tt> と <tt>val</tt> と <tt>continue</tt> と呼ばれる——がある。
+データ経路図を簡略化するために、レジスタ割り当てのボタンには名前をつけず、ただスタック操作ボタンにだけ名前をつけた (レジスタを退避するための <tt>sc</tt> と <tt>sn</tt>、レジスタを復元するための <tt>rc</tt> と <tt>rn</tt>)。
+マシンを動作させるには、階乗を計算したい数を <tt>n</tt> というレジスタに入れ、そして、マシンを始動させる。
+マシンが <tt>fact-done</tt> に到達したら、計算は完了し、<tt>val</tt> レジスタの中に答えが見出されることだろう。
+コントローラ列においては、<tt>n</tt> と <tt>continue</tt> は、それぞれの再帰呼び出しの前に退避され、その呼び出しからの戻りの際に復元される。
+呼び出しから戻ることは、<tt>continue</tt> に記憶されている場所へと分岐することによって、達成される。
+マシンが始動するときに、<tt>continue</tt> は、直近の戻りが <tt>fact-done</tt> へ行くように初期化される。
+<tt>val</tt> レジスタは、階乗計算の結果を保持するものなのだが、これは再帰呼び出しの前には退避されない。なぜなら、<tt>val</tt> の古い中身は、サブルーチンが戻った後には有用ではないからだ。
+新しい値——副計算により生み出された値——のみが、必要とされる。
 
+階乗計算が原理的には無限のマシンを必要とするとはいえ、図<a href="#%_fig_5.11">5.11</a>のマシンは、実際のところ、スタック——潜在的には無制限である——を除いて有限である。
+しかし、スタックのいかなる特定の物理的実装も、有限の大きさのものとなるだろうし、このことは、そのマシンによって扱うことのできる再帰呼び出しの深さを制限するだろう。
+階乗のこの実装は、スタックによって増強された通常のレジスタ・マシンとして再帰的アルゴリズムを実現するための、一般的戦略を例示している。
+再帰的な副問題に遭遇すると、私たちは、副問題が解かれた後に現在の値が必要とされるであろうレジスタを、スタック上に退避し、その後、退避したレジスタを復元して主問題についての実行を続ける。
+<tt>continue</tt> レジスタは常に退避されねばならない。
+退避する必要のある他のレジスタがあるかどうかは、特定のマシンに依存する。なぜなら、副問題を解く間に改変されるレジスタの元の値を、すべての再帰的計算が必要とする訳ではないためである (練習問題<a href="#%_thm_5.4">5.4</a>を参照)。
+</p>
 
 <a name="%_sec_Temp_719"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_719">A double recursion</a></h4>
 <h4 class="trans" lang="ja">二重再帰</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5584"></a>Let us examine a more complex recursive process, the tree-recursive
@@ -1185,6 +1247,7 @@ section <a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>:
 </p>
 
 <p class="trans" lang="ja">
+より複雑な再帰的プロセス、すなわち、フィボナッチ数の木構造再帰計算——<a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>節で導入したもの——を吟味しよう。
 </p>
 
 <p class="lisp">(define (fib n)
@@ -1209,6 +1272,20 @@ Figure <a href="#%_fig_5.12">5.12</a> shows the controller sequence for this
 machine.</p>
 
 <p class="trans" lang="ja">
+階乗とちょうど同じように、再帰的フィボナッチ計算を、<tt>n</tt> と <tt>val</tt> と <tt>continue</tt> というレジスタを有するレジスタ・マシンとして、実装できる。
+そのマシンは、階乗用のものよりも複雑だ。なぜなら、コントローラ列には、再帰呼び出しを実行する必要のある場所が二箇所あるためだ—— 一度は、
+<span class="math">Fib(<em class="en">n</em> &minus; 1)</span>
+を計算するため、一度は、
+<span class="math">Fib(<em class="en">n</em> &minus; 2)</span>
+を計算するためのものである。
+これらの呼び出しのそれぞれについて準備するために、後で値が必要となるであろうレジスタを退避し、<tt>n</tt> レジスタを、Fib を再帰的に計算する必要のある数 
+(<span class="math"><em class="en">n</em> &minus; 1</span>
+または
+<span class="math"><em class="en">n</em> &minus; 2</span>) に設定し、
+主たる列における、戻るべきエントリ・ポイント (それぞれ、<tt>afterfib-n-1</tt> または <tt>afterfib-n-2</tt>) を、<tt>continue</tt> に割り当てる。
+それから、<tt>fib-loop</tt> へ行く。
+再帰呼び出しから戻ってきたら、答えが <tt>val</tt> の中にある。
+図<a href="#%_fig_5.12">5.12</a>は、このマシンについてのコントローラ列を示している。
 </p>
 
 <figure>
@@ -1216,12 +1293,16 @@ machine.</p>
 <img src="ch5-Z-G-6.gif" border="0">
 <p class="infig-lisp">(controller
    (assign continue (label fact-done))     <em>; set up final return address</em>
+                                           <em>; (最終的な戻りアドレスを設定する)</em>
  fact-loop
    (test (op =) (reg n) (const 1))
    (branch (label base-case))
    <em>;; Set up for the recursive call by saving <tt>n</tt> and <tt>continue</tt>.</em>
+   <em>;; (<tt>n</tt> と <tt>continue</tt> を退避することにより、再帰呼び出しについて準備する)</em>
    <em>;; Set up <tt>continue</tt> so that the computation will continue</em>
    <em>;; at <tt>after-fact</tt> when the subroutine returns.</em>
+   <em>;; (サブルーチンが戻ってきたときに、計算が <tt>after-fact</tt> において</em>
+   <em>;;  続行するように、<tt>continue</tt> を設定する)</em>
    (save continue)
    (save n)
    (assign n (op -) (reg n) (const 1))
@@ -1231,15 +1312,19 @@ machine.</p>
    (restore n)
    (restore continue)
    (assign val (op *) (reg n) (reg val))   <em>; <tt>val</tt> now contains</em> <em>n</em>(<em>n</em> - 1)!
+                                           <em>; (<tt>val</tt> にはここで n(n - 1)! が入っている)</em>
    (goto (reg continue))                   <em>; return to caller</em>
+                                           <em>; (呼び出し側へ戻る)</em>
  base-case
    (assign val (const 1))                  <em>; base case: </em>1! = 1
+                                           <em>; (基礎となる場合: 1! = 1)</em>
    (goto (reg continue))                   <em>; return to caller</em>
+                                           <em>; (呼び出し側へ戻る)</em>
  fact-done)
 </p>
 
 <figcaption class="orig" lang="en"><b>Figure 5.11:</b>  A recursive factorial machine.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5.11.:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.11.:</b> 再帰的階乗マシン</figcaption>
 <a name="%_idx_5586"></a>
 </figure>
 
@@ -1251,38 +1336,51 @@ machine.</p>
    (test (op &lt;) (reg n) (const 2))
    (branch (label immediate-answer))
    <em>;; set up to compute <em>F</em><em>i</em><em>b</em>(<em>n</em> - 1)</em>
+   <em>;; (Fib(n - 1) を計算するために設定する)</em>
    (save continue)
    (assign continue (label afterfib-n-1))
    (save n)                           <em>; save old value of <tt>n</tt></em>
+                                      <em>; (<tt>n</tt> の古い値を退避する)</em>
    (assign n (op -) (reg n) (const 1))<em>; clobber <tt>n</tt> to <em>n</em> - 1</em>
+                                      <em>; (<tt>n</tt> を叩いて n - 1 にする)</em>
    (goto (label fib-loop))            <em>; perform recursive call</em>
+                                      <em>; (再帰呼び出しを実行する)</em>
  afterfib-n-1                         <em>; upon return, <tt>val</tt> contains <em>F</em><em>i</em><em>b</em>(<em>n</em> - 1)</em>
+                                      <em>; (戻ったとき、<tt>val</tt> には Fib(n - 1) が入っている)</em>
    (restore n)
    (restore continue)
    <em>;; set up to compute <em>F</em><em>i</em><em>b</em>(<em>n</em> - 2)</em>
+   <em>;; (Fib(n - 2) を計算するために設定する)</em>
    (assign n (op -) (reg n) (const 2))
    (save continue)
    (assign continue (label afterfib-n-2))
    (save val)                         <em>; save <em>F</em><em>i</em><em>b</em>(<em>n</em> - 1)</em>
+                                      <em>; (Fib(n - 1) を退避する)</em>
    (goto (label fib-loop))
  afterfib-n-2                         <em>; upon return, <tt>val</tt> contains <em>F</em><em>i</em><em>b</em>(<em>n</em> - 2)</em>
+                                      <em>; (戻ったとき、<tt>val</tt> には Fib(n - 2) が入っている)</em>
    (assign n (reg val))               <em>; <tt>n</tt> now contains <em>F</em><em>i</em><em>b</em>(<em>n</em> - 2)</em>
+                                      <em>; (<tt>n</tt> にはここで Fib(n - 2) が入っている)</em>
    (restore val)                      <em>; <tt>val</tt> now contains <em>F</em><em>i</em><em>b</em>(<em>n</em> - 1)</em>
+                                      <em>; (<tt>val</tt> にはここで Fib(n - 1) が入っている)</em>
    (restore continue)
    (assign val                        <em>;  <em>F</em><em>i</em><em>b</em>(<em>n</em> - 1) +  <em>F</em><em>i</em><em>b</em>(<em>n</em> - 2)</em>
            (op +) (reg val) (reg n)) 
    (goto (reg continue))              <em>; return to caller, answer is in <tt>val</tt></em>
+                                      <em>; (呼び出し側に戻る。答えは <tt>val</tt> にある)</em>
  immediate-answer
    (assign val (reg n))               <em>; base case:  <em>F</em><em>i</em><em>b</em>(<em>n</em>) = <em>n</em></em>
+                                      <em>; (基礎となる場合: Fib(n) = n)</em>
    (goto (reg continue))
  fib-done)
 </p>
 
 <figcaption class="orig" lang="en"><b>Figure 5.12:</b>  Controller for a machine to compute Fibonacci
 numbers.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.12.:</b> フィボナッチ数を計算するマシンについてのコントローラ</figcaption>
 <a name="%_idx_5588"></a>
 </figure>
+
 
 <p class="orig" lang="en">
 <a name="%_thm_5.4"></a>
@@ -1291,7 +1389,8 @@ procedures.  For each machine, write a controller instruction sequence
 and draw a diagram showing the data paths.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.4.</b> 以下の手続きのそれぞれを実装するレジスタ・マシンの明細を規定せよ。
+それぞれのマシンについて、コントローラ命令列を書き、データ経路を示す図を描け。
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -1299,7 +1398,7 @@ and draw a diagram showing the data paths.</p>
 </ol>
 
 <ol class="trans alph" start="1" lang="ja">
-<li></li>
+<li>再帰的な指数関数</li>
 </ol>
 
 <p class="lisp"><a name="%_idx_5590"></a>(define (expt b n)
@@ -1313,7 +1412,7 @@ and draw a diagram showing the data paths.</p>
 </ol>
 
 <ol class="trans alph" start="2" lang="ja">
-<li></li>
+<li>反復的な指数関数</li>
 </ol>
 
 <p class="lisp">(define (expt b n)
@@ -1336,7 +1435,8 @@ execution.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.5.</b> (少なくとも一回の再帰呼び出しの実行を必要とする) 何らかの非自明な入力を用いて、階乗マシンとフィボナッチ・マシンを手作業でシミュレートせよ。
+実行中の重要なそれぞれの時点におけるスタックの中身を示せ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1350,7 +1450,8 @@ removed to make a faster machine.  Where are these instructions?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.6.</b> フィボナッチ・マシンのコントローラ列に、余計な <tt>save</tt> と余計な <tt>restore</tt> ——より高速なマシンを作るために取り除くことが可能である——があることに、ベン・ビットディドルは気づく。
+これらの命令は、どこにあるのだろう?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1358,7 +1459,7 @@ removed to make a faster machine.  Where are these instructions?
 
 <a name="%_sec_5.1.5"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.1.5">5.1.5  Instruction Summary</a></h3>
-<h3 class="trans" lang="ja">5.1.5 </h3>
+<h3 class="trans" lang="ja">5.1.5 命令のまとめ</h3>
 
 
 <p class="orig" lang="en"><a name="%_idx_5592"></a>
@@ -1369,6 +1470,10 @@ or <tt>(const &lt;<em>constant-value</em>&gt;)</tt>.
 </p>
 
 <p class="trans" lang="ja">
+私たちのレジスタ・マシン言語におけるコントローラ命令は、以下の形のうちの一つの形をしていて、ここで、
+&lt;<em class="en">input<sub><em class="en">i</em></sub></em>&gt; は、
+<tt>(reg &lt;<em class="en">register-name</em>&gt;)</tt> または
+<tt>(const &lt;<em class="en">constant-value</em>&gt;)</tt> のいずれかである。
 </p>
 
 <p class="orig" lang="en">
@@ -1377,6 +1482,7 @@ section <a href="#%_sec_5.1.1">5.1.1</a>:
 </p>
 
 <p class="trans" lang="ja">
+これらの命令は、<a href="#%_sec_5.1.1">5.1.1</a>節で導入された。
 </p>
 
 <p class="lisp"><a name="%_idx_5598"></a>(assign &lt;<em>register-name</em>&gt; (reg &lt;<em>register-name</em>&gt;))
@@ -1394,14 +1500,13 @@ section <a href="#%_sec_5.1.1">5.1.1</a>:
 <a name="%_idx_5610"></a>(goto (label &lt;<em>label-name</em>&gt;))
 </p>
 
-
 <p class="orig" lang="en">
 The use of registers to hold labels was introduced in
 section <a href="#%_sec_5.1.3">5.1.3</a>:
 </p>
 
-
 <p class="trans" lang="ja">
+ラベルを保持するためのレジスタの使用は、<a href="#%_sec_5.1.3">5.1.3</a>節で導入された。
 </p>
 
 <p class="lisp">(assign &lt;<em>register-name</em>&gt; (label &lt;<em>label-name</em>&gt;))
@@ -1415,6 +1520,7 @@ section <a href="#%_sec_5.1.4">5.1.4</a>:
 </p>
 
 <p class="trans" lang="ja">
+スタックを使うための命令は、<a href="#%_sec_5.1.4">5.1.4</a>節で導入された。
 </p>
 
 <p class="lisp"><a name="%_idx_5612"></a>(save &lt;<em>register-name</em>&gt;)
@@ -1433,6 +1539,12 @@ and <tt>(const ())</tt> is the empty list.
 </p>
 
 <p class="trans" lang="ja">
+ここまで見てきた &lt;<em class="en">constant-value</em>&gt; の唯一の種類は数であるが、今後は、文字列や、<ruby><rb>記号</rb><rp> (</rp><rt>シンボル</rt><rp>) </rp></ruby>や、リストを使うだろう。
+たとえば、
+<tt>(const &quot;abc&quot;)</tt> は <tt>&quot;abc&quot;</tt> という文字列であり、
+<tt>(const abc)</tt> は <tt>abc</tt> という記号であり、
+<tt>(const (a b c))</tt> は <tt>(a b c)</tt> というリストであり、
+<tt>(const ())</tt> は空リストである。
 </p>
 
 <a name="footnotes"></a>
@@ -1455,6 +1567,10 @@ works for factorial, it cannot work in general, since the old value of
 a register cannot always be computed from the new one.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_717"><sup><small>2</small></sup></a>
+古い <tt>n</tt> を退避する必要はない、と主張する人がいるかもしれない。
+これをデクリメントして副問題を解いた後に、単純にこれをインクリメントして古い値を回復できるだろう、と。
+この戦略は、階乗についてはうまく機能するのだが、一般にはうまく機能し得ない。なぜなら、レジスタの古い値は、常に新しい値から計算できるわけではないからだ。
 </p>
 
 
@@ -1463,6 +1579,8 @@ section <a href="33_sec5_3.html#%_sec_5.3">5.3</a> we will see how to implement 
 stack in terms of more primitive operations.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_718"><sup><small>3</small></sup></a>
+より原始的な演算を用いてスタックを実装する方法を、<a href="33_sec5_3.html#%_sec_5.3">5.3</a>節で見よう。
 </p>
 
 
