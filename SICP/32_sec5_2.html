@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="sicp.css" type="text/css">
 <base target="_top">
-<title>SICP私訳: 5.2 レジスタマシンのシミュレータ</title>
+<title>SICP私訳: 5.2 レジスタ・マシンのシミュレータ</title>
 <link rel="canonical" href="https://piyo-ko.github.io/SICP/32_sec5_2.html" />
 </head>
 <body>
@@ -12,7 +12,7 @@
 <div class="idx-bar">
 <nav>
 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<span class="status">翻訳待ち</span>
+<span class="status">推敲待ち</span>
 [
 <a href="00_cover.html">先頭へ</a> |
 <a href="31_sec5_1.html">前へ</a> |
@@ -56,9 +56,8 @@
 
 <a name="%_sec_5.2"></a>
 <h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.2">5.2  A Register-Machine Simulator</a></h2>
-<h2 class="trans" lang="ja">5.2 レジスタマシンのシミュレータ</h2>
+<h2 class="trans" lang="ja">5.2 レジスタ・マシンのシミュレータ</h2>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5622"></a><a name="%_idx_5624"></a>
 In order to gain a good understanding of the design of register
@@ -75,6 +74,12 @@ other three allow us to simulate the machine by manipulating the
 model:</p>
 
 <p class="trans" lang="ja">
+レジスタ・マシンの設計について良い理解を得るためには、自分の設計するマシンを検査して、そのマシンが期待通りに機能するかどうかを見なくてはならない。
+設計を検査するための一つの方法は、練習問題<a href="31_sec5_1.html#%_thm_5.5">5.5</a>でのように、コントローラの演算を手作業でシミュレートすることである。
+しかし、これは、最も単純なマシン以外のすべてにとって、極めてうんざりすることだ。
+本節では、レジスタ・マシン言語で記述されたマシンについての、シミュレータを構築する。
+そのシミュレータは、四つのインタフェイス手続きをともなう Scheme プログラムだ。
+第一のものは、レジスタ・マシンの記述を使って、そのマシンのモデル (その部品が、シミュレートすべきマシンの部品に対応するような、データ構造である) を構築する。残りの三つは、そのモデルを操作することによって私たちがそのマシンをシミュレートできるようにしてくれる。
 </p>
 
 <dl class="orig" lang="en">
@@ -100,17 +105,17 @@ stopping when it reaches the end of the sequence.</dd>
 </dl>
 
 <dl class="trans" lang="ja">
-<dt><tt></tt></dt>
-<dd></dd>
+<dt><tt>(make-machine &lt;<em class="en">register-names</em>&gt; &lt;<em class="en">operations</em>&gt; &lt;<em class="en">controller</em>&gt;)</tt></dt>
+<dd>は、与えられたレジスタと演算とコントローラをともなうマシンの、モデルを構築して返す。</dd>
 
-<dt><tt></tt></dt>
-<dd></dd>
+<dt><tt>(set-register-contents! &lt;<em class="en">machine-model</em>&gt; &lt;<em class="en">register-name</em>&gt; &lt;<em class="en">value</em>&gt;)</tt></dt>
+<dd>は、与えられたマシン内のシミュレートされているレジスタに、値を格納する。</dd>
 
-<dt><tt></tt></dt>
-<dd></dd>
+<dt><tt>(get-register-contents &lt;<em class="en">machine-model</em>&gt; &lt;<em class="en">register-name</em>&gt;)</tt></dt>
+<dd>は、与えられたマシン内のシミュレートされているレジスタの中身を返す。</dd>
 
-<dt><tt></tt></dt>
-<dd></dd>
+<dt><tt>(start &lt;<em class="en">machine-model</em>&gt;)</tt></dt>
+<dd>は、与えられたマシンの実行をシミュレートし、その際、コントローラ列の最初から始めて、列の終わりに達したら停止する。</dd>
 
 </dl>
 
@@ -120,6 +125,7 @@ As an example of how these procedures are used, we can define
 of section <a href="31_sec5_1.html#%_sec_5.1.1">5.1.1</a> as follows:</p>
 
 <p class="trans" lang="ja">
+これらの手続きがどのように使われるのか、という例として、私たちは、<a href="31_sec5_1.html#%_sec_5.1.1">5.1.1</a>節の GCD マシンのモデルとなるように、<tt>gcd-machine</tt> を以下のとおり定義できる。
 </p>
 
 <p class="lisp"><a name="%_idx_5634"></a>(define gcd-machine
@@ -144,6 +150,9 @@ The last argument specifies the controller as a list of labels and
 machine instructions, as in section <a href="31_sec5_1.html#%_sec_5.1">5.1</a>.</p>
 
 <p class="trans" lang="ja">
+<tt>make-machine</tt> に対する最初の引数は、レジスタ名のリストである。
+次の引数は、各演算名を、当該演算を実装する (つまり、同じ入力値を与えられると同じ出力値を生み出す) Scheme 手続きと対にするような、<ruby><rb>表</rb><rp> (</rp><rt>テーブル</rt><rp>) </rp></ruby> (2要素リストのリスト) である。
+最後の引数は、<a href="31_sec5_1.html#%_sec_5.1">5.1</a>節でのように、ラベルとマシン命令とのリストとして、コントローラの明細を規定する。
 </p>
 
 <p class="orig" lang="en">
@@ -153,6 +162,7 @@ simulation terminates:
 </p>
 
 <p class="trans" lang="ja">
+このマシンで GCD を計算するには、入力レジスタを設定し、マシンを始動させ、シミュレーションが終了したときに結果を検討する。
 </p>
 
 <p class="lisp">(set-register-contents! gcd-machine 'a 206)
@@ -170,6 +180,7 @@ written in Scheme, because we will simulate low-level machine
 instructions, such as <tt>assign</tt>, by much more complex operations.</p>
 
 <p class="trans" lang="ja">
+この計算は、Scheme で書かれた <tt>gcd</tt> 手続きよりも、ずっとゆっくり動作するだろう。なぜなら、 <tt>assign</tt> などの低水準のマシン命令を、もっとずっと複雑な演算によってシミュレートすることになるからだ。
 </p>
 
 <p class="orig" lang="en">
@@ -179,7 +190,7 @@ exercise <a href="31_sec5_1.html#%_thm_5.4">5.4</a>.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.7.</b> 君が<a href="31_sec5_1.html#%_thm_5.4">5.4</a>節で設計したマシンを、シミュレータを用いて検査せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -187,7 +198,7 @@ exercise <a href="31_sec5_1.html#%_thm_5.4">5.4</a>.
 
 <a name="%_sec_5.2.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.2.1">5.2.1  The Machine Model</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.2.1 マシン・モデル</h3>
 
 
 <p class="orig" lang="en">The machine model generated by <tt>make-machine</tt> is represented as a
@@ -200,6 +211,9 @@ stack, together with an execution mechanism that processes the controller
 instructions one by one.</p>
 
 <p class="trans" lang="ja">
+<tt>make-machine</tt> により生成されるマシン・モデルは、3章で開発したメッセージ<ruby><rb>渡し</rb><rp> (</rp><rt>パッシング</rt><rp>) </rp></ruby>の技法を用いる、局所状態つきの手続きとして、表現される。
+このモデルを構築するために、<tt>make-machine</tt> は、<tt>make-new-machine</tt> という手続きを呼び出して、すべてのレジスタ・マシンに共通なマシン・モデルの部品を構築することから始める。
+<tt>make-new-machine</tt> により構築される、この基本的マシン・モデルは、本質的には、コントローラ命令を一つずつ処理する実行機構を備えた、いくつかのレジスタと一つのスタックのための<ruby><rb>容れ物</rb><rp> (</rp><rt>コンテナ</rt><rp>) </rp></ruby>である。
 </p>
 
 <p class="orig" lang="en">
@@ -212,6 +226,10 @@ transform the controller list into instructions for the new machine
 and installs these as the machine's instruction sequence.  <tt>Make-machine</tt> returns as its value the modified machine model.</p>
 
 <p class="trans" lang="ja">
+<tt>make-machine</tt> は、それから、レジスタや、演算や、定義中の特定のマシンのコントローラを含むように、(この基本的モデルにメッセージを送ることによって) この基本的モデルを拡張する。
+まず、与えられたレジスタ名の各々に対して、新規マシン内のレジスタを割り当て、指定された演算をマシンにインストールする。
+それから、<em>アセンブラ</em> (以下の<a href="#%_sec_5.2.2">5.2.2</a>節において説明する) を用いて、コントローラ・リストを新規マシン用の命令群へと変換し、これらの命令を当該マシンの命令列としてインストールする。
+<tt>make-machine</tt> は、その値として、改変されたマシン・モデルを返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5638"></a>(define (make-machine register-names ops controller-text)
@@ -227,7 +245,7 @@ and installs these as the machine's instruction sequence.  <tt>Make-machine</tt>
 
 <a name="%_sec_Temp_724"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_724">Registers</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">レジスタ</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5640"></a>
@@ -236,6 +254,8 @@ chapter 3.  The procedure <tt>make-register</tt> creates a register that
 holds a value that can be accessed or changed:</p>
 
 <p class="trans" lang="ja">
+3章でのような局所状態つきの手続きとして、レジスタを表そう。
+<tt>make-register</tt> という手続きは、アクセスしたり、あるいは変更したりすることが可能な値を保持するレジスタを、作成する。
 </p>
 
 <p class="lisp"><a name="%_idx_5642"></a>(define (make-register name)
@@ -252,6 +272,7 @@ holds a value that can be accessed or changed:</p>
 <p class="orig" lang="en">The following procedures are used to access registers:</p>
 
 <p class="trans" lang="ja">
+レジスタにアクセスするのには、以下の手続きが使われる。
 </p>
 
 <p class="lisp"><a name="%_idx_5644"></a>(define (get-contents register)
@@ -273,6 +294,9 @@ of a list of the items on the stack.  A stack accepts requests to <tt>push</tt> 
 and return it, and to <tt>initialize</tt> the stack to empty.</p>
 
 <p class="trans" lang="ja">
+スタックも、局所状態つきの手続きとして表せる。
+<tt>make-stack</tt> という手続きは、局所状態が当該スタック上の<ruby><rb>項目</rb><rp> (</rp><rt>アイテム</rt><rp>) </rp></ruby>のリストからできているようなスタックを、作成する。
+スタックは、当該スタック上に項目を <ruby><rb><tt>push</tt> する</rb><rp> (</rp><rt>つむ</rt><rp>) </rp></ruby>よう求める要求や、当該スタックから先頭項目を <ruby><rb><tt>pop</tt> し</rb><rp> (</rp><rt>とりだし</rt><rp>) </rp></ruby>てその先頭項目を返すよう求める要求や、スタックを空に <ruby><rb><tt>initialize</tt></rb><rp> (</rp><rt>初期化</rt><rp>) </rp></ruby> するよう求める要求を、受け入れる。
 </p>
 
 <p class="lisp"><a name="%_idx_5650"></a>(define (make-stack)
@@ -300,6 +324,7 @@ and return it, and to <tt>initialize</tt> the stack to empty.</p>
 <p class="orig" lang="en">The following procedures are used to access stacks:</p>
 
 <p class="trans" lang="ja">
+スタックにアクセスするのには、以下の手続きが使われる。
 </p>
 
 <p class="lisp"><a name="%_idx_5652"></a>(define (pop stack)
@@ -313,7 +338,6 @@ and return it, and to <tt>initialize</tt> the stack to empty.</p>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_726">The basic machine</a></h4>
 <h4 class="trans" lang="ja">基本マシン</h4>
 
-
 <p class="orig" lang="en">
 The <tt>make-new-machine</tt> procedure, shown in
 figure <a href="#%_fig_5.13">5.13</a>, constructs an object whose local
@@ -326,6 +350,8 @@ register table, and the internal procedure <tt>lookup-register</tt> looks
 up registers in the table.</p>
 
 <p class="trans" lang="ja">
+スタックと、最初は空の命令列と、スタックを初期化する演算を最初は含んでいる演算リストと、<tt>flag</tt> および <tt>pc</tt> (「プログラム・カウンタ」の意) という名の二つのレジスタを最初は含んでいる<em>レジスタ表</em>と、からなる局所状態のオブジェクトを、図<a href="#%_fig_5.13">5.13</a>に示す <tt>make-new-machine</tt> の手続きは構築する。
+<tt>allocate-register</tt> という内部手続きは、レジスタ表に新たなエントリを追加し、<tt>lookup-register</tt> という内部手続きは、その表でレジスタを調べる。
 </p>
 
 <p class="orig" lang="en">
@@ -335,6 +361,9 @@ the result of the test (true or false).  <tt>Branch</tt> instructions
 decide whether or not to branch by examining the contents of <tt>flag</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>flag</tt> レジスタは、シミュレートされるマシンにおける分岐を制御するのに使われる。
+<tt>test</tt> 命令は、<tt>flag</tt> の中身を、当該<ruby><rb>検査</rb><rp> (</rp><rt>テスト</rt><rp>) </rp></ruby>の結果 (真または偽) に設定する。
+<tt>branch</tt> 命令は、<tt>flag</tt> の中身を調べることによって、分岐すべきかどうかを決定する。
 </p>
 
 <p class="orig" lang="en">
@@ -352,6 +381,11 @@ repeats this cycle until there are no more instructions to execute
 (i.e., until <tt>pc</tt> points to the end of the instruction sequence).</p>
 
 <p class="trans" lang="ja">
+<tt>pc</tt> レジスタは、マシンが動作する際、命令の排列を定める。
+この排列は、<tt>execute</tt> という内部手続きにより実装される。
+シミュレーション・モデルにおいて、各マシン命令は、引数なしの手続き——<em>命令実行手続き</em>と呼ばれる——を含むデータ構造であって、その結果、この手続きの呼び出しにより、命令の実行がシミュレートされる。
+シミュレーションが動作する間、<tt>pc</tt> は、実行すべき次の命令から始まる命令列の中の場所を指す。
+<tt>execute</tt> は、その命令を取得して、命令実行手続きを呼び出すことで当該命令を実行し、実行すべき命令がもうなくなるまで (つまり、<tt>pc</tt> が命令列の最後を指すまで) この一巡りを繰り返す。
 </p>
 
 <figure>
@@ -402,7 +436,7 @@ repeats this cycle until there are no more instructions to execute
 </p>
 <figcaption class="orig" lang="en"><b>Figure 5.13:</b>  The <tt>make-new-machine</tt> procedure, which implements
 the basic machine model.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5.13.:</b></figcaption>
+<figcaption class="trans" lang="ja"><b>図5.13.:</b> <tt>make-new-machine</tt> 手続き——基本的マシン・モデルを実装するもの</figcaption>
 </figure>
 
 <p class="orig" lang="en">
@@ -416,6 +450,10 @@ not produce an infinite loop because running the instruction execution
 procedure changes the contents of <tt>pc</tt>.</p>
 
 <p class="trans" lang="ja">
+自身の演算の一部として、各命令実行手続きは、実行すべき次の命令を示すように <tt>pc</tt> を変更する。
+<tt>branch</tt> 命令と <tt>goto</tt> 命令は、新たな行き先を示すように <tt>pc</tt> を変更する。
+他のすべての命令は、単純に <tt>pc</tt> を進め、<tt>pc</tt> に列の中の次の命令を 示させる。
+<tt>execute</tt> に対する各呼び出しが再度 <tt>execute</tt> を呼び出すけれども、命令実行手続きが <tt>pc</tt> の中身を変更するので、この呼び出しは無限ループを生み出したりはしない、ということに気づいてほしい。
 </p>
 
 <p class="orig" lang="en">
@@ -426,6 +464,8 @@ accomplished by setting <tt>pc</tt> to the beginning of the instruction
 sequence and calling <tt>execute</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>make-new-machine</tt> は、メッセージ渡しによる内部状態へのアクセスを実装している <tt>dispatch</tt> 手続きを返す。
+<tt>pc</tt> を命令列の先頭に設定して <tt>execute</tt> を呼び出すことによって、マシンを始動させることが達成されるのだ、ということに注意してほしい。
 </p>
 
 <p class="orig" lang="en">
@@ -435,6 +475,7 @@ as well as procedures to set and examine register contents,
 as specified at the beginning of section <a href="#%_sec_5.2">5.2</a>:</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_5.2">5.2</a>節の先頭で規定されているような、レジスタの中身を設定したり調べたりする手続きだけでなく、マシンの <tt>start</tt> 演算に対しても、便宜上、別の手続き的インタフェイスを提供する。
 </p>
 
 <p class="lisp"><a name="%_idx_5674"></a>(define (start machine)
@@ -453,6 +494,7 @@ given name in a given machine:
 
 
 <p class="trans" lang="ja">
+これらの手続き (および、<a href="#%_sec_5.2.2">5.2.2</a>節と<a href="#%_sec_5.2.3">5.2.3</a>節の多くの手続き) は、与えられたマシンにおける、与えられた名前のレジスタを調べるために、以下のものを使う。
 </p>
 
 <p class="lisp"><a name="%_idx_5680"></a>(define (get-register machine reg-name)
@@ -472,6 +514,8 @@ this case, the register-machine language) and we must perform an
 appropriate action for each type of expression in the language.</p>
 
 <p class="trans" lang="ja">
+アセンブラは、あるマシンについての一連のコントローラ式を、対応するマシン命令のリスト——マシン命令の各々は自分の実行手続きをともなっている——に変換する。
+全体として、アセンブラは、4章で研究した評価器にとても似ている——つまり、入力言語 (目下の場合はレジスタ・マシン言語) があり、当該言語における式の各種類について適切な動作を実行せねばならないのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -488,6 +532,10 @@ replace references to labels by pointers to the place in the
 instruction sequence that the label designates.</p>
 
 <p class="trans" lang="ja">
+各命令について実行手続きを生み出す技法は、まさにちょうど、実行時の実行から解析を分離することによって評価器を高速化するために<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節で使ったものである。
+4章で見たとおり、変数の実際の値を知ることなしに、Scheme式についての多くの有用な解析を実行し得る。
+ここでは、似たようにして、マシン・レジスタの実際の中身を知ることなしに、レジスタ・マシン言語の式についての多くの有用な解析を実行できる。
+たとえば、レジスタへの参照を、レジスタ・オブジェクトへのポインタで置き換えられるし、ラベルへの参照を、そのラベルが指定する、命令列中の場所へのポインタで置き換えられる。
 </p>
 
 <p class="orig" lang="en">
@@ -500,6 +548,9 @@ into that list.  Then the assembler augments the instruction list by
 inserting the execution procedure for each instruction.</p>
 
 <p class="trans" lang="ja">
+命令実行手続きを生成するまでに、アセンブラは、すべてのラベルが何を参照しているのかを知らねばならず、それゆえに、アセンブラは、命令からラベルを分離するためにコントローラ・テキストを走査することから始める。
+アセンブラは、テキストを走査するにつれて、命令のリストと、各ラベルをそのリスト内へのポインタと関連づける表の、双方を構築する。
+それから、アセンブラは、各命令について実行手続きを挿入することによって命令リストを拡張する。
 </p>
 
 <p class="orig" lang="en">
@@ -515,6 +566,11 @@ and returns the modified list.
 </p>
 
 <p class="trans" lang="ja">
+<tt>assemble</tt> 手続きは、アセンブラへの主たる入り口である。
+これは、コントローラ・テキストとマシン・モデルを引数としてとり、そのモデル内に格納すべき命令列を返す。
+<tt>assemble</tt> は、供給されたコントローラ・テキストから初期命令リストとラベル表を構築するために、<tt>extract-labels</tt> を呼び出す。
+<tt>extract-labels</tt> への第2引数は、これらの結果を処理するために呼ばれるべき手続きである。
+この手続きは、<tt>update-insts!</tt> を用いて、命令実行手続きを生成してそれらを命令リストに挿入し、変更したリストを返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5686"></a>(define (assemble controller-text machine)
@@ -534,6 +590,11 @@ data structures, each containing an instruction from <tt>text</tt>; and
 with the position in the list <tt>insts</tt> that the label designates.</p>
 
 <p class="trans" lang="ja">
+<tt>extract-labels</tt> は、引数として、<tt>text</tt> というリスト (コントローラ命令式の列) と <tt>receive</tt> という手続きをとる。
+<tt>receive</tt> は、二つの値——つまり、
+(1) <tt>insts</tt> という、命令データ構造のリストであって、各命令データ構造が <tt>text</tt> からの命令を含んでいるものと、
+(2) <tt>labels</tt> と呼ばれる表であって、<tt>text</tt> からの各ラベルを、<tt>insts</tt> というリスト内での当該ラベルが指定する位置と、関連づけているもの
+——とともに、呼び出されるだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_5688"></a>(define (extract-labels text receive)
@@ -559,6 +620,9 @@ added to the <tt>labels</tt> table.  Otherwise the element is accumulated
 onto the <tt>insts</tt> list.<a name="call_footnote_Temp_727" href="#footnote_Temp_727"><sup><small>4</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>extract-labels</tt> は、<tt>text</tt> の要素を順に走査して <tt>insts</tt> と <tt>labels</tt> を蓄積することによって、機能する。
+もし、要素が記号である (したがってラベルである) ならば、適宜のエントリが <tt>labels</tt> の表に追加される。
+それ以外の場合は、その要素が <tt>insts</tt> のリスト上に蓄積される<a href="#footnote_Temp_727"><sup><small>4</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -567,6 +631,7 @@ contains only the text of the instructions, to include the
 corresponding execution procedures:</p>
 
 <p class="trans" lang="ja">
+<tt>update-insts!</tt> は、命令リスト——最初は命令のテキストのみを含む——を、対応する実行手続きを含むように変更する。
 </p>
 
 <p class="lisp"><a name="%_idx_5702"></a>(define (update-insts! insts labels machine)
@@ -591,8 +656,9 @@ The execution procedure is not yet available when <tt>extract-labels</tt>
 constructs the instruction, and is inserted later by <tt>update-insts!</tt>.
 </p>
 
-
 <p class="trans" lang="ja">
+マシン命令データ構造は、単純に、命令テキストを、対応する実行手続きと対にしている。
+実行手続きは、<tt>extract-labels</tt> が命令を構築するときにはまだ利用可能ではなく、後で <tt>update-insts!</tt> によって挿入される。
 </p>
 
 <p class="lisp"><a name="%_idx_5704"></a>(define (make-instruction text)
@@ -609,14 +675,15 @@ constructs the instruction, and is inserted later by <tt>update-insts!</tt>.
 around for debugging (see exercise <a href="#%_thm_5.16">5.16</a>).</p>
 
 <p class="trans" lang="ja">
+命令テキストは、私たちのシミュレータによっては使われないが、そのままにしておくのがデバッグのためには便利である (練習問題<a href="#%_thm_5.16">5.16</a>を参照)。
 </p>
 
 <p class="orig" lang="en">
 Elements of the label table are pairs:
 </p>
 
-
 <p class="trans" lang="ja">
+ラベル表の要素は対である。
 </p>
 
 <p class="lisp"><a name="%_idx_5712"></a>(define (make-label-entry label-name insts)
@@ -627,6 +694,7 @@ Elements of the label table are pairs:
 </p>
 
 <p class="trans" lang="ja">
+以下により、表内においてエントリが調べられるだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_5714"></a>(define (lookup-label labels label-name)
@@ -643,7 +711,7 @@ Elements of the label table are pairs:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.8.</b> 以下のレジスタ・マシン・コードは、<tt>here</tt> というラベルが一度ならず定義されているため、曖昧である。
 </p>
 
 <p class="lisp">start
@@ -664,6 +732,8 @@ name is used to indicate two different locations.
 </p>
 
 <p class="trans" lang="ja">
+書いてあるようなシミュレータを使うと、制御が <tt>there</tt> に到達したときに、<tt>a</tt> というレジスタの中身はどうなるだろうか?
+同じラベル名が二つの異なる場所を示すのに使われていたら、アセンブラがエラーの合図をよこすように、<tt>extract-labels</tt> 手続きを修正せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -672,7 +742,6 @@ name is used to indicate two different locations.
 <a name="%_sec_5.2.3"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.2.3">5.2.3  Generating Execution Procedures for Instructions</a></h3>
 <h3 class="trans" lang="ja">5.2.3 命令用の実行手続きを生成する</h3>
-
 
 <p class="orig" lang="en"><a name="%_idx_5716"></a>
 The assembler calls <tt>make-execution-procedure</tt> to
@@ -683,6 +752,8 @@ instruction to generate the appropriate execution procedure.
 </p>
 
 <p class="trans" lang="ja">
+アセンブラは、命令用の実行手続きを生成するために、<tt>make-execution-procedure</tt> を呼び出す。
+<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節の評価器における <tt>analyze</tt> 手続きと同様に、これは、適切な実行手続きを生成するために、命令の種類に基づいて<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>を行う。
 </p>
 
 <p class="lisp"><a name="%_idx_5718"></a>(define (make-execution-procedure inst labels machine
@@ -716,11 +787,16 @@ we did for evaluators in section <a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>,
 by using syntax procedures to extract and classify the parts of an instruction.</p>
 
 <p class="trans" lang="ja">
+レジスタ・マシン言語における命令の各種類について、適切な実行手続きを構築する生成器がある。
+これらの手続きの詳細は、レジスタ・マシン言語における個々の命令の、<ruby><rb>文法</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby>と意味の両方を、定める。
+私たちは、データ抽象化を用いて、<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節で評価器のためにそうしたのとちょうど同じように、命令の諸部分を抽出・分類するための文法手続きを用いることにより、レジスタ・マシンの式の詳細な文法を一般的な実行の仕組みから分離する。
+<!-- レジスタ・マシンの式の詳細な文法を一般的な実行の仕組みから分離するために、私たちは、<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節で評価器のためにそうしたのとちょうど同じように、命令の諸部分を抽出・分類するための文法手続きを用いることにより、データ抽象化を用いる。
+ -->
 </p>
 
 <a name="%_sec_Temp_729"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_729"><tt>Assign</tt> instructions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja"><tt>assign</tt> 命令</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5720"></a>
@@ -729,6 +805,7 @@ The <tt>make-assign</tt> procedure handles <tt>assign</tt> instructions:
 
 
 <p class="trans" lang="ja">
+<tt>make-assign</tt> 手続きは、<tt>assign</tt> 命令を扱う。
 </p>
 
 <p class="lisp"><a name="%_idx_5722"></a>(define (make-assign inst machine labels operations pc)
@@ -753,6 +830,7 @@ from the <tt>assign</tt> instruction using the selectors
 </p>
 
 <p class="trans" lang="ja">
+<tt>make-assign</tt> は、目的のレジスタ (命令の2番目の要素) と、値の式 (当該命令を形成しているリストの残り) を、セレクタを用いて <tt>assign</tt> から抽出する。
 </p>
 
 <p class="lisp"><a name="%_idx_5724"></a>(define (assign-reg-name assign-instruction)
@@ -776,6 +854,12 @@ by separating program analysis from execution in the evaluator of
 section <a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>.</p>
 
 <p class="trans" lang="ja">
+目的のレジスタ・オブジェクトを作り出すために、<tt>get-register</tt> を使ってレジスタ名を調べる。
+値の式は、もしその値が演算の結果なら、<tt>make-operation-exp</tt> へと渡され、それ以外の場合は、<tt>make-primitive-exp</tt> へと渡される。
+これらの手続き (以下に示してある) は、値の式を構文解析して、その値についての実行手続きを作り出す。
+これは、引数なしの手続きで、<tt>value-proc</tt> と呼ばれるのだが、シミュレーションの間に評価されて、レジスタに割り当てられるべき実際の値を生み出すことになるだろう。
+レジスタ名を調べて値の式を構文解析するという作業が、ただ一度だけ——つまり、アセンブルするときに——行われるのであって、命令がシミュレートされるたびに行われるのではない、ということに注意してほしい。
+こうした作業の節約は、私たちが実行手続きを使う理由である。また、<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節の評価器において、実行からプログラム分析を分離することで得た、作業上の節約に、直接的に対応している。
 </p>
 
 <p class="orig" lang="en">
@@ -789,6 +873,9 @@ the <tt>pc</tt> to the next instruction by running the procedure
 
 
 <p class="trans" lang="ja">
+<tt>make-assign</tt> により返される結果は、<tt>assign</tt> 命令に対する実行手続きである。
+この手続きは、(マシン・モデルの <tt>execute</tt> 手続きによって) 呼び出されると、目的のレジスタの中身を、<tt>value-proc</tt> を実行することで得られた結果に設定する。
+それから、この手続きは、以下の手続きを実行することによって、<tt>pc</tt> を次の命令へと進める。
 </p>
 
 <p class="lisp"><a name="%_idx_5732"></a>(define (advance-pc pc)
@@ -799,11 +886,12 @@ the <tt>pc</tt> to the next instruction by running the procedure
 <tt>branch</tt> and <tt>goto</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>advance-pc</tt> は、<tt>branch</tt> と <tt>goto</tt> を除くすべての命令に対する、正常な終了である。
 </p>
 
 <a name="%_sec_Temp_730"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_730"><tt>Test</tt>, <tt>branch</tt>, and <tt>goto</tt> instructions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja"><tt>test</tt> 命令と <tt>branch</tt> 命令と <tt>goto</tt> 命令</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5734"></a><tt>Make-test</tt> handles <tt>test</tt> instructions in a similar way.  It
@@ -814,6 +902,9 @@ procedure for the condition is called, the result is assigned to the
 </p>
 
 <p class="trans" lang="ja">
+<tt>make-test</tt> は <tt>test</tt> 命令を類似の方法で扱う。
+<tt>make-test</tt> は、検査すべき条件を指定する式を抽出し、その式に対する実行手続きを生成する。
+シミュレーションのときには、その条件に対する手続きが呼ばれ、結果が <tt>flag</tt> レジスタに割り当てられ、<tt>pc</tt> が進められる。
 </p>
 
 <p class="lisp"><a name="%_idx_5736"></a>(define (make-test inst machine labels operations flag pc)
@@ -841,6 +932,9 @@ also that the label is looked up at assembly time, not each time the
 <tt>branch</tt> instruction is simulated.</p>
 
 <p class="trans" lang="ja">
+<tt>branch</tt> 命令に対する実行手続きは、<tt>flag</tt> レジスタの中身を調べ、(分岐が行われる場合に) <tt>pc</tt> の中身を分岐先に設定するか、または、(分岐が行われない場合に) ただ単に <tt>pc</tt> を進める。
+<tt>branch</tt> 命令において示される行き先がラベルでなくてはならないことと、<tt>make-branch</tt> 手続きがこのことを遵守させることに、注意してほしい。
+また、そのラベルはアセンブルを行うときに調べられるのであって、<tt>branch</tt> 命令がシミュレートされるたびに調べられるのではない、ということにも注意してほしい。
 </p>
 
 <p class="lisp"><a name="%_idx_5742"></a>(define (make-branch inst machine labels flag pc)
@@ -866,6 +960,7 @@ new destination.
 
 
 <p class="trans" lang="ja">
+<tt>goto</tt> 命令は、行き先がラベルかレジスタのいずれかとして指定され得るという点と、検査すべき条件が存在しない——つまり、<tt>pc</tt> が常に新たな行き先に設定される——という点を除いて、分岐と同様である。
 </p>
 
 <p class="lisp"><a name="%_idx_5748"></a>(define (make-goto inst machine labels pc)
@@ -889,7 +984,7 @@ new destination.
 
 <a name="%_sec_Temp_731"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_731">Other instructions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">その他の命令</h4>
 
 <p class="orig" lang="en">
 The stack instructions <tt>save</tt> and <tt>restore</tt> simply use the
@@ -897,6 +992,7 @@ stack with the designated register and advance the <tt>pc</tt>:
 </p>
 
 <p class="trans" lang="ja">
+<tt>save</tt> および <tt>restore</tt> というスタック命令は、単純に、指定されたレジスタとともにスタックを用い、<tt>pc</tt> を進める。
 </p>
 
 <p class="lisp"><a name="%_idx_5752"></a><a name="%_idx_5754"></a>(define (make-save inst machine stack pc)
@@ -923,6 +1019,8 @@ time, the action procedure is executed and the <tt>pc</tt> advanced.
 
 
 <p class="trans" lang="ja">
+最後の命令タイプは、<tt>make-perform</tt> により扱われるものなのだが、これは、行われるべき動作についての実行手続きを生成する。
+シミュレーションのときには、動作手続きが実行され、<tt>pc</tt> が進められる。
 </p>
 
 <p class="lisp"><a name="%_idx_5764"></a>(define (make-perform inst machine labels operations pc)
@@ -940,8 +1038,7 @@ time, the action procedure is executed and the <tt>pc</tt> advanced.
 
 <a name="%_sec_Temp_732"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_732">Execution procedures for subexpressions</a></h4>
-<h4 class="trans" lang="ja"></h4>
-
+<h4 class="trans" lang="ja">部分式についての実行手続き</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5768"></a><a name="%_idx_5770"></a><a name="%_idx_5772"></a>The value of a <tt>reg</tt>, <tt>label</tt>, or <tt>const</tt> expression
@@ -952,6 +1049,8 @@ during the simulation:
 </p>
 
 <p class="trans" lang="ja">
+<tt>reg</tt> 式、<tt>label</tt> 式、または <tt>const</tt> 式の値が、レジスタへの割り当てのために (<tt>make-assign</tt>)、または、演算への入力のために (以下の <tt>make-operation-exp</tt>)、必要とされることがある。
+これらの式についての値を、シミュレーションの間に生み出すための実行手続きを、以下の手続きが生成する。
 </p>
 
 <p class="lisp"><a name="%_idx_5774"></a>(define (make-primitive-exp exp machine labels)
@@ -977,6 +1076,7 @@ is determined by
 
 
 <p class="trans" lang="ja">
+<tt>reg</tt> 式と <tt>label</tt> 式と <tt>const</tt> 式の文法は、以下により定められる。
 </p>
 
 <p class="lisp"><a name="%_idx_5776"></a>(define (register-exp? exp) (tagged-list? exp 'reg))
@@ -998,6 +1098,8 @@ operand expressions from the instruction:
 </p>
 
 <p class="trans" lang="ja">
+<tt>assign</tt> 命令と <tt>perform</tt> 命令と <tt>test</tt> 命令は、(<tt>op</tt> 式により指定される) マシン演算の、(<tt>reg</tt> 式や <tt>const</tt> 式により指定される) 何らかのオペランドへの適用を、含むことがある。
+以下の手続きは、「演算式」用の実行手続き——命令からの、演算とオペランド式とを含むリスト——を作り出す。
 </p>
 
 <p class="lisp"><a name="%_idx_5790"></a>(define (make-operation-exp exp machine labels operations)
@@ -1014,6 +1116,7 @@ operand expressions from the instruction:
 </p>
 
 <p class="trans" lang="ja">
+演算式の文法は、以下により定められる。
 </p>
 
 <p class="lisp"><a name="%_idx_5792"></a>(define (operation-exp? exp)
@@ -1035,6 +1138,9 @@ the operation table for the machine:
 </p>
 
 <p class="trans" lang="ja">
+各オペランドについて実行手続きを生成する、という点において、演算式の扱いは、<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節の評価器における <tt>analyze-application</tt> 手続きによる手続き適用の扱いと、非常によく似ている。
+シミュレーションのときには、オペランド手続きを呼び出し、そして、その結果として生じる値に、当該演算をシミュレートするScheme手続きを適用する。
+シミュレーション手続きは、当該マシン用の演算表において演算名を調べることによって、見つかる。
 </p>
 
 <p class="lisp"><a name="%_idx_5798"></a>(define (lookup-prim symbol operations)
@@ -1053,7 +1159,8 @@ that operations can be used only with registers and constants.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.9.</b> 上記のマシン演算の取り扱いによって、これらマシン演算が定数やレジスタの中身に対して動作するのと同様に、ラベルに対しても動作することが可能となる。
+レジスタおよび定数とだけ演算を使える、という条件を強制するように、式を処理する手続きを改変せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1068,7 +1175,8 @@ syntax procedures in this section?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.10.</b> レジスタ・マシン命令のための新たな文法を設計し、君の新たな文法を使うようにシミュレータを改変せよ。
+本節の文法手続き以外はシミュレータのどの部分も変更しないで、君の新たな文法を実装することができるかい?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1082,7 +1190,7 @@ if you tried to restore a register that was not the last one saved, as
 in the sequence</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.11.</b> 以下のような並びにおける、退避された最後のレジスタではないレジスタを復元しようとした場合に、何が起こるだろうかということを、私たちは、<a href="31_sec5_1.html#%_sec_5.1.4">5.1.4</a>節で <tt>save</tt> と <tt>restore</tt> を導入したときには規定しなかった。
 </p>
 
 <p class="lisp">(save y)
@@ -1093,6 +1201,7 @@ in the sequence</p>
 <p class="orig" lang="en">There are several reasonable possibilities for the meaning of <tt>restore</tt>:</p>
 
 <p class="trans" lang="ja">
+<tt>restore</tt> の意味については、筋の通った可能性がいくつかある。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1115,9 +1224,16 @@ associate a separate stack with each register.  You should make the
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li><tt>(restore y)</tt> は、スタック上に退避された最後の値を、その値がどのレジスタに由来するかによらず、とにかく <tt>y</tt> に入れる。
+これは、私たちのシミュレータの振る舞い方である。
+この振る舞いを利用して <a href="31_sec5_1.html#%_sec_5.1.4">5.1.4</a>節 (図<a href="31_sec5_1.html#%_fig_5.12">5.12</a>) のフィボナッチ・マシンから命令を一つ削除する方法を示せ。</li>
+<li><tt>(restore y)</tt> は、スタック上に退避された最後の値を <tt>y</tt> に入れるのだが、それは、その値が <tt>y</tt> から退避された場合のみであり、それ以外の場合には、エラーを知らせる。
+このように振る舞うように、シミュレータを改変せよ。
+君は、値とともにレジスタ名をスタック上に置くように <tt>save</tt> を変更しなくてはならないだろう。</li>
+<li><tt>(restore y)</tt> は、他のどのレジスタが <tt>y</tt> の後に退避され、かつ、復元されていないのか、ということによらず、<tt>y</tt> から退避された最後の値を <tt>y</tt> に入れる。
+このように振る舞うように、シミュレータを改変せよ。
+君は、別々のスタックを各レジスタと関連づけなくてはならないだろう。
+君は、<tt>initialize-stack</tt> 演算に、すべてのレジスタ・スタックを初期化させるべきである。</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
@@ -1131,9 +1247,9 @@ the assembler to store the following information in the machine model:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.12.</b> 与えられたコントローラを有するマシンを実装するために必要とされるデータ経路を決定するのを手助けするために、シミュレータが使える。
+マシン・モデル内に以下の情報を格納するよう、アセンブラを拡張せよ。
 </p>
-
 
 <ul class="orig" lang="en">
 <li>a list of all instructions, with duplicates removed, sorted by
@@ -1153,10 +1269,13 @@ in the factorial machine of figure <a href="31_sec5_1.html#%_fig_5.11">5.11</a> 
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>すべての命令のリスト——ただし重複を除いたもの——であって、命令種別 (<tt>assign</tt> や <tt>goto</tt> など) によりソートされたもの。</li>
+<li>エントリ・ポイントを保持するのに使われるレジスタ (これらは <tt>goto</tt> 命令により参照されるレジスタである) の (重複なしの) リスト。</li>
+<li><tt>save</tt> または <tt>restore</tt> されるレジスタの (重複なしの) リスト。</li>
+<li>各レジスタについての、当該レジスタの割り当て元たる源の (重複なしの) リスト (たとえば、図<a href="31_sec5_1.html#%_fig_5.11">5.11</a>の階乗マシンでの <tt>val</tt> というレジスタについての源は、
+<tt>(const 1)</tt> と 
+<tt>((op *) (reg n) (reg val))</tt>
+である)。</li>
 </ul>
 
 <p class="orig" lang="en">Extend the
@@ -1166,6 +1285,8 @@ figure <a href="31_sec5_1.html#%_fig_5.12">5.12</a> and examine the lists you co
 </p>
 
 <p class="trans" lang="ja">
+この新たな情報へのアクセスを提供するように、マシンに対するメッセージ渡しインタフェイスを拡張せよ。
+君の解析器を検査するために、図<a href="31_sec5_1.html#%_fig_5.12">5.12</a>のフィボナッチ・マシンを定義して、君が構築したリストを検討せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1182,17 +1303,16 @@ instructions.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.13.</b> <tt>make-machine</tt> に対する引数としてレジスタのリストを要求するのではなく、むしろ、マシンにどういうレジスタがあるかを判定するためにシミュレータがコントローラ列を用いるように、シミュレータを改変せよ。
+<tt>make-machine</tt> においてレジスタを予め割り当てる代わりに、君は、命令をアセンブルする間に、レジスタが最初に見受けられたときに、レジスタを一度に一つずつ割り当てることができる。
 </p>
-
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
 <a name="%_sec_5.2.4"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.2.4">5.2.4  Monitoring Machine Performance</a></h3>
-<h3 class="trans" lang="ja"></h3>
-
+<h3 class="trans" lang="ja">5.2.4 マシン性能を監視する</h3>
 
 <p class="orig" lang="en"><a name="%_idx_5804"></a>
 <a name="%_idx_5806"></a>Simulation is useful not only for verifying the correctness of a
@@ -1208,6 +1328,10 @@ stack statistics, by initializing <tt>the-ops</tt> in <tt>make-new-machine</tt> 
 </p>
 
 <p class="trans" lang="ja">
+提案されたマシン設計の正しさを検証するためだけでなく、マシンの性能を計測するためにも、シミュレーションは有用である。
+たとえば、計算の際に使われるスタック演算の数を計測する「<ruby><rb>計器</rb><rp> (</rp><rt>メータ</rt><rp>) </rp></ruby>」を、私たちのシミュレーション・プログラムの中に仕込むことができる。
+これを行うために、私たちは、シミュレートされるスタックを、レジスタがスタック上に退避される回数と、スタックが到達する最大深さとを把握するように、改変する。そして、後に示すように、統計量を印字するスタックのインタフェイスに対するメッセージを追加する。<!--係り受けについて要・見直し-->
+また、スタックの統計量を印字するために、<tt>make-new-machine</tt> 内の <tt>the-ops</tt> を以下のように初期化することにより、基本的マシン・モデルに演算を追加する。
 </p>
 
 <p class="lisp"><a name="%_idx_5808"></a><a name="%_idx_5810"></a>(list (list 'initialize-stack
@@ -1219,8 +1343,8 @@ stack statistics, by initializing <tt>the-ops</tt> in <tt>make-new-machine</tt> 
 <p class="orig" lang="en">Here is the new version of <tt>make-stack</tt>:
 </p>
 
-
 <p class="trans" lang="ja">
+ここに <tt>make-stack</tt> の新バージョンを示す。
 </p>
 
 <p class="lisp"><a name="%_idx_5812"></a>(define (make-stack)
@@ -1261,15 +1385,14 @@ stack statistics, by initializing <tt>the-ops</tt> in <tt>make-new-machine</tt> 
     dispatch))
 </p>
 
-
 <p class="orig" lang="en">
 Exercises <a href="#%_thm_5.15">5.15</a> through <a href="#%_thm_5.19">5.19</a>
 describe other useful monitoring and debugging features that can be
 added to the register-machine simulator.</p>
 
 <p class="trans" lang="ja">
+練習問題<a href="#%_thm_5.15">5.15</a>から練習問題<a href="#%_thm_5.19">5.19</a>では、レジスタ・マシン・シミュレータに追加可能な、その他の有用な監視機能およびデバッグ機能を記述している。
 </p>
-
 
 <p class="orig" lang="en">
 <a name="%_thm_5.14"></a>
@@ -1291,7 +1414,13 @@ invoke <tt>get-register-contents</tt>, <tt>set-register-contents!</tt>, and
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.14.</b> 図<a href="31_sec5_1.html#%_fig_5.11">5.11</a>に示す階乗マシンを使って <em class="en">n</em> の様々な小さな値について <em class="en">n</em>! を計算するのに必要な、プッシュ回数と最大スタック深さを、計測せよ。
+任意の
+<span class="math"><em class="en">n</em> &gt; 1</span>
+について、<em class="en">n</em>! を計算する際に使われるプッシュ演算の総数と最大スタック深さについての、<em class="en">n</em> を使った式を、君のデータから定めよ。
+これら<span class="note"> (プッシュ演算の総数と最大スタック深さ) </span>の各々は、<em class="en">n</em> の線形関数であり、したがって、二つの定数により定まるのだ、ということに注意せよ。
+印字される統計量を得るために、君は、スタックを初期化する命令や統計量を印字する命令で階乗マシンを拡張しなくてはならないだろう。
+君は、マシンが <em class="en">n</em> の値を繰り返し読んではその階乗を計算して結果を印刷するように (図<a href="31_sec5_1.html#%_fig_5.4">5.4</a>で GCD マシンについて私たちが行ったのとちょうど同じように)、マシンを改変したい、とも思うかもしれないし、するとその結果、君は、<tt>get-register-contents</tt> と <tt>set-register-contents!</tt> と <tt>start</tt> を繰り返し呼び出さなくてもよくなるだろう。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1307,7 +1436,9 @@ resets the count to zero.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.15.</b> レジスタ・マシン・シミュレーションに、<em>命令計数</em>を追加せよ。
+つまり、実行された命令の数を、マシン・モデルに把握させよ。
+命令カウントの値を印字してカウントをゼロにリセットするような、新たなメッセージを受け入れるように、マシン・モデルのインタフェイスを拡張せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1322,7 +1453,9 @@ the text of the instruction.  Make the machine model accept <tt>trace-on</tt> an
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.16.</b> <em>命令追跡</em>に備えるように、シミュレータを拡張せよ。
+つまり、各命令を実行する前に、シミュレータは、その命令のテキストを印字すべきである。
+追跡をオンにしたりオフにしたりするための <tt>trace-on</tt> メッセージと <tt>trace-off</tt> メッセージを、マシン・モデルに受け付けさせよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1340,7 +1473,9 @@ You will have to make the simulator retain the necessary label information.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.17.</b> シミュレータが、命令を印字する前に、コントローラ列においてその命令の直前にある任意のラベルを印字するように、練習問題<a href="#%_thm_5.16">5.16</a>の命令追跡を拡張せよ。
+命令計数 (練習問題<a href="#%_thm_5.15">5.15</a>) を妨害しないような方法でこれを行うように、気をつけよ。
+君は、必要なラベル情報をシミュレータに記憶させておかねばならなくなるだろう。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1358,7 +1493,10 @@ to permit you to turn tracing on and off for designated machine registers.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.18.</b> レジスタを追跡できるように、<a href="#%_sec_5.2.1">5.2.1</a>節の <tt>make-register</tt> 手続きを改変せよ。
+レジスタは、追跡をオンにしたりオフにしたりするメッセージを受け付けるべきである。
+レジスタが追跡される場合、そのレジスタに値を割り当てることで、そのレジスタの名前と、そのレジスタの古い中身と、割り当て中の新たな値とを印字することになるべきである。
+指定されたマシン・レジスタについて、君が追跡をオンにしたりオフにしたりできるように、マシン・モデルに対するインタフェイスを拡張せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1373,12 +1511,11 @@ controller sequence where the simulator will stop and allow her to
 examine the state of the machine.  You are to implement a procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.19.</b> アリッサ・P・ハッカは、自分のマシン設計を自分がデバッグするのを手助けするための、シミュレータにおける<em>ブレイクポイント</em>機能を欲しがっている。
+君は、彼女のためにこの機能をインストールするよう、雇われたところだ。
+シミュレータが停止することになる、コントローラ列内における場所を指定できること、そして、自分がマシンの状態を調べられることを、彼女は望んでいる。
+君は、以下の手続きを実装するつもりである。
 </p>
-
-<p class="exercise"><span class="ex_comment">
-</span></p>
-
 
 <p class="lisp">(set-breakpoint &lt;<em>machine</em>&gt; &lt;<em>label</em>&gt; &lt;<em>n</em>&gt;)
 </p>
@@ -1387,6 +1524,8 @@ examine the state of the machine.  You are to implement a procedure</p>
 given label.  For example,</p>
 
 <p class="trans" lang="ja">
+なおこれは、与えられたラベルの後の <em class="en">n</em> 番目の命令の直前にブレイクポイントを設定するものである。
+たとえば、
 </p>
 
 <p class="lisp">(set-breakpoint gcd-machine 'test-b 4)
@@ -1400,6 +1539,10 @@ the state of the simulated machine.  She should then be able to
 continue execution by saying</p>
 
 <p class="trans" lang="ja">
+は、<tt>gcd-machine</tt> におけるブレイクポイントを、<tt>a</tt> というレジスタへの割り当ての直前に、設置する。
+シミュレータは、ブレイクポイントに到達すると、ラベルと、ブレイクポイントのオフセットとを印字し、命令を実行するのをやめる。
+すると、アリッサは、<tt>get-register-contents</tt> と <tt>set-register-contents!</tt> を用いて、シミュレートされているマシンの状態を操作できる。
+その後、彼女は、以下のように述べることで実行を続けることが可能であるべきである。
 </p>
 
 <p class="lisp">(proceed-machine &lt;<em>machine</em>&gt;)
@@ -1408,6 +1551,7 @@ continue execution by saying</p>
 <p class="orig" lang="en">She should also be able to remove a specific breakpoint by means of</p>
 
 <p class="trans" lang="ja">
+彼女は、以下の手段により、特定のブレイクポイントを取り除くこともできるべきだし、
 </p>
 
 <p class="lisp">(cancel-breakpoint &lt;<em>machine</em>&gt; &lt;<em>label</em>&gt; &lt;<em>n</em>&gt;)
@@ -1416,10 +1560,14 @@ continue execution by saying</p>
 <p class="orig" lang="en">or to remove all breakpoints by means of</p>
 
 <p class="trans" lang="ja">
+あるいは、以下の手段により、すべてのブレイクポイントを取り除くこともできるべきである。
 </p>
 
 <p class="lisp">(cancel-all-breakpoints &lt;<em>machine</em>&gt;)
 </p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <a name="footnotes"></a>
 <hr>
@@ -1431,6 +1579,9 @@ pair of values, is
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_727"><sup><small>4</small></sup></a>
+ここで <tt>receive</tt> 手続きを使うことは、二つの値—— <tt>labels</tt> と <tt>insts</tt> ——を保持するための複合データ構造を明示的に作ることなしに、<tt>extract-labels</tt> に実質的にこれら二つの値を返させるための方法である。
+別の実装——値の明示的な対を返す——は、以下のとおりであり、
 </p>
 
 <p class="lisp"><a name="%_idx_5692"></a>(define (extract-labels text)
@@ -1450,6 +1601,7 @@ pair of values, is
 </p>
 
 <p class="trans" lang="ja">
+これは、以下のようにして <tt>assemble</tt> により呼び出されるだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_5694"></a>(define (assemble controller-text machine)
@@ -1467,6 +1619,9 @@ also used continuations to implement the backtracking control
 structure in the <tt>amb</tt> evaluator in section <a href="28_sec4_3.html#%_sec_4.3.3">4.3.3</a>.</p>
 
 <p class="trans" lang="ja">
+君は、私たちの <tt>receive</tt> の使用法を、複数の値を返すための洗練された方法を実証するものだと見なすこともできるし、あるいは、単にプログラミングの秘訣をひけらかすための口実だと見なすこともできる。
+呼び出されるべき次の手続きである、<tt>receive</tt> のような引数は、「<ruby><rb>継続</rb><rp> (</rp><rt>コンティニュエーション</rt><rp>) </rp></ruby>」と呼ばれる。
+<a href="28_sec4_3.html#%_sec_4.3.3">4.3.3</a>節で、<tt>amb</tt> 評価器におけるバックトラッキング制御構造を実装するためにも継続を使ったことを思い出してほしい。
 </p>
 
 </div>
