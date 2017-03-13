@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="sicp.css" type="text/css">
 <base target="_top">
-<title>SICP私訳: 5.3 記憶装置の割り当てとガーベジ・コレクション (ごみあつめ) </title>
+<title>SICP私訳: 5.3 記憶割り当てとガーベジ・コレクション (ごみあつめ) </title>
 <link rel="canonical" href="https://piyo-ko.github.io/SICP/33_sec5_3.html" />
 </head>
 <body>
@@ -12,7 +12,7 @@
 <div class="idx-bar">
 <nav>
 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<span class="status">翻訳待ち</span>
+<span class="status">推敲待ち</span>
 [
 <a href="00_cover.html">先頭へ</a> |
 <a href="32_sec5_2.html">前へ</a> |
@@ -42,10 +42,8 @@
 <div class="main-txt">
 <a name="%_sec_5.3"></a>
 <h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.3">5.3  Storage Allocation and Garbage Collection</a></h2>
-<h2 class="trans" lang="ja">5.3 記憶装置の割り当てと<ruby><rb>ガーベジ・コレクション</rb><rp> (</rp><rt>ごみあつめ</rt><rp>) </rp></ruby></h2>
+<h2 class="trans" lang="ja">5.3 記憶割り当てと<ruby><rb>ガーベジ</rb><rp> (</rp><rt>ごみ</rt><rp>) </rp></ruby>・<ruby><rb>コレクション</rb><rp> (</rp><rt>あつめ</rt><rp>) </rp></ruby></h2>
 
-
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5828"></a><a name="%_idx_5830"></a>
 In section <a href="34_sec5_4.html#%_sec_5.4">5.4</a>, we will show how to implement a Scheme
@@ -61,6 +59,10 @@ structure can be represented in a way that is compatible with
 conventional computer memories.</p>
 
 <p class="trans" lang="ja">
+<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節では、どのようにして Scheme 評価器をレジスタ・マシンとして実装するのかを示そう。
+その議論を簡単化するために、私たちは、<em>リスト構造化されたメモリ</em>——そこでは、リスト構造化されたデータを操作するための基本的演算が原始的である——を自分たちのレジスタ・マシンに備えつけることができるのだ、と仮定しよう。
+そうしたメモリの存在を仮定することは、Scheme インタプリタにおける制御の仕組みに関心を集中させているときに有用な抽象化であるが、これは、現代のコンピュータの実際の原始的データ演算についての現実的な見方を反映しているわけではない。
+Lisp システムがどのように動作するかについての、より完全な描写を手に入れるために、私たちは、従来のコンピュータ・メモリと互換性のある方法でリスト構造をどのように表せるのか、ということを研究せねばならない。
 </p>
 
 <p class="orig" lang="en">
@@ -86,14 +88,21 @@ method we shall discuss in this section is called <em>garbage
 collection</em>.</p>
 
 <p class="trans" lang="ja">
+リスト構造を実装する際に考慮すべきことが二つある。
+一つ目は、純粋に表現の問題である。つまり、Lisp での対の「箱とポインタ」の構造を、典型的コンピュータ・メモリの格納能力とアドレシング能力のみを用いて、どのように表現するか、という点である。
+二つ目の問題は、計算が進むにつれてのメモリの管理についてのものである。
+Lisp システムの動作は、新たなデータ・オブジェクトを継続的に作成する能力に、決定定期に依存している。
+これらの新たなデータ・オブジェクトには、解釈されている最中の Lisp 手続きにより明示的に作成されるオブジェクト、および、インタプリタ自体により作成される構造——環境や引数リストなど——が含まれる。
+新たなデータ・オブジェクトを絶え間なく作成することは、迅速にアクセス可能な無限の量のメモリを備えたコンピュータに対しては、何の問題ももたらさないだろうが、コンピュータ・メモリは、(残念ながら) 有限の大きさでしか利用可能ではない。
+よって、Lisp システムは、無限のメモリという幻影を支えるために、<em>自動的<ruby><rb>記憶</rb><rp> (</rp><rt>ストレージ</rt><rp>) </rp></ruby><ruby><rb>割り当て</rb><rp> (</rp><rt>アロケーション</rt><rp>) </rp></ruby></em>手段を提供している。
+データ・オブジェクトがもう必要ではなくなると、そのデータ・オブジェクトに割り当てられているメモリが自動的に再利用され、新たなデータ・オブジェクトを構築するのに使われる。
+そうした自動記憶割り当てを提供するための、様々な技法がある。
+本節で私たちが議論することになる方法は、<em><ruby><rb>ガーベジ</rb><rp> (</rp><rt>ごみ</rt><rp>) </rp></ruby>・<ruby><rb>コレクション</rb><rp> (</rp><rt>あつめ</rt><rp>) </rp></ruby></em>と呼ばれる。
 </p>
-
 
 <a name="%_sec_5.3.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.3.1">5.3.1  Memory as Vectors</a></h3>
-<h3 class="trans" lang="ja"></h3>
-
-
+<h3 class="trans" lang="ja">5.3.1 ベクタとしてのメモリ</h3>
 
 <p class="orig" lang="en">A conventional computer memory can be thought of as an array of
 cubbyholes, each of which can contain a piece of information.  Each
@@ -107,6 +116,12 @@ memory locations and manipulated in machine registers.  The
 representation of list structure is one application of such <a name="%_idx_5838"></a><a name="%_idx_5840"></a><em>address arithmetic</em>.</p>
 
 <p class="trans" lang="ja">
+従来のコンピュータ・メモリは、小部屋の配列だと見なせて、それらの小部屋の各々は、一つの情報を含むことができる。
+各小部屋には、その小部屋の<em><ruby><rb>番地</rb><rp> (</rp><rt>アドレス</rt><rp>) </rp></ruby></em>または<em><ruby><rb>場所</rb><rp> (</rp><rt>ロケーション</rt><rp>) </rp></ruby></em>と呼ばれる、一意な名前がある。
+典型的メモリシステムは、二つの原始的操作——すなわち、指定された場所に格納されているデータを取ってくるものと、指定された場所に新たなデータを割り当てるもの——を提供する。
+メモリアドレスは、小部屋の何らかの集まりに対する逐次的アクセスをサポートするために、インクリメントされ得る。
+より一般的には、データ——メモリ上の場所に格納することができ、マシン・レジスタにおいて操作することができるもの——としてメモリアドレスを扱うことを、多くの重要なデータ操作が要求している。
+リスト構造の表現は、そうした<em>アドレス算術</em>の一つの応用である。
 </p>
 
 <p class="orig" lang="en">
@@ -118,6 +133,10 @@ index.<a name="call_footnote_Temp_744" href="#footnote_Temp_744"><sup><small>5</
 primitive Scheme procedures for manipulating vectors:</p>
 
 <p class="trans" lang="ja">
+コンピュータ・メモリをモデル化するために、私たちは、<em>ベクタ</em>と呼ばれる新たな種類のデータ構造を用いる。
+<!-- 抽象的には、ベクタとは、その個々の要素に、添え字には依存しない量の時間で、整数の添え字によってアクセスできるような、複合データ・オブジェクトである。 -->
+抽象的には、ベクタとは、整数の添え字を用いて、その添え字には依存しない量の時間で、個々の要素にアクセスできるような、複合データ・オブジェクトである<a  href="#footnote_Temp_744"><sup><small>5</small></sup></a>。
+メモリ演算を説明するために、ベクタを操作するための二つの原始的な Scheme 手続きを用いる。
 </p>
 
 <ul class="orig" lang="en">
@@ -129,8 +148,8 @@ the <em>n</em>th element of the vector to the designated value.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
+<li><tt>(vector-ref &lt;<em class="en">vector</em>&gt; &lt;<em class="en">n</em>&gt;)</tt> は、ベクタの <em class="en">n</em> 番目の要素を返す。</li>
+<li><tt>(vector-set! &lt;<em class="en">vector</em>&gt; &lt;<em class="en">n</em>&gt; &lt;<em class="en">value</em>&gt;)</tt> は、ベクタの <em class="en">n</em> 番目の要素を、指定された値に設定する。</li>
 </ul>
 
 <p class="orig" lang="en">For example, if <tt>v</tt> is a vector, then <tt>(vector-ref v 5)</tt> gets
@@ -142,13 +161,17 @@ that specifies the beginning location of a vector in memory with an
 <em>index</em> that specifies the offset of a particular element of the vector.</p>
 
 <p class="trans" lang="ja">
+例えば、もし <tt>v</tt> がベクタなら、
+<tt>(vector-ref v 5)</tt> 
+は、<tt>v</tt> というベクタの 5 番目のエントリを取得し、
+<tt>(vector-set! v 5 7)</tt>
+は、<tt>v</tt> というベクタの 5 番目のエントリの値を 7 に変更する<a href="#footnote_Temp_745"><sup><small>6</small></sup></a>。
+メモリにおけるベクタの開始位置を指定する<em>ベース・アドレス</em>を、そのベクタの特定の要素のオフセットを指定する<em><ruby><rb>添え字</rb><rp> (</rp><rt>インデックス</rt><rp>) </rp></ruby></em>と組み合わせるアドレス算術の使用を通じて、コンピュータ・メモリ用に、こうしたアクセスを実装できる。
 </p>
-
 
 <a name="%_sec_Temp_746"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_746">Representing Lisp data</a></h4>
-<h4 class="trans" lang="ja"></h4>
-
+<h4 class="trans" lang="ja">Lisp データを表現する</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5852"></a><a name="%_idx_5854"></a>
@@ -179,6 +202,21 @@ and <tt>cdr</tt> of the pair are stored.  The blank locations in <tt>the-cars</t
 structures (not of interest here).</p>
 
 <p class="trans" lang="ja">
+リスト構造化されたメモリに必要な基本的な対構造を実装するために、私たちはベクタを使える。
+コンピュータ・メモリが、二つのベクタ——すなわち、<tt>the-cars</tt> と <tt>the-cdrs</tt> ——に分割されているものと想像しよう。
+リスト構造を次のように表現する。
+対へのポインタは、これら二つのベクタに対する添え字である。
+その対の <tt>car</tt> は、<tt>the-cars</tt> の中における、指定された添え字を有するエントリであり、その対の <tt>cdr</tt> は、<tt>the-cdrs</tt> の中における、指定された添え字を有するエントリである。
+私たちは、対以外のオブジェクト (数や記号など) に対する表現と、ある一つの種類のデータを別の種類のデータと区別するための方法も、必要としている。
+これを達成する多くの方法があるが、それらの方法はどれも、<em>型つきのポインタ</em>を使うことへと——つまり、「ポインタ」の概念を、データ型についての情報を含むように拡張することへと——帰着する<a href="#footnote_Temp_747"><sup><small>7</small></sup></a>。
+データ型により、システムが、対 (「対」のデータ型と、メモリ・ベクタに対する添え字とからなる) に対するポインタを、別の種類のデータ (他の何らかのデータ型と、その型のデータを表現するのに使われているものなら何でもすべて、からなる) に対するポインタと区別することが可能となる。
+二つのデータ・オブジェクトは、もしそれらのポインタ同士が同じであれば、同一である (<tt>eq?</tt>) と見なされる<a href="#footnote_Temp_748"><sup><small>8</small></sup></a>。
+図<a href="#%_fig_5.14">5.14</a>は、<tt>((1 2) 3 4)</tt> というリストを表現するためにこの方法を使用することを図示しており、このリストの、箱とポインタによる図も示されている。
+データ型情報を表記するために、文字の接頭辞を使う。
+よって、5 という添え字の対へのポインタは <tt>p5</tt> と示され、空リストは <tt>e0</tt> というポインタにより示され、4 という数へのポインタは <tt>n4</tt> と示される。
+箱とポインタによる図においては、それぞれの対の左下に、その対の <tt>car</tt>
+と <tt>cdr</tt> がどこに格納されているのかを指定する、ベクタの添え字を示した。
+<tt>the-cars</tt> と <tt>the-cdrs</tt> における空白の場所は、(ここでは興味の対象外の) 他のリスト構造の一部を含んでいてもよい。
 </p>
 
 <figure>
@@ -186,7 +224,7 @@ structures (not of interest here).</p>
 <img src="ch5-Z-G-7.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 5.14:</b>  Box-and-pointer and memory-vector representations 
 of the list <tt>((1 2) 3 4)</tt>.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5.14.:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.14.:</b> <tt>((1 2) 3 4)</tt> というリストの、箱とポインタでの表現と、メモリ上のベクタでの表現</figcaption>
 </figure>
 
 <p class="orig" lang="en">
@@ -200,6 +238,8 @@ pointer designates a list in which the parts of the number are
 stored.<a name="call_footnote_Temp_750" href="#footnote_Temp_750"><sup><small>10</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>n4</tt> のような、数へのポインタは、4 という数の実際の表現をともなった、数値的データを示す型からなるかもしれない<a href="#footnote_Temp_749"><sup><small>9</small></sup></a>。
+一つのポインタに対して割り当てられた固定量の空間で表現するには大きすぎる数を扱うためには、別の<em>多倍長</em>データ型——これについて、ポインタは、数の諸部分が格納されているリストを指定する——を使うこともできるだろう<a href="#footnote_Temp_750"><sup><small>10</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -223,6 +263,13 @@ stored in the obarray.  This process of replacing character strings by
 unique pointers is called <a name="%_idx_5888"></a><a name="%_idx_5890"></a><em>interning</em> symbols.</p>
 
 <p class="trans" lang="ja">
+記号は、その記号の印字された表現を形成している文字の並びを指定する、型つきのポインタとして、表現されるかもしれない。
+この並びは、入力の中でその文字列に最初に遭遇した際に、Lisp 読み取り器により構築される。
+私たちは、二つの記号が「同じだ」と <tt>eq?</tt> によって認識されてほしいし、<tt>eq?</tt> がポインタ同士の等価性のための簡潔な検査であってほしい。よって、私たちは、もし読み取り器が同じ文字列を二回見たなら、読み取り器は双方の存在を表現するのに (文字の同じ並びに対する) 同じポインタを使うだろう、ということを保証せねばならない。
+これを達成するために、読み取り器は、自分が今までに遭遇したことのあるすべての記号の表——伝統的には<em><ruby><rb>obarray</rb><rp> (</rp><rt>オブジェクト配列</rt><rp>) </rp></ruby></em>と呼ばれる——を維持する。
+読み取り器は、文字列に遭遇して、まさに記号を構築しようとするとき、以前に同じ文字列を見たことがあるかどうかを確かめるために obarray を調べる。
+読み取り器は、もしその文字列を以前に見たことがあれば、obarray 内に格納されている記号ポインタを返す。
+文字列を一意なポインタで置き換えるという、この過程は、記号の<em><ruby><rb>インターン</rb><rp> (</rp><rt>とじこめ</rt><rp>) </rp></ruby></em>と呼ばれる。
 </p>
 
 
@@ -241,12 +288,16 @@ index a vector, or adding two numbers) use only the index portion of
 the typed pointer.</p>
 
 <p class="trans" lang="ja">
+上記の表現方式が与えられると、私たちは、レジスタ・マシンの各「原始的」リスト演算を、一つ以上の原始的ベクタ演算に置き換えられる。
+メモリ・ベクタを識別するのに、二つのレジスタ——つまり、<tt>the-cars</tt> と <tt>the-cdrs</tt> ——を使おう。そして、原始的演算として <tt>vector-ref</tt> と <tt>vector-set!</tt> が利用可能だと仮定しよう。
+また、ポインタに対する数値的演算 (ポインタをインクリメントしたり、ベクタに添え字をつけるための対ポインタを使ったり、あるいは、二つの数を足したり、といったもの) が、型つきポインタの添え字部分のみを用いる、ということも仮定する。
 </p>
 
 <p class="orig" lang="en">
 For example, we can make a register machine support the instructions</p>
 
 <p class="trans" lang="ja">
+たとえば、レジスタ・マシンに次の命令をサポートさせることができる——
 </p>
 
 <a name="%_idx_5896"></a><a name="%_idx_5898"></a>
@@ -258,6 +309,7 @@ For example, we can make a register machine support the instructions</p>
 <p class="orig" lang="en">if we implement these, respectively, as</p>
 
 <p class="trans" lang="ja">
+もし、これらをそれぞれ以下のように実装するならば。
 </p>
 
 <p class="lisp">(assign &lt;<em>reg<sub>1</sub></em>&gt; (op vector-ref) (reg the-cars) (reg &lt;<em>reg<sub>2</sub></em>&gt;))
@@ -268,6 +320,7 @@ For example, we can make a register machine support the instructions</p>
 <p class="orig" lang="en">The instructions</p>
 
 <p class="trans" lang="ja">
+以下の命令は、
 </p>
 
 <a name="%_idx_5900"></a><a name="%_idx_5902"></a>
@@ -280,8 +333,8 @@ For example, we can make a register machine support the instructions</p>
 <p class="orig" lang="en">are implemented as
 </p>
 
-
 <p class="trans" lang="ja">
+次のように実装される。
 </p>
 
 <p class="lisp">(perform
@@ -290,7 +343,6 @@ For example, we can make a register machine support the instructions</p>
 (perform
  (op vector-set!) (reg the-cdrs) (reg &lt;<em>reg<sub>1</sub></em>&gt;) (reg &lt;<em>reg<sub>2</sub></em>&gt;))
 </p>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5904"></a><tt>Cons</tt> is performed by allocating an unused index and storing the
@@ -302,6 +354,9 @@ pointer to find the next free location.<a name="call_footnote_Temp_752" href="#f
 For example, the instruction</p>
 
 <p class="trans" lang="ja">
+<tt>cons</tt> は、使われていない添え字を割り当てることと、その添え字のついたベクタ位置において、<tt>the-cars</tt> と <tt>the-cdrs</tt> の中に、<tt>cons</tt> に対する引数を格納することにより、実行される。
+次に利用可能な添え字を含む対ポインタを常に保持する、<tt>free</tt> という特別なレジスタが存在する、ということを仮定し、また、次の空いている場所を見つけるためにそのポインタの添え字部分をインクリメントすることができる、と仮定する<a href="#footnote_Temp_752"><sup><small>11</small></sup></a>。
+たとえば、次の命令は、
 </p>
 
 <p class="lisp">(assign &lt;<em>reg<sub>1</sub></em>&gt; (op cons) (reg &lt;<em>reg<sub>2</sub></em>&gt;) (reg &lt;<em>reg<sub>3</sub></em>&gt;))
@@ -311,6 +366,7 @@ For example, the instruction</p>
 operations:<a name="call_footnote_Temp_753" href="#footnote_Temp_753"><sup><small>12</small></sup></a></p>
 
 <p class="trans" lang="ja">
+以下の一連のベクタ演算として実装される<a href="#footnote_Temp_753"><sup><small>12</small></sup></a>。
 </p>
 
 <p class="lisp">(perform
@@ -324,6 +380,7 @@ operations:<a name="call_footnote_Temp_753" href="#footnote_Temp_753"><sup><smal
 <p class="orig" lang="en">The <tt>eq?</tt> operation</p>
 
 <p class="trans" lang="ja">
+<tt>eq?</tt> 演算は、
 </p>
 
 <p class="lisp">(op eq?) (reg &lt;<em>reg<sub>1</sub></em>&gt;) (reg &lt;<em>reg<sub>2</sub></em>&gt;)
@@ -333,13 +390,12 @@ operations:<a name="call_footnote_Temp_753" href="#footnote_Temp_753"><sup><smal
 <a name="%_idx_5910"></a><a name="%_idx_5912"></a><a name="%_idx_5914"></a><a name="%_idx_5916"></a>predicates such as <tt>pair?</tt>, <tt>null?</tt>, <tt>symbol?</tt>, and <tt>number?</tt> need only check the type field.</p>
 
 <p class="trans" lang="ja">
+単に、レジスタ内のすべてのフィールドの等価性を検査するだけであり、<tt>pair?</tt> や <tt>null?</tt> や <tt>symbol?</tt> や <tt>number?</tt> などの述語は、ただ型フィールドを調べるだけでよい。
 </p>
-
 
 <a name="%_sec_Temp_754"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_754">Implementing stacks</a></h4>
 <h4 class="trans" lang="ja">スタックを実装する</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5918"></a>
@@ -348,8 +404,12 @@ here, since stacks can be modeled in terms of lists.  The stack can be
 a list of the saved values, pointed to by a special register <tt>the-stack</tt>.  Thus, <tt>(save &lt;<em>reg</em>&gt;)</tt> can be implemented as</p>
 
 <p class="trans" lang="ja">
+私たちのレジスタ・マシンはスタックを使うが、ここでは特別なことを何もしなくてよい。というのも、リストを用いてスタックをモデル化できるからだ。
+スタックは、保存された値のリストであってもよく、それは、<tt>the-stack</tt> という特別なレジスタによって指されている。
+よって、
+<tt>(save &lt;<em class="en">reg</em>&gt;)</tt> 
+を次のように実装できる。
 </p>
-
 
 <a name="%_idx_5920"></a>
 <p class="lisp">(assign the-stack (op cons) (reg &lt;<em>reg</em>&gt;) (reg the-stack))
@@ -359,6 +419,9 @@ a list of the saved values, pointed to by a special register <tt>the-stack</tt>.
 </p>
 
 <p class="trans" lang="ja">
+同様に、
+<tt>(restore &lt;<em class="en">reg</em>&gt;)</tt> 
+を次のように実装できるし、
 </p>
 
 <p class="lisp">(assign &lt;<em>reg</em>&gt; (op car) (reg the-stack))
@@ -369,6 +432,8 @@ a list of the saved values, pointed to by a special register <tt>the-stack</tt>.
 </p>
 
 <p class="trans" lang="ja">
+<tt>(perform (op initialize-stack))</tt> 
+を次のように実装できる。
 </p>
 
 <p class="lisp">(assign the-stack (const ()))
@@ -382,6 +447,9 @@ accomplished by incrementing or decrementing an index into that
 vector.</p>
 
 <p class="trans" lang="ja">
+上記で与えられたベクタ演算を用いて、これらの演算をさらに拡張できる。
+しかし、従来のコンピュータ・アーキテクチャでは、通常は、別個のベクタとしてスタックを割り当てるのが好都合である。
+そして、スタックをプッシュしたりポップしたりすることは、そのベクタに対する添え字をインクリメントしたりデクリメントしたりすることによって、達成できる。
 </p>
 
 <p class="orig" lang="en">
@@ -391,7 +459,7 @@ representation (as in figure <a href="#%_fig_5.14">5.14</a>) of the
 list structure produced by</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.20.</b> 以下により作り出されるリスト構造の、(図<a href="#%_fig_5.14">5.14</a>でのような) 箱とポインタによる表現およびメモリ・ベクタ表現を、描け。
 </p>
 
 <p class="lisp">(define x (cons 1 2))
@@ -403,6 +471,9 @@ value of <tt>free</tt> ?  What pointers represent the values of <tt>x</tt> and <
 </p>
 
 <p class="trans" lang="ja">
+なお、ここで、<tt>free</tt> ポインタは最初 <tt>p1</tt> である。
+<tt>free</tt> の最終的な値は何か?
+どのポインタが、<tt>x</tt> と <tt>y</tt> の値を表しているか?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -415,7 +486,8 @@ Assume that the list-structure memory operations are available as
 machine primitives.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.21.</b> 以下の手続きについてのレジスタ・マシンを実装せよ。
+リスト構造のメモリ演算が、マシンのプリミティブとして利用可能であるものと仮定せよ。
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -423,7 +495,7 @@ machine primitives.</p>
 </ol>
 
 <ol class="trans alph" start="1" lang="ja">
-<li></li>
+<li>再帰的な <tt>count-leaves</tt>:</li>
 </ol>
 
 <p class="lisp">(define (count-leaves tree)
@@ -438,7 +510,7 @@ machine primitives.</p>
 </ol>
 
 <ol class="trans alph" start="2" lang="ja">
-<li></li>
+<li>明示的なカウンタつきの再帰的な <tt>count-leaves</tt>:</li>
 </ol>
 
 <p class="lisp">(define (count-leaves tree)
@@ -464,7 +536,10 @@ available as primitive operations.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.22.</b> <a href="22_sec3_3.html#%_sec_3.3.1">3.3.1</a>節の練習問題<a href="22_sec3_3.html#%_thm_3.12">3.12</a>は、二つのリストを足し合わせて新たなリストを形成する <tt>append</tt> 手続きと、二つのリストを一つに継ぎ合わせる <tt>append!</tt> 手続きとを提示した。
+これらの手続きの各々を実装するレジスタ・マシンを設計せよ。
+リスト構造のメモリ演算が、原始的演算として利用可能であるものと仮定せよ。
+
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -472,7 +547,7 @@ available as primitive operations.
 
 <a name="%_sec_5.3.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.3.2">5.3.2  Maintaining the Illusion of Infinite Memory</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.3.2 無限メモリという幻影を維持する</h3>
 
 <a name="%_idx_5930"></a>
 <p class="orig" lang="en">
@@ -486,8 +561,12 @@ computation are used only to hold intermediate results.  After these
 results are accessed, the pairs are no longer needed -- they are <em>garbage</em>.  For instance, the computation</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_5.3.1">5.3.1</a>節で概要を説明した表現手法は、リスト構造を実装する問題を解決する——無限の量のメモリがあるとすれば、ではあるが。
+現実のコンピュータでは、新たな対を構築すべき空き場所を、遂には使い果たしてしまうだろう href="#footnote_Temp_758"><sup><small>13</small></sup></a>。
+しかし、典型的な計算において生成される対のほとんどは、中間的な結果を保持するためだけに使われる。
+これらの結果がアクセスされた後には、それらの対はもはや不要だ——それらは<em><ruby><rb>ごみ</rb><rp> (</rp><rt>ガーベジ</rt><rp>) </rp></ruby></em>なのだ。
+たとえば、以下の計算は、
 </p>
-
 
 <p class="lisp">(accumulate + 0 (filter odd? (enumerate-interval 0 n)))
 </p>
@@ -501,6 +580,9 @@ pairs, we will have preserved the illusion that there is an infinite
 amount of memory.</p>
 
 <p class="trans" lang="ja">
+二つのリストを構築する——数え上げと、その数え上げをフィルタにかけた結果である。
+蓄積が完了すると、これらのリストはもはや不要であり、割り当てられたメモリを再利用することができる。
+もし、定期的にすべてのごみを収集するように手配できるなら、かつ、これが、新たな対を構築するのとほぼ同じ速度でメモリを再利用するのだと分かれば、私たちは、無限の量のメモリが存在するのだという幻影を、保ち続けていることだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -516,6 +598,10 @@ the pointers that are currently in the machine registers.<a name="call_footnote_
 that is not so accessible may be recycled.</p>
 
 <p class="trans" lang="ja">
+対を再利用するためには、割り当て済みのどの対が (対の中身がもはや計算の将来に影響を与えることがあり得ない、という意味で) 不要なのかを判定する方法を持たねばならない。
+これを達成するために私たちが検討することになる方法は、<em><ruby><rb>ガーベジ</rb><rp> (</rp><rt>ごみ</rt><rp>) </rp></ruby>・<ruby><rb>コレクション</rb><rp> (</rp><rt>あつめ</rt><rp>) </rp></ruby></em>として知られる。
+Lisp 解釈におけるどの瞬間においても、計算の将来に影響を与えることができるオブジェクトとは、ただ、マシン・レジスタに今あるポインタから始まる、ある一連の <tt>car</tt> 演算と <tt>cdr</tt> 演算により到達できるオブジェクトだけなのだ、という観察結果に、ガーベジ・コレクションは、基づいている<a href="#footnote_Temp_759"><sup><small>14</small></sup></a>。
+そのようにしてアクセス可能なのではないメモリセルは、どれも再利用されうる。
 </p>
 
 <p class="orig" lang="en">
@@ -538,11 +624,20 @@ copy the useful pairs into the new free memory (which was the old
 working memory).<a name="call_footnote_Temp_760" href="#footnote_Temp_760"><sup><small>15</small></sup></a></p>
 
 <p class="trans" lang="ja">
+ガーベジ・コレクションを実行するには多くの方法がある。
+ここで私たちが吟味することになる方法は、<em>ストップ・アンド・コピー</em>と呼ばれる。
+基本的な考え方は、メモリを半分ずつに——「ワーキングメモリ」と「空きメモリ」に——分けることである。
+<tt>cons</tt> は、対を構築するとき、これらの対をワーキングメモリに割り当てる。
+ワーキングメモリが満杯のとき、私たちは、ワーキングメモリ中のすべての有用な対の場所を突き止めて、これらの対を空きメモリ内の連続する場所に複製することによって、ガーベジ・コレクションを行う (マシン・レジスタから始めて、すべての <tt>car</tt> ポインタと <tt>cdr</tt> ポインタを追跡することによって、有用な対の場所が突き止められる)。
+ごみは複製しないので、新たな対を割り当てるのに使用可能な付加的な空きメモリが、おそらくは存在するだろう。
+さらに、ワーキングメモリ中の何物も、必要ではない。というのも、ワーキングメモリ中のすべての有用な対は複製済みだからである。
+よって、もしワーキングメモリと空きメモリの役割を交換すれば、処理を続けられる。新たな対は、新ワーキングメモリ内に (旧空きメモリだったところに) 割り当てられるだろう。
+これが満杯になったら、新空きメモリ内に (旧ワーキングメモリだったところに) 有用な対を複製できる<a href="#footnote_Temp_760"><sup><small>15</small></sup></a>。
 </p>
 
 <a name="%_sec_Temp_761"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_761">Implementation of a stop-and-copy garbage collector</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">ストップ・アンド・コピー方式のガーベジ・コレクタの実装</h4>
 
 <p class="orig" lang="en">
 We now use our register-machine language to describe the stop-and-copy
@@ -558,6 +653,11 @@ vectors whose base addresses are in <a name="%_idx_5968"></a><a name="%_idx_5970
 and <tt>the-cdrs</tt>, and the free memory is in registers called <a name="%_idx_5972"></a><a name="%_idx_5974"></a><tt>new-cars</tt> and <tt>new-cdrs</tt>.</p>
 
 <p class="trans" lang="ja">
+ここで、私たちのレジスタ・マシン言語を用いて、より詳しくストップ・アンド・コピー・アルゴリズムを記述する。
+アクセス可能なすべてのデータを最終的には指している構造へのポインタを含む、<tt>root</tt> と呼ばれるレジスタがある、と仮定する。
+これは、<tt>root</tt> により指された、予め割り当てられたリストに、ガーベジ・コレクションを始める直前に、すべてのマシン・レジスタの中身を格納することによって、手筈を整えることができる<a href="#footnote_Temp_762"><sup><small>16</small></sup></a>。
+また、有用なデータを複製できるような、利用可能な空きメモリが、現在のワーキングメモリに加えて更に存在する、ということも仮定する。
+現在のワーキングメモリは、<tt>the-cars</tt> および <tt>the-cdrs</tt> と呼ばれるレジスタにベース・アドレスがあるようなベクタからなり、空きメモリの方は、<tt>new-cars</tt> および <tt>new-cdrs</tt> と呼ばれるレジスタにある。
 </p>
 
 <p class="orig" lang="en">
@@ -576,6 +676,10 @@ Figure <a href="#%_fig_5.15">5.15</a> shows the arrangement of memory just
 before and just after garbage collection.</p>
 
 <p class="trans" lang="ja">
+ガーベジ・コレクションは、現在のワーキングメモリ内の空きセルを使い果たしたとき——つまり、<tt>cons</tt> 演算が、メモリ・ベクタの末尾よりも先へと <tt>free</tt> ポインタをインクリメントしようと試みたとき——に、引き起こされる。
+ガーベジ・コレクション・プロセスが完了すると、<tt>root</tt> ポインタは新たなメモリ内を指していることだろうし、<tt>root</tt> からアクセス可能なすべてのオブジェクトはその新たなメモリへ移動済みになっているだろうし、<tt>free</tt> ポインタはその新たなメモリ内で新たな対を割り当て可能な次の場所を示していることだろう。
+さらに、ワーキングメモリと新たなメモリの役割が入れ替わっていることだろう——つまり、新たな対は、<tt>free</tt> により示される場所から始まる新たなメモリ内に構築されるだろう——し、(以前の) ワーキングメモリが次のガーベジ・コレクションでは新たなメモリとして利用可能になるだろう。
+図<a href="#%_fig_5.15">5.15</a>は、ガーベジ・コレクションの直前と直後のメモリの配置を示している。
 </p>
 
 <figure>
@@ -583,9 +687,8 @@ before and just after garbage collection.</p>
 <img src="ch5-Z-G-8.gif" border="0">
 <figcaption class="orig" lang="en"><b>Figure 5.15:</b>  Reconfiguration of memory by the garbage-collection 
 process.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5.15:</b>  </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.15:</b> ガーベジ・コレクション・プロセスによるメモリの再構成</figcaption>
 </figure>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5976"></a><a name="%_idx_5978"></a>The state of the garbage-collection process is controlled by
@@ -603,6 +706,15 @@ address</em> that points at the location to which the object has been
 moved.</p>
 
 <p class="trans" lang="ja">
+ガーベジ・コレクション・プロセスの状態は、二つのポインタ—— <tt>free</tt> と <tt>scan</tt> ——を維持することによって、制御される。
+これらは、新たなメモリの先頭を指すように、初期化される。
+本アルゴリズムは、<tt>root</tt> によって指されている対を、新たなメモリ先頭へと再配置することから始まる。
+その対を複製し、新たな場所を指すように <tt>root</tt> ポインタを調整し、<tt>free</tt> ポインタをインクリメントする。
+さらに、その対のかつての場所には、その中身が移動済みだと示すように、印をつける。
+この印づけは、次のように行われる。
+<tt>car</tt> 位置には、これは既に移動されたオブジェクトなのだと知らせる、特別なタグを置く
+(そうしたオブジェクトは、伝統的には<ruby><rb>失意</rb><rp> (</rp><rt>ブロークン・ハート</rt><rp>) </rp></ruby>と呼ばれる)<a name="call_footnote_Temp_763" href="#footnote_Temp_763"><sup><small>17</small></sup></a>。
+<tt>cdr</tt> 位置には、そのオブジェクトが移動された先の位置を指す、<em>転送先アドレス</em>を置く。
 </p>
 
 <p class="orig" lang="en">
@@ -628,8 +740,14 @@ at which point the <tt>scan</tt> pointer will overtake the <tt>free</tt>
 pointer and the process will terminate.</p>
 
 <p class="trans" lang="ja">
+<ruby><rb>根</rb><rp> (</rp><rt>ルート</rt><rp>) </rp></ruby> を再配置した後、ガーベジ・コレクタは、基本的サイクルに入る。
+本アルゴリズムの各ステップにおいて、<tt>scan</tt> ポインタ (最初は、再配置されたルートを指している) は、新たなメモリに移動済みだけれども自分の <tt>car</tt> ポインタと <tt>cdr</tt> ポインタはまだかつてのメモリ内のオブジェクトを参照している、という対を、指している。
+これらのオブジェクトをそれぞれ再配置し、<tt>scan</tt> ポインタをインクリメントする。
+あるオブジェクト (たとえば、いま走査している最中の対の <tt>car</tt> ポインタにより示されるオブジェクト) を再配置するには、そのオブジェクトが既に移動されているかどうか (そのオブジェクトの <tt>car</tt> 位置のブロークン・ハート・タグの存在によって示される) を調べる。
+もしそのオブジェクトが移動済みでなければ、<tt>free</tt> により示される場所にそのオブジェクトを複製し、<tt>free</tt> を更新し、そのオブジェクトのかつての場所にブロークン・ハートを設定し、そのオブジェクトへのポインタ (この例では、いま走査している最中の対の <tt>car</tt> ポインタ) を、新たな位置を指すように更新する。
+もしそのオブジェクトが移動済みなら、いま走査している最中の対のポインタを、その転送先アドレス (ブロークン・ハートの <tt>cdr</tt> 位置で見つかる) に置き換える。
+最後には、アクセス可能なすべてのオブジェクトが移動済みかつ走査済みとなることだろう。そして、その時点で、<tt>scan</tt> ポインタが <tt>free</tt> ポインタを追い越しているだろうし、プロセスが終了するだろう。
 </p>
-
 
 <p class="orig" lang="en">
 We can specify the stop-and-copy algorithm as a sequence of
@@ -646,6 +764,12 @@ accomplished, we install the new pointer as the new <tt>root</tt> and
 enter the main loop of the garbage collector.</p>
 
 <p class="trans" lang="ja">
+ストップ・アンド・コピー・アルゴリズムを、レジスタ・マシン用の命令列として、規定できる。
+オブジェクトを再配置する基本的ステップは、<tt>relocate-old-result-in-new</tt> と呼ばれるサブルーチンにより達成される。
+このサブルーチンは、引数——すなわち、再配置すべきオブジェクトへのポインタ——を、<tt>old</tt> という名前のレジスタから得る。
+このサブルーチンは、指定されたオブジェクトを再配置し (その過程で <tt>free</tt> をインクリメントする)、再配置したオブジェクトへのポインタを <tt>new</tt> という名前のレジスタに入れ、<tt>relocate-continue</tt> というレジスタに記憶されているエントリ・ポイントへと分岐することによって戻る。
+ガーベジ・コレクションを始めるには、<tt>free</tt> と <tt>scan</tt> を初期化し手から、このサブルーチンを呼び出して <tt>root</tt> ポインタを再配置する。
+<tt>root</tt> の再配置を成し遂げたら、新たなポインタを新たな <tt>root</tt> として組み込み、ガーベジ・コレクタのメイン・ループに入る。
 </p>
 
 <p class="lisp">begin-garbage-collection
@@ -671,6 +795,11 @@ the <tt>car</tt> of the next pair (by placing the <tt>car</tt> pointer in <tt>ol
 subroutine will return to update the <tt>car</tt> pointer.</p>
 
 <p class="trans" lang="ja">
+ガーベジ・コレクタのメイン・ループでは、走査すべきオブジェクトがさらにあるかどうかを判定せねばならない。
+私たちはこれを、<tt>scan</tt> ポインタが <tt>free</tt> ポインタと一致するかどうかを調べることによって、行う。
+もしポインタ同士が等しければ、アクセス可能なすべてのオブジェクトは再配置済みであり、<tt>gc-flip</tt> ——割り込まれた計算を続行できるように、ものを片付ける——へと分岐する。
+もし走査すべき対がまだあれば、再配置サブルーチンを呼び出して、次の対の <tt>car</tt> を再配置する (<tt>car</tt> ポインタを <tt>old</tt> に置くことによって)。
+<tt>relocate-continue</tt> レジスタは、サブルーチンが戻って <tt>car</tt> ポインタを更新するように、設定される。
 </p>
 
 <p class="lisp">gc-loop
@@ -681,7 +810,6 @@ subroutine will return to update the <tt>car</tt> pointer.</p>
   (goto (label relocate-old-result-in-new))
 </p>
 
-
 <p class="orig" lang="en">
 At <tt>update-car</tt>, we modify the <tt>car</tt> pointer of the pair being
 scanned, then proceed to relocate the <tt>cdr</tt> of the pair.  We
@@ -690,6 +818,9 @@ After relocating and updating the <tt>cdr</tt>, we are finished scanning
 that pair, so we continue with the main loop.</p>
 
 <p class="trans" lang="ja">
+<tt>update-car</tt> では、走査中の対の <tt>car</tt> ポインタを改変し、それから、その対の <tt>cdr</tt> の再配置を始める。
+その再配置を成し遂げたら、<tt>update-cdr</tt> へと戻る。
+<tt>cdr</tt> を再配置して更新し終わったら、その対を走査するのを終えているわけで、すると、メイン・ループを続行する。
 </p>
 
 <p class="lisp">update-car
@@ -725,6 +856,13 @@ to hold the <tt>car</tt> or the <tt>cdr</tt> of the object pointed at by
 <tt>old</tt>.<a name="call_footnote_Temp_764" href="#footnote_Temp_764"><sup><small>18</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>relocate-old-result-in-new</tt> というサブルーチンは、以下のようにオブジェクトを再配置する。
+もし再配置すべきオブジェクト (<tt>old</tt> により指されている) が対でなければ、そのままのオブジェクトへの同じポインタを (<tt>new</tt> の中に) 返す
+(たとえば、<tt>car</tt> が 4 という数であるような対を、走査しているところなのかもしれない。<a href="#%_sec_5.3.1">5.3.1</a>節で説明したように、その <tt>car</tt> を <tt>n4</tt> により表しているならば、「再配置済みの」<tt>car</tt> ポインタには、依然として <tt>n4</tt> であってほしいわけだ)。
+それ以外の場合、再配置を実行しなくてはならない。
+もし、再配置すべき対の <tt>car</tt> 位置がブロークン・ハート・タグを含んでいれば、その対は実際は移動済みであり、したがって、転送先アドレスを (ブロークン・ハートの <tt>cdr</tt> 位置から) 取り出して、これを <tt>new</tt> の中に返す。
+もし、<tt>old</tt> にあるポインタが、まだ移動されていない対を指していたら、新たなメモリにおける最初の空きセル (<tt>free</tt> により指されている) へとその対を移動させ、ブロークン・ハート・タグと転送先アドレスとを古い場所に格納することによってブロークン・ハートを設定する。
+<tt>relocate-old-result-in-new</tt> は、<tt>old</tt> により指されているオブジェクトの <tt>car</tt> または <tt>cdr</tt> を保持するために、<tt>oldcr</tt> というレジスタを使う<a href="#footnote_Temp_764"><sup><small>18</small></sup></a>。
 </p>
 
 <p class="lisp">relocate-old-result-in-new
@@ -763,6 +901,8 @@ role of old and new memories by interchanging pointers: interchanging
 collection the next time memory runs out.</p>
 
 <p class="trans" lang="ja">
+ガーベジ・コレクション・プロセスの本当の最後において、ポインタ同士を入れ替えることにより、旧メモリと新メモリの役割を入れ替える。つまり、<tt>the-cars</tt> と <tt>new-cars</tt> を入れ替え、<tt>the-cdrs</tt> と <tt>new-cdrs</tt> を入れ替えるのだ。
+すると、次にメモリが尽きたときに別のガーベジ・コレクションを実行する準備が、整うであろう。
 </p>
 
 <p class="lisp">gc-flip
@@ -774,7 +914,6 @@ collection the next time memory runs out.</p>
   (assign new-cars (reg temp))
 </p>
 
-
 <a name="footnotes"></a>
 <hr>
 <p class="orig" lang="en"><a name="footnote_Temp_744" href="#call_footnote_Temp_744"><sup><small>5</small></sup></a> We could represent memory as lists of items.
@@ -783,6 +922,11 @@ since accessing the <em>n</em>th element of a list requires <em>n</em> - 1 <tt>c
 operations.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_744"><sup><small>5</small></sup></a>
+項目のリストとしてメモリを表現することも、可能であっただろう。
+しかし、そうすると、アクセス時間が、添え字とは独立にはならないだろう。なぜなら、リストの <em class="en">n</em> 番目の要素にアクセスすることは、
+<span class="math"><em class="en">n</em> &minus; 1</span>
+回の <tt>cdr</tt> 操作を必要とするためである。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_745" href="#call_footnote_Temp_745"><sup><small>6</small></sup></a> For completeness, we should specify a <tt>make-vector</tt>
@@ -791,6 +935,9 @@ application we will use vectors only to model fixed divisions of the
 computer memory.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_745"><sup><small>6</small></sup></a> 
+完全性のためには、私たちは、ベクタを構築する <tt>make-vector</tt> 操作を規定すべきである。
+しかし、目下の応用においては、コンピュータ・メモリの固定的な分割をモデル化することのためだけに、ベクタを使おう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_747" href="#call_footnote_Temp_747"><sup><small>7</small></sup></a> This is
@@ -800,6 +947,9 @@ included at the primitive machine level rather than constructed
 through the use of lists.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_747"><sup><small>7</small></sup></a> 
+これは、総称的演算を扱うために2章で導入した「タグ付けされたデータ」の考え方と、まさに同じである。
+しかし、ここでは、データ型は、リストの使用を通じて構築されるのではなく、むしろ、原始的なマシン・レベルに含まれている。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_748" href="#call_footnote_Temp_748"><sup><small>8</small></sup></a> Type information may be encoded in a variety of
@@ -818,6 +968,15 @@ hardware for the efficient handling of type fields are said to have
 <a name="%_idx_5872"></a><em>tagged architectures</em>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_748"><sup><small>8</small></sup></a>
+型情報は、その上に Lisp システムを実装するべきマシンの詳細に応じて、多様な方法で符号化され得る。
+Lisp プログラムの実行効率は、この選択がどれほど賢くなされたか、ということに強く依存するだろうが、良い選択のための一般的な設計規則を定式化するのは困難だ。
+型つきポインタを実装するための最も分かりやすい方法は、各ポインタの中の所定のビット一揃いを、データ型を符号化する<em>型フィールド</em>となるよう、割り当てることである。
+そうした表現を設計するうえで対処すべき重要な疑問点には、次のようなものがある。
+型ビットはどれくらい多く必要か?
+ベクトルの添え字は、どれほど大きくなくてはならないか?
+原始的マシン命令を使って、どれほど効率的にポインタの型フィールドを操作できるか?
+型フィールドの効率的な取り扱いのための特別なハードウェアを含むマシンは、<em>タグつきアーキテクチャ</em>を有する、と言われる。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_749" href="#call_footnote_Temp_749"><sup><small>9</small></sup></a> This decision on the
@@ -830,6 +989,10 @@ equal pointers only if we are careful never to store the same number
 in more than one location.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_749"><sup><small>9</small></sup></a> 
+数の表現に関する決定は、数同士の等価性を検査するのに <tt>eq?</tt> ——ポインタ同士の等価性を検査する——が使えるかどうかを左右する。
+もしポインタが数そのものを含んでいれば、等しい数同士は、同じポインタを有するだろう。
+しかし、もしポインタが、数が格納されている場所の添え字を含んでいれば、一箇所よりも多くの場所には同じ数を決して格納しないように気をつける場合にしか、等しい数同士が等しいポインタを有するとは保証されないだろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_750" href="#call_footnote_Temp_750"><sup><small>10</small></sup></a> This is just like writing a number as a sequence of
@@ -837,6 +1000,8 @@ digits, except that each ``digit'' is a number between 0 and the
 largest number that can be stored in a single pointer.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_750"><sup><small>10</small></sup></a>
+これは、桁の並びとして数を書くこととちょうど同様である——各「桁」が、0 と、一つのポインタに格納できる最大の数との間の数である、という点を除いては。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_752" href="#call_footnote_Temp_752"><sup><small>11</small></sup></a> There are other ways
@@ -847,12 +1012,19 @@ because we are using a compacting garbage collector, as we will see in
 section <a href="#%_sec_5.3.2">5.3.2</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_752"><sup><small>11</small></sup></a>
+空いている記憶装置を見つける、別の方法もある。
+たとえば、使われていない対すべてを一緒につなげて、<em>空きリスト</em>とすることもできるだろう。
+私たちの空き場所は連続している (したがって、ポインタをインクリメントすることでアクセスできる) のだが、これは、<a href="#%_sec_5.3.2">5.3.2</a>節で見ることになるように、<ruby><rb>圧縮型の</rb><rp> (</rp><rt>コンパクティング</rt><rp>) </rp></ruby>ガーベジ・コレクタを使っているためである。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_753" href="#call_footnote_Temp_753"><sup><small>12</small></sup></a> This is essentially the implementation of <tt>cons</tt> in terms of <tt>set-car!</tt> and <tt>set-cdr!</tt>, as described in
 section <a href="22_sec3_3.html#%_sec_3.3.1">3.3.1</a>.  The operation <tt>get-new-pair</tt> used in that implementation is realized here by the <tt>free</tt> pointer.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_753"><sup><small>12</small></sup></a>
+これは、本質的には、<a href="22_sec3_3.html#%_sec_3.3.1">3.3.1</a>節で説明したような、<tt>set-car!</tt> と <tt>set-cdr!</tt> を用いた <tt>cons</tt> の実装である。
+その実装において用いた <tt>get-new-pair</tt> という演算は、ここでは、<tt>free</tt> ポインタにより実現される。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_758" href="#call_footnote_Temp_758"><sup><small>13</small></sup></a> This may not be true eventually,
@@ -869,6 +1041,13 @@ memory, so it may be possible to use up memory much faster than we
 have postulated.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_758"><sup><small>13</small></sup></a>
+ゆくゆくは、これは本当ではなくなるかもしれない。なぜなら、コンピュータの寿命の間には空きメモリを使い果たすのが不可能となるように、メモリが十分大規模になるかもしれないから。
+たとえば、一年には約
+<span class="math">3 &times; 10<sup>13</sup></span>
+マイクロ秒あり、よって、もし1マイクロ秒ごとに一度 <tt>cons</tt> するつもりだったとすると、メモリを使い果たさずに30年間動けるマシンを構築するには、メモリのセルを約 10<sup>15</sup> 個、必要とすることだろう。
+そうした大量のメモリは、今日の標準によれば馬鹿げたほど大規模なように見えるが、物理的に不可能なわけではない。
+一方で、プロセッサは高速化しているし、将来のコンピュータは、一つのメモリに対して並列に動作する多数のプロセッサを有しているかもしれない。そうすると、私たちが仮定したのよりもずっと速く、メモリを使い果たすこともあり得る。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_759" href="#call_footnote_Temp_759"><sup><small>14</small></sup></a> We
@@ -877,6 +1056,8 @@ section <a href="#%_sec_5.3.1">5.3.1</a>, so that items on the stack are
 accessible via the pointer in the stack register.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_759"><sup><small>14</small></sup></a>
+ここでは、<a href="#%_sec_5.3.1">5.3.1</a>節で説明したように、スタックがリストとして表現されているものと仮定しており、その結果、スタック上の項目は、スタック・レジスタのポインタを介してアクセス可能である。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_760" href="#call_footnote_Temp_760"><sup><small>15</small></sup></a> This idea was invented and first implemented
@@ -891,6 +1072,11 @@ extended by <a name="%_idx_5950"></a><a name="%_idx_5952"></a><a name="%_idx_595
 and other structure is more permanent.  </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_760"><sup><small>15</small></sup></a>
+この考えは、ミンスキーによって、考案され、最初に——MIT 電子工学調査研究所において PDP-1 用の Lisp 処理系の一部として——実装された。
+これはさらに、Multics のタイムシェアリング・システム用の Lisp 処理系で使うために、Fenichel and Yochelson (1969) によって開発された。
+後に、Baker (1978) は、本手法の「リアルタイム」版を開発したが、これは、ガーベジ・コレクションの間に計算が停止するよう要求したりはしない。
+ある種の構造は揮発性がより高く、他の構造は永続性がより高い、という事実を利用するよう、Baker の考えは Hewitt と Lieberman と Moon により拡張された (Lieberman and Hewitt 1983 を参照)。
 </p>
 
 <p class="orig" lang="en">
@@ -901,6 +1087,10 @@ We then scan all of memory, and any location that is unmarked is
 <a name="%_idx_5960"></a>discussion of the mark-sweep method can be found in Allen 1978.</p>
 
 <p class="trans" lang="ja">
+よく使われる別のガーベジ・コレクション技法は、<em>マーク・スイープ</em>法である。
+これは、マシン・レジスタからアクセス可能なすべての構造を追跡することと、たどり着く先のそれぞれの対に印をつけることから、成り立っている。
+それから、メモリ全体を走査し、印のついていないどの場所をも、ごみとして「掃き捨て」て、再利用のために使えるようにする。
+マーク・スイープ法についての詳細な議論は、Allen 1978 で見つかる。
 </p>
 
 <p class="orig" lang="en">
@@ -917,6 +1107,11 @@ widely separated memory addresses may require extra paging
 operations.</p>
 
 <p class="trans" lang="ja">
+Minsky-Fenichel-Yochelson アルゴリズムは、大規模メモリ型のシステムに使われている主要なアルゴリズムである。なぜなら、これは、メモリの有用な部分のみを調べるからである。
+これは、マーク・スイープ——スイープ段階でメモリ全体を調べなくてはならない——とは対照的である。
+ストップ・アンド・コピーの第二の利点は、これが<em>圧縮型の</em>ガーベジ・コレクタである、という点である。
+すなわち、ガーベジ・コレクション段階の最後には、連続的なメモリ上の場所に有用なデータが移動されていることになるだろうし、その際、ごみの対はすべて圧縮されて押し出されている。
+これは、仮想メモリ——広範囲に分離したメモリ・アドレスへのアクセスが、余計なページング操作を必要とするかもしれない——を有するマシンにおける、非常に重要な性能上の論点となる可能性がある。
 </p>
 
 <p class="orig" lang="en">
@@ -925,6 +1120,8 @@ the registers used by the storage-allocation system -- <tt>root</tt>, <tt>the-ca
 introduced in this section.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_762"><sup><small>16</small></sup></a>
+このレジスタのリストは、記憶割り当てシステムにより使われるレジスタ—— <tt>root</tt> や <tt>the-cars</tt> や <tt>the-cdrs</tt> や、本節で導入されるであろう他のレジスタ——を含まない。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_763" href="#call_footnote_Temp_763"><sup><small>17</small></sup></a> The term <em><a name="%_idx_5982"></a>broken heart</em> was coined by David Cressey, who wrote a garbage
@@ -932,6 +1129,8 @@ collector for <a name="%_idx_5984"></a><a name="%_idx_5986"></a>MDL, a dialect o
 1970s.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_763"><sup><small>17</small></sup></a>
+<em><ruby><rb>失意</rb><rp> (</rp><rt>ブロークン・ハート</rt><rp>) </rp></ruby></em>という用語は、David Cressey ——1970年代初頭に MIT で開発された、Lisp の方言である MDL のための、ガーベジ・コレクタを書いた——により、作られた。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_764" href="#call_footnote_Temp_764"><sup><small>18</small></sup></a> The garbage collector uses the low-level predicate
@@ -945,6 +1144,10 @@ For simulation purposes, <tt>pointer-to-pair?</tt> can be implemented as
 <tt>pair?</tt>.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_764"><sup><small>18</small></sup></a> 
+ガーベジ・コレクタは、リスト構造の <tt>pair?</tt> 演算の代わりに、<tt>pointer-to-pair?</tt> という低水準の述語を用いる。なぜなら、ガーベジ・コレクションの目的では対として扱われる様々なものが、現実のシステムには存在するかもしれないからである。
+たとえば、IEEE 標準に合致する Scheme システムでは、手続きオブジェクトが、<tt>pair?</tt> 述語を満たさないような特別な種類の「対」として、実装されてもよい。
+シミュレーション目的では、<tt>pointer-to-pair?</tt> を <tt>pair?</tt> として実装できる。
 </p>
 
 
