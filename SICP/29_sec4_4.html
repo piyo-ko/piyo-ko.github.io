@@ -1378,7 +1378,7 @@ defined by a very simple rule:<a name="call_footnote_Temp_658" href="#footnote_T
 <p class="lisp"><a name="%_idx_5142"></a>(rule (same ?x ?x))
 </p>
 
-<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+<p class="extra_code"><span class="ex_comment">% 上記の二つの規則は、Prolog だと以下のとおり。</span>
 lives_near(Person_1, Person_2) :- 
     address(Person_1, [Town | Rest_1]),
     address(Person_2, [Town | Rest_2]),
@@ -1968,6 +1968,13 @@ form <tt>z</tt>'':</p>
       (append-to-form ?v ?y ?z))
 </p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+append_to_form([], Y, Y).
+append_to_form([U | V], Y, [U | Z]) :- append_to_form(V, Y, Z).
+
+<span class="ex_comment">% プロンプトに対して以下のように [user]. と打ち込んでから
+% | ?- [user].
+% 上記の規則を入力し、終わったら Control+D を入力する。
+% そうすると、定義した規則を使ったクエリを実行できるようになる。</span>
 </p>
 
 <p class="orig" lang="en"><a name="%_idx_5160"></a>The first rule has no body, which means that the conclusion holds for
@@ -1993,6 +2000,11 @@ Given these two rules, we can formulate queries that compute the <tt>append</tt>
 (append-to-form (a b) (c d) (a b c d))
 </p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+|? append_to_form([a, b], [c, d], Z).
+
+Z = [a,b,c,d]
+
+yes
 </p>
 
 <p class="orig" lang="en">What is more striking, we can use the same rules to ask the question
@@ -2011,6 +2023,11 @@ This is done as follows:
 (append-to-form (a b) (c d) (a b c d))
 </p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- append_to_form([a, b], Y, [a, b, c, d]).
+
+Y = [c,d]
+
+yes
 </p>
 
 <p class="orig" lang="en">We can also ask for all pairs of lists that <tt>append</tt> to form <tt>(a b c d)</tt>:
@@ -2030,6 +2047,24 @@ This is done as follows:
 (append-to-form (a b c d) () (a b c d))
 </p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- append_to_form(X, Y, [a, b, c, d]).
+
+X = []
+Y = [a,b,c,d] ? ;
+
+X = [a]
+Y = [b,c,d] ? ;
+
+X = [a,b]
+Y = [c,d] ? ;
+
+X = [a,b,c]
+Y = [d] ? ;
+
+X = [a,b,c,d]
+Y = [] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">
@@ -2063,7 +2098,12 @@ adjacent elements of a list:
 (rule (?x next-to ?y in (?v . ?z))
       (?x next-to ?y in ?z))
 </p>
-<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+
+% | ?- [user].
+% としてから以下を入力し、入力後、Control+D を押す。</span>
+next_to(X, Y, [X, Y | U]).
+next_to(X, Y, [V | Z]) :- next_to(X, Y, Z).
 </p>
 
 <p class="orig" lang="en">What will the response be to the following queries?
@@ -2077,8 +2117,6 @@ adjacent elements of a list:
 
 (?x next-to 1 in (2 1 3 1))
 </p>
-<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
-</p>
 
 <p class="exercise">(1 next-to (2 3) in (1 (2 3) 4))
 ((2 3) next-to 4 in (1 (2 3) 4))
@@ -2086,7 +2124,26 @@ adjacent elements of a list:
 (2 next-to 1 in (2 1 3 1))
 (3 next-to 1 in (2 1 3 1))
 </p>
-<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% 1番目のクエリ</span>
+| ?- next_to(X, Y, [1, [2, 3], 4]).
+
+X = 1
+Y = [2,3] ? ;
+
+X = [2,3]
+Y = 4 ? ;
+
+no
+
+<span class="ex_comment">% 2番目のクエリ</span>
+| ?- next_to(X, 1, [2, 1, 3, 1]).
+
+X = 2 ? ;
+
+X = 3 ? ;
+
+no
 </p>
 
 <p class="orig" lang="en">
@@ -2104,25 +2161,58 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 <tt>(last-pair ?x (3))</tt> のようなクエリに対して、君の規則は正しく動くかな?
 </p>
 
-<p class="exercise">(last-pair (?last) (?last))
+<p class="exercise"><span class="ex_comment">; 第1引数は非空リスト。第2引数はその中の最後の要素を含むリスト。</span>
+(last-pair (?last) (?last))
 (rule (last-pair (?x . ?y) ?last)
       (last-pair ?y ?last))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
 
-<span class="ex_comment">(last-pair (3) ?x) は、1番目の規則を使うと、(?last) が (3) で、?x が (?last) つまり (3) 
+% | ?- [user].
+% としてから以下を入力し、入力後、Control+D を押す。</span>
+last_pair([Last], [Last]).
+last_pair([X | Y], Last) :- last_pair(Y, Last).
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (3) ?x) は、1番目の規則を使うと、(?last) が (3) で、?x が (?last) つまり (3) 
 になる。よって、(last-pair (3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([3], X).
 
-(last-pair (1 2 3) ?x) は、2番目の規則を使って、(last-pair (2 3) ?x) を解くことに
+X = [3] ? ;
+
+(1 ms) no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (1 2 3) ?x) は、2番目の規則を使って、(last-pair (2 3) ?x) を解くことに
 帰着される。今度はこれを2番目の規則を使って解くことになり、それは、
 (last-pair (3) ?x) を解くことに帰着される。これは、上記のとおり、1番目の規則で
 解くことになり、?x が (3) になる。
 というわけで、(last-pair (1 2 3) ?x) の ?x も (3) と解かれる。
 つまり、(last-pair (1 2 3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([1, 2, 3], X).
 
-(last-pair (2 ?x) (3)) は、2番目の規則を使って、(last-pair (?x) (3)) を解くことに
+X = [3] ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (2 ?x) (3)) は、2番目の規則を使って、(last-pair (?x) (3)) を解くことに
 帰着される。今度はこれを1番目の規則を使って解くことになるから、?x が 3 に
 なる。よって、(last-pair (2 3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([2, X], [3]).
 
-(last-pair ?x (3)) に対しては、1番目の規則から、?x が (3) という結果が得られる
+X = 3 ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair ?x (3)) に対しては、1番目の規則から、?x が (3) という結果が得られる
 (?last が 3 になり、?x が ?last になるから)。
 つまり、(last-pair (3) (3)) という応答が得られる。
 でも、意味的に考えると、?x は、最後の要素が 3 でありさえすれば、どんな長さ
@@ -2136,8 +2226,25 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
    :
 みたいな、不定のパタン変数を含む形で順に得られるかもしれないが、
 まあ、どうだろうね……?
-</span></p>
+</p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair(X, [3]).
+
+X = [3] ? ;
+
+X = [_,3] ? ;
+
+X = [_,_,3] ? ;
+
+X = [_,_,_,3] ? ;
+
+X = [_,_,_,_,3] ? ;
+
+X = [_,_,_,_,_,3] ? 
+
+(1 ms) yes
+<span class="ex_comment">% きりがないので、<tt>X = [_,_,_,_,_,3] ?</tt> のところで
+% リターンを押して中断した。</span>
 </p>
 
 <p class="orig" lang="en">
@@ -2162,7 +2269,15 @@ descendants of Ada back to Adam, by way of Cain:</p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
 % なお、以下の記述を含む<a href="bible_db.pl">ファイル</a> (<tt>bible_db.pl</tt>) を作ってある。
 % このファイルには、後出の規則も含めてある。</span>
-
+son('Adam', 'Cain').
+son('Cain', 'Enoch').
+son('Enoch', 'Irad').
+son('Irad', 'Mehujael').
+son('Mehujael', 'Methushael').
+son('Methushael', 'Lamech').
+wife('Lamech', 'Ada').
+son('Ada', 'Jabal').
+son('Ada', 'Jubal').
 </p>
 
 
@@ -2199,6 +2314,29 @@ deduce more complicated relationships.)
 
 </span></p>
 <p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+grandson(G, S) :- son(G, F), son(F, S).
+son(M, S) :- wife(M, W), son(W, S).
+
+<span class="ex_comment">% クエリの実行例</span>
+| ?- grandson('Cain', Grandson).
+
+Grandson = 'Irad' ? ;
+
+no
+| ?- son('Lamech', Son).
+
+Son = 'Jabal' ? ;
+
+Son = 'Jubal' ? ;
+
+no
+| ?- grandson('Methushael', Grandson).
+
+Grandson = 'Jabal' ? ;
+
+Grandson = 'Jubal' ? ;
+
+(1 ms) no
 </p>
 
 <a name="%_sec_4.4.2"></a>
@@ -3285,6 +3423,8 @@ outranked-by (1)
                 :
 
 <span class="ex_comment">と、雑に考えたんだが、どうだろう。</span></p>
+<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。</span>
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.65"></a>

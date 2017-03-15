@@ -99,7 +99,7 @@ meeting_time(Person, Day_and_Time) :-
     meeting(whole_company, Day_and_Time) ;
     job(Person, [Division |_]), meeting(Division, Day_and_Time).
 
-%練習問題4.60
+%練習問題4.60.
 lives_near_ver2(Person_1, Person_2) :- 
     address(Person_1, [Town | Rest_1]),
     address(Person_2, [Town | Rest_2]),
