@@ -3403,27 +3403,553 @@ the query</p>
 (outranked-by (Bitdiddle Ben) (Warbucks Oliver))
 <span class="ex_comment">という回答を返す。が、その後、ルイスの変更のせいで、以下のように、
 outranked-by の再帰的な呼び出しが無限に深まるループにはまり込んでしまう
-(つまり、(1)を打ち込むと、(2)の出力は得られるが、(3)以下が実行されていく
-無限ループにはまり、(*)は実行されず、ということ)。</span>
+(つまり、(☆1)を打ち込むと、(☆2)の出力は得られるが、(☆3)以下が実行されていく
+無限ループにはまり、<del>(*)は実行されず、ということ</del>)。</span>
 
-outranked-by (1)
+outranked-by (☆1)
  |
- +-- supervisor (2)
+ +-- supervisor (☆2)
  OR
- +-- outranked-by (3) --AND-- supervisor (*)
+ +-- outranked-by (☆3) --AND-- supervisor (*)
       |
-      +-- supervisor (4)
+      +-- supervisor (☆4)
       OR
-      +-- outranked-by (5) --AND-- supervisor (*)
+      +-- outranked-by (☆5) --AND-- supervisor (*)
            |
-           +-- supervisor (6)
+           +-- supervisor (☆6)
            OR
-           +-- outranked-by (7) --AND-- supervisor(*)
+           +-- outranked-by (☆7) --AND-- supervisor(*)
                 |
                 :
 
 <span class="ex_comment">と、雑に考えたんだが、どうだろう。</span></p>
-<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。</span>
+<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。
+
+% まず人事DB (規則込み) の読み込み。</span>
+| ?- consult('personnel_db.pl').
+<span class="ex_comment">% (出力は省略)</span>
+
+<span class="ex_comment">% outranked_by の定義を上書きする。</span>
+| ?- [user].
+compiling user for byte code...
+outranked_by(Staff_person, Boss) :-
+    supervisor(Staff_person, Boss);
+    (outranked_by(Middle_manager, Boss),
+     supervisor(Staff_person, Middle_manager)).
+
+user compiled, 5 lines read - 709 bytes written, 44124 ms
+warning: user:1: redefining procedure outranked_by/2
+<span class="ex_comment">% (もうちょっと出力があったが、それは省略)</span>
+
+<span class="ex_comment">% ちゃんと再定義されたか確認したい場合</span>
+| ?- listing.
+<span class="ex_comment">% (出力は省略)</span>
+
+<span class="ex_comment">% トレースできるようにします。</span>
+| ?- trace.
+The debugger will first creep -- showing everything (trace)
+
+yes
+{trace}
+
+<span class="ex_comment">% それでは、いざ実行。
+% (以下は、実際の出力にコメントを追記したもの。
+%    [呼び出し番号] [直接の先祖を示す番号] [ポート:] [ゴール] ?
+%  というのが元の出力である。)</span>
+
+| ?- outranked_by(['Bitdiddle', 'Ben'], Who).
+      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ? <span class="ex_comment">% (☆1)</span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ? <span class="ex_comment">% (☆2)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% ここまでは簡単。再帰なしで判明するパタン。</span>
+
+<span class="ex_comment">% 上の行でセミコロンを入力したので、別の解を探し始める。
+% 実際は、ベンより上位の人間はオリバーだけなので、別の解など存在しないのだが、
+% 以下の通り、探索が無限ループに陥ってしまう。</span>
+      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ? 
+<span class="ex_comment">% supervisor(['Bitdiddle','Ben'], Who) にマッチするものはもうないので、Fail となった。
+% というわけで、再帰呼び出し定義の方でマッチするものを探しにいく。つまり、
+% WhoがBossにユニファイされている状態で、
+% outranked_by(Middle_manager, Boss), supervisor(['Bitdiddle','Ben'], Middle_manager)
+% にマッチするものを、探しにいく。</span>
+      2    2  Call: outranked_by(_352,_283) ? <span class="ex_comment">% (☆3)</span>
+      3    3  Call: supervisor(_376,_283) ? 
+      3    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?
+<span class="ex_comment">% AND結合された一つ目の述語を満たす解は、上の行のとおり見つかったが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      3    3  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      3    3  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      3    3  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      3    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      2    2  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+      2    2  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    3  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      2    2  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+      2    2  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
+% というわけで、AND結合された一つ目の述語を満たす別の解を探す訳だが、
+% ここで、</span>
+      3    3  Call: outranked_by(_376,_283) ? 
+      4    4  Call: supervisor(_400,_283) ? 
+      4    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    3  Call: supervisor(_436,['Hacker','Alyssa','P']) ? 
+      5    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      5    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    3  Fail: supervisor(_424,['Hacker','Alyssa','P']) ? 
+      3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      4    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    3  Call: supervisor(_436,['Fect','Cy','D']) ? 
+      5    3  Fail: supervisor(_424,['Fect','Cy','D']) ? 
+      3    3  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      4    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    3  Call: supervisor(_436,['Tweakit','Lem','E']) ? 
+      5    3  Fail: supervisor(_424,['Tweakit','Lem','E']) ? 
+      3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      4    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    3  Call: supervisor(_436,['Reasoner','Louis']) ? 
+      5    3  Fail: supervisor(_424,['Reasoner','Louis']) ? 
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      3    3  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      5    3  Call: supervisor(_434,['Bitdiddle','Ben']) ? 
+      5    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      5    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+      2    2  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      5    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+      2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      5    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    3  Fail: supervisor(_422,['Bitdiddle','Ben']) ? 
+      3    3  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      4    4  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      4    4  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      3    3  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      5    3  Call: supervisor(_434,['Scrooge','Eben']) ? 
+      5    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      2    2  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+      2    2  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      5    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    3  Fail: supervisor(_422,['Scrooge','Eben']) ? 
+      3    3  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      4    4  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      4    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    3  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    3  Call: supervisor(_434,['Cratchet','Robert']) ? 
+      5    3  Fail: supervisor(_422,['Cratchet','Robert']) ? 
+      3    3  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      4    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      4    4  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      3    3  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      5    3  Call: supervisor(_434,['Aull','DeWitt']) ? 
+      5    3  Fail: supervisor(_422,['Aull','DeWitt']) ? 
+      3    3  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      4    4  Call: outranked_by(_400,_283) ? 
+      5    5  Call: supervisor(_424,_283) ? 
+      5    5  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    4  Call: supervisor(_460,['Hacker','Alyssa','P']) ? 
+      6    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      7    3  Call: supervisor(_490,['Reasoner','Louis']) ? 
+      7    3  Fail: supervisor(_478,['Reasoner','Louis']) ? 
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      6    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    4  Fail: supervisor(_448,['Hacker','Alyssa','P']) ? 
+      4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    4  Call: supervisor(_460,['Fect','Cy','D']) ? 
+      6    4  Fail: supervisor(_448,['Fect','Cy','D']) ? 
+      4    4  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    4  Call: supervisor(_460,['Tweakit','Lem','E']) ? 
+      6    4  Fail: supervisor(_448,['Tweakit','Lem','E']) ? 
+      4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    4  Call: supervisor(_460,['Reasoner','Louis']) ? 
+      6    4  Fail: supervisor(_448,['Reasoner','Louis']) ? 
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      4    4  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    4  Call: supervisor(_458,['Bitdiddle','Ben']) ? 
+      6    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      7    3  Call: supervisor(_490,['Hacker','Alyssa','P']) ? 
+      7    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      8    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+      8    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      7    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    3  Fail: supervisor(_478,['Hacker','Alyssa','P']) ? 
+      3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      6    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      7    3  Call: supervisor(_490,['Fect','Cy','D']) ? 
+      7    3  Fail: supervisor(_478,['Fect','Cy','D']) ? 
+      3    3  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      6    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      7    3  Call: supervisor(_490,['Tweakit','Lem','E']) ? 
+      7    3  Fail: supervisor(_478,['Tweakit','Lem','E']) ? 
+      3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      6    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    4  Fail: supervisor(_446,['Bitdiddle','Ben']) ? 
+      4    4  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      5    5  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      4    4  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    4  Call: supervisor(_458,['Scrooge','Eben']) ? 
+      6    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    3  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      7    3  Call: supervisor(_488,['Cratchet','Robert']) ? 
+      7    3  Fail: supervisor(_476,['Cratchet','Robert']) ? 
+      3    3  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      6    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    4  Fail: supervisor(_446,['Scrooge','Eben']) ? 
+      4    4  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      5    5  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      4    4  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    4  Call: supervisor(_458,['Cratchet','Robert']) ? 
+      6    4  Fail: supervisor(_446,['Cratchet','Robert']) ? 
+      4    4  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      4    4  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      6    4  Call: supervisor(_458,['Aull','DeWitt']) ? 
+      6    4  Fail: supervisor(_446,['Aull','DeWitt']) ? 
+      4    4  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      5    5  Call: outranked_by(_424,_283) ? 
+      6    6  Call: supervisor(_448,_283) ? 
+      6    6  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Hacker','Alyssa','P']) ? 
+      7    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      8    4  Call: supervisor(_514,['Reasoner','Louis']) ? 
+      8    4  Fail: supervisor(_502,['Reasoner','Louis']) ? 
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      7    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    5  Fail: supervisor(_472,['Hacker','Alyssa','P']) ? 
+      5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Fect','Cy','D']) ? 
+      7    5  Fail: supervisor(_472,['Fect','Cy','D']) ? 
+      5    5  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Tweakit','Lem','E']) ? 
+      7    5  Fail: supervisor(_472,['Tweakit','Lem','E']) ? 
+      5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    5  Call: supervisor(_484,['Reasoner','Louis']) ? 
+      7    5  Fail: supervisor(_472,['Reasoner','Louis']) ? 
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Hacker','Alyssa','P']) ? 
+      8    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      9    3  Call: supervisor(_544,['Reasoner','Louis']) ? 
+      9    3  Fail: supervisor(_532,['Reasoner','Louis']) ? 
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      8    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    4  Fail: supervisor(_502,['Hacker','Alyssa','P']) ? 
+      4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Fect','Cy','D']) ? 
+      8    4  Fail: supervisor(_502,['Fect','Cy','D']) ? 
+      4    4  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Tweakit','Lem','E']) ? 
+      8    4  Fail: supervisor(_502,['Tweakit','Lem','E']) ? 
+      4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    5  Fail: supervisor(_470,['Bitdiddle','Ben']) ? 
+      5    5  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Scrooge','Eben']) ? 
+      7    5  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      4    4  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_512,['Cratchet','Robert']) ? 
+      8    4  Fail: supervisor(_500,['Cratchet','Robert']) ? 
+      4    4  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    5  Fail: supervisor(_470,['Scrooge','Eben']) ? 
+      5    5  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    5  Call: supervisor(_482,['Cratchet','Robert']) ? 
+      7    5  Fail: supervisor(_470,['Cratchet','Robert']) ? 
+      5    5  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Aull','DeWitt']) ? 
+      7    5  Fail: supervisor(_470,['Aull','DeWitt']) ? 
+      5    5  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      6    6  Call: outranked_by(_448,_283) ? 
+      7    7  Call: supervisor(_472,_283) ? 
+      7    7  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Hacker','Alyssa','P']) ? 
+      8    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      9    5  Call: supervisor(_538,['Reasoner','Louis']) ? 
+      9    5  Fail: supervisor(_526,['Reasoner','Louis']) ? 
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      8    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    6  Fail: supervisor(_496,['Hacker','Alyssa','P']) ? 
+      6    6  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Fect','Cy','D']) ? 
+      8    6  Fail: supervisor(_496,['Fect','Cy','D']) ? 
+      6    6  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Tweakit','Lem','E']) ? 
+      8    6  Fail: supervisor(_496,['Tweakit','Lem','E']) ? 
+      6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    6  Call: supervisor(_508,['Reasoner','Louis']) ? 
+      8    6  Fail: supervisor(_496,['Reasoner','Louis']) ? 
+      6    6  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Hacker','Alyssa','P']) ? 
+      9    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     10    4  Call: supervisor(_568,['Reasoner','Louis']) ? 
+     10    4  Fail: supervisor(_556,['Reasoner','Louis']) ? 
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      9    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    5  Fail: supervisor(_526,['Hacker','Alyssa','P']) ? 
+      5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Fect','Cy','D']) ? 
+      9    5  Fail: supervisor(_526,['Fect','Cy','D']) ? 
+      5    5  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Tweakit','Lem','E']) ? 
+      9    5  Fail: supervisor(_526,['Tweakit','Lem','E']) ? 
+      5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    6  Fail: supervisor(_494,['Bitdiddle','Ben']) ? 
+      6    6  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Scrooge','Eben']) ? 
+      8    6  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_536,['Cratchet','Robert']) ? 
+      9    5  Fail: supervisor(_524,['Cratchet','Robert']) ? 
+      5    5  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      8    6  Fail: supervisor(_494,['Scrooge','Eben']) ? 
+      6    6  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      8    6  Call: supervisor(_506,['Cratchet','Robert']) ? 
+      8    6  Fail: supervisor(_494,['Cratchet','Robert']) ? 
+      6    6  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    7  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    7  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Aull','DeWitt']) ? 
+      8    6  Fail: supervisor(_494,['Aull','DeWitt']) ? 
+      6    6  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      7    7  Call: outranked_by(_472,_283) ? 
+      8    8  Call: supervisor(_496,_283) ? 
+      8    8  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Hacker','Alyssa','P']) ? 
+      9    7  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+     10    6  Call: supervisor(_562,['Reasoner','Louis']) ? 
+     10    6  Fail: supervisor(_550,['Reasoner','Louis']) ? 
+      6    6  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      9    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    7  Fail: supervisor(_520,['Hacker','Alyssa','P']) ? 
+      7    7  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Fect','Cy','D']) ? 
+      9    7  Fail: supervisor(_520,['Fect','Cy','D']) ? 
+      7    7  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Tweakit','Lem','E']) ? 
+      9    7  Fail: supervisor(_520,['Tweakit','Lem','E']) ? 
+      7    7  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    7  Call: supervisor(_532,['Reasoner','Louis']) ? 
+      9    7  Fail: supervisor(_520,['Reasoner','Louis']) ? 
+      7    7  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    8  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    8  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      9    7  Call: supervisor(_530,['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Hacker','Alyssa','P']) ? 
+     10    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     11    5  Call: supervisor(_592,['Reasoner','Louis']) ? 
+     11    5  Fail: supervisor(_580,['Reasoner','Louis']) ? 
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     10    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+     10    6  Fail: supervisor(_550,['Hacker','Alyssa','P']) ? 
+      6    6  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Fect','Cy','D']) ? 
+     10    6  Fail: supervisor(_550,['Fect','Cy','D']) ? 
+      6    6  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Tweakit','Lem','E']) ? 
+     10    6  Fail: supervisor(_550,['Tweakit','Lem','E']) ? 
+      6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      9    7  Fail: supervisor(_518,['Bitdiddle','Ben']) ? 
+      7    7  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    8  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? a
 </p>
 
 <p class="orig" lang="en">
@@ -3510,6 +4036,87 @@ Warbucks Oliver
   * (6)からできたフレームでは、(7)がマッチする。よって、オリバーは大物。
   * (7)、(8)の各々からできたフレームでは、マッチするものがない。
 </span></p>
+
+<p class="extra_code"><span class="ex_comment">% <a href="#%_thm_4.64">練習問題4.64</a>と同様にトレースを行ってみる。</span>
+| ?- wheel(Who).
+      1    1  Call: wheel(_279) ? 
+      2    2  Call: supervisor(_347,_279) ? 
+      2    2  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Hacker','Alyssa','P']) ? 
+      3    2  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      1    1  Exit: wheel(['Bitdiddle','Ben']) ? 
+
+Who = ['Bitdiddle','Ben'] ? ;
+<span class="ex_comment">% ルイス→アリッサ→ベン</span>
+
+      1    1  Redo: wheel(['Bitdiddle','Ben']) ? 
+      3    2  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    2  Fail: supervisor(_344,['Hacker','Alyssa','P']) ? 
+      2    2  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Fect','Cy','D']) ? 
+      3    2  Fail: supervisor(_344,['Fect','Cy','D']) ? 
+      2    2  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Tweakit','Lem','E']) ? 
+      3    2  Fail: supervisor(_344,['Tweakit','Lem','E']) ? 
+      2    2  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    2  Call: supervisor(_344,['Reasoner','Louis']) ? 
+      3    2  Fail: supervisor(_344,['Reasoner','Louis']) ? 
+      2    2  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% </span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% </span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% </span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    2  Fail: supervisor(_342,['Bitdiddle','Ben']) ? 
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Scrooge','Eben']) ? 
+      3    2  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% </span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    2  Fail: supervisor(_342,['Scrooge','Eben']) ? 
+      2    2  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    2  Call: supervisor(_342,['Cratchet','Robert']) ? 
+      3    2  Fail: supervisor(_342,['Cratchet','Robert']) ? 
+      2    2  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      2    2  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Aull','DeWitt']) ? 
+      3    2  Fail: supervisor(_342,['Aull','DeWitt']) ? 
+      1    1  Fail: wheel(_279) ? 
+
+(4 ms) no
+<span class="ex_comment">% これ以上の解はないと分かったので、これで終わり。</span>
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.66"></a>
@@ -3845,7 +4452,6 @@ section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.4.2">4.4.4.2  The Evaluator</a></h4>
 <h4 class="trans" lang="ja">4.4.4.2 評価器</h4>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5306"></a>The <tt>qeval</tt> procedure, called by the <tt>query-driver-loop</tt>, is
 the basic evaluator of the query system.  It takes as inputs a query
@@ -3855,6 +4461,10 @@ in chapter 2.  Any query that is not identified as a special form is
 assumed to be a simple query, to be processed by <tt>simple-query</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>qeval</tt> 手続き—— <tt>query-driver-loop</tt> により呼び出される——は、クエリ・システムの基本的評価器である。
+これは、クエリと、フレームのストリームとを、入力としてとり、拡張したフレームのストリームを返す。
+これは、2章で総称的演算を実装する際に行ったのとちょうど同様に、<tt>get</tt> と <tt>put</tt> を用いたデータ指向の<ruby><rb>割り振り</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>により、特殊形式を識別する。
+特殊形式として識別されないクエリはどれも、<tt>simple-query</tt> により処理されるべき単純クエリである、と想定される。
 </p>
 
 <p class="lisp"><a name="%_idx_5310"></a>(define (qeval query frame-stream)
@@ -3868,12 +4478,12 @@ assumed to be a simple query, to be processed by <tt>simple-query</tt>.</p>
 implement the abstract syntax of the special forms.</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で定義した、<tt>type</tt> と <tt>contents</tt> が、特殊形式の抽象的な構文を実装する。
 </p>
 
 <a name="%_sec_Temp_696"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_696">Simple queries</a></h4>
-<h4 class="trans" lang="ja">単純なクエリ</h4>
-
+<h4 class="trans" lang="ja">単純クエリ</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5312"></a>
@@ -3883,6 +4493,8 @@ and it returns the stream formed by extending each frame by all
 data-base matches of the query.</p>
 
 <p class="trans" lang="ja">
+<tt>simple-query</tt> 手続きは、単純クエリを取り扱う。
+これは、単純クエリ (パタン) を、フレームのストリームとともに引数として取り、そのクエリの、データベース上でのすべてのマッチによって、各フレームを拡張することで形成される、ストリームを返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5314"></a>(define (simple-query query-pattern frame-stream)
@@ -3910,10 +4522,11 @@ ways that any of the frames in the original input stream can be
 extended to produce a match with the given pattern.</p>
 
 <p class="trans" lang="ja">
+入力ストリーム内の各フレームについて、<tt>find-assertions</tt> (<a href="#%_sec_4.4.4.3">4.4.4.3</a>節) を使って、データベース内のすべての言明に対して当該パタンをマッチさせ、拡張したフレームのストリームを作り出すとともに、<tt>apply-rules</tt> (<a href="#%_sec_4.4.4.4">4.4.4.4</a>節) を使って、すべてのあり得る規則を適用して、拡張したフレームのもう一つ別のストリームを作り出す。
+これら二つのストリームを (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節の <tt>stream-append-delayed</tt> を用いて) 結合して、元のフレームと整合性を保ちつつ所与のパタンを満たせるようなすべての方法のストリームを作る (練習問題<a href="#%_thm_4.71">4.71</a>を参照)。
+<!-- 元の入力ストリーム内のフレームのいずれかを、所与のパタンとのマッチを作り出すように拡張することができるような、すべての方法からなる一つの大きなストリームを形成するように、個々の入力フレームに対するストリームを、<tt>stream-flatmap</tt> (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節) を用いて結合する。 -->
+個々の入力フレームに対するストリームを、<tt>stream-flatmap</tt> (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節) を用いて結合し、所与のパタンとのマッチを作り出すように元の入力ストリーム内のフレームのいずれかを拡張することができるようなすべての方法からなる、一つの大きなストリームを形成する。
 </p>
-
-<p class="exercise"><span class="ex_comment">
-</span></p>
 
 <a name="%_sec_Temp_697"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_697">Compound queries</a></h4>
@@ -3930,6 +4543,12 @@ frame stream, it recursively applies <tt>conjoin</tt> to the rest of the
 queries.</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> クエリは、図<a href="#%_fig_4.5">4.5</a>に示されているとおり、<tt>conjoin</tt> 手続きにより取り扱われる。
+<tt>conjoin</tt> は、連言肢とフレーム・ストリームとを入力として取り、拡張したフレームのストリームを返す。
+<!-- まず、<tt>conjoin</tt> は、連言の中で最初のクエリを満たすような、すべてのあり得るフレーム拡張のストリームを見つけるために、フレームのストリームを処理する。
+ -->
+まず、<tt>conjoin</tt> は、フレームのストリームを処理して、連言の中で最初のクエリを満たすようなすべてのあり得るフレーム拡張のストリームを見つける。
+それから、これ<span class="note"> (この見つけたストリーム) </span>を新たなフレーム・ストリームとして用いて、<tt>conjoin</tt> は、クエリの残りの部分に <tt>conjoin</tt> を再帰的に適用する。
 </p>
 
 <p class="lisp"><a name="%_idx_5320"></a>(define (conjoin conjuncts frame-stream)
@@ -3944,6 +4563,7 @@ queries.</p>
 </p>
 
 <p class="trans" lang="ja">
+次の式は、
 </p>
 
 <p class="lisp">(put 'and 'qeval conjoin)
@@ -3953,6 +4573,7 @@ queries.</p>
 form is encountered.</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> 形式に遭遇したときに <tt>conjoin</tt> へと<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>を行うように、<tt>qeval</tt> を設定する。
 </p>
 
 <p class="orig" lang="en">
@@ -3963,6 +4584,8 @@ disjuncts of the <tt>or</tt> are computed separately and merged using the
 (See exercises <a href="#%_thm_4.71">4.71</a> and <a href="#%_thm_4.72">4.72</a>.)</p>
 
 <p class="trans" lang="ja">
+<tt>or</tt> クエリも同様に、図<a href="#%_fig_4.6">4.6</a>に示すように取り扱われる。
+<tt>or</tt> の様々な選言肢に対する出力ストリームを、別々に計算し、<a href="#%_sec_4.4.4.6">4.4.4.6</a>節の <tt>interleave-delayed</tt> 手続きを用いて合併する (練習問題<a href="#%_thm_4.71">4.71</a>と練習問題<a href="#%_thm_4.72">4.72</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5324"></a>(define (disjoin disjuncts frame-stream)
@@ -3979,12 +4602,12 @@ disjuncts of the <tt>or</tt> are computed separately and merged using the
 are given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.</p>
 
 <p class="trans" lang="ja">
+連言肢や選言肢の構文についての、述語やセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
 </p>
 
 <a name="%_sec_Temp_698"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_698">Filters</a></h4>
 <h4 class="trans" lang="ja">フィルタ</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5326"></a><tt>Not</tt> is handled by the method outlined in
@@ -3993,6 +4616,8 @@ the input stream to satisfy the query being negated, and we include a
 given frame in the output stream only if it cannot be extended.</p>
 
 <p class="trans" lang="ja">
+<tt>not</tt> は、<a href="#%_sec_4.4.2">4.4.2</a>節で概要を述べた手法によって、取り扱われる。
+私たちは、入力ストリーム中の各フレームを、否定されているクエリを満たすように拡張しようと試み、そして、与えられたフレームを拡張できなかったときにのみ、与えられたフレームを出力ストリームに含める。
 </p>
 
 <p class="lisp"><a name="%_idx_5328"></a>(define (negate operands frame-stream)
@@ -4014,6 +4639,9 @@ returns false are filtered out of the input stream.  An error results
 if there are unbound pattern variables.</p>
 
 <p class="trans" lang="ja">
+<tt>lisp-value</tt> は、<tt>not</tt> に似たフィルタである。
+パタン内の変数をインスタンス化するのにストリーム中の各フレームが使われ、示された述語が適用され、述語が偽を返すようなフレームが入力ストリームからフィルタにより除去される。
+もし束縛されていないパタン変数があれば、エラーが生じる。
 </p>
 
 <p class="lisp"><a name="%_idx_5332"></a>(define (lisp-value call frame-stream)
@@ -4039,6 +4667,9 @@ produce the arguments.  Note that <tt>execute</tt> is implemented using
 <a name="%_idx_5334"></a><tt>eval</tt> and <tt>apply</tt> from the underlying Lisp system.</p>
 
 <p class="trans" lang="ja">
+<tt>execute</tt> ——述語を引数に適用する——は、適用すべき手続きを得るために、述語の式を <tt>eval</tt> せねばならない。
+しかし、<tt>execute</tt> は、引数を評価してはならない。というのも、引数はすでに実際の引数なのであって、(Lisp での) 評価が引数を作り出すであろうような式なのではないからだ。
+根底にある Lisp システムでの <tt>eval</tt> と <tt>apply</tt> を使って <tt>execute</tt> が実装される、ということに注意してほしい。
 </p>
 
 <p class="lisp">(define (execute exp)
@@ -4056,6 +4687,9 @@ defined without bodies (that is, rules whose conclusions are always
 satisfied).</p>
 
 <p class="trans" lang="ja">
+<tt>always-true</tt> という特殊形式は、常に満たされるクエリを与える。
+これは、自分の中身 (普通は空) を無視して、単純に入力ストリーム内の全フレームを通す。
+<tt>always-true</tt> は、本体なしで定義された規則 (つまり、帰結部が常に満たされるような規則) に本体を与えるために、<tt>rule-body</tt> セレクタ (<a href="#%_sec_4.4.4.7">4.4.4.7</a>節) によって使われる。
 </p>
 
 <p class="lisp"><a name="%_idx_5338"></a>(define (always-true ignore frame-stream) frame-stream)
@@ -4067,6 +4701,7 @@ are given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.
 </p>
 
 <p class="trans" lang="ja">
+<tt>not</tt> と <tt>lisp-value</tt> の構文を定義するセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
 </p>
 
 <a name="%_sec_4.4.4.3"></a>
@@ -4089,6 +4724,11 @@ the computation would be less efficient because we would need to make
 many more calls to the matcher.</p>
 
 <p class="trans" lang="ja">
+<tt>find-assertions</tt>  —— <tt>simple-query</tt> (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) により呼び出される——は、パタンとフレームを入力としてとる。
+<tt>find-assertions</tt> はフレームのストリームを返すのだが、それらフレームの各々は、与えられたパタンの、データベース上でのマッチによって、与えられたフレームを拡張するものである。
+<tt>find-assertions</tt> は、<tt>fetch-assertions</tt> (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節) を用いて、パタンとフレームに対するマッチがあるかを調べるべき、データベース内のすべての言明からなる、ストリームを得る。
+ここで <tt>fetch-assertions</tt> を使う理由は、成功するマッチの候補の蓄えからデータベース内のエントリの多くを削除するであろう、単純な検査を適用できることが、よくあるためである。
+もし <tt>fetch-assertions</tt> を削除して、単純にデータベース内のすべての言明のストリームを調べたとしても、システムは依然として機能するだろうが、もっとたくさんの回数、マッチャの呼び出しを行う必要があるだろうから、計算の効率性は落ちるだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_5344"></a>(define (find-assertions pattern frame)
@@ -4104,6 +4744,7 @@ containing the extended frame or <tt>the-empty-stream</tt> if the match
 fails.</p>
 
 <p class="trans" lang="ja">
+<tt>check-an-assertion</tt> は、引数として、パタンとデータ・オブジェクト (言明) とフレームをとり、拡張したフレームを含む一要素のストリームか、もしくは、マッチが失敗した場合には <tt>the-empty-stream</tt> を返す。
 </p>
 
 <p class="lisp">(define (check-an-assertion assertion query-pat query-frame)
@@ -4129,6 +4770,12 @@ against the <tt>cdr</tt> of the data.  If none of these cases are
 applicable, the match fails and we return the symbol <tt>failed</tt>.</p>
 
 <p class="trans" lang="ja">
+基本的パタン・マッチャは、<tt>failed</tt> という記号か、または、与えられたフレームの拡張を返す。
+マッチャの基本的な考え方は、パタン変数に対する束縛を蓄積しながら、データに対してパタンを要素ごとに調べる、というものである。
+もしパタンとデータ・オブジェクトが等しければ、マッチは成功し、これまでのところ蓄積された束縛のフレームを返す。
+それ以外の場合、もしパタンが変数なら、その変数をデータに束縛することで現在のフレームを拡張する——これが、フレーム内に既にある束縛と整合性が取れている限りは。
+もしパタンとデータの双方が対であれば、(再帰的に) パタンの <tt>car</tt> をデータの <tt>car</tt> に対してマッチさせて、フレームを作り出す。このフレームにおいて、その後、パタンの <tt>cdr</tt> をデータの <tt>cdr</tt> に対してマッチさせる。
+これらの場合のどれも当てはまらなければ、マッチは失敗し、<tt>failed</tt> という記号を返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5346"></a>(define (pattern-match pat dat frame)
@@ -4149,6 +4796,7 @@ Here is the procedure that extends a frame by adding a new binding, if
 this is consistent with the bindings already in the frame:</p>
 
 <p class="trans" lang="ja">
+新たな束縛を——もしこれが、フレーム内に既にある束縛と整合性が取れていれば——加えることで、フレームを拡張する手続きを、ここに示す。
 </p>
 
 <p class="lisp"><a name="%_idx_5348"></a>(define (extend-if-consistent var dat frame)
@@ -4178,6 +4826,18 @@ this match extends the frame by adding a binding of <tt>?y</tt> to <tt>b</tt>.  
 binding and we never store more than one binding for a given variable.</p>
 
 <p class="trans" lang="ja">
+そのフレーム内のその変数についての束縛が、もし存在しなければ、そのデータへのその変数の束縛を、ただ加えるだけである。
+それ以外の場合、そのフレーム内で、そのフレーム内のその変数の値に対して、そのデータをマッチさせる。
+もし、格納されている値が定数のみを含むなら——もしその値が、<tt>extend-if-consistent</tt> によるパタン・マッチングの間に格納されたのであれば、きっとそうなる筈だが——そのマッチは、単に、格納されている値と新たな値が等しいかどうかを調べるだけである。
+もし等しければ、変更しないままのフレームを返す。もし等しくなければ、失敗の印を返す。
+しかし、格納されている値は、もしそれがユニフィケーションの間に格納されたのであれば、パタン変数を含むこともあり得る (<a href="#%_sec_4.4.4.4">4.4.4.4</a>節を参照)。
+格納されているパタンの、新たなデータに対する再帰的マッチは、このパタン内の変数についての束縛を加えたり、または調べたりするだろう。
+たとえば、<tt>?x</tt> が <tt>(f ?y)</tt> に束縛されており、かつ、<tt>?y</tt> が束縛されていないようなフレームがあるものとして、このフレームを、<tt>?x</tt> の <tt>(f b)</tt> への束縛によって拡大したいのだとしよう。
+私たちは、<tt>x?</tt> を調べ、そして、<tt>x?</tt> が <tt>(f ?y)</tt> に束縛されていると分かる。
+このことにより私たちは、<tt>(f b)</tt> という提案された新たな値に対して、<tt>(f ?y)</tt> を同一フレーム内でマッチさせるように、仕向けられる。
+最終的に、このマッチは、<tt>?y</tt> の <tt>b</tt> への束縛を加えることでフレームを拡張する。
+<tt>x?</tt> は <tt>(f ?y)</tt> に束縛されたままである。
+私たちは、格納されている束縛を決して変更しないし、与えられた変数について一つよりも多くの束縛を格納することも、決してしない。
 </p>
 
 <p class="orig" lang="en">
@@ -4185,12 +4845,12 @@ The procedures used by <tt>extend-if-consistent</tt> to manipulate
 bindings are defined in section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.</p>
 
 <p class="trans" lang="ja">
+束縛を操作するために <tt>extend-if-consistent</tt> により使われる手続きは、<a href="#%_sec_4.4.4.8">4.4.4.8</a>節で定義される。
 </p>
 
 <a name="%_sec_Temp_699"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_699">Patterns with dotted tails</a></h4>
 <h4 class="trans" lang="ja">ドットの付いた末尾があるパタン</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5350"></a>
@@ -4204,6 +4864,9 @@ primitive, which is used by <tt>query-driver-loop</tt> to read the query
 and represent it as a list structure, treats dots in a special way.</p>
 
 <p class="trans" lang="ja">
+もしパタンが、パタン変数が後に続いているドットを含むなら、そのパタン変数は、(データ・リストの次の要素ではなく) データ・リストの残りの部分にマッチする——ちょうど、練習問題<a href="15_sec2_2.html#%_thm_2.20">2.20</a>で説明した、末尾にドットがついた記法を使って、人が予期するであろうとおりに。
+私たちが実装したばかりのパタン・マッチャは、ドットを探すわけではないが、私たちが望むとおりにふるまう。
+これは、Lisp により <tt>read</tt> されたプリミティブ——クエリを読んでそれをリスト構造として表現するために <tt>query-driver-loop</tt> によって使われる——が、ドットを特別な方法で扱うからである。
 </p>
 
 <p class="orig" lang="en">
@@ -4217,10 +4880,13 @@ and that for <tt>(computer . ?type)</tt> could be constructed by
 evaluating the expression <tt>(cons 'computer '?type)</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>read</tt> は、ドット<!-- を見る -->に出会うと、次の項目を、リストの次の要素とする (<tt>cdr</tt> がそのリストの残りの部分となるであろうような <tt>cons</tt> の、<tt>car</tt> とする) 代わりに、次の項目をリスト構造の <tt>cdr</tt> とする。
+たとえば、<tt>(computer ?type)</tt> というパタンに対して <tt>read</tt> により作り出されるリスト構造は、<tt>(cons 'computer (cons '?type '()))</tt> という式を評価することによって構築できるだろうし、<tt>(computer . ?type)</tt> に対するものは、<tt>(cons 'computer '?type)</tt> という式を評価することによって構築できるだろう。
+<span class="note"><br>(入り組んでいて分かりづらいのだけれど、多分、次のような意図だと思う。
+たとえば、<tt>(computer . ?type)</tt> のドットを見ると、ドットの「次の項目」である <tt>?type</tt> を、リストの次の要素とする——つまり、<tt>(computer ?type)</tt> と構築する——ということはしない。すなわち、ドットの「次の項目」である <tt>?type</tt> を、「その <tt>cdr</tt> が、(その <tt>(computer ?type)</tt> という)『リスト』の『残りの部分』たる <tt>()</tt> となるような <tt>cons</tt> の、<tt>car</tt>」にしたりはしない (要するに、<tt>?type</tt> を、<tt>(?type)</tt> という <tt>cons</tt> の <tt>car</tt> にはしない)。その代わり、ドットの「次の項目」である <tt>?type</tt> を、リスト構造の <tt>cdr</tt> として、<tt>(computer . ?type)</tt> というドット対を構築する。 )</span>
 </p>
 
 <p class="orig" lang="en">
-
 Thus, as <tt>pattern-match</tt> recursively compares <tt>car</tt>s and <tt>cdr</tt>s of a data list and a pattern that had a dot, it eventually
 matches the variable after the dot (which is a <tt>cdr</tt> of the
 pattern) against a sublist of the data list, binding the variable to
@@ -4229,8 +4895,9 @@ that list.  For example, matching the pattern <tt>(computer . ?type)</tt> agains
 list <tt>(programmer trainee)</tt>.
 </p>
 
-
 <p class="trans" lang="ja">
+このようにして、<tt>pattern-match</tt> は、データ・リストとドットのあったパタンとの <tt>car</tt> 同士および <tt>cdr</tt> 同士を再帰的に比較するので、最終的に、ドットの後の変数 (パタンの <tt>cdr</tt>) をデータ・リストの部分リストに対してマッチさせ、その変数をそのリストに束縛する。
+たとえば、<tt>(computer . ?type)</tt> というパタンを <tt>(computer programmer trainee)</tt> に対してマッチさせることで、<tt>(programmer trainee)</tt> というリストに対して <tt>?type</tt> をマッチさせることになるだろう。
 </p>
 
 <a name="%_sec_4.4.4.4"></a>
@@ -4246,6 +4913,10 @@ applicable rules (selected by <tt>fetch-rules</tt>, section <a href="#%_sec_4.4.
 and combines the resulting streams of frames.</p>
 
 <p class="trans" lang="ja">
+<tt>apply-rules</tt> は、<tt>find-assertions</tt> (<a href="#%_sec_4.4.4.3">4.4.4.3</a>節)の、規則版の類似物である。
+これは、入力としてパタンとフレームをとり、規則を適用することによってデータベースから拡張フレームのストリームを形成する。
+<tt>stream-flatmap</tt> は、もしかすると適用可能な規則 (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節の <tt>fetch-rules</tt> により選択される) のストリームに対して <tt>apply-a-rule</tt> をマップし、結果として生じるフレームのストリーム同士を結合する。
+
 </p>
 
 <p class="lisp"><a name="%_idx_5358"></a>(define (apply-rules pattern frame)
@@ -4262,6 +4933,9 @@ frame.  If this succeeds, it evaluates the rule body in this new
 frame.</p>
 
 <p class="trans" lang="ja">
+<tt>apply-a-rule</tt> は、<a href="#%_sec_4.4.2">4.4.2</a>節で概要を述べた方法を用いて、規則を適用する。
+これは、まず、規則の帰結部を、与えられたフレーム内のパタンとユニファイすることによって、自身の引数のフレームを拡張する。
+もしこれが成功すれば、<tt>apply-a-rule</tt> は、規則の本体部をこの新たなフレームにおいて評価する。
 </p>
 
 <p class="orig" lang="en">
@@ -4280,6 +4954,12 @@ exercise <a href="#%_thm_4.79">4.79</a>.)  Here is the <tt>apply-a-rule</tt>
 procedure:</p>
 
 <p class="trans" lang="ja">
+しかし、こうしたことのいずれかが起こる前に、プログラムは、規則内のすべての変数を、一意な新しい名前を使ってリネームする。
+こうする理由は、異なる規則適用についての変数同士が、お互いと混同されるようになることを防ぐためである。
+たとえば、二つの規則がどちらも <tt>?x</tt> と名付けられた変数を用いていれば、それぞれの規則が、その規則が適用された際に、<tt>?x</tt> に対する束縛をフレームに追加するかもしれない。
+これら二つの <tt>?x</tt> はお互いに無関係であり、私たちは、二つの束縛は整合性が取れていなくてはならないと考えるように騙されたりすべきではない。
+変数をリネームするのでなく、むしろ、私たちは、より賢い環境構造を考案することもできるであろう。しかし、ここで選択した、リネームするという手法は、もっとも効率的という訳ではないとしても、もっとも分かりやすいものである (練習問題<a href="#%_thm_4.79">4.79</a>を参照)。
+<tt>apply-a-rule</tt> 手続きをここに示す。
 </p>
 
 <p class="lisp">(define (apply-a-rule rule query-pattern query-frame)
@@ -4298,6 +4978,7 @@ procedure:</p>
 of a rule are defined in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.</p>
 
 <p class="trans" lang="ja">
+規則の一部を抽出する <tt>rule-body</tt> および <tt>conclusion</tt> というセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で定義される。
 </p>
 
 <p class="orig" lang="en">
@@ -4310,6 +4991,8 @@ the rule to <tt>?x-7</tt> and each <tt>?y</tt> in the rule to <tt>?y-7</tt>.
 included with the syntax procedures in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.)</p>
 
 <p class="trans" lang="ja">
+(番号などの) 一意な識別子をそれぞれの規則適用と対応づけて、この識別子を元の変数名と結合することによって、私たちは、一意な変数名を生成する。
+たとえば、規則適用の識別子が 7 であれば、その規則内のそれぞれの <tt>?x</tt> を <tt>?x-7</tt> に変更するかもしれないし、その規則内のそれぞれの <tt>?y</tt> を <tt>?y-7</tt> に変更するかもしれない (<tt>make-new-variable</tt> と <tt>new-rule-application-id</tt> は、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節の文法手続きに含まれている)。
 </p>
 
 <p class="lisp">(define (rename-variables-in rule)
@@ -4335,6 +5018,9 @@ except that there is extra code (marked ``<tt>***</tt>'' below) to handle
 the case where the object on the right side of the match is a variable.</p>
 
 <p class="trans" lang="ja">
+二つのパタンと一つのフレームとを入力としてとり、拡張したフレームか、<tt>failed</tt> という記号の、いずれかを返すような手続きとして、ユニフィケーション・アルゴリズムは実装される。
+ユニファイアは、対称的だ——変数がマッチの両側で許される——という点を除いては、パタン・マッチャと似ている。
+<tt>unify-match</tt> は、基本的には <tt>pattern-match</tt> と同じである——ただし、マッチの右側にあるオブジェクトが変数である、という場合を扱うための、追加のコード (以下では &ldquo;<tt>***</tt>&rdquo; という印がついている) が存在する、という点を除いて。
 </p>
 
 <p class="lisp"><a name="%_idx_5364"></a>(define (unify-match p1 p2 frame)
@@ -4365,6 +5051,10 @@ its value.  If both parties to the match are unbound, we may bind
 either to the other.</p>
 
 <p class="trans" lang="ja">
+ユニフィケーションでは、片側だけのパタン・マッチングにおけるのと同様に、既存の束縛と整合性が取れている場合にのみ、フレームの、提案された拡張を受け入れるようにしたい。
+ユニフィケーションで使われる <tt>extend-if-possible</tt> という手続きは、下記のプログラムにおいて &ldquo;<tt>***</tt>&rdquo; という印のついた二つの特別な検査を除いて、パタン・マッチングで使われる <tt>extend-if-consistent</tt> と同じである。
+1番目の場合では、もし、マッチさせようとしている変数が束縛されていないものの、その変数にマッチさせようとしている値それ自体が (別の) 変数なのであれば、その値が束縛されているかどうかを調べる必要があり、もし束縛されていれば、その値とマッチさせる必要がある。
+もし、マッチに対する双方の側が未束縛なら、どちらかを他方に束縛してもよい。
 </p>
 
 <p class="orig" lang="en">
@@ -4392,6 +5082,18 @@ and <tt>(?y ?y)</tt>.  The second attempt to bind <tt>?x</tt> to <tt>?y</tt> mat
 of <tt>unify-match</tt>.</p>
 
 <p class="trans" lang="ja">
+2番目の検査は、変数を、その変数を含むパタンへと束縛する試みを取り扱う。
+そうした状況は、変数が双方のパタンで繰り返される場合にはいつでも起こり得る。
+たとえば、<tt>?x</tt> と <tt>?y</tt> の双方が束縛されていないフレームにおいて、<tt>(?x ?x)</tt> および <tt>(?y &lt;<em class="en"><tt>?y</tt> を含む式</em>&gt;)</tt> という二つのパタンをユニファイすることを、考えよう。
+まず、<tt>?x</tt> を <tt>?y</tt> に対してマッチさせ、<tt>?x</tt> の <tt>?y</tt> への束縛を作り出す。
+次に、<tt>?y</tt> を含む、与えられた式に対して、同じ<tt>?x</tt> をマッチさせる。
+<tt>?x</tt> は既に <tt>?y</tt> に束縛されているから、これは、<tt>?y</tt> を当該の式に対してマッチさせるという結果になる。
+もし、ユニファイアのことを、パタン同士を等しくするような、パタン変数に対する値の集合を求めているのだと見なすなら、これらのパタン同士は、<tt>?y</tt> を含む式に <tt>?y</tt> が等しくなるような <tt>?y</tt> を求めよ、という命令を暗示する。
+そうした方程式を解くための一般的手法は存在せず、それゆえ、私たちは、そういった束縛を拒絶する。これらの場合は、<tt>depends-on?</tt> という述語によって認識される<a href="#footnote_Temp_700"><sup><small>80</small></sup></a>。
+一方、変数をその変数自身に束縛する試みは、拒絶したくない。
+たとえば、<tt>(?x ?x)</tt> と <tt>(?y ?y)</tt> をユニファイすることを考えよう。
+<tt>?x</tt> を <tt>?y</tt> に束縛しようという2回目の試みは、<tt>?y</tt> (<tt>?x</tt> の、格納された値) を、<tt>?y</tt> (<tt>?x</tt> の新たな値) に対してマッチさせる。
+これは、<tt>unify-match</tt> の <tt>equal?</tt> によって処理される。
 </p>
 
 <p class="lisp"><a name="%_idx_5370"></a>(define (extend-if-possible var val frame)
@@ -4420,6 +5122,9 @@ simple recursive tree walk in which we substitute for the values of
 variables whenever necessary.</p>
 
 <p class="trans" lang="ja">
+<tt>depends-on?</tt> は、あるパタン変数の値となるべきだと提案されている式が、その変数に依存するか否かを検査する。
+これは、現在のフレームに関して行われなくてはならない。なぜなら、テスト変数に依存する値を既に有しているような変数の出現を、その式が含んでいるかもしれないからである。
+<tt>depends-on?</tt> の構造は、必要なときはいつでも変数の値を置き換えるような、単純で再帰的な木の<ruby><rb>歩道</rb><rp> (</rp><rt>ウォーク</rt><rp>) </rp></ruby>である。
 </p>
 
 <p class="lisp">(define (depends-on? exp var frame)
@@ -4461,6 +5166,13 @@ handling only the case of constant symbols) into the program; instead
 we call on predicates and selectors that embody our criteria.</p>
 
 <p class="trans" lang="ja">
+論理プログラミング言語を設計する際の一つの重要な問題は、与えられたパタンを調べる際には、無関係なデータベース・エントリはできるだけ少数のものだけを検討すれば済むように、物事を整えておく、という問題である。
+私たちのシステムでは、一つの大きなストリームの中にすべての言明を格納することに加えて、<tt>car</tt> が定数記号であるようなすべての言明を、その記号により索引づけがなされた表の中の別々のストリームに格納する。
+パタンにマッチするかもしれない言明を取ってくるには、まず、そのパタンの <tt>car</tt> が定数記号か否かを調べる。
+もしそうであれば、同じ <tt>car</tt> を有する、すべての格納されている言明を、(マッチャを用いて検査されるようにするために) 返す。
+もし、パタンの <tt>car</tt> が定数記号でなければ、すべての格納されている言明を返す。
+より賢い方法であれば、フレーム内の情報をも利用できるであろうし、あるいは、パタンの <tt>car</tt> が定数記号でない場合をも最適化しようと試みることもできるだろう。
+私たちは、(<tt>car</tt> を用いた、定数記号の場合だけを扱う) 索引づけのための、自分の基準を構築することを避け、その代わり、自分の基準を具現化するような、述語とセレクタを頼りにしている。
 </p>
 
 <p class="lisp">(define THE-ASSERTIONS the-empty-stream)
@@ -4477,6 +5189,7 @@ we call on predicates and selectors that embody our criteria.</p>
 stream if nothing is stored there.</p>
 
 <p class="trans" lang="ja">
+<tt>get-stream</tt> は、表にあるストリームを調べて、もしそこに何も格納されていなければ、空ストリームを返す。
 </p>
 
 <p class="lisp">(define (get-stream key1 key2)
@@ -4498,6 +5211,11 @@ conclusions start with a variable in a separate stream in our table,
 indexed by the symbol <tt>?</tt>.</p>
 
 <p class="trans" lang="ja">
+規則も同様に、規則帰結部の <tt>car</tt> を利用して、格納される。
+しかし、規則帰結部は任意のパタンであり、そのため、規則帰結部は、変数を含むことができるという点で、言明とは異なる。
+<tt>car</tt> が定数記号であるようなパタンは、帰結部が変数で始まる規則にマッチし得るし、帰結部が同じ <tt>car</tt> を有しているような規則にもマッチし得る。
+よって、<tt>car</tt> が定数記号であるようなパタンとマッチするかもしれない規則を取ってくるときには、帰結部が変数で始まるすべての規則と、そのパタンと同じ <tt>car</tt> を帰結部が有している規則とを、取ってくる。
+この目的のため、私たちは、帰結部が変数で始まるすべての規則を、表の中の別のストリーム—— <tt>?</tt> という記号により索引づけされたもの——に格納する。
 </p>
 
 <p class="lisp">(define THE-RULES the-empty-stream)
@@ -4519,6 +5237,8 @@ index, if appropriate, and in a stream of all assertions or rules in
 the data base.</p>
 
 <p class="trans" lang="ja">
+<tt>add-rule-or-assertion!</tt> は、データベースに言明や規則を追加するために、<tt>query-driver-loop</tt> により使われる。
+各項目は、それが妥当な場合には索引に格納されるとともに、データベース内の全言明または全規則のストリームに格納される。
 </p>
 
 
@@ -4544,6 +5264,8 @@ To actually store an assertion or a rule, we check to see if it can be
 indexed.  If so, we store it in the appropriate stream.</p>
 
 <p class="trans" lang="ja">
+実際に言明または規則を格納するためには、その言明または規則を索引づけられるかどうかを調べる。
+もし索引づけられるなら、その言明または規則を適切なストリームに格納する。
 </p>
 
 <p class="lisp">(define (store-assertion-in-index assertion)
@@ -4573,8 +5295,9 @@ pattern (an assertion or a rule conclusion) will be stored in the
 table if it starts with a variable or a constant symbol.</p>
 
 <p class="trans" lang="ja">
+以下の手続きは、データベースの索引がどのように使われるのかを定義している。
+パタン (言明または規則帰結部) は、変数または定数記号から始まる場合、表に格納されるだろう。
 </p>
-
 
 <p class="lisp">(define (indexable? pat)
   (or (constant-symbol? (car pat))
@@ -4585,6 +5308,7 @@ table if it starts with a variable or a constant symbol.</p>
 it starts.</p>
 
 <p class="trans" lang="ja">
+表内でそのキーのもとにパタンが格納される、というキーは、<tt>?</tt> (そのパタンが変数から始まる場合) か、または、そのパタンの始まりの定数記号である。
 </p>
 
 
@@ -4597,6 +5321,7 @@ it starts.</p>
 the pattern starts with a constant symbol.</p>
 
 <p class="trans" lang="ja">
+パタンが定数記号から始まる場合に、そのパタンにマッチするかもしれない項目を取り出すために、索引が使われるだろう。
 </p>
 
 <p class="lisp">(define (use-index? pat)
@@ -4611,7 +5336,11 @@ Hint: Recall the definition of the infinite stream of ones in
 section <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>: <tt>(define ones (cons-stream 1 ones))</tt>.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.70.</b> 
+<b>練習問題4.70.</b> <tt>add-assertion!</tt> および <tt>add-rule!</tt> という手続きにおける <tt>let</tt> 束縛の目的は何だろうか?
+<tt>add-assertion!</tt> の以下の実装の、何が不具合なのだろうか?
+ヒント: <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>節の、1の無限ストリームの定義、すなわち、
+<tt>(define ones (cons-stream 1 ones))</tt>
+を、思い出せ。
 </p>
 
 <p class="lisp">(define (add-assertion! assertion)
@@ -4635,6 +5364,7 @@ The query system uses a few stream operations that were not presented
 in chapter 3.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムは、3章では提示されなかった少数のストリーム演算を用いる。
 </p>
 
 <p class="orig" lang="en">
@@ -4646,6 +5376,8 @@ procedure in section <a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>).
 This postpones looping in some cases (see exercise <a href="#%_thm_4.71">4.71</a>).</p>
 
 <p class="trans" lang="ja">
+<tt>stream-append-delayed</tt> および <tt>interleave-delayed</tt> は、まさに <tt>stream-append</tt> および <tt>interleave</tt> (<a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>節) に似ている——ただし、(<a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>節の <tt>integral</tt> 手続きと同様に) 遅延させた引数をとる、という点は除いて。
+これは、ある種の場合においてループを遅延させる (練習問題<a href="#%_thm_4.71">4.71</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5386"></a>(define (stream-append-delayed s1 delayed-s2)
@@ -4673,6 +5405,8 @@ an interleaving process, rather than simply appending them (see
 exercises <a href="#%_thm_4.72">4.72</a> and  <a href="#%_thm_4.73">4.73</a>).</p>
 
 <p class="trans" lang="ja">
+<tt>stream-flatmap</tt> ——フレームのストリームに対して手続きをマップして、結果として生じる、フレームのストリーム同士を結合するために、クエリ評価器の全体にわたって使われる——は、<a href="15_sec2_2.html#%_sec_2.2.3">2.2.3</a>節で普通のリストに関して導入した <tt>flatmap</tt> 手続きの、ストリーム版の類似物である。
+しかし、普通の <tt>flatmap</tt> とは違って、単純にストリーム同士を繋げるのではなく、間に挟まるプロセスとともにストリームを蓄積する (練習問題<a href="#%_thm_4.72">4.72</a>と練習問題<a href="#%_thm_4.73">4.73</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5390"></a>(define (stream-flatmap proc s)
@@ -4690,6 +5424,7 @@ The evaluator also uses the following simple procedure
 to generate a stream consisting of a single element:</p>
 
 <p class="trans" lang="ja">
+評価器は、単一要素からなるストリームを生成するために、以下の単純な手続きも用いる。
 </p>
 
 <p class="lisp"><a name="%_idx_5394"></a>(define (singleton-stream x)
@@ -4709,6 +5444,8 @@ They are the same as the <tt>type-tag</tt> and <tt>contents</tt> procedures in
 section <a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a>, except for the error message.</p>
 
 <p class="trans" lang="ja">
+<tt>tyoe</tt> と <tt>contents</tt> —— <tt>qeval</tt> により使われる (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) ——は、特殊形式はその <tt>car</tt> にある記号により識別されるのだ、ということを規定している。
+これらは、エラー・メッセージ以外は、<a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a>節の <tt>type-tag</tt> 手続きおよび <tt>contents</tt> 手続きと同じである。
 </p>
 
 <p class="lisp">(define (type exp)
@@ -4728,6 +5465,9 @@ that rules and assertions are added to the data base by expressions of
 the form <tt>(assert! &lt;<em>rule-or-assertion</em>&gt;):</tt></p>
 
 <p class="trans" lang="ja">
+以下の手続き—— (<a href="#%_sec_4.4.4.1">4.4.4.1</a>節における) <tt>query-driver-loop</tt> により使われる——は、規則や言明が、
+<tt>(assert! &lt;<em class="en">rule-or-assertion</em>&gt;)</tt>
+という形の式によってデータベースに追加される、ということを規定している。
 </p>
 
 <p class="lisp">(define (assertion-to-be-added? exp)
@@ -4741,6 +5481,7 @@ Here are the syntax definitions for the <tt>and</tt>,  <tt>or</tt>,  <tt>not</tt
 (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>):</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> と <tt>or</tt> と <tt>not</tt> と <tt>lisp-value</tt> という特殊形式 (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) についての文法定義を、ここに示す。
 </p>
 
 <p class="lisp">(define (empty-conjunction? exps) (null? exps))
@@ -4758,6 +5499,7 @@ Here are the syntax definitions for the <tt>and</tt>,  <tt>or</tt>,  <tt>not</tt
 The following three procedures define the syntax of rules:</p>
 
 <p class="trans" lang="ja">
+以下の三つの手続きは、規則の文法を定義している。
 </p>
 
 <p class="lisp">(define (rule? statement)
@@ -4784,6 +5526,10 @@ transformation is accomplished by the following
 procedure:<a name="call_footnote_Temp_702" href="#footnote_Temp_702"><sup><small>81</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>query-driver-loop</tt> (<a href="#%_sec_4.4.4.1">4.4.4.1</a>節) は、式の中のパタン変数—— <tt>?symbol</tt> という形である——を、<tt>(? symbol)</tt> という内部形式へと変形するために、<tt>query-syntax-process</tt> を呼び出す。
+つまり、<tt>(job ?x ?y)</tt> のようなパタンは、実際のところ、内部的にはシステムにより <tt>(job (? x) (? y))</tt> のように表現されるわけだ。
+これは、クエリ処理の効率性を向上させる。というのも、これは、記号から文字を抽出しなくてはならないのではなくて、むしろ、式の <tt>car</tt> が <tt>?</tt> という記号か否かを調べることで、その式がパタン変数か否かをシステムが調べられる、ということを意味するからである。
+文法変形は以下の手続きにより達成される href="#footnote_Temp_702"><sup><small>81</small></sup></a>。
 </p>
 
 <p class="lisp">(define (query-syntax-process exp)
@@ -4810,6 +5556,7 @@ and the constant symbols (which need to be recognized for
 data-base indexing, section <a href="#%_sec_4.4.4.5">4.4.4.5</a>) are just the symbols.</p>
 
 <p class="trans" lang="ja">
+一旦この方法で変数が変形されると、パタン内の変数は <tt>?</tt> で始まるリストであり、定数記号 (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節のとおり、データベースの索引づけのために、認識されねばならない) はただの記号である。
 </p>
 
 <p class="lisp">(define (var? exp)
@@ -4825,6 +5572,8 @@ application is a number, which is incremented each time a rule is
 applied.</p>
 
 <p class="trans" lang="ja">
+(<a href="#%_sec_4.4.4.4">4.4.4.4</a>節での) 規則適用の間に、以下の手続きを用いて、一意な変数が構築される。
+規則適用に対する一意な識別子は番号であり、これは、規則が適用されるたびにインクリメントされる。
 </p>
 
 
@@ -4842,6 +5591,7 @@ answer, it converts any unbound pattern variables back to the right
 form for printing, using</p>
 
 <p class="trans" lang="ja">
+<tt>query-driver-loop</tt> は、クエリをインスタンス化して答えを印字するとき、束縛されていないどのパタン変数をも、印字用の正しい形式へ戻すように、以下を用いて変換する。
 </p>
 
 <p class="lisp">(define (contract-question-mark variable)
@@ -4863,6 +5613,7 @@ form for printing, using</p>
 variable-value pairs:</p>
 
 <p class="trans" lang="ja">
+フレームは、束縛——変数と値の対——のリストとして、表現される。
 </p>
 
 <p class="lisp">(define (make-binding variable value)
@@ -4877,6 +5628,7 @@ variable-value pairs:</p>
   (cons (make-binding variable value) frame))
 </p>
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.71"></a>
 <b>Exercise 4.71.</b>  Louis Reasoner wonders why the <tt>simple-query</tt> and <tt>disjoin</tt>
@@ -4884,7 +5636,7 @@ procedures (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>) are implemented using
 explicit <tt>delay</tt> operations, rather than being defined as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.71.</b> 
+<b>練習問題4.71.</b> ルイス・リーズナは、
 </p>
 
 <p class="lisp">(define (simple-query query-pattern frame-stream)
