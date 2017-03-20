@@ -1,0 +1,11 @@
+h1, h2 {
+  background: linear-gradient(to bottom, hsl(80, 80%, 85%), hsl(150, 80%, 75%));
+}
+em {
+  background: linear-gradient(to bottom, hsl(170, 60%, 75%), hsl(270, 80%, 85%));
+}
+dt {
+  font-weight: bold;
+  font-family: sans-serif;
+  text-decoration: underline;
+}

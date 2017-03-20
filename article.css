@@ -164,3 +164,10 @@ span.key:hover {
 	background: hsl(250,75%,85%);
 }
 
+/*日付を右寄せで書く*/
+p.date {
+	text-align: right;
+	font-style: italic;
+	color: hsl(215,100%,25%);
+}
+
