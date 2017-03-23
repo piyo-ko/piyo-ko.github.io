@@ -5529,7 +5529,7 @@ procedure:<a name="call_footnote_Temp_702" href="#footnote_Temp_702"><sup><small
 <tt>query-driver-loop</tt> (<a href="#%_sec_4.4.4.1">4.4.4.1</a>節) は、式の中のパタン変数—— <tt>?symbol</tt> という形である——を、<tt>(? symbol)</tt> という内部形式へと変形するために、<tt>query-syntax-process</tt> を呼び出す。
 つまり、<tt>(job ?x ?y)</tt> のようなパタンは、実際のところ、内部的にはシステムにより <tt>(job (? x) (? y))</tt> のように表現されるわけだ。
 これは、クエリ処理の効率性を向上させる。というのも、これは、記号から文字を抽出しなくてはならないのではなくて、むしろ、式の <tt>car</tt> が <tt>?</tt> という記号か否かを調べることで、その式がパタン変数か否かをシステムが調べられる、ということを意味するからである。
-文法変形は以下の手続きにより達成される href="#footnote_Temp_702"><sup><small>81</small></sup></a>。
+文法変形は以下の手続きにより達成される <a href="#footnote_Temp_702"><sup><small>81</small></sup></a>。
 </p>
 
 <p class="lisp">(define (query-syntax-process exp)
@@ -5628,7 +5628,6 @@ variable-value pairs:</p>
   (cons (make-binding variable value) frame))
 </p>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.71"></a>
 <b>Exercise 4.71.</b>  Louis Reasoner wonders why the <tt>simple-query</tt> and <tt>disjoin</tt>
@@ -5636,7 +5635,7 @@ procedures (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>) are implemented using
 explicit <tt>delay</tt> operations, rather than being defined as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.71.</b> ルイス・リーズナは、
+<b>練習問題4.71.</b> ルイス・リーズナは、なぜ <tt>simple-query</tt> 手続きと <tt>disjoin</tt> 手続き (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) が、以下のように定義されるのではなく、むしろ明示的な <tt>delay</tt> 演算を用いて実装されているのかな、と思う。
 </p>
 
 <p class="lisp">(define (simple-query query-pattern frame-stream)
@@ -5658,6 +5657,7 @@ lead to undesirable behavior?
 </p>
 
 <p class="trans" lang="ja">
+これらのより簡素な定義が望ましくない振る舞いにつながるであろうクエリの例を、君は示せるかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5672,7 +5672,9 @@ section <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>?)
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.72.</b> 
+<b>練習問題4.72.</b> なぜ <tt>disjoin</tt> と <tt>stream-flatmap</tt> は、ストリーム同士を単純につなぐのではなく、むしろストリーム同士を混ぜこぜにするのか?
+なぜ混ぜこぜにすることで、よりうまくいくのか、ということを例示するような、例を示せ
+(ヒント: <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>節でどうして <tt>interleave</tt> を使ったのだったっけ?)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5686,7 +5688,8 @@ What would be wrong with defining it as follows:
 
 
 <p class="trans" lang="ja">
-<b>練習問題4.73.</b> 
+<b>練習問題4.73.</b> なぜ <tt>flatten-stream</tt> は <tt>delay</tt> を明示的に使うのか?
+<tt>flatten-stream</tt> を以下のように定義すると、何がまずいのだろう?
 </p>
 
 <p class="lisp">(define (flatten-stream stream)
@@ -5700,7 +5703,6 @@ What would be wrong with defining it as follows:
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
-
 <p class="orig" lang="en">
 <a name="%_thm_4.74"></a>
 <b>Exercise 4.74.</b>  <a name="%_idx_5418"></a>Alyssa P. Hacker proposes to use a simpler version of <tt>stream-flatmap</tt>
@@ -5710,7 +5712,8 @@ in these cases always produces either the empty stream or a singleton
 stream, so no interleaving is needed when combining these streams.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.74.</b> 
+<b>練習問題4.74.</b> <tt>negate</tt> と <tt>lisp-value</tt> と <tt>find-assertions</tt> の中では、より単純なバージョンの <tt>stream-flatmap</tt> を使おう、とアリッサ・P・ハッカは提案する。
+彼女は、これらの場合においてフレーム・ストリームに対してマップされる手続きが、常に、空ストリームか、または、一要素ストリームのいずれかを作り出すこと、そのため、これらのストリーム同士を結合する際には、混ぜこぜにする必要がないこと、に気づいているのだ。
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -5718,7 +5721,7 @@ stream, so no interleaving is needed when combining these streams.</p>
 </ol>
 
 <ol class="trans alph" start="1" lang="ja">
-<li></li>
+<li>アリッサのプログラムにおいて欠けている式を埋めよ。</li>
 </ol>
 
 <p class="lisp">(define (simple-stream-flatmap proc s)
@@ -5734,12 +5737,11 @@ stream, so no interleaving is needed when combining these streams.</p>
 </ol>
 
 <ol class="trans alph" start="2" lang="ja">
-<li></li>
+<li>クエリ・システムをこのように変えたら、クエリ・システムの振る舞いは変わるだろうか?</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
-
 
 <p class="orig" lang="en">
 <a name="%_thm_4.75"></a>
@@ -5747,7 +5749,9 @@ stream, so no interleaving is needed when combining these streams.</p>
 in the data base satisfying a specified query.  For example,</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.75.</b> 
+<b>練習問題4.75.</b> <tt>unique</tt> と呼ばれる新たな特殊形式を、クエリ言語用に実装せよ。
+指定されたクエリを満たす、きっかり一個の項目がデータベース内にある場合に、<tt>unique</tt> は成功すべきである。
+たとえば、
 </p>
 
 <p class="lisp">(unique (job ?x (computer wizard)))
@@ -5756,6 +5760,7 @@ in the data base satisfying a specified query.  For example,</p>
 <p class="orig" lang="en">should print the one-item stream</p>
 
 <p class="trans" lang="ja">
+は、次の一項目ストリームを印字すべきである。
 </p>
 
 <p class="lisp">(unique (job (Bitdiddle Ben) (computer wizard)))
@@ -5764,6 +5769,7 @@ in the data base satisfying a specified query.  For example,</p>
 <p class="orig" lang="en">since Ben is the only computer wizard, and</p>
 
 <p class="trans" lang="ja">
+というのも、ベンは唯一のコンピュータ魔術師だからである。また、
 </p>
 
 <p class="lisp">(unique (job ?x (computer programmer)))
@@ -5773,6 +5779,7 @@ in the data base satisfying a specified query.  For example,</p>
 programmer.  Moreover,</p>
 
 <p class="trans" lang="ja">
+は、空ストリームを印字すべきである。というのも、一人よりも多くのコンピュータ・プログラマがいるからである。さらに、
 </p>
 
 <p class="lisp">(and (job ?x ?j) (unique (job ?anyone ?j)))
@@ -5782,6 +5789,7 @@ programmer.  Moreover,</p>
 people who fill them.</p>
 
 <p class="trans" lang="ja">
+は、ただ一人の人物により果たされているようなすべての仕事と、それらの仕事を果たしている人々とを、列挙すべきである。
 </p>
 
 <p class="orig" lang="en">
@@ -5793,6 +5801,10 @@ your procedure is called <tt>uniquely-asserted</tt>, all you need to do
 is</p>
 
 <p class="trans" lang="ja">
+<tt>unique</tt> を実装することは、二つの部分からなっている。
+第一の部分は、この特殊形式を扱う手続きを書くことであり、第二の部分は、<tt>qeval</tt> に、その手続きへと割り振りを行わせることである。
+第二の部分は瑣末である。というのも、<tt>qeval</tt> は、自身による割り振りを、データ指向的な方法で行うからである。
+君の手続きが <tt>uniquely-asserted</tt> と呼ばれるとすれば、君がせねばならないことは、ただ、
 </p>
 
 <p class="lisp">(put 'unique 'qeval uniquely-asserted)
@@ -5802,6 +5814,7 @@ is</p>
 <tt>type</tt> (<tt>car</tt>) is the symbol <tt>unique</tt>.</p>
 
 <p class="trans" lang="ja">
+とすることだけであり、<tt>qeval</tt> は、<tt>type</tt> (<tt>car</tt>) が <tt>unique</tt> という記号であるようなどのクエリについても、この手続きへの割り振りを行うであろう。
 </p>
 
 <p class="orig" lang="en">
@@ -5815,6 +5828,12 @@ stream that is the result of the <tt>unique</tt> query.  This is similar
 to the implementation of the <tt>not</tt> special form.</p>
 
 <p class="trans" lang="ja">
+本当の問題は、<tt>uniquely-asserted</tt> という手続きを書くことである。
+この手続きは、<tt>unique</tt> クエリの <tt>contents</tt> (<tt>cdr</tt>) を、フレームのストリームとともに、入力としてとる。
+ストリーム中の各フレームについて、この手続きは、<tt>qeval</tt> を用いて、与えられたクエリを満たすような、当該フレームに対するすべての拡張からなる、ストリームを求めるはずだ。
+中にちょうど一個の項目を有する訳ではない、いかなるストリームも、削除されるはずである。
+残っているストリームは、<tt>unique</tt> クエリの結果である一つの大きなストリームの中へと蓄積されるべく、渡されて戻されるはずである。
+これは、<tt>not</tt> 特殊形式の実装に似ている。
 </p>
 
 <p class="orig" lang="en">
@@ -5823,6 +5842,7 @@ supervise precisely one person.
 </p>
 
 <p class="trans" lang="ja">
+きっかり一人の人物を指揮監督するようなすべての人々を列挙するクエリを形成することにより、君の実装を検査してみたまえ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5845,7 +5865,10 @@ factor of <em>k</em> fewer than the number of matches required in our current
 method.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.76.</b> 
+<b>練習問題4.76.</b> クエリの直列結合としての、私たちの <tt>and</tt> の実装 (図<a href="#%_fig_4.5">4.5</a>) は、明晰ではあるが、<tt>and</tt> のうちの2番目のクエリを処理する際に、1番目のクエリにより作り出された各フレームについてデータベースを走査せねばならないため、非効率的である。
+もしデータベースに <em class="en">N</em> 個の要素があり、典型的なクエリが <em class="en">N</em> に比例する個数 (つまり <em class="en">N</em>/<em class="en">k</em> 個) の出力フレームを作り出すとすれば、1番目のクエリにより作り出された各フレームについてデータベースを走査することは、パタン・マッチャに対する <em class="en">N</em><sup>2</sup>/<em class="en">k</em> 回の呼び出しを必要とするであろう。
+別の手法は、<tt>and</tt> の二つの節を別々に処理して、それから、両立する出力フレーム同士のすべての対を探すことであろう。
+もし各クエリが <em class="en">N</em>/<em class="en">k</em> 個の出力フレームを作り出すとすれば、これは、両立性検査を <em class="en">N</em><sup>2</sup>/<em class="en">k</em><sup>2</sup> 回——これは、私たちの今の方法で必要とされるマッチの回数よりも、<em class="en">k</em> 倍ぶんだけ少ない——実行せねばならない、ということを意味する。
 </p>
 
 <p class="orig" lang="en">
@@ -5857,6 +5880,9 @@ is similar to unification.
 </p>
 
 <p class="trans" lang="ja">
+この戦略を用いる、<tt>and</tt> の実装を考案せよ。
+入力として二つのフレームをとり、それらのフレーム内の束縛同士が両立するかどうかを調べ、もし両立するなら、その二組の束縛を合併するフレームを作り出すような手続きを、君は実装せねばならない。
+この操作は、ユニフィケーションに似ている。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5877,7 +5903,11 @@ intermediate frames generated.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.77.</b> 
+<b>練習問題4.77.</b> <tt>not</tt> と <tt>lisp-value</tt> は、変数が束縛されていないフレームにこれらのフィルタリング演算が適用された場合に、クエリ言語に「間違った」答えを提示させてしまう可能性がある、ということを<a href="#%_sec_4.4.3">4.4.3</a>節で見た。
+この欠点を修正する方法を考案せよ。
+一つの考え方は、演算を可能とするのに十分な変数が束縛されたときにのみ満たされるような、フィルタリングを行うための「<ruby><rb>約束</rb><rp> (</rp><rt>プロミス</rt><rp>) </rp></ruby>」を、フレームに追加することによって、「遅延された」方法でフィルタリングを行うことである。
+他のすべての演算が実行され終えるまで、フィルタリングを実行するのを待つことができるだろう。
+とはいえ、効率性のためには、生成される中間的フレームの数を減らすように、フィルタリングをできるだけすぐに行いたい。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5898,7 +5928,11 @@ difference?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.78.</b> 
+<b>練習問題4.78.</b> ストリーム・プロセスではなく、むしろ<a href="28_sec4_3.html#%_sec_4.3">4.3</a>節の評価器を使って実装されるべき非決定的プログラムとして、クエリ言語を設計し直せ。
+この手法では、各クエリが (すべての答えからなるストリームではなく) 単一の答えを生み出すだろうし、ユーザは、さらなる答えを見るために <tt>try-again</tt> と打ち込むことができる。
+本節で私たちが構築した仕組みのほとんどが、非決定的な探索とバックトラッキングに含められる、ということに君は気づくはずである。
+しかし、君の新たなクエリ言語が、ここで実装されたものとは微妙に振る舞いが違う、ということにも、おそらく君は気づくだろう。
+この違いを例解する事例を見つけられるかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -5911,7 +5945,8 @@ we saw how to use local environments to avoid name conflicts between
 the parameters of procedures.  For example, in evaluating</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.79.</b> 
+<b>練習問題4.79.</b> <a href="26_sec4_1.html#%_sec_4.1">4.1</a>節で Lisp 評価器を実装したとき、私たちは、手続きのパラメタ同士の間での名前衝突を防ぐためには局所環境をどのように使うのか、ということを見た。
+たとえば、以下を評価する際に、
 </p>
 
 <p class="lisp">(define (square x)
@@ -5933,6 +5968,10 @@ rename the variables in the body of a procedure each time we apply the
 procedure.</p>
 
 <p class="trans" lang="ja">
+<tt>square</tt> 内の <tt>x</tt> と、<tt>sum-of-squares</tt> 内の <tt>x</tt> との間には、何の混同もない。なぜなら、局所変数用の束縛を含むように特別に構築される環境内で、それぞれの手続きの本体を評価するからである。
+クエリ・システムでは、私たちは、規則を適用する際の名前衝突を防ぐために、別の戦略を用いた。
+規則を適用するたびに、変数を、一意だと保証されている新たな名前にリネームするのだ。
+Lisp 評価器についての類似の戦略は、局所環境を廃止して、手続きを適用するたびにその手続きの本体の中の変数を単純にリネームする、というものである。
 </p>
 
 <p class="orig" lang="en">
@@ -5948,6 +5987,10 @@ answer is probably worth a Ph.D.)</p>
 
 
 <p class="trans" lang="ja">
+リネームではなく環境を用いるような規則適用方法を、クエリ言語用に実装せよ。
+ブロック構造化された手続きの規則版の類似物などの、大規模システムを扱うための、クエリ言語における構造物を作成するために、君の環境構造を活かせているかどうか、ということを確かめよ。
+これのうちの幾らかでも、君は、問題解決の一手法として文脈内で演繹を行うという問題 (たとえば、「もし <em class="en">P</em> は真だと私が思ったなら、私は、<em class="en">A</em> かつ <em class="en">B</em> だと演繹できたことだろう」) と、関連づけられるかな?
+(この問題は自由回答である。良い答えは、おそらく博士号に値する)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -6335,14 +6378,32 @@ Beginning with the expression 1  +  <em>y</em>/2 and repeatedly substituting 1
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_700"><sup><small>80</small></sup></a>
+一般に、<tt>?y</tt> と、<tt>?y</tt> を含む式とをユニファイすることには、私たちが
+<span class="math"><tt>?y</tt>  =  &lt;<em class="en"><tt>?y</tt> を含む式</em>&gt;</span>
+という方程式の不動点を求められることが必要になるだろう。
+解のように見える式を文法的に形成することが、ときには可能である。
+たとえば、
+<span class="math"><tt>?y</tt>  =  <tt>(f ?y)</tt></span> 
+は、
+<tt>(f (f (f &hellip; )))</tt>
+という不動点—— <tt>(f ?y)</tt> という式から始めて、繰り返し、<tt>?y</tt> を <tt>(f ?y)</tt> で置き換えることによって、作り出せる——を持つように見える。
+あいにく、そうした方程式のすべてが意味のある不動点を持つわけではない。
+ここで持ち上がる問題は、数学において無限級数を操作する問題と似ている。
+たとえば、私たちは、2 が
+<span class="math"><em class="en">y</em>  =  1  +  <em class="en">y</em>/2</span>
+という方程式の解であることを知っている。
+<span class="math">1  +  <em class="en">y</em>/2</span>
+という式から初めて、繰り返し、<em class="en">y</em> を
+<span class="math">1 +  <em class="en">y</em>/2</span>
+で置き換えることによって、
 </p>
-
 
 <figure><img src="ch4-Z-G-7.gif" border="0"></figure>
 
 <p class="orig" lang="en">which leads to</p>
 
 <p class="trans" lang="ja">
+が得られ、これは、次のような結果となる。
 </p>
 
 <figure><img src="ch4-Z-G-8.gif" border="0"></figure>
@@ -6353,6 +6414,9 @@ obtain
 </p>
 
 <p class="trans" lang="ja">
+しかし、もし、&minus;1 は
+<span class="math"><em class="en">y</em>  =  1  +  2<em class="en">y</em></span>
+に対する解である、という観察から始まる同じ操作を試みれば、
 </p>
 
 <figure><img src="ch4-Z-G-9.gif" border="0"></figure>
@@ -6362,6 +6426,7 @@ obtain
 
 
 <p class="trans" lang="ja">
+となって、これは、次のような結果となる。
 </p>
 
 <figure><img src="ch4-Z-G-10.gif" border="0"></figure>
@@ -6374,6 +6439,8 @@ lead to errors. </p>
 
 
 <p class="trans" lang="ja">
+これら二つの方程式を導出する際に使われる形式上の操作は同一だが、1番目の結果は無限級数に関する有効な言明であり、2番目の結果はそうではない。
+同様に、私たちのユニフィケーション結果については、文法的に構築された任意の式を用いて推論することが、間違いにつながりかねない。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_702" href="#call_footnote_Temp_702"><sup><small>81</small></sup></a> Most Lisp systems give the user the ability to
@@ -6388,6 +6455,11 @@ explicitly.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_702"><sup><small>81</small></sup></a>
+<em>リーダ・マクロ文字</em>を定義することによって、普通の <tt>read</tt> 手続きを、こうした変形を実行するように変形する能力を、ほとんどの Lisp システムはユーザに与えてくれている。
+引用符のついた式は、既にこのような方法で扱われている。
+<ruby><rb>読み取り器</rb><rp> (</rp><rt>リーダ</rt><rp>) </rp></ruby>は、<tt>'expression</tt> を、評価器がこれを見る前に、<tt>(quote expression)</tt> へと自動的に変換する。
+私たちは、同じ方法で <tt>?expression</tt> が <tt>(? expression)</tt> へと変形されるように、手筈を整えることもできよう。
+しかし、明確さのために、私たちは、ここで明示的に変換手続きを含めておいたのである。
 </p>
 
 <p class="orig" lang="en">
@@ -6396,6 +6468,8 @@ several procedures with <tt>string</tt> in their names.
 These are Scheme primitives.</p>
 
 <p class="trans" lang="ja">
+<tt>expand-question-mark</tt> と <tt>contract-question-mark</tt> は、名前の中に <tt>string</tt> を含む手続きをいくつか用いる。
+これらは、Scheme のプリミティブである。
 </p>
 
 </div>
