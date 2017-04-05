@@ -3403,26 +3403,120 @@ the query</p>
 (outranked-by (Bitdiddle Ben) (Warbucks Oliver))
 <span class="ex_comment">という回答を返す。が、その後、ルイスの変更のせいで、以下のように、
 outranked-by の再帰的な呼び出しが無限に深まるループにはまり込んでしまう
-(つまり、(☆1)を打ち込むと、(☆2)の出力は得られるが、(☆3)以下が実行されていく
-無限ループにはまり、<del>(*)は実行されず、ということ</del>)。</span>
+(つまり、(☆1)  を打ち込むと、(☆2)の出力は得られるが、(☆3) 以下が実行されていく
+無限ループにはまる。</span>
 
 outranked-by (☆1)
  |
  +-- supervisor (☆2)
  OR
- +-- outranked-by (☆3) --AND-- supervisor (*)
+ +-- outranked-by (☆3) --AND-- supervisor (★3)
       |
       +-- supervisor (☆4)
       OR
-      +-- outranked-by (☆5) --AND-- supervisor (*)
+      +-- outranked-by (☆5) --AND-- supervisor (★5)
            |
            +-- supervisor (☆6)
            OR
-           +-- outranked-by (☆7) --AND-- supervisor(*)
+           +-- outranked-by (☆7) --AND-- supervisor (★7)
                 |
-                :
+                +-- supervisor (☆8)
+                OR
+                +-- outranked-by (☆9) --AND-- supervisor (★9)
+                     |
+                     :
 
-<span class="ex_comment">と、雑に考えたんだが、どうだろう。</span></p>
+<span class="ex_comment">ここで参考までに、上下関係を図示しておく。</span>
+Warbucks Oliver
+  |
+  +-- <span style="font-weight:bold; font-style: italic;">Bitdiddle Ben</span>
+  |     |
+  |     +-- Hacker Alyssa P
+  |     |     |
+  |     |     +-- Reasoner Louis
+  |     |
+  |     +-- Fect Cy D
+  |     +-- Tweakit Lem E
+  |
+  +-- Scrooge Eben
+  |     |
+  |     +-- Cratchet Robert
+  |
+  +-- Aull DeWitt
+
+<span class="ex_comment">さて、先程の ☆1 以下の流れをもう少し詳しく言うと、次のとおり。
+
+まず、(☆1) を満たす解 (ベンの上役) を求めたい、という要求がある。
+そこで、(☆2) を満たす解 (ベンの直接の上司) を探す。
+答えが一つ見つかり (オリバー)、出力される。
+続いて別の解を探そうとすると、他に (☆2) を満たす解がない。
+
+そこで、(☆3) と (★3) を満たす (ことで (☆1) を満たす) ような解を求めようとする。
+つまり、ある人 (M氏とする) とその人の上役 (B氏とする) の組み合わせを探して (☆3)、
+その下位の方の人物 (M氏) がベンの直接の上司である (★3) かどうかを確認してゆく。
+
+そのために、まず (☆4) を満たす解 (ある人とその人の直接の上司、という組み合わせ) を
+求める。すると、そうした解はいくつか見つかるが、どれも (★3) の AND 条件を満たさ
+ない (その下位の方の人物 (M氏) はベンの直接の上司ではない) と判明する。
+
+そこで次に、(☆5) と (★5) を満たす (ことで (☆3) を満たし、さらに (★3) も満たす
+ことで、ひいては (☆1) を満たす) ような解を求めようとする。
+つまり、まず、ある人 (M2氏) とその人の上役 (B氏) の組み合わせを探して (☆5)、
+その下位の方の人物 (M2氏) が直接の上司となって指揮監督する部下 (M氏) を持って
+いるかを確認する (★5)。
+もしそうした部下 (M氏) がいれば、その部下 (M氏) から見ても、上記の上役 (B氏) は
+上役に当たる (☆3)。さらに、もしこの部下 (M氏) がベンの直接の上司であれば (★3)、
+上記の上役 (B氏) はベンの上役でもある (☆1)。
+
+以上のような探索のために、まず (☆6) を満たす解 (ある人 (M2氏) とその人の直接の
+上司 (B氏)、という組み合わせ) を求める。すると、そうした解はいくつか見つかるが、
+どれも、(★5) の AND 条件を満たさない (M2氏には直接の部下に当たるM氏がいない) か、
+または、(★5) は満たしても (★3) を満たさない (M2氏には直接の部下に当たるM氏が
+いるが、M氏はベンの直接の上司ではない)、と判明する。
+つまり、見つかるのは、(☆3) を満たさないものか、(☆3) は満たしても (★3) を満たさ
+ないものばかりである。(☆1) を満たすものは見つからない。
+
+そこで次に、(☆7) と (★7) を満たす (ことで (☆5) を満たし、さらに (★5) も満たす
+ことで (☆3) を満たし、それに加えて (★3) も満たすことで、最終的には (☆1) を
+満たす) ような解を求めようとする。
+つまり、まず、ある人 (M3氏) とその人の上役 (B氏) の組み合わせを探して (☆7)、
+その下位の方の人物 (M3氏) が直接の上司となって指揮監督する部下 (M2氏) を持って
+いるかを確認する (★7)。
+もしそうした部下 (M2氏) がいれば、その部下 (M2氏) から見ても、上記の上役 (B氏) は
+上役に当たる (☆5)。
+さらに、この部下 (M2氏) が直接の上司となって指揮監督する部下 (M氏) を持って
+いるかを確認する (★5)。もしそうした部下 (M氏) がいれば、その部下 (M氏) から
+見ても、上記の上役 (B氏) は上役に当たる (☆3)。さらに、もしこの部下 (M氏) が
+ベンの直接の上司であれば (★3)、上記の上役 (B氏) はベンの上役でもある (☆1)。
+
+以上のような探索のために、まず (☆8) を満たす解 (ある人 (M3氏) とその人の直接の
+上司 (B氏)、という組み合わせ) を求める。すると、そうした解はいくつか見つかるが、
+どれも、(★7) を満たさないか、(★5) を満たさないか、(★3) を満たさない。
+その結果、(☆1) を満たすものは見つからない。
+
+……以下同様にして探索がどんどん深みにはまり、解が見つからないまま、無限ループに
+陥ってしまう。ということのはず。
+</span></p>
+
+<!--
+outranked_by(Staff_person, Boss) :- 
+	supervisor(Staff_person, Boss); 
+	(outranked_by(Middle_manager, Boss), 
+		supervisor(Staff_person, Middle_manager)).
+
+
+outranked_by(['Bitdiddle', 'Ben'], Who) :-	%☆1
+	supervisor(['Bitdiddle', 'Ben'], Who);	%☆2
+	(outranked_by(M, Who), supervisor(['Bitdiddle', 'Ben'], M)).	%☆3, ★3
+
+outranked_by(M, Who) :-	%☆3
+	supervisor(M, Who);	%☆4
+	(outranked_by(M2, Who), supervisor(M, M2)).	%☆5, ★5
+
+outranked_by(M2, Who) :-	%☆5
+	supervisor(M2, Who);	%☆6
+	(outranked_by(M3, Who), supervisor(M2, M3)).		%☆7, ★7
+-->
 <p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。
 
 % まず人事DB (規則込み) の読み込み。</span>
@@ -3452,270 +3546,558 @@ The debugger will first creep -- showing everything (trace)
 yes
 {trace}
 
-<span class="ex_comment">% それでは、いざ実行。
+<span class="ex_comment">% それでは、実行しますよ。
 % (以下は、実際の出力にコメントを追記したもの。
 %    [呼び出し番号] [直接の先祖を示す番号] [ポート:] [ゴール] ?
 %  というのが元の出力である。)</span>
 
 | ?- outranked_by(['Bitdiddle', 'Ben'], Who).
-      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ? <span class="ex_comment">% (☆1)</span>
-      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ? <span class="ex_comment">% (☆2)</span>
-      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
-      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆1 (ベンの上役は誰?) </span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆2 (ベンの直接の上司は誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆2 (オリバーだよ)</span>
+      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆1 (オリバーだよ)</span>
 
 Who = ['Warbucks','Oliver'] ? ;
 <span class="ex_comment">% ここまでは簡単。再帰なしで判明するパタン。</span>
 
 <span class="ex_comment">% 上の行でセミコロンを入力したので、別の解を探し始める。
-% 実際は、ベンより上位の人間はオリバーだけなので、別の解など存在しないのだが、
-% 以下の通り、探索が無限ループに陥ってしまう。</span>
-      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
-      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
-      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ? 
-<span class="ex_comment">% supervisor(['Bitdiddle','Ben'], Who) にマッチするものはもうないので、Fail となった。
-% というわけで、再帰呼び出し定義の方でマッチするものを探しにいく。つまり、
-% WhoがBossにユニファイされている状態で、
-% outranked_by(Middle_manager, Boss), supervisor(['Bitdiddle','Ben'], Middle_manager)
+% 実際は、ベンより上位の人間はオリバーだけなので、別の解など存在しない。しかも、
+% 「うまく有限ステップで探索木全体を探索し終えて、解が存在しないことを確認できた」
+% とはならず、以下の通り、探索が無限ループに陥ってしまう。</span>
+
+      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆1 (これから別の解を探しにいくよ!)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆2 (ベンの直接の上司はオリバー以外に誰かいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆2 (いないね、残念)</span>
+
+<span class="ex_comment">% ここからは、「ある人物M氏 (Middle_manager) の上役として、ある人物B氏 (Boss) がおり、
+% そのM氏がベンの直接の上司だから、B氏はベンの上役である」という条件に該当するような、
+% B氏を探しにいく。つまり ☆3 と ★3 を満たす解を探す (だが、実際はそんな人はいないので、
+% 答えは見つからないし、しかも無限ループに陥るので探索が終わらない)。
+
+% つまり、Who と Boss がユニファイされている状態で、
+% <tt>outranked_by(Middle_manager, Boss), supervisor(['Bitdiddle','Ben'], Middle_manager)</tt>
 % にマッチするものを、探しにいく。</span>
-      2    2  Call: outranked_by(_352,_283) ? <span class="ex_comment">% (☆3)</span>
+
+      2    2  Call: outranked_by(_352,_283) ?
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせはあるか?)</span>
       3    3  Call: supervisor(_376,_283) ? 
-      3    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせはあるか?)</span>
+      3    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?  
+              <span class="ex_comment">% ☆4 (アリッサの直接の上司にはベンがいる)</span>
       2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?
-<span class="ex_comment">% AND結合された一つ目の述語を満たす解は、上の行のとおり見つかったが……</span>
+              <span class="ex_comment">% ☆3 (アリッサの上役にはベンがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったアリッサは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
-      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (サイの直接の上司にはベンがいる)</span>
       2    2  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (サイの上役にはベンがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったサイは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
       2    2  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (レムの直接の上司にはベンがいる)</span>
       2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (レムの上役にはベンがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったレムは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
       2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆4 (ルイスの直接の上司にはアリッサがいる)</span>
       2    2  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (ルイスの上役にはアリッサがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったルイスは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
       2    2  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (ベンの直接の上司にはオリバーがいる)</span>
       2    2  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (ベンの上役にはオリバーがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったベンは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
+              <span class="ex_comment">% ★3 (違うよ、そんな訳ないでしょ)</span>
+
       2    2  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (エーベンの直接の上司にはオリバーがいる)</span>
       2    2  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (エーベンの上役にはオリバーがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったエーベンは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
-      2    2  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆4 (ロバートの直接の上司にはエーベンがいる)</span>
       2    2  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (ロバートの上役にはエーベンがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったロバートは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探すと……</span>
-      2    2  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ?  
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
       3    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
       3    3  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (ドゥウィットの直接の上司にはオリバーがいる)</span>
       2    2  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
-<span class="ex_comment">% 上の行のとおり解が見つかるが……</span>
+              <span class="ex_comment">% ☆3 (ドゥウィットの上役にはオリバーがいる)</span>
       4    2  Call: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったドゥウィットは、ベンの直接の上司なのか?)</span>
       4    2  Fail: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆4 (B氏はM氏の直接の上司である) を満たすことで ☆3 (B氏はM氏の上役である) を満たし、
+%   しかも ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解は存在しない、ということが判明 (長かった……)。
+
+% そこで、これからは、
+% 「☆5 (B氏はM2氏の上役である) かつ ★5 (M2氏はM氏の直接の上司である) を満たすことによって
+%   ☆3 (B氏はM氏の上役である) を満たし、
+%   しかも ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解を探しにいく。</span>
+
       2    2  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
-<span class="ex_comment">% その解は、二つ目の述語を満たさないと判明する。
-% というわけで、AND結合された一つ目の述語を満たす別の解を探す訳だが、
-% ここで、</span>
+              <span class="ex_comment">% ☆3 (M氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       3    3  Call: outranked_by(_376,_283) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせはあるか?)</span>
       4    4  Call: supervisor(_400,_283) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (アリッサ (M2) の直接の上司にはベン (B) がいる)</span>
       3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (アリッサ (M2) の上役にはベン (B) がいる)</span>
       5    3  Call: supervisor(_436,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったアリッサ (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (ルイス (M) がいた)</span>
       2    2  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (ということは、ルイス (M) にとってベン (B) は上役だ)</span>
       6    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったルイス (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       6    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
       2    2  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (M氏がルイスで、その上役のB氏がベン、という組み合わせは駄目だったので、やり直そう)</span>
       5    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (まず、アリッサ (M2) を直接の上司とするような、ルイスでない別の誰か (M) はいるかな?)</span>
       5    3  Fail: supervisor(_424,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (残念、いないよ)</span>
+
       3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がアリッサで、その上役のB氏がベン、という組み合わせが駄目だったということだから、ここからやり直し)</span>
       4    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (サイ (M2) の直接の上司にはベン (B) がいる)</span>
       3    3  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (サイ (M2) の上役にはベン (B) がいる)</span>
       5    3  Call: supervisor(_436,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったサイ (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Fail: supervisor(_424,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
       3    3  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
       4    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (レム (M2) の直接の上司にはベン (B) がいる)</span>
       3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (レム (M2) の上役にはベン (B) がいる)</span>
       5    3  Call: supervisor(_436,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったレム (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Fail: supervisor(_424,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
       3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
       4    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆6 (ルイス (M2) の直接の上司にはアリッサ (B) がいる)</span>
       3    3  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆5 (ルイス (M2) の上役にはアリッサ (B) がいる)</span>
       5    3  Call: supervisor(_436,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったルイス (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Fail: supervisor(_424,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
       3    3  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
       4    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (ベン (M2) の直接の上司にはオリバー (B) がいる)</span>
       3    3  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ベン (M2) の上役にはオリバー (B) がいる)</span>
       5    3  Call: supervisor(_434,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったベン (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (アリッサがいるよ)</span>
       2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、M氏がアリッサで、M2氏がベンで、B氏がオリバー、という組み合わせが存在するということだな)</span>
       6    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったアリッサ (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       6    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
       2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がアリッサで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
       5    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、アリッサでない別の誰か (M) はいるかな?)</span>
       5    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (サイがいた)</span>
       2    2  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、サイ (M) にとってオリバー (B) は上役だ)</span>
       6    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったサイ (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       6    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
       2    2  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がサイで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
       5    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、サイでない別の誰か (M) はいるかな?)</span>
       5    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (レムがいた)</span>
       2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、レム (M) にとってオリバー (B) は上役だ)</span>
       6    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったレム (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       6    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
       2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がレムで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
       5    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、レムでない別の誰か (M) はいるかな?)</span>
       5    3  Fail: supervisor(_422,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (もうこれ以上、そういう誰か (M) は見つからない)</span>
+
       3    3  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がベンで、その上役のB氏がオリバー、という組み合わせが駄目だったということだから、ここからやり直し)</span>
       4    4  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (エーベン (M2) の直接の上司にはオリバー (B) がいる)</span>
       3    3  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (エーベン (M2) の上役にはオリバー (B) がいる)</span>
       5    3  Call: supervisor(_434,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったエーベン (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (ロバート (M) がいた)</span>
       2    2  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、ロバート (M) にとってオリバー (B) は上役だ)</span>
       6    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったロバート (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       6    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (残念、違うよ)</span>
+
       2    2  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がロバートで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
       5    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (まず、エーベン (M2) を直接の上司とするような、ロバートでない別の誰か (M) はいるかな?)</span>
       5    3  Fail: supervisor(_422,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (残念、いないよ)</span>
+
       3    3  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がエーベンで、その上役のB氏がオリバー、という組み合わせが駄目だったということだから、ここからやり直し)</span>
       4    4  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆6 (ロバート (M2) の直接の上司にはエーベン (B) がいる)</span>
       3    3  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆5 (ロバート (M2) の上役にはエーベン (B) がいる)</span>
       5    3  Call: supervisor(_434,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったロバート (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Fail: supervisor(_422,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
       3    3  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がロバートで、その上役のB氏がエーベン、という組み合わせが駄目だったということだから、ここからやり直し)</span>
       4    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
       4    4  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (ドゥウィット (M2) の直接の上司にはオリバー (B) がいる)</span>
       3    3  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ドゥウィット (M2) の上役にはオリバー (B) がいる)</span>
       5    3  Call: supervisor(_434,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったドゥウィット (M2) を直接の上司とするような誰か (M) はいるか?)</span>
       5    3  Fail: supervisor(_422,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆6 (B氏はM2氏の直接の上司である) を満たすことで ☆5 (B氏はM2氏の上役である) を満たし、
+%   しかも ★5 (M2氏はM氏の直接の上司である) を満たしているので、☆5 かつ ★5 を満たしており、
+%   ゆえに ☆3 (B氏はM氏の上役である) を満たし、
+%   さらに ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解は存在しない、ということが判明。 (長かった……)。
+
+% つまり、
+% 「☆6 を満たすことで ☆5 を満たす、という解では最終的に ☆1 を満たせない」
+% と判明した。
+
+% そこで、これからは、
+% 「☆7 かつ ★7 を満たすことで ☆5 を満たす、という解があるかな?
+%   もしあれば、その解ならば最終的に ☆1 を満たせるのかな?」
+% という方針で探索を進める。
+
+% が、以下のトレースからも分かるように、これも失敗する。
+% 上司・部下の階層の数が一番多いのはオリバーからルイスに至る経路で、
+% ここを、B氏、M3氏、M2氏、M氏と見なすところまでは可能だが、
+% ルイスには部下がいないし、だから当然、「ルイス (M氏) の直接の部下がベン」
+% なんてこともありえない（そもそもベンはルイスより上役だし)。</span>
+
       3    3  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       4    4  Call: outranked_by(_400,_283) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせはあるか?)</span>
       5    5  Call: supervisor(_424,_283) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせはあるか?)</span>
       5    5  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=アリッサ、B=ベン)</span>
       4    4  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3=アリッサ、B=ベン)</span>
       6    4  Call: supervisor(_460,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M3=アリッサを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M2=ルイス)</span>
       3    3  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2=ルイス、B=ベン)</span>
       7    3  Call: supervisor(_490,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (M2=ルイスを直接の上司とするような誰か (M) はいるか?)</span>
       7    3  Fail: supervisor(_478,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
       3    3  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       6    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M3=アリッサを直接の上司とするような、ルイス以外の誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_448,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
-      4    4  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=サイ、B=ベン)</span>
+      4    4  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ?  
+              <span class="ex_comment">% ☆7 (M3=サイ、B=ベン)</span>
       6    4  Call: supervisor(_460,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★7 (M3=サイを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_448,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=レム、B=ベン)</span>
       4    4  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3=レム、B=ベン)</span>
       6    4  Call: supervisor(_460,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★7 (M3=レムを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_448,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆8 (M3=ルイス、B=アリッサ)</span>
       4    4  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆7 (M3=ルイス、B=アリッサ)</span>
       6    4  Call: supervisor(_460,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★7 (M3=ルイスを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_448,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=ベン、B=オリバー)</span>
       4    4  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=ベン、B=オリバー)</span>
       6    4  Call: supervisor(_458,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=アリッサ)</span>
       3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=アリッサ、B=オリバー)</span>
       7    3  Call: supervisor(_490,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (M2=アリッサを直接の上司とするような誰か (M) はいるか?)</span>
       7    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
-      2    2  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ★5 (M=ルイス)</span>
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆3 (M=ルイス、B=オリバー)</span>
       8    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったM=ルイスは、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
       8    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
       2    2  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       7    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (M2=アリッサを直接の上司とするような、ルイス以外の誰か (M) はいるか?)</span>
       7    3  Fail: supervisor(_478,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
       3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       6    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、アリッサ以外の誰か (M2) はいるか?)</span>
       6    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=サイ)</span>
       3    3  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=サイ、B=オリバー)</span>
       7    3  Call: supervisor(_490,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (M2=サイを直接の上司とするような誰か (M) はいるか?)</span>
       7    3  Fail: supervisor(_478,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
       3    3  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       6    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、サイ以外の誰か (M2) はいるか?)</span>
       6    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=レム)</span>
       3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=レム、B=オリバー)</span>
       7    3  Call: supervisor(_490,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (M2=レムを直接の上司とするような誰か (M) はいるか?)</span>
       7    3  Fail: supervisor(_478,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
       3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       6    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、レム以外の誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_446,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (もういないよ)</span>
+
       4    4  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=エーベン、B=オリバー)</span>
       4    4  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=エーベン、B=オリバー)</span>
       6    4  Call: supervisor(_458,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M3=エーベンを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M2=ロバート)</span>
       3    3  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=ロバート、B=オリバー)</span>
       7    3  Call: supervisor(_488,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (M2=ロバートを直接の上司とするような誰か (M) はいるか?)</span>
       7    3  Fail: supervisor(_476,['Cratchet','Robert']) ? 
-      3    3  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       6    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M3=エーベンを直接の上司とするような、ロバート以外の誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_446,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆8 (M3=ロバート、B=エーベン)</span>
       4    4  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆7 (M3=ロバート、B=エーベン)</span>
       6    4  Call: supervisor(_458,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★7 (M3=ロバートを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_446,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
       4    4  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
       5    5  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=ドゥウィット、B=オリバー)</span>
       4    4  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=ドゥウィット、B=オリバー)</span>
       6    4  Call: supervisor(_458,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★7 (M3=ドゥウィットを直接の上司とするような誰か (M2) はいるか?)</span>
       6    4  Fail: supervisor(_446,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆8 を満たすことで ☆7 を満たし、
+%   さらに ★7 を満たすことで ☆5 を満たし、
+%   さらに ★5 を満たすことで ☆3 を満たし、
+%   さらに ★3 を満たすことで ☆1 を満たす」
+% という解が存在しないことが分かった。
+
+% という訳で、さらに再帰が深まって、今度は、
+% 「☆9 かつ ★9 を満たすことで ☆7 を満たす、という解があるかな?
+%   もしあれば、その解ならば最終的に ☆1 を満たせるのかな?」
+% という方針で探索を進めることになるが、もちろんそんな解は見つからない。</span>
+
       4    4  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
       5    5  Call: outranked_by(_424,_283) ? 
+              <span class="ex_comment">% ☆9</span>
+
+ <span class="ex_comment">% (以下略)</span><!--
       6    6  Call: supervisor(_448,_283) ? 
       6    6  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       5    5  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
@@ -3724,27 +4106,32 @@ Who = ['Warbucks','Oliver'] ? ;
       4    4  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
       8    4  Call: supervisor(_514,['Reasoner','Louis']) ? 
       8    4  Fail: supervisor(_502,['Reasoner','Louis']) ? 
+
       4    4  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
       7    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       7    5  Fail: supervisor(_472,['Hacker','Alyssa','P']) ? 
+
       5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       6    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       6    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       5    5  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       7    5  Call: supervisor(_484,['Fect','Cy','D']) ? 
       7    5  Fail: supervisor(_472,['Fect','Cy','D']) ? 
+
       5    5  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       6    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       6    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       7    5  Call: supervisor(_484,['Tweakit','Lem','E']) ? 
       7    5  Fail: supervisor(_472,['Tweakit','Lem','E']) ? 
+
       5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       6    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       6    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       5    5  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       7    5  Call: supervisor(_484,['Reasoner','Louis']) ? 
       7    5  Fail: supervisor(_472,['Reasoner','Louis']) ? 
+
       5    5  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       6    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       6    6  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
@@ -3756,15 +4143,18 @@ Who = ['Warbucks','Oliver'] ? ;
       8    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       3    3  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
       9    3  Call: supervisor(_544,['Reasoner','Louis']) ? 
+
       9    3  Fail: supervisor(_532,['Reasoner','Louis']) ? 
       3    3  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
       8    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+
       8    4  Fail: supervisor(_502,['Hacker','Alyssa','P']) ? 
       4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
       7    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       7    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       4    4  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
       8    4  Call: supervisor(_514,['Fect','Cy','D']) ? 
+
       8    4  Fail: supervisor(_502,['Fect','Cy','D']) ? 
       4    4  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
       7    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
@@ -3774,6 +4164,7 @@ Who = ['Warbucks','Oliver'] ? ;
       8    4  Fail: supervisor(_502,['Tweakit','Lem','E']) ? 
       4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
       7    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+
       7    5  Fail: supervisor(_470,['Bitdiddle','Ben']) ? 
       5    5  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
       6    6  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
@@ -3784,21 +4175,25 @@ Who = ['Warbucks','Oliver'] ? ;
       4    4  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
       8    4  Call: supervisor(_512,['Cratchet','Robert']) ? 
       8    4  Fail: supervisor(_500,['Cratchet','Robert']) ? 
+
       4    4  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
       7    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       7    5  Fail: supervisor(_470,['Scrooge','Eben']) ? 
+
       5    5  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
       6    6  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
       6    6  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       5    5  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       7    5  Call: supervisor(_482,['Cratchet','Robert']) ? 
       7    5  Fail: supervisor(_470,['Cratchet','Robert']) ? 
+
       5    5  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       6    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       6    6  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       5    5  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       7    5  Call: supervisor(_482,['Aull','DeWitt']) ? 
       7    5  Fail: supervisor(_470,['Aull','DeWitt']) ? 
+
       5    5  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       6    6  Call: outranked_by(_448,_283) ? 
       7    7  Call: supervisor(_472,_283) ? 
@@ -3809,6 +4204,7 @@ Who = ['Warbucks','Oliver'] ? ;
       5    5  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
       9    5  Call: supervisor(_538,['Reasoner','Louis']) ? 
       9    5  Fail: supervisor(_526,['Reasoner','Louis']) ? 
+
       5    5  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
       8    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       8    6  Fail: supervisor(_496,['Hacker','Alyssa','P']) ? 
@@ -3818,18 +4214,21 @@ Who = ['Warbucks','Oliver'] ? ;
       6    6  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       8    6  Call: supervisor(_508,['Fect','Cy','D']) ? 
       8    6  Fail: supervisor(_496,['Fect','Cy','D']) ? 
+
       6    6  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       7    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       7    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       8    6  Call: supervisor(_508,['Tweakit','Lem','E']) ? 
       8    6  Fail: supervisor(_496,['Tweakit','Lem','E']) ? 
+
       6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       7    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       7    7  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       6    6  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       8    6  Call: supervisor(_508,['Reasoner','Louis']) ? 
       8    6  Fail: supervisor(_496,['Reasoner','Louis']) ? 
+
       6    6  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       7    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       7    7  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
@@ -3842,24 +4241,29 @@ Who = ['Warbucks','Oliver'] ? ;
       4    4  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
      10    4  Call: supervisor(_568,['Reasoner','Louis']) ? 
      10    4  Fail: supervisor(_556,['Reasoner','Louis']) ? 
+
       4    4  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
       9    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       9    5  Fail: supervisor(_526,['Hacker','Alyssa','P']) ? 
+
       5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
       8    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       8    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       5    5  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
       9    5  Call: supervisor(_538,['Fect','Cy','D']) ? 
       9    5  Fail: supervisor(_526,['Fect','Cy','D']) ? 
+
       5    5  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
       8    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       8    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
       9    5  Call: supervisor(_538,['Tweakit','Lem','E']) ? 
       9    5  Fail: supervisor(_526,['Tweakit','Lem','E']) ? 
+
       5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
       8    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       8    6  Fail: supervisor(_494,['Bitdiddle','Ben']) ? 
+
       6    6  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
       7    7  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
       7    7  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
@@ -3869,21 +4273,25 @@ Who = ['Warbucks','Oliver'] ? ;
       5    5  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
       9    5  Call: supervisor(_536,['Cratchet','Robert']) ? 
       9    5  Fail: supervisor(_524,['Cratchet','Robert']) ? 
+
       5    5  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
       8    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       8    6  Fail: supervisor(_494,['Scrooge','Eben']) ? 
+
       6    6  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
       7    7  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
       7    7  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       6    6  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       8    6  Call: supervisor(_506,['Cratchet','Robert']) ? 
       8    6  Fail: supervisor(_494,['Cratchet','Robert']) ? 
+
       6    6  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       7    7  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
       7    7  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       6    6  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       8    6  Call: supervisor(_506,['Aull','DeWitt']) ? 
       8    6  Fail: supervisor(_494,['Aull','DeWitt']) ? 
+
       6    6  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
       7    7  Call: outranked_by(_472,_283) ? 
       8    8  Call: supervisor(_496,_283) ? 
@@ -3894,27 +4302,32 @@ Who = ['Warbucks','Oliver'] ? ;
       6    6  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
      10    6  Call: supervisor(_562,['Reasoner','Louis']) ? 
      10    6  Fail: supervisor(_550,['Reasoner','Louis']) ? 
+
       6    6  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
       9    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       9    7  Fail: supervisor(_520,['Hacker','Alyssa','P']) ? 
+
       7    7  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       8    8  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
       8    8  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       7    7  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       9    7  Call: supervisor(_532,['Fect','Cy','D']) ? 
       9    7  Fail: supervisor(_520,['Fect','Cy','D']) ? 
+
       7    7  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       8    8  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       8    8  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       7    7  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       9    7  Call: supervisor(_532,['Tweakit','Lem','E']) ? 
       9    7  Fail: supervisor(_520,['Tweakit','Lem','E']) ? 
+
       7    7  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       8    8  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       8    8  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       7    7  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       9    7  Call: supervisor(_532,['Reasoner','Louis']) ? 
       9    7  Fail: supervisor(_520,['Reasoner','Louis']) ? 
+
       7    7  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       8    8  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
       8    8  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
@@ -3927,6 +4340,7 @@ Who = ['Warbucks','Oliver'] ? ;
       5    5  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
      11    5  Call: supervisor(_592,['Reasoner','Louis']) ? 
      11    5  Fail: supervisor(_580,['Reasoner','Louis']) ? 
+
       5    5  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
      10    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
      10    6  Fail: supervisor(_550,['Hacker','Alyssa','P']) ? 
@@ -3936,20 +4350,102 @@ Who = ['Warbucks','Oliver'] ? ;
       6    6  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
      10    6  Call: supervisor(_562,['Fect','Cy','D']) ? 
      10    6  Fail: supervisor(_550,['Fect','Cy','D']) ? 
+
       6    6  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
       9    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
       9    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
      10    6  Call: supervisor(_562,['Tweakit','Lem','E']) ? 
      10    6  Fail: supervisor(_550,['Tweakit','Lem','E']) ? 
+
       6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
       9    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
       9    7  Fail: supervisor(_518,['Bitdiddle','Ben']) ? 
+
       7    7  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
       8    8  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
       8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
       8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
-      7    7  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? a
+      7    7  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? -->
+</p>
+
+<p class="exercise"><span class="ex_comment">元のプログラムが無限ループに陥らない訳も確認しておく。</span>
+outranked-by (※1)
+ |
+ +-- supervisor (※2)
+ OR
+ +-- supervisor (※3) --AND-- outranked-by (＊3) 
+                               |
+                               +-- supervisor (※4)
+                               OR
+                               +-- supervisor (※5) --AND-- outranked-by (＊5)
+                                                   <span class="ex_comment">↑探索すべき対象がここで尽きるため、</span>
+                                                   <span class="ex_comment">ここで探索は終了。(＊5) は実行されない</span>
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。</span>
+| ?- consult('<a href="personnel_db.pl">personnel_db.pl</a>').
+<span class="ex_comment">% (出力省略)</span>
+108 lines read - 20294 bytes written, 39 ms
+(4 ms) yes
+<span class="ex_comment">% トレースできるようにする。</span>
+| ?- trace.
+The debugger will first creep -- showing everything (trace)
+yes
+{trace}
+<span class="ex_comment">% では実行。</span>
+| ?- outranked_by(['Bitdiddle', 'Ben'], Who).
+      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※1 (ベンの上役は誰?)</span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※2 (ベンの直接の上司は誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※2 (オリバーだよ)</span>
+      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※1 (オリバーだよ)</span>
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% 一つ解が見つかった。
+% つまり、「ベンの直接の上司 (指揮監督者) だからベンの上役である」という人物としてオリバーが見つかった。
+
+% 別の解を探しにいく。</span>
+      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※1 (これから別の解を探しにいくよ!)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※2 (ベンの直接の上司はオリバー以外に誰かいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ? 
+      <span class="ex_comment">% ※2 (いない)</span>
+
+<span class="ex_comment">% ここからは、「ベンの直接の上司として誰かがいて、その誰かの上役だから、ベンの上役である」
+% という人物を探しにいく
+%  (実際はそんな人はいないので、探索は失敗に終わるし、しかもその探索は有限ステップで無事に終わる)。</span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_352) ? 
+      <span class="ex_comment">% ※3 (ベンの直接の上司とは誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※3 (オリバーが見つかった)</span>
+      3    2  Call: outranked_by(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ＊3 (ではそのオリバーの上役は誰かいるか?)</span>
+      4    3  Call: supervisor(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ※4 (オリバーの直接の上司とは誰?)</span>
+      4    3  Fail: supervisor(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ※4 (そんな人はいない)</span>
+      4    3  Call: supervisor(['Warbucks','Oliver'],_405) ?
+      <span class="ex_comment">% ※5 (オリバーの直接の上司として誰かがいて、その誰かの上役だからオリバーの上役、という</span>
+      <span class="ex_comment">%    人がいるかを見るために、まずオリバーの直接の上司を探す)</span>
+      4    3  Fail: supervisor(['Warbucks','Oliver'],_393) ?
+      <span class="ex_comment">% ※5 (オリバーの直接の上司なんていう人はいない。よって、その人の上役だから</span>
+      <span class="ex_comment">%    オリバーの上役、という人も存在しない)</span>
+      3    2  Fail: outranked_by(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ＊3 (結局オリバーに上役はいない。つまりオリバーに関して ※3 AND ＊3 は不成立)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※3 の別の解を探す (オリバー以外にベンの直接の上司はいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_340) ?  
+      <span class="ex_comment">% ※3 (いなかった)</span>
+      1    1  Fail: outranked_by(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※1 (もうこれ以上探索しても解などないと分かって、探索終了)</span>
+
+(2 ms) no
+{trace}
 </p>
 
 <p class="orig" lang="en">
@@ -3991,14 +4487,14 @@ organization, gives a query to find all the wheels
 <span class="ex_comment">にマッチする言明として、以下のものが見つかる。便宜上、番号を振っておく。
 これらの言明の第2引数が、「大物」の候補ということ。</span>
 
-(supervisor (Hacker Alyssa P) (Bitdiddle Ben))    <span class="ex_comment">(1)</span>
-(supervisor (Fect Cy D) (Bitdiddle Ben))          <span class="ex_comment">(2)</span>
-(supervisor (Tweakit Lem E) (Bitdiddle Ben))      <span class="ex_comment">(3)</span>
-(supervisor (Reasoner Louis) (Hacker Alyssa P))   <span class="ex_comment">(4)</span>
-(supervisor (Bitdiddle Ben) (Warbucks Oliver))    <span class="ex_comment">(5)</span>
-(supervisor (Scrooge Eben) (Warbucks Oliver))     <span class="ex_comment">(6)</span>
-(supervisor (Cratchet Robert) (Scrooge Eben))     <span class="ex_comment">(7)</span>
-(supervisor (Aull DeWitt) (Warbucks Oliver))      <span class="ex_comment">(8)</span>
+(supervisor (Hacker Alyssa P) (Bitdiddle Ben))    <span class="ex_comment">; (1)</span>
+(supervisor (Fect Cy D) (Bitdiddle Ben))          <span class="ex_comment">; (2)</span>
+(supervisor (Tweakit Lem E) (Bitdiddle Ben))      <span class="ex_comment">; (3)</span>
+(supervisor (Reasoner Louis) (Hacker Alyssa P))   <span class="ex_comment">; (4)</span>
+(supervisor (Bitdiddle Ben) (Warbucks Oliver))    <span class="ex_comment">; (5)</span>
+(supervisor (Scrooge Eben) (Warbucks Oliver))     <span class="ex_comment">; (6)</span>
+(supervisor (Cratchet Robert) (Scrooge Eben))     <span class="ex_comment">; (7)</span>
+(supervisor (Aull DeWitt) (Warbucks Oliver))      <span class="ex_comment">; (8)</span>
 
 <span class="ex_comment">図で示すと、以下の通りの上下関係。</span>
 Warbucks Oliver
@@ -4047,7 +4543,7 @@ Warbucks Oliver
       1    1  Exit: wheel(['Bitdiddle','Ben']) ? 
 
 Who = ['Bitdiddle','Ben'] ? ;
-<span class="ex_comment">% ルイス→アリッサ→ベン</span>
+<span class="ex_comment">% ルイス→アリッサ→ベン、という階層におけるベンが大物として見つかった。</span>
 
       1    1  Redo: wheel(['Bitdiddle','Ben']) ? 
       3    2  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
@@ -4071,7 +4567,7 @@ Who = ['Bitdiddle','Ben'] ? ;
       1    1  Exit: wheel(['Warbucks','Oliver']) ? 
 
 Who = ['Warbucks','Oliver'] ? ;
-<span class="ex_comment">% </span>
+<span class="ex_comment">% アリッサ→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
 
       1    1  Redo: wheel(['Warbucks','Oliver']) ? 
       3    2  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
@@ -4079,7 +4575,7 @@ Who = ['Warbucks','Oliver'] ? ;
       1    1  Exit: wheel(['Warbucks','Oliver']) ? 
 
 Who = ['Warbucks','Oliver'] ? ;
-<span class="ex_comment">% </span>
+<span class="ex_comment">% サイ→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
 
       1    1  Redo: wheel(['Warbucks','Oliver']) ? 
       3    2  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
@@ -4087,7 +4583,7 @@ Who = ['Warbucks','Oliver'] ? ;
       1    1  Exit: wheel(['Warbucks','Oliver']) ? 
 
 Who = ['Warbucks','Oliver'] ? ;
-<span class="ex_comment">% </span>
+<span class="ex_comment">% レム→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
 
       1    1  Redo: wheel(['Warbucks','Oliver']) ? 
       3    2  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
@@ -4099,7 +4595,7 @@ Who = ['Warbucks','Oliver'] ? ;
       1    1  Exit: wheel(['Warbucks','Oliver']) ? 
 
 Who = ['Warbucks','Oliver'] ? ;
-<span class="ex_comment">% </span>
+<span class="ex_comment">% ロバート→エーベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
 
       1    1  Redo: wheel(['Warbucks','Oliver']) ? 
       3    2  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
@@ -4218,6 +4714,7 @@ modify the system to include your loop detector.)
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
+<p class="extra" id="translating">***ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.68"></a>
 <b>Exercise 4.68.</b>  <a name="%_idx_5286"></a>Define rules to implement the <tt>reverse</tt> operation of
@@ -5731,6 +6228,9 @@ stream, so no interleaving is needed when combining these streams.</p>
   (stream-map &lt;<em>??</em>&gt;
               (stream-filter &lt;<em>??</em>&gt; stream)))
 </p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <ol class="orig alph" start="2" lang="en">
 <li>Does the query system's behavior change if we change it in this way?</li>
