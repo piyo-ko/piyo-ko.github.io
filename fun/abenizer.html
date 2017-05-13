@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../article.css" type="text/css">
+<base target="_top">
+<title>simple Abenizer</title>
+<script>
+// 全体的な処理
+function abenize() {
+  // 入力文字列
+  var orig_txt = document.f.orig_txt.value;
+
+  // 句点で文に区切る。括弧内の句点などは考慮していない。
+  var sentences = orig_txt.split('。');
+  var i, n;
+  // 最後の句点が区切りとなって、配列の最終要素は空になるから、
+  // 最終要素は不要。なので、1 を引いている。
+  n = sentences.length - 1;
+  //console.log("n=" + n);
+
+  var conv_txt = "";
+  var c;
+  // 各文を変換して、変換したものをつなげていく。
+  for (i = 0; i < n; i++) {
+    c = abenize_sent(sentences[i]);
+    //console.log("i=" + i + ": [" + sentences[i] + "] → [" + c + "]");
+    conv_txt += c;
+  }
+  // 出力する。
+  document.f.conv_txt.value = conv_txt;
+}
+
+// 指定されたいくつかの文字列のうちの一つ、または、空文字列を、ランダムに返す。
+// 引数のpairs_of_phrase_and_threshold は配列。
+// 配列の各要素は、thresholdとphraseというプロパティを持つオブジェクト。
+// 要素は、thresholdの昇順に並んでいるものとする。
+// なお、0 < threshold < 1 である。
+// 
+// 乱数 r を発生させて、
+// r >= pairs_of_phrase_and_threshold[i].threshold
+// を満たす最大のiを見つけ、
+// pairs_of_phrase_and_threshold[i].phrase を返す。
+// そのようなiがなければ、空文字列を返す。
+function randomly_select(pairs_of_phrase_and_threshold) {
+  const n = pairs_of_phrase_and_threshold.length;
+  const r = Math.random();
+  var i;
+  //console.log("in randomly_select(): n=" + n + ", r=" + r);
+  for (i = n-1; i >= 0; i--) {
+    if (r >= pairs_of_phrase_and_threshold[i].threshold) {
+      return(pairs_of_phrase_and_threshold[i].phrase);
+    }
+  }
+  return("");
+}
+
+// 一つの文を変換して返す。
+function abenize_sent(sent) {
+  // 文頭につける副詞句的なものを定義する。
+  const adv_phrases = [
+    { phrase: "私は、内閣総理大臣、でありますから、",
+      threshold: 0.35 },
+    { phrase: "私は、自民党総裁として、申し上げますがね、",
+      threshold: 0.55 },
+    { phrase: "何度もお答え申し上げているように、", 
+      threshold: 0.75},
+    { phrase: "よく聞いてくださいよ、", 
+      threshold: 0.85}
+  ];
+  // ランダムに選択。
+  abenized = randomly_select(adv_phrases);
+
+  // 文を読点で区切って、擬似的な文節区切りとし、区切りごとに、
+  // 先頭に何か挿入したり、末尾を言い換えたりする。
+
+  // 読点での区切り (擬似文節) の先頭につける挿入句的なものを定義する。
+  const interjections = [
+    { phrase: "えー、",             threshold: 0.25 },
+    { phrase: "いわば、",           threshold: 0.37 },
+    { phrase: "まさに、",           threshold: 0.55 },
+    { phrase: "そこで、ですね、",   threshold: 0.70 },
+    { phrase: "丁寧に、",           threshold: 0.85 },
+    { phrase: "これは、ですね、",   threshold: 0.93 }
+  ];
+
+  var segments = sent.split('、');
+  var i, n;
+  n = segments.length;
+  for (i = 0; i < n; i++) {
+    // 擬似文節の先頭にランダムに挿入句を入れる。
+    abenized += randomly_select(interjections);
+    
+    // いくつかの言い換えは、一律に適用する。
+    var s = segments[i].replace(/する$/, "いたします");
+    s = s.replace(/した$/, "したのであります");
+    s = s.replace(/なる$/, "なる、のであります");
+    s = s.replace(/なった$/, "なったわけでごさいます");
+    s = s.replace(/[な無]い$/, "ないわけで、ございます");
+    s = s.replace(/いる$/, "おります");
+    s = s.replace(/いた$/, "おりました");
+    s = s.replace(/である$/, "で、ございます");
+    s = s.replace(/であった$/, "でございました");
+    s = s.replace(/ある$/, "あるので、ございます");
+    s = s.replace(/あった$/, "ありました");
+    s = s.replace(/だった$/, "だったわけで、ございます");
+
+    //「を」だけは助詞だと分かっている (現代仮名遣いの場合)。
+    // なので、単純にランダムで四択 (一つは、「を」のまま、というもの)。
+    var r = Math.random();
+    if (r > 0.75) {
+      s = s.replace(/を/, "、それをですね");
+    } else if (r > 0.50) {
+      s = s.replace(/を/, "、まさにこれを");
+    } else if (r > 0.25) {
+      s = s.replace(/を/, "、いわばこれを");
+    }
+
+    // 一文中で最後の擬似文節以外は、読点を末尾につける。
+    if (i < n-1) {
+      abenized = abenized + s + '、';
+    } else {
+      abenized = abenized + s;
+    }
+  }
+  return(abenized + "。");
+}
+</script>
+
+</head>
+<body class="main-text-only">
+
+<p>
+安倍首相の国会答弁があまりに言語不明瞭・意味不明瞭なので、安倍氏の答弁風に変換するページを作ってみた。
+簡単なパタンマッチングをしているだけで、形態素解析などは全くしていない。
+よって、非文が生成される可能性も高いと思うが、それはそれで安倍氏風なのではなかろうか。
+なお、一部の語句はランダムに挿入しているが、別に安倍氏の口癖を分析しているわけではないので、頻度分布的にあまり似ていないかもしれない。まあ、お遊びなので御容赦願いたい。
+</p>
+
+<p>
+というわけで、遊んでみてね〜。
+</p>
+
+<div style="text-align: center">
+<form name="f">
+
+<textarea name="orig_txt" cols="55" rows="10" placeholder="ここに変換したい元の文章を入力する。"></textarea><br>
+<input type="button" value="変換すると……↓" onclick="abenize()"><br>
+<textarea name="conv_txt" cols="55" rows="10"></textarea><br>
+<input type="reset" value="クリア"><br>
+
+
+</form>
+</div>
+
+<navi>[<a href="../index.html">ホーム</a>]</navi>
+
+</body>
+</html>
