@@ -12,6 +12,9 @@ background: paleturquoise;
 .lined td {
   border: solid 1px blue;
 }
+input[type="text"] {
+  text-align: right;
+}
 </style>
 <script type="text/javascript">
 var cur=0; //初期化。今、何番まで表示済みか。
@@ -101,12 +104,14 @@ function allClear() {
     document.ems.elements[i].style.background="white";
     //document.ems.elements[i].value="";
   }
+  return(true);
 }
 
 function incr() {
+  //console.log("cur=" + cur);
   if (cur>=64) { //オールクリアして終了
     allClear();
-    return;
+    return(false);
   }
 
   if (cur>0) { //このとき、eの値は設定済み
@@ -124,7 +129,7 @@ function incr() {
   c=parseInt(pos[cur].substr(0,1));
   r=parseInt(pos[cur].substr(2,1));
   e=8*(c-1)+r-1;
-  //alert("pos["+cur+"]="+pos[cur]+"\nc="+c+"\nr="+r+"\ne="+e);
+  //console.log("pos["+cur+"]="+pos[cur]+"\nc="+c+"\nr="+r+"\ne="+e);
   //色を変えて番号表示
   document.ems.elements[e].style.background="sandybrown";
   document.ems.elements[e].value=cur.toString();
@@ -132,6 +137,7 @@ function incr() {
   if (cur==64) {
     calc();
   }
+  return(true);
 }
 
 function calc() {
@@ -158,13 +164,22 @@ function calc() {
     document.ems.elements[83+(cn-1)*2].value=ex;
     document.ems.elements[83+(cn-1)*2+1].value=eval(ex).toString();
   }
+  return(true);
 }
 
 function autoIncr() {
   var i;
   allClear();
-  for (i=1; i<=64; i++) {
+
+  i=1;
+  autoIncrIter(1);
+  return(true);
+}
+
+function autoIncrIter(i) {
+  if (i<=64) {
     incr();
+    setTimeout(function() {autoIncrIter(++i);}, 500);
   }
 }
 </script>
