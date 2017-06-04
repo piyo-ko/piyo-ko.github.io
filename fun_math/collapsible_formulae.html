@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<link rel="canonical" href="https://piyo-ko.github.io/fun_math/collapsible_formulae.html">
+<title>式の展開の過程の表示・非表示を切り替える</title>
+<script type="text/javascript" src="mathjax_config.js"></script>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML"></script>
+<script>
+function expand(tr_id) {
+  document.getElementById(tr_id).style.display = 'table-row';
+  document.getElementById(tr_id).style.visibility = 'visible';
+}
+</script>
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>
+table {
+  border-collapse: collapse;
+  border: 2pt blue solid;
+}
+td {
+  padding: 6pt;
+}
+td.math {
+  background: white;
+  border: none; 
+}
+td.mathnote {
+  border-top: 1pt blue dotted;
+  border-bottom: 1pt blue dotted;
+}
+td.right {
+  text-align: right;
+}
+th {
+  border: solid 1px blue;
+}
+tr.collapsed {
+  visibility: collapse;
+  display: none;
+}
+span.st {
+  padding: 6pt;
+  border: blue solid 1px;
+  background: cyan;
+}
+span.st:hover {
+  background: orange;
+}
+</style>
+</head>
+
+<body class="main-text-only">
+<h1>式の展開の過程の表示・非表示を切り替える</h1>
+
+<p>
+MathJax を少し触ってみて、「式の展開の過程を表示するのと、展開の過程は省略して結果だけ表示するのを、切り替えられるようにしたら便利なのでは?」と思って、少し試してみました。
+</p>
+
+<p>
+「次」のところをクリップ (タップ) すると、式を少しずつ展開してゆきます。最終結果だけを見ることもできます。ただ、備考欄は少しずつ展開する場合に合わせて書いてあるので、最終結果だけを見る場合には、備考欄の文言がちょっと意味不明ですね。
+</p>
+
+<table>
+<tr><th></th><th>式</th><th>備考</th></tr>
+
+<tr id="step_00">
+<td><span onclick="expand('step_01')" class="st">次</span></td>
+<td class="math">$$\int \frac{1}{\sin x} dx $$</td>
+<td class="mathnote"><span onclick="expand('step_08')" class="st">最終結果</span>だけ見ることもできます。</td>
+</tr>
+
+<tr id="step_01" class="collapsed">
+<td><span onclick="expand('step_02')" class="st">次</span></td>
+<td class="math">$$= \int \frac{1}{\sin x} \deriv{x}{t} dt$$</td>
+<td class="mathnote">$\cos x = t$ とおいて置換積分を行うことにする。
+が、この段階ではまだ $\disp \frac{1}{\sin x}$ はそのまま書いておく (あとで $t$ の関数として書き直せればいいなぁ、と思いつつ)。</td>
+</tr>
+
+<tr id="step_02" class="collapsed">
+<td><span onclick="expand('step_03')" class="st">次</span></td>
+<td class="math">$$= \int \frac{-1}{\sin^2 x} dt$$</td>
+<td class="mathnote">$\cos x = t$ の両辺を $t$ で微分すると
+$\disp - \sin x \deriv{x}{t} = 1$ なので、
+$\disp \deriv{x}{t} = \frac{-1}{\sin x}$
+である。</td>
+</tr>
+
+<tr id="step_03" class="collapsed">
+<td><span onclick="expand('step_04')" class="st">次</span></td>
+<td class="math">$$= \int \frac{1}{t^2 - 1} dt$$</td>
+<td class="mathnote">$\disp \frac{-1}{\sin^2 x}
+= \frac{-1}{1 - t^2}
+= \frac{1}{t^2 - 1}$ を代入する。</td>
+</tr>
+
+<tr id="step_04" class="collapsed">
+<td><span onclick="expand('step_05')" class="st">次</span></td>
+<td class="math">$$= \int \frac{1}{t+1} \frac{1}{t-1} dt$$</td>
+<td class="mathnote">$t^2 -1 = (t+1) (t-1)$ を代入する。</td>
+</tr>
+
+<tr id="step_05" class="collapsed">
+<td><span onclick="expand('step_06')" class="st">次</span></td>
+<td class="math">$$= \frac{1}{2} \int \left( \frac{1}{t-1} - \frac{1}{t+1} \right) dt$$</td>
+<td class="mathnote">ところで、
+$$ %\frac{1}{t^2 -1} = 
+\frac{1}{t+1} \frac{1}{t-1} 
+= \frac{a}{t+1} + \frac{b}{t-1}$$ 
+とおくと、
+$$\frac{1}{(t+1)(t-1)} 
+= \frac{a(t-1)+b(t+1)}{(t+1)(t-1)}
+= \frac{(a+b)t+(b-a)}{(t+1)(t-1)}
+$$ より、
+$a+b=0$ かつ $b-a=1$ である。
+$b= -a$ を $b-a=1$ に代入すると $-2a=1$ だから 
+$\disp a= \frac{-1}{2}$ かつ $\disp b=\frac{1}{2}$ である。
+検算してみると、確かに、
+$$ \frac{1}{2} \left( \frac{1}{t-1} - \frac{1}{t+1} \right)
+= \frac{1}{2} \frac{t+1 - (t-1)} {(t-1)(t+1)}
+= \frac{1}{(t-1)(t+1)}$$
+である。これを代入する。
+</td>
+</tr>
+
+<tr id="step_06" class="collapsed">
+<td><span onclick="expand('step_07')" class="st">次</span></td>
+<td class="math">$$= \frac{1}{2} (\log |t-1| - \log |t+1| ) +C$$</td>
+<td class="mathnote">一般に、変数 $y$ について、$\disp \int \frac{1}{y} dy = \log|y| +C$ である ($C$ は定数)。
+なお、左記の式変形において、本当は置換積分も行っているが、$t+1$ も $t-1$ も、$t$ による導関数は 1 という定数になるので、ここでの置換積分の過程は明示していない。</td>
+</tr>
+
+<tr id="step_07" class="collapsed">
+<td><span onclick="expand('step_08')" class="st">次</span></td>
+<td class="math">$$= \frac{1}{2} \log \frac{|t-1|}{|t+1|} + C$$</td>
+<td class="mathnote">一般に、正の $a$ と $b$ について、$\disp \log a - \log b = \log \frac{a}{b}$ である。</td>
+</tr>
+
+<tr id="step_08" class="collapsed">
+<td>終わり</td>
+<td class="math">$$= \frac{1}{2} \log \frac{|\cos x -1|}{|\cos x +1|} + C$$</td>
+<td class="mathnote">$t = \cos x$ を代入する。</td>
+</tr>
+
+</table>
+
+<p>
+ちなみに、検算してみると以下の通り。合っていましたね!
+</p>
+
+<p style="overflow: auto; border: 1px solid blue;">$$
+\frac{d}{dx} \left( \frac{1}{2} \log \frac{|\cos x -1|}{|\cos x +1|} + C \right)
+= \frac{1}{2} \frac{d}{dx} ( \log |\cos x -1| - \log |\cos x +1| )
+= \frac{1}{2} \left( \frac{-\sin x}{\cos x -1} - \frac{-\sin x}{\cos x +1} \right)
+= \frac{-\sin x}{2} \frac{(\cos x +1) - (\cos x -1)}{(\cos x -1)(\cos x +1)}
+= \frac{-\sin x}{2} \frac{2}{\cos^2 -1}
+= \frac{\sin x}{1-\cos^2 x}
+= \frac{\sin x}{\sin^2 x}
+= \frac{1}{\sin x}
+$$</p>
+
+<p>
+今度は別の例を。
+「式を展開してゆく過程の粒度を切り替えられたら、それも便利かな?」
+と思って、2次方程式の解の公式を導出する過程で試してみました。
+</p>
+
+<table>
+<tr><th>少し飛ばす</th><th>詳しく見る</th><th colspan="2">式</th><th>備考</th></tr>
+
+<tr id="x_00">
+<td><span onclick="expand('x_02')" class="st">次</span></td>
+<td><span onclick="expand('x_01')" class="st">次</span></td>
+<td class="math right">$ ax^2 + bx + c$</td>
+<td class="math">$ = 0$</td>
+<td>$a \neq 0$ とする。<span onclick="expand('x_07')" class="st">最終結果</span>だけ見ることもできます。</td>
+</tr>
+
+<tr id="x_01" class="collapsed">
+<td></td>
+<td><span onclick="expand('x_02')" class="st">次</span></td>
+<td class="math right">$ \disp a (x^2 + \frac{b}{a} x + \frac{c}{a})$</td>
+<td class="math">$  = 0$</td>
+<td class="mathnote">$a$ でくくる。</td>
+</tr>
+
+<tr id="x_02" class="collapsed">
+<td><span onclick="expand('x_05')" class="st">次</span></td>
+<td><span onclick="expand('x_03')" class="st">次</span></td>
+<td class="math right">$ \disp x^2 + \frac{b}{a} x + \frac{c}{a}$</td>
+<td class="math">$ = 0$</td>
+<td class="mathnote">$a \neq 0$ より。</td>
+</tr>
+
+<tr id="x_03" class="collapsed">
+<td></td>
+<td><span onclick="expand('x_04')" class="st">次</span></td>
+<td class="math right">$ \disp \left( x + \frac{b}{2a} \right)^2 - \frac{b^2}{4a^2} + \frac{c}{a}$</td>
+<td class="math">$ = 0$</td>
+<td class="mathnote">平方完成を行う。</td>
+</tr>
+
+<tr id="x_04" class="collapsed">
+<td></td>
+<td><span onclick="expand('x_05')" class="st">次</span></td>
+<td class="math right">$ \disp \left( x + \frac{b}{2a} \right)^2$</td>
+<td class="math">$ \disp = \frac{b^2}{4a^2} - \frac{c}{a}$</td>
+<td class="mathnote">定数を右辺に移項する。</td>
+</tr>
+
+<tr id="x_05" class="collapsed">
+<td><span onclick="expand('x_07')" class="st">次</span></td>
+<td><span onclick="expand('x_06')" class="st">次</span></td>
+<td class="math right">$ \disp \left( x + \frac{b}{2a} \right)^2$</td>
+<td class="math">$ \disp =  \frac{b^2 - 4ac}{4a^2}$</td>
+<td>通分する。</td>
+</tr>
+
+<tr id="x_06" class="collapsed">
+<td></td>
+<td><span onclick="expand('x_07')" class="st">次</span></td>
+<td class="math right">$ \disp x + \frac{b}{2a}$</td>
+<td class="math">$ \disp = \frac{\pm \sqrt{b^2 - 4ac}}{2a}$</td>
+<td class="mathnote">2乗根をとる。</td>
+</tr>
+
+<tr id="x_07" class="collapsed">
+<td>終わり</td>
+<td></td>
+<td class="math right">$ x $</td>
+<td class="math">$ \disp = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</td>
+<td class="mathnote">定数を右辺に移項する。</td>
+</tr>
+</table>
+
+<p>
+備考欄の表示・非表示も切り替え可能にするなど、もう少し工夫の余地もあるかもしれませんが、電子テキストでこういう切り替えができたら便利かな、と思います。いかがでしょう。
+</p>
+
+
+<nav>[<a href="../index.html">ホーム</a> | 
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>]</nav>
+</body>
+</html>
