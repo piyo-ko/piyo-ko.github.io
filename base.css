@@ -3,6 +3,8 @@ body {
 	color: hsl(240, 100%, 12%);
 	padding-top: 1ex;
 	padding-bottom: 2ex;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 ::selection {
@@ -26,52 +28,42 @@ a:hover {
 	color: hsl(90, 100%, 60%);
 }
 
-.orange, .green, .blue {
-	margin-top: 12pt;
-	margin-bottom: 12pt;
-	padding: 4pt;
-}
 div {
-	margin-top: 12pt;
-	margin-bottom: 12pt;
-	max-height: 15ex;
 	overflow: auto;
+}
+div.center {
+	max-height: 15ex;
+}
+div.left, div.right {
+	height: 15ex;
+	vertical-align: top;
 }
 @media print {
 	div {
 		max-height: auto;
 	}
 }
-/*
-div:hover {
-	height: auto;
-}
-*/
+
 p {
 	text-indent: 1em;
 }
 p, ul {
 	margin: 0;
 }
-tt {
-	font-family: "Courier New", monospace;
-}
+
 h1 {
 	font-size: x-large;
 	font-style: italic;
 	font-weight: bold;
-	font-family: "游明朝体+36ポかな", /*"筑紫B丸ゴシック", */ "游明朝体", "クレー", serif;
+	font-family: "游明朝体+36ポかな", "游明朝体", "クレー", serif;
 	color: dodgerblue;
 	background: lightsteelblue;
-	/*text-indent: 1em;*/
 	padding-right: 1em;
 	padding-left: 1em;
 	text-align: right;
 	margin-left: 2%;
 	margin-right: 2%;
 	margin-bottom: 0;
-	/*overflow: -webkit-marquee;
-	white-space: nowrap;*/
 }
 h1:lang(en) {
 	font-size: small;
@@ -82,44 +74,46 @@ h1:lang(en) {
 	margin-top: 0;
 }
 h1:hover {
-	/*text-indent: 5em;*/
 	text-align: left;
 }
-
-.orange, div:nth-child(3n+1) {
+div.left {
+	display: inline-block;
+	margin-left: 3vw;
+	width: 40vw;
+}
+div.right {
+	display: inline-block;
+	margin-left: 7vw;
+	width: 40vw;
+}
+div.center {
+	display: block;
+	margin-top: 4pt;
+	margin-bottom: 6pt;
+	width: 70vw;
+	margin-left: 15vw;
+}
+.orange, .green, .blue {
 	border-style: dotted;
 	border-width: 6px;
+	padding: 4pt;
+}
+.orange {
 	border-color: hsl(55, 100%, 60%);
 	background: hsla(35, 100%, 65%, 1.0);
 	color: hsl(15, 100%, 20%);
 }
-.green, div:nth-child(3n) {
-	border-style: dotted;
-	border-width: 6px;
+.green {
 	border-color: hsl(85, 100%, 70%);
 	background: hsla(105, 100%, 65%, 1.0);
 	color: hsl(125, 100%, 16%);
 }
-.blue, div:nth-child(3n+2) {
-	border-style: dotted;
-	border-width: 6px;
+.blue {
 	border-color: hsl(230, 80%, 70%);
 	background: hsla(250, 100%, 80%, 1.0);
 	color: hsl(270, 100%, 20%);
 }
 
-.left, div:nth-child(3n+2) { /*div:nth-child(4n+3) {*/
-	margin-left: 2%;
-	margin-right: 20%;
-}
-.right, div:nth-child(3n) { /*div:nth-child(4n+1) {*/
-	margin-left: 20%;
-	margin-right: 2%;
-}
-.center, div:nth-child(3n+1) { /*div:nth-child(4n+2), div:nth-child(4n) {*/
-	margin-left: 11%;
-	margin-right: 11%;
-}
 div.footnote {
 	font-style: italic;
 	border: none;
@@ -132,28 +126,4 @@ div.footnote {
 }
 div.footnote p {
 	margin-top: 6pt;
-}
-
-dt {
-	/*display: inline;*/
-	text-decoration:underline;
-	font-family: sans-serif;
-	font-weight: bold;
-}
-dd {
-	display: inline;/*list-item;*/
-	text-indent: 1em;
-	/*padding-left: 0;*/
-	margin-left: 1em;
-	/*background: white;
-	border: solid 1px blue;*/
-}
-dd:before { 
-  content: "🔰";/*"☞❆";*/
-  /*color: navy; 
-  background: white;*/
-  /*color: hsl(20, 100%, 80%);
-  background: hsl(250, 50%, 20%);*/
-  padding-right: 4pt;
-  padding-left: 4pt;
 }
