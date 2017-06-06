@@ -12,7 +12,7 @@
 <div class="idx-bar">
 <nav>
 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<span class="status">翻訳待ち</span>
+<span class="status">翻訳中</span>
 [
 <a href="00_cover.html">先頭へ</a> |
 <a href="33_sec5_3.html">前へ</a> |
@@ -95,7 +95,6 @@ integrated-circuit layout.<a name="call_footnote_Temp_765" href="#footnote_Temp_
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_766">Registers and operations</a></h4>
 <h4 class="trans" lang="ja">レジスタと演算</h4>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_6006"></a>
 <a name="%_idx_6008"></a>In designing the explicit-control evaluator, we must specify the
@@ -118,6 +117,12 @@ list-structure implementation we described in
 section <a href="33_sec5_3.html#%_sec_5.3">5.3</a>.</p>
 
 <p class="trans" lang="ja">
+明示的制御方式の評価器を設計する際には、自分のレジスタ・マシンで使われることになる演算子を指定せねばならない。
+私たちは、<tt>quoted?</tt> や <tt>make-procedure</tt> のような手続きを使って、抽象的文法の観点からメタ循環的な評価器を説明した。
+レジスタ・マシンを実装する際には、これらの手続きを、基礎的な、リスト構造についてのメモリ操作の並びへと拡張すること、そして、自分のレジスタ・マシン上にこれらの操作を実装することが、できるだろう。
+しかし、これは、基本的構造を細部で覆い隠してしまい、私たちのレジスタ・マシンをとても長大にしてしまうだろう。
+提示の仕方を明確化するために、レジスタ・マシンの原始的演算として、<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節で示された文法手続きと、<a href="26_sec4_1.html#%_sec_4.1.3">4.1.3</a>節および<a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>節で示された、環境やその他の実行時のデータを表現するための手続きとを、含めることにしよう。
+低水準のマシン言語でプログラムされ得るような、あるいは、ハードウェアで実装され得るような、評価器の明細を完全に指定するために、私たちは、これらの演算を——<a href="33_sec5_3.html#%_sec_5.3">5.3</a>節で説明した、リスト構造の実装を用いて——より基礎的な演算で置き換えよう。
 </p>
 
 <figure>
@@ -128,7 +133,6 @@ Scheme.</figcaption>
 <figcaption class="trans" lang="ja"><b>図5.16.:</b> Scheme 用の評価器の、シリコン・チップでの実装</figcaption>
 </figure>
 <a name="%_idx_6010"></a><a name="%_idx_6012"></a><a name="%_idx_6014"></a>
-
 
 <a name="%_idx_6016"></a><a name="%_idx_6018"></a><a name="%_idx_6020"></a><a name="%_idx_6022"></a><a name="%_idx_6024"></a><a name="%_idx_6026"></a><a name="%_idx_6028"></a><a name="%_idx_6030"></a>
 
@@ -146,6 +150,12 @@ itself recursively, since evaluating an expression requires evaluating
 its subexpressions.)  The registers <tt>proc</tt>, <tt>argl</tt>, and <tt>unev</tt> are used in evaluating combinations.</p>
 
 <p class="trans" lang="ja">
+私たちの Scheme 評価器レジスタ・マシンは、スタックと、七つのレジスタ——すなわち、<tt>exp</tt> と、<tt>env</tt> と、<tt>val</tt> と、<tt>continue</tt> と、<tt>proc</tt> と、<tt>argl</tt> と、<tt>unev</tt> ——とを含む。
+<tt>exp</tt> は、評価すべき式を保持するのに使われ、<tt>env</tt> は、評価が行われるべき環境を含む。
+評価の終了時において、<tt>val</tt> は、指定された環境で式を評価することで得られた値を含む。
+<tt>continue</tt> レジスタは、<a href="31_sec5_1.html#%_sec_5.1.4">5.1.4</a>節で説明したようにして再帰を実装するのに使われる
+(式を評価することは、その式の部分式を評価することを要するため、評価器は、自分自身を再帰的に呼び出す必要がある)。
+<tt>proc</tt> と <tt>argl</tt> と <tt>unev</tt> というレジスタは、コンビネーションを評価する際に使われる。
 </p>
 
 <p class="orig" lang="en">
@@ -155,11 +165,14 @@ complete list of machine operations.  These are implicit in the
 evaluator's controller, which will be presented in detail.</p>
 
 <p class="trans" lang="ja">
+レジスタと、評価器の演算とが、どのようにして結びつけられているのかを示すデータ経路図を、私たちは提供しないことにするし、マシン演算の完全なリストも示さないことにしよう。
+これらは、評価器のコントローラ——これは詳しく提示しよう——の中で、暗黙的である。
 </p>
 
+<p class="extra" id="translating">**ここから</p>
 <a name="%_sec_5.4.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.1">5.4.1  The Core of the Explicit-Control Evaluator</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.4.1 明示的制御方式の評価器の核</h3>
 
 <p class="orig" lang="en"><a name="%_idx_6032"></a>
 The central element in the evaluator is the sequence of instructions
