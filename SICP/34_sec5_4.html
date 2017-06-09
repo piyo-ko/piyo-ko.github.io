@@ -169,7 +169,6 @@ evaluator's controller, which will be presented in detail.</p>
 これらは、評価器のコントローラ——これは詳しく提示しよう——の中で、暗黙的である。
 </p>
 
-<p class="extra" id="translating">**ここから</p>
 <a name="%_sec_5.4.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.1">5.4.1  The Core of the Explicit-Control Evaluator</a></h3>
 <h3 class="trans" lang="ja">5.4.1 明示的制御方式の評価器の核</h3>
@@ -187,6 +186,11 @@ case analysis on the syntactic type of the expression to be
 evaluated.<a name="call_footnote_Temp_767" href="#footnote_Temp_767"><sup><small>20</small></sup></a></p>
 
 <p class="trans" lang="ja">
+評価器における中心的要素は、<tt>eval-dispatch</tt> で始まる一連の命令である。
+これは、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節で説明したメタ循環的な評価器の <tt>eval</tt> 手続きに対応する。
+コントローラは、<tt>eval-dispatch</tt> から開始する際に、<tt>exp</tt> により指定された式を、<tt>env</tt> により指定された環境内で、評価する。
+評価が完了すると、コントローラは、<tt>continue</tt> に記憶されたエントリ・ポイントへ行くだろうし、<tt>val</tt> レジスタは、その式の値を保持しているだろう。
+メタ循環的な <tt>eval</tt> と同様に、<tt>eval-dispatch</tt> の構造は、評価すべき式の文法的な種類に基づく場合分け分析である<a href="#footnote_Temp_767"><sup><small>20</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6034"></a>eval-dispatch
@@ -213,7 +217,7 @@ evaluated.<a name="call_footnote_Temp_767" href="#footnote_Temp_767"><sup><small
 
 <a name="%_sec_Temp_768"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_768">Evaluating simple expressions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">単純な式を評価する</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_6036"></a>
@@ -225,6 +229,9 @@ execution at the entry point specified by <tt>continue</tt>.  Evaluation
 of simple expressions is performed by the following controller code:</p>
 
 <p class="trans" lang="ja">
+数および文字列 (これらは自己評価的である) と、変数と、引用と、<tt>lambda</tt> 式には、評価すべき部分式がない。
+これらについて評価器は、単に、<tt>val</tt> レジスタに正しい値を置いて、<tt>continue</tt> により指定されたエントリ・ポイントで実行を続けるだけである。
+単純な式の評価は、以下のコントローラ・コードによって実行される。
 </p>
 
 <p class="lisp"><a name="%_idx_6038"></a>ev-self-eval
@@ -250,11 +257,12 @@ that they can be passed to the <tt>make-procedure</tt> operation, along
 with the environment in <tt>env</tt>.</p>
 
 <p class="trans" lang="ja">
+どのようにして <tt>ev-lambda</tt> が、ラムダ式の仮引数と本体を <tt>env</tt> 内の環境とともに <tt>make-procedure</tt> 演算へと受け渡せるように、<tt>unev</tt> レジスタと <tt>exp</tt> レジスタを使ってラムダ式の仮引数と本体とを保持するのかを、よく見てほしい。
 </p>
 
 <a name="%_sec_Temp_769"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_769">Evaluating procedure applications</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">手続き適用を評価する</h4>
 
 
 <p class="orig" lang="en">
@@ -274,6 +282,11 @@ registers must be saved (because their values will be needed
 later).<a name="call_footnote_Temp_770" href="#footnote_Temp_770"><sup><small>21</small></sup></a></p>
 
 <p class="trans" lang="ja">
+手続き適用は、演算子とオペランドとを含むコンビネーションにより、指定される。
+演算子は、その値が手続きとなるような部分式であり、オペランドは、その値が、当該手続きを適用すべき実引数となるような部分式である。
+メタ循環的な <tt>eval</tt> は、コンビネーションの各要素を評価するために自分自身を再帰的に呼び出し、それから、その結果を <tt>apply</tt> ——実際の手続き適用を実行する——に渡すことで、適用を扱う。
+明示的制御方式の評価器は、同じことを行う。つまり、これらの再帰的な呼び出しは、再帰的な呼び出しが戻った後で復旧されることになるレジスタを退避するためのスタックの使用とあわせた、<tt>goto</tt> 命令によって、実装されるのである。
+それぞれの呼び出しの前に、私たちは、どのレジスタが (そのレジスタの値が後に必要とされるだろうから) 退避されなくてはならないのかを突き止めるべく、気をつけることにしよう<a href="#footnote_Temp_770"><sup><small>21</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -289,6 +302,13 @@ operator has been evaluated.  First, however, we save the old value of
 application.</p>
 
 <p class="trans" lang="ja">
+演算子を評価して、手続き——後に、評価されたオペランドに適用されることになる——を作り出すことから、適用の評価を始める。
+演算子を評価するには、その演算子を <tt>exp</tt> レジスタに移動し、<tt>eval-dispatch</tt> へ行く。
+<tt>env</tt> レジスタ内の環境は、既に、その中でその演算子を評価すべき正しいものとなっている。
+しかし、オペランドを評価するために後で必要になるだろうから、<tt>env</tt> を退避する。
+また、<tt>unev</tt> へとオペランドを抽出して、これをスタック上に退避する。
+演算子が評価され終わったら <tt>ev-appl-did-operator</tt> に <tt>eval-dispatch</tt> が復旧されるように、<tt>continue</tt> を設定する。
+しかし、まずは、<tt>continue</tt> の古い値——適用後に続行すべき場所をコントローラに教えてくれる——を退避する。
 </p>
 
 <p class="lisp"><a name="%_idx_6056"></a>ev-application
@@ -312,6 +332,12 @@ save <tt>proc</tt> on the stack and start the argument-evaluation
 loop:<a name="call_footnote_Temp_771" href="#footnote_Temp_771"><sup><small>22</small></sup></a></p>
 
 <p class="trans" lang="ja">
+演算子の部分式を評価することから戻ったら、コンビネーションのうちのオペランドを評価すること、そして、結果として得られる実引数を、<tt>argl</tt> 内に保持されるリストの中に蓄積することに、取り掛かる。
+まず、未評価のオペランドと、環境とを復旧する。
+<tt>argl</tt> を空リストに初期化する。
+それから、演算子を評価することで作り出された手続きを、<tt>proc</tt> レジスタに割り当てる。
+もし、オペランドがなければ、すぐに <tt>apply-dispatch</tt> へ行く。
+それ以外の場合は、<tt>proc</tt> をスタック上に退避して、引数評価のループを開始する<a href="#footnote_Temp_771"><sup><small>22</small></sup></a>。
 </p>
 
 <p class="lisp">ev-appl-did-operator
@@ -336,6 +362,10 @@ environment (held in <tt>env</tt>), and the remaining operands to be evaluated
 last operand, which is handled at <tt>ev-appl-last-arg</tt>.</p>
 
 <p class="trans" lang="ja">
+引数評価のループのそれぞれの一巡りは、<tt>unev</tt> 内のリストの一つのオペランドを評価し、その結果を <tt>argl</tt> に蓄積する。
+オペランドを評価するには、そのオペランドを <tt>exp</tt> レジスタに入れて、<tt>eval-dispatch</tt> へ行く——ただし、引数を蓄積する段階で実行が再開するように <tt>continue</tt> を設定してからだが。
+しかし、まずは、今まで蓄積されてきた引数 (<tt>argl</tt> に保持されている) と、環境 (<tt>env</tt> に保持されている) と、評価すべき残りのオペランド (<tt>unev</tt> に保持されている) とを、退避する。
+最後のオペランドの評価—— <tt>ev-appl-last-arg</tt> で扱われる——については、特別な場合が設けられている。
 </p>
 
 <p class="lisp">ev-appl-operand-loop
@@ -355,6 +385,8 @@ list held in <tt>argl</tt>.  The operand is then removed from the list of
 unevaluated operands in <tt>unev</tt>, and the argument-evaluation continues.</p>
 
 <p class="trans" lang="ja">
+オペランドを評価し終えたら、その値を、<tt>argl</tt> 内に保持されているリストに蓄積する。
+それから、そのオペランドを <tt>unev</tt> 内の未評価オペランドのリストから取り除いて、引数評価が続行する。
 </p>
 
 <p class="lisp">ev-appl-accumulate-arg
@@ -376,6 +408,9 @@ the new argument, restores the saved procedure, and goes off to
 perform the application.<a name="call_footnote_Temp_772" href="#footnote_Temp_772"><sup><small>23</small></sup></a></p>
 
 <p class="trans" lang="ja">
+最後の引数の評価は、異なる方法で取り扱われる。
+環境も、未評価のオペランドのリストも、<tt>eval-dispatch</tt> へ行く前に退避する必要がない。なぜなら、それらは、最後のオペランドが評価された後には必要とされない<!--であろう-->からだ。
+よって、評価から、<tt>ev-appl-accum-last-arg</tt> という特別なエントリ・ポイントへと戻るのだが、これは、引数リストを復旧し、新たな引数を蓄積し、退避された手続きを復旧し、適用を実行するために出発するものである<a href="#footnote_Temp_772"><sup><small>23</small></sup></a>。
 </p>
 
 <p class="lisp">ev-appl-last-arg
@@ -387,7 +422,6 @@ ev-appl-accum-last-arg
   (restore proc)
   (goto (label apply-dispatch))
 </p>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_6070"></a>The details of the argument-evaluation loop determine the order in
@@ -402,12 +436,14 @@ explicit-control evaluator will evaluate the operands of a combination
 in left-to-right order.</p>
 
 <p class="trans" lang="ja">
+引数評価ループの詳細が、コンビネーションのオペランドをインタプリタが評価する順序 (たとえば、左から右へ、あるいは、右から左へ——練習問題<a href="20_sec3_1.html#%_thm_3.8">3.8</a>を参照) を定める。
+この順序は、メタ循環的な評価器——このメタ循環的な評価器を実装している、根底にある Scheme から、メタ循環的な評価器自身の制御構造を受け継いでいる——によっては、定まらない<a href="#footnote_Temp_773"><sup><small>24</small></sup></a>。
+<tt>first-operand</tt> セレクタ (<tt>ev-appl-operand-loop</tt> において、連続するオペランドを <tt>unev</tt> から抽出するのに使われる) が <tt>car</tt> として実装され、かつ、<tt>rest-operands</tt> セレクタが <tt>cdr</tt> として実装されているので、明示的制御方式の評価器は、コンビネーションのオペランドを、左から右への順序で評価するだろう。
 </p>
 
 <a name="%_sec_Temp_774"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_774">Procedure application</a></h4>
-<h4 class="trans" lang="ja"></h4>
-
+<h4 class="trans" lang="ja">手続き適用</h4>
 
 <p class="orig" lang="en">
 The entry point <tt>apply-dispatch</tt> corresponds to the <tt>apply</tt>
@@ -423,6 +459,12 @@ the procedure to be applied is a primitive or it is a compound
 procedure.</p>
 
 <p class="trans" lang="ja">
+<tt>apply-dispatch</tt> というエントリ・ポイントは、メタ循環的な評価器の <tt>apply</tt> 手続きに対応する。
+<tt>apply-dispatch</tt> を行うようになるまでには、適用すべき手続きを <tt>proc</tt> レジスタが含んでおり、その手続きを適用せねばならない評価済みの引数のリストを <tt>argl</tt> レジスタが含んでいる。
+<tt>continue</tt> の退避済みの値 (もともとは <tt>eval-dispatch</tt> に渡されて、<tt>ev-application</tt> において退避された) ——手続き適用の結果とともに戻るべき場所を教えてくれる——は、スタック上にある。
+適用が完了すると、コントローラは、退避済みの <tt>continue</tt> により指定されているエントリ・ポイントへと、<tt>val</tt> の中にある適用の結果と一緒に移る。
+メタ循環的な <tt>apply</tt> におけるのと同様に、考えるべき二つの場合がある。
+適用すべき手続きが、原始的なのか、それとも、複合的手続きなのか、ということである。
 </p>
 
 <p class="lisp"><a name="%_idx_6072"></a>apply-dispatch
@@ -451,6 +493,11 @@ value of the primitive application, we restore <tt>continue</tt> and go
 to the designated entry point.</p>
 
 <p class="trans" lang="ja">
+各プリミティブは、引数を <tt>argl</tt> から取得して結果を <tt>val</tt> に入れるように実装されているものとする。
+マシンがプリミティブを扱う方法を指定するために、私たちは、各プリミティブを実装するための一連のコントローラ命令を提供せねばならないだろうし、<tt>proc</tt> の内容によって識別されるプリミティブ用の命令へと振り分けるための <tt>primitive-apply</tt> を手配せねばならないだろう。
+私たちは、その代わりに、ただ、<tt>argl</tt> 内の引数に <tt>proc</tt> 内の手続きを適用する <tt>apply-primitive-procedure</tt> 演算を使うことにしよう。というのも、私たちは、プリミティブの詳細ではなく、むしろ評価過程の構造に興味があるためである。
+<a href="32_sec5_2.html#%_sec_5.2">5.2</a>節のシミュレータを使って評価器をシミュレートする目的のために、私たちは <tt>apply-primitive-procedure</tt> を使うが、これは、<a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>節でメタ循環的評価器について私たちが行ったのとちょうど同じように、根底にある Scheme システムに対して適用を実行するように求めるものである。
+プリミティブ適用の値を計算した後、<tt>continue</tt> を復旧し、指定されたエントリ・ポイントへと行く。
 </p>
 
 <p class="lisp"><a name="%_idx_6076"></a>primitive-apply
@@ -472,6 +519,9 @@ section <a href="#%_sec_5.4.2">5.4.2</a>, handles the evaluation
 of the sequence.</p>
 
 <p class="trans" lang="ja">
+複合的手続きを適用するには、メタ循環的な評価器の場合とちょうど同じように進む。
+手続きの仮引数を実引数に束縛するフレームを構築し、このフレームを用いて、手続きにより伝えられた環境を拡張し、この拡張された環境において、手続きの本体を形成する式の連なりを評価する。
+<tt>ev-sequence</tt> ——後述の<a href="#%_sec_5.4.2">5.4.2</a>節で説明する——が、その連なりの評価を取り扱う。
 </p>
 
 <p class="lisp"><a name="%_idx_6080"></a>compound-apply
@@ -491,13 +541,15 @@ environment carried by the procedure, together with the argument list
 and the corresponding list of variables to be bound.</p>
 
 <p class="trans" lang="ja">
+<tt>compound-apply</tt> は、<tt>env</tt> レジスタが新たな値を割り当てられる、インタプリタ内における正に唯一の場所である。
+メタ循環的な評価器におけるのとちょうど同じように、新たな環境は、手続きにより伝えられた環境——それと、実引数リスト、および、束縛されるべき変数からなる、それに対応するリスト——から、構築される。
 </p>
 
 <a name="%_sec_5.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.2">5.4.2  Sequence Evaluation and Tail Recursion</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.4.2 列の評価と末尾再帰</h3>
 
-
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_6082"></a>
 The portion of the explicit-control evaluator at <tt>ev-sequence</tt> is
 analogous to the metacircular evaluator's <tt>eval-sequence</tt> procedure.  It
@@ -580,7 +632,7 @@ ev-sequence-last-exp
 
 <a name="%_sec_Temp_775"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_775">Tail recursion</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">末尾再帰</h4>
 
 
 <p class="orig" lang="en">
@@ -689,7 +741,7 @@ control mechanism other than procedure call.</p>
 
 <a name="%_sec_5.4.3"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.3">5.4.3  Conditionals, Assignments, and Definitions</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.4.3 条件式と<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義</h3>
 
 <p class="orig" lang="en"><a name="%_idx_6104"></a>As with the metacircular evaluator, special forms are handled by
 selectively evaluating fragments of the expression.  For an <tt>if</tt>
@@ -747,7 +799,7 @@ ev-if-consequent
 
 <a name="%_sec_Temp_779"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_779">Assignments and definitions</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja"><ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_6108"></a>Assignments are handled by <tt>ev-assignment</tt>, which is reached from
@@ -849,7 +901,7 @@ based on the lazy evaluator of section <a href="27_sec4_2.html#%_sec_4.2">4.2</a
 
 <a name="%_sec_5.4.4"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.4">5.4.4  Running the Evaluator</a></h3>
-<h3 class="trans" lang="ja"></h3>
+<h3 class="trans" lang="ja">5.4.4 評価器を実行する</h3>
 
 <p class="orig" lang="en"><a name="%_idx_6128"></a>
 <a name="%_idx_6130"></a><a name="%_idx_6132"></a>With the implementation of the explicit-control evaluator we come to
@@ -996,8 +1048,7 @@ interpreter.</p>
 
 <a name="%_sec_Temp_787"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_787">Monitoring the performance of the evaluator</a></h4>
-<h4 class="trans" lang="ja"></h4>
-
+<h4 class="trans" lang="ja">評価器の性能を監視する</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_6160"></a>
@@ -1281,6 +1332,9 @@ data-directed dispatches.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_767"><sup><small>20</small></sup></a>
+私たちのコントローラでは、<tt>test</tt> 命令と <tt>branch</tt> 命令の列として、<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>が書かれている。
+そうする代わりに、逐次的な検査を実行する必要性を避けるために、また、新たな式の種類の定義を容易にするために、データ指向的な様式で振り分けを書くこともできただろう (し、現実のシステムにおいては、おそらくそのように書かれたであろう)。 <span class="note">(括弧内の訳し方がやや不安)</span>
+Lisp を実行するように設計されたマシンは、そのようなデータ指向的な振り分けを効率よく実行するであろう <tt>dispatch-on-type</tt> 命令を、おそらくは含むであろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_770" href="#call_footnote_Temp_770"><sup><small>21</small></sup></a> This is an important but subtle point in translating
@@ -1296,6 +1350,11 @@ garbage-collected, freeing space to be reused.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_770"><sup><small>21</small></sup></a>
+これは、Lisp のような手続き的言語からレジスタ・マシン言語へとアルゴリズムを変換する際の、重要だが微妙な点である。
+必要とされるものだけを退避することに対する代替案として、私たちは、それぞれの再帰的な呼び出しの前に、(<tt>val</tt> 以外の) すべてのレジスタを退避することもできよう。
+これは、<em>フレーム付きスタック</em> 規律と呼ばれる。
+これはうまく行くだろうが、必要以上に多くのレジスタを退避するかもしれない。これは、スタック演算が高くつくシステムでは、重要な論点である。
+中身が後に必要とされないようなレジスタを退避することは、他の場合であればガーベジ・コレクション——再利用すべき空間を解放する——がなされ得るだろう無用なデータを、保管しておくことになるかもしれないのだ。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_771" href="#call_footnote_Temp_771"><sup><small>22</small></sup></a> We add to the evaluator data-structure procedures in
@@ -1304,6 +1363,7 @@ for manipulating argument lists:</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_771"><sup><small>22</small></sup></a>
+<a href="26_sec4_1.html#%_sec_4.1.3">4.1.3</a>節で私たちは、引数リストを操作するための以下の二つの手続きを、評価器のデータ構造手続きに追加している。
 </p>
 
 <p class="lisp"><a name="%_idx_6060"></a>(define (empty-arglist) '())
@@ -1316,6 +1376,7 @@ for manipulating argument lists:</p>
 last operand in a combination:</p>
 
 <p class="trans" lang="ja">
+コンビネーション内の最後のオペランドなのかを検査するための付加的な文法手続きも、私たちは利用している。
 </p>
 
 <p class="lisp"><a name="%_idx_6064"></a>(define (last-operand? ops)
@@ -1336,6 +1397,10 @@ section <a href="35_sec5_5.html#%_sec_5.5.3">5.5.3</a>.)</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_772"><sup><small>23</small></sup></a>
+最後のオペランドの取り扱いの最適化は、具体的には、<em>evlis の末尾再帰</em> として知られている (Wand 1980 を参照)。
+最初のオペランドの評価も特別な場合にしていたならば、引数評価ループを、多少はより効率的にすることができただろう。
+これによって、私たちは、最初のオペランドの評価後まで、<tt>argl</tt> の初期化を延期することができるだろうし、すると、この場合に <tt>argl</tt> を退避することを避けられるようになる。
+<a href="35_sec5_5.html#%_sec_5.5">5.5</a>節のコンパイラは、この最適化を行う (<a href="35_sec5_5.html#%_sec_5.5.3">5.5.3</a>節の <tt>construct-arglist</tt> 手続きを比較せよ)。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_773" href="#call_footnote_Temp_773"><sup><small>24</small></sup></a> The
@@ -1346,6 +1411,8 @@ in the procedure <tt>list-of-values</tt> of section <a href="26_sec4_1.html#%_se
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_773"><sup><small>24</small></sup></a>
+メタ循環的な評価器におけるオペランド評価の順序は、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の <tt>list-of-values</tt> という手続きにおける、<tt>cons</tt> に対する引数の評価の順序によって、定まる
+(練習問題<a href="26_sec4_1.html#%_thm_4.1">4.1</a>を参照)。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_776" href="#call_footnote_Temp_776"><sup><small>25</small></sup></a> We saw in
