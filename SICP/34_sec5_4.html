@@ -549,7 +549,6 @@ and the corresponding list of variables to be bound.</p>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.2">5.4.2  Sequence Evaluation and Tail Recursion</a></h3>
 <h3 class="trans" lang="ja">5.4.2 列の評価と末尾再帰</h3>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_6082"></a>
 The portion of the explicit-control evaluator at <tt>ev-sequence</tt> is
 analogous to the metacircular evaluator's <tt>eval-sequence</tt> procedure.  It
@@ -557,6 +556,8 @@ handles sequences of expressions in procedure bodies or in explicit
 <tt>begin</tt> expressions.</p>
 
 <p class="trans" lang="ja">
+明示的制御方式の評価器の、<tt>ev-sequence</tt> の部分は、メタ循環的な評価器の <tt>eval-sequence</tt> 手続きに似ている。
+この部分は、手続き本体の中または明示的な <tt>begin</tt> 式の中の、一連の式を取り扱う。
 </p>
 
 <p class="orig" lang="en">
@@ -566,6 +567,7 @@ stack, and jumping to <tt>ev-sequence</tt>.
 </p>
 
 <p class="trans" lang="ja">
+明示的な <tt>begin</tt> 式は、評価すべき一連の式を <tt>unev</tt> に入れ、<tt>continue</tt> をスタック上に退避し、<tt>ev-sequence</tt> へジャンプすることによって、評価される。
 </p>
 
 <p class="lisp"><a name="%_idx_6084"></a>ev-begin
@@ -579,6 +581,7 @@ stack, and jumping to <tt>ev-sequence</tt>.
 <tt>ev-application</tt>.</p>
 
 <p class="trans" lang="ja">
+手続き本体の中の暗黙的な<ruby><rb>並び</rb><rp> (</rp><rt>シーケンス</rt><rp>) </rp></ruby>は、<tt>compound-apply</tt> から <tt>ev-sequence</tt> へジャンプすることによって取り扱われるのだが、この時点で既に <tt>continue</tt> はスタック上にあり、というのも、<tt>ev-application</tt> で退避されたためである。
 </p>
 
 <p class="orig" lang="en">
@@ -594,6 +597,11 @@ evaluate the expression.  The two saved registers are restored upon
 the return from this evaluation, at <tt>ev-sequence-continue</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>ev-sequence</tt> と <tt>ev-sequence-continue</tt> にあるエントリが、並びの中のそれぞれの式を次々と評価するループを形成する。
+未評価の式のリストは、<tt>unev</tt> に保持される。
+それぞれの式を評価する前に、評価すべき更なる式が並びの中にあるか否かを調べる。
+もしあれば、(<tt>unev</tt> に保持されている) 未評価の式のうち残りのものと、これらを評価せねばならない環境 (<tt>env</tt> に保持されている) とを退避し、その式を評価するために <tt>eval-dispatch</tt> を呼び出す。
+退避された二つのレジスタは、この評価から戻ったときに、<tt>ev-sequence-continue</tt> において復旧される。
 </p>
 
 <p class="orig" lang="en">
@@ -610,6 +618,10 @@ the stack before going to <tt>eval-dispatch</tt>, so that <tt>eval-dispatch</tt>
 expression.</p>
 
 <p class="trans" lang="ja">
+並びの中で最後の式は、<tt>ev-sequence-last-exp</tt> というエントリ・ポイントにおいて、異なる方法で扱われる。
+この式の後には、評価すべき式がもう何もないので、<tt>unev</tt> も <tt>env</tt> も、<tt>eval-dispatch</tt> に行く前に退避しておく必要がない。
+並び全体の値は最後の式の値であり、よって、最後の式の評価の後には、現在スタック上に保持されているエントリ・ポイント (<tt>ev-application</tt> または <tt>ev-begin</tt> により退避されたもの) <!--において-->から続行すること以外は、やることは何も残っていない。
+<tt>eval-dispatch</tt> がここに戻って来るように手筈を整えるべく <tt>continue</tt> を設定しておいて、その後で、スタックから <tt>continue</tt> を復旧して、そのエントリ・ポイント<!--において-->から続行するのではなく、むしろ、<tt>eval-dispatch</tt> へ行く前にスタックから <tt>continue</tt> を復旧する。その結果、<tt>eval-dispatch</tt> は、その <span class="note">(最後の)</span> 式を評価した後で、そのエントリ・ポイント<!--において-->から続行するだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_6086"></a>ev-sequence
@@ -634,12 +646,12 @@ ev-sequence-last-exp
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_775">Tail recursion</a></h4>
 <h4 class="trans" lang="ja">末尾再帰</h4>
 
-
 <p class="orig" lang="en">
 <a name="%_idx_6088"></a><a name="%_idx_6090"></a>
 In chapter 1 we said that the process described by a procedure such as</p>
 
 <p class="trans" lang="ja">
+1章で私たちは、以下のような手続きにより記述されるプロセスが
 </p>
 
 <p class="lisp">(define (sqrt-iter guess x)
@@ -663,10 +675,14 @@ when procedure calls cause a net accumulation of information on the
 stack.</p>
 
 <p class="trans" lang="ja">
+反復的なプロセスである、と言った。
+たとえ文法上はこの手続きが再帰的であっても (この手続き自身を用いて定義されていても)、<tt>sqrt-iter</tt> に対する一つの呼び出しから次の呼び出しへの推移の際に評価器が情報を退避することは、論理的に必要な訳ではない<a href="#footnote_Temp_776"><sup><small>25</small></sup></a>。
+手続きが自分自身を呼び出し続けるのに連れての、増えゆく記憶を必要とすることなしに、<tt>sqrt-iter</tt> のような手続きを実行できる評価器は、<em>末尾再帰的な</em>評価器と呼ばれる。
+4章における、評価器のメタ循環的実装は、評価器が末尾再帰的か否かを規定していない。なぜなら、その評価器は、状態を保存するための仕組みを、根底にある Scheme から受け継いでいるからだ。
+しかし、明示的制御方式の評価器を使うと、私たちは、手続き呼び出しがスタック上の情報の正味の蓄積をいつ引き起こすのかを見るために、評価過程を通じてトレースを行うことができるのだ。
 </p>
 
 <p class="orig" lang="en">
-
 Our evaluator is tail-recursive, because in order to evaluate the final
 expression of a sequence we transfer directly to <tt>eval-dispatch</tt> without
 saving any information on the stack.  Hence, evaluating the final expression
@@ -676,6 +692,8 @@ reduces to a call to <tt>sqrt-iter</tt>) -- will not cause any information to be
 accumulated on the stack.<a name="call_footnote_Temp_777" href="#footnote_Temp_777"><sup><small>26</small></sup></a></p>
 
 <p class="trans" lang="ja">
+私たちの評価器は末尾再帰的である。なぜなら、並びの中で最後の式を評価するために、何の情報もスタックに退避することなく、直接、<tt>eval-dispatch</tt> へ移るからである。
+ゆえに、並びの中で最後の式を評価することは、たとえそれが (<tt>sqrt-iter</tt> ——そこでは <tt>if</tt> 式が手続き本体の中で最後の式である訳だが、その <tt>if</tt> 式が <tt>sqrt-iter</tt> に対する呼び出しへと帰着している——におけるのと同様に) 手続き呼び出しであろうとも、何らかの情報をスタック上に蓄積させる原因となることはないだろう<a href="#footnote_Temp_777"><sup><small>26</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -687,6 +705,7 @@ returning to restore the registers, and repeating this until all the
 expressions have been evaluated:<a name="call_footnote_Temp_778" href="#footnote_Temp_778"><sup><small>27</small></sup></a></p>
 
 <p class="trans" lang="ja">
+この場合には情報を退避することが不要なのだ、という事実を利用することを、もし思いつかなかったならば、並びの中のすべての式を同じ方法で扱う——レジスタを退避し、式を評価し、戻ってレジスタを復旧し、すべての式が評価済みになるまで、これを繰り返す——ことによって <tt>eval-sequence</tt> を実装していたかもしれない<a href="#footnote_Temp_778"><sup><small>27</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6100"></a>ev-sequence
@@ -724,6 +743,12 @@ constant space.  This difference can be significant.  For example,
 procedure-call mechanism:</p>
 
 <p class="trans" lang="ja">
+これは、並びの評価についての以前のコードに対する、ちょっとした変更のように見えるかもしれない。唯一の違いは、並びの中の最後の式についても、残りの式についてと同様に、退避・復旧のサイクルを経る、という点なのだ。
+インタプリタは、依然として、いかなる式についても、同じ値を与えることだろう。
+しかし、この変更は、末尾再帰的な実装に対しては致命的である。というのも、今や、並びの中の最後の式を評価した後に、(無用な) レジスタ退避を帳消しにするために、戻りが必須であるからだ。
+これらの余計な退避は、手続き呼び出しの入れ子の間に、蓄積してゆくだろう。
+その結果、<tt>sqrt-iter</tt> のようなプロセスは、一定の空間を必要とするのではなく、むしろ、反復の回数に比例した空間を必要とするだろう。
+たとえば、末尾再帰を使えば、手続き呼び出しの仕組みを使うだけで、無限ループを表現できる。
 </p>
 
 <p class="lisp">(define (count n)
@@ -737,12 +762,14 @@ stack space, and expressing a true iteration would require some
 control mechanism other than procedure call.</p>
 
 <p class="trans" lang="ja">
+末尾再帰を使わないと、そうした手続きは、遂にはスタック空間を使い果たしてしまうだろうし、また、真の反復を表すことには、手続き呼び出し以外の何らかの制御の仕組みが必要となるだろう。
 </p>
 
 <a name="%_sec_5.4.3"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.3">5.4.3  Conditionals, Assignments, and Definitions</a></h3>
 <h3 class="trans" lang="ja">5.4.3 条件式と<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義</h3>
 
+<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_6104"></a>As with the metacircular evaluator, special forms are handled by
 selectively evaluating fragments of the expression.  For an <tt>if</tt>
 expression, we must evaluate the predicate and decide, based on the
@@ -1422,6 +1449,7 @@ process was stored in a fixed set of registers.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_776"><sup><small>25</small></sup></a>
+そうしたプロセスを、スタックのないレジスタ・マシンを用いてどのように実装するのかということを、<a href="31_sec5_1.html#%_sec_5.1">5.1</a>節で見た。つまり、プロセスの状態は、所定の一揃いのレジスタに記憶された訳である。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_777" href="#call_footnote_Temp_777"><sup><small>26</small></sup></a> This implementation of tail recursion in
@@ -1433,12 +1461,16 @@ provides the optimization uniformly throughout the language.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_777"><sup><small>26</small></sup></a>
+<tt>ev-sequence</tt> における末尾再帰のこの実装は、多くのコンパイラにより使われている周知の最適化技法のうちの一変種である。
+手続き呼び出しで終わる手続きをコンパイルする際には、その呼び出しを、呼び出された手続きのエントリ・ポイントへのジャンプで置き換えられる。
+本節で私たちが行ったように、この戦略をインタプリタの中に組み込むことで、言語の全体を通じて一様に最適化がもたらされる。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_778" href="#call_footnote_Temp_778"><sup><small>27</small></sup></a> We can define <tt>no-more-exps?</tt> as follows:</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_778"><sup><small>27</small></sup></a>
+<tt>no-more-exps?</tt> を以下のように定義できる。
 </p>
 
 <p class="lisp"><a name="%_idx_6098"></a>(define (no-more-exps? seq) (null? seq))
