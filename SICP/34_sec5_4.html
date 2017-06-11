@@ -769,7 +769,6 @@ control mechanism other than procedure call.</p>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.3">5.4.3  Conditionals, Assignments, and Definitions</a></h3>
 <h3 class="trans" lang="ja">5.4.3 条件式と<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義</h3>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en"><a name="%_idx_6104"></a>As with the metacircular evaluator, special forms are handled by
 selectively evaluating fragments of the expression.  For an <tt>if</tt>
 expression, we must evaluate the predicate and decide, based on the
@@ -777,6 +776,8 @@ value of predicate, whether to evaluate the consequent or the
 alternative.</p>
 
 <p class="trans" lang="ja">
+メタ循環的な評価器のときと同様に、式の断片を選択的に評価することによって、特殊形式を取り扱う。
+<tt>if</tt> 式については、述語を評価して、述語の値に基づいて、帰結式を評価すべきか代替式を評価すべきかを決めねばならない。
 </p>
 
 <p class="orig" lang="en">
@@ -787,6 +788,8 @@ evaluate the consequent or the alternative, and we save <tt>continue</tt>, which
 evaluation of the expression that is waiting for the value of the <tt>if</tt>.</p>
 
 <p class="trans" lang="ja">
+述語を評価する前に、後で帰結式または代替式を抽出できるように <tt>if</tt> 式自体を退避する。
+また、環境——帰結式または代替式を評価するために、後で必要となるだろう——も退避し、<tt>continue</tt> —— <tt>if</tt> の値を待っている式の評価へと戻るために、後で必要となるだろう——も退避する。
 </p>
 
 <p class="lisp"><a name="%_idx_6106"></a>ev-if
@@ -807,6 +810,8 @@ to continue at the right place to receive the value of the <tt>if</tt>
 expression. </p>
 
 <p class="trans" lang="ja">
+述語の評価から戻ったら、それが真だったのか偽だったのかを検査し、その結果によって、<tt>eval-dispatch</tt> に行く前に、帰結式か代替式のいずれかを <tt>exp</tt> に入れる。
+<tt>env</tt> と <tt>continue</tt> をここで復旧することで、<tt>eval-dispatch</tt> は、正しい環境を有するように、かつ、<tt>if</tt> 式の値を受け取るための正しい場所で続行するように、設定されるのだ、ということに注意してほしい。
 </p>
 
 <p class="lisp">ev-if-decide
@@ -835,6 +840,9 @@ then installs the new value in the environment.  <tt>Set-variable-value!</tt> is
 operation.</p>
 
 <p class="trans" lang="ja">
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>は、<tt>ev-assignment</tt> ——ここには、<tt>exp</tt> の中の<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>式をともなって、<tt>eval-dispatch</tt> から到達する——により、扱われる。
+<tt>ev-assignment</tt> におけるコードは、まず、式のうちの値の部分を評価し、それから、新たな値を環境に取り込む。
+<tt>set-variable-value!</tt> は、マシン演算として利用可能であるものとする。
 </p>
 
 
@@ -860,6 +868,7 @@ ev-assignment-1
 <a name="%_idx_6112"></a>Definitions are handled in a similar way:</p>
 
 <p class="trans" lang="ja">
+定義は、似た方法で扱われる。
 </p>
 
 <p class="lisp"><a name="%_idx_6114"></a>ev-definition
@@ -880,7 +889,6 @@ ev-definition-1
   (goto (reg continue))
 </p>
 
-
 <p class="orig" lang="en">
 <a name="%_thm_5.23"></a>
 <b>Exercise 5.23.</b>  <a name="%_idx_6116"></a><a name="%_idx_6118"></a><a name="%_idx_6120"></a>Extend the evaluator to handle derived expressions such as <tt>cond</tt>,
@@ -891,7 +899,8 @@ operations.<a name="call_footnote_Temp_781" href="#footnote_Temp_781"><sup><smal
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.23.</b> <tt>cond</tt> や <tt>let</tt> などのような派生式 (<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節) を扱うように、評価器を拡張せよ。
+君は、「ごまかし」をして、<tt>cond-&gt;if</tt> のような文法変換器がマシン演算として利用可能なのだと想定しても、構わない<a name="call_footnote_Temp_781" href="#footnote_Temp_781"><sup><small>28</small></sup></a>。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -907,7 +916,8 @@ of the clause.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.24.</b> <tt>cond</tt> を <tt>if</tt> へと帰着させることなしに、新たな基本的特殊形式として <tt>cond</tt> を実装せよ。
+連続する <tt>cond</tt> 節の述語を、真であるものを見つけるまで検査するループを、構築する必要があるだろうし、それから、<tt>ev-sequence</tt> を用いて、その節の動作を評価する必要があるだろう。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -920,7 +930,7 @@ based on the lazy evaluator of section <a href="27_sec4_2.html#%_sec_4.2">4.2</a
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.25.</b> <a href="27_sec4_2.html#%_sec_4.2">4.2</a>節の遅延評価器に基づいて、正規順の評価を用いるように評価器を改修せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -928,7 +938,8 @@ based on the lazy evaluator of section <a href="27_sec4_2.html#%_sec_4.2">4.2</a
 
 <a name="%_sec_5.4.4"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.4">5.4.4  Running the Evaluator</a></h3>
-<h3 class="trans" lang="ja">5.4.4 評価器を実行する</h3>
+<h3 class="trans" lang="ja">5.4.4 評価器を動かす</h3>
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6128"></a>
 <a name="%_idx_6130"></a><a name="%_idx_6132"></a>With the implementation of the explicit-control evaluator we come to
@@ -1485,6 +1496,8 @@ execution.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_781"><sup><small>28</small></sup></a>
+これは、本当は、ごまかしをすることではない。
+何もないところから構築される実際の実装において、私たちは、自分たちの明示的制御方式の評価器を使って、実行の前に動く文法段階において <tt>cond-&gt;if</tt> のようなソース・レベルの変換を行う Scheme プログラムを、解釈するだろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_784" href="#call_footnote_Temp_784"><sup><small>29</small></sup></a> We assume here that <tt>read</tt> and the
