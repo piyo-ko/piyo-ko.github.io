@@ -12,7 +12,7 @@
 <div class="idx-bar">
 <nav>
 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<span class="status">翻訳中</span>
+<span class="status">推敲待ち</span>
 [
 <a href="00_cover.html">先頭へ</a> |
 <a href="33_sec5_3.html">前へ</a> |
@@ -939,7 +939,6 @@ based on the lazy evaluator of section <a href="27_sec4_2.html#%_sec_4.2">4.2</a
 <a name="%_sec_5.4.4"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.4.4">5.4.4  Running the Evaluator</a></h3>
 <h3 class="trans" lang="ja">5.4.4 評価器を動かす</h3>
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6128"></a>
 <a name="%_idx_6130"></a><a name="%_idx_6132"></a>With the implementation of the explicit-control evaluator we come to
@@ -960,6 +959,12 @@ explicit-control evaluator, we can simulate it and monitor its
 performance.</p>
 
 <p class="trans" lang="ja">
+明示的制御方式の評価器の実装で、私たちは、1章で始めた開発——評価プロセスのより正確なモデルを、順々に検討してきた——の最後に至る。
+比較的形式ばらない<ruby><rb>代入</rb><rp> (</rp><rt>おきかえ</rt><rp>) </rp></ruby>モデルから始めて、それから、3章でこれを環境モデル——これのおかげで状態と変化とを扱えるようになった——に拡張した。
+4章のメタ循環的な評価器では、式の評価の間に構築される環境構造をより明示的なものにするための言語として、Scheme 自体を使った。<span class="span">(making ...のところは多分倒置だと思う)</span>
+さて今や、レジスタ・マシンを使って、私たちは、記憶の管理や、引数の受け渡しや、制御についての、評価器の仕組みを仔細に見てきたところである。
+説明のそれぞれの新たな水準において、私たちは、問題点を提起せざるを得なかったし、以前の、正確さの劣る、評価の取り扱いにおいては明らかではなかった曖昧性を、解決せねばならなかった。
+明示的制御方式の評価器の振る舞いを理解するために、私たちは、それをシミュレートして、その実行ぶりを監視することができる。
 </p>
 
 <p class="orig" lang="en">
@@ -971,6 +976,10 @@ the beginning of the explicit-control evaluator's controller
 sequence:<a name="call_footnote_Temp_784" href="#footnote_Temp_784"><sup><small>29</small></sup></a></p>
 
 <p class="trans" lang="ja">
+私たちの評価器マシンに、ドライバ・ループを組み込もう。
+これは、<a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>節の <tt>driver-loop</tt> 手続きの役割を果たす。
+評価器は、繰り返し、プロンプトを印字し、式を読み込み、<tt>eval-dispatch</tt> へ行くことによってその式を評価し、結果を印字する。
+以下の命令は、明示的制御方式の評価器のコントローラ・シーケンスの始まりをなす<a href="#footnote_Temp_784"><sup><small>29</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6142"></a><a name="%_idx_6144"></a>read-eval-print-loop
@@ -994,6 +1003,7 @@ procedure type error'' indicated at <tt>apply-dispatch</tt>), we print an
 error message and return to the driver loop.<a name="call_footnote_Temp_785" href="#footnote_Temp_785"><sup><small>30</small></sup></a></p>
 
 <p class="trans" lang="ja">
+(<tt>apply-dispatch</tt> で示される「未知の手続き種類というエラー」のような) エラーに手続き内で遭遇したら、エラー・メッセージを印字してドライバ・ループへ戻る<a href="#footnote_Temp_785"><sup><small>30</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6152"></a>unknown-expression-type
@@ -1014,6 +1024,8 @@ through the driver loop, since it might not be empty after an error
 (such as an undefined variable) interrupts an evaluation.<a name="call_footnote_Temp_786" href="#footnote_Temp_786"><sup><small>31</small></sup></a></p>
 
 <p class="trans" lang="ja">
+シミュレーションの目的のために、私たちは、ドライバ・ループを通り抜けるたびにスタックを初期化する。なぜなら、(未定義変数のような) エラーが評価に割り込んだ後では、スタックが空でないことがあり得るからだ<a href="#footnote_Temp_786"><sup><small>31</small></sup></a>。
+<span class="note">(each time through ... というところは、文法的には何か主語・動詞が欠けている気がするが、意味的にはこうなると思う。)</span>
 </p>
 
 <p class="orig" lang="en">
@@ -1023,6 +1035,7 @@ evaluator machine model that we can run using the register-machine simulator
 of section <a href="32_sec5_2.html#%_sec_5.2">5.2</a>.</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_5.4.1">5.4.1</a>節から<a href="#%_sec_5.4.4">5.4.4</a>節までに提示したコード断片をすべて結合すると、<a href="32_sec5_2.html#%_sec_5.2">5.2</a>節のレジスタ・マシン・シミュレータを使って動かせる評価器マシン・モデルを作り出せる。
 </p>
 
 <p class="lisp">(define eceval
@@ -1042,6 +1055,8 @@ section <a href="26_sec4_1.html#%_sec_4.1">4.1</a>, together with the few additi
 defined in footnotes throughout section <a href="#%_sec_5.4">5.4</a>.</p>
 
 <p class="trans" lang="ja">
+評価器によりプリミティブとして使われる演算をシミュレートするための Scheme 手続きを、私たちは定義せねばならない。
+これらは、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節でメタ循環的な評価器のために用いたのと同じ手続きと、それから、<a href="#%_sec_5.4">5.4</a>節全体を通じて脚注で定義した追加の手続きである。
 </p>
 
 <p class="lisp">(define eceval-operations
@@ -1049,11 +1064,11 @@ defined in footnotes throughout section <a href="#%_sec_5.4">5.4</a>.</p>
         <em>&lt;complete list of operations for eceval machine&gt;</em>))
 </p>
 
-
 <p class="orig" lang="en">
 Finally, we can initialize the global environment and run the evaluator:</p>
 
 <p class="trans" lang="ja">
+最後に、大域環境を初期化して評価器を動かすことができる。
 </p>
 
 <p class="lisp">(define the-global-environment (setup-environment))
@@ -1082,11 +1097,13 @@ a Scheme program, which is itself being evaluated by the Scheme
 interpreter.</p>
 
 <p class="trans" lang="ja">
+もちろん、この方法で式を評価することは、それらの式を Scheme に直接的に打ち込んだ場合よりも、ずっと長い時間がかかるだろう。なぜなら、シミュレーションの複数のレベルを伴うためである。
+式は、明示的制御方式の評価器のマシンによって評価され、このマシンは、Scheme プログラムによりシミュレートされており、このプログラムは、それ自体が、Scheme インタプリタにより評価されているのである。
 </p>
 
 <a name="%_sec_Temp_787"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_787">Monitoring the performance of the evaluator</a></h4>
-<h4 class="trans" lang="ja">評価器の性能を監視する</h4>
+<h4 class="trans" lang="ja">評価器の実行ぶりを監視する</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_6160"></a>
@@ -1103,6 +1120,10 @@ evaluator's <tt>print-result</tt> entry point to print the
 statistics:</p>
 
 <p class="trans" lang="ja">
+シミュレーションは、評価器の実装を道案内するための強力な道具たり得る。
+シミュレーションは、レジスタ・マシンの設計の諸変種を探求することを簡単にするだけでなく、シミュレートされる評価器の実行ぶりを監視することも簡単にする。
+たとえば、実行における一つの重要な因子は、評価器がどれほど効率よくスタックを使うか、ということである。
+スタック利用についての統計値を収集するバージョンのシミュレータ (<a href="32_sec5_2.html#%_sec_5.2.4">5.2.4</a>節) を使って、評価器レジスタ・マシンを定義し、評価器の <tt>print-result</tt> エントリ・ポイントに、その統計値を印字するように命令を追加することによって、私たちは、様々な式を評価するのに必要とされるスタック演算の数を観察できる。
 </p>
 
 <p class="lisp"><a name="%_idx_6164"></a>print-result
@@ -1115,6 +1136,7 @@ statistics:</p>
 <p class="orig" lang="en">Interactions with the evaluator now look like this:</p>
 
 <p class="trans" lang="ja">
+評価器とのやりとりは、今や、このようになる。
 </p>
 
 <p class="lisp"><i>;;; EC-Eval input:</i>
@@ -1138,6 +1160,7 @@ each interaction, so that the statistics printed will refer only to
 stack operations used to evaluate the previous expression.</p>
 
 <p class="trans" lang="ja">
+評価器のドライバ・ループが、それぞれのやり取りの開始時点でスタックを再初期化するということと、その結果、印字される統計値は、直前の式を評価するのに使われたスタック演算のみを指すだろうということに、注意してほしい。
 </p>
 
 <p class="orig" lang="en">
@@ -1148,11 +1171,9 @@ evaluator and define the iterative <tt>factorial</tt> procedure from
 section <a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.26.</b> 監視されているスタックを使って、評価器の末尾再帰の性質 (<a href="#%_sec_5.4.2">5.4.2</a>節) を探求せよ。
+評価器を開始させて、<a href="11_sec1_2.html#%_sec_1.2.1">1.2.1</a>節の反復的な <tt>factorial</tt> 手続きを定義せよ。
 </p>
-
-<p class="exercise"><span class="ex_comment">
-</span></p>
 
 <p class="lisp">(define (factorial n)
   (define (iter product counter)
@@ -1168,6 +1189,8 @@ stack depth and the number of pushes required to compute <em>n</em>! for each of
 these values.</p>
 
 <p class="trans" lang="ja">
+何らかの小さな <span class="note">(いくつかの)</span> 値の <em class="en">n</em> を使って、この手続きを動かせ。
+これらの値のそれぞれについて、最大のスタック深さと、<em class="en">n</em>! を計算するのに必要とされたプッシュの回数を、記録せよ。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1182,9 +1205,17 @@ and is thus determined by two constants.</li>
 
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li><em class="en">n</em>! を評価するのに必要とされる最大の深さが、<em class="en">n</em> とは独立である、と君は気づくだろう。
+その深さとはどれほどか?</li>
+
+<li>任意の 
+<span class="math"><em class="en">n</em> &ge; 1</span> 
+について、<em class="en">n</em>! を評価する際に使われるプッシュ操作の総数について <em class="en">n</em> で表した式を、君のデータから定めよ。
+使われる操作の回数は、<em class="en">n</em> の線形関数であり、したがって、二つの定数により定まる、ということに注意せよ。</li>
 </ol>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <p class="orig" lang="en">
 <a name="%_thm_5.27"></a>
@@ -1193,7 +1224,7 @@ behavior of the following procedure for computing factorials
 recursively:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.27.</b> 練習問題<a href="#%_thm_5.26">5.26</a>との比較のため、階乗を再帰的に計算するための以下の手続きの振る舞いを、探求せよ。
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -1209,8 +1240,12 @@ will be linear.)  Summarize your experiments by filling in the
 following table with the appropriate expressions in terms of <em>n</em>:</p>
 
 <p class="trans" lang="ja">
+監視されるスタックを使ってこの手続きを動かすことによって、
+<span class="math"><em class="en">n</em> &ge; 1</span> 
+について、スタックの最大の深さと、<em class="en">n</em>! を評価する際に使われるプッシュの総数とを、<em class="en">n</em> の関数として定めよ
+(さらに、これらの関数もまた、線形となるだろう)。
+<em class="en">n</em> で表した適切な式で以下の表を埋めることにより、君の実験を要約せよ。
 </p>
-
 
 <div class="orig" lang="en">
 <table class="expl">
@@ -1223,11 +1258,10 @@ following table with the appropriate expressions in terms of <em>n</em>:</p>
 
 <div class="trans" lang="ja">
 <table class="expl">
-<tr><td></td><td>最大の深さ</td><td>プッシュ数</td></tr>
+<tr><td></td><td>最大の深さ</td><td>プッシュの回数</td></tr>
 <tr><td>再帰的な階乗</td><td></td><td></td></tr>
 <tr><td>反復的な階乗</td><td></td><td></td></tr>
 </table>
-
 </div>
 
 <p class="orig" lang="en">
@@ -1237,10 +1271,19 @@ correlates well with the time required.
 </p>
 
 <p class="trans" lang="ja">
+最大の深さは、計算を遂行する際に評価器により使われる空間の量の尺度であり、プッシュの回数は、必要な時間と、かなりの相関関係がある。
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<div class="exercise">
+<p><span class="ex_comment">
 </span></p>
+
+<table class="expl ex_comment">
+<tr><td></td><td>最大の深さ</td><td>プッシュの回数</td></tr>
+<tr><td>再帰的な階乗</td><td></td><td></td></tr>
+<tr><td>反復的な階乗</td><td></td><td></td></tr>
+</table>
+</div>
 
 <p class="orig" lang="en">
 <a name="%_thm_5.28"></a>
@@ -1254,7 +1297,8 @@ that grows linearly with their input.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.28.</b> 評価器がもはや末尾再帰的ではなくなるように、<a href="#%_sec_5.4.2">5.4.2</a>節で説明したとおりに <tt>eval-sequence</tt> を変更することによって評価器を改変せよ。
+練習問題<a href="#%_thm_5.26">5.26</a>と練習問題<a href="#%_thm_5.27">5.27</a>の君の実験を再び行って、<tt>factorial</tt> 手続きの双方のバージョンが、今や、その入力に対して線形に増える空間を必要とするのだ、ということを実証せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -1265,7 +1309,7 @@ that grows linearly with their input.
 <b>Exercise 5.29.</b>  <a name="%_idx_6178"></a>Monitor the stack operations in the tree-recursive Fibonacci computation:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.29.</b> 木構造再帰的なフィボナッチ計算におけるスタック演算を監視せよ。
 </p>
 
 <p class="lisp"><a name="%_idx_6180"></a>(define (fib n)
@@ -1293,8 +1337,38 @@ as <em>a</em>  <em>F</em><em>i</em><em>b</em>(<em>n</em> + 1)  +  <em>b</em> and
 
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li>
+<span class="math"><em class="en">n</em> &ge; 2</span>
+に対して
+<span class="math"><em class="en">Fib</em>(<em class="en">n</em>)</span>
+を計算するのに必要とされる、スタックの最大の深さについて、
+<em class="en">n</em> で表した式を示せ。
+ヒント: このプロセスにより使われる空間は <em class="en">n</em> に対して線形に増える、と<a href="11_sec1_2.html#%_sec_1.2.2">1.2.2</a>節で私たちは主張した。
+</li>
+<li>
+<span class="math"><em class="en">n</em> &ge; 2</span>
+に対して
+<span class="math"><em class="en">Fib</em>(<em class="en">n</em>)</span>
+を計算するのに使われるプッシュの総数について、
+<em class="en">n</em> で表した式を示せ。
+プッシュの回数 (使われる時間とかなりの相関関係がある) が <em class="en">n</em> に対して指数関数的に増える、ということに、君は気づくはずだ。
+ヒント: 
+<span class="math"><em class="en">Fib</em>(<em class="en">n</em>)</span>
+を計算するのに使われるプッシュの回数を、
+<span class="math"><em class="en">S</em>(<em class="en">n</em>)</span>
+とする。
+<span class="math"><em class="en">S</em>(<em class="en">n</em> &minus; 1)</span>
+と、
+<span class="math"><em class="en">S</em>(<em class="en">n</em> &minus; 2)</span>
+と、<em class="en">n</em> とは独立した何らかの固定「オーバヘッド」定数である <em class="en">k</em> とを用いて、
+<span class="math"><em class="en">S</em>(<em class="en">n</em>)</span>
+を表す式が存在するのだ、と君は主張できるはずである。
+その式を示せ。そして、<em class="en">k</em> が何なのかを述べよ。
+それから、
+<span class="math"><em class="en">S</em>(<em class="en">n</em>)</span>
+を、
+<span class="math"><em class="en">a</em> <em class="en">Fib</em>(<em class="en">n</em> + 1) + <em class="en">b</em></span>
+として表せることを示し、<em class="en">a</em> と <em class="en">b</em> の値を示せ。</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
@@ -1313,7 +1387,11 @@ error system work, but it is well worth the effort to understand what
 is involved here.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.30.</b> 私たちの評価器は、今のところ、たった二種類のエラー ——つまり、未知の式という種類と、未知の手続きという種類——を捕捉して合図を送るだけである。
+他のエラーは、私たちを、評価器の読み込み・評価・印字のループの外側へと連れ出すことだろう。
+レジスタ・マシン・シミュレータを使って評価器を動かすとき、これらのエラーは、根底にある Scheme システムにより捕捉される。
+これは、ユーザ・プログラムがエラーを引き起こすとコンピュータがクラッシュすることに似ている<a href="#footnote_Temp_793"><sup><small>32</small></sup></a>。
+現実のエラー・システムをうまく機能させることは、大規模プロジェクトではあるが、ここに何が付随しているのかを理解しようとする苦労に見合うだけの、十分な価値はある。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1340,10 +1418,21 @@ evaluator can check for the condition code and go to <tt>signal-error</tt> if ne
 This is a major project.</li>
 </ol>
 
-
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li>束縛されていない変数へアクセスしようとする試みなどの、評価プロセス中に生じるエラーは、区別された状態コード——どのユーザ変数の可能な値でもあり得ない——をルックアップ演算に返させるように、ルックアップ演算を変更することによって、捕捉できるだろう。
+評価器は、この状態コードかどうかを検査し、それから、<tt>signal-error</tt> へ行くのに必要なことを行うことができる。
+そのような変更が必要な、評価器中のすべての場所を見つけ出し、それらの場所を修正せよ。
+これは大量の仕事だ。
+</li>
+<li>もっと悪いことは、ゼロで割ろうとする試み、あるいは、記号の <tt>car</tt> を抽出しようとする試みなどの、原始的手続きを適用することで合図されるようなエラーを扱う問題である。
+玄人により書かれた高品質のシステムでは、それぞれのプリミティブ適用が、プリミティブの一部として、安全のために検査される。
+たとえば、<tt>car</tt> のすべての呼び出しは、まず、引数が対であることを検査することが可能だろう。
+もし引数が対でなければ、適用は、区別された状態コードを評価器に返すだろうし、すると評価器は、失敗を報告するだろう。
+これを、私たちは、各原始的手続きに適用可能性を検査させるとともに、失敗に応じて適宜の区別された状態コードを返すことによって、私たちのレジスタ・マシン・シミュレータの中に手配することができるだろう。
+すると、評価器における <tt>primitive-apply</tt> のコードは、状態コードを検査することができ、必要に応じて <tt>signal-error</tt> に行くことができる。
+この構造を構築して、それをうまく機能させよ。
+これは大変なプロジェクトである。
+</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
@@ -1510,6 +1599,9 @@ such as transferring single characters to and from a device.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_784"><sup><small>29</small></sup></a>
+ここで私たちは、<tt>read</tt> や様々な印字<ruby><rb>操作</rb><rp> (</rp><rt>オペレーション</rt><rp>) </rp></ruby>が、原始的なマシン<ruby><rb>演算</rb><rp> (</rp><rt>オペレーション</rt><rp>) </rp></ruby>として利用可能なのだ、と想定していて、そのことは私たちのシミュレーションにとっては有用なのだが、実際にはまったくもって非現実的である。
+これらは、実際には極めて複雑な操作である。
+実際、これらは、デバイスに一つの文字を転送したりデバイスから一つの文字を転送したりするような、低水準の入出力操作を使って、実装されるだろう。
 </p>
 
 <p class="orig" lang="en">
@@ -1531,6 +1623,8 @@ so simple.  See exercise <a href="#%_thm_5.30">5.30</a>.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_785"><sup><small>30</small></sup></a>
+インタプリタに取り扱ってほしい他のエラーも存在するが、これらはそれほど単純ではない。
+練習問題<a href="#%_thm_5.30">5.30</a>を参照のこと。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_786" href="#call_footnote_Temp_786"><sup><small>31</small></sup></a> We
@@ -1540,6 +1634,7 @@ performance, as described below.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_786"><sup><small>31</small></sup></a>
+エラーの後でだけスタック初期化を行うこともできるだろうが、スタック初期化をドライバ・ループにおいて行うことは、後述のとおり、評価器の実行ぶりを監視するのに便利だろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_793" href="#call_footnote_Temp_793"><sup><small>32</small></sup></a> Regrettably, this is the normal state of affairs in
@@ -1552,6 +1647,9 @@ the computer -- if you're lucky.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_793"><sup><small>32</small></sup></a>
+残念ながら、これは、C のような従来のコンパイラ・ベースの言語システムにおける、物事の普通の状態である。
+UNIX&trade; では、システムが「コアを<ruby><rb>吐き</rb><rp> (</rp><rt>ダンプし</rt><rp>) </rp></ruby>」、DOS/Windows&trade; では、システムが無反応になる。
+Macintosh&trade; は、爆発する爆弾の絵を表示して、君に対して、コンピュータを再起動する機会を提供してくれる——もし君につきがあれば、だが。
 </p>
 
 </div>
