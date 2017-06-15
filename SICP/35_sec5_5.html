@@ -12,7 +12,7 @@
 <div class="idx-bar">
 <nav>
 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<span class="status">翻訳待ち</span>
+<span class="status">翻訳中</span>
 [
 <a href="00_cover.html">先頭へ</a> |
 <a href="34_sec5_4.html">前へ</a> |
@@ -77,7 +77,6 @@
 <h2 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5">5.5  Compilation</a></h2>
 <h2 class="trans" lang="ja">5.5 コンパイル</h2>
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_6194"></a>
 The explicit-control evaluator of section <a href="34_sec5_4.html#%_sec_5.4">5.4</a> is a
@@ -86,6 +85,8 @@ section we will see how to run Scheme programs on a register machine
 whose controller is not a Scheme interpreter.</p>
 
 <p class="trans" lang="ja">
+<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節の明示的制御方式の評価器は、そのコントローラが Scheme プログラムを解釈するというレジスタ・マシンである。
+本節では、そのコントローラが Scheme インタプリタではないようなレジスタ・マシン上で Scheme プログラムを動かす方法を見ることにしよう。
 </p>
 
 <p class="orig" lang="en">
@@ -97,6 +98,9 @@ universal: They are sufficient to perform any computation we desire,
 given an appropriate controller.<a name="call_footnote_Temp_794" href="#footnote_Temp_794"><sup><small>33</small></sup></a></p>
 
 <p class="trans" lang="ja">
+明示的制御方式の評価器マシンは普遍的である——つまり、Scheme で記述できる任意の計算プロセスを実行できる。
+評価器のコントローラは、所望の計算を実行するために、そのデータ経路の使用を組織化する。
+よって、評価器のデータ経路は、普遍的である。すなわち、適切なコントローラが与えられるなら、それらのデータ経路は、私たちが望む任意の計算を実行するのに十分なのである<a href="#footnote_Temp_794"><sup><small>33</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -114,6 +118,11 @@ computer rather than as the controller for a specialized interpreter
 machine.</p>
 
 <p class="trans" lang="ja">
+商用の汎用コンピュータは、レジスタの集まりと、データ経路の効率的で便利な普遍的集合を構成する演算とを中心に系統立てられた、レジスタ・マシンである。
+汎用マシン用のコントローラとは、私たちがこれまで使ってきた<!--ものの-->ようなレジスタ・マシン言語についてのインタプリタである。
+この言語は、マシンの<em>ネイティブ言語</em>、または単に<em>マシン語</em>と呼ばれる。
+マシン語で書かれたプログラムは、マシンのデータ経路を使う命令の列である。
+たとえば、明示的制御方式の評価器の命令列は、特別のインタプリタ用のコントローラなのではなく、むしろ、汎用コンピュータ用のマシン語プログラムなのだ、と見なせる。
 </p>
 
 <p class="orig" lang="en">
@@ -132,6 +141,13 @@ does so, it simulates the intended behavior of the source program by
 calling appropriate primitive subroutines from the library.</p>
 
 <p class="trans" lang="ja">
+高水準言語とレジスタ・マシン言語の間の隔たりを埋めるための、二つの平凡な戦略がある。
+明示的制御方式の評価器は、解釈の戦略を例解している。
+あるマシンのネイティブ言語で書かれたインタプリタは、評価を実行する当該マシンのネイティブ言語とは異なるかもしれない言語 (<em>ソース言語</em>と呼ばれる) で書かれたプログラムを実行するように、そのマシンを構成する。
+ソース言語の原始的手続きは、与えられたマシンのネイティブ言語で書かれたサブルーチンのライブラリとして、実装される。
+解釈されるべきプログラム (<em>ソース・プログラム</em>と呼ばれる) は、データ構造として表現される。
+インタプリタは、ソース・プログラムを解析する際、このデータ構造をトラバースする。
+インタプリタがそのようにするに連れて、インタプリタは、ライブラリから適切な原始的サブルーチンを呼び出すことによって、ソース・プログラムの、意図された振る舞いをシミュレートする。
 </p>
 
 <p class="orig" lang="en">
@@ -143,6 +159,9 @@ in Scheme into sequences of instructions to be executed using
 the explicit-control evaluator machine's data paths.<a name="call_footnote_Temp_795" href="#footnote_Temp_795"><sup><small>34</small></sup></a></p>
 
 <p class="trans" lang="ja">
+本節では、<em>コンパイル</em>という別の戦略を探究する。
+与えられたソース言語とマシンについてのコンパイラは、ソース・プログラムを、そのマシンのネイティブ言語で書かれた等価なプログラム (<em>オブジェクト・プログラム</em>と呼ばれる) へと、翻訳する。
+本節で私たちが実装するコンパイラは、Scheme で書かれたプログラムを、明示的制御方式の評価器マシンのデータ経路を用いて実行されるべき命令の列へと、翻訳する<a name="call_footnote_Temp_795" href="#footnote_Temp_795"><sup><small>34</small></sup></a>。
 </p>
 
 <p class="orig" lang="en">
@@ -156,6 +175,9 @@ because the entire library of primitives is present, new programs can
 be constructed and added to the system during debugging.</p>
 
 <p class="trans" lang="ja">
+解釈と比べると、コンパイルは——コンパイラの概要において以下に説明するとおり——プログラム実行の効率性における非常な進歩をもたらすことができる。
+一方、インタプリタは、インタラクティブなプログラム開発とデバッグのためのより強力な環境をもたらす。なぜなら、実行されている最中のソース・プログラムが、実行時において、吟味したり改変したりするのに使えるからだ。
+さらに、プリミティブの完全なライブラリが存在するので、デバッグの最中に新たなプログラムを構築してシステムに追加することができる。
 </p>
 
 <p class="orig" lang="en">
@@ -173,11 +195,17 @@ the compiler, we will show how to interface it with our interpreter to
 produce an integrated interpreter-compiler development system.</p>
 
 <p class="trans" lang="ja">
+コンパイルと解釈の、相補的な利点を考慮して、現代的なプログラム開発環境は、混合した戦略を追求している。
+Lisp インタプリタは、一般的には、解釈された手続きとコンパイルされた手続きがお互いを呼び出せるように、組織化されている。
+これによってプログラマは、デバッグすべきだと想定されているプログラムの部分をコンパイルすることが可能となり、それゆえに、コンパイルの効率性の利点を得つつ、その一方で、インタラクティブな開発とデバッグの流動の中にあるプログラムの部分について、解釈による実行の方式を保てるのだ。
+コンパイラを実装した後の<a href="#%_sec_5.5.7">5.5.7</a>節では、統合インタプリタ・コンパイラ開発システムを作り出すためにコンパイラをインタプリタとインタフェイス接続する方法を、示すことにしよう。
+
 </p>
 
 <a name="%_sec_Temp_796"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_796">An overview of the compiler</a></h4>
 <h4 class="trans" lang="ja">コンパイラの概要</h4>
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6224"></a><a name="%_idx_6226"></a>
 Our compiler is much like our interpreter, both in its structure and in
@@ -2835,8 +2863,11 @@ calculations or calculations that intensively manipulate bit vectors.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_794"><sup><small>33</small></sup></a>
+これは理論上の陳述である。
+評価器のデータ経路が、汎用コンピュータ用のデータ経路の、特に便利または効率的な集合である、と主張しているわけではないのだ。
+たとえば、それらのデータ経路は、高性能の浮動小数点計算や、あるいは、ビット・ベクタを徹底的に操作しまくる計算を実装するのには、非常に適しているという訳ではない。
 </p>
-
 
 <p class="orig" lang="en"><a name="footnote_Temp_795" href="#call_footnote_Temp_795"><sup><small>34</small></sup></a> Actually, the machine that runs
 compiled code can be simpler than the interpreter machine, because we
@@ -2851,6 +2882,12 @@ appear in the explicit-control evaluator machine.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_795"><sup><small>34</small></sup></a>
+実際のところ、コンパイルされたコードを動かすマシンは、インタプリタ・マシンよりも単純になり得る。なぜなら、私たちは、<tt>exp</tt> レジスタと <tt>unev</tt> レジスタを使わないだろうから。
+インタプリタは、未評価の式のかけらを保持するために、これらのレジスタを使った。
+しかし、コンパイラがあれば、これらの式は、レジスタ・マシンが動かすであろう、コンパイルされたコードの中に、組み込まれるようになる。
+同じ理由のため、私たちは、式の文法を扱うマシン演算を必要としない。
+しかし、コンパイルされたコードは、明示的制御方式の評価器マシンには出てこなかった、(コンパイルされた手続きオブジェクトを表現するための) 少数の付加的なマシン演算を、使うだろう。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_797" href="#call_footnote_Temp_797"><sup><small>35</small></sup></a> Notice, however, that our
@@ -2864,6 +2901,7 @@ in our register machine simulation.)
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_797"><sup><small>35</small></sup></a>
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_803" href="#call_footnote_Temp_803"><sup><small>36</small></sup></a> This procedure uses a feature of Lisp called <em><a name="%_idx_6280"></a><a name="%_idx_6282"></a><a name="%_idx_6284"></a><a name="%_idx_6286"></a><a name="%_idx_6288"></a><a name="%_idx_6290"></a>backquote</em> (or <em>quasiquote</em>) that is handy for constructing lists.
@@ -2871,6 +2909,7 @@ Preceding a list with a backquote symbol is much like quoting it,
 except that anything in the list that is flagged with a comma is evaluated.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_803"><sup><small>36</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -2902,6 +2941,7 @@ unique variable names in the query language, as follows:
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_806"><sup><small>37</small></sup></a>
 </p>
 
 
@@ -2925,6 +2965,7 @@ compound procedures described in section <a href="26_sec4_1.html#%_sec_4.1.3">4.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_809"><sup><small>38</small></sup></a>
 </p>
 
 
@@ -2948,6 +2989,7 @@ values in <tt>val</tt>.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_812"><sup><small>39</small></sup></a>
 </p>
 
 
@@ -2973,6 +3015,7 @@ points of computer architecture.  (See <a name="%_idx_6366"></a>Appel 1987 and <
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_813"><sup><small>40</small></sup></a>
 </p>
 
 
@@ -2981,6 +3024,7 @@ points of computer architecture.  (See <a name="%_idx_6366"></a>Appel 1987 and <
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_814"><sup><small>41</small></sup></a>
 </p>
 
 
@@ -2994,6 +3038,7 @@ procedure that takes an arbitrary number of arguments.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_815"><sup><small>42</small></sup></a>
 </p>
 
 
@@ -3005,6 +3050,7 @@ and primitives of the machine.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_822"><sup><small>43</small></sup></a>
 </p>
 
 
@@ -3018,6 +3064,7 @@ problem.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_823"><sup><small>44</small></sup></a>
 </p>
 
 
@@ -3027,6 +3074,7 @@ See exercise <a href="#%_thm_5.43">5.43</a>.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_824"><sup><small>45</small></sup></a>
 </p>
 
 
@@ -3038,6 +3086,7 @@ work.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_826"><sup><small>46</small></sup></a>
 </p>
 
 
@@ -3051,6 +3100,7 @@ name to be entered in the compile-time environment.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_830"><sup><small>47</small></sup></a>
 </p>
 
 
@@ -3062,6 +3112,7 @@ to compiled).
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_833"><sup><small>48</small></sup></a>
 </p>
 
 
@@ -3072,6 +3123,7 @@ its ordinary read-eval-print loop, we could use
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_834"><sup><small>49</small></sup></a>
 </p>
 
 
@@ -3089,6 +3141,7 @@ components of a compiled procedure:
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_835"><sup><small>50</small></sup></a>
 </p>
 
 
@@ -3110,6 +3163,7 @@ exercise <a href="#%_thm_5.47">5.47</a>.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_837"><sup><small>51</small></sup></a>
 </p>
 
 
@@ -3127,6 +3181,7 @@ programmers to control the extent and type of error checking in the
 compiled code.</p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_838"><sup><small>52</small></sup></a>
 </p>
 
 <p class="orig" lang="en">
@@ -3159,6 +3214,7 @@ machine.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_839"><sup><small>53</small></sup></a>
 </p>
 
 
@@ -3173,6 +3229,7 @@ the results are extremely sensitive to minuscule details.
 </p>
 
 <p class="trans" lang="ja">
+<a href="#call_footnote_Temp_840"><sup><small>54</small></sup></a>
 </p>
 
 </div>
