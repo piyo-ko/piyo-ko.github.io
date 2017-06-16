@@ -198,14 +198,13 @@ produce an integrated interpreter-compiler development system.</p>
 コンパイルと解釈の、相補的な利点を考慮して、現代的なプログラム開発環境は、混合した戦略を追求している。
 Lisp インタプリタは、一般的には、解釈された手続きとコンパイルされた手続きがお互いを呼び出せるように、組織化されている。
 これによってプログラマは、デバッグすべきだと想定されているプログラムの部分をコンパイルすることが可能となり、それゆえに、コンパイルの効率性の利点を得つつ、その一方で、インタラクティブな開発とデバッグの流動の中にあるプログラムの部分について、解釈による実行の方式を保てるのだ。
-コンパイラを実装した後の<a href="#%_sec_5.5.7">5.5.7</a>節では、統合インタプリタ・コンパイラ開発システムを作り出すためにコンパイラをインタプリタとインタフェイス接続する方法を、示すことにしよう。
+コンパイラを実装した後の<a href="#%_sec_5.5.7">5.5.7</a>節では、統合インタプリタ・コンパイラ開発システムを作り出すためにコンパイラをインタプリタに仲介する方法を、示すことにしよう。
 
 </p>
 
 <a name="%_sec_Temp_796"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_796">An overview of the compiler</a></h4>
 <h4 class="trans" lang="ja">コンパイラの概要</h4>
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6224"></a><a name="%_idx_6226"></a>
 Our compiler is much like our interpreter, both in its structure and in
@@ -224,6 +223,10 @@ program that performs essentially the same register operations as
 would the interpreter in evaluating the same source program.</p>
 
 <p class="trans" lang="ja">
+私たちのコンパイラは、私たちのインタプリタに——構造と、実行する機能の、双方の点で——とてもよく似ている。
+したがって、式を分析するためにコンパイラにより使われる仕組みは、インタプリタにより使われる仕組みに似たものとなるだろう。
+さらに、コンパイルされたコードと解釈されたコードとを仲介するのを簡単にするために、レジスタ使用についてインタプリタと同じ慣習に従うコードを生成するように、コンパイラを設計しよう。つまり、環境は <tt>env</tt> レジスタに保持されるだろうし、実引数リストは <tt>argl</tt> に蓄積されるだろうし、適用すべき手続きは <tt>proc</tt> にあるだろうし、手続きは答えを <tt>val</tt> の中に返すだろうし、手続きが返ってくるべき場所は <tt>continue</tt> に保持されるだろう。
+一般に、コンパイラは、ソース・プログラムを、インタプリタが同じソース・プログラムを評価する際に行うであろうものと本質的に同じレジスタ演算を行うオブジェクト・プログラムへと、翻訳する。
 </p>
 
 <p class="orig" lang="en">
@@ -246,6 +249,13 @@ the operator and the two operands, assemble the argument list,
 and apply the procedure (in <tt>proc</tt>) to the arguments (in <tt>argl</tt>).</p>
 
 <p class="trans" lang="ja">
+この説明は、基本的なコンパイラを実装するための戦略を示唆する。つまり、インタプリタが行うのと同じ方法で、式をトラバースするのだ。
+その式を評価する際にインタプリタが行うであろうレジスタ命令に遭遇したら、その命令は実行せず、その代わりに、その命令を列に蓄積する。
+結果としてできあがる命令列が、オブジェクト・コードになっているだろう。
+解釈に対するコンパイルの効率上の優位に、気づいてほしい。
+インタプリタは、式——例えば <tt>(f 84 96)</tt> ——を評価するたびに、その式を分類して (これは手続き適用だと突き止めて)、オペランド・リストの最後かどうかを検査する (二つのオペランドがあると突き止める)、という仕事を行う。
+コンパイラを使うと、式は一度だけ——コンパイル時に命令列が生成されるときに——解析される。
+コンパイラにより作り出されたオブジェクト・コードは、オペレータと二つのオペランドを評価し、実引数リストを組み上げ、(<tt>proc</tt> にある) 手続きを (<tt>argl</tt> にある) 実引数に適用する命令だけを含む。
 </p>
 
 <p class="orig" lang="en">
@@ -266,6 +276,14 @@ particular expression it is processing to generate code that avoids
 unnecessary stack operations.</p>
 
 <p class="trans" lang="ja">
+これは、<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節での評価器の分析において実装したものと、同じ種類の最適化である。
+しかし、コンパイルされたコードにおいて効率性を達成するための、さらなる機会がある。
+インタプリタが動く際、インタプリタは、当該言語で書かれたどのような式にも適用可能であらねばならないプロセスに従う。
+対照的に、コンパイルされたコードの所与の断片は、何らかの特定の式を実行することを意図したものである。
+これは、たとえば、レジスタを退避するためのスタックの使用において、大きな違いを生じる可能性がある。
+インタプリタが式を評価するとき、インタプリタは、いかなる不測の事態にも備えていなくてはならない。
+部分式を評価する前に、インタプリタは、後で必要になるであろうすべてのレジスタを退避する。なぜなら、その部分式が任意の評価を必要とするかもしれないからである。
+一方、コンパイラは、自分が処理している最中の特定の式の構造を、不要なスタック演算を避けるコードを生成するために、活用できるのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -280,6 +298,16 @@ accomplished by the machine operation <tt>lookup-variable-value</tt>,
 which does not alter any registers.  The compiler that we implement in
 this section will take advantage of this fact and generate code that
 evaluates the operator using the instruction
+</p>
+
+<p class="trans" lang="ja">
+好例として、<tt>(f 84 96)</tt> というコンビネーションを考えよう。
+インタプリタは、このコンビネーションの演算子を評価する前に、オペランドと環境を含むレジスタ——後でその値が必要になるだろう——を退避することで、この評価に備える。
+それから、インタプリタは演算子を評価して結果を <tt>val</tt> の中に得て、退避してあるレジスタを復旧し、最後に結果を <tt>val</tt> から <tt>proc</tt> に移動する。
+しかし、私たちが取り扱っている特定の式においては、演算子は <tt>f</tt> という記号であり、その評価は <tt>lookup-variable-value</tt> というマシン演算により達成され、このマシン演算はいかなるレジスタも変更しない。
+本節で私たちが実装するコンパイラは、この事実を利用するだろうし、以下の命令を用いてこの演算子を評価するようなコードを生成するだろう。
+</p>
+
 <p class="lisp">(assign proc (op lookup-variable-value) (const f) (reg env))
 </p>
 
@@ -289,6 +317,7 @@ restores but also assigns the value of the lookup directly to
 and then move this to <tt>proc</tt>.</p>
 
 <p class="trans" lang="ja">
+インタプリタは <tt>val</tt> の中の結果を取得して、それからこの結果を <tt>proc</tt> へ移動するであろうが、それに対してこのコードは、不要な退避・復旧を避けるだけでなく、ルックアップの値を直接的に <tt>proc</tt> に割り当てもするのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -307,11 +336,19 @@ Our main goal in this section is to illustrate the compilation process
 in a simplified (but still interesting) context.</p>
 
 <p class="trans" lang="ja">
+コンパイラは、環境へのアクセスも最適化できる。
+コードを解析し終えたら、多くの場合、コンパイラは、特定の変数がどのフレームに配置されるだろうかということを知ることができるし、<tt>lookup-variable-value</tt> 探索を実行するのではなく直接的にそのフレームにアクセスできる。
+<a href="#%_sec_5.5.6">5.5.6</a>節では、そうした変数アクセスを実装する方法を議論しよう。
+しかし、それまでは、上述のレジスタとスタックの最適化の種類に焦点を絞ろう。
+一般的な <tt>apply</tt> の仕組みを使う代わりに原始的演算を「インライン形式で」コード化する (練習問題<a href="#%_thm_5.38">5.38</a>を参照) などといった、コンパイラによって実行できる他の多くの最適化が存在する。しかし、これらのことは、ここでは強調しないでおこう。
+本節での私たちの主たる目標は、簡略化された (しかしそれでもまだ興味深い) 文脈において、コンパイル過程を例解することである。
 </p>
 
 <a name="%_sec_5.5.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.1">5.5.1  Structure of the Compiler</a></h3>
 <h3 class="trans" lang="ja">5.5.1 コンパイラの構造</h3>
+
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6236"></a>
 <a name="%_idx_6238"></a>In section <a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a> we modified our original
@@ -612,7 +649,7 @@ of these <tt>save</tt> and <tt>restore</tt> operations are superfluous and
 thus could be eliminated by the compiler's <tt>preserving</tt> mechanism:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.31.</b> 
 </p>
 
 <p class="lisp">(f 'x 'y)
@@ -639,7 +676,7 @@ performs a similar optimization, by treating combinations with no
 operands as a special case.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.32.</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -1781,7 +1818,7 @@ call in the predicate and needed for the procedure call and the
 slightly different from the one given above:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.33.</b> 
 </p>
 
 <p class="lisp">(define (factorial-alt n)
@@ -1806,7 +1843,7 @@ program execute more efficiently than the other?
 <b>Exercise 5.34.</b>  <a name="%_idx_6408"></a><a name="%_idx_6410"></a>Compile the iterative factorial procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.34.</b> 
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -1954,7 +1991,7 @@ after-lambda1
 figure <a href="#%_fig_5.18">5.18</a>?</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.35.</b> 
 </p>
 
 <figure>
@@ -2049,7 +2086,7 @@ the argument list?
 </span></p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.36.</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2067,7 +2104,7 @@ Compare the code to that generated with the <tt>preserving</tt> mechanism intact
 </span></p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.37.</b> 
 </p>
 
 <p class="orig" lang="en">
@@ -2091,7 +2128,7 @@ might be compiled into something as simple as <a name="call_footnote_Temp_822" h
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.38.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2297,7 +2334,7 @@ specified lexical address.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.39.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2312,7 +2349,7 @@ described above.  That is, add a compile-time-environment argument to
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.40.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2328,7 +2365,7 @@ environment during the compilation of expression &lt;<em>e1</em>&gt; is <tt>((y
 z) (a b c d e) (x y))</tt>.  <tt>Find-variable</tt> should produce</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.41.</b> 
 </p>
 
 <p class="lisp">(find-variable 'c '((y z) (a b c d e) (x y)))
@@ -2363,7 +2400,7 @@ Test the modified compiler on a few simple cases, such as the nested
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.42.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2383,7 +2420,7 @@ body.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.43.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2402,7 +2439,7 @@ exercise <a href="#%_thm_5.38">5.38</a> would still open-code it as a primitive,
 ignoring the new binding.  For example, consider the procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.44.</b> 
 </p>
 
 <p class="lisp">(lambda (+ * a b x y)
@@ -2645,7 +2682,7 @@ stack use to the performance of a special-purpose machine for the same
 computation gives some indication of the quality of the compiler.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.45.</b> 
 </p>
 
 <ol class="orig alph" lang="en">
@@ -2692,7 +2729,7 @@ exercise <a href="#%_thm_5.45">5.45</a> to determine the effectiveness of
 compiling the tree-recursive Fibonacci procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.46.</b> 
 </p>
 
 <p class="lisp">(define (fib n)
@@ -2734,7 +2771,7 @@ entry point, and add an instruction to initialize it:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.47.</b> 
 </p>
 
 <p class="lisp">  (assign compapp (label compound-apply))
@@ -2764,7 +2801,7 @@ interface by providing a <tt>compile-and-run</tt> primitive that can be
 called from within the explicit-control evaluator as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.48.</b> 
 </p>
 
 <p class="lisp"><i>;;; EC-Eval input:</i>
@@ -2797,7 +2834,7 @@ operations.''
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.49.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2814,7 +2851,7 @@ but getting all the details to work is an instructive exercise.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.50.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2831,7 +2868,7 @@ support.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.51.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2846,7 +2883,7 @@ section <a href="26_sec4_1.html#%_sec_4.1">4.1</a> to produce a Scheme interpret
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5..</b> 
+<b>練習問題5.52.</b> 
 </p>
 
 <p class="exercise"><span class="ex_comment">
