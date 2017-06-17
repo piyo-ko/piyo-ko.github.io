@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>ISBNからリンクを作る</title>
+<link rel="canonical" href="https://piyo-ko.github.io/tools/ISBN_link.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<script>
+var counter = 0;
+
+function gen_link() {
+  //console.log('gen_link(): hello');
+  var link_txt;
+  var d8 = document.isbn.eight_digits.value.toString();
+  var cd = isbn10_check_digit(d8);
+  
+  if (d8.length != 8) {
+    alert('8桁を入力してね');
+    return(false);
+  }
+  counter++;
+
+  link_txt = '<a href="https://www.amazon.co.jp/dp/4' + d8 + cd;
+  link_txt += ( '/" target="_amzn">Amazon (' + counter + ')</a>' );
+  link_txt += "\n";
+  link_txt += ( '<a href="http://iss.ndl.go.jp/api/openurl?isbn=4' + d8 + cd );
+  link_txt += ( '" target="_ndl">NDL (' + counter + ')</a>' );
+
+  document.getElementById('link_test').innerHTML = link_txt;
+  document.getElementById('link_list').textContent += (link_txt + "\n");
+}
+// dは、最初の "987-4-" を除く、真ん中の8桁。
+// 13桁のISBNと10桁のISBNではチェックディジットが違うので計算せねばならない。
+function isbn10_check_digit(d) {
+  var sum = 4*10;
+  for (var i=0; i<8; i++) {
+    sum += parseInt(d.charAt(i)) * (9 - i);
+  }
+  var c = 11-(sum % 11);
+  if (c == 10) {
+    return('X');
+  } else if (c == 11) {
+    return('0');
+  } else {
+    return(c);
+  }
+}
+</script>
+</head>
+<body class="main-text-only">
+
+<h1>ISBNからリンクを作る</h1>
+
+<p>
+積ん読は怖くないがダブりが怖い。
+という訳で、買った本の載っているウェブページ (出版社や <a href="https://www.amazon.co.jp/">Amazon</a> などのページ) へのリンクのファイル (macOS だったら拡張子が webloc のファイル) に、当該書籍の題名をつけて保存し、後から検索できるようにしています
+(いやまあ、Amazon じゃなくて、
+<a href="https://honto.jp/">honto</a> とか
+<a href="https://www.honyaclub.com/">Honya Club</a> とか
+<a href="https://www.e-hon.ne.jp/">e-hon</a> とか
+でも構わないのですが、ついつい……)。
+</p>
+
+<p>
+一方、私がよく行くリアル書店のレシートには ISBN が印刷されています。
+で、ふと思ったのが、<em>Amazon の当該書籍のページへのリンクを ISBN から 生成したら便利なのではないか</em>、ということ。
+HTML ページにコピペしても良いし。
+</p>
+
+<p>
+<em>13桁 ISBN は、978-4-[8桁]-[1桁のチェックディジット] という形式</em>なので、レシートを見ながらこの 8 桁を入力するだけでよい筈です。
+また、せっかくなので、Amazon だけでなくて、国会図書館のページへのリンクも生成してみましょう。
+</p>
+
+<form name="isbn">
+<p>
+という訳で、右の入力欄に <em>ISBN の真ん中の 8 桁を入力</em>して、
+<input name="eight_digits" type="text" minlength="8" maxlength="8" size="8" style="font-family: 'Courier New';">
+<input type="button" value="リンクを作成" onClick="gen_link()">
+してみてください
+(<input type="reset" value="入力欄の消去">もできます)。
+作成したリンクが以下の出力欄に累積されていくので、必要に応じてコピペするなどしてください。
+</p>
+<code id="link_list"></code>
+
+<p>なお、直近に入力した一冊分については、ここ→ 
+(<span id="link_test"></span>)
+からリンクを実際に辿ってみることもできます。
+</p>
+
+</form>
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>
