@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>議決権行使サイトを使ってみた (第二弾@it-soukai.com)</title>
+<link rel="canonical" href="https://piyo-ko.github.io/misc/vote_at_it-soukai.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>
+div.center {
+  text-align: center;
+}
+</style>
+</head>
+
+<body class="main-text-only">
+<h1>議決権行使サイトを使ってみた (第二弾<tt>@it-soukai.com</tt>)</h1>
+
+<p>
+<a href="vote_at_web54.html">第一弾</a>に引き続き、個人株主向け議決権行使サイトを利用してその結果を報告する。
+今回対象とする株主名簿管理人は、<em>みずほ信託銀行証券代行部</em>である。
+</p>
+
+<p>
+議決権行使書で案内されている「議決権行使ウェブサイト」のURLは、
+<a href="http://www.it-soukai.com/"><tt>http://www.it-soukai.com/</tt></a>
+である。また<em>非HTTPS</em>ですか。
+そんなところをお揃いにしなくてもいいのにね、と思いつつ、とりあえずこのURLをアドレスバーに打ち込んだところ、
+<a href="https://soukai.mizuho-tb.co.jp"><tt>https://soukai.mizuho-tb.co.jp</tt></a>
+に<em>リダイレクトされた</em>。
+なぜ最初からこっちのURLを案内しないんだろう。
+</p>
+
+<p>
+ちなみに、通知されたアドレスの <tt>http</tt> の部分を <tt>https</tt> と変えて、アドレスバーに
+<a href="https://www.it-soukai.com/"><tt>https://www.it-soukai.com/</tt></a>
+と入力し直してみると、「<em>ページを開けません</em>」となる。
+どういう設計だ。
+</p>
+
+<p>
+ところで、
+<tt>it-soukai.com</tt>
+というドメイン名からは、このドメインの持ち主を思いつきようもないのだが、一応、<tt>whois</tt> した結果を抜粋しておくと、以下の通りである。
+謎の代行業者のサイトではなく、確かにみずほ信託銀行のサイトだな、と分かって少し安心。
+</p>
+
+<code>$ whois it-soukai.com
+(略)
+Registrant Name: Mizuho Trust &amp; Banking
+Registrant Street: 1-17-7,Sagacho
+Registrant City: koto-ku
+Registrant State/Province: Tokyo-to
+Registrant Postal Code: 135-8722
+Registrant Country: JP
+Registrant Phone: +81.336433731
+(略)</code>
+
+<p>
+だが、そもそもリダイレクト先のアドレスは、ドメイン名を見ればすぐに「あ、みずほ信託銀行」と分かる。知らない人のために、一応 <tt>whois</tt> した結果も載せておく。
+</p>
+
+<code>$ whois mizuho-tb.co.jp
+(略)
+a. [ドメイン名]                 MIZUHO-TB.CO.JP
+e. [そしきめい]                 みずほしんたくぎんこうかぶしきがいしゃ
+f. [組織名]                     みずほ信託銀行株式会社
+g. [Organization]               Mizuho Trust and Banking Co.,Ltd
+k. [組織種別]                   株式会社
+l. [Organization Type]          company
+(略)</code>
+
+<p>
+みずほ信託銀行のドメインという信用できそうなドメインがせっかくあって、そこではHTTPSに対応もしているのに、なぜ、<tt>it-soukai.com</tt> という謎ドメインの、それも非HTTPSアドレスを案内するのだろうか。謎である。
+「たまには、胡散臭い奴だと疑われてみたいの♡」という変な趣味でもあるのだろうか。
+<em>最初からちゃんと
+<a href="https://soukai.mizuho-tb.co.jp"><tt>https://soukai.mizuho-tb.co.jp</tt></a>
+と案内していただきたい。</em>
+</p>
+
+<p>
+さて、ここから議決権行使サイトで投票するわけだが、三井住友信託銀行証券代行部のサイト (<a href="https://www.web54.net"><tt>https://www.web54.net</tt></a>) とそっくりな見かけなので、不思議な気分になる。
+同じSIerに発注した同じシステムを、ちょこっとずつカスタマイズして使っているということなのかな。
+</p>
+
+<p>
+……などと不明な裏事情を想像しつつ進んでゆくと、そっくりなのは見かけだけではなくて、ページ遷移の仕方もなのだ、と分かった。
+詳しいことは<a href="vote_at_web54.html">第一弾</a>で報告したとおりだが、まず、<em>パスワードなしで (16 桁の「議決権行使コード」のみで)「ログイン」</em>させられる。
+すると、郵便で通知された仮のパスワード (8桁の数字) をユーザ定義パスワードに変更するページが出てくるが、<em>許されるパスワード長は 8 のみ</em>である。しかも、パスワードに<em>記号は使えない</em>。
+</p>
+
+<p>
+もっとも、三井住友信託銀行のサイトと比べてマシだなと思える点もある。変に使えない記号を列挙しようとして書き洩らすのではなくて、簡潔に「<em>8文字の半角英数文字のみ入力可能です</em>」とだけ注意書きに書いてあるところだ。
+無理やり良いところを探してしまった。ポリアンナか。
+</p>
+
+<p>
+ここから分かるのは、システムの骨格は共通だが、表示される文言などはある程度カスタマイズされていて、三井住友信託とみずほ信託で差異があるということ。
+実際、この後の画面でも、メニューが書いてある部分などでは、緑の銀行は緑を使い、青の銀行は青を使うなど、見栄えの点では差異があった。
+</p>
+
+<p>
+ログインの仕方だけでなく、投票自体の仕方も、<a href="vote_at_web54.html">第一弾</a>で報告した三井住友信託銀行のサイトと同様だった。また、「お届出事項変更」というメニューも同様だった。
+</p>
+
+<p>
+最後にもう一つ、みずほ信託銀行のサイトの方がマシだな、と思える点があって、それは、「ログアウト」ボタンをタップした後のこと。
+「ログアウト」ボタンをタップすると「ログアウト完了」というページに遷移するのだが、三井住友のサイトだと、ここに「終了」ボタンしか出てこなかった。そのため、「ログアウトして更に終了とか一体何の二度手間だ」と馬鹿らしさだけが残った。
+一方、みずほのサイトだと、このページに「閉じる」と「次へすすむ」という二つのボタンがある。
+そして、「続けて別の銘柄のご投票をする場合は【次へすすむ】をクリックしてください。」と書かれている。
+そういう二択のためにこの「ログアウト完了」ページを設けているのであれば、まあ一応納得はできる。
+なお、小姑的なことを言えば、「ご投票をする」という敬語はややおかしくて、「別の銘柄について<u>ご投票になる</u>場合」または「別の銘柄の<u>ご投票をなさる</u>場合」とすべきかと思うが、今時の人は気にしないのかもしれない。
+</p>
+
+<p>
+ちなみに、
+「<a href="https://soukai.mizuho-tb.co.jp/intro.html">インターネットによる議決権行使について</a>」や、
+「<a href="https://soukai.mizuho-tb.co.jp/faq.html">ＦＡＱ（よくあるご質問）／ＨＥＬＰ</a>」
+といったページは、ログインしなくても閲覧可能である。
+</p>
+
+<p class="date">2017-06-19 作成</p>
+<nav>[<a href="../index.html">ホーム</a> |
+<a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>]</nav>
+
+</body>
+
+
+</html>
+
+
