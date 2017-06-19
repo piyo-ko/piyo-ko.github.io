@@ -1,3 +1,6 @@
+html {
+	padding: 0;
+}
 body {
 	background: hsl(200, 90%, 90%);
 	color: hsl(240, 100%, 12%);
@@ -35,6 +38,8 @@ div.center {
 	max-height: 15ex;
 }
 div.left, div.right {
+	display: inline-block;
+	width: 40%;
 	height: 15ex;
 	vertical-align: top;
 }
@@ -77,21 +82,18 @@ h1:hover {
 	text-align: left;
 }
 div.left {
-	display: inline-block;
-	margin-left: 3vw;
-	width: 40vw;
+	margin-left: 5%;
+	margin-right: 0;
 }
 div.right {
-	display: inline-block;
-	margin-left: 7vw;
-	width: 40vw;
+	margin-left: 5%;
 }
 div.center {
 	display: block;
 	margin-top: 4pt;
 	margin-bottom: 6pt;
-	width: 70vw;
-	margin-left: 15vw;
+	width: 70%;
+	margin-left: 15%;
 }
 .orange, .green, .blue {
 	border-style: dotted;
