@@ -146,7 +146,7 @@ calling appropriate primitive subroutines from the library.</p>
 あるマシンのネイティブ言語で書かれたインタプリタは、評価を実行する当該マシンのネイティブ言語とは異なるかもしれない言語 (<em>ソース言語</em>と呼ばれる) で書かれたプログラムを実行するように、そのマシンを構成する。
 ソース言語の原始的手続きは、与えられたマシンのネイティブ言語で書かれたサブルーチンのライブラリとして、実装される。
 解釈されるべきプログラム (<em>ソース・プログラム</em>と呼ばれる) は、データ構造として表現される。
-インタプリタは、ソース・プログラムを解析する際、このデータ構造をトラバースする。
+インタプリタは、ソース・プログラムを分析する際、このデータ構造をトラバースする。
 インタプリタがそのようにするに連れて、インタプリタは、ライブラリから適切な原始的サブルーチンを呼び出すことによって、ソース・プログラムの、意図された振る舞いをシミュレートする。
 </p>
 
@@ -254,7 +254,7 @@ and apply the procedure (in <tt>proc</tt>) to the arguments (in <tt>argl</tt>).<
 結果としてできあがる命令列が、オブジェクト・コードになっているだろう。
 解釈に対するコンパイルの効率上の優位に、気づいてほしい。
 インタプリタは、式——例えば <tt>(f 84 96)</tt> ——を評価するたびに、その式を分類して (これは手続き適用だと突き止めて)、オペランド・リストの最後かどうかを検査する (二つのオペランドがあると突き止める)、という仕事を行う。
-コンパイラを使うと、式は一度だけ——コンパイル時に命令列が生成されるときに——解析される。
+コンパイラを使うと、式は一度だけ——コンパイル時に命令列が生成されるときに——分析される。
 コンパイラにより作り出されたオブジェクト・コードは、オペレータと二つのオペランドを評価し、実引数リストを組み上げ、(<tt>proc</tt> にある) 手続きを (<tt>argl</tt> にある) 実引数に適用する命令だけを含む。
 </p>
 
@@ -337,7 +337,7 @@ in a simplified (but still interesting) context.</p>
 
 <p class="trans" lang="ja">
 コンパイラは、環境へのアクセスも最適化できる。
-コードを解析し終えたら、多くの場合、コンパイラは、特定の変数がどのフレームに配置されるだろうかということを知ることができるし、<tt>lookup-variable-value</tt> 探索を実行するのではなく直接的にそのフレームにアクセスできる。
+コードを分析し終えたら、多くの場合、コンパイラは、特定の変数がどのフレームに配置されるだろうかということを知ることができるし、<tt>lookup-variable-value</tt> 探索を実行するのではなく直接的にそのフレームにアクセスできる。
 <a href="#%_sec_5.5.6">5.5.6</a>節では、そうした変数アクセスを実装する方法を議論しよう。
 しかし、それまでは、上述のレジスタとスタックの最適化の種類に焦点を絞ろう。
 一般的な <tt>apply</tt> の仕組みを使う代わりに原始的演算を「インライン形式で」コード化する (練習問題<a href="#%_thm_5.38">5.38</a>を参照) などといった、コンパイラによって実行できる他の多くの最適化が存在する。しかし、これらのことは、ここでは強調しないでおこう。
@@ -347,8 +347,6 @@ in a simplified (but still interesting) context.</p>
 <a name="%_sec_5.5.1"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.1">5.5.1  Structure of the Compiler</a></h3>
 <h3 class="trans" lang="ja">5.5.1 コンパイラの構造</h3>
-
-<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6236"></a>
 <a name="%_idx_6238"></a>In section <a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a> we modified our original
@@ -360,6 +358,10 @@ producing execution procedures, however, we will generate sequences of
 instructions to be run by our register machine.</p>
 
 <p class="trans" lang="ja">
+<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節で私たちは、元のメタ循環的インタプリタを、実行から分析を切り離すように改変した。
+私たちは、それぞれの式を分析して、引数として環境をとる実行手続きを作り出し、必要な演算を実行した。
+私たちのコンパイラでは、本質的に同じ分析を行おう。
+しかし、実行手続きを作り出す代わりに、私たちのレジスタ・マシンによって実行されるべき命令の列を生成しよう。
 </p>
 
 <p class="orig" lang="en">
@@ -377,6 +379,11 @@ each type of expression, it dispatches to a specialized <a name="%_idx_6242"></a
 generator</em>:</p>
 
 <p class="trans" lang="ja">
+<tt>compile</tt> という手続きは、コンパイラにおけるトップ・レベルの振り分けである。
+これは、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の <tt>eval</tt> 手続きや、<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節の <tt>analyze</tt> 手続きや、<a href="34_sec5_4.html#%_sec_5.4.1">5.4.1</a>節の明示的制御方式の評価器での <tt>eval-dispatch</tt> というエントリ・ポイントに、対応する。
+インタプリタと同様にコンパイラは、<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節で定義した、式の文法についての手続きを使う<a href="#footnote_Temp_797"><sup><small>35</small></sup></a>。
+ <tt>compile</tt> は、コンパイルすべき式の文法的種類に基づく場合分け分析を行う。
+式の各種類に対して、コンパイラは、専門の<em>コード生成器</em>への振り分けを行う。
 </p>
 
 <p class="lisp"><a name="%_idx_6244"></a>(define (compile exp target linkage)
@@ -417,6 +424,10 @@ execution.  The linkage descriptor can require that the code do one of
 the following three things:</p>
 
 <p class="trans" lang="ja">
+<tt>compile</tt> と、<tt>compile</tt> が呼び出すコード生成器は、コンパイルすべき式に加えてさらに二つの引数をとる。
+<em>ターゲット</em>——コンパイルされたコードが式の値を返すことになる先のレジスタを指定する——がある。
+<em>リンケージ記述子</em>——式のコンパイルから生じたコードが、自分の実行を終了したときに、どのように進むべきかを記述する——もある。
+リンケージ記述子は、以下の三つの事柄のうちの一つをコードが行うことを、要求することができる。
 </p>
 
 <ul class="orig" lang="en">
@@ -431,9 +442,9 @@ designated label as the linkage descriptor).</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li>列の中の次の命令を続ける (これは、<tt>next</tt> というリンケージ記述子によって指定される)</li>
+<li>コンパイルされている最中の当該手続きから戻る (これは、<tt>return</tt> というリンケージ記述子によって指定される)</li>
+<li>名前の付けられたエントリ・ポイントへジャンプする (これは、指定されたラベルをリンケージ記述子として用いることによって、指定される)</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -442,6 +453,7 @@ self-evaluating) with a target of the <tt>val</tt> register and a
 linkage of <tt>next</tt> should produce the instruction</p>
 
 <p class="trans" lang="ja">
+たとえば、<tt>5</tt> という式 (これは自己評価的である) を、<tt>val</tt> レジスタというターゲットおよび <tt>next</tt> というリンケージとともにコンパイルすることで、次の命令が生成されるはずである。
 </p>
 
 <p class="lisp">(assign val (const 5))
@@ -451,6 +463,7 @@ linkage of <tt>next</tt> should produce the instruction</p>
 produce the instructions</p>
 
 <p class="trans" lang="ja">
+同じ式を、<tt>return</tt> というリンケージとともにコンパイルすることで、次の命令が生成されるはずである。
 </p>
 
 <p class="lisp">(assign val (const 5))
@@ -463,6 +476,9 @@ call.  In both cases, the value of the expression will be placed into
 the target <tt>val</tt> register.</p>
 
 <p class="trans" lang="ja">
+1番目の場合では、列の中の次の命令から、実行が継続するだろう。
+2番目の場合では、手続き呼び出しから戻るだろう。
+どちらの場合でも、式の値は、ターゲットたる <tt>val</tt> レジスタの中に入れられるだろう。
 </p>
 
 <a name="%_sec_Temp_799"></a>
@@ -477,6 +493,8 @@ evaluation of a compound expression is accomplished by evaluating the
 component expressions.</p>
 
 <p class="trans" lang="ja">
+それぞれのコード生成器は、自分が式に対して生成し終えたオブジェクト・コードを含む<em>命令列</em>を返す。
+複合的な式に対するコード生成は、構成要素の式のためのより単純なコード生成器からの出力を結合することによって、成し遂げられる——ちょうど、複合的な式の評価が、構成要素の式を評価することによって成し遂げられるのと同様に。
 </p>
 
 <p class="orig" lang="en">
@@ -489,6 +507,13 @@ evaluating
 </p>
 
 <p class="trans" lang="ja">
+命令列同士を結合するためのもっとも単純な方法は、<tt>append-instruction-sequences</tt> と呼ばれる手続きである。
+これは、引数として、逐次的に実行されるべき任意の個数の命令列をとる。そして、それらの命令列を連結して、結合した列を返す。
+つまり、もし 
+<span class="math">&lt;<em class="en">seq</em><sub>1</sub>&gt;</span>
+と
+<span class="math">&lt;<em class="en">seq</em><sub>2</sub>&gt;</span>
+が命令列であれば、以下のものを評価することで、
 </p>
 
 <p class="lisp">(append-instruction-sequences &lt;<em><em>s</em><em>e</em><em>q</em><sub>1</sub></em>&gt; &lt;<em><em>s</em><em>e</em><em>q</em><sub>2</sub></em>&gt;)
@@ -497,6 +522,7 @@ evaluating
 <p class="orig" lang="en">produces the sequence</p>
 
 <p class="trans" lang="ja">
+次の式が作り出される。
 </p>
 
 <p class="lisp">&lt;<em><em>s</em><em>e</em><em>q</em><sub>1</sub></em>&gt;
@@ -519,6 +545,12 @@ sequences.  Otherwise, <tt>preserving</tt> simply returns the appended
 instruction sequences.  Thus, for example,</p>
 
 <p class="trans" lang="ja">
+レジスタを退避する必要があるかもしれないときはいつでも、コンパイラのコード生成器は <tt>preserving</tt> を使うのだが、これは、命令列を結合するための、より巧妙な方法である。
+<tt>preserving</tt> は、三つの引数をとる。すなわち、レジスタの集合と、逐次的に実行すべき二つの命令列である。
+<tt>preserving</tt> は、この集合内の各レジスタの中身が、1番目の列の実行中ずっと保全されるように、列同士をつなげる——もし、このことが2番目の列の実行に必要とされるならば。
+つまり、もし1番目の列が当該レジスタを変更し、かつ、2番目の列が実際に当該レジスタの元の中身を必要とするならば、<tt>preserving</tt> は、列同士をつなげる前に、当該レジスタの <tt>save</tt> と <tt>restore</tt> を1番目の列にまとわせる。
+それ以外の場合、<tt>preserving</tt> は単純に、つなげた命令列を返す。
+よって、たとえば、
 </p>
 
 <p class="lisp">(preserving (list &lt;<em><em>r</em><em>e</em><em>g</em><sub>1</sub></em>&gt; &lt;<em><em>r</em><em>e</em><em>g</em><sub>2</sub></em>&gt;) &lt;<em><em>s</em><em>e</em><em>q</em><sub>1</sub></em>&gt; &lt;<em><em>s</em><em>e</em><em>q</em><sub>2</sub></em>&gt;)
@@ -528,10 +560,18 @@ instruction sequences.  Thus, for example,</p>
 &lt;<em><em>s</em><em>e</em><em>q</em><sub>1</sub></em>&gt; and &lt;<em><em>s</em><em>e</em><em>q</em><sub>2</sub></em>&gt; use &lt;<em><em>r</em><em>e</em><em>g</em><sub>1</sub></em>&gt; and &lt;<em><em>r</em><em>e</em><em>g</em><sub>2</sub></em>&gt;:</p>
 
 <p class="trans" lang="ja">
+は、
+<span class="math">&lt;<em class="en">seq</em><sub>1</sub>&gt;</span>
+と
+<span class="math">&lt;<em class="en">seq</em><sub>2</sub>&gt;</span>
+が
+<span class="math">&lt;<em class="en">reg</em><sub>1</sub>&gt;</span>
+と
+<span class="math">&lt;<em class="en">reg</em><sub>2</sub>&gt;</span>
+をどのように用いるのかによって、以下の四つの命令列のうちの一つを作り出す。
 </p>
 
 <figure><img src="ch5-Z-G-9.gif" border="0"></figure>
-
 
 <p class="orig" lang="en">
 By using <tt>preserving</tt> to combine instruction sequences the
@@ -544,6 +584,9 @@ In fact no <tt>save</tt> or <tt>restore</tt> instructions are explicitly
 produced by the code generators.</p>
 
 <p class="trans" lang="ja">
+命令列同士を結合するために <tt>preserving</tt> を用いることによって、コンパイラは、不要なスタック演算を避ける。
+これは、<tt>save</tt> 命令と <tt>restore</tt> 命令を <tt>preserving</tt> 手続きの内部で生成すべきかどうかという詳細を、隔離することにもなる——その詳細を、個々のコード生成器の各々を書く際に生じる問題から切り離すわけである。
+実際、コード生成器によって明示的に <tt>save</tt> 命令または <tt>restore</tt> 命令が作り出されることはない。
 </p>
 
 <p class="orig" lang="en">
@@ -564,12 +607,19 @@ register-use information for the combined sequence from the
 information associated with the component sequences.</p>
 
 <p class="trans" lang="ja">
+原理的には、私たちは、命令列を単純に命令のリストとして表現できるだろう。
+すると、<tt>append-instruction-sequences</tt> は、普通のリスト用の <tt>append</tt> を実行することで、命令列同士を結合できるだろう。
+しかし、そうすると、<tt>preserving</tt> は、複雑な演算になってしまうだろう。なぜなら、列がどのようにしてレジスタを使うのかを明らかにするために各命令列を分析しなくてはならないだろうからである。
+<tt>preserving</tt> は、複雑である上に非効率にもなるだろう。なぜなら、命令列引数のそれぞれを——たとえ、これらの列自体が、<tt>preserving</tt> への呼び出しにより構築されたのかもしれなくても (その場合には、これらの列の部分はもう分析済みであろう) ——分析しなくてはならないだろうからである。
+そうした繰り返しの分析を避けるため、私たちは、各命令列に、そのレジスタ使用についてのある種の情報を関連づけよう。
+基本的な命令列を構築するときには、この情報を明示的に提供しよう。すると、命令列同士を結合する手続きは、結合後の列についてのレジスタ使用の情報を、構成部品の列に関連づけられた情報から導き出すだろう。
 </p>
 
 <p class="orig" lang="en">
 An instruction sequence will contain three pieces of information:</p>
 
 <p class="trans" lang="ja">
+命令列は三つの情報を含むだろう。
 </p>
 
 
@@ -586,9 +636,9 @@ the sequence.</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li></li>
-<li></li>
-<li></li>
+<li>その列の中の命令が実行される前に初期化されねばならないレジスタの集合 (これらのレジスタは、その列によって<em>必要とされる</em>のだ、と言われる)</li>
+<li>その列の中の命令によって値が変更されるレジスタの集合</li>
+<li>実際の命令 (<em><ruby><rb>文</rb><rp> (</rp><rt>ステートメント</rt><rp>) </rp></ruby></em>とも呼ばれる)</li>
 </ul>
 
 <p class="orig" lang="en">
@@ -596,11 +646,12 @@ We will represent an instruction sequence as a list of its three
 parts.  The constructor for instruction sequences is thus</p>
 
 <p class="trans" lang="ja">
+命令列を、その三つの部分のリストとして表そう。
+よって、命令列のためのコンストラクタは、以下のとおりである。
 </p>
 
 <p class="lisp"><a name="%_idx_6266"></a>(define (make-instruction-sequence needs modifies statements)
   (list needs modifies statements))
-
 </p>
 
 <p class="orig" lang="en">
@@ -610,19 +661,21 @@ to <tt>val</tt>, and then returns, requires registers <tt>env</tt> and <tt>conti
 This sequence would therefore be constructed as</p>
 
 <p class="trans" lang="ja">
+たとえば、現在の環境における <tt>x</tt> という変数の値を調べて、その結果を <tt>val</tt> に<ruby><rb>代入し</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>、それから戻るような、二つの命令からなる列は、<tt>env</tt> および <tt>continue</tt> というレジスタが初期化済みであることを要求し、<tt>val</tt> というレジスタを変更する。
+したがって、この列は、次のように構築されるだろう。
 </p>
 
 <p class="lisp">(make-instruction-sequence '(env continue) '(val)
  '((assign val
            (op lookup-variable-value) (const x) (reg env))
    (goto (reg continue))))
-
 </p>
 
 <p class="orig" lang="en">
 We sometimes need to construct an instruction sequence with no statements:</p>
 
 <p class="trans" lang="ja">
+ときには、文のない命令列を構築する必要がある。
 </p>
 
 <p class="lisp"><a name="%_idx_6268"></a>(define (empty-instruction-sequence)
@@ -634,6 +687,7 @@ The procedures for combining instruction sequences are shown in
 section <a href="#%_sec_5.5.4">5.5.4</a>.</p>
 
 <p class="trans" lang="ja">
+命令列同士を結合するための手続きは、<a href="#%_sec_5.5.4">5.5.4</a>節に示されている。
 </p>
 
 <p class="orig" lang="en">
@@ -649,7 +703,8 @@ of these <tt>save</tt> and <tt>restore</tt> operations are superfluous and
 thus could be eliminated by the compiler's <tt>preserving</tt> mechanism:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.31.</b> 
+<b>練習問題5.31.</b> 手続き適用を評価する際、明示的制御方式の評価器は、いつも、演算子の評価を囲んで <tt>env</tt> レジスタを退避および復旧し、(最後の一つを除く) 各オペランドの評価を囲んで <tt>env</tt> を退避および復旧し、各オペランドの評価を囲んで <tt>argl</tt> を退避および復旧し、オペランド列の評価を囲んで <tt>proc</tt> を退避および復旧する。
+以下のコンビネーションの各々について、これらの <tt>save</tt> 操作と <tt>restore</tt> 操作のうちのいずれが無駄であり、それゆえコンパイラの <tt>preserving</tt> の仕組みによって削除され得るのか、ということを述べよ。
 </p>
 
 <p class="lisp">(f 'x 'y)
@@ -665,6 +720,15 @@ thus could be eliminated by the compiler's <tt>preserving</tt> mechanism:</p>
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
 <p class="orig" lang="en">
 <a name="%_thm_5.32"></a>
 <b>Exercise 5.32.</b>  <a name="%_idx_6274"></a><a name="%_idx_6276"></a>Using the <tt>preserving</tt> mechanism, the compiler will avoid saving
@@ -676,7 +740,9 @@ performs a similar optimization, by treating combinations with no
 operands as a special case.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.32.</b> 
+<b>練習問題5.32.</b> <tt>preserving</tt> の仕組みを使うと、コンパイラは、演算子が記号である場合に、コンビネーションの演算子の評価を囲んで <tt>env</tt> を退避および復旧することを避けるだろう。
+評価器の中にも、そういった最適化を組み入れることができるだろう。
+実際、<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節の明示的制御方式の評価器は、オペランドのないコンビネーションを特別な場合として取り扱うことによって、すでに類似の最適化を行っている。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -691,8 +757,9 @@ altogether.  What do you think of this idea?</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li>演算子が記号であるようなコンビネーションを、別の種類の式だと認識するように、かつ、そうした式を評価する際に、この事実を利用するように、明示的制御方式の評価器を拡張せよ。</li>
+<li>ますます多くの特別な場合を認識するように評価器を拡張することによって、コンパイラの最適化のすべてを取り込むことができるだろうし、これはコンパイルの優位性を完全に消し去ってしまうだろう、とアリッサ・P・ハッカは示唆する。
+この考えについて、君はどう思う?</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
@@ -702,6 +769,7 @@ altogether.  What do you think of this idea?</li>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.2">5.5.2  Compiling Expressions</a></h3>
 <h3 class="trans" lang="ja">5.5.2 式をコンパイルする</h3>
 
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en">In this section and the next we implement the code generators to which the <tt>compile</tt> procedure dispatches.</p>
 
@@ -2939,6 +3007,9 @@ in our register machine simulation.)
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_797"><sup><small>35</small></sup></a>
+しかし、私たちのコンパイラは Scheme プログラムなのだということ、そして、このコンパイラが式を操作するために使う文法手続きは、メタ循環的なインタプリタとともに使われた現実の Scheme 手続きなのだということに、注意してほしい。
+対照的に、明示的制御方式の評価器について私たちは、等価な文法的演算がレジスタ・マシン用の演算として利用可能なのだ、と想定した
+(もちろん、私たちがレジスタ・マシンを Scheme でシミュレートする際には、現実の Scheme 手続きをレジスタ・マシン・シミュレーションにおいて使った)。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_803" href="#call_footnote_Temp_803"><sup><small>36</small></sup></a> This procedure uses a feature of Lisp called <em><a name="%_idx_6280"></a><a name="%_idx_6282"></a><a name="%_idx_6284"></a><a name="%_idx_6286"></a><a name="%_idx_6288"></a><a name="%_idx_6290"></a>backquote</em> (or <em>quasiquote</em>) that is handy for constructing lists.
