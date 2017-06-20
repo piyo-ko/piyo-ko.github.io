@@ -769,11 +769,10 @@ altogether.  What do you think of this idea?</li>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.2">5.5.2  Compiling Expressions</a></h3>
 <h3 class="trans" lang="ja">5.5.2 式をコンパイルする</h3>
 
-<p class="extra" id="translating">**ここから</p>
-
 <p class="orig" lang="en">In this section and the next we implement the code generators to which the <tt>compile</tt> procedure dispatches.</p>
 
 <p class="trans" lang="ja">
+本節と次節では、<tt>compile</tt> 手続きが振り分けを行う先のコード生成器を実装する。
 </p>
 
 <a name="%_sec_Temp_802"></a>
@@ -791,8 +790,12 @@ instructions.  Otherwise, the linkage is a label, and we generate a
 any registers.<a name="call_footnote_Temp_803" href="#footnote_Temp_803"><sup><small>36</small></sup></a></p>
 
 <p class="trans" lang="ja">
+一般に、各コード生成器の出力は、要求されたリンケージを実装する命令—— <tt>compile-linkage</tt> という手続きにより生成される——で終わる。
+もしリンケージが <tt>return</tt> なら、<tt>(goto (reg continue))</tt> という命令を生成しなくてはならない。
+これは、<tt>continue</tt> レジスタを必要とし、どのレジスタも変更しない。
+もしリンケージが <tt>next</tt> なら、何も追加の命令を含める必要はない。
+それ以外の場合、リンケージはラベルであり、そのラベルへの <tt>goto</tt> ——つまり、どのレジスタを必要とはしないし、どのレジスタも変更しない命令——を生成する<a href="#footnote_Temp_803"><sup><small>36</small></sup></a>。
 </p>
-
 
 <p class="lisp"><a name="%_idx_6292"></a>(define (compile-linkage linkage)
   (cond ((eq? linkage 'return)
@@ -812,8 +815,9 @@ If the given instruction sequence modifies <tt>continue</tt> and the
 linkage code needs it, <tt>continue</tt> will be saved and restored.</p>
 
 <p class="trans" lang="ja">
+リンケージ・コードは、<tt>continue</tt> レジスタを <tt>preserving</tt> することによって、命令列に付加される。というのも、<tt>return</tt> リンケージは、<tt>continue</tt> レジスタを必要とするだろうからである。
+与えられた命令列が <tt>continue</tt> を変更し、かつ、リンケージ・コードが <tt>continue</tt> を必要とする場合、<tt>continue</tt> は退避され、復旧されるだろう。
 </p>
-
 
 <p class="lisp"><a name="%_idx_6294"></a>(define (end-with-linkage linkage instruction-sequence)
   (preserving '(continue)
@@ -831,8 +835,8 @@ sequences that assign the required value to the target register
 and then proceed as specified by the linkage descriptor.</p>
 
 <p class="trans" lang="ja">
+自己評価的な式、引用、および変数に対するコード生成器は、必要とされる値をターゲット・レジスタに<ruby><rb>代入し</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>、その後、リンケージ記述子により指定されたように続行するような命令列を、構築する。
 </p>
-
 
 <p class="lisp"><a name="%_idx_6302"></a>(define (compile-self-evaluating exp target linkage)
   (end-with-linkage linkage
@@ -855,6 +859,7 @@ and then proceed as specified by the linkage descriptor.</p>
 and the one that looks up a variable needs the <tt>env</tt> register.</p>
 
 <p class="trans" lang="ja">
+これらすべての<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>命令はターゲット・レジスタを変更し、変数を調べる<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>命令は<tt>env</tt> レジスタを必要とする。
 </p>
 
 <p class="orig" lang="en">
@@ -872,6 +877,10 @@ the compilation of a complex expression that might modify the
 registers in arbitrary ways.</p>
 
 <p class="trans" lang="ja">
+<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>と定義は、インタプリタにおけるのとほぼ同様に扱われる。
+私たちは、変数に<ruby><rb>代入される</rb><rp> (</rp><rt>わりあてられる</rt><rp>) </rp></ruby>べき値を計算するコード<span class="note"> (<tt>get-value-code</tt>) </span>を<span class="note"> (<tt>compile</tt> により) </span>再帰的に生成する。そして、実際に変数を設定または定義して<span class="note"> (<tt>(perform (op set-variable-value!) ...)</tt> で設定、または <tt>(perform (op define-variable!) ...)</tt> で定義して) </span>式全体の値 (<tt>ok</tt> という記号) をターゲット・レジスタに<ruby><rb>代入する</rb><rp> (</rp><rt>わりあてる</rt><rp>) </rp></ruby><span class="note"> (<tt>(assign ,target (const ok))</tt> による代入を行う) </span>ような、二つの命令からなる列<span class="note"> (<tt>make-instruction-sequence</tt> で作ったもの) </span>を、そのコード<span class="note"> (<tt>get-value-code</tt>) </span>の後ろに付加する。
+再帰的なコンパイル<span class="note"> (<tt>compile (assignment-value exp) 'val 'next)</tt> または <tt>(compile (definition-value exp) 'val 'next)</tt>) </span>は、コードがその結果を <tt>val</tt> の中に入れるように、そして、そのコードの後に付加されるコードから続行するように、ターゲットたる <tt>val</tt> とリンケージたる <tt>next</tt> をもらう。
+付加は、<tt>env</tt> を<ruby><rb>保全</rb><rp> (</rp><rt><tt>preserving</tt></rt><rp>) </rp></ruby>することによってなされる。というのも、変数を設定または定義するのには環境が必要であり、かつ、変数の値のためのコード<span class="note"> (<tt>get-value-code</tt>) </span>は、レジスタを任意の方法で変更するかもしれない複雑な式のコンパイルであり得るからである。
 </p>
 
 <p class="lisp"><a name="%_idx_6312"></a>(define (compile-assignment exp target linkage)
@@ -909,6 +918,8 @@ this sequence, we do not preserve <tt>val</tt>, because the <tt>get-value-code</
 have a bug, because this would cause the previous contents of <tt>val</tt> to be restored right after the <tt>get-value-code</tt> is run.)</p>
 
 <p class="trans" lang="ja">
+つなげられる、二つの命令からなる列<span class="note"> (<tt>(perform ...)</tt> と <tt>(assign ...)</tt> からなる列) </span>は、<tt>env</tt> と <tt>val</tt> を必要とし、ターゲットを変更する。
+この列のために <tt>env</tt> を保全している<span class="note"> (<tt>(preserving '(env) ...)</tt> としている) </span>ものの、<tt>val</tt> は保全していない——なぜなら、<tt>get-value-code</tt> は、この列による使用のために、その結果を明示的に <tt>val</tt> に入れるように設計されている<span class="note"> (<tt>(compile (assignment-value exp) 'val 'next)</tt> または <tt>(compile (definition-value exp) 'val 'next)</tt> と定義されている) </span>ためである——ということに、注意してほしい。
 </p>
 
 <a name="%_sec_Temp_805"></a>
@@ -919,6 +930,7 @@ have a bug, because this would cause the previous contents of <tt>val</tt> to be
 compiled with a given target and linkage has the form</p>
 
 <p class="trans" lang="ja">
+与えられたターゲットおよびリンケージを使ってコンパイルされた、<tt>if</tt> 式に対するコードは、以下の形をとる。
 </p>
 
 <p class="lisp"> &lt;<em>compilation of predicate, target <tt>val</tt>, linkage <tt>next</tt></em>&gt;
@@ -928,6 +940,16 @@ true-branch
  &lt;<em>compilation of consequent with given target and given linkage or <tt>after-if</tt></em>&gt;
 false-branch
  &lt;<em>compilation of alternative with given target and linkage</em>&gt;
+after-if
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment">述語と、ターゲットたる <tt>val</tt> と、リンケージたる <tt>next</tt> とをコンパイルしたもの</i>&gt;
+ (test (op false?) (reg val))
+ (branch (label false-branch))
+true-branch
+ &lt;<i class="ex_comment">帰結式を、与えられたターゲット、および、与えられたリンケージまたは <tt>after-if</tt> とともに、コンパイルしたもの</i>&gt;
+false-branch
+ &lt;<i class="ex_comment">代替式を、与えられたターゲットおよびリンケージとともに、コンパイルしたもの</i>&gt;
 after-if
 </p>
 
@@ -944,8 +966,12 @@ branches will both use this same linkage.  If the linkage is <tt>next</tt>, the 
 branch to the label at the end of the conditional.</p>
 
 <p class="trans" lang="ja">
+このコードを生成するために、述語と帰結式と代替式をコンパイルし、できあがったコード<span class="note"> (<tt>p-code</tt> と <tt>c-code</tt> と <tt>a-code</tt>) </span>を、述語の結果を検査する命令<span class="note"> (<tt>(test (op false?) (reg val))</tt>)</span>、および、真の分岐と偽の分岐と条件式の最後に印をつけるための新たに生成されたラベル<span class="note"> (<tt>t-branch</tt> と <tt>f-branch</tt> と <tt>after-if</tt>)</span> と、結合する<a href="#footnote_Temp_806"><sup><small>37</small></sup></a>。
+コードのこうした配置において、検査が偽の場合には、真の分岐を避けるように分岐せねばならない。
+ほんのちょっとした厄介ごとは、真の分岐についてのリンケージをどのように扱うべきか、という点にある。
+もし条件式に対するリンケージが <tt>return</tt> またはラベルなら、真の分岐と偽の分岐は、どちらも、この同じリンケージを使うだろう。
+もしそのリンケージが <tt>next</tt> であれば、真の分岐は、偽の分岐に対するコードを避けて条件式の最後にあるラベルへと飛ぶジャンプで終わる<span class="note"> (<tt>consequent-linkage</tt> を <tt>(if (eq? linkage 'next) after-if linkage)</tt> と定義して、<tt>c-code</tt> を求める際に、この<tt>consequent-linkage</tt> を使っている)</span>。
 </p>
-
 
 <p class="lisp"><a name="%_idx_6324"></a>(define (compile-if exp target linkage)
   (let ((t-branch (make-label 'true-branch))
@@ -979,6 +1005,8 @@ special combiner <tt>parallel-instruction-sequences</tt> described in
 section <a href="#%_sec_5.5.4">5.5.4</a>.</p>
 
 <p class="trans" lang="ja">
+述語のコードを囲んで <tt>env</tt> が保全される。なぜなら、<tt>env</tt> は、真の分岐と偽の分岐により必要とされる可能性があるからである。また、<tt>continue</tt> は、これらの分岐でのリンケージ・コードにより必要とされる可能性があるため、保全される。
+真の分岐と偽の分岐 (これらは逐次的に実行される訳ではない) についてのコードは、<a href="#%_sec_5.5.4">5.5.4</a>節で説明する <tt>parallel-instruction-sequences</tt> という特別な結合器を使って、つなげられる。
 </p>
 
 <p class="orig" lang="en">
@@ -988,11 +1016,12 @@ transformer (from section <a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>) and
 compile the resulting <tt>if</tt> expression.</p>
 
 <p class="trans" lang="ja">
+<tt>cond</tt> は派生式であり、その結果、<tt>cond</tt> を扱うためにコンパイラがしなくてはならないことは、ただ、(<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節の) <a href="26_sec4_1.html#%_idx_4370"><tt>cond-&gt;if</tt> 変換器</a>を適用して、その結果できあがる <tt>if</tt> 式をコンパイルすることだけである、ということに注意してほしい。
 </p>
 
 <a name="%_sec_Temp_807"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_807">Compiling sequences</a></h4>
-<h4 class="trans" lang="ja">連なりをコンパイルする</h4>
+<h4 class="trans" lang="ja">列をコンパイルする</h4>
 
 <p class="orig" lang="en"><a name="%_idx_6326"></a>The compilation of sequences (from procedure bodies or explicit <tt>begin</tt> expressions) parallels their evaluation.  Each expression of the
 sequence is compiled -- the last expression with the linkage specified
@@ -1004,6 +1033,9 @@ the rest of the sequence) and <tt>continue</tt> (possibly needed for the
 linkage at the end of the sequence) are preserved.</p>
 
 <p class="trans" lang="ja">
+(手続き本体または明示的な <tt>begin</tt> 式の) 列のコンパイルは、それらの列の評価と似ている。
+列のうちの各式がコンパイルされるのだ——ただし、最後の式は、列に対して指定されたリンケージを用いてコンパイルされ、それ以外の式は、(列の残りの部分を実行するために) <tt>next</tt> というリンケージを用いてコンパイルされる。
+個々の式についての命令列同士がつなげられて単一の命令列を形成するが、その際、(列の残りの部分に必要な) <tt>env</tt> と、(もしかすると列の最後のリンケージのために必要な) <tt>continue</tt> が保全されるようにする。
 </p>
 
 <p class="lisp"><a name="%_idx_6328"></a>(define (compile-sequence seq target linkage)
@@ -1018,15 +1050,20 @@ linkage at the end of the sequence) are preserved.</p>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_808">Compiling <tt>lambda</tt> expressions</a></h4>
 <h4 class="trans" lang="ja"><tt>lambda</tt> 式をコンパイルする</h4>
 
-
 <p class="orig" lang="en"><a name="%_idx_6330"></a><tt>Lambda</tt> expressions construct procedures.
 The object code for a <tt>lambda</tt> expression must have the form</p>
 
 <p class="trans" lang="ja">
+<tt>lambda</tt> 式は手続きを構築する。
+<tt>lambda</tt> 式に対するオブジェクト・コードは、次の形をとらねばならない。
 </p>
 
 <p class="lisp">&lt;<em>construct procedure object and assign it to target register</em>&gt;
 &lt;<em>linkage</em>&gt;
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment">手続きオブジェクトを構築してそれをターゲット・レジスタに代入する</i>&gt;
+&lt;<i class="ex_comment">リンケージ</i>&gt;
 </p>
 
 <p class="orig" lang="en">When we compile the <tt>lambda</tt> expression, we also generate the code for the
@@ -1039,11 +1076,22 @@ that jumps to a label that is inserted after the body.  The object code thus
 has the form</p>
 
 <p class="trans" lang="ja">
+<tt>lambda</tt> 式をコンパイルするとき、私たちは、手続き本体に対するコードも生成する。
+本体は、手続き構築の時点では実行されないだろうが、<tt>lambda</tt> に対するコードの直後において、それ<span class="note"> (手続き本体に対するコード) </span>をオブジェクト・コードの中へ挿入することは、便利である。
+もし <tt>lambda</tt> 式に対するリンケージがラベルか <tt>return</tt> なら、これは申し分ない。
+しかし、もしそのリンケージが <tt>next</tt> なら、本体の後に挿入されたラベル<span class="note"> (<tt>after-lambda</tt> と表されている) </span>へとジャンプするリンケージを使って、手続き本体に対するコードを飛ばして避ける必要があるだろう。
+よって、オブジェクト・コードは次の形をとる。
 </p>
 
 <p class="lisp"> &lt;<em>construct procedure object and assign it to target register</em>&gt;
  &lt;<em>code for given linkage</em>&gt;<em>or</em> <tt>(goto (label after-lambda))</tt>
  &lt;<em>compilation of procedure body</em>&gt;
+after-lambda
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment">手続きオブジェクトを構築してそれをターゲット・レジスタに代入する</i>&gt;
+&lt;<i class="ex_comment">与えられたリンケージに対するコード</i>&gt; <i class="ex_comment">または</i> (goto (label after-lambda))
+&lt;<i class="ex_comment">手続き本体をコンパイルしたもの</i>&gt;
 after-lambda
 </p>
 
@@ -1056,6 +1104,8 @@ with the entry point to the compiled procedure body (a newly generated
 label).<a name="call_footnote_Temp_809" href="#footnote_Temp_809"><sup><small>38</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>compile-lambda</tt> は、手続き本体に対するコード<span class="note"> (<tt>(compile-lambda-body exp proc-entry)</tt> で作られるコード) </span>が後続する、手続きオブジェクトを構築するためのコード<span class="note"> (<tt>(end-with-linkage lambda-linkage ...)</tt> で作られるコード) </span>を、生成する。<!--手続きオブジェクトを構築するためのコードとそれに後続する手続き本体に対するコードを、生成する。-->
+実行時に、現在の環境 (定義の時点での環境) を、コンパイルされた手続き本体へのエントリ・ポイント (新たに生成されたラベル)<span class="note"> (<tt>proc-entry</tt>) </span>と結合することによって、手続きオブジェクトが構築されるだろう<a href="#footnote_Temp_809"><sup><small>38</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6340"></a>(define (compile-lambda exp target linkage)
@@ -1082,6 +1132,7 @@ that will be executed when the combined sequence is entered; rather, it is in
 the sequence only because that was a convenient place to put it.</p>
 
 <p class="trans" lang="ja">
+<tt>compile-lambda</tt> は、手続き本体を <tt>lambda</tt> 式のコードの後ろにつなげるために、<tt>append-instruction-sequences</tt> ではなくて、むしろ、<tt>tack-on-instruction-sequence</tt> という特別な結合器 (<a href="#%_sec_5.5.4">5.5.4</a>節) を使う。なぜなら、本体は、結合された列がエンターされた<span class="note"> (結合された列のところまで、実行が進んできた) </span>ときに実行されるであろう命令の列の一部ではないからだ。むしろ、本体は、ただ本体を置くのに便利な場所だったから、というだけの理由で、その列の中にあるのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -1098,6 +1149,11 @@ so that it will end by returning from the procedure with the
 procedure result in <tt>val</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>compile-lambda-body</tt> は、手続きの本体に対するコードを構築する。
+このコードは、エントリ・ポイント用のラベル<span class="note"> (<tt>proc-entry</tt>) </span>から始まる。
+次に、実行時の評価環境を、手続き本体を評価するための正しい環境、つまり、手続きの定義環境——手続きが呼び出されるときの実引数への仮引数の束縛を含むように拡張されたもの——へと、切り替えさせるであろう命令<span class="note"> (二つの <tt>(assign env ...)</tt>)</span> が来る。
+これの後に、手続き本体を構成する式の列に対するコード<span class="note"> (<tt>(compile-sequence (lambda-body exp) 'val 'return)</tt> で作られたもの) </span>が来る。
+<tt>val</tt> の中に手続き結果がある状態で手続きから返ることで、その<span class="note"> (式の) </span>列が終了するように、その列は、<tt>return</tt> というリンケージおよび <tt>val</tt> というターゲットとともに、コンパイルされる。
 </p>
 
 <p class="lisp">(define (compile-lambda-body exp proc-entry)
@@ -1118,6 +1174,7 @@ procedure result in <tt>val</tt>.</p>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.3">5.5.3  Compiling Combinations</a></h3>
 <h3 class="trans" lang="ja">5.5.3 コンビネーションをコンパイルする</h3>
 
+<p class="extra" id="translating">**ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6342"></a><a name="%_idx_6344"></a>
 The essence of the compilation process is the compilation of procedure
@@ -1131,6 +1188,11 @@ has the form</p>
 <p class="lisp">&lt;<em>compilation of operator, target <tt>proc</tt>, linkage <tt>next</tt></em>&gt;
 &lt;<em>evaluate operands and construct argument list in <tt>argl</tt></em>&gt;
 &lt;<em>compilation of procedure call with given target and linkage</em>&gt;
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
 </p>
 
 <p class="orig" lang="en">The registers <tt>env</tt>, <tt>proc</tt>, and <tt>argl</tt> may have to be
@@ -1196,6 +1258,11 @@ The general form of the argument-list construction is thus as follows:</p>
 (assign argl (op cons) (reg val) (reg argl))
 <tt>...</tt>&lt;<em>compilation of first operand, targeted to <tt>val</tt></em>&gt;
 (assign argl (op cons) (reg val) (reg argl))
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
 </p>
 
 <p class="orig" lang="en"><tt>Argl</tt> must be preserved around each operand evaluation except
@@ -1288,6 +1355,11 @@ primitive-branch
          (reg argl))
  &lt;<em>linkage</em>&gt;
 after-call
+</p>
+
+<p class="exercise" lang="ja">&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
+&lt;<i class="ex_comment"></i>&gt;
 </p>
 
 <p class="orig" lang="en">Observe that the compiled branch must skip around the primitive
@@ -3018,6 +3090,8 @@ except that anything in the list that is flagged with a comma is evaluated.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_803"><sup><small>36</small></sup></a>
+この手続きは、リストを構築するのに便利な、<em>バッククオート</em> (または<em>準クオート</em>) と呼ばれる Lisp の機能を利用する。
+リストをバッククオート記号で始めることは、リスト内においてカンマで印が付けられたものは何でも評価されるという点を除いて、リストを引用することとそっくりだ。
 </p>
 
 <p class="orig" lang="en">
@@ -3033,8 +3107,17 @@ evaluates to the list
 </p>
 
 <p class="trans" lang="ja">
+たとえば、<tt>linkage</tt> の値が <tt>branch25</tt> という記号であれば、
+<tt>`((goto (label ,linkage)))</tt>
+という式は、
+<tt>((goto (label branch25)))</tt>
+というリストへと評価される。
+同様に、<tt>x</tt> の値が <tt>(a b c)</tt> というリストであれば、
+<tt>`(1 2 ,(car x))</tt>
+という式は、
+<tt>(1 2 a)</tt>
+というリストへと評価される。
 </p>
-
 
 <p class="orig" lang="en"><a name="footnote_Temp_806" href="#call_footnote_Temp_806"><sup><small>37</small></sup></a> We can't just
 use the labels <tt>true-branch</tt>, <tt>false-branch</tt>, and
@@ -3050,8 +3133,12 @@ unique variable names in the query language, as follows:
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_806"><sup><small>37</small></sup></a>
+上記で示したように、ただ単に <tt>true-branch</tt> と <tt>false-branch</tt> と <tt>after-if</tt> というラベルを使ってはならない。なぜなら、プログラム中には、一つよりも多くの <tt>if</tt> があるかもしれないからだ。
+コンパイラは、ラベルを生成するために <tt>make-label</tt> という手続きを使う。
+<tt>make-label</tt> は、引数として記号をとり、その与えられた記号から始まる新たな記号を返す。
+たとえば、<tt>(make-label 'a)</tt> に対する連続した呼び出しは、<tt>a1</tt>、<tt>a2</tt> などを返すだろう。
+以下のとおり、クエリ言語における一意的な変数名の生成と同様にして、<tt>make-label</tt> を実装できる。
 </p>
-
 
 <p class="lisp">(define label-counter 0)
 
@@ -3074,6 +3161,7 @@ compound procedures described in section <a href="26_sec4_1.html#%_sec_4.1.3">4.
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_809"><sup><small>38</small></sup></a>
+コンパイルされた手続きを表すためのデータ構造——<a href="26_sec4_1.html#%_sec_4.1.3">4.1.3</a>節で説明した複合的な手続きのための構造に類似のもの——を実装する、マシン演算が必要である。
 </p>
 
 
