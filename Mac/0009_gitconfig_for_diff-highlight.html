@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: diff-highlight の色をカスタマイズするための .gitconfig での設定</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/0009_gitconfig_for_diff-highlight.html" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>diff-highlight</tt> の色をカスタマイズするための <tt>.gitconfig</tt> での設定</h2>
+
+<p>
+以前、「<a href="0006_git-diff.html"><tt>git diff</tt> で差分を文字単位でカラー表示する</a>」という記事を書いたが、色指定のカスタマイズはしていなかった。
+で、いざカスタマイズしようと思ったら、落とし穴があったので、記録しておく。
+ちょっと長いので、結論だけ読みたい場合は、<a href="#config1">ここ</a>と<a href="#config2">ここ</a>の設定例だけお読みください。
+</p>
+
+<h3>落とし穴に落ちた</h3>
+<p>
+私の環境は macOS Sierra である。ターミナル.app を使っている。
+<code>diff-highlight</code> についての文書は
+<code>/usr/local/share/git-core/contrib/diff-highlight/README</code>
+にある。
+この文書によると、たとえば <code>~/.gitconfig</code> に次のように書いておけば、色を自分で指定できるようだ。
+</p>
+
+<code>[color "diff-highlight"]
+oldNormal = "black #f8cbcb"
+oldHighlight = "black #ffaaaa"
+newNormal = "black #cbeecb"
+newHighlight = "black #aaffaa"
+</code>
+
+<p>
+ところが、これがうまくいかなかった。
+色の名前として、white, black, red, blue, green, yellow, magenta, cyan という基本的な 8 色の名前は受け付けるのだが、X11で使えるはずのそれ以外の色の名前が使えない。たとえば、RoyalBlue と書いても royalblue と書いても駄目 (一応、後から <code>/opt/X11/share/X11/rgb.txt</code> を見て、綴りを確認した) 。
+しかも、#rrggbb 形式の指定も効かない模様。
+二重引用符を一重引用符に変えたり、引用符を削除してみたりもしたが、変わらない。
+</p>
+
+<h3>0 から 255 の数値で色指定ですって!</h3>
+<p>
+試行錯誤したり検索したりして結局分かったのは、どうも私の環境では <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI エスケープコードで使われる 256 色</a>の番号 (0〜255) で指定すれば良さそう、ということ。
+ちなみに、<a href="https://github.com/piyo-ko/color_demo">これらの色を試しに表示するスクリプト</a>を以前作ったのだが、それを実行した結果は以下のとおり。
+これを見ながら好きな色の番号を選べばよい。
+</p>
+
+<div style="width: 100%; text-align: center">
+<img style="width: 45%" src="0009_bg.png" />
+<img style="width: 45%" src="0009_fg.png" />
+</div>
+
+<h3 id="config1">いざ設定</h3>
+<p>
+というわけで、<code>~/.gitconfig</code> に以下のような感じで指定してみた。色を一つだけ指定すると文字色のみの指定となり、二つ指定すると、文字色と背景色の指定となるようである。
+</p>
+
+<code>[color "diff-highlight"]
+	oldNormal = 141
+	oldHighlight = 52 178
+	newNormal = 215
+	newHighlight = 22 77
+</code>
+
+<p>
+これは、変更を含む行について、以下のような配色にせよ、という指定である。
+</p>
+
+<ul>
+<li>変更前の状態を示すために出力している行 (<code>-</code> から始まる行) では、
+  <ul>
+  <li>変更されていない部分は、背景色は変えずに文字色を 141 にし、</li>
+  <li>変更された部分は、文字色を 52 とし、背景色を 178 とする。</li>
+  </ul>
+</li>
+<li>変更後の状態を示すために出力している行 (<code>+</code> から始まる行)  では、
+  <ul>
+  <li>変更されていない部分は、背景色は変えずに文字色を 215 にし、</li>
+  <li>変更された部分は、文字色を 22 とし、背景色を 77 とする。</li>
+  </ul>
+</li>
+</ul>
+
+<h3>もう一つ落とし穴があったので調べ回る</h3>
+<p>
+と、ここまで漕ぎつけたものの、「変更」ではない、純粋な「削除」や、純粋な「追加」だと、どうもこの色設定が効かないようだと気づいた。
+純粋な削除の行 (<code>-</code> から始まる) はデフォルトの赤い文字になり、
+純粋な追加の行 (<code>+</code> から始まる) はデフォルトの緑の文字になっている。
+それはそれで、変更・削除・追加の 3 種類を色で区別できるので便利ではあるが、赤と緑以外の好きな色に変えたい気持ちもある。
+そこで、色々調べてみる。
+</p>
+
+<p>
+ローカルにある <code>/usr/local/share/git-core/contrib/diff-highlight/diff-highlight</code> か、
+<a href="https://github.com/git/git/blob/master/contrib/diff-highlight/diff-highlight">GitHub 上のレポジトリ</a>
+を参照すれば、Perl のソースが見られるのだけれど、そもそも <code>show_hunk</code> というサブルーチンで、「変更」(削除と追加のペア) か否かで場合分けしているようだ。
+一方、メインルーチンは、単純に <code>while (&lt;&gt;) { ... }</code> の形をしている。
+要するに、ページャとして指定した <code>diff-highlight</code> に、入力として <code>git diff</code> の出力が与えられているということだろう。
+以上から考えると、純粋な「削除」と純粋な「追加」の行での赤い文字・緑の文字というデフォルトの色は、<code>diff-highlight</code> ではそもそも変更しない (<code>git diff</code> から与えられたままに素通しさせる) 設計になっているのだろう。
+</p>
+
+<p>
+という訳で、<code>git diff</code> の方でこの赤・緑というデフォルトの色を決めているはず。
+と、あたりをつけたので、検索などしてみる。
+すると、<code>git config</code> のマニュアルの、<code>color.diff.&lt;slot&gt;</code> のところの説明に、色の指定方法がちゃんと書いてあるよ、という<a href="http://qiita.com/qurage/items/452f2debb64e2708a46c">情報</a>を見つけた。
+</p>
+
+<p>
+<code>man git-config</code> してもよいのだが、
+<code>/usr/local/share/doc/git-doc/git.html</code>
+にある HTML 版をブラウザで見る方が見やすいように思う。
+いずれにせよ、<code>git config</code> のマニュアルには、<code>git diff</code> 用の色の指定方法が書かれていた。
+しかも、色として指定できる値についても、Values というセクションの中の color という項目に、ちゃんと書いてあるではないの (基本の 8 色は名前で指定でき、ANSI の 256 色は番号で指定できる、という上記の話が明記されていた)。
+回り道をしてしまった……。
+</p>
+
+<h3 id="config2">追加の設定をしてハッピーエンドだ</h3>
+<p>
+しかしまあ、これで指定方法が分かったので、めでたしめでたし。
+<code>~/.gitconfig</code> で色を様々に指定してみる。
+</p>
+
+<code>[color "diff"]
+	meta = 58
+	frag = 52
+	old = 33 bold
+	new = 202 bold
+</code>
+
+
+<p>
+これは、
+<code>diff --git a/hoge.txt b/hoge.txt</code> 等の部分の文字色を 58 とし、
+<code>@@ -627,7 +627,7 @@</code> 等の部分の文字色を 52 とし、
+削除された行の文字色を 33 にして、かつ、この行の文字を太字にし、
+追加された行の文字色を 202 にして、かつ、この行の文字を太字にする、
+という、派手派手路線の設定である。楽しい。
+</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
