@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: bcを楽しく便利に</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>bc</tt> を楽しく便利に</h2>
+
+<p>
+<a href="../fun_math/frac_1_9801.html">別のところ</a>で書いたこととも重なるが、
+<tt>~/.bash_profile</tt> に
+<code>export BC_ENV_ARGS=&quot;${HOME}/.bc&quot;</code>
+と書いておいて (設定ファイルを指定して)、
+<tt>~/.bc</tt> で
+<code>scale=3</code>
+などと、普段から示しておいてほしい小数点以下の桁数を指定しておくと、便利である。
+</p>
+
+<p>
+また、消費税についての計算がしやすいように、<tt>~/.bc</tt> に
+<code>tax=1.08</code>
+などと好きな変数名で定義しておいても便利である (このページを書いている時点での消費税率は 8% である)。
+</p>
+
+<p>
+ついでに、<tt>bc</tt> を起動するたびにこれらの定義内容を印字するよう、<tt>~/.bc</tt> に記述しておくと便利なのだが、その際に、絵文字を入れておいたりすると楽しい。たとえば、
+<code>print &quot;🐬  tax=&quot;, tax, &quot;\n&quot;</code>
+などとすると、毎回イルカさんにお出迎えしてもらえる。
+</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
