@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>書店のレシートの画像からISBNを読んでリンクを作る</title>
+<link rel="canonical" href="https://piyo-ko.github.io/tools/ISBN_link_from_image.html" />
+
+<script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+<script>
+function read_in() {
+  var reader = new FileReader();
+  var input_file = document.getElementById("input_image_file");
+  reader.onload = function (e) {
+    //選択された画像をimg要素として表示する。
+    var img_as_data_uri = e.target.result;
+    document.getElementById("receipt_image").src = img_as_data_uri;
+
+    //結果出力先の要素を取得する。
+    var ndl_out = document.getElementById("ndl_links");
+    var amz_out = document.getElementById("amz_links");
+    //複数回、連続して実行するときのために、最初に中身を捨てる。
+    ndl_out.innerHTML = "";
+    amz_out.innerHTML = "";
+
+    document.getElementById("msg").textContent = "[処理中です……]";
+
+    var num_books=0; // ISBNを読み取れた本の冊数を初期化する。
+    //画像認識
+    Tesseract.recognize(
+      img_as_data_uri, 
+      { tessedit_char_whitelist: "0123456789" })
+      .then(function(result) { 
+        var lines = result.text.split("\n");
+        var i, L, isbn_pattern, res;
+        L=lines.length;
+        isbn_pattern = /9784\d{9}/;  //13桁ISBN
+
+        for (i=0; i<L; i++) {
+          // '1'の認識で前後にスペースが入ってしまうことがあるので、
+          // スペースをあらかじめ削除しておくためにreplaceを使っている。
+          res = isbn_pattern.exec(lines[i].replace(' ', ''));
+          // マッチする文字列があったら……
+          if (res !== undefined && res !== null) {
+            num_books++;
+            var d8 = res[0].substring(4,12);
+            var cd = isbn10_check_digit(d8);
+            var ndl_link_str = '<a href="http://iss.ndl.go.jp/api/openurl?isbn=4' + d8 + cd + '" target="_ndl">' + res[0] + '</a>' + "\n";
+            ndl_out.innerHTML += ndl_link_str;
+            var amz_link_str = '<a href="https://www.amazon.co.jp/dp/4' + d8 + cd + '/" target="_amzn">' + res[0] + '</a>' + "\n";
+            amz_out.innerHTML += amz_link_str;
+          }
+        }
+      })
+      .finally(function(r) {
+        document.getElementById("msg").textContent = "[処理が終わりました (" + num_books + "冊のISBNを読み取りました)]";
+      });
+  } // end of the function assigned to reader.onload
+
+  // 画像ファイルをdata URLとして読み込むように指示しておく。
+  reader.readAsDataURL(input_file.files[0]);
+}
+
+// dは、最初の "987-4-" を除く、真ん中の8桁。
+// 13桁のISBNと10桁のISBNではチェックディジットが違うので計算せねばならない。
+function isbn10_check_digit(d) {
+  var sum = 4*10;
+  for (var i=0; i<8; i++) {
+    sum += parseInt(d.charAt(i)) * (9 - i);
+  }
+  var c = 11-(sum % 11);
+  if (c == 10) {
+    return('X');
+  } else if (c == 11) {
+    return('0');
+  } else {
+    return(c);
+  }
+}
+</script>
+
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>
+td.links {
+  white-space: pre;
+  font-family: monospace;
+  line-height: 180%;
+  text-align: center;
+  padding: 4pt;
+}
+</style>
+</head>
+
+<body class="main-text-only">
+<h1>書店のレシートの画像からISBNを読んでリンクを作る</h1>
+
+<h2>とりあえず実行してみる</h2>
+<form name="f">
+<p>
+<em>書店のレシートの画像ファイル</em>を選択して
+(<input type="file" id="input_image_file" name="input_image_file" />) 
+そのファイルを
+<input type="button" value="読み込んで" onclick="read_in()">
+ください。
+レシートに記載されている書籍に該当するページへのリンクを作ります。
+</p>
+</form>
+
+<table>
+<tr><th>画像</th><th>国会図書館<wbr>へのリンク</th><th>Amazon<wbr>へのリンク</th></tr>
+<tr>
+<td style="overflow: auto;"><img id="receipt_image" style="max-width: 450px; max-height: 450px;" /></td>
+<td id="ndl_links" class="links"></td>
+<td id="amz_links" class="links"></td>
+</tr>
+</table>
+
+<p id="msg" style="color: darkred; font-style: italic;"></p>
+
+
+<h2>ところでこのページの目的は何?</h2>
+
+<p>
+<img src="sample_receipt.jpg" height="100px" alt="書店のレシートの例 (一部抜粋)" style="float: left; margin-right: 1em;" />
+左のごとく、書店のレシートには ISBN (を含む文字列) が印字されていることがままある。
+そこで先日、<a href="ISBN_link.html">ISBN の真ん中の 8 桁を手で入力して Amazon へのリンクを生成できるようにしてみた</a>。
+そもそも、積ん読は怖くないがダブりが怖いので、「何を買ったか」を、検索可能な形で、かつローカルに記録できたら嬉しい、というのが動機である。
+</p>
+
+<p style="clear: both">
+一方、世の中には
+<a href="http://tesseract.projectnaptha.com/">Tesseract.js</a> 
+という OCR ライブラリがあるので、レシートの画像そのものから ISBN を認識して、リンクの生成までを自動化することもできそうだな、とも思った。
+それを試してみたのがこのページ。
+もう少し便利にリンクを生成したいという理由と、Tesseract.js を試してみたいという理由から、作ってみた。
+</p>
+
+<p>
+許容可能な文字として数字だけを指定する、('1' の前後に余計な空白文字が入る傾向があったので) その空白文字を削る、'9784' + 数字 9 桁 の部分だけ抽出する、といったごく単純な処理を行うだけで、ありがたいことに書店のレシートの画像ファイルから ISBN を抽出できる。
+もちろん多少の誤認識はあるが、Tesseract.js はすごい。
+</p>
+<p>
+それに、この程度の目的のためなら、特に複雑なオプション設定もいらない (上記のように数字だけを指定してみたが、簡単に指定できた)。
+また、認識率を上げるための学習用のデータの作成や、そのデータを使った学習過程なども、不要だった。
+使いやすい。
+</p>
+<p>
+私がテストに使った画像は、グレイスケールモードでスキャンしてできた画像だが、ピンボケしていなければ、カメラで撮った画像でも大丈夫なのではなかろうか。
+</p>
+
+<nav>[<a href="https://www.twitter.com/pi__yo__ko" target="_blank">Twitter</a> | <a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>
+
