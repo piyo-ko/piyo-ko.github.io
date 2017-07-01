@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>Tesseract.jsで紙の「お薬手帳」を画像認識してみる</title>
+<link rel="canonical" href="https://piyo-ko.github.io/tools/okusuri_techo.html" />
+
+<script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+<script>
+// ユーザ指定のファイルを読み込み、画像認識の関数を呼び出す。
+function read_in() {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    //選択された画像をimg要素として表示する。
+    document.getElementById("image_of_read_okusuri_techo").src = 
+      e.target.result;
+    //画像認識を行う
+    read_prescription();
+  }
+  // 画像ファイルをdata URLとして読み込むように指示しておく。
+  reader.readAsDataURL(document.getElementById("input_image_file").files[0]);
+}
+
+//サンプル画像を読み込み、画像認識の関数を呼び出す。
+function read_sample(img_id) {
+  document.getElementById("image_of_read_okusuri_techo").src = 
+    document.getElementById(img_id).src;
+  read_prescription();
+}
+
+// 画像認識を行う。
+function read_prescription() {
+  //結果出力先の要素を取得する。
+  var txt_out = document.getElementById("text_of_read_okusuri_techo");
+  //複数回、連続して実行するときのために、最初に中身を捨てる。
+  txt_out.innerHTML = "";
+  
+  document.getElementById("msg").textContent = "[処理を開始しました。]\n";
+
+  //認識結果に出現しそうな文字をホワイトリスト方式で制限したい。
+  //種類ごとにとりあえず定義してみて、それらをつなげてホワイトリストを
+  //作ることにする。
+  var katakana = "アイウエオカキクケコガギグゲゴサシスセソザジズゼゾタチツテトダヂヅデドナニヌネノハヒフヘホバビブベボパピプペポマミムメモヤユヨャュョラリユレロワヲンー";
+  var han_kana = "ｱｲｳｴｵｶｷｸｹｺｶﾞｷﾞｸﾞｹﾞｺﾞｻｼｽｾｿｻﾞｼﾞｽﾞｾﾞｿﾞﾀﾁﾂﾃﾄﾀﾞﾁﾞﾂﾞﾃﾞﾄﾞﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟﾏﾐﾑﾒﾓﾔﾕﾖｬｭｮﾗﾘﾕﾚﾛﾜｦﾝｰ";
+  var uppercase_chars = "ABCDEFGGIJKLMNOPQRSTUVWXYZＡＢＣＤＥＦＧＧＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ";
+  var digits = "0123456789０１２３４５６７８９";
+  var units = "mμg%ｍｇ％個包日分回";
+  var kanji = "錠剤点眼鼻薬液配合顆粒吸入塗布内服外用酸塩臭酢乳硫炭水硝化物";
+  var timing = "朝昼夕毎食前後就寝時間おきごと起床";
+  var symbol_chars = "()（）「」";
+  var whitelist_chars = katakana + han_kana + uppercase_chars + digits + units + kanji + timing  + symbol_chars;
+
+  //画像認識
+  Tesseract.recognize(
+    document.getElementById("image_of_read_okusuri_techo").src,
+    { 
+      lang: 'jpn',
+      tessedit_char_whitelist: whitelist_chars
+    })
+  .progress(function(m) {
+    document.getElementById("msg").textContent += "▶︎ ";
+    //console.log("途中経過: " + m + "\n");
+  })
+  .catch(function(e) {
+    document.getElementById("msg").textContent += "[エラーです: " + e + "]";
+    console.log("エラーです: " + e);
+  })
+  .then(function(result) {
+    txt_out.innerHTML = result.text;
+    //console.log("終わり:[" + result.text + "]");
+  })
+  .finally(function(r) {
+    document.getElementById("msg").textContent += "[処理が終わりました]\n";
+  });
+}
+
+</script>
+
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>
+ul li code {
+  display: inline;
+  margin-left: 1pt;
+  margin-right: 1pt;
+  padding: 1pt;
+}
+</style>
+</head>
+
+<body class="main-text-only">
+<h1><tt>Tesseract.js</tt> で紙の「お薬手帳」を画像認識してみる</h1>
+
+
+<h2>※ 本ページ使用前の注意 ※</h2>
+<p>
+ここでは <a href="http://tesseract.projectnaptha.com/">Tesseract.js</a> というライブラリを使っていますが、完全にブラックボックスとして使っています。
+つまり、ここでは、
+「認識対象の画像のデータをどこかのサーバにひっそり送信したり蓄積したりしていないか」
+といった疑問は棚上げにして、このライブラリを使っています
+(おそらくそういう疑問は杞憂だろうとは思いますが、特に確認したわけではありません)。
+</p>
+<p>
+一方、「お薬手帳」は、非常にセンシティブな内容を含む可能性があります。
+ですので、<em>プライバシーが心配な場合</em>は、
+「画像の一部を黒塗り等で隠す」
+「画像のうち最小限の部分だけ切り取る」
+「人に知らせたくない持病の薬ではなく、一般的な風邪薬のページで試す」
+などの対策をおとりください。
+<em>それでもまだ心配な場合</em>は、以下のサンプル画像で画像認識をお試しになることも可能です。
+</p>
+
+<h2>とりあえず実行してみる</h2>
+<form name="f">
+<p>
+<em>紙のお薬手帳を撮影した画像ファイル</em> (または電子版のお薬手帳アプリのスクリーンショット) を選択して
+(<input type="file" id="input_image_file" name="input_image_file" />) 
+そのファイルを
+<input type="button" value="読み込んで" onclick="read_in()">
+ください。
+どの程度まで画像認識で読めるのか、実験できます。
+</p>
+<p>
+あるいは、上記のように<em>どうしてもプライバシーが心配</em>な場合は、
+<input type="button" value="左のサンプル画像で試す" onclick="read_sample('sample_1')">
+か、
+<input type="button" value="右のサンプル画像で試す" onclick="read_sample('sample_2')">
+ことも可能です。
+</p>
+</form>
+
+<div style="text-align: center">
+<img id="sample_1" src="okusuri_sample_1.jpg" style="max-height: 100px" alt="お薬手帳のサンプル" />
+<img id="sample_2" src="okusuri_sample_2.jpg" style="max-height: 100px" alt="お薬手帳のサンプル (2)" />
+</div>
+
+<table style="margin: auto;">
+<tr><th>認識対象画像</th><th>読み取り結果</th></tr>
+<tr>
+<td style="overflow: auto;"><img id="image_of_read_okusuri_techo" style="max-width: 450px; max-height: 450px;" /></td>
+<td id="text_of_read_okusuri_techo" style="white-space: pre; font-family: monospace;"></td>
+</tr>
+</table>
+
+<p id="msg" style="color: darkred; font-style: italic; overflow: auto; max-height: 10ex;"></p>
+
+
+<h2>ところでこのページの目的は何?</h2>
+
+<p>
+先日、<a href="http://tesseract.projectnaptha.com/">Tesseract.js</a> を利用して、<a href="ISBN_link_from_image.html">書店のレシートから ISBN を画像認識し、書籍のページへのリンクを生成する、というページ</a>を作ってみたが、
+そこで認識対象になる文字は数字のみである。
+というわけで、認識タスクとしては容易な方だろう。
+一方、Tesseract.js は多言語対応が売りである。
+日本語を対象としたタスクも試してみたい。 
+</p>
+
+<p>
+そこで思い出したのが、「お薬手帳」にまつわる<a href="https://twitter.com/tweeting_drtaka/status/820611907056898049">このツイート</a>と、<a href="http://www.mitou.org/projects/medical_crisis/161220.html">そのリンク先のページ</a>。
+私は持病があるので、そういうのが気になるのです。
+</p>
+
+<p>
+で、実際のシステムはしかるべき人がしかるべく作るであろうから、ここでは
+「<em>素人がちょこっとオプションを設定してみた程度だと、 Tesseract.js はどんな感じの認識結果を出してくるのかな〜?</em>」
+という好奇心を満たすのが目的である。
+自分のお薬手帳を使って数例の実験を行った感じだと、
+「実用には程遠いけれど、目的に合わせて作った訓練データもなしに認識しているにしては、結構健闘しているのでは?」
+という印象であった。
+とはいえ、「〜カプセル」のようによく使われるはずの「ル」が「レ」に誤認識されやすいようだったり、数字の「1」が長音符号「ー」になってしまったり (縦書きと横書きの区別ができていない?) といったあたりは、どうにも残念なのだが。
+</p>
+
+<h2><tt>Tesseract.js</tt> に対して行ったオプション設定</h2>
+<p>
+というわけで好奇心は満たされたのだが、せっかくなので、「どういう理由で、どういうオプション設定を行ったのか」を以下に書き留めておく。
+似ても似つかぬ文字に認識される部分は、下記のようなオプション設定が原因の場合も多かろうと思う。
+なお、Tesseract.js には<a href="https://github.com/naptha/tesseract.js/blob/master/docs/tesseract_parameters.md">山のようにオプションがあるようだが</a>、
+私はこれらをきちんと検討したわけではないので、改善の余地はもちろん大きいだろう。
+</p>
+
+
+<ul>
+<li>日本語で書かれた「お薬手帳」が対象なので、
+<code>lang: 'jpn'</code>
+のように、日本語を指定した。当たり前だ。</li>
+
+<li>漢方薬を除けば、薬剤名には圧倒的にカタカナが多く使われている (と思われる)。よって、日本語で一般的に使われる文字全般を「認識結果として許容できる文字」として扱うよりも、「認識結果として許容できる文字」を<em>ホワイトリスト方式で絞った方が認識率が上がるのではないか</em>、と考えた。
+ホワイトリストを指定するオプションがあるので、
+<code>tessedit_char_whitelist: whitelist_chars</code>
+のように指定することにした。
+なお、以下に述べる方針に基づき、許可したい文字からなる文字列を、<tt>whitelist_chars</tt> という変数に予め代入しておいた (この変数名は適当につけたもの)。</li>
+
+<li>さて、上記の通り、ホワイトリストには、まず<em>カタカナ</em>を含めるべきだろう。
+そして、本ページの左側サンプル画像のように、半角カタカナが使われることもあるので、半角カタカナもホワイトリストに含めるべきだろう。</li>
+
+<li><em>ラテン・アルファベットの大文字</em>を含む薬剤名も、ときどき見かける。そこで、全角・半角の両方の大文字をホワイトリストに含める。
+小文字を含む薬剤名もあるのかもしれないが、よく知らないので、とりあえず大文字だけを対象とする。</li>
+
+<li>「50mg錠」のように<em>数字</em>を含む名称もよく見かける (本ページの右側サンプル画像など)。そこで、全角・半角の両方の数字をホワイトリストに含める。</li>
+
+<li>本ページのサンプル画像を見ると、<em>括弧</em>が使われることもあるようなので、括弧もホワイトリストに含めておく。</li>
+
+<li>「50mg錠」の「錠」など、<em>特定の漢字</em>はホワイトリストに入れておいた方が良さそうである。漢字が使われるパタンがいくつかありそうなので、パタンごとに、思いついた範囲の漢字をホワイトリストに入れた (見落としはあると思う)。
+  <ul>
+  <li>「〜錠」「〜剤」「〜点眼薬」「〜点鼻薬」「〜液」「〜配合錠」「〜顆粒」など、薬の形状や種類に関して使われる漢字。</li>
+  <li>「点眼」「点鼻」「吸入」「塗布」「内服」「外用」など、薬の使い方に関して使われる漢字。</li>
+  <li>「〜酸」「塩化〜」「塩酸〜」「酢酸〜」「乳酸〜」「硫酸〜」「水酸化〜」「硝酸〜」「臭化〜」「炭酸〜」「〜化物」など、化合物名に使われる漢字。</li>
+  <li>「朝食後」「昼食後」「夕食後」「毎食前」「毎食後」「食間」「〜時間おき」「〜時間ごと」「起床後」「就寝前」「1日〜回」など、服薬のタイミングや頻度に関して使われる漢字。</li>
+  <li>「〜個」「〜包」「〜錠」「〜日分」「〜回分」など、処方された量に関して使われる漢字。</li>
+  </ul>
+</li>
+
+<li>なお、上記の通り、とりあえずラテン・アルファベットの小文字は認識対象外としてみたが、「50mg錠」のように<em>単位</em>の中で「m」や「g」が使われることがある。他に、「%」や「μg」といった単位も見かける。そこで、これらの文字もホワイトリストに含めておく。</li>
+</ul>
+
+<p>
+以上のように、本当に単純な設定しかしていないが、お遊びなので構わないだろう。
+こういう便利なライブラリが手軽に使えるとは良い時代じゃ。
+</p>
+
+<nav>[<a href="https://www.twitter.com/pi__yo__ko" target="_blank">Twitter</a> | <a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>
+
