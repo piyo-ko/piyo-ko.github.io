@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>Tesseract.jsで言語だけを指定して画像認識をしてみる</title>
+<link rel="canonical" href="https://piyo-ko.github.io/tools/ocr_with_tesseract.html" />
+
+<script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+<script>
+// ユーザ指定のファイルを読み込み、画像認識の関数を呼び出す。
+function read_in() {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    //選択された画像をimg要素として表示する。
+    document.getElementById("read_image").src = e.target.result;
+    //画像認識を行う
+    recognize_image();
+  }
+  // 画像ファイルをdata URLとして読み込むように指示しておく。
+  reader.readAsDataURL(document.getElementById("input_image_file").files[0]);
+}
+
+
+// 画像認識を行う。
+function recognize_image() {
+  //結果出力先の要素を取得する。
+  var txt_out = document.getElementById("text_of_read_image");
+  //複数回、連続して実行するときのために、最初に中身を捨てる。
+  txt_out.innerHTML = "";
+  //指定された言語のコードを取得する。
+  var lang_list = document.getElementById("lang_options");
+  var selected_lang = lang_list.options[lang_list.selectedIndex].value;
+  console.log(selected_lang + "が選択されました。");
+  
+  document.getElementById("msg").textContent = "[処理を開始しました。]\n";
+
+  //画像認識
+  Tesseract.recognize(
+    document.getElementById("read_image").src,
+    { 
+      lang: selected_lang
+    })
+  .progress(function(m) {
+    document.getElementById("msg").textContent += "▶︎ ";
+    //console.log("途中経過: " + m + "\n");
+  })
+  .catch(function(e) {
+    document.getElementById("msg").textContent += "[エラーです: " + e + "]";
+    console.log("エラーです: " + e);
+  })
+  .then(function(result) {
+    txt_out.innerHTML = result.text;
+  })
+  .finally(function(r) {
+    document.getElementById("msg").textContent += "[処理が終わりました]\n";
+  });
+}
+
+</script>
+
+<link rel="stylesheet" href="../article.css" type="text/css">
+</head>
+
+<body class="main-text-only">
+<h1><tt>Tesseract.js</tt> で言語だけを指定して画像認識をしてみる</h1>
+
+<h2>このページは何?</h2>
+<p>
+<a href="http://tesseract.projectnaptha.com/">Tesseract.js</a> で遊ぶのは楽しい。
+ということで、
+<a href="ISBN_link_from_image.html">第一弾</a> (書店のレシートから ISBN を画像認識し、書籍のページへのリンクを生成する) および
+<a href="okusuri_techo.html">第二弾</a> (紙の「お薬手帳」を画像認識してみる) に続く第三弾である。
+</p>
+
+<p>
+今更という感じだが、今回は、言語以外は何もオプションを指定しない、素の状態の Tesseract.js での認識を試す
+(<a href="https://github.com/naptha/tesseract.js/blob/master/docs/tesseract_lang_list.md">対応している言語のリスト</a>を見れば分かるが、Tesseract.js の売りの一つは多言語対応である)。
+言語以外のオプションは指定しないし、前処理・後処理もしていないので、汎用の認識処理と言えるが、そのぶん、おそらく精度は落ちるだろう。
+</p>
+
+<p>
+試しに日本語のツイートのスクリーンショットを認識させてみたら、元の文章はまともなのに、クサチュー語というかギャル文字というか、そんな感じになってしまった (一体何から日本語を学習したんですか、Tesseract さん……)。
+だがしかし、大変便利なライブラリである。ありがたや〜。
+</p>
+
+<h2>実行してみる</h2>
+<form name="f">
+
+<ol>
+<li>言語を指定し (
+<select name="lang_options" id="lang_options">
+<option value="'afr">Afrikaans</option>
+<option value="ara">Arabic</option>
+<option value="aze">Azerbaijani</option>
+<option value="bel">Belarusian</option>
+<option value="ben">Bengali</option>
+<option value="bul">Bulgarian</option>
+<option value="cat">Catalan</option>
+<option value="ces">Czech</option>
+<option value="chi_sim">Chinese</option>
+<option value="chi_tra">Traditional Chinese</option>
+<option value="chr">Cherokee</option>
+<option value="dan">Danish</option>
+<option value="deu">German</option>
+<option value="ell">Greek</option>
+<option value="eng">English</option>
+<option value="enm">English (Old)</option>
+<option value="epo">Esperanto</option>
+<option value="epo_alt">Esperanto alternative</option>
+<option value="equ">Math</option>
+<option value="est">Estonian</option>
+<option value="eus">Basque</option>
+<option value="fin">Finnish</option>
+<option value="fra">French</option>
+<option value="frk">Frankish</option>
+<option value="frm">French (Old)</option>
+<option value="glg">Galician</option>
+<option value="grc">Ancient Greek</option>
+<option value="heb">Hebrew</option>
+<option value="hin">Hindi</option>
+<option value="hrv">Croatian</option>
+<option value="hun">Hungarian</option>
+<option value="ind">Indonesian</option>
+<option value="isl">Icelandic</option>
+<option value="ita">Italian</option>
+<option value="ita_old">Italian (Old)</option>
+<option value="jpn" selected>Japanese</option>
+<option value="kan">Kannada</option>
+<option value="kor">Korean</option>
+<option value="lav">Latvian</option>
+<option value="lit">Lithuanian</option>
+<option value="mal">Malayalam</option>
+<option value="mkd">Macedonian</option>
+<option value="mlt">Maltese</option>
+<option value="msa">Malay</option>
+<option value="nld">Dutch</option>
+<option value="nor">Norwegian</option>
+<option value="pol">Polish</option>
+<option value="por">Portuguese</option>
+<option value="ron">Romanian</option>
+<option value="rus">Russian</option>
+<option value="slk">Slovakian</option>
+<option value="slv">Slovenian</option>
+<option value="spa">Spanish</option>
+<option value="spa_old">Old Spanish</option>
+<option value="sqi">Albanian</option>
+<option value="srp">Serbian (Latin)</option>
+<option value="swa">Swahili</option>
+<option value="swe">Swedish</option>
+<option value="tam">Tamil</option>
+<option value="tel">Telugu</option>
+<option value="tgl">Tagalog</option>
+<option value="tha">Thai</option>
+<option value="tur">Turkish</option>
+<option value="ukr">Ukrainian</option>
+<option value="vie">Vietnamese</option>
+</select>
+)、
+</li>
+
+<li>
+画像ファイルを選択し
+(<input type="file" id="input_image_file" name="input_image_file" />)、
+</li>
+
+<li>
+そのファイルを
+<input type="button" value="読み込んで" onclick="read_in()">
+ください。
+</li>
+</ol>
+
+<p>
+どの程度まで画像認識で読めるのか、実験できます。
+</p>
+
+</form>
+
+
+
+<table style="margin: auto;">
+<tr><th>認識対象画像</th><th>読み取り結果</th></tr>
+<tr>
+<td style="overflow: auto;"><img id="read_image" style="max-width: 450px; max-height: 450px;" /></td>
+<td id="text_of_read_image" style="white-space: pre; font-family: monospace;"></td>
+</tr>
+</table>
+
+<p id="msg" style="color: darkred; font-style: italic; overflow: auto; max-height: 10ex;"></p>
+
+
+<nav>[<a href="https://www.twitter.com/pi__yo__ko" target="_blank">Twitter</a> | <a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>
+
