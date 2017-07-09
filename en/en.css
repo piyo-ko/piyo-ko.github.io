@@ -1,7 +1,7 @@
 body {
 	color: hsl(80, 80%, 80%);
 	background-color: hsl(80, 70%, 10%);
-	font-family: Baskerville, Didot, Palatino, /*クレー,*/ serif;
+	font-family: Baskerville, Didot, Palatino, serif;
 	padding: 1em;
 }
 p {
@@ -33,11 +33,11 @@ nav {
 	display: block;
 	color: hsl(80, 90%, 60%);
 }
-nav:before {
+nav::before {
 	content: "▶︎";
 	color: hsl(80, 90%, 60%);
 }
-nav:after {
+nav::after {
 	content: "◀︎︎";
 	color: hsl(80, 90%, 60%);
 }
@@ -53,8 +53,7 @@ nav.bottom {
 h1 {
 	font-size: x-large;
 	font-weight: bold;
-	font-family: /*Chalkboard,*/ Skia, クレー, sans-serif;
-	/*text-decoration: underline;*/
+	font-family:  Skia, クレー, sans-serif;
 	background-color: hsl(40, 80%, 80%);
 	color: hsl(80, 90%, 20%);
 	text-align: center;
@@ -62,7 +61,7 @@ h1 {
 h2 {
 	font-size: large;
 	font-weight: normal;
-	font-family: /*Papyrus,*/ Skia, クレー, sans-serif;
+	font-family: Skia, クレー, sans-serif;
 	background-color: hsl(80, 80%, 20%);
 	color: hsl(40, 90%, 80%);
 	text-align: center;
@@ -75,16 +74,13 @@ table {
 }
 th {
 	padding: 6pt;
-	/*font-style: italic;*/
 	font-family: Baskerville, Didot, Palatino, serif;
 	color: hsl(30, 100%, 65%);
-	/*text-align: right;*/
 	white-space: pre;
 	width: auto;
 }
 td {
 	padding: 6pt;
-	/*width: 80%;*/
 }
 td.col2, th.col2 {
 	min-width: 40%;
@@ -114,21 +110,14 @@ dt {
 	font-family: Skia, sans-serif;
 	color: hsl(30, 100%, 65%);
 }
-dt:before {
-	content: "🍀 ";/*🍏🌵🍀🌻*/
+dt::before {
+	content: "🍀 ";
 }
 
 ul.para li {
 	margin-bottom: 12pt;
 }
-/*
-dt {
-	margin-bottom: 0;
-}
-dd {
-	margin-top: 0;
-}
-*/
+
 dd > ul {
 	margin-top: 4pt;
 	margin-bottom: 4pt;

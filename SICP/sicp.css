@@ -201,55 +201,48 @@ rt {
 
 /*見出しのフォントを設定*/
 h1[lang="en"],h2[lang="en"],h3[lang="en"],h4[lang="en"],h5[lang="en"] {
-	font-family: /*Copperplate, Luminari,"American Typewriter",*/ Skia, Helvetica, Monaco, Ricty, sans-serif;
+	font-family: Skia, Helvetica, Monaco, Ricty, sans-serif;
 	color: hsl(45, 100%, 20%);
-	/*border-radius: 50pt;*/
 }
 h1[lang="ja"],h2[lang="ja"],h3[lang="ja"],h4[lang="ja"],h5[lang="ja"],h1.extra,h2.extra {
-	font-family: "ヒラギノ丸ゴ ProN", "HiraMaruProN-W4", /*Ricty,*/ sans-serif;
+	font-family: "ヒラギノ丸ゴ ProN", "HiraMaruProN-W4", sans-serif;
 	color: hsl(210, 80%, 20%);
-	/*border-radius: 50pt;*/
 }
 h1 {
 	font-size: x-large;
 	font-weight: 900;
 }
-h1:before {
+h1::before {
 	content: "🍰 ";
 }
 h2 {
 	font-size: x-large;
 	font-weight: 400;
 }
-h2:before {
+h2::before {
 	content: "🍭 ";
 }
 h3 {
 	font-size: large;
 	font-weight: 900;
 }
-h3:before {
+h3::before {
 	content: "🍬 ";
 }
 h4 {
 	font-size: large;
 	font-weight: 400;
 }
-h4:before {
+h4::before {
 	content: "📚 ";
 }
 h5 {
 	font-size: medium;
 	font-weight: 400;
 }
-h5:before {
+h5::before {
 	content: "🍀 ";
 }
-/*
-h1:after, h2:after, h3:after, h4:after, h5:after {
-	content: " 🍄";
-}
-*/
 
 /*原文のブロック要素は左寄りにする*/
 p.orig, h1.orig, h2.orig, h3.orig, h4.orig, h5.orig, dl.orig, ul.orig, ol.orig, blockquote.orig, div.orig {
@@ -325,7 +318,7 @@ dl.extra dd {
 }
 /*練習問題で、コードではなく文章を書くとき。コード用のフォントだと鬱陶しいので、ちょっと軽めに。*/
 .ex_comment {
-	color: hsl(110, 100%, 25%);/*darkgreen;*/
+	color: hsl(110, 100%, 25%);
 	white-space: pre;
 	font-family: Palatino, "Times New Roman", "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif; 
 }
@@ -347,7 +340,6 @@ figure {
 }
 figcaption {
 	font-weight: bold;
-	/*margin-left: 2em;*/
 	margin-right: 2em;
 	margin-top: 4pt;
 	padding-left: 1em;
@@ -470,7 +462,7 @@ table.expl td, table.expl th {
 	text-align: center;
 	font-size: large;
 	font-weight: 900;
-	font-family: /*"ヒラギノ角ゴ ProN",*/ "筑紫B丸ゴシック", TsukuBRdGothic-Regular, "ヒラギノ丸ゴ ProN", HiraMaruProN-W4, sans-serif;
+	font-family: "筑紫B丸ゴシック", TsukuBRdGothic-Regular, "ヒラギノ丸ゴ ProN", HiraMaruProN-W4, sans-serif;
 }
 /*ヘッダとフッタは中寄せ。table.centerは索引と目次に使う。これも中寄せ*/
 header, footer, table.center {
@@ -501,7 +493,7 @@ div.center {
 /*数式内部では改行しない(翻訳文の中でしか指定していないけれど*/
 span.math {
 	white-space: nowrap;
-	font-family: /*Baskerville, Georgia,*/ Palatino, "Times New Roman", serif;
+	font-family: Palatino, "Times New Roman", serif;
 }
 /* &radic;の中身をoverlineつきにするのに使う */
 .radic {
@@ -511,13 +503,9 @@ span.math {
 /* 解答欄で色付きマーカーで区別または強調したいときに使う。12色まで */
 span.hilit1 {
 	background: hsl(120, 80%, 75%);
-	/*border-bottom: solid 4pt hsl(120, 80%, 75%);
-	margin-bottom: 4pt;*/
 }
 span.hilit2 {
 	background: hsl(240, 80%, 75%);
-	/*border-bottom: solid 4pt hsl(240, 80%, 75%);
-	margin-bottom: 4pt;*/
 }
 span.hilit3 {
 	background: hsl(0, 80%, 75%);

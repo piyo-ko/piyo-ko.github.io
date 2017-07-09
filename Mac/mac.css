@@ -82,16 +82,11 @@ h2 {
 }
 h3 {
 	font-size: medium;
-	text-align: center; /*left;*/
-	/*text-decoration: underline red;*/
+	text-align: center; 
 	padding-left: 1em;
 	margin-top: 40pt;
 }
-/*
-h3:before {
-	content: "🍎 ";
-}
-*/
+
 code {
 	font-family: Monaco, monospace;
 	background-color: hsl(50, 80%, 90%);
@@ -114,7 +109,7 @@ dt {
 	font-family: "筑紫B丸ゴシック", sans-serif;
 	text-decoration: underline hsl(20, 100%, 50%);
 }
-dt:before {
+dt::before {
 	content: "🍏 ";
 }
 p {
