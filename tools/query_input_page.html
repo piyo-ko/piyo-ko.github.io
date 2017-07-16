@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>名称が似ている薬を探す</title>
+<link rel="canonical" href="https://piyo-ko.github.io/tools/query_input_page.html">
+<script src="drug_BK_tree.js" defer></script>
+<script src="dist.js"></script>
+<script>
+/* 
+q はクエリ文字列、
+N は許容できるレーベンシュタイン距離の範囲 (0以上の整数)、
+BK は探索対象の BK木
+*/
+function search_BK_tree(q, N, BK) {
+  // 各 candidates[i] は BK 木であり、その木の根の値 (文字列) が
+  // 「答え」の候補であるようなもの。
+  var candidates = [BK];
+  // results[i] はqから距離iの文字列の集合 (を配列で表したもの)。
+  var results = new Array(N+1);
+  for (var j=0; j <= N; j++) {
+    results[j] = new Array();
+  }
+
+  while (candidates.length > 0) {
+    var cur_candidate = candidates.pop();
+    // まず「今の候補」が答えになるかを調べ、なるなら記録する
+    var D = distance(q, cur_candidate.val);
+    if (D <= N) {
+      results[D].push({val: cur_candidate.val, idx:cur_candidate.idx});
+    }
+    // 次に、「今の候補」から D-N 以上 D+N 以下の距離にあるような、
+    // 「今の候補」の子ノードを候補として追加する。
+    for (c = 0; c < cur_candidate.children.length; c++) {
+      var dist = cur_candidate.children[c].dist;
+      if (D-N <= dist && dist <= D+N) {
+        candidates.push(cur_candidate.children[c].subT);
+      }
+    }
+  }
+
+  return(results);
+}
+
+function fuzzy_search() {
+  const query_str = f.drug_name.value;
+  const s = f.allowance.selectedIndex;
+  //console.log("s="+s);
+  const a = f.allowance.options[s].value;
+  console.log("検索開始 (" + query_str + ", " + a + ")");
+  var res = search_BK_tree(query_str, a, drugs_BK_tree);
+  console.log("検索終了");
+  
+  // 前回の検索結果を消す
+  document.getElementById('results').innerHTML="";
+  // 今回の検索結果を表示する
+  for (var i = 0; i <= a; i++) {
+    console.log("i=" + i);
+    var li_of_ol = document.createElement('li');
+    li_of_ol.textContent = i + '文字違いの結果のリスト:';
+    var ul_inside = document.createElement('ul');
+    for (var j = 0; j < res[i].length; j++) {
+      console.log("  j=" + j + "(" + res[i][j].idx + "," + res[i][j].val + ")");
+      var inside_li = document.createElement('li');
+      var txt = '<a href="simple_drug_list.html#g_' + res[i][j].idx + '" target="list">' + res[i][j].val + '</a>';
+      inside_li.innerHTML = txt;
+      ul_inside.appendChild(inside_li);
+    }
+    li_of_ol.appendChild(ul_inside);
+    document.getElementById('results').appendChild(li_of_ol);
+  }
+}
+</script>
+<style>
+body {
+  color: hsl(80, 25%, 15%);
+  background: hsl(80, 60%, 85%);
+}
+h1 {
+  text-align: center;
+  color: hsl(25, 100%, 30%);
+  background: hsl(80, 55%, 60%);
+  font-size: x-large;
+}
+h2 {
+  text-align: center;
+  color: hsl(25, 100%, 30%);
+  font-size: large;
+}
+dt {
+  font-family: sans-serif;
+  color: hsl(160, 80%, 25%);
+  font-weight: bold;
+}
+p {
+  text-indent: 1em;
+}
+nav {
+  text-align: right;
+}
+#list {
+  border: solid 1pt;
+  min-height: 10em;
+  width: 96%;
+  margin-left: 2%;
+  overflow: auto;
+}
+#prog {
+  text-align: center;
+  font-style: italic;
+  color: hsl(25, 100%, 40%);
+}
+#results {
+  border: solid 1pt;
+  max-height: 15em;
+  width: 92%;
+  margin-left: 2%;
+  overflow: auto;
+}
+#results > li > ul > li {
+  display: inline;
+  margin-right: 1em;
+}
+#results > li > ul > li::before {
+	content: "🍀 ";
+}
+</style>
+</head>
+
+<body>
+
+<h1>薬の名前の曖昧検索をして同一成分の薬のリストを見る</h1>
+<h2>このページは何?</h2>
+<p>
+「患者がお薬手帳を持参しても、医師がその内容を電子カルテに転記するのが大変だし、後発薬の場合は対応する成分名や先発薬を調べるのが大変」といった趣旨の<a href="http://www.mitou.org/projects/medical_crisis/161220.html">話を見かけたことがあって</a>、なんとなく気になっていたのですが、ちょっと利用できそうなデータを<a href="http://www.mhlw.go.jp/topics/2016/04/tp20160401-01.html">厚労省のサイト</a>で見つけたので、プログラミングのリハビリがてら、曖昧検索ページを作ってみました。
+</p>
+<p>
+機能的には、この程度のものは当然、世の中にあるとは思うのですが、本ページを作る過程で<a href="http://postd.cc/bk-tree/">BK 木という構造</a>を知って面白かったし、とにかくプログラミングは楽しい (そこか)。ちなみにクライアントサイドだけで動作しています。なお、<a href="okusuri_techo.html">紙の「お薬手帳」を画像認識するページ</a>もあります。
+</p>
+
+<h2>ではどうぞ検索を</h2>
+<p id="prog">ページ読み込み進行状況→ [
+<span id="progress">読み込み中……少しお待ちくださいね。</span>
+]</p>
+
+<form name="f">
+<ul>
+<li>曖昧検索をしたい薬の成分名または製品名を入力してください。
+<input type="text" name="drug_name" size="50" placeholder="曖昧検索をしたい薬の成分名または製品名" /></li>
+<li>何文字違いまでを考慮するか、指定できます。
+<select name="allowance">
+<option value="0">完全一致のみ検索</option>
+<option value="1">1 文字違いまで考慮</option>
+<option value="2">2 文字違いまで考慮</option>
+<option value="3" selected>3 文字違いまで考慮</option>
+<option value="4">4 文字違いまで考慮</option>
+<option value="5">5 文字違いまで考慮</option>
+<option value="6">6 文字違いまで考慮</option>
+</select>
+  <ul>
+  <li>1文字の追加・1文字の削除・1文字の置換のいずれも、1文字違いとして数えます。</li>
+  <li>ここの数値が大きくなるほど、検索に時間がかかる可能性があります。</li>
+  </ul>
+</li>
+<li>たとえば、「ほげほげ製薬」が作った“ほにゃららカプセル３００ｍｇ「ほげほげ」”という製品の場合、“ほにゃらら”、“ほにゃららカプセル”、“ほにゃららカプセル３００ｍｇ「ほげほげ」”を登録してあります。よって、“ほに<u>ゅる</u>ら”で検索すれば、「2文字違いのもの」として、“ほにゃらら”が見つかり、そのリンク先には“ほにゃららカプセル３００ｍｇ「ほげほげ」”があるはずです。また、“ほにゃららカプセル３００ｍｇ「ほ<u>わ</u>ほ<u>わ</u>」”で検索しても、「2文字違いのもの」として、“ほにゃららカプセル３００ｍｇ「ほげほげ」”が見つかるはずです。</li>
+<li>“３００ｍｇ”などの部分は全角文字です。半角文字から全角文字への自動変換機能はつけていません。</li>
+<li>この<input type="button" value="検索" onclick="fuzzy_search()" />ボタンを押して、しばらくお待ちください。</li>
+<li>なお、単純に「前方一致検索」や「後方一致検索」を行いたい場合は、<a href="simple_drug_list.html">一覧表ページを開き</a>、ブラウザのページ内検索機能を使って検索する手もあります。</li>
+</ul>
+</form>
+
+
+
+<ul id="results">
+</ul>
+
+<iframe id="list" name="list" ></iframe>
+
+<script>
+window.onload = function() {
+  document.getElementById('progress').textContent="読み込み完了。検索できます。";
+};
+</script>
+
+<nav>[<a href="https://www.twitter.com/pi__yo__ko" target="_blank">Twitter</a> | <a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>
