@@ -85,8 +85,8 @@ section we will see how to run Scheme programs on a register machine
 whose controller is not a Scheme interpreter.</p>
 
 <p class="trans" lang="ja">
-<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節の明示的制御方式の評価器は、そのコントローラが Scheme プログラムを解釈するというレジスタ・マシンである。
-本節では、そのコントローラが Scheme インタプリタではないようなレジスタ・マシン上で Scheme プログラムを動かす方法を見ることにしよう。
+<a href="34_sec5_4.html#%_sec_5.4">5.4</a>節の明示的制御方式の評価器は、その<span class="note"> (レジスタ・マシン自身の) </span>コントローラが Scheme プログラムを解釈するというレジスタ・マシンである。
+本節では、その<span class="note"> (レジスタ・マシン自身の) </span>コントローラが Scheme インタプリタではないようなレジスタ・マシン上で Scheme プログラムを動かす方法を見ることにしよう。
 </p>
 
 <p class="orig" lang="en">
@@ -99,7 +99,7 @@ given an appropriate controller.<a name="call_footnote_Temp_794" href="#footnote
 
 <p class="trans" lang="ja">
 明示的制御方式の評価器マシンは普遍的である——つまり、Scheme で記述できる任意の計算プロセスを実行できる。
-評価器のコントローラは、所望の計算を実行するために、そのデータ経路の使用を組織化する。
+評価器のコントローラは、所望の計算を実行するために、その<span class="note"> (コントロー自身の) </span>データ経路の使用を組織化する。
 よって、評価器のデータ経路は、普遍的である。すなわち、適切なコントローラが与えられるなら、それらのデータ経路は、私たちが望む任意の計算を実行するのに十分なのである<a href="#footnote_Temp_794"><sup><small>33</small></sup></a>。
 </p>
 
@@ -141,8 +141,8 @@ does so, it simulates the intended behavior of the source program by
 calling appropriate primitive subroutines from the library.</p>
 
 <p class="trans" lang="ja">
-高水準言語とレジスタ・マシン言語の間の隔たりを埋めるための、二つの平凡な戦略がある。
-明示的制御方式の評価器は、解釈の戦略を例解している。
+高水準言語とレジスタ・マシン言語の間の隔たりを埋めるための、二つの<!--平凡な-->よくある戦略がある。
+明示的制御方式の評価器は、<ruby><rb>解釈</rb><rp> (</rp><rt>インタプリテーション</rt><rp>) </rp></ruby>の戦略を例解している。
 あるマシンのネイティブ言語で書かれたインタプリタは、評価を実行する当該マシンのネイティブ言語とは異なるかもしれない言語 (<em>ソース言語</em>と呼ばれる) で書かれたプログラムを実行するように、そのマシンを構成する。
 ソース言語の原始的手続きは、与えられたマシンのネイティブ言語で書かれたサブルーチンのライブラリとして、実装される。
 解釈されるべきプログラム (<em>ソース・プログラム</em>と呼ばれる) は、データ構造として表現される。
@@ -195,9 +195,9 @@ the compiler, we will show how to interface it with our interpreter to
 produce an integrated interpreter-compiler development system.</p>
 
 <p class="trans" lang="ja">
-コンパイルと解釈の、相補的な利点を考慮して、現代的なプログラム開発環境は、混合した戦略を追求している。
+コンパイルと解釈の相補的な利点を考慮して、現代的なプログラム開発環境は、混合した戦略を追求している。
 Lisp インタプリタは、一般的には、解釈された手続きとコンパイルされた手続きがお互いを呼び出せるように、組織化されている。
-これによってプログラマは、デバッグすべきだと想定されているプログラムの部分をコンパイルすることが可能となり、それゆえに、コンパイルの効率性の利点を得つつ、その一方で、インタラクティブな開発とデバッグの流動の中にあるプログラムの部分について、解釈による実行の方式を保てるのだ。
+これによってプログラマは、デバッグすべきだと想定されているプログラムの部分をコンパイルすることが可能となり、それゆえに、コンパイルの効率性の利点を得つつ、その一方で、インタラクティブな開発とデバッグの流動の中にあるプログラムの部分について、解釈による実行方式を保てるのだ。
 コンパイラを実装した後の<a href="#%_sec_5.5.7">5.5.7</a>節では、統合インタプリタ・コンパイラ開発システムを作り出すためにコンパイラをインタプリタに仲介する方法を、示すことにしよう。
 
 </p>
@@ -253,7 +253,7 @@ and apply the procedure (in <tt>proc</tt>) to the arguments (in <tt>argl</tt>).<
 その式を評価する際にインタプリタが行うであろうレジスタ命令に遭遇したら、その命令は実行せず、その代わりに、その命令を列に蓄積する。
 結果としてできあがる命令列が、オブジェクト・コードになっているだろう。
 解釈に対するコンパイルの効率上の優位に、気づいてほしい。
-インタプリタは、式——例えば <tt>(f 84 96)</tt> ——を評価するたびに、その式を分類して (これは手続き適用だと突き止めて)、オペランド・リストの最後かどうかを検査する (二つのオペランドがあると突き止める)、という仕事を行う。
+インタプリタは、式——例えば <tt>(f 84 96)</tt> ——を評価するたびに、その式を分類して (これは手続き適用だ、と突き止めて)、オペランド・リストの最後かどうかを検査する (二つのオペランドがある、と突き止める)、という仕事を行う。
 コンパイラを使うと、式は一度だけ——コンパイル時に命令列が生成されるときに——分析される。
 コンパイラにより作り出されたオブジェクト・コードは、オペレータと二つのオペランドを評価し、実引数リストを組み上げ、(<tt>proc</tt> にある) 手続きを (<tt>argl</tt> にある) 実引数に適用する命令だけを含む。
 </p>
@@ -283,7 +283,7 @@ unnecessary stack operations.</p>
 これは、たとえば、レジスタを退避するためのスタックの使用において、大きな違いを生じる可能性がある。
 インタプリタが式を評価するとき、インタプリタは、いかなる不測の事態にも備えていなくてはならない。
 部分式を評価する前に、インタプリタは、後で必要になるであろうすべてのレジスタを退避する。なぜなら、その部分式が任意の評価を必要とするかもしれないからである。
-一方、コンパイラは、自分が処理している最中の特定の式の構造を、不要なスタック演算を避けるコードを生成するために、活用できるのだ。
+一方、コンパイラは、自分が処理している最中の特定の式の構造を、不要なスタック演算を避けるコードを生成するために活用できるのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -379,11 +379,11 @@ each type of expression, it dispatches to a specialized <a name="%_idx_6242"></a
 generator</em>:</p>
 
 <p class="trans" lang="ja">
-<tt>compile</tt> という手続きは、コンパイラにおけるトップ・レベルの振り分けである。
+<tt>compile</tt> という手続きは、コンパイラにおけるトップ・レベルの<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>である。
 これは、<a href="26_sec4_1.html#%_sec_4.1.1">4.1.1</a>節の <tt>eval</tt> 手続きや、<a href="26_sec4_1.html#%_sec_4.1.7">4.1.7</a>節の <tt>analyze</tt> 手続きや、<a href="34_sec5_4.html#%_sec_5.4.1">5.4.1</a>節の明示的制御方式の評価器での <tt>eval-dispatch</tt> というエントリ・ポイントに、対応する。
 インタプリタと同様にコンパイラは、<a href="26_sec4_1.html#%_sec_4.1.2">4.1.2</a>節で定義した、式の文法についての手続きを使う<a href="#footnote_Temp_797"><sup><small>35</small></sup></a>。
  <tt>compile</tt> は、コンパイルすべき式の文法的種類に基づく場合分け分析を行う。
-式の各種類に対して、コンパイラは、専門の<em>コード生成器</em>への振り分けを行う。
+ 式の各種類に対して、コンパイラは、専門の<em>コード<ruby><rb>生成器</rb><rp> (</rp><rt>ジェネレータ</rt><rp>) </rp></ruby></em>への振り分けを行う。
 </p>
 
 <p class="lisp"><a name="%_idx_6244"></a>(define (compile exp target linkage)
@@ -442,7 +442,7 @@ designated label as the linkage descriptor).</li>
 </ul>
 
 <ul class="trans" lang="ja">
-<li>列の中の次の命令を続ける (これは、<tt>next</tt> というリンケージ記述子によって指定される)</li>
+<li>列の中の次の命令を続ける (これは、<tt>next</tt> というリンケージ記述子によって指定される)<span class="note"> (一般的なマシン語の説明において、プログラム・カウンタを1だけインクリメントする場合に対応)</span></li>
 <li>コンパイルされている最中の当該手続きから戻る (これは、<tt>return</tt> というリンケージ記述子によって指定される)</li>
 <li>名前の付けられたエントリ・ポイントへジャンプする (これは、指定されたラベルをリンケージ記述子として用いることによって、指定される)</li>
 </ul>
@@ -585,7 +585,7 @@ produced by the code generators.</p>
 
 <p class="trans" lang="ja">
 命令列同士を結合するために <tt>preserving</tt> を用いることによって、コンパイラは、不要なスタック演算を避ける。
-これは、<tt>save</tt> 命令と <tt>restore</tt> 命令を <tt>preserving</tt> 手続きの内部で生成すべきかどうかという詳細を、隔離することにもなる——その詳細を、個々のコード生成器の各々を書く際に生じる問題から切り離すわけである。
+これは、<tt>save</tt> 命令と <tt>restore</tt> 命令を生成すべきかどうかという詳細を、<tt>preserving</tt> 手続きの内部に隔離することにもなる——その詳細を、個々のコード生成器の各々を書く際に生じる問題から切り離すわけである。
 実際、コード生成器によって明示的に <tt>save</tt> 命令または <tt>restore</tt> 命令が作り出されることはない。
 </p>
 
@@ -794,7 +794,7 @@ any registers.<a name="call_footnote_Temp_803" href="#footnote_Temp_803"><sup><s
 もしリンケージが <tt>return</tt> なら、<tt>(goto (reg continue))</tt> という命令を生成しなくてはならない。
 これは、<tt>continue</tt> レジスタを必要とし、どのレジスタも変更しない。
 もしリンケージが <tt>next</tt> なら、何も追加の命令を含める必要はない。
-それ以外の場合、リンケージはラベルであり、そのラベルへの <tt>goto</tt> ——つまり、どのレジスタを必要とはしないし、どのレジスタも変更しない命令——を生成する<a href="#footnote_Temp_803"><sup><small>36</small></sup></a>。
+それ以外の場合、リンケージはラベルであり、そのラベルへの <tt>goto</tt> ——つまり、どのレジスタも必要とはしないし、どのレジスタも変更しない命令——を生成する<a href="#footnote_Temp_803"><sup><small>36</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6292"></a>(define (compile-linkage linkage)
@@ -835,7 +835,7 @@ sequences that assign the required value to the target register
 and then proceed as specified by the linkage descriptor.</p>
 
 <p class="trans" lang="ja">
-自己評価的な式、引用、および変数に対するコード生成器は、必要とされる値をターゲット・レジスタに<ruby><rb>代入し</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>、その後、リンケージ記述子により指定されたように続行するような命令列を、構築する。
+自己評価的な式、<ruby><rb>引用</rb><rp> (</rp><rt>クオテーション</rt><rp>) </rp></ruby>、および変数に対するコード生成器は、必要とされる値をターゲット・レジスタに<ruby><rb>代入し</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>、その後、リンケージ記述子により指定されたように続行するような命令列を、構築する。
 </p>
 
 <p class="lisp"><a name="%_idx_6302"></a>(define (compile-self-evaluating exp target linkage)
@@ -861,6 +861,8 @@ and the one that looks up a variable needs the <tt>env</tt> register.</p>
 <p class="trans" lang="ja">
 これらすべての<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>命令はターゲット・レジスタを変更し、変数を調べる<ruby><rb>代入</rb><rp> (</rp><rt>わりあて</rt><rp>) </rp></ruby>命令は<tt>env</tt> レジスタを必要とする。
 </p>
+
+<p class="extra">***ここから見直し***</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_6308"></a><a name="%_idx_6310"></a>Assignments and definitions are handled much as they are in the
@@ -1853,7 +1855,7 @@ even if these are modified by the first branch.</p>
 <p class="trans" lang="ja">
 <tt>compile-if</tt> と <tt>compile-procedure-call</tt> は、検査に続く二つの選択肢たる分岐同士をつなげるために、<tt>parallel-instruction-sequences</tt> と呼ばれる特別な結合器を使う。
 二つの分岐は、決して逐次的に実行されないだろう。検査のいかなる特定の評価に対しても、一方の分岐または他方の分岐へと入るだろう。
-このため、二番目の分岐により必要とされるレジスタは、依然として、結合された列によっても必要とされるのだ。
+このため、二番目の分岐により必要とされるレジスタは、仮に一番目の分岐によって変更されるのだとしても、依然として、結合された列によっても必要とされるのだ。
 </p>
 
 <p class="lisp"><a name="%_idx_6402"></a>(define (parallel-instruction-sequences seq1 seq2)
@@ -1877,6 +1879,8 @@ compile the definition of a recursive <tt>factorial</tt> procedure by
 calling <tt>compile</tt>:</p>
 
 <p class="trans" lang="ja">
+今や私たちはコンパイラの全要素を見たわけだから、コンパイル済みのコードの例を吟味して、ものごとがどのように組み合わさるのかを見てみよう。
+<tt>compile</tt> を呼び出すことによって、再帰的な <tt>factorial</tt> 手続きの定義をコンパイルしよう。
 </p>
 
 <p class="lisp">(compile
@@ -1893,6 +1897,8 @@ be placed in the <tt>val</tt> register.  We don't care what the compiled
 code does after executing the <tt>define</tt>, so our choice of <tt>next</tt> as the linkage descriptor is arbitrary.</p>
 
 <p class="trans" lang="ja">
+<tt>define</tt> 式の値が <tt>val</tt> レジスタに置かれるべきだ、と私たちは指定した。
+コンパイル済みのコードが、<tt>define</tt> を実行した後に何をするのか、という点について、私たちは気にしないので、リンケージ記述子として <tt>next</tt> を選択したことは、任意的なものである。
 </p>
 
 <p class="orig" lang="en">
@@ -1905,6 +1911,10 @@ to install the definition.  Because the linkage is <tt>next</tt>, there is no
 linkage code in this case.  The skeleton of the compiled code is thus</p>
 
 <p class="trans" lang="ja">
+<tt>compile</tt> は、この式が定義であることを特定し、それゆえ、<tt>compile-definition</tt> を呼び出して、<ruby><rb>代入される</rb><rp> (</rp><rt>わりあてられる</rt><rp>) </rp></ruby>べき (<tt>val</tt> をターゲットとした) 値を計算するためのコードと、それに続く、当該定義を組み込むためのコードと、それに続く、<tt>define</tt> の値 (<tt>ok</tt> という記号である) をターゲット・レジスタに入れるためのコードと、それに続く最後のリンケージ・コードとを、コンパイルする。
+<tt>env</tt> は、値の計算のまわりで保全される。なぜなら、定義を組み込むために <tt>env</tt> が必要だからである。
+リンケージが <tt>next</tt> であるため、この場合はリンケージ・コードがない。
+よって、コンパイル済みコードの骨格は、以下のようになる。
 </p>
 
 <p class="lisp">  &lt;<em>save <tt>env</tt> if modified by code to compute value</em>&gt;
@@ -1916,6 +1926,17 @@ linkage code in this case.  The skeleton of the compiled code is thus</p>
            (reg env))
   (assign val (const ok))
 </p>
+
+<p class="exercise" lang="ja">  &lt;<i class="ex_comment">もし、値を計算するためのコードによって変更されるならば、<tt>env</tt> を退避する</i>&gt;
+  &lt;<i class="ex_comment">定義の値と、<tt>val</tt> というターゲットと、<tt>next</tt> というリンケージについて、コンパイルしたもの</i>&gt;
+  &lt;<i class="ex_comment">上で退避される場合には、<tt>env</tt> を復旧する</i>&gt;
+  (perform (op define-variable!)
+           (const factorial)
+           (reg val)
+           (reg env))
+  (assign val (const ok))
+</p>
+
 
 <p class="orig" lang="en">
 The expression that is to be compiled to produce the value for the
@@ -1937,6 +1958,15 @@ is irrelevant.)
 Therefore, the skeleton for the compiled code becomes</p>
 
 <p class="trans" lang="ja">
+<tt>factorial</tt> という変数についての値を作り出すためにコンパイルされるべき式は、階乗を計算する手続きを値とする <tt>lambda</tt> 式である。
+<tt>compile</tt> はこれを、<tt>compile-lambda</tt> ——手続き本体をコンパイルする——を呼び出すことによって扱い、それを新たなエントリ・ポイントとしてラベルづけし、そのエントリ・ポイントにある手続き本体を実行時の環境に結合して結果を <tt>val</tt> に割り当てるであろう命令を生成する。
+<span class="note">(which の範囲について一応見直した方がよいかもしれない)</span>
+その後、この<ruby><rb>一連の流れ</rb><rp> (</rp><rt>シーケンス</rt><rp>) </rp></ruby>はコンパイル済みの手続きコード——このポイントに挿入されている——を避けて飛ばす。
+手続きコード自体は、<tt>n</tt> という仮引数を手続き実引数に束縛するフレームによって手続きの定義環境を拡張することから、始まる。
+それから、実際の手続き本体がくる。
+変数の値に対するこのコードは <tt>env</tt> レジスタを変更しないため、上記で示したオプショナルな <tt>save</tt> と <tt>restore</tt> は生成されない
+(<tt>entry2</tt> にある手続きコードは、この箇所では実行されないので、この手続きコードによる <tt>env</tt> の使用は無関係である)。
+したがって、コンパイル済みコードについての骨格は、次のようになる。
 </p>
 
 <p class="lisp">  (assign val (op make-compiled-procedure)
@@ -1964,6 +1994,8 @@ a sequence with target <tt>val</tt> and linkage <tt>return</tt>.  The
 sequence in this case consists of a single <tt>if</tt> expression:</p>
 
 <p class="trans" lang="ja">
+手続き本体は常に、<tt>val</tt> というターゲットと <tt>return</tt> というリンケージを有する列として、(<tt>compile-lambda-body</tt> によって) コンパイルされる。
+この場合における列は、次のような一つの <tt>if</tt> 式からなる。
 </p>
 
 <p class="lisp">(if (= n 1)
@@ -1982,6 +2014,10 @@ compiled with target <tt>val</tt> and linkage <tt>return</tt>.
 either of its branches, is the value of the procedure.)</p>
 
 <p class="trans" lang="ja">
+(<tt>val</tt> をターゲットとした) 述語をまず計算して、それから結果を調べ、もしその述語が偽であれば、真の分岐を避けて分岐するようなコードを、<tt>compile-if</tt> は生成する。
+<tt>env</tt> と <tt>continue</tt> が、述語コードのまわりで保全される。というのも、これらは、<tt>if</tt> 式の残りの部分にとって必要かもしれないためである。
+<tt>if</tt> 式は、手続き本体を構成する列における最後の式 (そして唯一の式) なので、そのターゲットは <tt>val</tt> であり、そのリンケージは <tt>return</tt> であり、そのため、真の分岐と偽の分岐は、双方とも、<tt>val</tt> というターゲットおよび <tt>return</tt> というリンケージとともにコンパイルされる
+(すなわち、条件式の値——その条件式の分岐のうちのいずれかによって計算される値——が、手続きの値である)。
 </p>
 
 <p class="lisp">  &lt;<em>save <tt>continue</tt>, <tt>env</tt> if modified by predicate and needed by branches</em>&gt;
@@ -1993,6 +2029,18 @@ true-branch5
   &lt;<em>compilation of true branch, target <tt>val</tt>, linkage <tt>return</tt></em>&gt;
 false-branch4
   &lt;<em>compilation of false branch, target <tt>val</tt>, linkage <tt>return</tt></em>&gt;
+after-if3
+</p>
+
+<p class="exercise" lang="ja">  &lt;<i class="ex_comment">もし述語により変更され、かつ、分岐により必要とされるならば、<tt>continue</tt> と <tt>env</tt> を退避する</i>&gt;
+  &lt;<i class="ex_comment">述語と、<tt>val</tt> というターゲットと、<tt>next</tt> というリンケージとを、コンパイルしたもの</i>&gt;
+  &lt;<i class="ex_comment">上で退避した場合には <tt>continue</tt> と <tt>env</tt> を復旧する</i>&gt;
+  (test (op false?) (reg val))
+  (branch (label false-branch4))
+true-branch5
+  &lt;<i class="ex_comment">真の分岐と、<tt>val</tt> というターゲットと、<tt>return</tt> というリンケージとを、コンパイルしたもの</i>&gt;
+false-branch4
+  &lt;<i class="ex_comment">偽の分岐と、<tt>val</tt> というターゲットと、<tt>return</tt> というリンケージとを、コンパイルしたもの</i>&gt;
 after-if3
 </p>
 
@@ -2008,6 +2056,12 @@ any saving of registers, because in this case those evaluations don't
 modify the registers in question.</p>
 
 <p class="trans" lang="ja">
+<tt>(= n 1)</tt> という述語は手続き呼び出しである。
+これは、演算子 (<tt>=</tt> という記号) を調べて、この値を <tt>proc</tt> に入れる。
+それから、これは、<tt>1</tt> という実引数と、<tt>n</tt> の値という実引数を、<tt>argl</tt> の中に組み立てる。
+それから、<tt>proc</tt> がプリミティブを含むのか、それとも複合的手続きを含むのかを検査し、それに応じて、プリミティブの分岐か、または複合的な方の分岐へと振り分ける。
+双方の分岐は、<tt>after-call</tt> において再開する。
+演算子とオペランドの評価のまわりでレジスタを保全するための要件は、レジスタのいかなる退避にもつながらない。なぜなら、この場合、それらの評価は、当該レジスタを変更しないからである。
 </p>
 
 <p class="lisp">  (assign proc
@@ -2034,6 +2088,7 @@ The true branch, which is the constant 1, compiles (with target
 <tt>val</tt> and linkage <tt>return</tt>) to</p>
 
 <p class="trans" lang="ja">
+真の分岐—— 1 という定数である——は、(<tt>val</tt> というターゲットおよび <tt>return</tt> というリンケージとともに) 以下のようにコンパイルされる。
 </p>
 
 <p class="lisp">  (assign val (const 1))
@@ -2054,6 +2109,10 @@ call in the predicate and needed for the procedure call and the
 <tt>return</tt> linkage in the branches.</p>
 
 <p class="trans" lang="ja">
+偽の分岐に対する分岐は、もう一つの手続き呼び出しであって、そこでは、手続きは <tt>*</tt> という記号の値であり、引数は、<tt>n</tt> と、もう一つの手続き呼び出し (<tt>factorial</tt> に対する呼び出し) の結果である。
+これらの呼び出しの各々は、<tt>proc</tt> および <tt>argl</tt> と、自分自身のプリミティブおよび複合的分岐とを、設定する。
+図<a href="#%_fig_5.17">5.17</a>は、<tt>factorial</tt> 手続きの定義を完全にコンパイルしたものを示している。
+述語のまわりでの <tt>continue</tt> と <tt>env</tt> のあり得る <tt>save</tt> と <tt>restore</tt> ——上で示したもの——が、実際に生成されること、なぜなら、これらのレジスタは述語内での手続き呼び出しにより改変され、分岐中の手続き呼び出しおよび <tt>return</tt> リンケージに必要とされるためであることに、注目してほしい。
 </p>
 
 
@@ -2062,7 +2121,7 @@ call in the predicate and needed for the procedure call and the
 slightly different from the one given above:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.33.</b> 
+<b>練習問題5.33.</b> 階乗手続きの以下の定義——上記のものとは少し異なる——を考えよう。
 </p>
 
 <p class="lisp">(define (factorial-alt n)
@@ -2077,6 +2136,9 @@ program execute more efficiently than the other?
 </p>
 
 <p class="trans" lang="ja">
+この手続きをコンパイルし、結果としてできあがるコードを、<tt>factorial</tt> に対して作り出されたものと比較せよ。
+君が見つけた相違点が何かあれば、説明せよ。
+どちらかのプログラムの方が、他方よりも効率よく実行されるのだろうか?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2087,7 +2149,7 @@ program execute more efficiently than the other?
 <b>Exercise 5.34.</b>  <a name="%_idx_6408"></a><a name="%_idx_6410"></a>Compile the iterative factorial procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.34.</b> 
+<b>練習問題5.34.</b> 以下の反復的な階乗手続きをコンパイルせよ。
 </p>
 
 <p class="lisp">(define (factorial n)
@@ -2106,6 +2168,7 @@ stack space.
 </p>
 
 <p class="trans" lang="ja">
+結果として生じるコードに注釈をつけよ—— 一方のプロセスにスタック空間を築きあげさせつつ、他方のプロセスを一定のスタック空間で動作せしめるような、<tt>factorial</tt> の反復的バージョンと再帰的バージョンに対するコード同士の間の相違を示すように。
 </p>
 
 <figure>
@@ -2164,7 +2227,7 @@ false-branch4
 
 <figcaption class="orig" lang="en"><b>Figure 5.17:</b>  Compilation of the definition of the <tt>factorial</tt>
 procedure (continued on next page).</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.17.:</b> <tt>factorial</tt> 手続きの定義をコンパイルしたもの (次ページに続く)</figcaption>
 </figure>
 
 <figure>
@@ -2222,7 +2285,7 @@ after-lambda1
 </p>
 
 <figcaption class="orig" lang="en"><b>Figure 5.17:</b>  (continued)</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.17.:</b> (承前)</figcaption>
 </figure>
 
 <p class="exercise"><span class="ex_comment">
@@ -2235,7 +2298,7 @@ after-lambda1
 figure <a href="#%_fig_5.18">5.18</a>?</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.35.</b> 
+<b>練習問題5.35.</b> いかなる式がコンパイルされて、図<a href="#%_fig_5.18">5.18</a>に示したコードを作り出したのだろうか?
 </p>
 
 <figure>
@@ -2281,7 +2344,7 @@ primitive-branch22
 
 <figcaption class="orig" lang="en"><b>Figure 5.18:</b>  An example of compiler output (continued on next page).
 See exercise <a href="#%_thm_5.35">5.35</a>.</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.18.:</b> コンパイラ出力の例 (次ページに続く)。練習問題<a href="#%_thm_5.35">5.35</a>を参照。</figcaption>
 </figure>
 
 <figure>
@@ -2308,7 +2371,7 @@ after-lambda15
 </p>
 
 <figcaption class="orig" lang="en"><b>Figure 5.18:</b>  (continued)</figcaption>
-<figcaption class="trans" lang="ja"><b>図5..:</b> </figcaption>
+<figcaption class="trans" lang="ja"><b>図5.18.:</b> (承前)</figcaption>
 </figure>
 
 <p class="exercise"><span class="ex_comment">
@@ -2330,7 +2393,12 @@ the argument list?
 </span></p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.36.</b> 
+<b>練習問題5.36.</b> 私たちのコンパイラは、コンビネーションのオペランドに対して、どのような評価の順序を作り出すだろうか?
+左から右へという順序か、右から左へという順序か、それとも何らかの他の順序だろうか?
+この順序は、コンパイラ内のどこで決定されるのか?
+コンパイラが、評価についての何らかの他の順序を作り出すように、コンパイラを改変せよ
+(<a href="34_sec5_4.html#%_sec_5.4.1">5.4.1</a>節における、明示的制御方式の評価器についての、評価の順序に関す議論を参照せよ)。
+オペランド評価の順序を変更することは、実引数リストを構築するコードの効率に対して、どのように影響するだろうか?
 </p>
 
 <p class="orig" lang="en">
@@ -2348,7 +2416,10 @@ Compare the code to that generated with the <tt>preserving</tt> mechanism intact
 </span></p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.37.</b> 
+<b>練習問題5.37.</b> スタック使用を最適化するための、コンパイラの <tt>preserving</tt> の仕組みを理解するための一つの方法とは、もしこの考えを利用していなかったとしたら、いかなる余計な演算が生成されたであろうか、ということを調べることである。
+<tt>save</tt> 演算と <tt>restore</tt> 演算を常に生成するように、<tt>preserving</tt> を改変せよ。
+何らかの単純な式をコンパイルして、生成される不要なスタック演算を突き止めよ。
+そのコードを、元のままの <tt>preserving</tt> の仕組みを用いて生成されるものと、比較せよ。
 </p>
 
 <p class="orig" lang="en">
@@ -2372,11 +2443,14 @@ might be compiled into something as simple as <a name="call_footnote_Temp_822" h
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.38.</b> 
+<b>練習問題5.38.</b> 私たちのコンパイラは、不要なスタック演算を避けることについては巧みだが、マシンにより供給される原始的演算を用いた、言語の原始的手続きに対する呼び出しを、コンパイルするところになると、まったく巧みではない。
+たとえば、<tt>(+ a 1)</tt> を計算するのに、どれほど大量のコードがコンパイルされるのかを考えよう。
+コードは、引数リストを <tt>argl</tt> の中に設定し、(環境内で <tt>+</tt> という記号を調べることで見つかる) 原始的な加算手続きを <tt>proc</tt> に入れ、手続きが原始的か複合的かを検査する。
+コンパイラは常に、検査を行うためのコードを生成し、また、原始的な方の分岐用と複合的な方の分岐用のコード (それらのうち一方のみが実行されるだろう) を生成する。
+コントローラのうち、プリミティブを実装する部分を、私たちは示してこなかったが、これらの命令がマシンのデータ経路における原始的算術演算を利用することを、私たちは想定している。
+もしコンパイラがプリミティブを<em>オープン・コード</em>できたなら——つまり、もしコンパイラがこれらの原始的マシン演算を直接的に使うためのコードを生成できたなら——どれほど少なくなったコードが生成されるだろうか、と考えてほしい。
+<tt>(+ a 1)</tt> という式は、以下と同じくらい簡潔な何かへとコンパイルされるかもしれないのだ<a href="#footnote_Temp_822"><sup><small>43</small></sup></a>。
 </p>
-
-<p class="exercise"><span class="ex_comment">
-</span></p>
 
 <p class="lisp">(assign val (op lookup-variable-value) (const a) (reg env))
 (assign val (op +) (reg val) (const 1))
@@ -2392,6 +2466,11 @@ inputs from <tt>arg1</tt> and <tt>arg2</tt>. The results may be put into
 <tt>val</tt>, <tt>arg1</tt>, or <tt>arg2</tt>.</p>
 
 <p class="trans" lang="ja">
+この練習問題では、選択されたプリミティブのオープン・コーディングをサポートするように、私たちのコンパイラを拡張することにしよう。
+これらの原始的手続きに対する呼び出しについては、汎用の手続き適用コードの代わりに、専用のコードが生成されるだろう。
+これをサポートするために、<tt>arg1</tt> および <tt>arg2</tt> という特別な引数レジスタを使って、私たちのマシンを拡張しよう。
+このマシンの原始的算術演算は、<tt>arg1</tt> および <tt>arg2</tt> から入力をとることだろう。
+結果は、<tt>val</tt> か <tt>arg1</tt> か <tt>arg2</tt> に入れられ得る。
 </p>
 
 <p class="orig" lang="en">
@@ -2404,6 +2483,10 @@ this exercise we will construct a family of code generators for the
 open-coded primitives.</p>
 
 <p class="trans" lang="ja">
+コンパイラは、ソース・プログラムにおける、オープン・コーディングされたプリミティブの適用を認識できなくてはならない。
+<tt>compile</tt> 手続きでの振り分けが今のところ認識する予約語 (特殊形式) に加えて、これらのプリミティブの名前をも認識するように、<tt>compile</tt> 手続きでの振り分けを拡張しよう<a href="#footnote_Temp_823"><sup><small>44</small></sup></a>。
+それぞれの特殊形式について、私たちのコンパイラはコード生成器を有する。
+本練習問題では、オープン・コーディングされたプリミティブについてのコード生成器の一群を構築しよう。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -2433,12 +2516,25 @@ sequence of operations, each with only two inputs.</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>オープン・コーディングされたプリミティブは、特殊形式とは異なり、皆すべて、自身のオペランドが評価済みであることを要する。
+すべてのオープン・コーディング・コード生成器が使うための、<tt>spread-arguments</tt> というコード生成器を書け。
+<tt>spread-arguments</tt> は、オペランド・リストをとって、一連の引数レジスタをターゲットとするその与えられたオペランドをコンパイルするべきである。
+オープン・コーディングされたプリミティブに対する呼び出しをオペランドが含むかもしれず、すると、オペランド評価の間、引数レジスタが保全されることになるだろう、ということに、注意せよ。</li>
+
+<li><tt>=</tt>、<tt>*</tt>、<tt>-</tt>、<tt>+</tt> という原始的手続きのそれぞれについて、当該演算子を有するコンビネーションをターゲットおよびリンケージ記述子とともにとって、そして、引数をレジスタへ分配してから所与のリンケージをともなう所与のターゲットに向けられた当該演算を実行するコードを作り出すような、コード生成器を書け。
+二つのオペランドを有する式を扱うだけでよい。
+これらのコード生成器への振り分けを、<tt>compile</tt> に行わせよ。
+</li>
+
+<li><tt>factorial</tt> の事例について、君の新コンパイラを試してみたまえ。
+結果としてできあがるコードを、オープン・コーディングなしで作り出される結果と比較せよ。</li>
+
+<li><tt>+</tt> と <tt>*</tt> についての君のコード生成器を、任意の個数のオペランドを有する式を扱えるように拡張せよ。
+二つよりも多くのオペランドを有する式は、一連の演算——それぞれの演算はただ二つの入力のみを有する——へとコンパイルされる必要があるだろう。</li>
 </ol>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
 
 <a name="%_sec_5.5.6"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.6">5.5.6  Lexical Addressing</a></h3>
@@ -3195,7 +3291,7 @@ except that anything in the list that is flagged with a comma is evaluated.</p>
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_803"><sup><small>36</small></sup></a>
 この手続きは、リストを構築するのに便利な、<em>バッククオート</em> (または<em>準クオート</em>) と呼ばれる Lisp の機能を利用する。
-リストをバッククオート記号で始めることは、リスト内においてカンマで印が付けられたものは何でも評価されるという点を除いて、リストを引用することとそっくりだ。
+リストをバッククオート記号で始めることは、リスト内においてカンマで印が付けられたものは何でも評価されるという点を除いて、リストを<ruby><rb>引用</rb><rp> (</rp><rt>クオート</rt><rp>) </rp></ruby>することとそっくりだ。
 </p>
 
 <p class="orig" lang="en">
@@ -3362,6 +3458,8 @@ and primitives of the machine.
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_822"><sup><small>43</small></sup></a>
+ここでは、ソース言語の手続きと、マシン演算の双方を示すのに、<tt>+</tt> という同じ記号を用いた。
+一般には、ソース言語のプリミティブとマシンのプリミティブとの間には、一対一対応は存在しないだろう。
 </p>
 
 
@@ -3376,6 +3474,9 @@ problem.
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_823"><sup><small>44</small></sup></a>
+プリミティブを予約語にすることは、一般には悪い考え方だ。というのも、そうするとユーザがこれらの名前を別の手続きへと束縛し直すことができないからである。
+さらに、もし使用中のコンパイラに予約語を加えると、これらの名前を用いた手続きを定義している既存のプログラムが、動かなくなってしまうだろう。
+この問題をどう避けるかについての考え方については、練習問題<a href="#%_thm_5.44">5.44</a>を参照せよ。
 </p>
 
 
