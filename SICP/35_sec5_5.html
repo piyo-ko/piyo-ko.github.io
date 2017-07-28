@@ -2689,8 +2689,6 @@ compile-time environment.</p>
 練習問題<a href="#%_thm_5.44">5.44</a>では、コンパイル時環境についての別の用法を記述している。
 </p>
 
-<p class="extra" id="translating">***ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_thm_5.39"></a>
 <b>Exercise 5.39.</b>  <a name="%_idx_6442"></a><a name="%_idx_6444"></a>Write a procedure <tt>lexical-address-lookup</tt> that implements the new
@@ -2703,7 +2701,10 @@ specified lexical address.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.39.</b> 
+<b>練習問題5.39.</b> 新規ルックアップ演算を実装する <tt>lexical-address-lookup</tt> という手続きを書け。
+これは、二つの引数——レキシカル・アドレスと実行時環境——をとるべきであり、指定されたレキシカル・アドレスに記憶されている変数の値を返すべきである。
+もし、その変数の値が <tt>*unassigned*</tt> という記号であれば、<tt>lexical-address-lookup</tt> は、エラーを知らせるべきである<a href="#footnote_Temp_826"><sup><small>46</small></sup></a>。
+また、指定されたレキシカル・アドレスにある変数の値を変更する演算を実装する、<tt>lexical-address-set!</tt> という手続きを書け。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2718,7 +2719,8 @@ described above.  That is, add a compile-time-environment argument to
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.40.</b> 
+<b>練習問題5.40.</b> 上述のとおりコンパイル時環境を維持するように、コンパイラを改変せよ。
+つまり、<tt>compile</tt> および種々のコード生成器にコンパイル時環境の引数を加え、その引数を <tt>compile-lambda-body</tt> において拡張せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2734,7 +2736,11 @@ environment during the compilation of expression &lt;<em>e1</em>&gt; is <tt>((y
 z) (a b c d e) (x y))</tt>.  <tt>Find-variable</tt> should produce</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.41.</b> 
+<b>練習問題5.41.</b> 変数とコンパイル時環境を引数としてとり、その環境についてのその変数のレキシカル・アドレスを返すような、<tt>find-variable</tt> という手続きを書け。
+たとえば、上記のプログラム断片では、&lt;<em class="en">e1</em>&gt; という式のコンパイルの間におけるコンパイル時環境は、
+<tt>((y z) (a b c d e) (x y))</tt>
+である。
+<tt>find-variable</tt> は以下のものを作り出すはずである。
 </p>
 
 <p class="lisp">(find-variable 'c '((y z) (a b c d e) (x y)))
@@ -2769,7 +2775,11 @@ Test the modified compiler on a few simple cases, such as the nested
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.42.</b> 
+<b>練習問題5.42.</b> 練習問題<a href="#%_thm_5.41">5.41</a>の <tt>find-variable</tt> を用いて、レキシカル・アドレス方式の命令を出力するように <tt>compile-variable</tt> と <tt>compile-assignment</tt> を書き換えよ。
+<tt>find-variable</tt> が <tt>not-found</tt> を返す (つまり、変数がコンパイル時環境にはない) 場合には、従来と同様に、コード生成器に、束縛を探すための評価器の演算を使わせるべきである 
+(コンパイル時に見つからない変数が存在し得る唯一の箇所は、大域環境——実行時環境の一部であるがコンパイル時環境の一部ではない——の中である)<a href="#footnote_Temp_830"><sup><small>47</small></sup></a>。
+よって、もし君が望むなら、君は、評価器の演算に、<tt>env</tt> の中で見つかる実行時環境全体を探索させる代わりに、大域環境—— <tt>(op get-global-environment)</tt> という演算を使って取得できる——の中を直接、見させても構わない。
+本節の最初にある入れ子になった <tt>lambda</tt> コンビネーションなどの、二、三の単純な事例について、改変したコンパイラを試してみよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2789,7 +2799,10 @@ body.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.43.</b> 
+<b>練習問題5.43.</b> <a href="26_sec4_1.html#%_sec_4.1.6">4.1.6</a>節において私たちは、ブロック構造のための内部定義を「現実の」<tt>define</tt> だと考えるべきではないのだ、と論じた。
+そうではなく <span class="note">(現実の <tt>define</tt> なのではなく)</span>、定義されている内部変数が、あたかも、<tt>set!</tt> を用いて正しい値に初期化される通常の <tt>lambda</tt> 変数として組み込まれたかのように、手続き本体が解釈されるべきなのだ。
+<a href="26_sec4_1.html#%_sec_4.1.6">4.1.6</a>節および練習問題<a href="26_sec4_1.html#%_thm_4.16">4.16</a>では、内部定義を走査し尽くすことでこれを達成するようにメタ循環的なインタプリタを改変する方法を示した。
+コンパイラが手続き本体をコンパイルする前に、同じ変形を実行するよう、コンパイラを改変せよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2808,7 +2821,12 @@ exercise <a href="#%_thm_5.38">5.38</a> would still open-code it as a primitive,
 ignoring the new binding.  For example, consider the procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.44.</b> 
+<b>練習問題5.44.</b> 本節で私たちは、レキシカル・アドレスを作り出すための、コンパイル時環境の使用に、焦点を当ててきた。
+しかし、コンパイル時環境についての別の用途もある。
+たとえば、練習問題<a href="#%_thm_5.38">5.38</a>では、オープン・コーディング方式の原始的手続きによって、コンパイル済みコードの効率を増大させた。
+私たちの実装は、オープン・コーディングされた手続きの名前を、予約語として扱っていた。
+もし、プログラムがそうした名前を束縛し直そうとしたならば、練習問題<a href="#%_thm_5.38">5.38</a>で説明した仕組みは、新たな束縛を無視して、依然として、その名前をプリミティブとしてオープン・コーディングするだろう。
+たとえば、以下の手続きを考えよ。
 </p>
 
 <p class="lisp">(lambda (+ * a b x y)
@@ -2825,6 +2843,9 @@ expressions involving the names of primitive procedures.
 </p>
 
 <p class="trans" lang="ja">
+これは、<tt>x</tt> と <tt>y</tt> の線形結合を計算する。
+私たちはこれを、<tt>+matrix</tt> と <tt>*matrix</tt> と四つの行列、という引数とともに呼び出すかもしれないが、オープン・コーディング式コンパイラは、依然として、<tt>(+ (* a x) (* b y))</tt> の中の <tt>+</tt> および <tt>*</tt> を、原始的な <tt>+</tt> および <tt>*</tt> として、オープン・コーディングするだろう。
+原始的手続きの名前を含む式について正しいコードをコンパイルするために、コンパイル時環境を調べるよう、オープン・コーディング式コンパイラを改変せよ (プログラムがこれらの名前を <tt>define</tt> も <tt>set!</tt> もしない限りは、コードは正しく動くだろう)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -2832,8 +2853,9 @@ expressions involving the names of primitive procedures.
 
 <a name="%_sec_5.5.7"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.7">5.5.7  Interfacing Compiled Code to the Evaluator</a></h3>
-<h3 class="trans" lang="ja">5.5.7 </h3>
+<h3 class="trans" lang="ja">5.5.7 コンパイル済みコードを評価器に対して仲介する</h3>
 
+<p class="extra" id="translating">***ここから</p>
 
 <p class="orig" lang="en"><a name="%_idx_6466"></a><a name="%_idx_6468"></a><a name="%_idx_6470"></a>
 We have not yet explained how to load compiled code into the evaluator machine
@@ -3000,7 +3022,7 @@ optimization that results from our compilation strategy.</p>
 
 <a name="%_sec_Temp_836"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_836">Interpretation and compilation</a></h4>
-<h4 class="trans" lang="ja"></h4>
+<h4 class="trans" lang="ja">解釈とコンパイル</h4>
 
 <p class="orig" lang="en"><a name="%_idx_6490"></a><a name="%_idx_6492"></a>
 With the programs in this section, we can now experiment with the
@@ -3530,6 +3552,8 @@ work.
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_826"><sup><small>46</small></sup></a>
+これは、内部定義を削除するための走査方法 (練習問題<a href="#%_thm_5.43">5.43</a>) を実装するときに必要とされる変数ルックアップに対する改変である。
+私たちは、レキシカル・アドレシングがうまく動くようにするために、これらの定義を削除する必要があるだろう。
 </p>
 
 
@@ -3544,6 +3568,9 @@ name to be entered in the compile-time environment.
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_830"><sup><small>47</small></sup></a>
+レキシカル・アドレスは、大域環境内の変数にアクセスするためには使えない。なぜなら、これらの名前は、任意の時点においてインタラクティブに定義され得るし、また、再定義もされ得るからである。
+練習問題<a href="#%_thm_5.43">5.43</a>のように内部定義を走査し尽くす場合には、コンパイラが目にする定義は、ただ、トップレベルの定義——大域環境上で動作する——のみである。
+定義をコンパイルすることが、定義済みの名前をコンパイル時環境に入らせる、というわけではないのだ。
 </p>
 
 
