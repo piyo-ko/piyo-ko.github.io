@@ -2855,8 +2855,6 @@ expressions involving the names of primitive procedures.
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_5.5.7">5.5.7  Interfacing Compiled Code to the Evaluator</a></h3>
 <h3 class="trans" lang="ja">5.5.7 コンパイル済みコードを評価器に対して仲介する</h3>
 
-<p class="extra" id="translating">***ここから</p>
-
 <p class="orig" lang="en"><a name="%_idx_6466"></a><a name="%_idx_6468"></a><a name="%_idx_6470"></a>
 We have not yet explained how to load compiled code into the evaluator machine
 or how to run it.  We will assume that the explicit-control-evaluator machine
@@ -2873,6 +2871,11 @@ ones.  We can then put a compiled procedure into the machine and use the
 evaluator to call it:</p>
 
 <p class="trans" lang="ja">
+どのようにしてコンパイル済みコードを評価器マシンにロードするのかについても、どのようにしてコンパイル済みコードを実行するのかについても、私たちはまだ説明していない。
+脚注<a href="#footnote_Temp_809">38</a>で指定された付加的な演算を備えつつ、<a href="34_sec5_4.html#%_sec_5.4.4">5.4.4</a>節でのように明示的制御方式評価器マシンが定義済みであるものとしよう。
+Scheme 式をコンパイルし、結果としてできあがったオブジェクト・コードを評価器マシンにロードし、そして、マシンに、当該コードを評価器の大域環境内で実行させ、結果を印字させ、評価器のドライバ・ループへと入らせるような、<tt>compile-and-go</tt> という手続きを実装しよう。
+また、解釈された式が、解釈済みの手続きだけでなくコンパイル済みの手続きも呼び出せるようにも、評価器を改変しよう。
+すると、コンパイル済みの手続きをマシンに入れ、評価器を使って、そのコンパイル済みの手続きを呼び出す、ということができる。
 </p>
 
 <p class="lisp">(compile-and-go
@@ -2900,6 +2903,7 @@ compiled code:<a name="call_footnote_Temp_833" href="#footnote_Temp_833"><sup><s
 
 
 <p class="trans" lang="ja">
+評価器がコンパイル済み手続きを扱えるように (たとえば、上記の <tt>factorial</tt> に対する呼び出しを評価できるように) するために、私たちは、<tt>apply-dispatch</tt> (<a href="34_sec5_4.html#%_sec_5.4.1">5.4.1</a>節) のところにあるコードを、(複合的手続きあるいは原始的手続きとは別のものとして) コンパイル済み手続きを認識してそのコンパイル済みコードのエントリ・ポイントへと直接的に制御を移すように、変更する必要がある<a href="#footnote_Temp_833"><sup><small>48</small></sup></a>。
 </p>
 
 <p class="lisp"><a name="%_idx_6474"></a>apply-dispatch
@@ -2923,6 +2927,9 @@ expects the continuation to be in <tt>continue</tt>, so <tt>continue</tt> must b
 restored before the compiled code is executed.</p>
 
 <p class="trans" lang="ja">
+<tt>compiled-apply</tt> における <tt>continue</tt> の復旧に注意してほしい。
+<tt>apply-dispatch</tt> においては継続がスタックの先頭にあるだろう、というふうに評価器が整えられたことを、思い出してほしい。
+他方、コンパイル済みコードのエントリ・ポイントは、継続が <tt>continue</tt> にあると予期しており、そのため、コンパイル済みコードが実行される前に <tt>continue</tt> が復旧されねばならないのだ。
 </p>
 
 <p class="orig" lang="en">
@@ -2932,6 +2939,7 @@ the beginning of the evaluator machine, which causes the machine to
 go to a new entry point if the <tt>flag</tt> register is set.<a name="call_footnote_Temp_834" href="#footnote_Temp_834"><sup><small>49</small></sup></a></p>
 
 <p class="trans" lang="ja">
+評価器マシンを始動させたときに、何らかのコンパイル済みコードを実行できるようにするために、私たちは、評価器マシンの最初のところに <tt>branch</tt> 命令を追加するのだが、これにより、マシンを、<tt>flag</tt> レジスタがセットされていれば新規エントリ・ポイントへ行くようにさせるのだ<a href="#footnote_Temp_834"><sup><small>49</small></sup></a>。
 </p>
 
 
@@ -2949,8 +2957,9 @@ to <tt>print-result</tt>, which prints the value in <tt>val</tt> and then goes t
 the beginning of the evaluator's read-eval-print loop.<a name="call_footnote_Temp_835" href="#footnote_Temp_835"><sup><small>50</small></sup></a></p>
 
 <p class="trans" lang="ja">
+結果を <tt>val</tt> に入れて <tt>(goto (reg continue))</tt> で終わるような命令列の場所を <tt>val</tt> が含んでいる状態で、マシンが始動される、ということを <tt>external-entry</tt> は想定している。
+このエントリ・ポイントから始めると、<tt>val</tt> により指定される場所へとジャンプするが、まず先に、実行が <tt>print-result</tt> ——これは、<tt>val</tt> にある値を印字し、それから、評価器の読み取り・評価・印字ループの最初のところへ行く——へと戻るように、<tt>continue</tt> を割り当てる<a href="#footnote_Temp_835"><sup><small>50</small></sup></a>。
 </p>
-
 
 <p class="lisp"><a name="%_idx_6482"></a>external-entry
   (perform (op initialize-stack))
@@ -2973,6 +2982,10 @@ the <tt>val</tt> register to point to the list of instructions, set the
 the evaluator.</p>
 
 <p class="trans" lang="ja">
+手続き定義をコンパイルし、そのコンパイル済みコードを実行し、その手続きを試すことができるように読み取り・評価・印字ループを実行するために、今や私たちは、以下の手続きをを使うことができる。
+コンパイル済みコードには、<tt>val</tt> の中の結果とともに、<tt>continue</tt> の中の場所へと戻って来てほしいので、私たちは、式を、<tt>val</tt> というターゲット、および、<tt>return</tt> というリンケージとともに、コンパイルする。
+コンパイラによって作り出されたオブジェクト・コードを、評価器レジスタ・マシンにとって実行可能な命令へと変換するためには、レジスタ・マシン・シミュレータの <tt>assemble</tt> という手続き (<a href="32_sec5_2.html#%_sec_5.2.2">5.2.2</a>節) を使う。
+それから、命令のリストを指すように <tt>val</tt> レジスタを初期化し、評価器が <tt>external-entry</tt> へ行くように <tt>flag</tt> をセットし、評価器を始動させる。
 </p>
 
 <p class="lisp"><a name="%_idx_6484"></a>(define (compile-and-go expression)
@@ -2993,6 +3006,7 @@ section <a href="34_sec5_4.html#%_sec_5.4.4">5.4.4</a>, we can examine the
 stack usage of compiled code:</p>
 
 <p class="trans" lang="ja">
+もし、<a href="34_sec5_4.html#%_sec_5.4.4">5.4.4</a>節の終わりにおけるのと同様にスタック監視を設定済みであれば、コンパイル済みコードのスタック使用を検討できる。
 </p>
 
 <p class="lisp">(compile-and-go
@@ -3018,8 +3032,13 @@ section <a href="34_sec5_4.html#%_sec_5.4.4">5.4.4</a>.  The interpreted version
 optimization that results from our compilation strategy.</p>
 
 <p class="trans" lang="ja">
+この例を、<a href="34_sec5_4.html#%_sec_5.4.4">5.4.4</a>節の最後に示した、同じ手続きの解釈されたバージョンを用いた、<tt>(factorial 5)</tt> の評価と比較せよ。
+解釈されたバージョンは、144 回のプッシュと、28 という最大スタック深さを要した。
+これは、私たちのコンパイル戦略に起因する最適化を例示している。
 </p>
 
+
+<p class="extra" id="translating">***ここから</p>
 <a name="%_sec_Temp_836"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_836">Interpretation and compilation</a></h4>
 <h4 class="trans" lang="ja">解釈とコンパイル</h4>
@@ -3583,6 +3602,8 @@ to compiled).
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_833"><sup><small>48</small></sup></a>
+もちろん、解釈済み手続きだけでなくコンパイル済み手続きも、複合的 (非原始的) である。
+明示的制御方式の評価器で用いた用語法との一致のために、本節では、(コンパイル済みではなく) 解釈済みということを意味するために、「複合的」<span class="note">(という言葉)</span> を用いよう。
 </p>
 
 
@@ -3594,6 +3615,8 @@ its ordinary read-eval-print loop, we could use
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_834"><sup><small>49</small></sup></a>
+今や評価器マシンは <tt>branch</tt> とともに始動するわけだから、私たちは常に、評価器マシンを始動させる前に <tt>flag</tt> レジスタを初期化せねばならない。
+通常の読み取り・評価・印字ループからマシンを始動させるには、私たちは、以下のものを使えることだろう。
 </p>
 
 
@@ -3612,6 +3635,7 @@ components of a compiled procedure:
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_835"><sup><small>50</small></sup></a>
+コンパイル済み手続きは、システムが印字しようとするかもしれないオブジェクトであるから、私たちは、(<a href="26_sec4_1.html#%_sec_4.1.4">4.1.4</a>節の) <a href="26_sec4_1.html#%_idx_4538"><tt>user-print</tt> というシステム印字演算</a>がコンパイル済み手続きの構成要素を印字しようと試みないように、<tt>user-print</tt> をも改変する。
 </p>
 
 
