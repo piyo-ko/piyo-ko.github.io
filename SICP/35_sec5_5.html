@@ -3091,9 +3091,6 @@ produce an interpreter that runs on the new machine.</p>
 あるいは、私たちは、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節のインタプリタのうちの一つをコンパイルして、新たなマシン上で動作するインタプリタを作り出すことができる。
 </p>
 
-
-<p class="extra" id="translating">***ここから</p>
-
 <p class="orig" lang="en">
 <a name="%_thm_5.45"></a>
 <b>Exercise 5.45.</b>  <a name="%_idx_6506"></a><a name="%_idx_6508"></a>By comparing the stack operations used by compiled code to the stack
@@ -3105,7 +3102,8 @@ stack use to the performance of a special-purpose machine for the same
 computation gives some indication of the quality of the compiler.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.45.</b> 
+<b>練習問題5.45.</b> コンパイル済みコードにより使われるスタック演算を、同じ計算について評価器により使われるスタック演算と比較することにより、私たちは、コンパイラがスタックの使用を速度 (スタック演算の総数を減らす) と空間 (最大のスタック深さを減らす) の双方において最適化する程度を、特定できる。
+この最適化されたスタック使用を、同じ計算のための専用マシンの性能と比較することで、コンパイラの品質についての、ある種の指標が与えられる。
 </p>
 
 <ol class="orig alph" lang="en">
@@ -3137,8 +3135,20 @@ hand-tailored version?</li>
 </ol>
 
 <ol class="trans alph" lang="ja">
-<li></li>
-<li></li>
+<li>練習問題<a href="34_sec5_4.html#%_thm_5.27">5.27</a> では、先に与えられた再帰的な階乗手続きを用いて <em class="en">n</em>! を計算するのに評価器により必要とされる、プッシュの回数および最大のスタック深さを、<em class="en">n</em> の関数として特定するように、君に求めた。
+練習問題<a href="32_sec5_2.html#%_thm_5.14">5.14</a>では、図<a href="31_sec5_1.html#%_fig_5.11">5.11</a>に示した専用の階乗マシンについての同じ計測を行うように、君に求めた。
+ここでは、同じ分析を、コンパイル済みの <tt>factorial</tt> 手続きを用いて行え。
+<br>
+コンパイル済みバージョンにおけるプッシュの回数の、解釈されたバージョンにおけるプッシュの回数に対する割合を求めよ。そして、同じことを、最大のスタック深さについても行え。
+<em class="en">n</em>! を計算するのに使われる、演算の回数およびスタック深さは、<em class="en">n</em> に対して線形であるから、これらの割合は、<em class="en">n</em> が大きくなるのに連れて、定数に近づくはずである。
+これらの定数はどれくらいか?
+同様に、専用マシンにおけるスタック使用の、解釈されたバージョンにおける使用に対する割合を求めよ。
+<br>
+専用コード<ruby><rb>対</rb><rp> (</rp><rt>たい</rt><rp>) </rp></ruby>解釈されたコードについての割合を、コンパイル済みコード<ruby><rb>対</rb><rp> (</rp><rt>たい</rt><rp>) </rp></ruby>解釈されたコードについての割合と、比較せよ。
+手作業で調節されたコントローラ・コードは、私たちの初歩的な汎用コンパイラによって作り出されるものよりもずっと良いはずなので、専用マシンは確かにコンパイル済みコードよりもずっとうまくゆく、ということが分かるはずだ。
+</li>
+
+<li>手作業で調節されたバージョンに性能面で近づくであろうコードをコンパイラが生成するのを助けるであろう、コンパイラに対する改善点を、君は示唆できるかな?</li>
 </ol>
 
 
@@ -3152,7 +3162,7 @@ exercise <a href="#%_thm_5.45">5.45</a> to determine the effectiveness of
 compiling the tree-recursive Fibonacci procedure</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.46.</b> 
+<b>練習問題5.46.</b> 以下の木構造再帰的なフィボナッチ手続きをコンパイルすることの有効性を明らかにするため、練習問題<a href="#%_thm_5.45">5.45</a>での分析と似たような分析を実行せよ。
 </p>
 
 <p class="lisp">(define (fib n)
@@ -3170,6 +3180,9 @@ independent of <em>n</em>.
 </p>
 
 <p class="trans" lang="ja">
+——なおその有効性とは、図<a href="31_sec5_1.html#%_fig_5.12">5.12</a>の専用フィボナッチ・マシンを使うことの有効性と比較してのものとする
+(解釈された場合の性能の計測については、練習問題<a href="34_sec5_4.html#%_thm_5.29">5.29</a>を参照)。
+フィボナッチについては、使われる時間資源が <em class="en">n</em> に対して線形ではない。よって、スタック演算についての割合は、<em class="en">n</em> と独立な上限値に近づいたりはしないだろう。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3194,7 +3207,12 @@ entry point, and add an instruction to initialize it:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.47.</b> 
+<b>練習問題5.47.</b> 本節では、解釈されたコードがコンパイル済み手続きを呼び出せるように明示的制御方式の評価器を改変する方法を説明した。
+コンパイル済み手続きが、原始的手続きとコンパイル済み手続きだけでなく、解釈された手続きも同様に呼び出せるように、コンパイラを改変する方法を示せ。
+これには、複合的な (解釈された) 手続きの場合を扱うために <tt>compile-procedure-call</tt> を改変することが必要である。
+<tt>compile-proc-appl</tt> におけるのと同じ <tt>target</tt> と <tt>linkage</tt> の組み合わせすべてを必ず扱うようにせよ。
+実際の手続き適用を行うには、コードは、評価器の <tt>compound-apply</tt> エントリ・ポイントへとジャンプする必要がある。
+このラベルを、オブジェクト・コードの中で直接的に参照することはできない (なぜなら、アセンブラは、そのアセンブラがアセンブルしている最中のコードにより参照されるすべてのラベルが、そこで<span class="note"> (どこで? 後ではっきりさせよう……) </span>定義されることを要求するからである)。そこで、私たちは、このエントリ・ポイントを保持するための、<tt>compapp</tt> と呼ばれるレジスタを、評価器マシンに追加して、それを初期化するための以下の命令を追加しよう。
 </p>
 
 <p class="lisp">  (assign compapp (label compound-apply))
@@ -3210,6 +3228,9 @@ define <tt>g</tt> and try to call <tt>f</tt>.
 </p>
 
 <p class="trans" lang="ja">
+君のコードを検査するために、<tt>g</tt> という手続きを呼び出すような <tt>f</tt> という手続きを定義することから、始めよ。
+<tt>compile-and-go</tt> を用いて、<tt>f</tt> の定義をコンパイルし、評価器を始動させよ。
+ここで、評価器において打鍵して、<tt>g</tt> を定義し、<tt>f</tt> を呼び出そうと試してみよ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3224,7 +3245,8 @@ interface by providing a <tt>compile-and-run</tt> primitive that can be
 called from within the explicit-control evaluator as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.48.</b> 
+<b>練習問題5.48.</b> 本節で実装した <tt>compile-and-go</tt> というインタフェイスは、扱いづらい。というのも、(評価器マシンが始動されたときに) コンパイラを一回呼び出せるだけだからである。
+明示的制御方式の評価器の内部から以下のようにして呼び出すことができる <tt>compile-and-run</tt> というプリミティブを提供することによって、コンパイラとインタプリタのインタフェイスを拡張せよ。
 </p>
 
 <p class="lisp"><i>;;; EC-Eval input:</i>
@@ -3257,7 +3279,9 @@ operations.''
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.49.</b> 
+<b>練習問題5.49.</b> 明示的制御方式の評価器の読み取り・評価・印字ループを使うことに対する代替策として、読み取り・評価・印字ループを実行するレジスタ・マシンを設計せよ。
+つまり、そのマシンは、式を読み取り、それをコンパイルし、その結果としてできたコードをアセンブルして実行し、その結果を印字するようなループを、実行すべきである。
+これは、私たちのシミュレートされた設定においては実行するのが簡単である。というのも、私たちは、<tt>compile</tt> および <tt>assemble</tt> という手続きを「レジスタ・マシン演算」として呼び出せるように手筈を整えておくことができるからである。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3274,7 +3298,9 @@ but getting all the details to work is an instructive exercise.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.50.</b> 
+<b>練習問題5.50.</b> コンパイラを使って、<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節のメタ循環的評価器をコンパイルし、このプログラムを、レジスタ・マシン・シミュレータを用いて実行せよ
+(一つよりも多くの定義を一度にコンパイルするために、君は、それらの定義を <tt>begin</tt> の中に詰め込むことができる)。
+結果としてできあがるインタプリタは、解釈の複数の水準があるせいで、とても低速に動作するだろうが、うまく動作するためのすべての細目を得ることは、ためになる練習問題なのである。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3291,7 +3317,8 @@ support.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.51.</b> 
+<b>練習問題5.51.</b> <a href="34_sec5_4.html#%_sec_5.4">5.4</a>節の明示的制御方式の評価器を C へと翻訳することによって、C (または、君の選んだ何らかの他の低水準言語) による Scheme の初歩的実装を開発せよ。
+このコードを実行するために、君は、適切な記憶割り当てルーチンや他の実行時サポートも、提供する必要があるだろう。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -3306,7 +3333,8 @@ section <a href="26_sec4_1.html#%_sec_4.1">4.1</a> to produce a Scheme interpret
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題5.52.</b> 
+<b>練習問題5.52.</b> 練習問題<a href="#%_thm_5.51">5.51</a>に対する対照的要素として、Scheme 手続きを C の命令列へとコンパイルするように、コンパイラを改変せよ。
+<a href="26_sec4_1.html#%_sec_4.1">4.1</a>節のメタ循環的な評価器をコンパイルして、C で書かれた Scheme インタプリタを作り出せ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
