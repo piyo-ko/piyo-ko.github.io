@@ -39,7 +39,7 @@ function bgImg() {
 		font_color = "lightseagreen";
 		break;
 	default:
-		watermark_str = "🦉🦆🦉🦅";
+		watermark_str = "🦉🦆🦉🦅"; //🕊🐓🦃🐧🐦🐤🐣🐥
 		font_family=" AppleColorEmoji, 'Apple Color Emoji', 'Apple カラー絵文字' ";
 		font_size =36;
 		break;
@@ -63,99 +63,133 @@ function bgImg() {
 	var img_src=canv.toDataURL();
 	document.body.style.background = "url(" + img_src + ")";
 }
+window.onload = bgImg;
 </script>
 </head>
 
-<body onLoad="bgImg();">
+<body>
 <h1>くるくるくるくる🌀あっちへふらふら、こっちへふらふらします</h1>
 <h1 lang="en">swirling around and around, and drifting here and there</h1>
 
-<div class="green left">
+<nav><a href="#eng">English</a></nav>
+
+<div class="blue center">
+<h2>翻訳とか英語とか</h2>
 <ul>
-<li><a href="https://piyo-ko.github.io/BK-tree/docs/index.html">Some demo pages related to a BK-tree are listed</a> and the JavaScript functions used these pages are published on <a href="https://github.com/piyo-ko/BK-tree">my GitHub repository</a>.  With these functions to handle a BK-tree, you can easily implement fuzzy search.</li>
-<li>Enjoy <a href="fun_math/Euler-magic-square.html">Euler's magic square</a>, which is one of the most fabulous magic squares.</li>
-<li><a href="demo/get_tailored_example_sentences/filter.html">A prototype tool</a> to help a user to extract, from a specific document that the user is interested in, example sentences for learning a grammatical rule of a foreign language.</li>
-<li>A <a href="comp/ref/keyboard.pdf">PDF file</a> in which a keyboard (of my MacBook Pro) is illustrated in such a way that each key top is associated with a Latin character in both lowercase and uppercase, one or two Japanese hiragana characters, a Cyrillic character in both lowercase and uppercase, one or two components of Hangul, and an Arabic character (and a diacritical sign), all of which are assigned to that key.
-<li><a href="fun/moon.html">The wax and wane of the Moon</a> using emoji characters.</li>
-<li><a href="comp/ref/one-byte-values.html">A quick reference to one-byte values</a> is presented.</li>
+<li>SICP を翻訳中 (<a href="SICP/00_cover.html">表紙</a>・<a href="SICP/04_toc.html">目次</a>)。あと一息。とりあえず翻訳したら、推敲していなくても公開している。</li>
+<li>「<a href="https://github.com/piyo-ko/bad-data-guide/blob/master/README_ja.md">Quartzの駄目データの手引き</a>」というのも訳してみた。統計処理の非専門家向け。1項目ずつ独立に読んでも大丈夫。</li>
+<li>英語についての<a href="en/index.html">あれこれ</a>を少しずつまとめているところ。そんなに高いレベルのことではないが、微妙に隙間にはさまってなかなか良い表現が出てこなくて、なんだかもやもやしたままのことなど。<a href="en/0002_reference_sources.html">便利な情報源</a>もまとめた。</li>
+</ul></div>
+
+<div class="green center">
+<h2>気ままに観察するよ</h2>
+<ul>
+<li>「<a href="misc/security_font_ww.html">セキュリティフォント観察会</a>」を開催中。随時<a href="https://github.com/piyo-ko/piyo-ko.github.io/commits/master/misc/security_font_ww.html">更新</a>。</li>
+<li><a href="misc/patent_watching_index.html">特許・商標出願のお気楽観察会</a>も試しに始めてみた。</li>
+<li>ついでに、誰とは言わぬが嘘を言い散らす人が多い今日この頃なので、<a href="misc/patterns_of_fakes.html">騙す方が楽だよね (小並感)</a>という話も書いた。</li>
+<li>株主の議決権行使サイトのセキュリティが素人から見ても何だか心配な感じなので、レポートした (<a href="misc/vote_at_web54.html">第一弾</a>・<a href="misc/vote_at_it-soukai.html">第二弾</a>・<a href="misc/vote_at_evote.html">第三弾</a>)。</li>
+</ul></div>
+
+
+<div class="orange left">
+<h2>Mac のこと</h2>
+<p>ぼちぼち<a href="Mac/index.html">備忘録的なもの</a>を書いていこうかな。</p>
+</div>
+
+<div class="blue right">
+<h2>病気をめぐる色々</h2>
+<ul>
+<li>入院の際の持ち物やお金のことなどについて、<a href="lifehack/0000_hospitalization.html">入院経験者として書いてみた</a>。個人差のある事柄だと思うので参考にならないかもしれないが、ちょっとした不便や不快を防ぐお役に立てれば。</li>
+<li><a href="tools/okusuri_techo.html">紙の「お薬手帳」を画像認識</a>したり、<a href="tools/query_input_page.html">薬の名前の曖昧検索</a>をして同一成分の薬のリストを見たり、といったことも試している。</li>
+</ul></div>
+
+<div class="green center">
+<h2>ほんのりプログラミング</h2>
+<ul>
+
+<li>日曜大工的に小道具を作っている。へっぽこでも平気で<a href="https://github.com/piyo-ko?tab=repositories">GitHub</a>に公開リポジトリを作る派。</li>
+
+<li>BK 木を使った曖昧検索を簡単に実装できるように、JavaScript 関数一式を<a href="https://github.com/piyo-ko/BK-tree">公開中</a> (<a href="https://piyo-ko.github.io/BK-tree/docs/index.html">デモページ</a>あり)。利用例として、<a href="tools/query_input_page.html">薬の名前の曖昧検索をして同一成分の薬のリストを見るページ</a>も作った。</li>
+
+<li><tt>Tesseract.js</tt> による OCR が楽しい。書店のレシートの画像から ISBN を読んで Amazonと国会図書館のサイト上の当該書籍のページへのリンクを作る<a href="tools/ISBN_link_from_image.html">ツール</a>が簡単に作れる。<a href="tools/okusuri_techo.html">紙の「お薬手帳」を画像認識</a>したり、<a href="tools/ocr_with_tesseract.html">言語だけを指定して画像認識</a>したり、といったテストページも作った。</li>
+
+<li>ISBN の真ん中の 8 桁を入力すると、Amazonと国会図書館のサイト上の当該書籍のページへの<a href="tools/ISBN_link.html">リンクを作る</a>ツール。</li>
+
+<li>オフラインの雑用をゆるめに管理する<a href="https://github.com/piyo-ko/task_manager_for_chores">簡易タスクマネジャ</a>を作ったので、その<a href="lifehack/0002_managing_chores.html">紹介</a>。</li>
+
+<li>座り続けていると<a href="tools/healthy.html">姿勢と水分補給と運動不足を注意</a>してくれるページ (デスクトップ通知を許可している環境で使えるはず)。</li>
+
+<li>複数種類の作業を並行して行う場合の<a href="tools/timer.html">作業時間の内訳を計測するためのタイマー</a>。</li>
+
+<li>外国語学習用の<a href="https://github.com/piyo-ko/get_tailored_example_sentences">例文抽出ツール</a>を作り途中。ブラウザ版の<a href="demo/get_tailored_example_sentences/filter.html">デモページ</a>あり。</li>
 </ul>
 </div>
-
-<div class="blue right"><p>
-自宅療養中の頭のリハビリというかボケ防止に、SICPを読みつつ翻訳しだして、それを細々と続けているのですが、超たのしい。思わず夜更かししてしまうので、SICPは体に悪い (←褒めている)。
-翻訳したところから、(推敲していなくても) 公開しています。
-→ [ <a href="SICP/00_cover.html">表紙</a> | <a href="SICP/04_toc.html">目次</a> ]
-</p></div><div class="orange center">
-<p>「<a href="misc/security_font_ww.html">セキュリティフォント観察会</a>」を開催中。随時<a href="https://github.com/piyo-ko/piyo-ko.github.io/commits/master/misc/security_font_ww.html">更新</a>しております。
-<a href="misc/patent_watching_index.html">特許・商標出願のお気楽観察会</a>も試しに始めてみました。
-ついでに、誰とは言いませんが嘘を言い散らす人が多い今日この頃なので、<a href="misc/patterns_of_fakes.html">騙す方が楽だよね (小並感)</a>という話も書いておきました。
-</p></div>
-
-<div class="blue left"><p>
-<a href="https://github.com/piyo-ko">GitHub</a>にへっぽこリポジトリをいくつか作っていますので、よかったら冷やかしていってください。
-一番ちゃんとした出来なのは「<a href="https://github.com/piyo-ko/bad-data-guide/blob/master/README_ja.md">Quartzの駄目データの手引き」の日本語訳</a>だと思います。
-また、BK 木を使った曖昧検索を簡単に実装できるように、 <a href="https://github.com/piyo-ko/BK-tree">JavaScript 関数一式を公開</a>しています (<a href="https://piyo-ko.github.io/BK-tree/docs/index.html">デモページ</a>あり)。
-あと、外国語学習用の例文抽出ツールを作り途中なのですが、ブラウザ版は<a href="demo/get_tailored_example_sentences/filter.html">ここ</a>で試せます。
-プラレールで樹の形を描く<a href="https://github.com/jun-mitani/railway_tree_animation">デモ</a>が綺麗だったので、<a href="demo/railway_tree_animation.html">色づけ</a>してみました。
-</p></div>
-
-<div class="green right"><p>
-自民党の憲法改正草案が、一部分を読んだだけでも色々な意味でげんなりするもので、とても全部に目を通す気になれなかったので、口直し (?) に<a href="misc/constitution.html">現憲法を読んで、素人の私でも読みやすいように表示を工夫してみました</a>。皆様にも是非、胸熱な<a href="misc/constitution.html#chap10">97条</a>を読んでみてほしい。あと3章も。
-あの人たちは一体何様のつもりで (その答えは「俺様だ!」のような気もするが……) 個人の自由をどんどん狭めようって思うのかな。自分だけは縛られないと思い上がっているのか、自分でも理解できていないのか、どっちにしろ暗澹たるものがある。
-</p>
-<p><a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換するページ</a>も作ってみた。なんなんですかね、あの日本語……。</p>
-</div>
-
-<div class="orange center"><p>
-入院を経験してみて色々思うことがあったので、入院の際の持ち物やお金のことなどについて、<a href="lifehack/0000_hospitalization.html">書いてみました</a>。かなり個人差のある事柄だと思うので、全然参考にならないかもしれませんが、ちょっとした不便や不快を防ぐお役に立てればな、と思います。
-</p></div>
-
-<div class="green left"><p>
-英語についての<a href="en/index.html">あれこれ</a>を少しずつまとめていきたい。
-そんなに高いレベルのことではなくても、微妙に隙間にはさまってなかなか良い表現が出てこなくて、なんだかもやもやしたままのこと、ちょっとしたコツみたいなこと、特定の語に関することなど。とりあえず、<a href="en/0002_reference_sources.html">便利な情報源</a>のページは一般性があるかと思う。
-</p></div>
-
-<div class="blue right"><p>
-Macについてもぼちぼち<a href="Mac/index.html">備忘録的なもの</a>を書いていこうかな。
-</p></div>
 
 <div class="orange center">
-<p>
-ついでに、とりとめのないお遊びのページもいくつか。
-</p>
+<h2>資料</h2>
 <ul>
-<li><a href="fun_math/Euler-magic-square.html">オイラーの魔方陣</a>というものがありまして、1から順に「この数はどこに配置されるのかな?」と追っていくと、最後には、「え、なにこの魔方陣すごい……っていうかオイラーやっぱりすごい」ってなります。多分。というわけで、ボタンをポチポチしてみてください。</li>
-<li><a href="fun_math/collapsible_formulae.html">式の展開の過程の表示・非表示を切り替える</a>例を作ってみました。テキストがこうなっていたら割と便利なのではないかと思いますが、いかがでしょうか。</li>
-<li>「<a href="fun_math/prime_date.html">今日は素数日かな?</a>」と確かめて結果を表示します。好きな日付も指定できます。</li>
-<li>絵文字で<a href="fun/moon.html">月の満ち欠け</a>を眺めます。</li>
-<li><a href="fun_math/frac_1_9801.html">1/9801</a>の数字の並びがちょっと楽しいです (小学生並みの感想)。</li>
-<li>素人くさいものですが、<a href="fun/crossword_001.html">コンピュータ関連用語のクロスワードパズル</a>を作ってみました。お暇なときにどうぞ。</li>
-<li><a href="fun/onomatopoeia.html">「ほげほげ」みたいな繰り返し言葉を順列組み合わせ的に生成するページ</a>。たとえば「ほげほげ」と同じ母音パタンで生成すると、「こてこて」とか、「おれおれ」(これは擬態語・擬音語ではないけれど) とかが列挙されてくるので、まぁ、ちょっとした暇つぶしにはなるような、ならないような……。</li>
-<li><a href="fun/eto_emoji.html">干支の絵文字</a>を思い立って調べてみた。ヒエログリフを使えば、酉年はめちゃくちゃ多様な絵文字表現が可能である。</li>
-</ul>
-</div>
-
-<div class="blue left">
-<p>役に立つのかどうか微妙なへっぽこツール。</p>
-<ul>
-<li><a href="tools/okusuri_techo.html"><tt>Tesseract.js</tt> で紙の「お薬手帳」を画像認識してみる</a>というお遊びをしてみた。実用にはならない。ついでに、<a href="tools/query_input_page.html">薬の名前の曖昧検索をして同一成分の薬のリストを見る</a>ページも作ってみた。</li>
-<li><a href="tools/ocr_with_tesseract.html"><tt>Tesseract.js</tt> で言語だけを指定して画像認識をしてみる</a>ページ。</li>
-<li><a href="tools/ISBN_link.html">ISBN の真ん中の 8 桁から、Amazonと国会図書館のサイト上の当該書籍のページへのリンクを作る</a>ツール。
-書店のレシートの画像から ISBN を読んでリンクを作るところまでを<a href="tools/ISBN_link_from_image.html">自動化したバージョン</a>も作ってみた。</li>
-<li>オフラインの雑用をゆるめに管理する<a href="https://github.com/piyo-ko/task_manager_for_chores">簡易タスクマネジャ</a>を作ったので、その<a href="lifehack/0002_managing_chores.html">紹介</a>。</li>
-<li><a href="tools/healthy.html">姿勢と水分補給と運動不足を注意</a>してくれるページ (デスクトップ通知を許可している環境で使えるはずです)。</li>
-<li>複数種類の作業を並行して行う場合の<a href="tools/timer.html">作業時間の内訳を計測するためのタイマー</a>。</li>
-<li>英字、かな、キリル文字、ハングル (の構成要素)、アラビア文字をまとめてキートップに描いた図を作ってみたので、<a href="comp/ref/keyboard.pdf">PDF版</a> を置いておく (キーの割り当ては手元の MacBook Pro のもの)。ラテン文字以外の文字を使う外国語をかじるとキーボードから入力してみたくなるのだが、Mac の「キーボードビューア」だと使い勝手がいまいちなので、こういう図があれば便利かも、と思って作ってみた。本当に便利なのかは謎。</li>
-<li><a href="comp/ref/one-byte-values.html">1バイトの値の早見表</a>。10進数 (符号なし・あり)、16進数、2進数、ASCII文字。符号つき整数の値も含めて1箇所にまとめた表ってあんまり見ない気がするので、あったら便利かな、と思って。</li>
 <li><a href="comp/ref/floating-point-numbers.html">浮動小数点数のビットの並びを確認するための簡単な一覧表</a>。多分これで合っている筈だけれど、エンディアンがな……。</li>
+<li>英字、かな、キリル文字、ハングル (の構成要素)、アラビア文字をまとめてキートップに描いた図 (<a href="comp/ref/keyboard.pdf">PDF</a>)。キーの割り当ては手元の MacBook Pro のもの。ラテン文字以外の文字を使う外国語をかじるとキーボードから入力してみたくなるのだが、Mac の「キーボードビューア」だと使い勝手がいまいちなので、こういう図があれば便利かも、と思って作ってみた。本当に便利なのかは謎。</li>
+<li><a href="comp/ref/one-byte-values.html">1バイトの値の早見表</a>。10進数 (符号なし・あり)、16進数、2進数、ASCII文字。符号つき整数の値も含めて1箇所にまとめた表ってあんまり見ない気がするので、あったら便利かな、と思って。</li>
 </ul>
 </div>
 
-<div class="green right"><p>
-料理も皿洗いも嫌いですが自炊派です。
-「これはひどい」というレベルをさまよっていますが、皆様の自炊へのハードルを下げるお役に立つかも、と思って（というのも嘘ではありませんが、自分用の備忘録も兼ねて）、<a href="lifehack/0003_cooking_index.html">自炊の実態を少し公開してみます</a>。
+<div class="blue center">
+<h2>お遊び</h2>
+<ul>
+<li><a href="fun_math/Euler-magic-square.html">オイラーの魔方陣</a>。1から順に「この数はどこに配置されるのかな?」と追っていくと、最後には、「え、なにこの魔方陣すごい……っていうかオイラーやっぱりすごい」となる。多分。</li>
+<li>プラレールで樹の形を描く<a href="https://github.com/jun-mitani/railway_tree_animation">デモ</a>が綺麗だったので、<a href="demo/railway_tree_animation.html">色づけ</a>してみた。</li>
+<li><a href="fun_math/collapsible_formulae.html">式の展開の過程の表示・非表示を切り替える</a>例を作ってみた。教材がこうなっていたら割と便利かなと思う。</li>
+<li>「<a href="fun_math/prime_date.html">今日は素数日かな?</a>」と確かめて結果を表示。好きな日付も指定可能。</li>
+<li>絵文字による<a href="fun/moon.html">月の満ち欠け</a>。</li>
+<li><a href="fun_math/frac_1_9801.html">1/9801</a>の数字の並びがちょっと楽しい (小並感)。</li>
+<li>素人くさいが、<a href="fun/crossword_001.html">コンピュータ関連用語のクロスワードパズル</a>を作ってみた。</li>
+<li><a href="fun/onomatopoeia.html">「ほげほげ」みたいな繰り返し言葉を順列組み合わせ的に生成するページ</a>。</li>
+<li><a href="fun/eto_emoji.html">干支の絵文字</a> (ヒエログリフも含む)。</li>
+<li><a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換する</a>お笑いネタ。</li>
+</ul>
+</div>
+
+<div class="green left">
+<h2>政治ネタ</h2>
+<ul>
+<li><a href="misc/constitution.html">現憲法を読んで、素人の私でも読みやすいように表示を工夫した</a>。皆様にも是非、胸熱な<a href="misc/constitution.html#chap10">97条</a>を読んでいただきたい。<a href="misc/constitution.html#chap03">3章</a>もおすすめ。一部分を読んだだけでげっそりする自民党の憲法改正草案とは大違い。
+</li>
+<li>お笑いネタとして、<a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換するページ</a>も作ってみた。なんなんですかね、あの日本語……。</li>
+</ul>
+</div>
+
+<div class="orange right">
+<h2>低空飛行で自炊する</h2>
+<p>
+料理も皿洗いも嫌いながら自炊派。
+「これはひどい」というレベルをさまよっているが、皆様の自炊へのハードルを下げるお役に立つかも、と思って（というのも嘘ではないが、自分用の備忘録も兼ねて）、<a href="lifehack/0003_cooking_index.html">自炊の実態を少し公開してみる</a>。
 </p></div>
 
+
+<div class="blue center" id="eng">
+<h2>Code for fuzzy search</h2>
+<ul>
+<li>Some <a href="https://piyo-ko.github.io/BK-tree/docs/index.html">demo pages related to a BK-tree</a> are listed.  The JavaScript functions used there are available on my <a href="https://github.com/piyo-ko/BK-tree">GitHub repository</a>.  With these functions, you can easily implement fuzzy search.
+</li>
+</ul>
+<h2>Other toy systems</h2>
+<ul>
+<li>See <a href="https://github.com/piyo-ko?tab=repositories">the list of my GitHub repositories</a>.</li>
+<!--<li><a href="demo/get_tailored_example_sentences/filter.html">A prototype tool for helping a user to learn a foreign language</a>: This will extract, from a specific document that the user is interested in, example sentences for learning a grammatical rule of the foreign language.</li>-->
+</ul>
+<h2>Fun</h2>
+<ul>
+<li>Enjoy <a href="fun_math/Euler-magic-square.html">Euler's magic square</a>, which is one of the most fabulous magic squares.</li>
+<li><a href="fun/moon.html">The wax and wane of the Moon</a> using emoji characters.</li>
+<li>I <a href="demo/railway_tree_animation.html">colorized</a> Prof. Mitani's <a href="https://github.com/jun-mitani/railway_tree_animation">tree drawing animation</a>.</li>
+</ul>
+<h2>Reference material</h2>
+<ul>
+<li><a href="comp/ref/keyboard.pdf">A keyboard diagram</a> (in PDF): A keyboard (of MacBook Pro) is illustrated so that each key top is associated with characters of five languages (more specifically, a Latin character in both lowercase and uppercase, one or two Japanese <i>hiragana</i> characters, a Cyrillic character in both lowercase and uppercase, one or two components of Hangul, and an Arabic character).</li>
+<li><a href="comp/ref/one-byte-values.html">A quick reference to one-byte values</a>.</li>
+</ul>
+</div>
 
 <hr style="border: 2pt royalblue inset;">
 <div class="footnote">
