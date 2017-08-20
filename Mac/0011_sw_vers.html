@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: sw_vers コマンドで macOS のバージョンを確かめる</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>sw_vers</tt> コマンドで macOS のバージョンを確かめる</h2>
+
+<p>macOS 独自のコマンドの中に <tt>sw_vers</tt> というのがあって、実行例は以下のとおりである。</p>
+
+<code>$ sw_vers
+ProductName:	Mac OS X
+ProductVersion:	10.12.6
+BuildVersion:	16G29
+</code>
+
+<p>標準出力に出力された内容をログとして残しておきたいときがあるが、目的の処理の前または後についでに <tt>sw_vers</tt> を実行しておくと、その処理を行ったときの OS のバージョンも一緒に記録に残せるので便利である。</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
