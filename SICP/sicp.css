@@ -142,7 +142,7 @@ tt {
 	overflow: auto;
 }
 /*解答案ではないが、原文でも翻訳文でもない、というもの用。*/
-.extra {
+.extra, .extra_code {
 	color: black;
 	background: hsl(250, 60%, 80%);
 	border: solid 2px hsl(250, 100%, 50%);
@@ -153,6 +153,11 @@ tt {
 	padding-bottom: 4pt;
 	padding-left: 2em;
 	padding-right: 2em;
+	overflow: auto;
+}
+.extra_code {
+	white-space: pre;
+	font-family: "Courier New", Ricty, monospace;
 }
 /*数式用だったりコードの可変部の引用だったりにemタグを使っているところがあるから、一律で背景色をつけるのはやめた方がいいかも。*/
 em {
@@ -321,6 +326,9 @@ dl.extra dd {
 	color: hsl(110, 100%, 25%);
 	white-space: pre;
 	font-family: Palatino, "Times New Roman", "ヒラギノ明朝 ProN", HiraMaruProN-W4, serif; 
+}
+p.extra_code span.ex_comment, p.extra span.ex_comment {
+	color: hsl(250, 100%, 50%);
 }
 /*練習問題の解答とかで、ちょっと強調の手段として赤字が欲しいとき用のクラス。<em>ではない。*/
 .em-red {

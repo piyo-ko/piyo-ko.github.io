@@ -516,11 +516,85 @@ computer technician:</p>
 </p>
 
 <p class="trans" lang="ja">
-また、以下のことはよく知られているとおりである。
+また、以下のことはよく知られているとおりである<span class="note"> (ここは笑うところだよ)</span>。
 </p>
 
 <p class="lisp">(can-do-job (administration secretary)
             (administration big wheel))
+</p>
+
+<p class="extra">
+ここから先は Prolog で答え合わせをしながら読むといいかな、と思う (とりあえず GNU Prolog を使う)。
+そこで、以下のような記述を含む<a href="personnel_db.pl">ファイル</a> (<tt>personnel_db.pl</tt>) を作った。なお、このファイルには後出の規則も含めてある。
+</p>
+
+<p class="extra_code"><span class="ex_comment">% GNU Prologでは、同じ述語を連続して (まとめて) 記述しておかないと
+% 「discontiguous predicate address/2 - clause ignored」
+% のようなエラーが出るので、それを回避するためのおまじない。</span>
+:- discontiguous(address/2, job/2, salary/2, supervisor/2, can_do_job/2).
+
+address(['Bitdiddle', 'Ben'], ['Slumerville', ['Ridge', 'Road'], 10]).
+job(['Bitdiddle', 'Ben'], [computer, wizard]).
+salary(['Bitdiddle', 'Ben'], 60000).
+
+address(['Hacker', 'Alyssa', 'P'], ['Cambridge', ['Mass', 'Ave'], 78]).
+job(['Hacker', 'Alyssa', 'P'], [computer, programmer]).
+salary(['Hacker', 'Alyssa', 'P'], 40000).
+supervisor(['Hacker', 'Alyssa', 'P'], ['Bitdiddle', 'Ben']).
+
+address(['Fect', 'Cy', 'D'], ['Cambridge', ['Ames', 'Street'], 3]).
+job(['Fect', 'Cy', 'D'], [computer, programmer]).
+salary(['Fect', 'Cy', 'D'], 35000).
+supervisor(['Fect', 'Cy', 'D'], ['Bitdiddle', 'Ben']).
+
+address(['Tweakit', 'Lem', 'E'], ['Boston', ['Bay', 'State', 'Road'], 22]).
+job(['Tweakit', 'Lem', 'E'], [computer, technician]).
+salary(['Tweakit', 'Lem', 'E'], 25000).
+supervisor(['Tweakit', 'Lem', 'E'], ['Bitdiddle', 'Ben']).
+
+address(['Reasoner', 'Louis'], ['Slumerville', ['Pine', 'Tree', 'Road'], 80]).
+job(['Reasoner', 'Louis'], [computer, programmer, trainee]).
+salary(['Reasoner', 'Louis'], 30000).
+supervisor(['Reasoner', 'Louis'], ['Hacker', 'Alyssa', 'P']).
+
+supervisor(['Bitdiddle', 'Ben'], ['Warbucks', 'Oliver']).
+
+address(['Warbucks', 'Oliver'], ['Swellesley', ['Top', 'Heap', 'Road']]).
+job(['Warbucks', 'Oliver'], [administration, big, wheel]).
+salary(['Warbucks', 'Oliver'], 150000).
+
+address(['Scrooge', 'Eben'], ['Weston', ['Shady', 'Lane'], 10]).
+job(['Scrooge', 'Eben'], [accounting, chief, accountant]).
+salary(['Scrooge', 'Eben'], 75000).
+supervisor(['Scrooge', 'Eben'], ['Warbucks', 'Oliver']).
+
+address(['Cratchet', 'Robert'], ['Allston', ['N', 'Harvard', 'Street'], 16]).
+job(['Cratchet', 'Robert'], [accounting, scrivener]).
+salary(['Cratchet', 'Robert'], 18000).
+supervisor(['Cratchet', 'Robert'], ['Scrooge', 'Eben']).
+
+address(['Aull', 'DeWitt'], ['Slumerville', ['Onion', 'Square'], 5]).
+job(['Aull', 'DeWitt'], [administration, secretary]).
+salary(['Aull', 'DeWitt'], 25000).
+supervisor(['Aull', 'DeWitt'], ['Warbucks', 'Oliver']).
+
+can_do_job([computer, wizard], [computer, programmer]).
+can_do_job([computer, wizard], [computer, technician]).
+can_do_job([computer, programmer], [computer, programmer, trainee]).
+can_do_job([administration, secretary], [administration, big, wheel]).
+</p>
+
+<p class="extra">以下のように実行し、ファイルを読み込む。
+<br>
+<tt>$ gprolog<br>
+| ?- consult('personnel_db.pl').</tt> 
+<br>
+ここから先は、クエリを打ち込むと答えが出てくる。
+あるいは、
+<br>
+<tt>$ gprolog --consult-file personnel_db.pl</tt>
+<br>
+としてもよい。
 </p>
 
 <a name="%_sec_Temp_650"></a>
@@ -546,13 +620,22 @@ example, to find all computer programmers one can say</p>
 <p class="orig" lang="en">The system will respond with the following items:</p>
 
 <p class="trans" lang="ja">
-システムは、以下の項目で応答するだろう。
+システムは、以下の項目でもって応答するだろう。
 </p>
 
 <p class="lisp"><i>;;; Query results:</i>
 (job (Hacker Alyssa P) (computer programmer))
 (job (Fect Cy D) (computer programmer))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, programmer]).
+
+X = ['Hacker','Alyssa','P'] ? ;
+
+X = ['Fect','Cy','D'] ? ;
+
+no</p>
 
 <p class="orig" lang="en">
 <a name="%_idx_5112"></a>The input query specifies that we are looking for entries in the data
@@ -573,7 +656,7 @@ showing all entries in the data base that match the specified pattern.</p>
 マッチング・リストにおける2番目の項目になり得る「<!-- 任意のもの -->何か」は、<em>パタン変数</em>により、すなわち、<tt>?x</tt> により、指定されている。
 パタン変数の一般形は、疑問符が先に付いていて、変数の名前としてとられるべき、記号である。
 「<!-- 任意のもの -->何か」を表現するのに、単に <tt>?</tt> をパタンの中に置くのではなく、<!--むしろ-->パタン変数の名前を指定することが、なぜ有用なのかは、後に分かるだろう。
-単純クエリに対してシステムは、指定されたパタンに合致する、データベース内の全エントリを示すことによって、応答する。
+単純クエリに対して、システムは、指定されたパタンに合致する、データベース内の全エントリを示すことによって、応答する。
 </p>
 
 <p class="orig" lang="en">
@@ -593,6 +676,38 @@ A pattern can have more than one variable.  For example, the query
 全職員の住所を列挙するだろう。
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- address(X, Y).
+
+X = ['Bitdiddle','Ben']
+Y = ['Slumerville',['Ridge','Road'],10] ? ;
+
+X = ['Hacker','Alyssa','P']
+Y = ['Cambridge',['Mass','Ave'],78] ? ;
+
+X = ['Fect','Cy','D']
+Y = ['Cambridge',['Ames','Street'],3] ? ;
+
+X = ['Tweakit','Lem','E']
+Y = ['Boston',['Bay','State','Road'],22] ? ;
+
+X = ['Reasoner','Louis']
+Y = ['Slumerville',['Pine','Tree','Road'],80] ? ;
+
+X = ['Warbucks','Oliver']
+Y = ['Swellesley',['Top','Heap','Road']] ? ;
+
+X = ['Scrooge','Eben']
+Y = ['Weston',['Shady','Lane'],10] ? ;
+
+X = ['Cratchet','Robert']
+Y = ['Allston',['N','Harvard','Street'],16] ? ;
+
+X = ['Aull','DeWitt']
+Y = ['Slumerville',['Onion','Square'],5]
+
+(1 ms) yes</p>
+
 <p class="orig" lang="en">
 A pattern can have no variables, in which case the query simply
 determines whether that pattern is an entry in the data base.  If so,
@@ -600,7 +715,7 @@ there will be one match; if not, there will be no matches.</p>
 
 <p class="trans" lang="ja">
 パタンに変数がないこともあり得て、その場合、クエリは単に、そのパタンがデータベース内のエントリであるかどうかを判定する。
-もしそうなら、一つの一致があるだろうし、そうでなければ、何も一致がないだろう。
+もしそうなら<span class="note"> (そのパタンがデータベース内のエントリであるならば)</span>、一つの一致があるだろうし、そうでなければ、何も一致がないだろう。
 </p>
 
 
@@ -625,6 +740,11 @@ assertions in our sample data base).</p>
 は、自分自身を指揮監督しているすべての人たちを見つける (私たちのサンプル・データベースにはそういう言明は存在しないけれども)。
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, X).
+
+no
+</p>
 
 <p class="orig" lang="en">
 The query
@@ -648,6 +768,24 @@ first item is <tt>computer</tt>:</p>
 (job (Hacker Alyssa P) (computer programmer))
 (job (Fect Cy D) (computer programmer))
 (job (Tweakit Lem E) (computer technician))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, Type]).
+
+Type = wizard
+X = ['Bitdiddle','Ben'] ? ;
+
+Type = programmer
+X = ['Hacker','Alyssa','P'] ? ;
+
+Type = programmer
+X = ['Fect','Cy','D'] ? ;
+
+Type = technician
+X = ['Tweakit','Lem','E'] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">This same pattern does <em>not</em> match
@@ -674,6 +812,26 @@ list beginning with <tt>computer</tt>, we could specify<a name="%_idx_5116"></a>
 
 <p class="lisp">(job ?x (computer . ?type))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer | Type]).
+
+Type = [wizard]
+X = ['Bitdiddle','Ben'] ? ;
+
+Type = [programmer]
+X = ['Hacker','Alyssa','P'] ? ;
+
+Type = [programmer]
+X = ['Fect','Cy','D'] ? ;
+
+Type = [technician]
+X = ['Tweakit','Lem','E'] ? ;
+
+Type = [programmer,trainee]
+X = ['Reasoner','Louis'] ? ;
+
+no</p>
 
 <p class="orig" lang="en">For example,
 </p>
@@ -783,14 +941,50 @@ in Slumerville.</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">; a</span>
-(supervisor ?name (Bitdiddle Ben))
+(supervisor ?name (Bitdiddle Ben))</p>
 
-<span class="ex_comment">; b</span>
-(job ?name (accounting . ?type))
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Name, ['Bitdiddle', 'Ben']).
 
-<span class="ex_comment">; c</span>
+Name = ['Hacker','Alyssa','P'] ? ;
+
+Name = ['Fect','Cy','D'] ? ;
+
+Name = ['Tweakit','Lem','E'] ? ;
+
+no</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
+(job ?name (accounting . ?type))</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(Name, [accounting | Type]).
+
+Name = ['Scrooge','Eben']
+Type = [chief,accountant] ? ;
+
+Name = ['Cratchet','Robert']
+Type = [scrivener] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; c</span>
 (address ?name (Slumerville . ?x))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- address(Name, ['Slumerville' | X]).
+
+Name = ['Bitdiddle','Ben']
+X = [['Ridge','Road'],10] ? ;
+
+Name = ['Reasoner','Louis']
+X = [['Pine','Tree','Road'],80] ? ;
+
+Name = ['Aull','DeWitt']
+X = [['Onion','Square'],5]
+
+yes</p>
 
 <a name="%_sec_Temp_653"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_653">Compound queries</a></h4>
@@ -836,6 +1030,17 @@ computer programmers:</p>
 (and (job (Fect Cy D) (computer programmer))
      (address (Fect Cy D) (Cambridge (Ames Street) 3)))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(Person, [computer, programmer]), address(Person, Where).
+
+Person = ['Hacker','Alyssa','P']
+Where = ['Cambridge',['Mass','Ave'],78] ? ;
+
+Person = ['Fect','Cy','D']
+Where = ['Cambridge',['Ames','Street'],3] ? ;
+
+(1 ms) no</p>
 
 <p class="orig" lang="en"><a name="%_idx_5126"></a>In general,
 </p>
@@ -896,6 +1101,19 @@ Hacker:</p>
     (supervisor (Reasoner Louis) (Hacker Alyssa P)))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, ['Bitdiddle', 'Ben']); supervisor(X, ['Hacker', 'Alyssa', 'P']).
+
+X = ['Hacker','Alyssa','P'] ? ;
+
+X = ['Fect','Cy','D'] ? ;
+
+X = ['Tweakit','Lem','E'] ? ;
+
+X = ['Reasoner','Louis'] ? ;
+
+(1 ms) no</p>
+
 <p class="orig" lang="en">In general,
 </p>
 
@@ -929,6 +1147,13 @@ satisfy at least one of &lt;<em>query<sub>1</sub></em>&gt; <tt>...</tt> &lt;<em>
      (not (job ?x (computer programmer))))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(X, ['Bitdiddle', 'Ben']), \+(job(X, [computer, programmer])).
+
+X = ['Tweakit','Lem','E'] ? ;
+
+no</p>
+
 <p class="orig" lang="en">finds all people supervised by Ben Bitdiddle who are not computer
 programmers.  In general,</p>
 
@@ -936,6 +1161,7 @@ programmers.  In general,</p>
 は、ベン・ビットディドルにより指揮監督される、コンピュータ・プログラマではない、すべての人たちを見つけ出す。
 一般に、
 </p>
+
 
 <p class="lisp">(not &lt;<em>query<sub>1</sub></em>&gt;)
 </p>
@@ -984,6 +1210,26 @@ $30,000 we could write<a name="call_footnote_Temp_655" href="#footnote_Temp_655"
      (lisp-value &gt; ?amount 30000))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog で擬似的に真似すると以下のとおり。</span>
+| ?- salary(Person, Amount), Amount > 30000.
+
+Amount = 60000
+Person = ['Bitdiddle','Ben'] ? ;
+
+Amount = 40000
+Person = ['Hacker','Alyssa','P'] ? ;
+
+Amount = 35000
+Person = ['Fect','Cy','D'] ? ;
+
+Amount = 150000
+Person = ['Warbucks','Oliver'] ? ;
+
+Amount = 75000
+Person = ['Scrooge','Eben'] ? ;
+
+(1 ms) no</p>
+
 <p class="orig" lang="en">
 <a name="%_thm_4.56"></a>
 <b>Exercise 4.56.</b>  Formulate compound queries that retrieve the following information:</p>
@@ -1006,29 +1252,94 @@ division, together with the supervisor's name and job.</li>
 <ol class="trans alph" lang="ja">
 <li>ベン・ビットディドルにより指揮監督されているすべての人たちの名前を、その人たちの住所と一緒に。</li>
 <li>ベン・ビットディドルよりも給与が低いすべての人たちを、その人たちの給与およびベン・ビットディドルの給与と一緒に。</li>
-<li>コンピュータ部門にいない誰かによって指揮監督されているすべての人たちを、上司の名前および仕事と一緒に。</li>
+<li>コンピュータ部門にいない誰かによって指揮監督されているすべての人たちを、<!-- 上司 -->指揮監督者の名前および仕事と一緒に。</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">; a</span>
 (and (supervisor ?who (Bitdiddle Ben))
-     (address ?who ?where))
+     (address ?who ?where))</p>
 
-<span class="ex_comment">; b</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Who, ['Bitdiddle', 'Ben']), address(Who, Where).
+
+Where = ['Cambridge',['Mass','Ave'],78]
+Who = ['Hacker','Alyssa','P'] ? ;
+
+Where = ['Cambridge',['Ames','Street'],3]
+Who = ['Fect','Cy','D'] ? ;
+
+Where = ['Boston',['Bay','State','Road'],22]
+Who = ['Tweakit','Lem','E'] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
 (and (salary ?person ?amount)
      (salary (Bitdiddle Ben) ?amount-of-Ben)
-     (lisp-value &lt; ?amount ?amount-of-Ben))
+     (lisp-value &lt; ?amount ?amount-of-Ben))</p>
 
-<span class="ex_comment">; c</span>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- salary(Person, Amount), salary(['Bitdiddle', 'Ben'], Amount_of_Ben), Amount < Amount_of_Ben.
+
+Amount = 40000
+Amount_of_Ben = 60000
+Person = ['Hacker','Alyssa','P'] ? ;
+
+Amount = 35000
+Amount_of_Ben = 60000
+Person = ['Fect','Cy','D'] ? ;
+
+Amount = 25000
+Amount_of_Ben = 60000
+Person = ['Tweakit','Lem','E'] ? ;
+
+Amount = 30000
+Amount_of_Ben = 60000
+Person = ['Reasoner','Louis'] ? ;
+
+Amount = 18000
+Amount_of_Ben = 60000
+Person = ['Cratchet','Robert'] ? ;
+
+Amount = 25000
+Amount_of_Ben = 60000
+Person = ['Aull','DeWitt'] ? ;
+
+(1 ms) no</p>
+
+<p class="exercise"><span class="ex_comment">; c</span>
 (and (supervisor ?who ?boss)
      (not (job ?boss (computer . ?x)))
      (job ?boss ?job-of-boss))
+
 <span class="ex_comment">; 以下のように書きたくなるが、
-;「等価性の検査に lisp-value を使うな」と脚注64にあるので、
+;「等価性の検査に lisp-value を使うな」と<a  href="#footnote_Temp_655">脚注64</a>にあるので、
 ; 上記のような回答案にしてみた。</span>
 (and (supervisor ?who ?boss)
      (job ?boss (?division ?job-detail))
      (not (lisp-value = ?division 'computer)))
 </p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- supervisor(Who, Boss), \+(job(Boss, [computer | X])), job(Boss, Job_of_Boss).
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Bitdiddle','Ben'] ? ;
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Scrooge','Eben'] ? ;
+
+Boss = ['Scrooge','Eben']
+Job_of_Boss = [accounting,chief,accountant]
+Who = ['Cratchet','Robert'] ? ;
+
+Boss = ['Warbucks','Oliver']
+Job_of_Boss = [administration,big,wheel]
+Who = ['Aull','DeWitt'] ? ;
+
+(1 ms) no</p>
 
 <a name="%_sec_Temp_657"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_657">Rules</a></h4>
@@ -1067,6 +1378,14 @@ defined by a very simple rule:<a name="call_footnote_Temp_658" href="#footnote_T
 <p class="lisp"><a name="%_idx_5142"></a>(rule (same ?x ?x))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% 上記の二つの規則は、Prolog だと以下のとおり。</span>
+lives_near(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    \+(same(Rest_1, Rest_2)).
+same(X, X).
+</p>
+
 <p class="orig" lang="en">
 The following rule declares that a person is a ``wheel'' in an
 organization if he supervises someone who is in turn a supervisor:</p>
@@ -1078,6 +1397,12 @@ organization if he supervises someone who is in turn a supervisor:</p>
 <p class="lisp"><a name="%_idx_5144"></a>(rule (wheel ?person)
       (and (supervisor ?middle-manager ?person)
            (supervisor ?x ?middle-manager)))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+wheel(Person) :- 
+    supervisor(Middle_manager, Person), 
+    supervisor(X, Middle_manager).
 </p>
 
 <p class="orig" lang="en">
@@ -1126,6 +1451,16 @@ query
 (lives-near (Aull DeWitt) (Bitdiddle Ben))
 </p>
 
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(X, ['Bitdiddle', 'Ben']).
+
+X = ['Reasoner','Louis'] ? ;
+
+X = ['Aull','DeWitt'] ? ;
+
+(1 ms) no
+</p>
+
 <p class="orig" lang="en">To find all computer programmers who live near Ben Bitdiddle, we can
 ask
 </p>
@@ -1136,6 +1471,12 @@ ask
 
 <p class="lisp">(and (job ?x (computer programmer))
      (lives-near ?x (Bitdiddle Ben)))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- job(X, [computer, programmer]), lives_near(X, ['Bitdiddle', 'Ben']).
+
+no
 </p>
 
 <p class="orig" lang="en">
@@ -1153,6 +1494,13 @@ or even be defined recursively.  For instance, the rule
       (or (supervisor ?staff-person ?boss)
           (and (supervisor ?staff-person ?middle-manager)
                (outranked-by ?middle-manager ?boss))))
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+outranked_by(Staff_person, Boss) :-
+    supervisor(Staff_person, Boss);
+    (supervisor(Staff_person, Middle_manager), 
+     outranked_by(Middle_manager, Boss)).
 </p>
 
 <p class="orig" lang="en">says that a staff person is outranked by a boss in the organization if
@@ -1200,16 +1548,49 @@ are, together with the two salaries.</li>
       (and (job ?person1 ?job1) (job ?person2 ?job2) (can-do-job ?job1 ?job2)))
      <span class="ex_comment">; 人物1 と人物2 は別人である。</span>
     (not (same ?person1 ?person2))))
-<span class="ex_comment">; a</span>
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+can_replace(Person1, Person2) :-
+    ( (job(Person1, Job1), job(Person2, Job1)) ;
+      (job(Person1, Job1), job(Person2, Job2), can_do_job(Job1, Job2)) ),
+    \+(same(Person1, Person2)).
+</p>
+
+<p class="exercise"><span class="ex_comment">; a</span>
 (can-replace ?who (Fect Cy D))
-<span class="ex_comment">; b</span>
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- can_replace(Who, ['Fect', 'Cy', 'D']).
+
+Who = ['Hacker','Alyssa','P'] ? ;
+
+Who = ['Bitdiddle','Ben'] ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">; b</span>
 (and (can-replace ?who ?more-paid-person)
      (salary ?who ?s1) (salary ?more-paid-person ?s2)
      (lisp-value &lt; ?s1 ?s2))
 </p>
-<!--
-      (and (job ?person1 ?job1) (job ?someone ?job1)  (job ?person2 ?job2) (can-do-job ?job1 ?job2)
--->
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- can_replace(Who, More_Paid_Person), salary(Who, S1), salary(More_Paid_Person, S2), S1 < S2.
+
+More_Paid_Person = ['Hacker','Alyssa','P']
+S1 = 35000
+S2 = 40000
+Who = ['Fect','Cy','D'] ? ;
+
+More_Paid_Person = ['Warbucks','Oliver']
+S1 = 25000
+S2 = 150000
+Who = ['Aull','DeWitt'] ? ;
+
+(1 ms) no
+</p>
+
 <p class="orig" lang="en">
 <a name="%_thm_4.58"></a>
 <b>Exercise 4.58.</b>  Define a rule that says that a person is a ``big shot'' in a division
@@ -1221,13 +1602,41 @@ works in the division.
 <b>練習問題4.58.</b> もし、ある人がある部門で働いているものの、当人には当該部門で働く指揮監督者がいなければ、その人は当該部門における「お偉方」である、と述べる規則を、定義せよ。
 </p>
 
-<p class="exercise">(is-big-shot ?who
+<p class="exercise"><span class="ex_comment">; 二つの場合があるので、二つの規則に分けて記述する。
+
+; ある人 (?who) には指揮監督者 (?supervisor) がいるけれど、指揮監督者は別部門に属している。</span>
+(rule (is-big-shot ?who ?division1)
   (and (job ?who (?division1 . ?j1))
        (supervisor ?who ?supervisor)
        (job ?supervisor (?division2 . ?j2))
        (not (same ?divison1 ?division2))))
-</p>
 
+<span class="ex_comment">; ある人 (?who) は実在していて、どこかの部門 (?div) で働いているのだが、
+; そもそもこの人には (同部門であれ別部門であれ) 指揮監督者 (?someone-else)などいない。</span>
+(rule (is-big-shot ?who ?div)
+  (and (job ?who (?div . ?j)) (not (supervisor ?who ?someone-else))))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+is_big_shot(Who, Division1) :-
+    job(Who, [Division1 |_]), supervisor(Who, Supervisor),
+    job(Supervisor, [Division2 |_]), \+(same(Division1, Division2)).
+is_big_shot(Who, Div) :-
+    job(Who, [Div |_]), \+(supervisor(Who, Someone_else)).
+
+<span class="ex_comment">% クエリを実行してみると以下のとおり。</span>
+| ?- is_big_shot(Who, Div).
+
+Div = computer
+Who = ['Bitdiddle','Ben'] ? ;
+
+Div = accounting
+Who = ['Scrooge','Eben'] ? ;
+
+Div = administration
+Who = ['Warbucks','Oliver'] ? ;
+
+no
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.59"></a>
@@ -1239,7 +1648,7 @@ asserting the following:
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.59.</b> ベン・ビットディドルは、これまで何度も会議に行きそこねてきた<span class="note"> (oneがうまく解釈できない)</span>。
+<b>練習問題4.59.</b> ベン・ビットディドルは、これまで会議に出席しそこねることがちょっと多すぎた。
 会議を忘れるという自分の癖は、厄介事を自分にもたらしかねない、と懸念して、ベンは、これに関して何かしよう、と決意する。
 以下のように言明することによって、彼は、会社の毎週の会議をすべて、マイクロシャフト社のデータベースに加える。
 </p>
@@ -1248,6 +1657,12 @@ asserting the following:
 (meeting administration (Monday 10am))
 (meeting computer (Wednesday 3pm))
 (meeting administration (Friday 1pm))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting(accounting, ['Monday', '9am']).
+meeting(administration, ['Monday', '10am']).
+meeting(computer, ['Wednesday', '3pm']).
+meeting(administration, ['Friday', '1pm']).
 </p>
 
 <p class="orig" lang="en">Each of the above assertions is for a meeting of an entire division.
@@ -1263,6 +1678,9 @@ divisions.  All of the company's employees attend this meeting.
 
 <p class="lisp">(meeting whole-company (Wednesday 4pm))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting(whole_company, ['Wednesday', '4pm']).
+</p>
 
 <ol class="orig alph" lang="en">
 <li>On Friday morning, Ben wants to query the data base for all the meetings
@@ -1275,6 +1693,14 @@ that occur that day.  What query should he use?</li>
 </ol>
 
 <p class="exercise">(meeting ?div (Friday ?time))</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- meeting(Div, ['Friday', Time]).
+
+Div = administration
+Time = '1pm' ? ;
+
+no
+</p>
 
 <ol class="orig alph" start="2" lang="en">
 <li>Alyssa P. Hacker is unimpressed.  She thinks it would be much more
@@ -1298,6 +1724,11 @@ Fill in the body of Alyssa's rule.</li>
   (or (meeting whole-company ?day-and-time)
       (and (job ?person (?division . ?x)) (meeting ?division ?day-and-time))))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+meeting_time(Person, Day_and_Time) :-
+    meeting(whole_company, Day_and_Time) ;
+    job(Person, [Division |_]), meeting(Division, Day_and_Time).
+</p>
 
 <ol class="orig alph" start="3" lang="en">
 <li>Alyssa arrives at work on Wednesday morning and wonders what meetings she 
@@ -1310,19 +1741,40 @@ what query should she make to find this out?</li>
 上記の規則を定義済みだとして、彼女がこれについて知るためには、どのようなクエリを作るべきだろうか?</li>
 </ol>
 
-<p class="exercise">(meeting-time (Hacker Alyssa P) (Wednesday . ?time))</p>
+<p class="exercise"><span class="ex_comment">; 何時に会議があるか、だけでなくて、
+; その会議がどこの部署のものか、を知りたいかと思って、and で二つをつないでみた。</span>
+(and (meeting-time (Hacker Alyssa P) (Wednesday . ?time))
+     (meeting ?div (Wednesday . ?time)))</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- meeting_time(['Hacker','Alyssa','P'], ['Wednesday' | Time]), 
+meeting(Div, ['Wednesday' | Time]).
+
+Div = whole_company
+Time = ['4pm'] ? ;
+
+Div = computer
+Time = ['3pm'] ? ;
+
+(1 ms) no
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.60"></a>
 <b>Exercise 4.60.</b>  <a name="%_idx_5154"></a>By giving the query
 </p>
 
-
 <p class="trans" lang="ja">
 <b>練習問題4.60.</b> 次のクエリを与えることで、
 </p>
 
 <p class="lisp">(lives-near ?person (Hacker Alyssa P))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(Person, ['Hacker','Alyssa','P']).
+
+Person = ['Fect','Cy','D'] ? ;
+
+no
 </p>
 
 <p class="orig" lang="en">Alyssa P. Hacker is able to find people who live near her, with whom
@@ -1347,6 +1799,35 @@ listed twice; for example,</p>
 
 <p class="lisp">(lives-near (Hacker Alyssa P) (Fect Cy D))
 (lives-near (Fect Cy D) (Hacker Alyssa P))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- lives_near(Person_1, Person_2).
+
+Person_1 = ['Bitdiddle','Ben']
+Person_2 = ['Reasoner','Louis'] ? ;
+
+Person_1 = ['Bitdiddle','Ben']
+Person_2 = ['Aull','DeWitt'] ? ;
+
+Person_1 = ['Hacker','Alyssa','P']
+Person_2 = ['Fect','Cy','D'] ? ;
+
+Person_1 = ['Fect','Cy','D']
+Person_2 = ['Hacker','Alyssa','P'] ? ;
+
+Person_1 = ['Reasoner','Louis']
+Person_2 = ['Bitdiddle','Ben'] ? ;
+
+Person_1 = ['Reasoner','Louis']
+Person_2 = ['Aull','DeWitt'] ? ;
+
+Person_1 = ['Aull','DeWitt']
+Person_2 = ['Bitdiddle','Ben'] ? ;
+
+Person_1 = ['Aull','DeWitt']
+Person_2 = ['Reasoner','Louis'] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">Why does this happen?
@@ -1384,7 +1865,52 @@ which each pair appears only once?  Explain.
 するような組み込み述語ってあったかな? あるいは、シンボル名を表現する文字列を
 取得するような組み込み関数とか (それで文字列同士の大小比較に持ち込む)。
 ちょっと実際の実装までは考えていない。
+
+[追記] <a href="http://practical-scheme.net/gauche/index-j.html">Gauche</a>の<a href="http://practical-scheme.net/gauche/man/?l=ja&p=eq-compare"><tt>eq-compare</tt></a>を使う手がありそう。
+あるいは、<a href="http://practical-scheme.net/gauche/man/?l=ja&p=symbol->string"><tt>symbol-&gt;string</tt></a>と<a href="http://practical-scheme.net/gauche/man/?l=ja&p=string>?"><tt>string&lt;?</tt></a>の合わせ技かな。
 </span></p>
+
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% 2通りの方法 (規則の本体を書き換える方法と、ラッパ規則を作る方法) を示す。</span>
+lives_near_ver2(Person_1, Person_2) :- 
+    address(Person_1, [Town | Rest_1]),
+    address(Person_2, [Town | Rest_2]),
+    Person_1 @&lt; Person_2.
+lives_near_ver3(Person_1, Person_2) :- 
+    lives_near(Person_1, Person_2), Person_1 @&lt; Person_2.
+
+<span class="ex_comment">% クエリを実行してみると以下のとおり。</span>
+| ?- lives_near_ver2(A, B).
+
+A = ['Bitdiddle','Ben']
+B = ['Reasoner','Louis'] ? ;
+
+A = ['Fect','Cy','D']
+B = ['Hacker','Alyssa','P'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Bitdiddle','Ben'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Reasoner','Louis'] ? ;
+
+no
+| ?- lives_near_ver3(A, B).
+
+A = ['Bitdiddle','Ben']
+B = ['Reasoner','Louis'] ? ;
+
+A = ['Fect','Cy','D']
+B = ['Hacker','Alyssa','P'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Bitdiddle','Ben'] ? ;
+
+A = ['Aull','DeWitt']
+B = ['Reasoner','Louis'] ? ;
+
+(1 ms) no
+</p>
 
 <a name="%_sec_Temp_664"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_664">Logic as programs</a></h4>
@@ -1441,6 +1967,15 @@ form <tt>z</tt>'':</p>
 (rule (append-to-form (?u . ?v) ?y (?u . ?z))
       (append-to-form ?v ?y ?z))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+append_to_form([], Y, Y).
+append_to_form([U | V], Y, [U | Z]) :- append_to_form(V, Y, Z).
+
+<span class="ex_comment">% プロンプトに対して以下のように [user]. と打ち込んでから
+% | ?- [user].
+% 上記の規則を入力し、終わったら Control+D を入力する。
+% そうすると、定義した規則を使ったクエリを実行できるようになる。</span>
+</p>
 
 <p class="orig" lang="en"><a name="%_idx_5160"></a>The first rule has no body, which means that the conclusion holds for
 any value of <tt>?y</tt>.  Note how the second rule makes use of
@@ -1464,6 +1999,13 @@ Given these two rules, we can formulate queries that compute the <tt>append</tt>
 <i>;;; Query results:</i>
 (append-to-form (a b) (c d) (a b c d))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+|? append_to_form([a, b], [c, d], Z).
+
+Z = [a,b,c,d]
+
+yes
+</p>
 
 <p class="orig" lang="en">What is more striking, we can use the same rules to ask the question
 ``Which list, when <tt>append</tt>ed to <tt>(a b)</tt>, yields <tt>(a b c d)</tt>?''
@@ -1479,6 +2021,13 @@ This is done as follows:
 (append-to-form (a b) ?y (a b c d))
 <i>;;; Query results:</i>
 (append-to-form (a b) (c d) (a b c d))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- append_to_form([a, b], Y, [a, b, c, d]).
+
+Y = [c,d]
+
+yes
 </p>
 
 <p class="orig" lang="en">We can also ask for all pairs of lists that <tt>append</tt> to form <tt>(a b c d)</tt>:
@@ -1496,6 +2045,26 @@ This is done as follows:
 (append-to-form (a b) (c d) (a b c d))
 (append-to-form (a b c) (d) (a b c d))
 (append-to-form (a b c d) () (a b c d))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- append_to_form(X, Y, [a, b, c, d]).
+
+X = []
+Y = [a,b,c,d] ? ;
+
+X = [a]
+Y = [b,c,d] ? ;
+
+X = [a,b]
+Y = [c,d] ? ;
+
+X = [a,b,c]
+Y = [d] ? ;
+
+X = [a,b,c,d]
+Y = [] ? ;
+
+(1 ms) no
 </p>
 
 <p class="orig" lang="en">
@@ -1529,6 +2098,13 @@ adjacent elements of a list:
 (rule (?x next-to ?y in (?v . ?z))
       (?x next-to ?y in ?z))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+
+% | ?- [user].
+% としてから以下を入力し、入力後、Control+D を押す。</span>
+next_to(X, Y, [X, Y | U]).
+next_to(X, Y, [V | Z]) :- next_to(X, Y, Z).
+</p>
 
 <p class="orig" lang="en">What will the response be to the following queries?
 </p>
@@ -1548,6 +2124,27 @@ adjacent elements of a list:
 (2 next-to 1 in (2 1 3 1))
 (3 next-to 1 in (2 1 3 1))
 </p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% 1番目のクエリ</span>
+| ?- next_to(X, Y, [1, [2, 3], 4]).
+
+X = 1
+Y = [2,3] ? ;
+
+X = [2,3]
+Y = 4 ? ;
+
+no
+
+<span class="ex_comment">% 2番目のクエリ</span>
+| ?- next_to(X, 1, [2, 1, 3, 1]).
+
+X = 2 ? ;
+
+X = 3 ? ;
+
+no
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.62"></a>
@@ -1564,25 +2161,58 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
 <tt>(last-pair ?x (3))</tt> のようなクエリに対して、君の規則は正しく動くかな?
 </p>
 
-<p class="exercise">(last-pair (?last) (?last))
+<p class="exercise"><span class="ex_comment">; 第1引数は非空リスト。第2引数はその中の最後の要素を含むリスト。</span>
+(last-pair (?last) (?last))
 (rule (last-pair (?x . ?y) ?last)
       (last-pair ?y ?last))
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
 
-<span class="ex_comment">(last-pair (3) ?x) は、1番目の規則を使うと、(?last) が (3) で、?x が (?last) つまり (3) 
+% | ?- [user].
+% としてから以下を入力し、入力後、Control+D を押す。</span>
+last_pair([Last], [Last]).
+last_pair([X | Y], Last) :- last_pair(Y, Last).
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (3) ?x) は、1番目の規則を使うと、(?last) が (3) で、?x が (?last) つまり (3) 
 になる。よって、(last-pair (3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([3], X).
 
-(last-pair (1 2 3) ?x) は、2番目の規則を使って、(last-pair (2 3) ?x) を解くことに
+X = [3] ? ;
+
+(1 ms) no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (1 2 3) ?x) は、2番目の規則を使って、(last-pair (2 3) ?x) を解くことに
 帰着される。今度はこれを2番目の規則を使って解くことになり、それは、
 (last-pair (3) ?x) を解くことに帰着される。これは、上記のとおり、1番目の規則で
 解くことになり、?x が (3) になる。
 というわけで、(last-pair (1 2 3) ?x) の ?x も (3) と解かれる。
 つまり、(last-pair (1 2 3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([1, 2, 3], X).
 
-(last-pair (2 ?x) (3)) は、2番目の規則を使って、(last-pair (?x) (3)) を解くことに
+X = [3] ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair (2 ?x) (3)) は、2番目の規則を使って、(last-pair (?x) (3)) を解くことに
 帰着される。今度はこれを1番目の規則を使って解くことになるから、?x が 3 に
 なる。よって、(last-pair (2 3) (3)) という応答が得られる。
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair([2, X], [3]).
 
-(last-pair ?x (3)) に対しては、1番目の規則から、?x が (3) という結果が得られる
+X = 3 ? ;
+
+no
+</p>
+
+<p class="exercise"><span class="ex_comment">(last-pair ?x (3)) に対しては、1番目の規則から、?x が (3) という結果が得られる
 (?last が 3 になり、?x が ?last になるから)。
 つまり、(last-pair (3) (3)) という応答が得られる。
 でも、意味的に考えると、?x は、最後の要素が 3 でありさえすれば、どんな長さ
@@ -1596,8 +2226,26 @@ Do your rules work correctly on queries such as <tt>(last-pair ?x (3))</tt> ?
    :
 みたいな、不定のパタン変数を含む形で順に得られるかもしれないが、
 まあ、どうだろうね……?
-</span></p>
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+| ?- last_pair(X, [3]).
 
+X = [3] ? ;
+
+X = [_,3] ? ;
+
+X = [_,_,3] ? ;
+
+X = [_,_,_,3] ? ;
+
+X = [_,_,_,_,3] ? ;
+
+X = [_,_,_,_,_,3] ? 
+
+(1 ms) yes
+<span class="ex_comment">% きりがないので、<tt>X = [_,_,_,_,_,3] ?</tt> のところで
+% リターンを押して中断した。</span>
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.63"></a>
@@ -1617,6 +2265,19 @@ descendants of Ada back to Adam, by way of Cain:</p>
 (wife Lamech Ada)
 (son Ada Jabal)
 (son Ada Jubal)
+</p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。
+% なお、以下の記述を含む<a href="bible_db.pl">ファイル</a> (<tt>bible_db.pl</tt>) を作ってある。
+% このファイルには、後出の規則も含めてある。</span>
+son('Adam', 'Cain').
+son('Cain', 'Enoch').
+son('Enoch', 'Irad').
+son('Irad', 'Mehujael').
+son('Mehujael', 'Methushael').
+son('Methushael', 'Lamech').
+wife('Lamech', 'Ada').
+son('Ada', 'Jabal').
+son('Ada', 'Jubal').
 </p>
 
 
@@ -1652,24 +2313,32 @@ deduce more complicated relationships.)
 　　　　　　　　　　　　　　　　　　　　　　　　　　　　アダ　└ユバル
 
 </span></p>
+<p class="extra_code"><span class="ex_comment">% Prolog だと以下のとおり。</span>
+grandson(G, S) :- son(G, F), son(F, S).
+son(M, S) :- wife(M, W), son(W, S).
 
-<!--
-　アダム
-　　│
-　カイン
-　　│
-　エノク
-　　│
-　イラデ
-　　│
-メホヤエル
-　　│
-メトサエル
-　　│
-　レメク╤アダ
-　　┌─┤
-ヤバル　ユバル
--->
+<span class="ex_comment">% クエリの実行例</span>
+| ?- grandson('Cain', Grandson).
+
+Grandson = 'Irad' ? ;
+
+no
+| ?- son('Lamech', Son).
+
+Son = 'Jabal' ? ;
+
+Son = 'Jubal' ? ;
+
+no
+| ?- grandson('Methushael', Grandson).
+
+Grandson = 'Jabal' ? ;
+
+Grandson = 'Jubal' ? ;
+
+(1 ms) no
+</p>
+
 <a name="%_sec_4.4.2"></a>
 <h3 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_4.4.2">4.4.2  How the Query System Works</a></h3>
 <h3 class="trans" lang="ja">4.4.2 クエリ・システムはどう動くのか</h3>
@@ -1900,7 +2569,7 @@ programmer trainee''), we first find all entries that match the
 pattern</p>
 
 <p class="trans" lang="ja">
-(これは、くだけて言うと、「コンピュータ・プログラマ見習いの仕事ができる、すべての人たちを求めよ」である)、まず以下のパタンに合致するすべてのエントリを求める。
+(これは、くだけた言い方をするなら、「コンピュータ・プログラマ見習いの仕事ができる、すべての人たちを求めよ」である)、まず以下のパタンに合致するすべてのエントリを求める。
 </p>
 
 <p class="lisp">(can-do-job ?x (computer programmer trainee))
@@ -2696,7 +3365,7 @@ he realizes this, he quickly reinstalls it.  Unfortunately, he makes a
 slight change in the rule, and types it in as</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.64.</b> ルイス・リーズナは、間違えてデータベースから <tt>outranked-by</tt> の規則 (<a href="#%_sec_4.4.1">4.4.1</a> 節) を削除してしまう。
+<b>練習問題4.64.</b> ルイス・リーズナは、間違えてデータベースから <a href="#%_idx_5152"><tt>outranked-by</tt> の規則</a> (<a href="#%_sec_4.4.1">4.4.1</a> 節) を削除してしまう。
 このことに気づくと、彼は素早くこの規則を再び組み入れる。
 あいにく、彼は規則にちょっとした変更を加えてしまい、それを以下のように打ち込む。
 </p>
@@ -2726,8 +3395,1058 @@ the query</p>
 回答した後、システムは、無限ループに陥る。なぜなのかを説明せよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment">まず確認しておくと、ルイスは、and の二つの引数の順序を逆にした。
+
+さて、システムは、まず、データベースにある</span>
+(supervisor (Bitdiddle Ben) (Warbucks Oliver))
+<span class="ex_comment">という言明を見つける。これが or の一つ目の引数のパタンにマッチする。よって、システムは</span>
+(outranked-by (Bitdiddle Ben) (Warbucks Oliver))
+<span class="ex_comment">という回答を返す。が、その後、ルイスの変更のせいで、以下のように、
+outranked-by の再帰的な呼び出しが無限に深まるループにはまり込んでしまう
+(つまり、(☆1)  を打ち込むと、(☆2)の出力は得られるが、(☆3) 以下が実行されていく
+無限ループにはまる。</span>
+
+outranked-by (☆1)
+ |
+ +-- supervisor (☆2)
+ OR
+ +-- outranked-by (☆3) --AND-- supervisor (★3)
+      |
+      +-- supervisor (☆4)
+      OR
+      +-- outranked-by (☆5) --AND-- supervisor (★5)
+           |
+           +-- supervisor (☆6)
+           OR
+           +-- outranked-by (☆7) --AND-- supervisor (★7)
+                |
+                +-- supervisor (☆8)
+                OR
+                +-- outranked-by (☆9) --AND-- supervisor (★9)
+                     |
+                     :
+
+<span class="ex_comment">ここで参考までに、上下関係を図示しておく。</span>
+Warbucks Oliver
+  |
+  +-- <span style="font-weight:bold; font-style: italic;">Bitdiddle Ben</span>
+  |     |
+  |     +-- Hacker Alyssa P
+  |     |     |
+  |     |     +-- Reasoner Louis
+  |     |
+  |     +-- Fect Cy D
+  |     +-- Tweakit Lem E
+  |
+  +-- Scrooge Eben
+  |     |
+  |     +-- Cratchet Robert
+  |
+  +-- Aull DeWitt
+
+<span class="ex_comment">さて、先程の ☆1 以下の流れをもう少し詳しく言うと、次のとおり。
+
+まず、(☆1) を満たす解 (ベンの上役) を求めたい、という要求がある。
+そこで、(☆2) を満たす解 (ベンの直接の上司) を探す。
+答えが一つ見つかり (オリバー)、出力される。
+続いて別の解を探そうとすると、他に (☆2) を満たす解がない。
+
+そこで、(☆3) と (★3) を満たす (ことで (☆1) を満たす) ような解を求めようとする。
+つまり、ある人 (M氏とする) とその人の上役 (B氏とする) の組み合わせを探して (☆3)、
+その下位の方の人物 (M氏) がベンの直接の上司である (★3) かどうかを確認してゆく。
+
+そのために、まず (☆4) を満たす解 (ある人とその人の直接の上司、という組み合わせ) を
+求める。すると、そうした解はいくつか見つかるが、どれも (★3) の AND 条件を満たさ
+ない (その下位の方の人物 (M氏) はベンの直接の上司ではない) と判明する。
+
+そこで次に、(☆5) と (★5) を満たす (ことで (☆3) を満たし、さらに (★3) も満たす
+ことで、ひいては (☆1) を満たす) ような解を求めようとする。
+つまり、まず、ある人 (M2氏) とその人の上役 (B氏) の組み合わせを探して (☆5)、
+その下位の方の人物 (M2氏) が直接の上司となって指揮監督する部下 (M氏) を持って
+いるかを確認する (★5)。
+もしそうした部下 (M氏) がいれば、その部下 (M氏) から見ても、上記の上役 (B氏) は
+上役に当たる (☆3)。さらに、もしこの部下 (M氏) がベンの直接の上司であれば (★3)、
+上記の上役 (B氏) はベンの上役でもある (☆1)。
+
+以上のような探索のために、まず (☆6) を満たす解 (ある人 (M2氏) とその人の直接の
+上司 (B氏)、という組み合わせ) を求める。すると、そうした解はいくつか見つかるが、
+どれも、(★5) の AND 条件を満たさない (M2氏には直接の部下に当たるM氏がいない) か、
+または、(★5) は満たしても (★3) を満たさない (M2氏には直接の部下に当たるM氏が
+いるが、M氏はベンの直接の上司ではない)、と判明する。
+つまり、見つかるのは、(☆3) を満たさないものか、(☆3) は満たしても (★3) を満たさ
+ないものばかりである。(☆1) を満たすものは見つからない。
+
+そこで次に、(☆7) と (★7) を満たす (ことで (☆5) を満たし、さらに (★5) も満たす
+ことで (☆3) を満たし、それに加えて (★3) も満たすことで、最終的には (☆1) を
+満たす) ような解を求めようとする。
+つまり、まず、ある人 (M3氏) とその人の上役 (B氏) の組み合わせを探して (☆7)、
+その下位の方の人物 (M3氏) が直接の上司となって指揮監督する部下 (M2氏) を持って
+いるかを確認する (★7)。
+もしそうした部下 (M2氏) がいれば、その部下 (M2氏) から見ても、上記の上役 (B氏) は
+上役に当たる (☆5)。
+さらに、この部下 (M2氏) が直接の上司となって指揮監督する部下 (M氏) を持って
+いるかを確認する (★5)。もしそうした部下 (M氏) がいれば、その部下 (M氏) から
+見ても、上記の上役 (B氏) は上役に当たる (☆3)。さらに、もしこの部下 (M氏) が
+ベンの直接の上司であれば (★3)、上記の上役 (B氏) はベンの上役でもある (☆1)。
+
+以上のような探索のために、まず (☆8) を満たす解 (ある人 (M3氏) とその人の直接の
+上司 (B氏)、という組み合わせ) を求める。すると、そうした解はいくつか見つかるが、
+どれも、(★7) を満たさないか、(★5) を満たさないか、(★3) を満たさない。
+その結果、(☆1) を満たすものは見つからない。
+
+……以下同様にして探索がどんどん深みにはまり、解が見つからないまま、無限ループに
+陥ってしまう。ということのはず。
 </span></p>
+
+<!--
+outranked_by(Staff_person, Boss) :- 
+	supervisor(Staff_person, Boss); 
+	(outranked_by(Middle_manager, Boss), 
+		supervisor(Staff_person, Middle_manager)).
+
+
+outranked_by(['Bitdiddle', 'Ben'], Who) :-	%☆1
+	supervisor(['Bitdiddle', 'Ben'], Who);	%☆2
+	(outranked_by(M, Who), supervisor(['Bitdiddle', 'Ben'], M)).	%☆3, ★3
+
+outranked_by(M, Who) :-	%☆3
+	supervisor(M, Who);	%☆4
+	(outranked_by(M2, Who), supervisor(M, M2)).	%☆5, ★5
+
+outranked_by(M2, Who) :-	%☆5
+	supervisor(M2, Who);	%☆6
+	(outranked_by(M3, Who), supervisor(M2, M3)).		%☆7, ★7
+-->
+<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。
+
+% まず人事DB (規則込み) の読み込み。</span>
+| ?- consult('personnel_db.pl').
+<span class="ex_comment">% (出力は省略)</span>
+
+<span class="ex_comment">% outranked_by の定義を上書きする。</span>
+| ?- [user].
+compiling user for byte code...
+outranked_by(Staff_person, Boss) :-
+    supervisor(Staff_person, Boss);
+    (outranked_by(Middle_manager, Boss),
+     supervisor(Staff_person, Middle_manager)).
+
+user compiled, 5 lines read - 709 bytes written, 44124 ms
+warning: user:1: redefining procedure outranked_by/2
+<span class="ex_comment">% (もうちょっと出力があったが、それは省略)</span>
+
+<span class="ex_comment">% ちゃんと再定義されたか確認したい場合</span>
+| ?- listing.
+<span class="ex_comment">% (出力は省略)</span>
+
+<span class="ex_comment">% トレースできるようにします。</span>
+| ?- trace.
+The debugger will first creep -- showing everything (trace)
+
+yes
+{trace}
+
+<span class="ex_comment">% それでは、実行しますよ。
+% (以下は、実際の出力にコメントを追記したもの。
+%    [呼び出し番号] [直接の先祖を示す番号] [ポート:] [ゴール] ?
+%  というのが元の出力である。)</span>
+
+| ?- outranked_by(['Bitdiddle', 'Ben'], Who).
+      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆1 (ベンの上役は誰?) </span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆2 (ベンの直接の上司は誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆2 (オリバーだよ)</span>
+      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆1 (オリバーだよ)</span>
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% ここまでは簡単。再帰なしで判明するパタン。</span>
+
+<span class="ex_comment">% 上の行でセミコロンを入力したので、別の解を探し始める。
+% 実際は、ベンより上位の人間はオリバーだけなので、別の解など存在しない。しかも、
+% 「うまく有限ステップで探索木全体を探索し終えて、解が存在しないことを確認できた」
+% とはならず、以下の通り、探索が無限ループに陥ってしまう。</span>
+
+      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆1 (これから別の解を探しにいくよ!)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+              <span class="ex_comment">% ☆2 (ベンの直接の上司はオリバー以外に誰かいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ?
+              <span class="ex_comment">% ☆2 (いないね、残念)</span>
+
+<span class="ex_comment">% ここからは、「ある人物M氏 (Middle_manager) の上役として、ある人物B氏 (Boss) がおり、
+% そのM氏がベンの直接の上司だから、B氏はベンの上役である」という条件に該当するような、
+% B氏を探しにいく。つまり ☆3 と ★3 を満たす解を探す (だが、実際はそんな人はいないので、
+% 答えは見つからないし、しかも無限ループに陥るので探索が終わらない)。
+
+% つまり、Who と Boss がユニファイされている状態で、
+% <tt>outranked_by(Middle_manager, Boss), supervisor(['Bitdiddle','Ben'], Middle_manager)</tt>
+% にマッチするものを、探しにいく。</span>
+
+      2    2  Call: outranked_by(_352,_283) ?
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせはあるか?)</span>
+      3    3  Call: supervisor(_376,_283) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせはあるか?)</span>
+      3    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?  
+              <span class="ex_comment">% ☆4 (アリッサの直接の上司にはベンがいる)</span>
+      2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?
+              <span class="ex_comment">% ☆3 (アリッサの上役にはベンがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったアリッサは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ?
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (サイの直接の上司にはベンがいる)</span>
+      2    2  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (サイの上役にはベンがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったサイは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (レムの直接の上司にはベンがいる)</span>
+      2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (レムの上役にはベンがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったレムは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆4 (ルイスの直接の上司にはアリッサがいる)</span>
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆3 (ルイスの上役にはアリッサがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったルイスは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (ベンの直接の上司にはオリバーがいる)</span>
+      2    2  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ベンの上役にはオリバーがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったベンは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★3 (違うよ、そんな訳ないでしょ)</span>
+
+      2    2  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (エーベンの直接の上司にはオリバーがいる)</span>
+      2    2  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (エーベンの上役にはオリバーがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったエーベンは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆4 (ロバートの直接の上司にはエーベンがいる)</span>
+      2    2  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆3 (ロバートの上役にはエーベンがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったロバートは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+      2    2  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ?  
+              <span class="ex_comment">% ☆3 (誰かが誰かの上役だ、という組み合わせは、まだ他にあるか?)</span> 
+      3    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆4 (誰かが誰かの直接の上司だ、という組み合わせは、まだ他にあるか?)</span>
+      3    3  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆4 (ドゥウィットの直接の上司にはオリバーがいる)</span>
+      2    2  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ドゥウィットの上役にはオリバーがいる)</span>
+      4    2  Call: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったドゥウィットは、ベンの直接の上司なのか?)</span>
+      4    2  Fail: supervisor(['Bitdiddle','Ben'],['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★3 (違うよ)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆4 (B氏はM氏の直接の上司である) を満たすことで ☆3 (B氏はM氏の上役である) を満たし、
+%   しかも ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解は存在しない、ということが判明 (長かった……)。
+
+% そこで、これからは、
+% 「☆5 (B氏はM2氏の上役である) かつ ★5 (M2氏はM氏の直接の上司である) を満たすことによって
+%   ☆3 (B氏はM氏の上役である) を満たし、
+%   しかも ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解を探しにいく。</span>
+
+      2    2  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      3    3  Call: outranked_by(_376,_283) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせはあるか?)</span>
+      4    4  Call: supervisor(_400,_283) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (アリッサ (M2) の直接の上司にはベン (B) がいる)</span>
+      3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (アリッサ (M2) の上役にはベン (B) がいる)</span>
+      5    3  Call: supervisor(_436,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったアリッサ (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (ルイス (M) がいた)</span>
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (ということは、ルイス (M) にとってベン (B) は上役だ)</span>
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったルイス (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆3 (M氏がルイスで、その上役のB氏がベン、という組み合わせは駄目だったので、やり直そう)</span>
+      5    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (まず、アリッサ (M2) を直接の上司とするような、ルイスでない別の誰か (M) はいるかな?)</span>
+      5    3  Fail: supervisor(_424,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (残念、いないよ)</span>
+
+      3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がアリッサで、その上役のB氏がベン、という組み合わせが駄目だったということだから、ここからやり直し)</span>
+      4    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (サイ (M2) の直接の上司にはベン (B) がいる)</span>
+      3    3  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (サイ (M2) の上役にはベン (B) がいる)</span>
+      5    3  Call: supervisor(_436,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったサイ (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Fail: supervisor(_424,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+      3    3  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (レム (M2) の直接の上司にはベン (B) がいる)</span>
+      3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (レム (M2) の上役にはベン (B) がいる)</span>
+      5    3  Call: supervisor(_436,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったレム (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Fail: supervisor(_424,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+      3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆6 (ルイス (M2) の直接の上司にはアリッサ (B) がいる)</span>
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆5 (ルイス (M2) の上役にはアリッサ (B) がいる)</span>
+      5    3  Call: supervisor(_436,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったルイス (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Fail: supervisor(_424,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (ベン (M2) の直接の上司にはオリバー (B) がいる)</span>
+      3    3  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ベン (M2) の上役にはオリバー (B) がいる)</span>
+      5    3  Call: supervisor(_434,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったベン (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (アリッサがいるよ)</span>
+      2    2  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、M氏がアリッサで、M2氏がベンで、B氏がオリバー、という組み合わせが存在するということだな)</span>
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったアリッサ (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がアリッサで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
+      5    3  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、アリッサでない別の誰か (M) はいるかな?)</span>
+      5    3  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (サイがいた)</span>
+      2    2  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、サイ (M) にとってオリバー (B) は上役だ)</span>
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったサイ (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がサイで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
+      5    3  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、サイでない別の誰か (M) はいるかな?)</span>
+      5    3  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (レムがいた)</span>
+      2    2  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、レム (M) にとってオリバー (B) は上役だ)</span>
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったレム (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がレムで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
+      5    3  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (まず、ベン (M2) を直接の上司とするような、レムでない別の誰か (M) はいるかな?)</span>
+      5    3  Fail: supervisor(_422,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★5 (もうこれ以上、そういう誰か (M) は見つからない)</span>
+
+      3    3  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がベンで、その上役のB氏がオリバー、という組み合わせが駄目だったということだから、ここからやり直し)</span>
+      4    4  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (エーベン (M2) の直接の上司にはオリバー (B) がいる)</span>
+      3    3  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (エーベン (M2) の上役にはオリバー (B) がいる)</span>
+      5    3  Call: supervisor(_434,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったエーベン (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (ロバート (M) がいた)</span>
+      2    2  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (ということは、ロバート (M) にとってオリバー (B) は上役だ)</span>
+      6    2  Call: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったロバート (M) は、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      6    2  Fail: supervisor(['Bitdiddle','Ben'],['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★3 (残念、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏がロバートで、その上役のB氏がオリバー、という組み合わせは駄目だったので、やり直そう)</span>
+      5    3  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (まず、エーベン (M2) を直接の上司とするような、ロバートでない別の誰か (M) はいるかな?)</span>
+      5    3  Fail: supervisor(_422,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★5 (残念、いないよ)</span>
+
+      3    3  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がエーベンで、その上役のB氏がオリバー、という組み合わせが駄目だったということだから、ここからやり直し)</span>
+      4    4  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆6 (ロバート (M2) の直接の上司にはエーベン (B) がいる)</span>
+      3    3  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆5 (ロバート (M2) の上役にはエーベン (B) がいる)</span>
+      5    3  Call: supervisor(_434,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったロバート (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Fail: supervisor(_422,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+      3    3  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆5 (ということは、M2氏がロバートで、その上役のB氏がエーベン、という組み合わせが駄目だったということだから、ここからやり直し)</span>
+      4    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆6 (M2氏の直接の上司がB氏、という別の組み合わせはあるか?)</span>
+      4    4  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆6 (ドゥウィット (M2) の直接の上司にはオリバー (B) がいる)</span>
+      3    3  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (ドゥウィット (M2) の上役にはオリバー (B) がいる)</span>
+      5    3  Call: supervisor(_434,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★5 (こうして見つかったドゥウィット (M2) を直接の上司とするような誰か (M) はいるか?)</span>
+      5    3  Fail: supervisor(_422,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★5 (いないな、残念)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆6 (B氏はM2氏の直接の上司である) を満たすことで ☆5 (B氏はM2氏の上役である) を満たし、
+%   しかも ★5 (M2氏はM氏の直接の上司である) を満たしているので、☆5 かつ ★5 を満たしており、
+%   ゆえに ☆3 (B氏はM氏の上役である) を満たし、
+%   さらに ★3 (M氏はベンの直接の上司である) も満たしているので、☆3 かつ ★3 を満たしており、
+%   ゆえに ☆1 (B氏はベンの上役である) を満たす」
+% というような解は存在しない、ということが判明。 (長かった……)。
+
+% つまり、
+% 「☆6 を満たすことで ☆5 を満たす、という解では最終的に ☆1 を満たせない」
+% と判明した。
+
+% そこで、これからは、
+% 「☆7 かつ ★7 を満たすことで ☆5 を満たす、という解があるかな?
+%   もしあれば、その解ならば最終的に ☆1 を満たせるのかな?」
+% という方針で探索を進める。
+
+% が、以下のトレースからも分かるように、これも失敗する。
+% 上司・部下の階層の数が一番多いのはオリバーからルイスに至る経路で、
+% ここを、B氏、M3氏、M2氏、M氏と見なすところまでは可能だが、
+% ルイスには部下がいないし、だから当然、「ルイス (M氏) の直接の部下がベン」
+% なんてこともありえない（そもそもベンはルイスより上役だし)。</span>
+
+      3    3  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      4    4  Call: outranked_by(_400,_283) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせはあるか?)</span>
+      5    5  Call: supervisor(_424,_283) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせはあるか?)</span>
+      5    5  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=アリッサ、B=ベン)</span>
+      4    4  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3=アリッサ、B=ベン)</span>
+      6    4  Call: supervisor(_460,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M3=アリッサを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M2=ルイス)</span>
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2=ルイス、B=ベン)</span>
+      7    3  Call: supervisor(_490,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (M2=ルイスを直接の上司とするような誰か (M) はいるか?)</span>
+      7    3  Fail: supervisor(_478,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      6    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (M3=アリッサを直接の上司とするような、ルイス以外の誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_448,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=サイ、B=ベン)</span>
+      4    4  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ?  
+              <span class="ex_comment">% ☆7 (M3=サイ、B=ベン)</span>
+      6    4  Call: supervisor(_460,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★7 (M3=サイを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_448,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3=レム、B=ベン)</span>
+      4    4  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3=レム、B=ベン)</span>
+      6    4  Call: supervisor(_460,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★7 (M3=レムを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_448,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆8 (M3=ルイス、B=アリッサ)</span>
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆7 (M3=ルイス、B=アリッサ)</span>
+      6    4  Call: supervisor(_460,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★7 (M3=ルイスを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_448,['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=ベン、B=オリバー)</span>
+      4    4  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=ベン、B=オリバー)</span>
+      6    4  Call: supervisor(_458,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=アリッサ)</span>
+      3    3  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=アリッサ、B=オリバー)</span>
+      7    3  Call: supervisor(_490,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (M2=アリッサを直接の上司とするような誰か (M) はいるか?)</span>
+      7    3  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (M=ルイス)</span>
+      2    2  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆3 (M=ルイス、B=オリバー)</span>
+      8    2  Call: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (こうして見つかったM=ルイスは、(元のクエリの引数である) ベンの直接の上司なのか?)</span>
+      8    2  Fail: supervisor(['Bitdiddle','Ben'],['Reasoner','Louis']) ? 
+              <span class="ex_comment">% ★3 (まさか、違うよ)</span>
+
+      2    2  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆3 (M氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      7    3  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (M2=アリッサを直接の上司とするような、ルイス以外の誰か (M) はいるか?)</span>
+      7    3  Fail: supervisor(_478,['Hacker','Alyssa','P']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      6    4  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、アリッサ以外の誰か (M2) はいるか?)</span>
+      6    4  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=サイ)</span>
+      3    3  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=サイ、B=オリバー)</span>
+      7    3  Call: supervisor(_490,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (M2=サイを直接の上司とするような誰か (M) はいるか?)</span>
+      7    3  Fail: supervisor(_478,['Fect','Cy','D']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      6    4  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、サイ以外の誰か (M2) はいるか?)</span>
+      6    4  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M2=レム)</span>
+      3    3  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=レム、B=オリバー)</span>
+      7    3  Call: supervisor(_490,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (M2=レムを直接の上司とするような誰か (M) はいるか?)</span>
+      7    3  Fail: supervisor(_478,['Tweakit','Lem','E']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      6    4  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (M3=ベンを直接の上司とするような、レム以外の誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_446,['Bitdiddle','Ben']) ? 
+              <span class="ex_comment">% ★7 (もういないよ)</span>
+
+      4    4  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=エーベン、B=オリバー)</span>
+      4    4  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=エーベン、B=オリバー)</span>
+      6    4  Call: supervisor(_458,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M3=エーベンを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M2=ロバート)</span>
+      3    3  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆5 (M2=ロバート、B=オリバー)</span>
+      7    3  Call: supervisor(_488,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (M2=ロバートを直接の上司とするような誰か (M) はいるか?)</span>
+      7    3  Fail: supervisor(_476,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★5 (いないよ)</span>
+
+      3    3  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ?  
+              <span class="ex_comment">% ☆5 (M2氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      6    4  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (M3=エーベンを直接の上司とするような、ロバート以外の誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_446,['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆8 (M3=ロバート、B=エーベン)</span>
+      4    4  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆7 (M3=ロバート、B=エーベン)</span>
+      6    4  Call: supervisor(_458,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★7 (M3=ロバートを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_446,['Cratchet','Robert']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+      4    4  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+              <span class="ex_comment">% ☆8 (M3氏の直接の上司がB氏、という組み合わせは、他にあるか?)</span>
+      5    5  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆8 (M3=ドゥウィット、B=オリバー)</span>
+      4    4  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3=ドゥウィット、B=オリバー)</span>
+      6    4  Call: supervisor(_458,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★7 (M3=ドゥウィットを直接の上司とするような誰か (M2) はいるか?)</span>
+      6    4  Fail: supervisor(_446,['Aull','DeWitt']) ? 
+              <span class="ex_comment">% ★7 (いないよ)</span>
+
+<span class="ex_comment">% ここまでで、
+% 「☆8 を満たすことで ☆7 を満たし、
+%   さらに ★7 を満たすことで ☆5 を満たし、
+%   さらに ★5 を満たすことで ☆3 を満たし、
+%   さらに ★3 を満たすことで ☆1 を満たす」
+% という解が存在しないことが分かった。
+
+% という訳で、さらに再帰が深まって、今度は、
+% 「☆9 かつ ★9 を満たすことで ☆7 を満たす、という解があるかな?
+%   もしあれば、その解ならば最終的に ☆1 を満たせるのかな?」
+% という方針で探索を進めることになるが、もちろんそんな解は見つからない。</span>
+
+      4    4  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+              <span class="ex_comment">% ☆7 (M3氏の上役にはB氏がいる、という組み合わせは、他にあるか?)</span>
+      5    5  Call: outranked_by(_424,_283) ? 
+              <span class="ex_comment">% ☆9</span>
+
+ <span class="ex_comment">% (以下略)</span><!--
+      6    6  Call: supervisor(_448,_283) ? 
+      6    6  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Hacker','Alyssa','P']) ? 
+      7    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      8    4  Call: supervisor(_514,['Reasoner','Louis']) ? 
+      8    4  Fail: supervisor(_502,['Reasoner','Louis']) ? 
+
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      7    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    5  Fail: supervisor(_472,['Hacker','Alyssa','P']) ? 
+
+      5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Fect','Cy','D']) ? 
+      7    5  Fail: supervisor(_472,['Fect','Cy','D']) ? 
+
+      5    5  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    5  Call: supervisor(_484,['Tweakit','Lem','E']) ? 
+      7    5  Fail: supervisor(_472,['Tweakit','Lem','E']) ? 
+
+      5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    5  Call: supervisor(_484,['Reasoner','Louis']) ? 
+      7    5  Fail: supervisor(_472,['Reasoner','Louis']) ? 
+
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Hacker','Alyssa','P']) ? 
+      8    4  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    3  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      9    3  Call: supervisor(_544,['Reasoner','Louis']) ? 
+
+      9    3  Fail: supervisor(_532,['Reasoner','Louis']) ? 
+      3    3  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      8    4  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+
+      8    4  Fail: supervisor(_502,['Hacker','Alyssa','P']) ? 
+      4    4  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Fect','Cy','D']) ? 
+
+      8    4  Fail: supervisor(_502,['Fect','Cy','D']) ? 
+      4    4  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    5  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      4    4  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_514,['Tweakit','Lem','E']) ? 
+      8    4  Fail: supervisor(_502,['Tweakit','Lem','E']) ? 
+      4    4  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+
+      7    5  Fail: supervisor(_470,['Bitdiddle','Ben']) ? 
+      5    5  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Scrooge','Eben']) ? 
+      7    5  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      4    4  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      8    4  Call: supervisor(_512,['Cratchet','Robert']) ? 
+      8    4  Fail: supervisor(_500,['Cratchet','Robert']) ? 
+
+      4    4  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      7    5  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    5  Fail: supervisor(_470,['Scrooge','Eben']) ? 
+
+      5    5  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    5  Call: supervisor(_482,['Cratchet','Robert']) ? 
+      7    5  Fail: supervisor(_470,['Cratchet','Robert']) ? 
+
+      5    5  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      5    5  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      7    5  Call: supervisor(_482,['Aull','DeWitt']) ? 
+      7    5  Fail: supervisor(_470,['Aull','DeWitt']) ? 
+
+      5    5  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      6    6  Call: outranked_by(_448,_283) ? 
+      7    7  Call: supervisor(_472,_283) ? 
+      7    7  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Hacker','Alyssa','P']) ? 
+      8    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      9    5  Call: supervisor(_538,['Reasoner','Louis']) ? 
+      9    5  Fail: supervisor(_526,['Reasoner','Louis']) ? 
+
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      8    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    6  Fail: supervisor(_496,['Hacker','Alyssa','P']) ? 
+      6    6  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Fect','Cy','D']) ? 
+      8    6  Fail: supervisor(_496,['Fect','Cy','D']) ? 
+
+      6    6  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    6  Call: supervisor(_508,['Tweakit','Lem','E']) ? 
+      8    6  Fail: supervisor(_496,['Tweakit','Lem','E']) ? 
+
+      6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    6  Call: supervisor(_508,['Reasoner','Louis']) ? 
+      8    6  Fail: supervisor(_496,['Reasoner','Louis']) ? 
+
+      6    6  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Hacker','Alyssa','P']) ? 
+      9    5  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      4    4  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     10    4  Call: supervisor(_568,['Reasoner','Louis']) ? 
+     10    4  Fail: supervisor(_556,['Reasoner','Louis']) ? 
+
+      4    4  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+      9    5  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    5  Fail: supervisor(_526,['Hacker','Alyssa','P']) ? 
+
+      5    5  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Fect','Cy','D']) ? 
+      9    5  Fail: supervisor(_526,['Fect','Cy','D']) ? 
+
+      5    5  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    6  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      5    5  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_538,['Tweakit','Lem','E']) ? 
+      9    5  Fail: supervisor(_526,['Tweakit','Lem','E']) ? 
+
+      5    5  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    6  Fail: supervisor(_494,['Bitdiddle','Ben']) ? 
+
+      6    6  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Scrooge','Eben']) ? 
+      8    6  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      5    5  Exit: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      9    5  Call: supervisor(_536,['Cratchet','Robert']) ? 
+      9    5  Fail: supervisor(_524,['Cratchet','Robert']) ? 
+
+      5    5  Redo: outranked_by(['Cratchet','Robert'],['Warbucks','Oliver']) ? 
+      8    6  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      8    6  Fail: supervisor(_494,['Scrooge','Eben']) ? 
+
+      6    6  Redo: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      6    6  Exit: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      8    6  Call: supervisor(_506,['Cratchet','Robert']) ? 
+      8    6  Fail: supervisor(_494,['Cratchet','Robert']) ? 
+
+      6    6  Redo: outranked_by(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    7  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      7    7  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      6    6  Exit: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      8    6  Call: supervisor(_506,['Aull','DeWitt']) ? 
+      8    6  Fail: supervisor(_494,['Aull','DeWitt']) ? 
+
+      6    6  Redo: outranked_by(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      7    7  Call: outranked_by(_472,_283) ? 
+      8    8  Call: supervisor(_496,_283) ? 
+      8    8  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Hacker','Alyssa','P']) ? 
+      9    7  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      6    6  Exit: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+     10    6  Call: supervisor(_562,['Reasoner','Louis']) ? 
+     10    6  Fail: supervisor(_550,['Reasoner','Louis']) ? 
+
+      6    6  Redo: outranked_by(['Reasoner','Louis'],['Bitdiddle','Ben']) ? 
+      9    7  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    7  Fail: supervisor(_520,['Hacker','Alyssa','P']) ? 
+
+      7    7  Redo: outranked_by(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Fect','Cy','D']) ? 
+      9    7  Fail: supervisor(_520,['Fect','Cy','D']) ? 
+
+      7    7  Redo: outranked_by(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      7    7  Exit: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      9    7  Call: supervisor(_532,['Tweakit','Lem','E']) ? 
+      9    7  Fail: supervisor(_520,['Tweakit','Lem','E']) ? 
+
+      7    7  Redo: outranked_by(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    8  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      8    8  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      7    7  Exit: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      9    7  Call: supervisor(_532,['Reasoner','Louis']) ? 
+      9    7  Fail: supervisor(_520,['Reasoner','Louis']) ? 
+
+      7    7  Redo: outranked_by(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    8  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      8    8  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      9    7  Call: supervisor(_530,['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Hacker','Alyssa','P']) ? 
+     10    6  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      5    5  Exit: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     11    5  Call: supervisor(_592,['Reasoner','Louis']) ? 
+     11    5  Fail: supervisor(_580,['Reasoner','Louis']) ? 
+
+      5    5  Redo: outranked_by(['Reasoner','Louis'],['Warbucks','Oliver']) ? 
+     10    6  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+     10    6  Fail: supervisor(_550,['Hacker','Alyssa','P']) ? 
+      6    6  Redo: outranked_by(['Hacker','Alyssa','P'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Fect','Cy','D']) ? 
+     10    6  Fail: supervisor(_550,['Fect','Cy','D']) ? 
+
+      6    6  Redo: outranked_by(['Fect','Cy','D'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      9    7  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      6    6  Exit: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+     10    6  Call: supervisor(_562,['Tweakit','Lem','E']) ? 
+     10    6  Fail: supervisor(_550,['Tweakit','Lem','E']) ? 
+
+      6    6  Redo: outranked_by(['Tweakit','Lem','E'],['Warbucks','Oliver']) ? 
+      9    7  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      9    7  Fail: supervisor(_518,['Bitdiddle','Ben']) ? 
+
+      7    7  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    8  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      8    8  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      7    7  Exit: outranked_by(['Scrooge','Eben'],['Warbucks','Oliver']) ? -->
+</p>
+
+<p class="exercise"><span class="ex_comment">元のプログラムが無限ループに陥らない訳も確認しておく。</span>
+outranked-by (※1)
+ |
+ +-- supervisor (※2)
+ OR
+ +-- supervisor (※3) --AND-- outranked-by (＊3) 
+                               |
+                               +-- supervisor (※4)
+                               OR
+                               +-- supervisor (※5) --AND-- outranked-by (＊5)
+                                                   <span class="ex_comment">↑探索すべき対象がここで尽きるため、</span>
+                                                   <span class="ex_comment">ここで探索は終了。(＊5) は実行されない</span>
+</p>
+
+<p class="extra_code"><span class="ex_comment">% Prologでこれをなぞってみる。</span>
+| ?- consult('<a href="personnel_db.pl">personnel_db.pl</a>').
+<span class="ex_comment">% (出力省略)</span>
+108 lines read - 20294 bytes written, 39 ms
+(4 ms) yes
+<span class="ex_comment">% トレースできるようにする。</span>
+| ?- trace.
+The debugger will first creep -- showing everything (trace)
+yes
+{trace}
+<span class="ex_comment">% では実行。</span>
+| ?- outranked_by(['Bitdiddle', 'Ben'], Who).
+      1    1  Call: outranked_by(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※1 (ベンの上役は誰?)</span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※2 (ベンの直接の上司は誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※2 (オリバーだよ)</span>
+      1    1  Exit: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※1 (オリバーだよ)</span>
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% 一つ解が見つかった。
+% つまり、「ベンの直接の上司 (指揮監督者) だからベンの上役である」という人物としてオリバーが見つかった。
+
+% 別の解を探しにいく。</span>
+      1    1  Redo: outranked_by(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※1 (これから別の解を探しにいくよ!)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※2 (ベンの直接の上司はオリバー以外に誰かいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_283) ? 
+      <span class="ex_comment">% ※2 (いない)</span>
+
+<span class="ex_comment">% ここからは、「ベンの直接の上司として誰かがいて、その誰かの上役だから、ベンの上役である」
+% という人物を探しにいく
+%  (実際はそんな人はいないので、探索は失敗に終わるし、しかもその探索は有限ステップで無事に終わる)。</span>
+      2    2  Call: supervisor(['Bitdiddle','Ben'],_352) ? 
+      <span class="ex_comment">% ※3 (ベンの直接の上司とは誰?)</span>
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※3 (オリバーが見つかった)</span>
+      3    2  Call: outranked_by(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ＊3 (ではそのオリバーの上役は誰かいるか?)</span>
+      4    3  Call: supervisor(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ※4 (オリバーの直接の上司とは誰?)</span>
+      4    3  Fail: supervisor(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ※4 (そんな人はいない)</span>
+      4    3  Call: supervisor(['Warbucks','Oliver'],_405) ?
+      <span class="ex_comment">% ※5 (オリバーの直接の上司として誰かがいて、その誰かの上役だからオリバーの上役、という</span>
+      <span class="ex_comment">%    人がいるかを見るために、まずオリバーの直接の上司を探す)</span>
+      4    3  Fail: supervisor(['Warbucks','Oliver'],_393) ?
+      <span class="ex_comment">% ※5 (オリバーの直接の上司なんていう人はいない。よって、その人の上役だから</span>
+      <span class="ex_comment">%    オリバーの上役、という人も存在しない)</span>
+      3    2  Fail: outranked_by(['Warbucks','Oliver'],_283) ?
+      <span class="ex_comment">% ＊3 (結局オリバーに上役はいない。つまりオリバーに関して ※3 AND ＊3 は不成立)</span>
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ?
+      <span class="ex_comment">% ※3 の別の解を探す (オリバー以外にベンの直接の上司はいるか?)</span>
+      2    2  Fail: supervisor(['Bitdiddle','Ben'],_340) ?  
+      <span class="ex_comment">% ※3 (いなかった)</span>
+      1    1  Fail: outranked_by(['Bitdiddle','Ben'],_283) ?
+      <span class="ex_comment">% ※1 (もうこれ以上探索しても解などないと分かって、探索終了)</span>
+
+(2 ms) no
+{trace}
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.65"></a>
@@ -2736,7 +4455,7 @@ organization, gives a query to find all the wheels
 (using the <tt>wheel</tt> rule of section <a href="#%_sec_4.4.1">4.4.1</a>):</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.65.</b> サイ・D・フェクトは、組織内で昇格する日を楽しみにしていて、大物たちすべてを見つけるために (<a href="#%_sec_4.4.1">4.4.1</a>節の <tt>wheel</tt> の規則を使って) クエリを与える。
+<b>練習問題4.65.</b> サイ・D・フェクトは、組織内で昇格する日を楽しみにしていて、大物たちすべてを見つけるために (<a href="#%_sec_4.4.1">4.4.1</a>節の <a href="#%_idx_5144"><tt>wheel</tt> の規則</a>を使って) クエリを与える。
 </p>
 
 <p class="lisp">(wheel ?who)
@@ -2763,8 +4482,137 @@ organization, gives a query to find all the wheels
 なぜオリバー・ウォーバックスが4回列挙されているのだろう?
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment">まず、wheel の規則の本体の and 節の中の</span>
+(supervisor ?middle-manager ?person)
+<span class="ex_comment">にマッチする言明として、以下のものが見つかる。便宜上、番号を振っておく。
+これらの言明の第2引数が、「大物」の候補ということ。</span>
+
+(supervisor (Hacker Alyssa P) (Bitdiddle Ben))    <span class="ex_comment">; (1)</span>
+(supervisor (Fect Cy D) (Bitdiddle Ben))          <span class="ex_comment">; (2)</span>
+(supervisor (Tweakit Lem E) (Bitdiddle Ben))      <span class="ex_comment">; (3)</span>
+(supervisor (Reasoner Louis) (Hacker Alyssa P))   <span class="ex_comment">; (4)</span>
+(supervisor (Bitdiddle Ben) (Warbucks Oliver))    <span class="ex_comment">; (5)</span>
+(supervisor (Scrooge Eben) (Warbucks Oliver))     <span class="ex_comment">; (6)</span>
+(supervisor (Cratchet Robert) (Scrooge Eben))     <span class="ex_comment">; (7)</span>
+(supervisor (Aull DeWitt) (Warbucks Oliver))      <span class="ex_comment">; (8)</span>
+
+<span class="ex_comment">図で示すと、以下の通りの上下関係。</span>
+Warbucks Oliver
+  |
+  +-- Bitdiddle Ben
+  |     |
+  |     +-- Hacker Alyssa P
+  |     |     |
+  |     |     +-- Reasoner Louis
+  |     |
+  |     +-- Fect Cy D
+  |     +-- Tweakit Lem E
+  |
+  +-- Scrooge Eben
+  |     |
+  |     +-- Cratchet Robert
+  |
+  +-- Aull DeWitt
+
+<span class="ex_comment">wheel の規則は、誰かの二段上の人を wheel (大物) と定義しているわけだから、
+  * アリッサの二段上にいる職員としての、オリバー
+  * ルイスの二段上にいる職員としての、ベン
+  * サイの二段上にいる職員としての、オリバー
+  * レムの二段上にいる職員としての、オリバー
+  * ロバートの二段上にいる職員としての、オリバー
+が答えとして出てくる。ということで、応答にはオリバーが4回含まれる。
+
+実際、上記(1)〜(7)それぞれによって変数が束縛されてできた各フレームで、</span>
+(supervisor ?x ?middle-manager)
+<span class="ex_comment">にマッチする言明は、以下のとおりである。
+  * (1)からできたフレームでは、(4)がマッチする。よって、ベンは大物。
+  * (2)、(3)、(4)の各々からできたフレームでは、このパタンにマッチするものがない。
+  * (5)からできたフレームでは、(1)、(2)、(3)がマッチする。
+    よって、オリバーは大物。また、三つにマッチしたので、オリバーは3回、応答に出現する。
+  * (6)からできたフレームでは、(7)がマッチする。よって、オリバーは大物。
+  * (7)、(8)の各々からできたフレームでは、マッチするものがない。
 </span></p>
+
+<p class="extra_code"><span class="ex_comment">% <a href="#%_thm_4.64">練習問題4.64</a>と同様にトレースを行ってみる。</span>
+| ?- wheel(Who).
+      1    1  Call: wheel(_279) ? 
+      2    2  Call: supervisor(_347,_279) ? 
+      2    2  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Hacker','Alyssa','P']) ? 
+      3    2  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      1    1  Exit: wheel(['Bitdiddle','Ben']) ? 
+
+Who = ['Bitdiddle','Ben'] ? ;
+<span class="ex_comment">% ルイス→アリッサ→ベン、という階層におけるベンが大物として見つかった。</span>
+
+      1    1  Redo: wheel(['Bitdiddle','Ben']) ? 
+      3    2  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    2  Fail: supervisor(_344,['Hacker','Alyssa','P']) ? 
+      2    2  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Fect','Cy','D']) ? 
+      3    2  Fail: supervisor(_344,['Fect','Cy','D']) ? 
+      2    2  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    2  Call: supervisor(_344,['Tweakit','Lem','E']) ? 
+      3    2  Fail: supervisor(_344,['Tweakit','Lem','E']) ? 
+      2    2  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      2    2  Exit: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      3    2  Call: supervisor(_344,['Reasoner','Louis']) ? 
+      3    2  Fail: supervisor(_344,['Reasoner','Louis']) ? 
+      2    2  Redo: supervisor(['Reasoner','Louis'],['Hacker','Alyssa','P']) ? 
+      2    2  Exit: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% アリッサ→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Hacker','Alyssa','P'],['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% サイ→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Fect','Cy','D'],['Bitdiddle','Ben']) ? 
+      3    2  Exit: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% レム→ベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Tweakit','Lem','E'],['Bitdiddle','Ben']) ? 
+      3    2  Fail: supervisor(_342,['Bitdiddle','Ben']) ? 
+      2    2  Redo: supervisor(['Bitdiddle','Ben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Scrooge','Eben']) ? 
+      3    2  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      1    1  Exit: wheel(['Warbucks','Oliver']) ? 
+
+Who = ['Warbucks','Oliver'] ? ;
+<span class="ex_comment">% ロバート→エーベン→オリバー、という階層におけるオリバーが大物として見つかった。</span>
+
+      1    1  Redo: wheel(['Warbucks','Oliver']) ? 
+      3    2  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    2  Fail: supervisor(_342,['Scrooge','Eben']) ? 
+      2    2  Redo: supervisor(['Scrooge','Eben'],['Warbucks','Oliver']) ? 
+      2    2  Exit: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      3    2  Call: supervisor(_342,['Cratchet','Robert']) ? 
+      3    2  Fail: supervisor(_342,['Cratchet','Robert']) ? 
+      2    2  Redo: supervisor(['Cratchet','Robert'],['Scrooge','Eben']) ? 
+      2    2  Exit: supervisor(['Aull','DeWitt'],['Warbucks','Oliver']) ? 
+      3    2  Call: supervisor(_342,['Aull','DeWitt']) ? 
+      3    2  Fail: supervisor(_342,['Aull','DeWitt']) ? 
+      1    1  Fail: wheel(_279) ? 
+
+(4 ms) no
+<span class="ex_comment">% これ以上の解はないと分かったので、これで終わり。</span>
+</p>
 
 <p class="orig" lang="en">
 <a name="%_thm_4.66"></a>
@@ -2774,7 +4622,7 @@ computer programmers one will be able to say</p>
 
 <p class="trans" lang="ja">
 <b>練習問題4.66.</b> ベンは、会社についての統計値を提供するために、クエリ・システムの一般化をずっと行っている。
-たとえば、コンピュータ・プログラマ全員の給与総額を知るためには、以下のように述べることが可能となるだろう。
+たとえば、コンピュータ・プログラマ全員の給与総額を知るためには、以下のように述べることが可能となることだろう。
 </p>
 
 <p class="lisp">(sum ?amount
@@ -2825,8 +4673,22 @@ salvage the situation.
 状況を救い出すために彼が使える方法について、概要を述べよ。
 </p>
 
-<p class="exercise"><span class="ex_comment">
-</span></p>
+<p class="exercise"><span class="ex_comment">練習問題<a href="#%_thm_4.65">4.65</a>でオリバーが4回出現したことを考慮すると、
+もし、上記のベンの実装で</span>
+(sum ?amount (and (wheel ?x) (salary ?x ?amount)))
+<span class="ex_comment">とすると、所望の「大物たちの給与総額」は得られず、オリバーの給与が4回数えられてしまう。
+
+つまり、クエリに <tt>or</tt> が含まれていなくてさえも、
+  * ある一つのクエリ (たとえば (wheel ?x) ) と、
+  * その中の一つの変数 (たとえば ?x) と、
+  * そのクエリを満たすような、その変数に対する特定の一つの値 (たとえば (Warbucks Oliver) )
+の組み合わせを導き出すようなフレームが、複数存在する場合がある、ということ。
+多分、ベンはそのことに気づいたところなのだろう。
+
+解決策は、累積関数に値のストリームを与える前に、このストリームから、重複した値を
+取り除くこと。そして、値の重複のないストリームを、累積関数に与えること
+(具体的にどう実装するかはともかくとして)。
+</p>
 
 
 <p class="orig" lang="en">
@@ -2845,13 +4707,14 @@ modify the system to include your loop detector.)
 
 <p class="trans" lang="ja">
 <b>練習問題4.67.</b> 本文と練習問題<a href="#%_thm_4.64">4.64</a>において例示されている単純なループの類を避けるように、クエリ・システム内にループ検出器を組み入れる方法を、考案せよ。
-一般的な考え方は、システムは自分の現在の演繹の連鎖についての、ある種の履歴を維持すべきであり、かつ、すでにそれについて作業したことのあるクエリを、処理し始めるべきではない、というものだ。
+一般的な考え方は、システムは自分の現在の演繹の連鎖についての、ある種の履歴を維持すべきであり、かつ、そのシステムが既に<!-- それについて作業したことのある -->作業対象としているクエリを、処理し始めるべきではない、というものだ。
 どのような種類の情報 (パタンとフレーム) がこの履歴に含まれるのか、そして、どのようにして確認が行われるべきなのか、ということを説明せよ (君は、クエリ・システムの実装の詳細について<a href="#%_sec_4.4.4">4.4.4</a>節で研究した後、自分のループ検出器を含めるようにシステムを改変したいと思うかもしれないね)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
+<p class="extra" id="translating">***ここから</p>
 <p class="orig" lang="en">
 <a name="%_thm_4.68"></a>
 <b>Exercise 4.68.</b>  <a name="%_idx_5286"></a>Define rules to implement the <tt>reverse</tt> operation of
@@ -2866,7 +4729,52 @@ Can your rules answer both
 君の規則は、<tt>(reverse (1 2 3) ?x)</tt> と <tt>(reverse ?x (1 2 3))</tt> の両方に答えられるかな?
 </p>
 
-<p class="exercise"><span class="ex_comment">
+<p class="exercise"><span class="ex_comment">; とりあえず、以下の定義をクエリ言語に翻訳しようかな。</span>
+(define (reverse arg-list)
+  (if (or (null? arg-list) (null? (cdr arg-list)))
+      arg-list
+      (append (reverse (cdr arg-list)) (list (car arg-list)))))
+
+<span class="ex_comment">; 場合分けにしたがって、規則を書き並べてみた。</span>
+(rule (reverse () ()))
+(rule (reverse (?x) (?x)))
+(rule (reverse (?given-car . ?given-cdr) ?reversed-list)
+      (and (reverse ?given-cdr ?reversed-cdr)
+           (append-to-form ?reversed-cdr (?given-car) ?reversed-list)))
+
+<span class="ex_comment">; このような定義でうまく動くのかを考える。
+(a) (reverse (1 2 3) ?x) は、3番目の規則にマッチする。
+    ここで、「?given-car が 1 に束縛され、?given-cdr が (2 3) に束縛され、
+    ?reversed-list が ?x に束縛されたフレーム」(F1 とする) ができる。
+(b) 次は F1 での (reverse (2 3) ?reversed-cdr) のユニフィケーションだが、
+    これも3番目の規則にマッチする。変数の名前が同じなのでややこしいが、
+    F1 に対する子フレーム (F2 とする) の側では、?given-car が 2 に束縛され、
+    ?given-cdr が (3) に束縛され、?reversed-list は F1 での ?reversed-cdr に
+    束縛される。
+(c) すると今度は F2 での (reverse (3) ?reversed-cdr) のユニフィケーションだが、
+    これは2番目の規則にマッチし、(この規則における) ?x が 3 に束縛される。
+    そして、F2における ?reversed-cdr が (3) に束縛される。
+(d) 次は、and 節の2番目のクエリについての、F2 でのユニフィケーション。
+     つまり、(append-to-form (3) (2) ?reversed-list) のユニフィケーションを行う。
+     append-to-form 内部の途中経過は省略すると、これにより、?reversed-list が
+     (3 2) に束縛される。
+(e) よって、(and (reverse (3) (3)) (append-to-form (3) (2) (3 2))) だから、
+     F2 において (reverse (2 3) (3 2)) という結果が得られる。
+(f) また、F2 の ?reversed-list は F1 での ?reversed-cdr に束縛されているから、
+    次は、F1 での (append-to-form (3 2) (1) ?reversed-list) のユニフィケーション。
+    append-to-form 内部の途中経過は省略すると、これにより、?reversed-list が
+    (3 2 1) に束縛される。
+(g) すでに (a) で述べたように、F1 においては ?reversed-list が ?x に束縛されて
+    いるから、つまりは (reverse (1 2 3) ?x) の ?x は (3 2 1) だということ。
+    ちゃんと解けた。
+
+(h) では逆に、(reverse ?x (1 2 3)) というクエリだったらどうなるか。
+    これは3番目の規則にマッチする。そして、「(?given-car . ?given-cdr) という
+    対が ?x に束縛され、?reversed-list が (1 2 3) に束縛されたフレーム」
+    (G1 とする) ができる。
+(i) 次は G1 でのユニフィケーションだが、
+    ……と、ここで思ったが、2番目の規則があると無限ループ行きかもしれない。
+    ちゃんと考えないと分からないが、なんか危険な気がするな。
 </span></p>
 
 <p class="orig" lang="en">
@@ -2924,7 +4832,6 @@ implementation of the system.</p>
 <h4 class="trans" lang="ja">4.4.4.1 ドライバ・ループとインスタンス化</h4>
 
 
-<p class="extra" id="translating">**ここから</p>
 <p class="orig" lang="en">
 <a name="%_idx_5288"></a><a name="%_idx_5290"></a>The driver loop for the query system repeatedly reads input
 expressions.  If the expression is a rule or assertion to be added to
@@ -2939,6 +4846,12 @@ variables are instantiated with values supplied by the stream of
 frames, and this final stream is printed at the terminal:</p>
 
 <p class="trans" lang="ja">
+クエリ・システムのためのドライバ・ループは、繰り返し、入力された式を読む。
+もし式が、データベースに追加すべき規則か言明だったら、その情報が追加される。
+それ以外の場合、その式は、クエリだと想定される。
+ドライバは、このクエリを、単一の空フレームからなる初期フレーム・ストリームと一緒に、<tt>qeval</tt> という評価器へと渡す。
+評価の結果は、データベース内で見つかった変数値でクエリを満たすことにより生成される、フレームのストリームである。
+これらのフレームは、フレームのストリームにより与えられる値で変数がインスタンス化された状態の元のクエリの複製からなる、新たなストリームを形成するのに使われる。そして、この最終的なストリームが、端末に印字される。
 </p>
 
 <p class="lisp"><a name="%_idx_5292"></a>(define input-prompt &quot;;;; Query input:&quot;)
@@ -2973,6 +4886,9 @@ is given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.
 <tt>Add-rule-or-assertion!</tt> is defined in section <a href="#%_sec_4.4.4.5">4.4.4.5</a>.</p>
 
 <p class="trans" lang="ja">
+ここで、本章の他の評価器におけるのと同様に、クエリ言語の式のための抽象的<ruby><rb>文法</rb><rp> (</rp><rt>シンタックス</rt><rp>) </rp></ruby>を使う。
+式の文法の実装—— <tt>assertion-to-be-added?</tt> という述語と <tt>add-assertion-body</tt> というセレクタを含む——は、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
+<tt>add-rule-or-assertion!</tt> は<a href="#%_sec_4.4.4.5">4.4.4.5</a>節で定義される。
 </p>
 
 <p class="orig" lang="en">
@@ -2986,6 +4902,10 @@ printed.  These transformations are performed by the two procedures
 (section  <a href="#%_sec_4.4.4.7">4.4.4.7</a>).</p>
 
 <p class="trans" lang="ja">
+入力された式に対して何か処理を行う前に、ドライバ・ループは、その式を、処理をより効率的にする形式へと、文法的に変形する。
+これは、パタン変数の表現を変更することを含む。
+クエリがインスタンス化されるとき、束縛されていないままで残っているどの変数も、印字される前には、変形されて、入力された表現へと戻される。
+これらの変形は、<tt>query-syntax-process</tt> と <tt>contract-question-mark</tt> という二つの手続きにより実行される (<a href="#%_sec_4.4.4.7">4.4.4.7</a>節)。
 </p>
 
 <p class="orig" lang="en">
@@ -2998,6 +4918,9 @@ take if a variable cannot be instantiated is given by a procedural
 argument to <tt>instantiate</tt>.</p>
 
 <p class="trans" lang="ja">
+式をインスタンス化するには、その式をコピーし、その際、その式の中のどの変数も、与えられたフレーム内での当該変数の値に置換する。
+値は、それ自体がインスタンス化され<!--てい-->る。というのも、それらの値は、変数を含み得るからだ (たとえば、<tt>exp</tt> の中の <tt>?x</tt> がユニフィケーションの結果として <tt>?y</tt> に束縛されており、そして今度は <tt>?y</tt> が 5 に束縛されている場合などに)。
+変数をインスタンス化できなかったら<!-- 取るべき行動 -->行うべき動作は、<tt>instantiate</tt> に対する手続き的引数により、提示される。
 </p>
 
 <p class="lisp"><a name="%_idx_5304"></a>(define (instantiate exp frame unbound-var-handler)
@@ -3018,6 +4941,7 @@ section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.
 </p>
 
 <p class="trans" lang="ja">
+束縛を操作する手続きは、<a href="#%_sec_4.4.4.8">4.4.4.8</a>節で定義される。
 </p>
 
 
@@ -3034,6 +4958,10 @@ in chapter 2.  Any query that is not identified as a special form is
 assumed to be a simple query, to be processed by <tt>simple-query</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>qeval</tt> 手続き—— <tt>query-driver-loop</tt> により呼び出される——は、クエリ・システムの基本的評価器である。
+これは、クエリと、フレームのストリームとを、入力としてとり、拡張したフレームのストリームを返す。
+これは、2章で総称的演算を実装する際に行ったのとちょうど同様に、<tt>get</tt> と <tt>put</tt> を用いたデータ指向の<ruby><rb>割り振り</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>により、特殊形式を識別する。
+特殊形式として識別されないクエリはどれも、<tt>simple-query</tt> により処理されるべき単純クエリである、と想定される。
 </p>
 
 <p class="lisp"><a name="%_idx_5310"></a>(define (qeval query frame-stream)
@@ -3047,12 +4975,12 @@ assumed to be a simple query, to be processed by <tt>simple-query</tt>.</p>
 implement the abstract syntax of the special forms.</p>
 
 <p class="trans" lang="ja">
+<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で定義した、<tt>type</tt> と <tt>contents</tt> が、特殊形式の抽象的な構文を実装する。
 </p>
 
 <a name="%_sec_Temp_696"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_696">Simple queries</a></h4>
-<h4 class="trans" lang="ja">単純なクエリ</h4>
-
+<h4 class="trans" lang="ja">単純クエリ</h4>
 
 <p class="orig" lang="en">
 <a name="%_idx_5312"></a>
@@ -3062,6 +4990,8 @@ and it returns the stream formed by extending each frame by all
 data-base matches of the query.</p>
 
 <p class="trans" lang="ja">
+<tt>simple-query</tt> 手続きは、単純クエリを取り扱う。
+これは、単純クエリ (パタン) を、フレームのストリームとともに引数として取り、そのクエリの、データベース上でのすべてのマッチによって、各フレームを拡張することで形成される、ストリームを返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5314"></a>(define (simple-query query-pattern frame-stream)
@@ -3089,10 +5019,11 @@ ways that any of the frames in the original input stream can be
 extended to produce a match with the given pattern.</p>
 
 <p class="trans" lang="ja">
+入力ストリーム内の各フレームについて、<tt>find-assertions</tt> (<a href="#%_sec_4.4.4.3">4.4.4.3</a>節) を使って、データベース内のすべての言明に対して当該パタンをマッチさせ、拡張したフレームのストリームを作り出すとともに、<tt>apply-rules</tt> (<a href="#%_sec_4.4.4.4">4.4.4.4</a>節) を使って、すべてのあり得る規則を適用して、拡張したフレームのもう一つ別のストリームを作り出す。
+これら二つのストリームを (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節の <tt>stream-append-delayed</tt> を用いて) 結合して、元のフレームと整合性を保ちつつ所与のパタンを満たせるようなすべての方法のストリームを作る (練習問題<a href="#%_thm_4.71">4.71</a>を参照)。
+<!-- 元の入力ストリーム内のフレームのいずれかを、所与のパタンとのマッチを作り出すように拡張することができるような、すべての方法からなる一つの大きなストリームを形成するように、個々の入力フレームに対するストリームを、<tt>stream-flatmap</tt> (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節) を用いて結合する。 -->
+個々の入力フレームに対するストリームを、<tt>stream-flatmap</tt> (<a href="#%_sec_4.4.4.6">4.4.4.6</a>節) を用いて結合し、所与のパタンとのマッチを作り出すように元の入力ストリーム内のフレームのいずれかを拡張することができるようなすべての方法からなる、一つの大きなストリームを形成する。
 </p>
-
-<p class="exercise"><span class="ex_comment">
-</span></p>
 
 <a name="%_sec_Temp_697"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_697">Compound queries</a></h4>
@@ -3109,6 +5040,12 @@ frame stream, it recursively applies <tt>conjoin</tt> to the rest of the
 queries.</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> クエリは、図<a href="#%_fig_4.5">4.5</a>に示されているとおり、<tt>conjoin</tt> 手続きにより取り扱われる。
+<tt>conjoin</tt> は、連言肢とフレーム・ストリームとを入力として取り、拡張したフレームのストリームを返す。
+<!-- まず、<tt>conjoin</tt> は、連言の中で最初のクエリを満たすような、すべてのあり得るフレーム拡張のストリームを見つけるために、フレームのストリームを処理する。
+ -->
+まず、<tt>conjoin</tt> は、フレームのストリームを処理して、連言の中で最初のクエリを満たすようなすべてのあり得るフレーム拡張のストリームを見つける。
+それから、これ<span class="note"> (この見つけたストリーム) </span>を新たなフレーム・ストリームとして用いて、<tt>conjoin</tt> は、クエリの残りの部分に <tt>conjoin</tt> を再帰的に適用する。
 </p>
 
 <p class="lisp"><a name="%_idx_5320"></a>(define (conjoin conjuncts frame-stream)
@@ -3123,6 +5060,7 @@ queries.</p>
 </p>
 
 <p class="trans" lang="ja">
+次の式は、
 </p>
 
 <p class="lisp">(put 'and 'qeval conjoin)
@@ -3132,6 +5070,7 @@ queries.</p>
 form is encountered.</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> 形式に遭遇したときに <tt>conjoin</tt> へと<ruby><rb>振り分け</rb><rp> (</rp><rt>ディスパッチ</rt><rp>) </rp></ruby>を行うように、<tt>qeval</tt> を設定する。
 </p>
 
 <p class="orig" lang="en">
@@ -3142,6 +5081,8 @@ disjuncts of the <tt>or</tt> are computed separately and merged using the
 (See exercises <a href="#%_thm_4.71">4.71</a> and <a href="#%_thm_4.72">4.72</a>.)</p>
 
 <p class="trans" lang="ja">
+<tt>or</tt> クエリも同様に、図<a href="#%_fig_4.6">4.6</a>に示すように取り扱われる。
+<tt>or</tt> の様々な選言肢に対する出力ストリームを、別々に計算し、<a href="#%_sec_4.4.4.6">4.4.4.6</a>節の <tt>interleave-delayed</tt> 手続きを用いて合併する (練習問題<a href="#%_thm_4.71">4.71</a>と練習問題<a href="#%_thm_4.72">4.72</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5324"></a>(define (disjoin disjuncts frame-stream)
@@ -3158,12 +5099,12 @@ disjuncts of the <tt>or</tt> are computed separately and merged using the
 are given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.</p>
 
 <p class="trans" lang="ja">
+連言肢や選言肢の構文についての、述語やセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
 </p>
 
 <a name="%_sec_Temp_698"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_698">Filters</a></h4>
 <h4 class="trans" lang="ja">フィルタ</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5326"></a><tt>Not</tt> is handled by the method outlined in
@@ -3172,6 +5113,8 @@ the input stream to satisfy the query being negated, and we include a
 given frame in the output stream only if it cannot be extended.</p>
 
 <p class="trans" lang="ja">
+<tt>not</tt> は、<a href="#%_sec_4.4.2">4.4.2</a>節で概要を述べた手法によって、取り扱われる。
+私たちは、入力ストリーム中の各フレームを、否定されているクエリを満たすように拡張しようと試み、そして、与えられたフレームを拡張できなかったときにのみ、与えられたフレームを出力ストリームに含める。
 </p>
 
 <p class="lisp"><a name="%_idx_5328"></a>(define (negate operands frame-stream)
@@ -3193,6 +5136,9 @@ returns false are filtered out of the input stream.  An error results
 if there are unbound pattern variables.</p>
 
 <p class="trans" lang="ja">
+<tt>lisp-value</tt> は、<tt>not</tt> に似たフィルタである。
+パタン内の変数をインスタンス化するのにストリーム中の各フレームが使われ、示された述語が適用され、述語が偽を返すようなフレームが入力ストリームからフィルタにより除去される。
+もし束縛されていないパタン変数があれば、エラーが生じる。
 </p>
 
 <p class="lisp"><a name="%_idx_5332"></a>(define (lisp-value call frame-stream)
@@ -3218,6 +5164,9 @@ produce the arguments.  Note that <tt>execute</tt> is implemented using
 <a name="%_idx_5334"></a><tt>eval</tt> and <tt>apply</tt> from the underlying Lisp system.</p>
 
 <p class="trans" lang="ja">
+<tt>execute</tt> ——述語を引数に適用する——は、適用すべき手続きを得るために、述語の式を <tt>eval</tt> せねばならない。
+しかし、<tt>execute</tt> は、引数を評価してはならない。というのも、引数はすでに実際の引数なのであって、(Lisp での) 評価が引数を作り出すであろうような式なのではないからだ。
+根底にある Lisp システムでの <tt>eval</tt> と <tt>apply</tt> を使って <tt>execute</tt> が実装される、ということに注意してほしい。
 </p>
 
 <p class="lisp">(define (execute exp)
@@ -3235,6 +5184,9 @@ defined without bodies (that is, rules whose conclusions are always
 satisfied).</p>
 
 <p class="trans" lang="ja">
+<tt>always-true</tt> という特殊形式は、常に満たされるクエリを与える。
+これは、自分の中身 (普通は空) を無視して、単純に入力ストリーム内の全フレームを通す。
+<tt>always-true</tt> は、本体なしで定義された規則 (つまり、帰結部が常に満たされるような規則) に本体を与えるために、<tt>rule-body</tt> セレクタ (<a href="#%_sec_4.4.4.7">4.4.4.7</a>節) によって使われる。
 </p>
 
 <p class="lisp"><a name="%_idx_5338"></a>(define (always-true ignore frame-stream) frame-stream)
@@ -3246,6 +5198,7 @@ are given in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.
 </p>
 
 <p class="trans" lang="ja">
+<tt>not</tt> と <tt>lisp-value</tt> の構文を定義するセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で与えられる。
 </p>
 
 <a name="%_sec_4.4.4.3"></a>
@@ -3268,6 +5221,11 @@ the computation would be less efficient because we would need to make
 many more calls to the matcher.</p>
 
 <p class="trans" lang="ja">
+<tt>find-assertions</tt>  —— <tt>simple-query</tt> (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) により呼び出される——は、パタンとフレームを入力としてとる。
+<tt>find-assertions</tt> はフレームのストリームを返すのだが、それらフレームの各々は、与えられたパタンの、データベース上でのマッチによって、与えられたフレームを拡張するものである。
+<tt>find-assertions</tt> は、<tt>fetch-assertions</tt> (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節) を用いて、パタンとフレームに対するマッチがあるかを調べるべき、データベース内のすべての言明からなる、ストリームを得る。
+ここで <tt>fetch-assertions</tt> を使う理由は、成功するマッチの候補の蓄えからデータベース内のエントリの多くを削除するであろう、単純な検査を適用できることが、よくあるためである。
+もし <tt>fetch-assertions</tt> を削除して、単純にデータベース内のすべての言明のストリームを調べたとしても、システムは依然として機能するだろうが、もっとたくさんの回数、マッチャの呼び出しを行う必要があるだろうから、計算の効率性は落ちるだろう。
 </p>
 
 <p class="lisp"><a name="%_idx_5344"></a>(define (find-assertions pattern frame)
@@ -3283,6 +5241,7 @@ containing the extended frame or <tt>the-empty-stream</tt> if the match
 fails.</p>
 
 <p class="trans" lang="ja">
+<tt>check-an-assertion</tt> は、引数として、パタンとデータ・オブジェクト (言明) とフレームをとり、拡張したフレームを含む一要素のストリームか、もしくは、マッチが失敗した場合には <tt>the-empty-stream</tt> を返す。
 </p>
 
 <p class="lisp">(define (check-an-assertion assertion query-pat query-frame)
@@ -3308,6 +5267,12 @@ against the <tt>cdr</tt> of the data.  If none of these cases are
 applicable, the match fails and we return the symbol <tt>failed</tt>.</p>
 
 <p class="trans" lang="ja">
+基本的パタン・マッチャは、<tt>failed</tt> という記号か、または、与えられたフレームの拡張を返す。
+マッチャの基本的な考え方は、パタン変数に対する束縛を蓄積しながら、データに対してパタンを要素ごとに調べる、というものである。
+もしパタンとデータ・オブジェクトが等しければ、マッチは成功し、これまでのところ蓄積された束縛のフレームを返す。
+それ以外の場合、もしパタンが変数なら、その変数をデータに束縛することで現在のフレームを拡張する——これが、フレーム内に既にある束縛と整合性が取れている限りは。
+もしパタンとデータの双方が対であれば、(再帰的に) パタンの <tt>car</tt> をデータの <tt>car</tt> に対してマッチさせて、フレームを作り出す。このフレームにおいて、その後、パタンの <tt>cdr</tt> をデータの <tt>cdr</tt> に対してマッチさせる。
+これらの場合のどれも当てはまらなければ、マッチは失敗し、<tt>failed</tt> という記号を返す。
 </p>
 
 <p class="lisp"><a name="%_idx_5346"></a>(define (pattern-match pat dat frame)
@@ -3328,6 +5293,7 @@ Here is the procedure that extends a frame by adding a new binding, if
 this is consistent with the bindings already in the frame:</p>
 
 <p class="trans" lang="ja">
+新たな束縛を——もしこれが、フレーム内に既にある束縛と整合性が取れていれば——加えることで、フレームを拡張する手続きを、ここに示す。
 </p>
 
 <p class="lisp"><a name="%_idx_5348"></a>(define (extend-if-consistent var dat frame)
@@ -3357,6 +5323,18 @@ this match extends the frame by adding a binding of <tt>?y</tt> to <tt>b</tt>.  
 binding and we never store more than one binding for a given variable.</p>
 
 <p class="trans" lang="ja">
+そのフレーム内のその変数についての束縛が、もし存在しなければ、そのデータへのその変数の束縛を、ただ加えるだけである。
+それ以外の場合、そのフレーム内で、そのフレーム内のその変数の値に対して、そのデータをマッチさせる。
+もし、格納されている値が定数のみを含むなら——もしその値が、<tt>extend-if-consistent</tt> によるパタン・マッチングの間に格納されたのであれば、きっとそうなる筈だが——そのマッチは、単に、格納されている値と新たな値が等しいかどうかを調べるだけである。
+もし等しければ、変更しないままのフレームを返す。もし等しくなければ、失敗の印を返す。
+しかし、格納されている値は、もしそれがユニフィケーションの間に格納されたのであれば、パタン変数を含むこともあり得る (<a href="#%_sec_4.4.4.4">4.4.4.4</a>節を参照)。
+格納されているパタンの、新たなデータに対する再帰的マッチは、このパタン内の変数についての束縛を加えたり、または調べたりするだろう。
+たとえば、<tt>?x</tt> が <tt>(f ?y)</tt> に束縛されており、かつ、<tt>?y</tt> が束縛されていないようなフレームがあるものとして、このフレームを、<tt>?x</tt> の <tt>(f b)</tt> への束縛によって拡大したいのだとしよう。
+私たちは、<tt>x?</tt> を調べ、そして、<tt>x?</tt> が <tt>(f ?y)</tt> に束縛されていると分かる。
+このことにより私たちは、<tt>(f b)</tt> という提案された新たな値に対して、<tt>(f ?y)</tt> を同一フレーム内でマッチさせるように、仕向けられる。
+最終的に、このマッチは、<tt>?y</tt> の <tt>b</tt> への束縛を加えることでフレームを拡張する。
+<tt>x?</tt> は <tt>(f ?y)</tt> に束縛されたままである。
+私たちは、格納されている束縛を決して変更しないし、与えられた変数について一つよりも多くの束縛を格納することも、決してしない。
 </p>
 
 <p class="orig" lang="en">
@@ -3364,12 +5342,12 @@ The procedures used by <tt>extend-if-consistent</tt> to manipulate
 bindings are defined in section <a href="#%_sec_4.4.4.8">4.4.4.8</a>.</p>
 
 <p class="trans" lang="ja">
+束縛を操作するために <tt>extend-if-consistent</tt> により使われる手続きは、<a href="#%_sec_4.4.4.8">4.4.4.8</a>節で定義される。
 </p>
 
 <a name="%_sec_Temp_699"></a>
 <h4 class="orig" lang="en"><a href="04_toc.html#%_toc_%_sec_Temp_699">Patterns with dotted tails</a></h4>
 <h4 class="trans" lang="ja">ドットの付いた末尾があるパタン</h4>
-
 
 <p class="orig" lang="en">
 <a name="%_idx_5350"></a>
@@ -3383,6 +5361,9 @@ primitive, which is used by <tt>query-driver-loop</tt> to read the query
 and represent it as a list structure, treats dots in a special way.</p>
 
 <p class="trans" lang="ja">
+もしパタンが、パタン変数が後に続いているドットを含むなら、そのパタン変数は、(データ・リストの次の要素ではなく) データ・リストの残りの部分にマッチする——ちょうど、練習問題<a href="15_sec2_2.html#%_thm_2.20">2.20</a>で説明した、末尾にドットがついた記法を使って、人が予期するであろうとおりに。
+私たちが実装したばかりのパタン・マッチャは、ドットを探すわけではないが、私たちが望むとおりにふるまう。
+これは、Lisp により <tt>read</tt> されたプリミティブ——クエリを読んでそれをリスト構造として表現するために <tt>query-driver-loop</tt> によって使われる——が、ドットを特別な方法で扱うからである。
 </p>
 
 <p class="orig" lang="en">
@@ -3396,10 +5377,13 @@ and that for <tt>(computer . ?type)</tt> could be constructed by
 evaluating the expression <tt>(cons 'computer '?type)</tt>.</p>
 
 <p class="trans" lang="ja">
+<tt>read</tt> は、ドット<!-- を見る -->に出会うと、次の項目を、リストの次の要素とする (<tt>cdr</tt> がそのリストの残りの部分となるであろうような <tt>cons</tt> の、<tt>car</tt> とする) 代わりに、次の項目をリスト構造の <tt>cdr</tt> とする。
+たとえば、<tt>(computer ?type)</tt> というパタンに対して <tt>read</tt> により作り出されるリスト構造は、<tt>(cons 'computer (cons '?type '()))</tt> という式を評価することによって構築できるだろうし、<tt>(computer . ?type)</tt> に対するものは、<tt>(cons 'computer '?type)</tt> という式を評価することによって構築できるだろう。
+<span class="note"><br>(入り組んでいて分かりづらいのだけれど、多分、次のような意図だと思う。
+たとえば、<tt>(computer . ?type)</tt> のドットを見ると、ドットの「次の項目」である <tt>?type</tt> を、リストの次の要素とする——つまり、<tt>(computer ?type)</tt> と構築する——ということはしない。すなわち、ドットの「次の項目」である <tt>?type</tt> を、「その <tt>cdr</tt> が、(その <tt>(computer ?type)</tt> という)『リスト』の『残りの部分』たる <tt>()</tt> となるような <tt>cons</tt> の、<tt>car</tt>」にしたりはしない (要するに、<tt>?type</tt> を、<tt>(?type)</tt> という <tt>cons</tt> の <tt>car</tt> にはしない)。その代わり、ドットの「次の項目」である <tt>?type</tt> を、リスト構造の <tt>cdr</tt> として、<tt>(computer . ?type)</tt> というドット対を構築する。 )</span>
 </p>
 
 <p class="orig" lang="en">
-
 Thus, as <tt>pattern-match</tt> recursively compares <tt>car</tt>s and <tt>cdr</tt>s of a data list and a pattern that had a dot, it eventually
 matches the variable after the dot (which is a <tt>cdr</tt> of the
 pattern) against a sublist of the data list, binding the variable to
@@ -3408,8 +5392,9 @@ that list.  For example, matching the pattern <tt>(computer . ?type)</tt> agains
 list <tt>(programmer trainee)</tt>.
 </p>
 
-
 <p class="trans" lang="ja">
+このようにして、<tt>pattern-match</tt> は、データ・リストとドットのあったパタンとの <tt>car</tt> 同士および <tt>cdr</tt> 同士を再帰的に比較するので、最終的に、ドットの後の変数 (パタンの <tt>cdr</tt>) をデータ・リストの部分リストに対してマッチさせ、その変数をそのリストに束縛する。
+たとえば、<tt>(computer . ?type)</tt> というパタンを <tt>(computer programmer trainee)</tt> に対してマッチさせることで、<tt>(programmer trainee)</tt> というリストに対して <tt>?type</tt> をマッチさせることになるだろう。
 </p>
 
 <a name="%_sec_4.4.4.4"></a>
@@ -3425,6 +5410,10 @@ applicable rules (selected by <tt>fetch-rules</tt>, section <a href="#%_sec_4.4.
 and combines the resulting streams of frames.</p>
 
 <p class="trans" lang="ja">
+<tt>apply-rules</tt> は、<tt>find-assertions</tt> (<a href="#%_sec_4.4.4.3">4.4.4.3</a>節)の、規則版の類似物である。
+これは、入力としてパタンとフレームをとり、規則を適用することによってデータベースから拡張フレームのストリームを形成する。
+<tt>stream-flatmap</tt> は、もしかすると適用可能な規則 (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節の <tt>fetch-rules</tt> により選択される) のストリームに対して <tt>apply-a-rule</tt> をマップし、結果として生じるフレームのストリーム同士を結合する。
+
 </p>
 
 <p class="lisp"><a name="%_idx_5358"></a>(define (apply-rules pattern frame)
@@ -3441,6 +5430,9 @@ frame.  If this succeeds, it evaluates the rule body in this new
 frame.</p>
 
 <p class="trans" lang="ja">
+<tt>apply-a-rule</tt> は、<a href="#%_sec_4.4.2">4.4.2</a>節で概要を述べた方法を用いて、規則を適用する。
+これは、まず、規則の帰結部を、与えられたフレーム内のパタンとユニファイすることによって、自身の引数のフレームを拡張する。
+もしこれが成功すれば、<tt>apply-a-rule</tt> は、規則の本体部をこの新たなフレームにおいて評価する。
 </p>
 
 <p class="orig" lang="en">
@@ -3459,6 +5451,12 @@ exercise <a href="#%_thm_4.79">4.79</a>.)  Here is the <tt>apply-a-rule</tt>
 procedure:</p>
 
 <p class="trans" lang="ja">
+しかし、こうしたことのいずれかが起こる前に、プログラムは、規則内のすべての変数を、一意な新しい名前を使ってリネームする。
+こうする理由は、異なる規則適用についての変数同士が、お互いと混同されるようになることを防ぐためである。
+たとえば、二つの規則がどちらも <tt>?x</tt> と名付けられた変数を用いていれば、それぞれの規則が、その規則が適用された際に、<tt>?x</tt> に対する束縛をフレームに追加するかもしれない。
+これら二つの <tt>?x</tt> はお互いに無関係であり、私たちは、二つの束縛は整合性が取れていなくてはならないと考えるように騙されたりすべきではない。
+変数をリネームするのでなく、むしろ、私たちは、より賢い環境構造を考案することもできるであろう。しかし、ここで選択した、リネームするという手法は、もっとも効率的という訳ではないとしても、もっとも分かりやすいものである (練習問題<a href="#%_thm_4.79">4.79</a>を参照)。
+<tt>apply-a-rule</tt> 手続きをここに示す。
 </p>
 
 <p class="lisp">(define (apply-a-rule rule query-pattern query-frame)
@@ -3477,6 +5475,7 @@ procedure:</p>
 of a rule are defined in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.</p>
 
 <p class="trans" lang="ja">
+規則の一部を抽出する <tt>rule-body</tt> および <tt>conclusion</tt> というセレクタは、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節で定義される。
 </p>
 
 <p class="orig" lang="en">
@@ -3489,6 +5488,8 @@ the rule to <tt>?x-7</tt> and each <tt>?y</tt> in the rule to <tt>?y-7</tt>.
 included with the syntax procedures in section <a href="#%_sec_4.4.4.7">4.4.4.7</a>.)</p>
 
 <p class="trans" lang="ja">
+(番号などの) 一意な識別子をそれぞれの規則適用と対応づけて、この識別子を元の変数名と結合することによって、私たちは、一意な変数名を生成する。
+たとえば、規則適用の識別子が 7 であれば、その規則内のそれぞれの <tt>?x</tt> を <tt>?x-7</tt> に変更するかもしれないし、その規則内のそれぞれの <tt>?y</tt> を <tt>?y-7</tt> に変更するかもしれない (<tt>make-new-variable</tt> と <tt>new-rule-application-id</tt> は、<a href="#%_sec_4.4.4.7">4.4.4.7</a>節の文法手続きに含まれている)。
 </p>
 
 <p class="lisp">(define (rename-variables-in rule)
@@ -3514,6 +5515,9 @@ except that there is extra code (marked ``<tt>***</tt>'' below) to handle
 the case where the object on the right side of the match is a variable.</p>
 
 <p class="trans" lang="ja">
+二つのパタンと一つのフレームとを入力としてとり、拡張したフレームか、<tt>failed</tt> という記号の、いずれかを返すような手続きとして、ユニフィケーション・アルゴリズムは実装される。
+ユニファイアは、対称的だ——変数がマッチの両側で許される——という点を除いては、パタン・マッチャと似ている。
+<tt>unify-match</tt> は、基本的には <tt>pattern-match</tt> と同じである——ただし、マッチの右側にあるオブジェクトが変数である、という場合を扱うための、追加のコード (以下では &ldquo;<tt>***</tt>&rdquo; という印がついている) が存在する、という点を除いて。
 </p>
 
 <p class="lisp"><a name="%_idx_5364"></a>(define (unify-match p1 p2 frame)
@@ -3544,6 +5548,10 @@ its value.  If both parties to the match are unbound, we may bind
 either to the other.</p>
 
 <p class="trans" lang="ja">
+ユニフィケーションでは、片側だけのパタン・マッチングにおけるのと同様に、既存の束縛と整合性が取れている場合にのみ、フレームの、提案された拡張を受け入れるようにしたい。
+ユニフィケーションで使われる <tt>extend-if-possible</tt> という手続きは、下記のプログラムにおいて &ldquo;<tt>***</tt>&rdquo; という印のついた二つの特別な検査を除いて、パタン・マッチングで使われる <tt>extend-if-consistent</tt> と同じである。
+1番目の場合では、もし、マッチさせようとしている変数が束縛されていないものの、その変数にマッチさせようとしている値それ自体が (別の) 変数なのであれば、その値が束縛されているかどうかを調べる必要があり、もし束縛されていれば、その値とマッチさせる必要がある。
+もし、マッチに対する双方の側が未束縛なら、どちらかを他方に束縛してもよい。
 </p>
 
 <p class="orig" lang="en">
@@ -3571,6 +5579,18 @@ and <tt>(?y ?y)</tt>.  The second attempt to bind <tt>?x</tt> to <tt>?y</tt> mat
 of <tt>unify-match</tt>.</p>
 
 <p class="trans" lang="ja">
+2番目の検査は、変数を、その変数を含むパタンへと束縛する試みを取り扱う。
+そうした状況は、変数が双方のパタンで繰り返される場合にはいつでも起こり得る。
+たとえば、<tt>?x</tt> と <tt>?y</tt> の双方が束縛されていないフレームにおいて、<tt>(?x ?x)</tt> および <tt>(?y &lt;<em class="en"><tt>?y</tt> を含む式</em>&gt;)</tt> という二つのパタンをユニファイすることを、考えよう。
+まず、<tt>?x</tt> を <tt>?y</tt> に対してマッチさせ、<tt>?x</tt> の <tt>?y</tt> への束縛を作り出す。
+次に、<tt>?y</tt> を含む、与えられた式に対して、同じ<tt>?x</tt> をマッチさせる。
+<tt>?x</tt> は既に <tt>?y</tt> に束縛されているから、これは、<tt>?y</tt> を当該の式に対してマッチさせるという結果になる。
+もし、ユニファイアのことを、パタン同士を等しくするような、パタン変数に対する値の集合を求めているのだと見なすなら、これらのパタン同士は、<tt>?y</tt> を含む式に <tt>?y</tt> が等しくなるような <tt>?y</tt> を求めよ、という命令を暗示する。
+そうした方程式を解くための一般的手法は存在せず、それゆえ、私たちは、そういった束縛を拒絶する。これらの場合は、<tt>depends-on?</tt> という述語によって認識される<a href="#footnote_Temp_700"><sup><small>80</small></sup></a>。
+一方、変数をその変数自身に束縛する試みは、拒絶したくない。
+たとえば、<tt>(?x ?x)</tt> と <tt>(?y ?y)</tt> をユニファイすることを考えよう。
+<tt>?x</tt> を <tt>?y</tt> に束縛しようという2回目の試みは、<tt>?y</tt> (<tt>?x</tt> の、格納された値) を、<tt>?y</tt> (<tt>?x</tt> の新たな値) に対してマッチさせる。
+これは、<tt>unify-match</tt> の <tt>equal?</tt> によって処理される。
 </p>
 
 <p class="lisp"><a name="%_idx_5370"></a>(define (extend-if-possible var val frame)
@@ -3599,6 +5619,9 @@ simple recursive tree walk in which we substitute for the values of
 variables whenever necessary.</p>
 
 <p class="trans" lang="ja">
+<tt>depends-on?</tt> は、あるパタン変数の値となるべきだと提案されている式が、その変数に依存するか否かを検査する。
+これは、現在のフレームに関して行われなくてはならない。なぜなら、テスト変数に依存する値を既に有しているような変数の出現を、その式が含んでいるかもしれないからである。
+<tt>depends-on?</tt> の構造は、必要なときはいつでも変数の値を置き換えるような、単純で再帰的な木の<ruby><rb>歩道</rb><rp> (</rp><rt>ウォーク</rt><rp>) </rp></ruby>である。
 </p>
 
 <p class="lisp">(define (depends-on? exp var frame)
@@ -3640,6 +5663,13 @@ handling only the case of constant symbols) into the program; instead
 we call on predicates and selectors that embody our criteria.</p>
 
 <p class="trans" lang="ja">
+論理プログラミング言語を設計する際の一つの重要な問題は、与えられたパタンを調べる際には、無関係なデータベース・エントリはできるだけ少数のものだけを検討すれば済むように、物事を整えておく、という問題である。
+私たちのシステムでは、一つの大きなストリームの中にすべての言明を格納することに加えて、<tt>car</tt> が定数記号であるようなすべての言明を、その記号により索引づけがなされた表の中の別々のストリームに格納する。
+パタンにマッチするかもしれない言明を取ってくるには、まず、そのパタンの <tt>car</tt> が定数記号か否かを調べる。
+もしそうであれば、同じ <tt>car</tt> を有する、すべての格納されている言明を、(マッチャを用いて検査されるようにするために) 返す。
+もし、パタンの <tt>car</tt> が定数記号でなければ、すべての格納されている言明を返す。
+より賢い方法であれば、フレーム内の情報をも利用できるであろうし、あるいは、パタンの <tt>car</tt> が定数記号でない場合をも最適化しようと試みることもできるだろう。
+私たちは、(<tt>car</tt> を用いた、定数記号の場合だけを扱う) 索引づけのための、自分の基準を構築することを避け、その代わり、自分の基準を具現化するような、述語とセレクタを頼りにしている。
 </p>
 
 <p class="lisp">(define THE-ASSERTIONS the-empty-stream)
@@ -3656,6 +5686,7 @@ we call on predicates and selectors that embody our criteria.</p>
 stream if nothing is stored there.</p>
 
 <p class="trans" lang="ja">
+<tt>get-stream</tt> は、表にあるストリームを調べて、もしそこに何も格納されていなければ、空ストリームを返す。
 </p>
 
 <p class="lisp">(define (get-stream key1 key2)
@@ -3677,6 +5708,11 @@ conclusions start with a variable in a separate stream in our table,
 indexed by the symbol <tt>?</tt>.</p>
 
 <p class="trans" lang="ja">
+規則も同様に、規則帰結部の <tt>car</tt> を利用して、格納される。
+しかし、規則帰結部は任意のパタンであり、そのため、規則帰結部は、変数を含むことができるという点で、言明とは異なる。
+<tt>car</tt> が定数記号であるようなパタンは、帰結部が変数で始まる規則にマッチし得るし、帰結部が同じ <tt>car</tt> を有しているような規則にもマッチし得る。
+よって、<tt>car</tt> が定数記号であるようなパタンとマッチするかもしれない規則を取ってくるときには、帰結部が変数で始まるすべての規則と、そのパタンと同じ <tt>car</tt> を帰結部が有している規則とを、取ってくる。
+この目的のため、私たちは、帰結部が変数で始まるすべての規則を、表の中の別のストリーム—— <tt>?</tt> という記号により索引づけされたもの——に格納する。
 </p>
 
 <p class="lisp">(define THE-RULES the-empty-stream)
@@ -3698,6 +5734,8 @@ index, if appropriate, and in a stream of all assertions or rules in
 the data base.</p>
 
 <p class="trans" lang="ja">
+<tt>add-rule-or-assertion!</tt> は、データベースに言明や規則を追加するために、<tt>query-driver-loop</tt> により使われる。
+各項目は、それが妥当な場合には索引に格納されるとともに、データベース内の全言明または全規則のストリームに格納される。
 </p>
 
 
@@ -3723,6 +5761,8 @@ To actually store an assertion or a rule, we check to see if it can be
 indexed.  If so, we store it in the appropriate stream.</p>
 
 <p class="trans" lang="ja">
+実際に言明または規則を格納するためには、その言明または規則を索引づけられるかどうかを調べる。
+もし索引づけられるなら、その言明または規則を適切なストリームに格納する。
 </p>
 
 <p class="lisp">(define (store-assertion-in-index assertion)
@@ -3752,8 +5792,9 @@ pattern (an assertion or a rule conclusion) will be stored in the
 table if it starts with a variable or a constant symbol.</p>
 
 <p class="trans" lang="ja">
+以下の手続きは、データベースの索引がどのように使われるのかを定義している。
+パタン (言明または規則帰結部) は、変数または定数記号から始まる場合、表に格納されるだろう。
 </p>
-
 
 <p class="lisp">(define (indexable? pat)
   (or (constant-symbol? (car pat))
@@ -3764,6 +5805,7 @@ table if it starts with a variable or a constant symbol.</p>
 it starts.</p>
 
 <p class="trans" lang="ja">
+表内でそのキーのもとにパタンが格納される、というキーは、<tt>?</tt> (そのパタンが変数から始まる場合) か、または、そのパタンの始まりの定数記号である。
 </p>
 
 
@@ -3776,6 +5818,7 @@ it starts.</p>
 the pattern starts with a constant symbol.</p>
 
 <p class="trans" lang="ja">
+パタンが定数記号から始まる場合に、そのパタンにマッチするかもしれない項目を取り出すために、索引が使われるだろう。
 </p>
 
 <p class="lisp">(define (use-index? pat)
@@ -3790,7 +5833,11 @@ Hint: Recall the definition of the infinite stream of ones in
 section <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>: <tt>(define ones (cons-stream 1 ones))</tt>.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.70.</b> 
+<b>練習問題4.70.</b> <tt>add-assertion!</tt> および <tt>add-rule!</tt> という手続きにおける <tt>let</tt> 束縛の目的は何だろうか?
+<tt>add-assertion!</tt> の以下の実装の、何が不具合なのだろうか?
+ヒント: <a href="24_sec3_5.html#%_sec_3.5.2">3.5.2</a>節の、1の無限ストリームの定義、すなわち、
+<tt>(define ones (cons-stream 1 ones))</tt>
+を、思い出せ。
 </p>
 
 <p class="lisp">(define (add-assertion! assertion)
@@ -3814,6 +5861,7 @@ The query system uses a few stream operations that were not presented
 in chapter 3.</p>
 
 <p class="trans" lang="ja">
+クエリ・システムは、3章では提示されなかった少数のストリーム演算を用いる。
 </p>
 
 <p class="orig" lang="en">
@@ -3825,6 +5873,8 @@ procedure in section <a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>).
 This postpones looping in some cases (see exercise <a href="#%_thm_4.71">4.71</a>).</p>
 
 <p class="trans" lang="ja">
+<tt>stream-append-delayed</tt> および <tt>interleave-delayed</tt> は、まさに <tt>stream-append</tt> および <tt>interleave</tt> (<a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>節) に似ている——ただし、(<a href="24_sec3_5.html#%_sec_3.5.4">3.5.4</a>節の <tt>integral</tt> 手続きと同様に) 遅延させた引数をとる、という点は除いて。
+これは、ある種の場合においてループを遅延させる (練習問題<a href="#%_thm_4.71">4.71</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5386"></a>(define (stream-append-delayed s1 delayed-s2)
@@ -3852,6 +5902,8 @@ an interleaving process, rather than simply appending them (see
 exercises <a href="#%_thm_4.72">4.72</a> and  <a href="#%_thm_4.73">4.73</a>).</p>
 
 <p class="trans" lang="ja">
+<tt>stream-flatmap</tt> ——フレームのストリームに対して手続きをマップして、結果として生じる、フレームのストリーム同士を結合するために、クエリ評価器の全体にわたって使われる——は、<a href="15_sec2_2.html#%_sec_2.2.3">2.2.3</a>節で普通のリストに関して導入した <tt>flatmap</tt> 手続きの、ストリーム版の類似物である。
+しかし、普通の <tt>flatmap</tt> とは違って、単純にストリーム同士を繋げるのではなく、間に挟まるプロセスとともにストリームを蓄積する (練習問題<a href="#%_thm_4.72">4.72</a>と練習問題<a href="#%_thm_4.73">4.73</a>を参照)。
 </p>
 
 <p class="lisp"><a name="%_idx_5390"></a>(define (stream-flatmap proc s)
@@ -3869,6 +5921,7 @@ The evaluator also uses the following simple procedure
 to generate a stream consisting of a single element:</p>
 
 <p class="trans" lang="ja">
+評価器は、単一要素からなるストリームを生成するために、以下の単純な手続きも用いる。
 </p>
 
 <p class="lisp"><a name="%_idx_5394"></a>(define (singleton-stream x)
@@ -3888,6 +5941,8 @@ They are the same as the <tt>type-tag</tt> and <tt>contents</tt> procedures in
 section <a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a>, except for the error message.</p>
 
 <p class="trans" lang="ja">
+<tt>tyoe</tt> と <tt>contents</tt> —— <tt>qeval</tt> により使われる (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) ——は、特殊形式はその <tt>car</tt> にある記号により識別されるのだ、ということを規定している。
+これらは、エラー・メッセージ以外は、<a href="17_sec2_4.html#%_sec_2.4.2">2.4.2</a>節の <tt>type-tag</tt> 手続きおよび <tt>contents</tt> 手続きと同じである。
 </p>
 
 <p class="lisp">(define (type exp)
@@ -3907,6 +5962,9 @@ that rules and assertions are added to the data base by expressions of
 the form <tt>(assert! &lt;<em>rule-or-assertion</em>&gt;):</tt></p>
 
 <p class="trans" lang="ja">
+以下の手続き—— (<a href="#%_sec_4.4.4.1">4.4.4.1</a>節における) <tt>query-driver-loop</tt> により使われる——は、規則や言明が、
+<tt>(assert! &lt;<em class="en">rule-or-assertion</em>&gt;)</tt>
+という形の式によってデータベースに追加される、ということを規定している。
 </p>
 
 <p class="lisp">(define (assertion-to-be-added? exp)
@@ -3920,6 +5978,7 @@ Here are the syntax definitions for the <tt>and</tt>,  <tt>or</tt>,  <tt>not</tt
 (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>):</p>
 
 <p class="trans" lang="ja">
+<tt>and</tt> と <tt>or</tt> と <tt>not</tt> と <tt>lisp-value</tt> という特殊形式 (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) についての文法定義を、ここに示す。
 </p>
 
 <p class="lisp">(define (empty-conjunction? exps) (null? exps))
@@ -3937,6 +5996,7 @@ Here are the syntax definitions for the <tt>and</tt>,  <tt>or</tt>,  <tt>not</tt
 The following three procedures define the syntax of rules:</p>
 
 <p class="trans" lang="ja">
+以下の三つの手続きは、規則の文法を定義している。
 </p>
 
 <p class="lisp">(define (rule? statement)
@@ -3963,6 +6023,10 @@ transformation is accomplished by the following
 procedure:<a name="call_footnote_Temp_702" href="#footnote_Temp_702"><sup><small>81</small></sup></a></p>
 
 <p class="trans" lang="ja">
+<tt>query-driver-loop</tt> (<a href="#%_sec_4.4.4.1">4.4.4.1</a>節) は、式の中のパタン変数—— <tt>?symbol</tt> という形である——を、<tt>(? symbol)</tt> という内部形式へと変形するために、<tt>query-syntax-process</tt> を呼び出す。
+つまり、<tt>(job ?x ?y)</tt> のようなパタンは、実際のところ、内部的にはシステムにより <tt>(job (? x) (? y))</tt> のように表現されるわけだ。
+これは、クエリ処理の効率性を向上させる。というのも、これは、記号から文字を抽出しなくてはならないのではなくて、むしろ、式の <tt>car</tt> が <tt>?</tt> という記号か否かを調べることで、その式がパタン変数か否かをシステムが調べられる、ということを意味するからである。
+文法変形は以下の手続きにより達成される <a href="#footnote_Temp_702"><sup><small>81</small></sup></a>。
 </p>
 
 <p class="lisp">(define (query-syntax-process exp)
@@ -3989,6 +6053,7 @@ and the constant symbols (which need to be recognized for
 data-base indexing, section <a href="#%_sec_4.4.4.5">4.4.4.5</a>) are just the symbols.</p>
 
 <p class="trans" lang="ja">
+一旦この方法で変数が変形されると、パタン内の変数は <tt>?</tt> で始まるリストであり、定数記号 (<a href="#%_sec_4.4.4.5">4.4.4.5</a>節のとおり、データベースの索引づけのために、認識されねばならない) はただの記号である。
 </p>
 
 <p class="lisp">(define (var? exp)
@@ -4004,6 +6069,8 @@ application is a number, which is incremented each time a rule is
 applied.</p>
 
 <p class="trans" lang="ja">
+(<a href="#%_sec_4.4.4.4">4.4.4.4</a>節での) 規則適用の間に、以下の手続きを用いて、一意な変数が構築される。
+規則適用に対する一意な識別子は番号であり、これは、規則が適用されるたびにインクリメントされる。
 </p>
 
 
@@ -4021,6 +6088,7 @@ answer, it converts any unbound pattern variables back to the right
 form for printing, using</p>
 
 <p class="trans" lang="ja">
+<tt>query-driver-loop</tt> は、クエリをインスタンス化して答えを印字するとき、束縛されていないどのパタン変数をも、印字用の正しい形式へ戻すように、以下を用いて変換する。
 </p>
 
 <p class="lisp">(define (contract-question-mark variable)
@@ -4042,6 +6110,7 @@ form for printing, using</p>
 variable-value pairs:</p>
 
 <p class="trans" lang="ja">
+フレームは、束縛——変数と値の対——のリストとして、表現される。
 </p>
 
 <p class="lisp">(define (make-binding variable value)
@@ -4063,7 +6132,7 @@ procedures (section <a href="#%_sec_4.4.4.2">4.4.4.2</a>) are implemented using
 explicit <tt>delay</tt> operations, rather than being defined as follows:</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.71.</b> 
+<b>練習問題4.71.</b> ルイス・リーズナは、なぜ <tt>simple-query</tt> 手続きと <tt>disjoin</tt> 手続き (<a href="#%_sec_4.4.4.2">4.4.4.2</a>節) が、以下のように定義されるのではなく、むしろ明示的な <tt>delay</tt> 演算を用いて実装されているのかな、と思う。
 </p>
 
 <p class="lisp">(define (simple-query query-pattern frame-stream)
@@ -4085,6 +6154,7 @@ lead to undesirable behavior?
 </p>
 
 <p class="trans" lang="ja">
+これらのより簡素な定義が望ましくない振る舞いにつながるであろうクエリの例を、君は示せるかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4099,7 +6169,9 @@ section <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>?)
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.72.</b> 
+<b>練習問題4.72.</b> なぜ <tt>disjoin</tt> と <tt>stream-flatmap</tt> は、ストリーム同士を単純につなぐのではなく、むしろストリーム同士を混ぜこぜにするのか?
+なぜ混ぜこぜにすることで、よりうまくいくのか、ということを例示するような、例を示せ
+(ヒント: <a href="24_sec3_5.html#%_sec_3.5.3">3.5.3</a>節でどうして <tt>interleave</tt> を使ったのだったっけ?)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4113,7 +6185,8 @@ What would be wrong with defining it as follows:
 
 
 <p class="trans" lang="ja">
-<b>練習問題4.73.</b> 
+<b>練習問題4.73.</b> なぜ <tt>flatten-stream</tt> は <tt>delay</tt> を明示的に使うのか?
+<tt>flatten-stream</tt> を以下のように定義すると、何がまずいのだろう?
 </p>
 
 <p class="lisp">(define (flatten-stream stream)
@@ -4127,7 +6200,6 @@ What would be wrong with defining it as follows:
 <p class="exercise"><span class="ex_comment">
 </span></p>
 
-
 <p class="orig" lang="en">
 <a name="%_thm_4.74"></a>
 <b>Exercise 4.74.</b>  <a name="%_idx_5418"></a>Alyssa P. Hacker proposes to use a simpler version of <tt>stream-flatmap</tt>
@@ -4137,7 +6209,8 @@ in these cases always produces either the empty stream or a singleton
 stream, so no interleaving is needed when combining these streams.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.74.</b> 
+<b>練習問題4.74.</b> <tt>negate</tt> と <tt>lisp-value</tt> と <tt>find-assertions</tt> の中では、より単純なバージョンの <tt>stream-flatmap</tt> を使おう、とアリッサ・P・ハッカは提案する。
+彼女は、これらの場合においてフレーム・ストリームに対してマップされる手続きが、常に、空ストリームか、または、一要素ストリームのいずれかを作り出すこと、そのため、これらのストリーム同士を結合する際には、混ぜこぜにする必要がないこと、に気づいているのだ。
 </p>
 
 <ol class="orig alph" start="1" lang="en">
@@ -4145,7 +6218,7 @@ stream, so no interleaving is needed when combining these streams.</p>
 </ol>
 
 <ol class="trans alph" start="1" lang="ja">
-<li></li>
+<li>アリッサのプログラムにおいて欠けている式を埋めよ。</li>
 </ol>
 
 <p class="lisp">(define (simple-stream-flatmap proc s)
@@ -4156,17 +6229,19 @@ stream, so no interleaving is needed when combining these streams.</p>
               (stream-filter &lt;<em>??</em>&gt; stream)))
 </p>
 
+<p class="exercise"><span class="ex_comment">
+</span></p>
+
 <ol class="orig alph" start="2" lang="en">
 <li>Does the query system's behavior change if we change it in this way?</li>
 </ol>
 
 <ol class="trans alph" start="2" lang="ja">
-<li></li>
+<li>クエリ・システムをこのように変えたら、クエリ・システムの振る舞いは変わるだろうか?</li>
 </ol>
 
 <p class="exercise"><span class="ex_comment">
 </span></p>
-
 
 <p class="orig" lang="en">
 <a name="%_thm_4.75"></a>
@@ -4174,7 +6249,9 @@ stream, so no interleaving is needed when combining these streams.</p>
 in the data base satisfying a specified query.  For example,</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.75.</b> 
+<b>練習問題4.75.</b> <tt>unique</tt> と呼ばれる新たな特殊形式を、クエリ言語用に実装せよ。
+指定されたクエリを満たす、きっかり一個の項目がデータベース内にある場合に、<tt>unique</tt> は成功すべきである。
+たとえば、
 </p>
 
 <p class="lisp">(unique (job ?x (computer wizard)))
@@ -4183,6 +6260,7 @@ in the data base satisfying a specified query.  For example,</p>
 <p class="orig" lang="en">should print the one-item stream</p>
 
 <p class="trans" lang="ja">
+は、次の一項目ストリームを印字すべきである。
 </p>
 
 <p class="lisp">(unique (job (Bitdiddle Ben) (computer wizard)))
@@ -4191,6 +6269,7 @@ in the data base satisfying a specified query.  For example,</p>
 <p class="orig" lang="en">since Ben is the only computer wizard, and</p>
 
 <p class="trans" lang="ja">
+というのも、ベンは唯一のコンピュータ魔術師だからである。また、
 </p>
 
 <p class="lisp">(unique (job ?x (computer programmer)))
@@ -4200,6 +6279,7 @@ in the data base satisfying a specified query.  For example,</p>
 programmer.  Moreover,</p>
 
 <p class="trans" lang="ja">
+は、空ストリームを印字すべきである。というのも、一人よりも多くのコンピュータ・プログラマがいるからである。さらに、
 </p>
 
 <p class="lisp">(and (job ?x ?j) (unique (job ?anyone ?j)))
@@ -4209,6 +6289,7 @@ programmer.  Moreover,</p>
 people who fill them.</p>
 
 <p class="trans" lang="ja">
+は、ただ一人の人物により果たされているようなすべての仕事と、それらの仕事を果たしている人々とを、列挙すべきである。
 </p>
 
 <p class="orig" lang="en">
@@ -4220,6 +6301,10 @@ your procedure is called <tt>uniquely-asserted</tt>, all you need to do
 is</p>
 
 <p class="trans" lang="ja">
+<tt>unique</tt> を実装することは、二つの部分からなっている。
+第一の部分は、この特殊形式を扱う手続きを書くことであり、第二の部分は、<tt>qeval</tt> に、その手続きへと割り振りを行わせることである。
+第二の部分は瑣末である。というのも、<tt>qeval</tt> は、自身による割り振りを、データ指向的な方法で行うからである。
+君の手続きが <tt>uniquely-asserted</tt> と呼ばれるとすれば、君がせねばならないことは、ただ、
 </p>
 
 <p class="lisp">(put 'unique 'qeval uniquely-asserted)
@@ -4229,6 +6314,7 @@ is</p>
 <tt>type</tt> (<tt>car</tt>) is the symbol <tt>unique</tt>.</p>
 
 <p class="trans" lang="ja">
+とすることだけであり、<tt>qeval</tt> は、<tt>type</tt> (<tt>car</tt>) が <tt>unique</tt> という記号であるようなどのクエリについても、この手続きへの割り振りを行うであろう。
 </p>
 
 <p class="orig" lang="en">
@@ -4242,6 +6328,12 @@ stream that is the result of the <tt>unique</tt> query.  This is similar
 to the implementation of the <tt>not</tt> special form.</p>
 
 <p class="trans" lang="ja">
+本当の問題は、<tt>uniquely-asserted</tt> という手続きを書くことである。
+この手続きは、<tt>unique</tt> クエリの <tt>contents</tt> (<tt>cdr</tt>) を、フレームのストリームとともに、入力としてとる。
+ストリーム中の各フレームについて、この手続きは、<tt>qeval</tt> を用いて、与えられたクエリを満たすような、当該フレームに対するすべての拡張からなる、ストリームを求めるはずだ。
+中にちょうど一個の項目を有する訳ではない、いかなるストリームも、削除されるはずである。
+残っているストリームは、<tt>unique</tt> クエリの結果である一つの大きなストリームの中へと蓄積されるべく、渡されて戻されるはずである。
+これは、<tt>not</tt> 特殊形式の実装に似ている。
 </p>
 
 <p class="orig" lang="en">
@@ -4250,6 +6342,7 @@ supervise precisely one person.
 </p>
 
 <p class="trans" lang="ja">
+きっかり一人の人物を指揮監督するようなすべての人々を列挙するクエリを形成することにより、君の実装を検査してみたまえ。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4272,7 +6365,10 @@ factor of <em>k</em> fewer than the number of matches required in our current
 method.</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.76.</b> 
+<b>練習問題4.76.</b> クエリの直列結合としての、私たちの <tt>and</tt> の実装 (図<a href="#%_fig_4.5">4.5</a>) は、明晰ではあるが、<tt>and</tt> のうちの2番目のクエリを処理する際に、1番目のクエリにより作り出された各フレームについてデータベースを走査せねばならないため、非効率的である。
+もしデータベースに <em class="en">N</em> 個の要素があり、典型的なクエリが <em class="en">N</em> に比例する個数 (つまり <em class="en">N</em>/<em class="en">k</em> 個) の出力フレームを作り出すとすれば、1番目のクエリにより作り出された各フレームについてデータベースを走査することは、パタン・マッチャに対する <em class="en">N</em><sup>2</sup>/<em class="en">k</em> 回の呼び出しを必要とするであろう。
+別の手法は、<tt>and</tt> の二つの節を別々に処理して、それから、両立する出力フレーム同士のすべての対を探すことであろう。
+もし各クエリが <em class="en">N</em>/<em class="en">k</em> 個の出力フレームを作り出すとすれば、これは、両立性検査を <em class="en">N</em><sup>2</sup>/<em class="en">k</em><sup>2</sup> 回——これは、私たちの今の方法で必要とされるマッチの回数よりも、<em class="en">k</em> 倍ぶんだけ少ない——実行せねばならない、ということを意味する。
 </p>
 
 <p class="orig" lang="en">
@@ -4284,6 +6380,9 @@ is similar to unification.
 </p>
 
 <p class="trans" lang="ja">
+この戦略を用いる、<tt>and</tt> の実装を考案せよ。
+入力として二つのフレームをとり、それらのフレーム内の束縛同士が両立するかどうかを調べ、もし両立するなら、その二組の束縛を合併するフレームを作り出すような手続きを、君は実装せねばならない。
+この操作は、ユニフィケーションに似ている。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4304,7 +6403,11 @@ intermediate frames generated.
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.77.</b> 
+<b>練習問題4.77.</b> <tt>not</tt> と <tt>lisp-value</tt> は、変数が束縛されていないフレームにこれらのフィルタリング演算が適用された場合に、クエリ言語に「間違った」答えを提示させてしまう可能性がある、ということを<a href="#%_sec_4.4.3">4.4.3</a>節で見た。
+この欠点を修正する方法を考案せよ。
+一つの考え方は、演算を可能とするのに十分な変数が束縛されたときにのみ満たされるような、フィルタリングを行うための「<ruby><rb>約束</rb><rp> (</rp><rt>プロミス</rt><rp>) </rp></ruby>」を、フレームに追加することによって、「遅延された」方法でフィルタリングを行うことである。
+他のすべての演算が実行され終えるまで、フィルタリングを実行するのを待つことができるだろう。
+とはいえ、効率性のためには、生成される中間的フレームの数を減らすように、フィルタリングをできるだけすぐに行いたい。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4325,7 +6428,11 @@ difference?
 </p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.78.</b> 
+<b>練習問題4.78.</b> ストリーム・プロセスではなく、むしろ<a href="28_sec4_3.html#%_sec_4.3">4.3</a>節の評価器を使って実装されるべき非決定的プログラムとして、クエリ言語を設計し直せ。
+この手法では、各クエリが (すべての答えからなるストリームではなく) 単一の答えを生み出すだろうし、ユーザは、さらなる答えを見るために <tt>try-again</tt> と打ち込むことができる。
+本節で私たちが構築した仕組みのほとんどが、非決定的な探索とバックトラッキングに含められる、ということに君は気づくはずである。
+しかし、君の新たなクエリ言語が、ここで実装されたものとは微妙に振る舞いが違う、ということにも、おそらく君は気づくだろう。
+この違いを例解する事例を見つけられるかな?
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4338,7 +6445,8 @@ we saw how to use local environments to avoid name conflicts between
 the parameters of procedures.  For example, in evaluating</p>
 
 <p class="trans" lang="ja">
-<b>練習問題4.79.</b> 
+<b>練習問題4.79.</b> <a href="26_sec4_1.html#%_sec_4.1">4.1</a>節で Lisp 評価器を実装したとき、私たちは、手続きのパラメタ同士の間での名前衝突を防ぐためには局所環境をどのように使うのか、ということを見た。
+たとえば、以下を評価する際に、
 </p>
 
 <p class="lisp">(define (square x)
@@ -4360,6 +6468,10 @@ rename the variables in the body of a procedure each time we apply the
 procedure.</p>
 
 <p class="trans" lang="ja">
+<tt>square</tt> 内の <tt>x</tt> と、<tt>sum-of-squares</tt> 内の <tt>x</tt> との間には、何の混同もない。なぜなら、局所変数用の束縛を含むように特別に構築される環境内で、それぞれの手続きの本体を評価するからである。
+クエリ・システムでは、私たちは、規則を適用する際の名前衝突を防ぐために、別の戦略を用いた。
+規則を適用するたびに、変数を、一意だと保証されている新たな名前にリネームするのだ。
+Lisp 評価器についての類似の戦略は、局所環境を廃止して、手続きを適用するたびにその手続きの本体の中の変数を単純にリネームする、というものである。
 </p>
 
 <p class="orig" lang="en">
@@ -4375,6 +6487,10 @@ answer is probably worth a Ph.D.)</p>
 
 
 <p class="trans" lang="ja">
+リネームではなく環境を用いるような規則適用方法を、クエリ言語用に実装せよ。
+ブロック構造化された手続きの規則版の類似物などの、大規模システムを扱うための、クエリ言語における構造物を作成するために、君の環境構造を活かせているかどうか、ということを確かめよ。
+これのうちの幾らかでも、君は、問題解決の一手法として文脈内で演繹を行うという問題 (たとえば、「もし <em class="en">P</em> は真だと私が思ったなら、私は、<em class="en">A</em> かつ <em class="en">B</em> だと演繹できたことだろう」) と、関連づけられるかな?
+(この問題は自由回答である。良い答えは、おそらく博士号に値する)。
 </p>
 
 <p class="exercise"><span class="ex_comment">
@@ -4532,7 +6648,7 @@ different.)</p>
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_658"><sup><small>65</small></sup></a>
 二つのものを同一とするためには、<tt>same</tt> を必要とはしないのだ、ということに注意せよ。それぞれについて同じパタン変数を使いさえすればよいのだ。実際、そもそもは、二つのものではなく、一つのものがある訳だ。
-たとえば、<tt>lives-near</tt> の規則における <tt>?town</tt> や、以下の <tt>wheel</tt> の規則における <tt>?middle-manager</tt> を参照せよ
+たとえば、<tt>lives-near</tt> の規則における <tt>?town</tt> や、以下の <tt>wheel</tt> の規則における <tt>?middle-manager</tt> を参照せよ。
 <tt>same</tt> は、<tt>lives-near</tt> の規則における <tt>?person-1</tt> と <tt>?person-2</tt> のように、二つのものを強制的に異なるものとしたい場合に、有用である。
 クエリの二つの部分で同じパタン変数を使うことは、同じ値が両方の場所に現れることを強いるが、異なるパタン変数を使うことは、異なる値が現れることを強いる訳ではない (異なるパタン変数に<ruby><rb>代入された</rb><rp> (</rp><rt>わりあてられた</rt><rp>) </rp></ruby>値は、同じかもしれないし、あるいは、違うかもしれないのだ)。
 </p>
@@ -4543,7 +6659,7 @@ conclusion is satisfied by any values of the variables.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_659"><sup><small>66</small></sup></a>
-<tt>same</tt> でのような、本体のない規則も許可しよう。そして、そういった規則を、変数の任意の値によって当該規則の帰結が満たされることを意味するものとして、解釈しよう。
+<tt>same</tt> に見られるような、本体のない規則も許可しよう。そして、そういった規則を、変数の任意の値によって当該規則の帰結が満たされることを意味するものとして、解釈しよう。
 </p>
 
 <p class="orig" lang="en">
@@ -4562,7 +6678,7 @@ simple-minded form of such an optimization.</p>
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_670"><sup><small>67</small></sup></a>
 マッチングは一般的にはとても高くつくので、データベースのどの要素に対しても完全なマッチャを適用することは避けたい。
-これの手筈は、普通、プロセスを高速で粗いマッチと最終的なマッチへと分解することにより、整えられる。
+これ<span class="note"> (完全なマッチャの適用を避けること) </span>の手筈は、普通、プロセスを、高速で粗いマッチと最終的なマッチへと分解することにより、整えられる。
 粗いマッチは、データベースをフィルタにかけて、最終的なマッチに対する候補の小さな集合を作り出す。
 注意すれば、私たちは、候補を選択したいときではなくデータベースが構築されるときに粗いマッチングの作業のうちのいくらかを行えるように、自分のデータベースを整えられる。
 これは、データベースの<em><ruby><rb>索引づけ</rb><rp> (</rp><rt>インデクシング</rt><rp>) </rp></ruby></em>と呼ばれる。
@@ -4733,7 +6849,7 @@ frame, which is used to instantiate the input query to produce <tt>(not (basebal
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_688"><sup><small>78</small></sup></a>
 <tt>(not (baseball-fan (Bitdiddle Ben)))</tt> というクエリを考えよう。
-システムは、<tt>(baseball-fan (Bitdiddle Ben))</tt> データベース内に存在しないと知り、よって、空フレームは、このパタンを満たさず、フレームの初期ストリームから除外されない。
+システムは、<tt>(baseball-fan (Bitdiddle Ben))</tt> がデータベース内に存在しないと知り、よって、空フレームは、このパタンを満たさず、フレームの初期ストリームから除外されない。
 したがって、クエリの結果は空フレームであり、この空フレームは、入力クエリをインスタンス化して <tt>(not (baseball-fan (Bitdiddle Ben)))</tt> を作り出すのに使われる。
 </p>
 
@@ -4762,14 +6878,32 @@ Beginning with the expression 1  +  <em>y</em>/2 and repeatedly substituting 1
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_700"><sup><small>80</small></sup></a>
+一般に、<tt>?y</tt> と、<tt>?y</tt> を含む式とをユニファイすることには、私たちが
+<span class="math"><tt>?y</tt>  =  &lt;<em class="en"><tt>?y</tt> を含む式</em>&gt;</span>
+という方程式の不動点を求められることが必要になるだろう。
+解のように見える式を文法的に形成することが、ときには可能である。
+たとえば、
+<span class="math"><tt>?y</tt>  =  <tt>(f ?y)</tt></span> 
+は、
+<tt>(f (f (f &hellip; )))</tt>
+という不動点—— <tt>(f ?y)</tt> という式から始めて、繰り返し、<tt>?y</tt> を <tt>(f ?y)</tt> で置き換えることによって、作り出せる——を持つように見える。
+あいにく、そうした方程式のすべてが意味のある不動点を持つわけではない。
+ここで持ち上がる問題は、数学において無限級数を操作する問題と似ている。
+たとえば、私たちは、2 が
+<span class="math"><em class="en">y</em>  =  1  +  <em class="en">y</em>/2</span>
+という方程式の解であることを知っている。
+<span class="math">1  +  <em class="en">y</em>/2</span>
+という式から初めて、繰り返し、<em class="en">y</em> を
+<span class="math">1 +  <em class="en">y</em>/2</span>
+で置き換えることによって、
 </p>
-
 
 <figure><img src="ch4-Z-G-7.gif" border="0"></figure>
 
 <p class="orig" lang="en">which leads to</p>
 
 <p class="trans" lang="ja">
+が得られ、これは、次のような結果となる。
 </p>
 
 <figure><img src="ch4-Z-G-8.gif" border="0"></figure>
@@ -4780,6 +6914,9 @@ obtain
 </p>
 
 <p class="trans" lang="ja">
+しかし、もし、&minus;1 は
+<span class="math"><em class="en">y</em>  =  1  +  2<em class="en">y</em></span>
+に対する解である、という観察から始まる同じ操作を試みれば、
 </p>
 
 <figure><img src="ch4-Z-G-9.gif" border="0"></figure>
@@ -4789,6 +6926,7 @@ obtain
 
 
 <p class="trans" lang="ja">
+となって、これは、次のような結果となる。
 </p>
 
 <figure><img src="ch4-Z-G-10.gif" border="0"></figure>
@@ -4801,6 +6939,8 @@ lead to errors. </p>
 
 
 <p class="trans" lang="ja">
+これら二つの方程式を導出する際に使われる形式上の操作は同一だが、1番目の結果は無限級数に関する有効な言明であり、2番目の結果はそうではない。
+同様に、私たちのユニフィケーション結果については、文法的に構築された任意の式を用いて推論することが、間違いにつながりかねない。
 </p>
 
 <p class="orig" lang="en"><a name="footnote_Temp_702" href="#call_footnote_Temp_702"><sup><small>81</small></sup></a> Most Lisp systems give the user the ability to
@@ -4815,6 +6955,11 @@ explicitly.</p>
 
 <p class="trans" lang="ja">
 <a href="#call_footnote_Temp_702"><sup><small>81</small></sup></a>
+<em>リーダ・マクロ文字</em>を定義することによって、普通の <tt>read</tt> 手続きを、こうした変形を実行するように変形する能力を、ほとんどの Lisp システムはユーザに与えてくれている。
+引用符のついた式は、既にこのような方法で扱われている。
+<ruby><rb>読み取り器</rb><rp> (</rp><rt>リーダ</rt><rp>) </rp></ruby>は、<tt>'expression</tt> を、評価器がこれを見る前に、<tt>(quote expression)</tt> へと自動的に変換する。
+私たちは、同じ方法で <tt>?expression</tt> が <tt>(? expression)</tt> へと変形されるように、手筈を整えることもできよう。
+しかし、明確さのために、私たちは、ここで明示的に変換手続きを含めておいたのである。
 </p>
 
 <p class="orig" lang="en">
@@ -4823,6 +6968,8 @@ several procedures with <tt>string</tt> in their names.
 These are Scheme primitives.</p>
 
 <p class="trans" lang="ja">
+<tt>expand-question-mark</tt> と <tt>contract-question-mark</tt> は、名前の中に <tt>string</tt> を含む手続きをいくつか用いる。
+これらは、Scheme のプリミティブである。
 </p>
 
 </div>
