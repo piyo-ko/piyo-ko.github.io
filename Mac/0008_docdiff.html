@@ -103,6 +103,35 @@ code em.add {
 
 <p>細かいことを言うと、元のソースで<a href="#html_output">上記のように</a> docdiff を実行してできた HTML ファイルと、修正後のソースで同様に docdiff を実行してできた HTML ファイルとでは、「ここからここまでが同じ」と認識する範囲が微妙に異なることもある。ただし、どちらの認識も、「そういう認識もできるよね」という範囲内のものではある。つまり、解釈の相違というレベルの違いが生じただけであって、別に「今回のソースの改造によって未知の新たなエラーが生じた」ということではなさそうだ。</p>
 
+<h3 id="change_style">[追記] <tt>docdiff</tt> 自体のソースはいじらずに、出力される HTML ファイルでの色使い (などのスタイル) を変更する</h3>
+
+<p><tt>docdiff</tt> が HTML 形式の出力を行ってくれるのは便利でよいのだが、色使いがちょっと好みではない。ということで、スタイルを変えたい。
+が、<tt>docdiff</tt> 自体のソースはいじりたくない。
+ということで、とりあえず Perl で解決しようと思って、<a href="https://gist.github.com/piyo-ko/e805ba322ef14bf2a0e411ee118c8822">簡単なスクリプト</a>を書いた。</p>
+
+
+<p>たとえば、
+<code>$ docdiff --char old.txt new.txt | ./change_docdiff_style.pl > diff.html</code>
+といったように使える。
+また、これによって生成されるファイルでのスタイルが気に食わなければ、print 文の引数を適当に書き換えればよい。
+</p>
+
+<p>ただしこれは、生成される HTML ファイル内の style タグの中身を書き換えるという安直な方法なので、柔軟性がない。
+本当は、外部の CSS ファイルを読み込むように変更して、その CSS ファイルを自分で好きなときに好きなように編集できるようにしておく方が便利だろう (と、思ったけれど、まだやっていない)。</p>
+
+<h3 id="modify_2">[追記] <tt>docdiff</tt> 自体のソースを改造してスタイルを変更する</h3>
+
+<p>これはまだ試していない。だが、いつもいつもパイプで Perl スクリプトにつなぐのは面倒な気もしてきたので、<tt>docdiff</tt> 自体のソースを改造することも考えるべきかもしれない。
+とりあえず、改造対象のソースを特定しよう。</p>
+
+<code>$ cd /usr/local/lib/ruby/gems/2.4.0/gems/docdiff-0.5.0
+$ grep -R &quot;span.del&quot; .
+./lib/docdiff/view.rb:     &quot; span.del {background: hotpink; border: thin inset;}#{@eol_char||''}&quot; +
+./readme.html:  span.del {background: hotpink; border: thin inset;}
+./test/docdiff_test.rb:     ' span.del {background: hotpink; border: thin inset;}' + &quot;\n&quot; +</code>
+
+<p>というわけで、<code>/usr/local/lib/ruby/gems/2.4.0/gems/docdiff-0.5.0/lib/docdiff/view.rb</code> を修正すれば良さそうだ。
+ソースを見た感じだと、<code>def html_header()</code> の中を書き換えれば良さそう (外部の CSS ファイルを読み込む形にもできそう) なので、今度試してみようかな。</p>
 
 <nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
 </div>
