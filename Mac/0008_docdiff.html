@@ -6,6 +6,14 @@
 <title>林檎さんについての備忘録: git で管理していなくったって、DocDiff を使えば文字単位で差分を見られるよ</title>
 <link rel="canonical" href="https://piyo-ko.github.io/Mac/0008_docdiff.html" />
 <link rel="stylesheet" href="mac.css" type="text/css">
+<style>
+code em.del {
+  background: hsl(120, 100%, 80%);
+}
+code em.add {
+  background: hsl(40, 100%, 80%);
+}
+</style>
 <script type="text/javascript" src="decor.js"></script>
 </head>
 
@@ -20,6 +28,9 @@
 <h2>git で管理していなくったって、DocDiff を使えば文字単位で差分を見られるよ</h2>
 
 <p>……という、タイトルがすべての記事なんだが、一応、詳細も書いておく。git で管理している場合は、<a href="0006_git-diff.html"><tt>diff-highlight</tt> を使えばよい</a>。</p>
+
+<p>[追記] <em>git で管理していないファイルでも <tt>git diff</tt> が使える</em>ということを知った。よって、<a href="0006_git-diff.html"><tt>diff-highlight</tt> を使っている場合</a>は、たとえば、<code>$ git diff old.txt new.txt</code> などとすることで、差分をカラー表示できる。ただ、<a href="#html_output">後述するように</a>、DocDiff には「ファイル全体について HTML 形式で見やすく出力できる」という利点もあるので、場合によって使い分けるのが良さそう。</p>
+
 
 <h3>DocDiff にたどりつくまで</h3>
 <p>git で管理するほどのものではなくても、何かの拍子にファイルの更新の差分を見たいときがある。あるいは、フィルタに通した後の結果 (sed にかけた結果とか) が所望のものになっているかどうか確認するために、フィルタへの入力と出力の差分を見たいときがある (sed に不慣れだと、正規表現の指定の仕方がまずくて、予期せぬ変なところで変換されて、ぎゃふんとなったりするのよ)。</p>
@@ -47,7 +58,7 @@
 
 <p>見やすい形でじっくり差分を見るには、</p>
 
-<code class="block">$ docdiff --char <span class="com">旧ファイル</span> <span class="com">新ファイル</span> &gt; <span class="com">結果出力先.html</span></code>
+<code class="block" id="html_output">$ docdiff --char <span class="com">旧ファイル</span> <span class="com">新ファイル</span> &gt; <span class="com">結果出力先.html</span></code>
 
 <p>と実行して、生成されたHTMLファイルをブラウザで開くと良い (なお、私の環境だと
 「Thread.exclusive is deprecated, use Mutex」
@@ -57,6 +68,41 @@
 <p>設定ファイルのサンプルというのは、多分、</p>
 <code class="block">/usr/local/lib/ruby/gems/2.3.0/gems/docdiff-0.5.0/docdiff.conf.example</code>
 <p>のことですね。とりあえずはいじらなくても良いかな……。</p>
+
+<h3 id="modify_1">[追記] エラーを抑制するための改造をしてみた</h3>
+<p>Ruby の読み書きがまったくできないくせに、適当に検索して見つけた例を流用して改造を行う、という蛮勇をふるってみた (良い子の振る舞いではございません)。具体的には、docdiff を実行したときの</p>
+
+<code>Thread.exclusive is deprecated, use Thread::MutexThread.exclusive is deprecated, use Thread::Mutex
+/usr/local/lib/ruby/gems/2.4.0/gems/docdiff-0.5.0/lib/docdiff/diff/speculative.rb:23:in `block in lcs'</code>
+
+<p>というエラーメッセージを頼りに、speculative.rb を少し改造した。</p>
+
+<p>まず、とりあえずソースのあるディレクトリに行ってみる。</p>
+<code>$ cd /usr/local/lib/ruby/gems/2.4.0/gems/docdiff-0.5.0/lib/docdiff/diff/
+</code>
+
+<p>怖いので、一応、現状のファイルをコピーして保存しておく。</p>
+<code>$ sudo cp speculative.rb old_speculative.rb</code>
+
+<p>さて、「ruby Thread.exclusive Thread::Mutex」で検索してみると、<a href="http://fiveteesixone.lackland.io/2016/01/03/thread-exclusive-is-deprecated-use-mutex/">このページ</a>が見つかって、<a href="https://github.com/middleman/middleman-livereload/pull/85/files">修正例</a>へのリンクもある。
+もっとも、「ちょっと落ち着かない気がする」と評されているのではあるが、私は Ruby の読み書きがまったくできないので、この修正例を真似て、speculative.rb を修正してみた。修正前後のファイルの diff (に色づけしたもの) を以下に示しておく。</p>
+
+<code>$ diff old_speculative.rb speculative.rb
+23c23,24
+< 	<em class="del">Thread.exclusive</em> {tg.list.each {|t| t.kill if t != Thread.current}}
+---
+> 	<em class="add">@m1 = Thread::Mutex.new</em>
+> 	<em class="add">@m1.synchronize</em> {tg.list.each {|t| t.kill if t != Thread.current}}
+31c32,33
+< 	<em class="del">Thread.exclusive</em> {tg.list.each {|t| t.kill if t != Thread.current}}
+---
+> 	<em class="add">@m2 = Thread::Mutex.new</em>
+> 	<em class="add">@m2.synchronize</em> {tg.list.each {|t| t.kill if t != Thread.current}}</code>
+
+<p>こういういい加減な修正により、うるさいエラーは消えたのであった。Ruby の分かる方からの「それじゃダメだよ」等の突っ込みを<a href="https://www.twitter.com/pi__yo__ko">お待ちしております</a>。</p>
+
+<p>細かいことを言うと、元のソースで<a href="#html_output">上記のように</a> docdiff を実行してできた HTML ファイルと、修正後のソースで同様に docdiff を実行してできた HTML ファイルとでは、「ここからここまでが同じ」と認識する範囲が微妙に異なることもある。ただし、どちらの認識も、「そういう認識もできるよね」という範囲内のものではある。つまり、解釈の相違というレベルの違いが生じただけであって、別に「今回のソースの改造によって未知の新たなエラーが生じた」ということではなさそうだ。</p>
+
 
 <nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
 </div>
