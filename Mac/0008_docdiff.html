@@ -117,7 +117,19 @@ code em.add {
 </p>
 
 <p>ただしこれは、生成される HTML ファイル内の style タグの中身を書き換えるという安直な方法なので、柔軟性がない。
-本当は、外部の CSS ファイルを読み込むように変更して、その CSS ファイルを自分で好きなときに好きなように編集できるようにしておく方が便利だろう (と、思ったけれど、まだやっていない)。</p>
+本当は、外部の CSS ファイルを読み込むように変更して、その CSS ファイルを自分で好きなときに好きなように編集できるようにしておく方が便利だろう<del> (と、思ったけれど、まだやっていない)</del>。</p>
+
+<p id="change_style_with_css">さらに追記。
+外部の CSS ファイル (とりあえず <tt>~/.docdiff.css</tt> という固定のファイル) を読み込むように変換する<a href="https://gist.github.com/piyo-ko/c0884122e6c6e2badbd15ab30cdabd3b#file-change_docdiff_style_with_css-pl">スクリプト</a>も書いてみた。
+<a href="https://gist.github.com/piyo-ko/c0884122e6c6e2badbd15ab30cdabd3b#file-docdiff-css">CSS の例</a>も作っておいた。
+たとえば、
+<code>$ docdiff --char old.txt new.txt | ./change_docdiff_style_with_css.pl > diff.html</code>
+のように使う。
+ローカルで自分でだけ使っているぶんには、まあこれでもよさそう。
+もし問題があるとすれば、外に出すとき。このスクリプトによって、
+<code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/Users/<span class="com">ユーザ名</span>/.docdiff.css&quot;&gt;</code>
+という行が追加されるので、自分がローカルマシンで使っているユーザ名が暴露されてしまう。まあ、この行を書き換えれば (そしてそれに合わせて適宜の場所に CSS ファイルをおけば) 済むのだが。
+</p>
 
 <h3 id="modify_2">[追記] <tt>docdiff</tt> 自体のソースを改造してスタイルを変更する</h3>
 
