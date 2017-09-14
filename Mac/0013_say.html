@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: say コマンドで遊ぶ</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2><tt>say</tt> コマンドで遊ぶ</h2>
+
+<h3>まず声のデータを用意する</h3>
+<p>
+システム環境設定で、[アクセシビリティ]-[スピーチ] とメニューを選択すると、<em>[システムの声]</em> というプルダウンメニューが見つかる (macOS Sierra の場合)。
+その一番下に [カスタマイズ…] とあり、これを選ぶと [声を選択] というウィンドウが現れる。
+ここで、使いたい声のチェックボックスをチェックする。
+</p>
+<p>
+なお、「日本語 (日本)」用の声としては、女性の Kyoko (響子?) さんと男性の Otoya (音也?) さんが用意されている。
+外国語を学習中の場合は、その言語の声のチェックボックスをチェックしておくのもよいかもしれない。
+なお、新たに声をチェックすると、データのダウンロードにしばらく時間がかかる。
+</p>
+
+<h3>疲れたときなどにどうぞ</h3>
+<p>
+さて、適宜好きな声を選んで [OK] ボタンをタップした後、上記の [スピーチ] メニューにおいて [システムの声] として Kyoko さんが選ばれた状態にしておくと、デフォルトの声が Kyoko さんになる。
+すると、<em>ターミナルで</em>
+<code>$ say 'こんばんは、お嬢様'</code>
+<em>と実行したときに、Kyoko さんからこう言ってもらえる。</em>
+Otoya さんに言ってもらいたい場合は、
+<code>$ say -v Otoya 'こんばんは、お嬢様'</code>
+と声を指定すればよい。
+ちなみに、声の一覧を見たい場合は、
+<code>$ say -v ?</code>
+とする。
+</p>
+
+<h3>宇宙人ごっこもできるぞ</h3>
+<p>
+ところで、当然というべきか、英語用の声が一番多く用意されているのだが、<em>「英語 (アメリカ)」</em>に至っては、「女性」と「男性」に加えて<em>「その他」という分類</em>まである。
+ここに分類されている声は、冗談用のおもしろボイスなので、<em>「我々は宇宙人だ! 降伏せよ! ハハハハ!」みたいな科白が似合う</em>。
+ただし、英語用の声なので、この日本語そのままを引数として与えても、そのようにはしゃべってくれない。
+そこで、たとえば以下のようにすると、いわゆる宇宙人ボイスでこの科白が聞ける。
+楽しい。
+</p>
+
+<code>$ cat &lt;&lt;UFO | say -v Trinoids
+&gt; wa re wa re wa oo chew zin da!
+&gt; koh hu ku say yo!
+&gt; ha! ha! ha! ha!
+&gt; UFO</code>
+
+<p>
+Trinoids さん以外も、この分類の声は大体この科白が似合うように思うので、遊び甲斐がある。
+</p>
+
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
