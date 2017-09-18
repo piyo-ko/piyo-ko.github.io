@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>ふるスマで理解する実録・債務超過 (初心者版)</title>
+<link rel="canonical" href="https://piyo-ko.github.io/misc/furusuma_BS.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>
+table {
+  display: inline-block;
+  border-collapse: collapse;
+  margin-left: 0;
+  margin-right: 0;
+}
+table.top {
+  vertical-align: top;
+}
+table.bottom {
+  vertical-align: bottom;
+}
+td.x {
+  border: 1px solid;
+  border-top: 1px dashed;
+  border-bottom: 1px dashed;
+  background: lightcyan;
+  font-size: 9pt !important;
+  text-align: right;
+  padding-left: 4pt;
+  padding-right: 4pt;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+td.b_dot {
+  border-bottom: dashed 1px deeppink;
+}
+td.t_dot {
+  border-top: dashed 1px deeppink;
+}
+td.solid_bottom {
+  border-bottom: 1px solid;
+}
+td.solid_top {
+  border-top: 1px solid;
+}
+td.center {
+  text-align: center;
+}
+th {
+  border: 1px solid;
+  background: khaki;
+}
+div {
+  margin-left: 3em;
+  white-space: nowrap;
+}
+span.note {
+  color: darkgreen;
+  font-style: italic;
+}
+</style>
+</head>
+
+<body class="main-text-only">
+<h1>ふるスマで理解する実録・債務超過 (初心者版)</h1>
+
+<p>
+今更ほじくり返すのもどうかという気もするが、<a href="https://archive.is/iJpgF#selection-299.0-299.154">樋渡氏が相変わらず企業実務家のふりをなさっている御様子</a>なので、<a href="http://kanpo-kanpo.blog.jp/archives/15856334.html">ふるさとスマホの決算の件</a>をほじくり返すことにした。
+</p>
+
+<p>
+と言っても、私は大昔に簿記 2 級をとっただけで、経理や会計の実務経験はない。
+この記事には、その程度の素人なりの理解しか書かれていないことを、お含みおき願いたい。
+</p>
+
+<p>
+なお、素人の戯言なんぞ無意味だ、という御意見もありましょうが、
+ふるスマの出した損失の (身の丈に合わぬ) 大きさを図示することに、少しは意味があるかと思います。
+また、「債務超過のときの貸借対照表を、こう解釈してみたら理解できた」
+という記録も兼ねて、このページを公開しています。
+不適切な点については、<tt><a href="https://www.twitter.com/pi__yo__ko" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt> 宛に御教示いただければ幸いです。
+</p>
+
+<h2 id="elementary_bs">まずは基本的な貸借対照表の復習</h2>
+<p>貸借対照表 (B/S) は、普通は以下のような感じである。左右の額が揃っているのが特徴。
+上から下に向かって、金額に比例する長さで四角形が延びていくようなイメージで考えると分かりやすいかもしれない。</p>
+<div>
+<table class="top">
+<tr><th>借方</th></tr>
+<tr><td style="height: 100pt;" class="x solid_bottom">資産 100</td></tr>
+</table>
+<table class="top">
+<tr><th>貸方</th></tr>
+<tr><td style="height: 40pt;" class="x solid_bottom">負債 40</td></tr>
+<tr><td style="height: 60pt;" class="x solid_bottom">純資産 60</td></tr>
+</table>
+<br>
+<span class="note">(※ 9pt 以下のフォントが使えない環境だと正しく表示されない可能性があります)</span>
+</div>
+
+<p>
+貸借対照表は、決算時という特定のタイミングにおけるスナップショットであり、この例は、
+「この時点で資産 (商品の在庫や現金など) が 100 あるよ」
+ということを表している。
+また、この例からは、「この時点で負債が 40 あるよ」ということも読み取れる。
+</p>
+<p>
+複式簿記では常に借方と貸方の釣り合いが取れているので、貸借対照表における貸方は、「資産を得るためにとった手段」あるいは「資産が得られた理由」と考えると分かりやすいかもしれない。
+この例だと、
+「借金等によって調達したぶんの価額が 40 であり、残りの 60 は、資本金と利益剰余金に由来するものである」
+と考えると分かりやすい (なお、純資産には、資本金と利益剰余金が含まれる)。
+</p>
+
+<h2 id="excess_liabilities">債務超過になると貸借対照表はどうなるのか</h2>
+<p>
+ただし、以上のように純資産について「資産を得た手段」と解釈していると訳が分からなくなるのが、債務超過の場合である。
+債務超過の場合なんて簿記 2 級の勉強では出てこなかったので、私も長い間
+「債務超過のときの貸借対照表ってどうなるの?」
+と疑問だったのだが、
+<a href="https://www.yskzt.com/how-is-the-relation-between-capital-reduction-and-insolvency%E3%80%8020150515#ensp">純資産は資産と負債の単なる差額だと教えてくれるブログ</a>を見つけて、なるほどと理解した。
+</p>
+
+<p>
+資産は借方に書くもので、負債は貸方に書くもの、と決まっているが、純資産は単なる差額だから、場合によって貸方に書いたり借方に書いたりすることになる、と考えればよいらしい。
+</p>
+
+<p>
+普通は、資産の方が負債より大きく、つまり、純資産は正である (たとえば上記の例だと、100 &gt; 40 であり、100 &minus; 40 = 60 &gt; 0 である)。
+この場合、純資産を貸方に書き、それによって、借方と貸方の総額が等しくなるようにする。
+逆に、資産の方が負債より小さい場合 (つまり債務超過の場合) には、純資産は負である。
+この場合、純資産を借方に書き、それによって、借方と貸方の総額が等しくなるようにする。
+</p>
+
+<p>したがって、債務超過だと、貸借対照表がたとえば以下のようになる。</p>
+<div>
+<table class="top">
+<tr><th>借方</th></tr>
+<tr><td style="height: 70pt;" class="x solid_bottom">資産 70</td></tr>
+<tr><td style="height: 50pt;" class="x solid_bottom">純資産 50</td></tr>
+</table>
+
+<table class="top">
+<tr><th>貸方</th></tr>
+<tr><td style="height: 120pt;" class="x solid_bottom">負債 120</td></tr>
+</table>
+<br>
+<span class="note">(※ 9pt 以下のフォントが使えない環境だと正しく表示されない可能性があります)</span>
+</div>
+
+<p>
+これをあえて解釈するなら、以下のようになるだろうか。
+</p>
+
+<ul>
+<li>利益剰余金が負である (つまり損失が出た)。</li>
+<li>しかもその損失は、資本金を食いつぶしてもまだ足りないほどの大きな損失である。</li>
+<li>具体的に言うと、資本金と負の利益剰余金との和が &minus;50 であり、これが純資産である。</li>
+<li>ところで、資産が 70 で負債が 120 なので (つまり負債の方が大きいので)、純資産は (正負を逆転させて) 借方に書くことになる。すると借方合計が 70+50=120 となり、貸方と釣り合う。</li>
+<li>負債のうち 70 は、資産を得るための手段とみなせる。</li>
+<li>負債のうち残りの 50 は、上記のごとき、資本金を食いつぶしてもまだ足りない損失の穴埋めのためのものだとみなせる。</li>
+</ul>
+
+<p>
+ただし、この解釈は、「こう解釈してみたら自分にとって腑に落ちた」というだけのものなので、どこまで妥当かは分からない。
+</p>
+
+<h2 id="furusuma">それではふるスマの決算を見てみよう!</h2>
+<p>
+まず基本的事項を確認しておくと、ふるさとスマホは、2017年3月の決算でものすごい債務超過に陥って (<a href="http://kanpo-kanpo.blog.jp/archives/15856334.html">官報ブログの2017年5月25日付の記事</a>を参照)、4月にはサイトも消滅し (<a href="https://archive.is/http://www.furusuma.com/">魚拓一覧</a>を参照)、6月1日には、とうとう<a href="http://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3011001106682">株式会社TSUTAYAに合併されて解散した</a>。
+</p>
+
+<p>
+なお、ふるスマの決算公告では、<a href="#excess_liabilities">上記のような「純資産は単なる差額」という捉え方</a>による作図はしておらず、あくまでも「負債及び純資産の部」として負債と純資産をまとめた書き方をしている。
+それを、「純資産は単なる差額」という捉え方で整理し直すと、貸借対照表の概要は以下の通りである。
+</p>
+
+<ul>
+<li>資産合計は 9,037千円で、その内訳は、流動資産 6,064千円、固定資産 1,242千円、繰延資産 1,730円である (6064+1242+1730 = 9036 &ne; 9037 だが、これは四捨五入の影響と思われる)。</li>
+<li>負債合計は 46,747千円で、その内訳は、流動負債 8,747千円、固定負債 38,000千円である。なお、流動負債のうち 1,822千円が賞与引当金である (したがって、四捨五入の影響を無視すれば、その他の流動負債が 6,925千円ということになる)。</li>
+<li>純資産合計は &minus;37,710千円である。これは、資本金 40,000千円と、利益剰余金 &minus;77,710千円との和である (利益剰余金が負ということは、つまり、7,771万円もの大損を出しているということである。ああ怖い)。</li>
+</ul>
+
+<p>
+この決算内容を図示すると、以下のようになる。
+資産に比べて圧倒的に負債が多く、大変壮観な債務超過ぶりですね (棒
+</p>
+
+<div>
+<table class="top">
+<tr><th>借方</th></tr>
+<tr><td style="height: 60pt;" class="x">流動資産 6,064千円</td></tr>
+<tr><td style="height: 12pt;" class="x">固定資産 1,242千円</td></tr>
+<tr><td style="height: 17pt;" class="x solid_bottom">繰延資産 1,730千円</td></tr>
+<tr><td style="height: 377pt;" class="x solid_bottom">純資産 37,710千円</td></tr>
+</table>
+<table class="top">
+<tr><th>貸方</th></tr>
+<tr><td style="height: 18pt;" class="x">賞与引当金 1,822千円</td></tr>
+<tr><td style="height: 69pt;" class="x">その他の流動負債 6,925千円</td></tr>
+<tr><td style="height: 380pt;" class="x t_dot solid_bottom">固定負債 38,000千円</td></tr>
+</table>
+<br>
+<span class="note">(※ 9pt 以下のフォントが使えない環境だと正しく表示されない可能性があります)</span>
+</div>
+
+<p>
+なお、決算公告にあるように、「負債及び純資産の部」として負債と純資産を (貸方に) まとめて考えるような解釈による図示を行うとすれば、以下のようになるだろうか。
+つまり、左側の表のように考えて、それを整理すると右側の表のようになり、こうすれば確かに決算公告にあるとおりに両方の列の総額が 9,037千円で揃うのだが、このような図では壮絶な債務超過ぶりが見づらくなるように思うのは私だけだろうか。
+</p>
+
+<div>
+<table class="top">
+<tr><th>借方</th></tr>
+<tr><td style="height: 60pt;" class="x">流動資産 6,064千円</td></tr>
+<tr><td style="height: 12pt;" class="x">固定資産 1,242千円</td></tr>
+<tr><td style="height: 17pt;" class="x solid_bottom">繰延資産 1,730千円</td></tr>
+</table>
+
+<table class="top">
+<tr><th>貸方</th></tr>
+<tr><td style="height: 18pt;" class="x">賞与引当金 1,822千円</td></tr>
+<tr><td style="height: 69pt;" class="x">その他の流動負債 6,925千円</td></tr>
+<tr><td style="height: 3pt;" class="x b_dot"><!--290千円--></td></tr>
+<tr><td style="height: 377pt;" class="x t_dot solid_bottom">固定負債 38,000千円</td></tr>
+<tr><td style="height: 400pt;" class="x solid_bottom">資本金 40,000千円</td></tr>
+</table>
+
+<table class="bottom">
+<tr><td style="height: 777pt;" class="x solid_top solid_bottom center">利益剰余金 &minus; 77,710千円<br><br><br><br>(マイナスなので、<br>図面上では下から<br>上に延びていって、<br>資本金や負債を<br>相殺するような<br>イメージで捉えると<br>分かりやすい)</td></tr>
+</table>
+
+<span style="display: inline-block; vertical-align: top"><br><br>左記の表を<br>整理すると<br>…… →</span>
+
+<table class="top">
+<tr><th>借方</th></tr>
+<tr><td style="height: 60pt;" class="x">流動資産 6,064千円</td></tr>
+<tr><td style="height: 12pt;" class="x">固定資産 1,242千円</td></tr>
+<tr><td style="height: 17pt;" class="x solid_bottom">繰延資産 1,730千円</td></tr>
+</table>
+<table class="top">
+<tr><th>貸方</th></tr>
+<tr><td style="height: 91pt;" class="x solid_bottom">負債と純資産の合計<br> 9,037千円</td></tr>
+</table>
+</div>
+
+<p>
+<span class="note">(※ 9pt 以下のフォントが使えない環境だと正しく表示されない可能性があります)</span>
+</p>
+
+<p>
+というわけで、ふるスマの債務超過決算のおかげで貸借対照表についての理解が少し進んだ気がする。
+</p>
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+
+
+</html>
+
+
