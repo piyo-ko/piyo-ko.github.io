@@ -65,7 +65,10 @@ div.notes {
 	color: hsl(250,100%,15%);
 	border: solid 1px hsl(300,100%,50%);
 }
-
+div.notes > ul {
+	padding-left: 1ex;
+	padding-right: 1ex;
+}
 /* 本文だけのときに使うスタイル(右側の領域を設けない場合) */
 body.main-text-only {
 	position: static;
@@ -143,3 +146,9 @@ p.date {
 	color: hsl(215,100%,25%);
 }
 
+blockquote {
+	margin-left: 3em;
+	border: solid 1px hsl(170,100%,30%);
+	background: hsl(170, 60%, 90%);
+	padding: 4pt;
+}
