@@ -25,7 +25,7 @@
 $ git config --global user.email <span class="com">公開してもさしつかえのないアドレス</span>
 </code>
 
-<p>いちいちコマンドを打つのが面倒だったら、<code>~/.gitconfig</code>を直接編集してもよい。下記は、カラー設定と、エディタ設定と、常に管理対象から外しておきたいものを指定するための設定と、いくつかのエイリアスの設定の例。以下のように設定したうえで、<code>~/.gitignore_global</code>に<code>.DS_Store</code>と書いておけば、「知らぬ間になぜか.DS_Storeができていて、それがgitの管理対象に入っている」という事態にならない筈。なお、エディタは、最初は大好きな<a href="https://www.mimikaki.net/">mi</a>にしたかったんだが、パッケージ型のエディタであるせいか、うまく呼び出せなかったので、emacsを設定してみた。</p>
+<p>いちいちコマンドを打つのが面倒だったら、<code>~/.gitconfig</code>を直接編集してもよい。下記は、カラー設定と、エディタ設定と、常に管理対象から外しておきたいものを指定するための設定と、いくつかのエイリアスの設定の例。以下のように設定したうえで、<code>~/.gitignore_global</code>に<code>.DS_Store</code>と書いておけば、「知らぬ間になぜか.DS_Storeができていて、それがgitの管理対象に入っている」という事態にならない筈。なお、エディタは、最初は大好きな<a href="https://www.mimikaki.net/">mi</a>にしたかったんだが、<del>パッケージ型のエディタであるせいか、うまく呼び出せなかったので、</del>emacsを設定してみた。</p>
 
 <code class="block">[color]
 	ui = auto
@@ -41,6 +41,24 @@ $ git config --global user.email <span class="com">公開してもさしつか�
 </code>
 
 <p><code>git diff</code>のカラー表示のための設定については、<a href="0006_git-diff.html">別ページ</a>に書いた。</p>
+
+<h2>追記: エディタの設定 (mi も指定できるみたい)</h2>
+<p>
+<a href="http://qiita.com/aKenjiKato/items/1c47f15743442ea9a86f">テキストエディットや Sublime Text をエディタとして指定する方法について書いてあるページ</a>を見つけたので、それを参考にして、少し試行錯誤してみた。
+以下のようにすれば、エディタとして mi を指定することもできるようである。
+</p>
+
+<code class="block">[core]
+	editor = open -a mi.app -n -W
+</code>
+
+<p>
+<code>-a</code> オプションでアプリケーションを指定し、<code>-n</code> オプションで、mi が起動済みの場合には別インスタンスで mi を起動するようにしておく。そして、<code>-W</code> オプションで、その新たに起動した mi が終了するのを待つようにする (それによって、たとえば、mi が終了するまでは、コミット・メッセージの入力待ち状態になる)。
+なお、<code>/Applications/mi.app/Contents/MacOS/mi</code> のような実行パスを指定するのが気持ち悪かったので、<code>-a</code> オプションを使う形にしてみた。
+</p>
+
+<p>ただ、常に mi の起動を待つ時間 (しっかり体感できる程度には長い) が発生してしまうので、使い勝手としては、ちょっと微妙かもしれない。</p>
+
 
 <nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
 </div>
