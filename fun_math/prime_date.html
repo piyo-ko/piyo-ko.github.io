@@ -3,8 +3,6 @@
 <meta charset="utf-8">
 <title>今日は素数日かな?</title>
 <link rel="canonical" href="https://piyo-ko.github.io/fun_math/prime_date.html" />
-<script type="text/javascript" src="watermark.js"></script>
-
 <script type="text/javascript">
 function about_today() {
 	var t = new Date();
@@ -28,10 +26,6 @@ function about_the_day(y, m, d, check_md, check_d) {
 	var res=factorize(x);
 	if (m<10) {
 		if (d<10) {
-			x = d + m*100 + y*1000; //yyyymdd (ddは0埋めあり)
-			res += "\n"+factorize(x);
-			x = d + m*10 + y*1000; //yyyymmd (mmは0埋めあり)
-			res += "\n"+factorize(x);
 			x = d + m*10 + y*100; //yyyymd (0埋めなし)
 			res += "\n"+factorize(x);
 		} else {
@@ -123,9 +117,6 @@ function factorize(n) {
 	}
 
 	if (is_prime) {
-		//s = "🎉  " + s + "  🎊";
-		//s = "💚  " + s + "  💛";
-		//s = "🔮  " + s + "  💎";
 		s = "💕  " + s + "  💕";
 	}
 
@@ -143,27 +134,40 @@ function test_another_day() {
 	return(true);
 }
 
-window.onload = function() {
-	watermark(' 今日は素数日かな?    ', 'lemonchiffon', 24, 'serif', 'maroon');
-	about_today();
-}
+window.onload = about_today;
 </script>
 <style>
 body {
 	padding-left: 3em; 
 	padding-right: 3em; 
-	padding-top: 36pt;
+	padding-top: 6pt;
 	color: darkred; 
+    background: lemonchiffon;
+}
+h1 {
+  color: maroon;
+  background: linear-gradient(to right, peachpuff, lemonchiffon, peachpuff);
+  border: peachpuff solid 2px;
+  font-size: large;
+  font-style: italic;
+  font-family: sans-serif;
+  text-align: center;
+  padding-top: 6pt;
+  padding-bottom: 6pt;
 }
 #result_txt {
+
 	border: lightcoral dotted 12px; 
+    border-radius: 36px;
 	padding: 8pt; 
 	background: peachpuff;//lightsalmon; 
 	text-align: center; 
 	font-family: 'Ricty Discord', 'Ricty', 'Courier New', monospace; 
 }
+p {
+  text-indent: 1em;
+}
 nav, div {
-	background: lemonchiffon; 
 	padding: 4pt;
 }
 nav {
@@ -174,23 +178,20 @@ nav {
 }
 div {
 	text-align: center;
-	margin-top: 80pt;
-	/*display: inline-block;*/
 	width: auto;
 	padding-left: auto;
 	padding-right: auto;
 	border: 1px solid lightcoral;
 }
-/*
-form {
-	display: inline;
-}
-*/
+
 </style>
 </head>
 
 
 <body>
+<h1>今日は素数日かな?</h1>
+<p>年月日・月日・日について、それぞれ 0 埋めあり・なしで考えて、その数字の並びを整数とみなして素因数分解し、その日付が「素数日」に該当するかどうかを調べます。素数日だと💕が表示され、素数日でなければ、素因数分解した結果が表示されます。</p>
+
 <pre id="result_txt"></pre>
 
 <div>
