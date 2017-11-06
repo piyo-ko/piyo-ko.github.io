@@ -2,7 +2,7 @@ html {
 	padding: 0;
 }
 body {
-	background: hsl(200, 90%, 90%);
+	background: hsl(200, 0%, 85%);
 	color: hsl(240, 100%, 12%);
 	padding-top: 1ex;
 	padding-bottom: 2ex;
@@ -21,10 +21,10 @@ body {
 }
 
 a:link {
-	color: hsl(330, 100%, 50%);
+	color: hsl(0, 80%, 50%);
 }
 a:visited {
-	color: hsl(270, 100%, 30%);
+	color: hsl(220, 90%, 40%);
 }
 a:hover {
 	background: hsl(90, 100%, 12%);
@@ -70,7 +70,6 @@ div.footnote {
 	font-style: italic;
 	border: none;
 	color: black;
-	background: hsla(200, 90%, 90%, 1.0);
 	margin-left: 5%;
 	margin-right: 5%;
 	margin-top: 6pt;
@@ -100,7 +99,7 @@ div.green > ul > li::before {
 	content: "🍄 ";
 }
 div.orange > ul > li::before {
-	content: "⛄️ "; /*🍀🌜🌷🍄🍎🍒🍭;*/
+	content: "⛄️ ";
 }
 p {
 	text-indent: 1em;
@@ -115,7 +114,7 @@ h1 {
 	font-weight: bold;
 	font-family: "游明朝体+36ポかな", "游明朝体", "クレー", serif;
 	color: dodgerblue;
-	background: lightsteelblue;
+	background: linear-gradient(to right, hsl(170, 35%, 85%), hsl(210, 10%, 85%) 35%, hsl(260, 25%, 85%) 65%, hsl(290, 15%, 85%));
 	padding-right: 1em;
 	padding-left: 1em;
 	text-align: right;
@@ -150,12 +149,6 @@ h2::before {
 h2::after {
 	content: "▶︎"; 
 }
-/*
-h2::before, h2::after {
-	content: "⭐"; 
-}
-*/
-/*💎🍀🌷🎈🍬🍭🎉🎀️*/
 
 .orange, .green, .blue {
 	border-style: dotted;
@@ -164,17 +157,17 @@ h2::before, h2::after {
 }
 .orange {
 	border-color: hsl(55, 100%, 60%);
-	background: hsla(35, 100%, 65%, 1.0);
+	background: hsla(35, 100%, 65%, 0.6);
 	color: hsl(15, 100%, 20%);
 }
 .green {
 	border-color: hsl(85, 100%, 70%);
-	background: hsla(105, 100%, 65%, 1.0);
+	background: hsla(105, 100%, 65%, 0.6);
 	color: hsl(125, 100%, 16%);
 }
 .blue {
 	border-color: hsl(230, 80%, 70%);
-	background: hsla(250, 100%, 80%, 1.0);
+	background: hsla(250, 100%, 80%, 0.6);
 	color: hsl(270, 100%, 20%);
 }
 
@@ -182,6 +175,5 @@ nav {
 	text-align: right;
 }
 nav > a {
-	background: hsl(200, 90%, 90%);
 	padding: 4pt;
 }

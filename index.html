@@ -7,64 +7,6 @@
 <link rel="stylesheet" href="base.css" type="text/css">
 <base target="_top">
 <title>くるくるくるくる🌀あっちへふらふら、こっちへふらふらします</title>
-<script>
-function bgImg() {
-	var canv = document.createElement('canvas');
-	var contxt = canv.getContext('2d');
-	var rot = -20/180 * Math.PI;
-	var watermark_str;
-	var font_size;
-	var font_family=""; // デフォルト。適当。
-	var font_color=""; // デフォルト。
-	
-	var d = new Date();
-	var patternNo = d.getSeconds() % 4;
-	
-	switch (patternNo) {
-	case 0:
-		watermark_str = "🐬🐠☘🍀🐿🐇🐈";
-		font_family=" AppleColorEmoji, 'Apple Color Emoji', 'Apple カラー絵文字' ";
-		font_size = 24;
-		break;
-	case 1:
-		watermark_str = "𓅨 𓅪 𓆐 𓆲";
-        font_family="NotoSansEgyptianHieroglyphs, 'Noto Sans Egyptian Hieroglyphs' ";
-		font_size = 36;
-		font_color = "royalblue";
-		break;
-	case 2:
-		watermark_str = "𓅀 𓅂 𓅃 ";
-        font_family="NotoSansEgyptianHieroglyphs, 'Noto Sans Egyptian Hieroglyphs' ";
-		font_size = 36;
-		font_color = "lightseagreen";
-		break;
-	default:
-		watermark_str = "🦉🦆🦉🦅"; //🕊🐓🦃🐧🐦🐤🐣🐥
-		font_family=" AppleColorEmoji, 'Apple Color Emoji', 'Apple カラー絵文字' ";
-		font_size =36;
-		break;
-	}
-
-
-	canv.width = Math.round(font_size * watermark_str.length * Math.abs(Math.cos(-rot)) + font_size * Math.abs(Math.sin(-rot)) + 45);
-	canv.height = Math.round(canv.width * Math.abs(Math.sin(-rot)) + font_size * Math.abs(Math.cos(-rot)));
-
-	contxt.fillStyle = "hsl(200, 90%, 90%)";
-	contxt.fillRect(0, 0, canv.width, canv.height);
-
-	contxt.font = font_size + "pt " + font_family;
-	contxt.fillStyle = font_color;
-	contxt.textAlign = 'left';
-	contxt.textBaseline = 'top';
-	contxt.translate(45, canv.height-55);
-	contxt.rotate(rot);
-	contxt.fillText(watermark_str, 0, 0);
-
-	var img_src=canv.toDataURL();
-	document.body.style.background = "url(" + img_src + ")";
-}
-window.onload = bgImg;
-</script>
 </head>
 
 <body>
@@ -197,11 +139,11 @@ window.onload = bgImg;
 <p lang="ja">
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>
 本サイトは、(たとえば対訳版SICPのページのように) 別段の断りのあるページを除いて、<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja">クリエイティブ・コモンズ 表示 - 非営利 4.0 国際 ライセンス</a>のもとで提供されています。
-御感想などは<tt><a href="https://www.twitter.com/pi__yo__ko" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>宛にどうぞ。
+御感想などは<tt><a href="https://twitter.com/share?text=@pi__yo__ko%20" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>宛にどうぞ。
 </p>
 <p lang="en">
 This website is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License</a> except as otherwise specified.
-If you have any message, please send it to <tt><a href="https://www.twitter.com/pi__yo__ko" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>.
+If you have any message, please send it to <tt><a href="https://twitter.com/share?text=@pi__yo__ko%20" style="text-decoration: none;" target="_blank">@pi__yo__ko</a></tt>.
 </p>
 </div>
 
