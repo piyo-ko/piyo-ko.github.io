@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>鳥文字</title>
+<link rel="canonical" href="https://piyo-ko.github.io/fun/tori_moji.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansegyptianhieroglyphs.css" type="text/css">
+<style>
+#torimoji_div {
+  display: block;
+  text-align: center;
+  margin: 1em;
+}
+svg {
+  border: solid 1px royalblue;
+  background: white;
+}
+.birds {
+  background: hsl(210, 20%, 70%);
+  font-size: 36pt;
+  color: hsl(210, 100%, 30%);
+}
+</style>
+<script>
+var bird_n = 0;
+function read_str() {
+  const str = document.menu.input_str.value;
+  const L = str.length;
+  const svg_elt = document.getElementById('torimoji');
+  var t = document.createElementNS(svg_elt.namespaceURI, 'text');
+  const font_size = 120;
+  const margin = 24;
+  const min_w = margin * 2 + font_size * L;
+  svg_elt.setAttribute('width', min_w);
+  svg_elt.setAttribute('viewBox', '0 0 ' + min_w + ' 160');
+  t.setAttribute('id', 'input_str');
+  t.setAttribute('class', 'main');
+  t.setAttribute('x', margin);
+  t.setAttribute('y', 0);
+  t.setAttribute('dx', 0);
+  t.setAttribute('dy', font_size);
+  t.appendChild(document.createTextNode(str));
+  t.dataset.strlen = L;
+  svg_elt.appendChild(t);
+  svg_elt.appendChild(document.createTextNode('\n'));
+}
+function add_birds(n) {
+  const svg_elt = document.getElementById('torimoji');
+  const ns = svg_elt.namespaceURI;
+  const max_x = parseInt(svg_elt.getAttribute('width'));
+  const max_y = parseInt(svg_elt.getAttribute('height'));
+  const font_size = 24;
+  const margin = 24;
+  const bird = document.menu.bird_char.value;
+  var x, y, t, rot, mir, trans_str;
+  for (var i=0; i<n; i++) {
+    t = document.createElementNS(ns, 'text');
+    x = Math.floor(Math.random(Date.now()) * (max_x - margin * 2 - font_size)) + margin;
+    y = Math.floor(Math.random(Date.now()) * (max_y - margin * 2 - font_size)) + margin;
+    t.setAttribute('id', 'bird_' + bird_n++);
+    t.setAttribute('class', 'bird');
+    t.setAttribute('x', x);
+    t.setAttribute('y', y);
+    t.setAttribute('dx', 0);
+    t.setAttribute('dy', font_size);
+    rot = Math.random(Date.now());
+    if (rot > 0.75) {
+      trans_str = 'rotate(30, ' + x + ', ' + y + ')';
+    } else if (rot > 0.5) {
+      trans_str = 'rotate(-30, ' + x + ', ' + y + ')';
+    } else {
+      trans_str = '';
+    }
+    mir = Math.random(Date.now());
+    if (mir > 0.5) {
+      trans_str += ' matrix(-1, 0, 0, 1, ' + (2*x + font_size) + ', 0)';
+    }
+    t.setAttribute('transform', trans_str);
+    t.appendChild(document.createTextNode(bird));
+    svg_elt.appendChild(t);
+    svg_elt.appendChild(document.createTextNode('\n'));
+  }
+}
+function download_svg() {
+  const s = document.getElementById('torimoji_div').innerHTML;
+  const b = new Blob([s], {type :'image/svg+xml'});
+  var a = document.createElement('a');
+  document.getElementsByTagName('body')[0].appendChild(a);
+  a.download = 'torimoji.svg';
+  a.href = URL.createObjectURL(b);
+  a.click();
+}
+</script>
+</head>
+
+<body class="main-text-only">
+<h1>鳥文字</h1>
+
+<p>先日、下記のツイートを見てほっこりしたので、お遊びページを作ってみました。</p>
+
+<blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">なんか大津京の書体おかしくね？と思ったらめっちゃ鳩くつろいでた <a href="https://twitter.com/hashtag/%E3%82%82%E3%81%98%E9%89%84?src=hash&amp;ref_src=twsrc%5Etfw">#もじ鉄</a> <a href="https://t.co/OWBK85aI5f">pic.twitter.com/OWBK85aI5f</a></p>&mdash; なかゅき (@nacayuki) <a href="https://twitter.com/nacayuki/status/931019512110911491?ref_src=twsrc%5Etfw">2017年11月16日</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<div id="torimoji_div">
+<svg id="torimoji" xmlns="http://www.w3.org/2000/svg" width="600" height="160" viewBox="0 0 600 160">
+  <style>
+  .main { fill: hsl(210, 20%, 20%); font-size: 120px; font-weight: bold; font-family: '筑紫B丸ゴシック', sans-serif; }
+  .bird { fill: hsl(150, 80%, 50%); font-size: 24px; }
+  </style>
+</svg>
+</div>
+
+<form name="menu">
+<ul>
+<li>鳥さんで装飾したい文字列を入力してください (例「大津京駅」) →<input type="text" name="input_str" size="10">
+<input type="button" value="この文字列を配置する" onclick="read_str()"></li>
+<li>装飾に使いたい鳥さんの文字を入力してください (例「🕊」) →<input type="text" name="bird_char" size="2">
+<input type="button" value="この鳥さんを3羽追加する" onclick="add_birds(3)"></li>
+<li>SVG形式でデータを<input type="button" value="ダウンロード" onclick="download_svg()">できます</li>
+<li><input type="button" value="最初からやり直し" onclick="location.reload()"></li>
+</ul>
+</form>
+
+<p>エラー処理などはしていませんが、よかったら色々な鳥さんで遊んでみてね。
+御感想などがあれば <a href="https://twitter.com/share?text=@pi__yo__ko%20" target="_blank">Twitter</a> でお知らせください。</p>
+
+<p class="birds">
+🐔 🐧 🐦 🐤 🐣 🐥 🐓 🦃 🕊 🦆 🦅 🦉
+𓄿 𓅀 𓅁 𓅂 𓅃 𓅄 𓅅 𓅆 𓅇 𓅈 𓅉 𓅊 𓅋 𓅌 𓅍 𓅎 𓅏 𓅐 𓅑 𓅒 𓅓 𓅔 𓅕 𓅖 𓅗 𓅘 𓅙 𓅚 𓅛 𓅜 𓅝 𓅞 𓅟 𓅠 𓅡 𓅢 𓅣 𓅤 𓅥 𓅦 𓅧 𓅨 𓅩 𓅪 𓅫 𓅬 𓅭 𓅮 𓅯 𓅰 𓅱 𓅲 𓅳 𓅴 𓅵 𓅶 𓅷 𓅸 𓅹 𓅺 𓅻 𓅼 𓅽 𓅾 𓅿 𓆀 𓆁 𓆂 𓊿 𓆲 𓈢 𓈯 𓈷 𓈺 𓉊 𓉉 𓉡 𓊿 𓆃
+</p>
+
+
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+
+</html>
+
+
