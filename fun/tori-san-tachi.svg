@@ -1,0 +1,32 @@
+
+<svg id="torimoji" xmlns="http://www.w3.org/2000/svg" width="648" height="160" viewBox="0 0 648 160">
+  <style>
+  .main { fill: hsl(210, 20%, 20%); font-size: 120px; font-weight: bold; font-family: '筑紫B丸ゴシック', sans-serif; }
+  .bird { fill: hsl(150, 80%, 50%); font-size: 24px; }
+  </style>
+<text id="input_str" class="main" x="24" y="0" dx="0" dy="120" data-strlen="5">鳥さんたち</text>
+<text id="bird_0" class="bird" x="117" y="65" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 258, 0)">🕊</text>
+<text id="bird_1" class="bird" x="378" y="105" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 780, 0)">🕊</text>
+<text id="bird_2" class="bird" x="220" y="67" dx="0" dy="24" transform="">🕊</text>
+<text id="bird_3" class="bird" x="503" y="85" dx="0" dy="24" transform="rotate(-30, 503, 85) matrix(-1, 0, 0, 1, 1030, 0)">🕊</text>
+<text id="bird_4" class="bird" x="170" y="51" dx="0" dy="24" transform="rotate(30, 170, 51)">🕊</text>
+<text id="bird_5" class="bird" x="414" y="82" dx="0" dy="24" transform="rotate(-30, 414, 82) matrix(-1, 0, 0, 1, 852, 0)">🕊</text>
+<text id="bird_6" class="bird" x="273" y="74" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 570, 0)">🦆</text>
+<text id="bird_7" class="bird" x="499" y="24" dx="0" dy="24" transform="rotate(30, 499, 24)">🦆</text>
+<text id="bird_8" class="bird" x="273" y="38" dx="0" dy="24" transform="">🦆</text>
+<text id="bird_9" class="bird" x="546" y="71" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1116, 0)">🦆</text>
+<text id="bird_10" class="bird" x="522" y="103" dx="0" dy="24" transform="rotate(30, 522, 103)">🦆</text>
+<text id="bird_11" class="bird" x="417" y="69" dx="0" dy="24" transform="rotate(30, 417, 69)">🦆</text>
+<text id="bird_12" class="bird" x="449" y="49" dx="0" dy="24" transform="">𓅭</text>
+<text id="bird_13" class="bird" x="480" y="78" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 984, 0)">𓅭</text>
+<text id="bird_14" class="bird" x="358" y="60" dx="0" dy="24" transform="rotate(-30, 358, 60)">𓅭</text>
+<text id="bird_15" class="bird" x="538" y="69" dx="0" dy="24" transform="rotate(-30, 538, 69) matrix(-1, 0, 0, 1, 1100, 0)">𓅭</text>
+<text id="bird_16" class="bird" x="352" y="56" dx="0" dy="24" transform="rotate(30, 352, 56) matrix(-1, 0, 0, 1, 728, 0)">𓅭</text>
+<text id="bird_17" class="bird" x="184" y="43" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 392, 0)">𓅭</text>
+<text id="bird_18" class="bird" x="429" y="101" dx="0" dy="24" transform="rotate(-30, 429, 101)">🦉</text>
+<text id="bird_19" class="bird" x="153" y="110" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 330, 0)">🦉</text>
+<text id="bird_20" class="bird" x="388" y="104" dx="0" dy="24" transform="rotate(30, 388, 104)">🦉</text>
+<text id="bird_21" class="bird" x="113" y="91" dx="0" dy="24" transform="rotate(-30, 113, 91)">𓅩</text>
+<text id="bird_22" class="bird" x="470" y="55" dx="0" dy="24" transform="">𓅩</text>
+<text id="bird_23" class="bird" x="164" y="83" dx="0" dy="24" transform="rotate(-30, 164, 83) matrix(-1, 0, 0, 1, 352, 0)">𓅩</text>
+</svg>

@@ -1,0 +1,240 @@
+
+<svg id="torimoji" xmlns="http://www.w3.org/2000/svg" width="1248" height="160" viewBox="0 0 1248 160">
+  <style>
+  .main { fill: hsl(210, 20%, 20%); font-size: 120px; font-weight: bold; font-family: '筑紫B丸ゴシック', sans-serif; }
+  .bird { fill: hsl(150, 80%, 50%); font-size: 24px; }
+  </style>
+<text id="input_str" class="main" x="24" y="0" dx="0" dy="120" data-strlen="10">5000兆円欲しい!</text>
+<text id="bird_0" class="bird" x="785" y="96" dx="0" dy="24" transform="rotate(-30, 785, 96)">💴</text>
+<text id="bird_1" class="bird" x="404" y="29" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 832, 0)">💴</text>
+<text id="bird_2" class="bird" x="66" y="90" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 156, 0)">💴</text>
+<text id="bird_3" class="bird" x="759" y="41" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1542, 0)">💴</text>
+<text id="bird_4" class="bird" x="550" y="41" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1124, 0)">💴</text>
+<text id="bird_5" class="bird" x="555" y="82" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1134, 0)">💴</text>
+<text id="bird_6" class="bird" x="786" y="71" dx="0" dy="24" transform="rotate(-30, 786, 71)">💴</text>
+<text id="bird_7" class="bird" x="673" y="32" dx="0" dy="24" transform="">💴</text>
+<text id="bird_8" class="bird" x="102" y="38" dx="0" dy="24" transform="">💴</text>
+<text id="bird_9" class="bird" x="161" y="83" dx="0" dy="24" transform="rotate(30, 161, 83) matrix(-1, 0, 0, 1, 346, 0)">💴</text>
+<text id="bird_10" class="bird" x="759" y="33" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1542, 0)">💴</text>
+<text id="bird_11" class="bird" x="461" y="58" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 946, 0)">💴</text>
+<text id="bird_12" class="bird" x="207" y="79" dx="0" dy="24" transform="">💴</text>
+<text id="bird_13" class="bird" x="900" y="105" dx="0" dy="24" transform="rotate(30, 900, 105) matrix(-1, 0, 0, 1, 1824, 0)">💴</text>
+<text id="bird_14" class="bird" x="441" y="78" dx="0" dy="24" transform="rotate(30, 441, 78) matrix(-1, 0, 0, 1, 906, 0)">💴</text>
+<text id="bird_15" class="bird" x="703" y="90" dx="0" dy="24" transform="rotate(30, 703, 90) matrix(-1, 0, 0, 1, 1430, 0)">💴</text>
+<text id="bird_16" class="bird" x="266" y="82" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 556, 0)">💴</text>
+<text id="bird_17" class="bird" x="344" y="109" dx="0" dy="24" transform="rotate(30, 344, 109) matrix(-1, 0, 0, 1, 712, 0)">💴</text>
+<text id="bird_18" class="bird" x="151" y="36" dx="0" dy="24" transform="rotate(-30, 151, 36)">💴</text>
+<text id="bird_19" class="bird" x="174" y="43" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 372, 0)">💴</text>
+<text id="bird_20" class="bird" x="1056" y="86" dx="0" dy="24" transform="rotate(30, 1056, 86)">💴</text>
+<text id="bird_21" class="bird" x="589" y="110" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1202, 0)">💴</text>
+<text id="bird_22" class="bird" x="1011" y="67" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2046, 0)">💴</text>
+<text id="bird_23" class="bird" x="976" y="84" dx="0" dy="24" transform="rotate(-30, 976, 84)">💴</text>
+<text id="bird_24" class="bird" x="894" y="39" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1812, 0)">💴</text>
+<text id="bird_25" class="bird" x="383" y="69" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 790, 0)">💴</text>
+<text id="bird_26" class="bird" x="987" y="30" dx="0" dy="24" transform="rotate(-30, 987, 30)">💴</text>
+<text id="bird_27" class="bird" x="387" y="87" dx="0" dy="24" transform="">💴</text>
+<text id="bird_28" class="bird" x="316" y="63" dx="0" dy="24" transform="rotate(-30, 316, 63) matrix(-1, 0, 0, 1, 656, 0)">💴</text>
+<text id="bird_29" class="bird" x="588" y="88" dx="0" dy="24" transform="">💴</text>
+<text id="bird_30" class="bird" x="135" y="45" dx="0" dy="24" transform="rotate(-30, 135, 45) matrix(-1, 0, 0, 1, 294, 0)">💴</text>
+<text id="bird_31" class="bird" x="642" y="102" dx="0" dy="24" transform="rotate(-30, 642, 102) matrix(-1, 0, 0, 1, 1308, 0)">💴</text>
+<text id="bird_32" class="bird" x="392" y="74" dx="0" dy="24" transform="">💴</text>
+<text id="bird_33" class="bird" x="557" y="68" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1138, 0)">💴</text>
+<text id="bird_34" class="bird" x="515" y="100" dx="0" dy="24" transform="rotate(30, 515, 100) matrix(-1, 0, 0, 1, 1054, 0)">💴</text>
+<text id="bird_35" class="bird" x="157" y="46" dx="0" dy="24" transform="rotate(-30, 157, 46) matrix(-1, 0, 0, 1, 338, 0)">💴</text>
+<text id="bird_36" class="bird" x="637" y="49" dx="0" dy="24" transform="">💴</text>
+<text id="bird_37" class="bird" x="1141" y="41" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2306, 0)">💴</text>
+<text id="bird_38" class="bird" x="1084" y="92" dx="0" dy="24" transform="rotate(-30, 1084, 92) matrix(-1, 0, 0, 1, 2192, 0)">💴</text>
+<text id="bird_39" class="bird" x="398" y="41" dx="0" dy="24" transform="rotate(-30, 398, 41)">💴</text>
+<text id="bird_40" class="bird" x="1130" y="95" dx="0" dy="24" transform="rotate(-30, 1130, 95)">💴</text>
+<text id="bird_41" class="bird" x="130" y="109" dx="0" dy="24" transform="rotate(-30, 130, 109) matrix(-1, 0, 0, 1, 284, 0)">💴</text>
+<text id="bird_42" class="bird" x="526" y="105" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1076, 0)">💴</text>
+<text id="bird_43" class="bird" x="206" y="91" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 436, 0)">💴</text>
+<text id="bird_44" class="bird" x="742" y="58" dx="0" dy="24" transform="rotate(30, 742, 58) matrix(-1, 0, 0, 1, 1508, 0)">💴</text>
+<text id="bird_45" class="bird" x="59" y="34" dx="0" dy="24" transform="">💴</text>
+<text id="bird_46" class="bird" x="912" y="72" dx="0" dy="24" transform="rotate(30, 912, 72) matrix(-1, 0, 0, 1, 1848, 0)">💴</text>
+<text id="bird_47" class="bird" x="1039" y="35" dx="0" dy="24" transform="">💴</text>
+<text id="bird_48" class="bird" x="592" y="35" dx="0" dy="24" transform="rotate(30, 592, 35) matrix(-1, 0, 0, 1, 1208, 0)">💴</text>
+<text id="bird_49" class="bird" x="475" y="63" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 974, 0)">💴</text>
+<text id="bird_50" class="bird" x="311" y="47" dx="0" dy="24" transform="rotate(30, 311, 47) matrix(-1, 0, 0, 1, 646, 0)">💴</text>
+<text id="bird_51" class="bird" x="590" y="37" dx="0" dy="24" transform="rotate(-30, 590, 37)">💴</text>
+<text id="bird_52" class="bird" x="193" y="97" dx="0" dy="24" transform="rotate(-30, 193, 97)">💴</text>
+<text id="bird_53" class="bird" x="611" y="100" dx="0" dy="24" transform="rotate(30, 611, 100)">💴</text>
+<text id="bird_54" class="bird" x="716" y="95" dx="0" dy="24" transform="rotate(-30, 716, 95)">💴</text>
+<text id="bird_55" class="bird" x="310" y="45" dx="0" dy="24" transform="rotate(-30, 310, 45) matrix(-1, 0, 0, 1, 644, 0)">💴</text>
+<text id="bird_56" class="bird" x="953" y="99" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1930, 0)">💴</text>
+<text id="bird_57" class="bird" x="870" y="86" dx="0" dy="24" transform="rotate(30, 870, 86) matrix(-1, 0, 0, 1, 1764, 0)">💴</text>
+<text id="bird_58" class="bird" x="68" y="92" dx="0" dy="24" transform="">💴</text>
+<text id="bird_59" class="bird" x="332" y="44" dx="0" dy="24" transform="rotate(-30, 332, 44) matrix(-1, 0, 0, 1, 688, 0)">💴</text>
+<text id="bird_60" class="bird" x="312" y="102" dx="0" dy="24" transform="rotate(30, 312, 102) matrix(-1, 0, 0, 1, 648, 0)">💴</text>
+<text id="bird_61" class="bird" x="1194" y="26" dx="0" dy="24" transform="rotate(-30, 1194, 26) matrix(-1, 0, 0, 1, 2412, 0)">💴</text>
+<text id="bird_62" class="bird" x="210" y="82" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 444, 0)">💴</text>
+<text id="bird_63" class="bird" x="871" y="94" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1766, 0)">💴</text>
+<text id="bird_64" class="bird" x="642" y="32" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1308, 0)">💴</text>
+<text id="bird_65" class="bird" x="630" y="111" dx="0" dy="24" transform="">💴</text>
+<text id="bird_66" class="bird" x="1038" y="49" dx="0" dy="24" transform="rotate(-30, 1038, 49) matrix(-1, 0, 0, 1, 2100, 0)">💴</text>
+<text id="bird_67" class="bird" x="385" y="42" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 794, 0)">💴</text>
+<text id="bird_68" class="bird" x="372" y="96" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 768, 0)">💴</text>
+<text id="bird_69" class="bird" x="422" y="44" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 868, 0)">💴</text>
+<text id="bird_70" class="bird" x="1130" y="35" dx="0" dy="24" transform="">💴</text>
+<text id="bird_71" class="bird" x="1168" y="28" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2360, 0)">💴</text>
+<text id="bird_72" class="bird" x="155" y="37" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 334, 0)">💴</text>
+<text id="bird_73" class="bird" x="1105" y="106" dx="0" dy="24" transform="rotate(-30, 1105, 106) matrix(-1, 0, 0, 1, 2234, 0)">💴</text>
+<text id="bird_74" class="bird" x="416" y="104" dx="0" dy="24" transform="rotate(30, 416, 104)">💴</text>
+<text id="bird_75" class="bird" x="859" y="80" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1742, 0)">💴</text>
+<text id="bird_76" class="bird" x="561" y="35" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1146, 0)">💴</text>
+<text id="bird_77" class="bird" x="64" y="40" dx="0" dy="24" transform="rotate(-30, 64, 40)">💴</text>
+<text id="bird_78" class="bird" x="548" y="38" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1120, 0)">💴</text>
+<text id="bird_79" class="bird" x="342" y="98" dx="0" dy="24" transform="rotate(30, 342, 98)">💴</text>
+<text id="bird_80" class="bird" x="779" y="85" dx="0" dy="24" transform="">💴</text>
+<text id="bird_81" class="bird" x="516" y="47" dx="0" dy="24" transform="">💴</text>
+<text id="bird_82" class="bird" x="1198" y="68" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2420, 0)">💴</text>
+<text id="bird_83" class="bird" x="33" y="24" dx="0" dy="24" transform="">💴</text>
+<text id="bird_84" class="bird" x="924" y="49" dx="0" dy="24" transform="rotate(30, 924, 49) matrix(-1, 0, 0, 1, 1872, 0)">💴</text>
+<text id="bird_85" class="bird" x="45" y="72" dx="0" dy="24" transform="rotate(30, 45, 72)">💴</text>
+<text id="bird_86" class="bird" x="1114" y="46" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2252, 0)">💴</text>
+<text id="bird_87" class="bird" x="922" y="29" dx="0" dy="24" transform="rotate(30, 922, 29)">💴</text>
+<text id="bird_88" class="bird" x="73" y="94" dx="0" dy="24" transform="rotate(-30, 73, 94)">💴</text>
+<text id="bird_89" class="bird" x="671" y="56" dx="0" dy="24" transform="">💴</text>
+<text id="bird_90" class="bird" x="986" y="86" dx="0" dy="24" transform="">💴</text>
+<text id="bird_91" class="bird" x="711" y="35" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1446, 0)">💴</text>
+<text id="bird_92" class="bird" x="671" y="55" dx="0" dy="24" transform="">💴</text>
+<text id="bird_93" class="bird" x="638" y="66" dx="0" dy="24" transform="">💴</text>
+<text id="bird_94" class="bird" x="588" y="110" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1200, 0)">💴</text>
+<text id="bird_95" class="bird" x="667" y="71" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1358, 0)">💴</text>
+<text id="bird_96" class="bird" x="1143" y="69" dx="0" dy="24" transform="rotate(-30, 1143, 69) matrix(-1, 0, 0, 1, 2310, 0)">💴</text>
+<text id="bird_97" class="bird" x="233" y="87" dx="0" dy="24" transform="">💴</text>
+<text id="bird_98" class="bird" x="955" y="105" dx="0" dy="24" transform="">💴</text>
+<text id="bird_99" class="bird" x="925" y="109" dx="0" dy="24" transform="rotate(-30, 925, 109)">💴</text>
+<text id="bird_100" class="bird" x="588" y="38" dx="0" dy="24" transform="">💴</text>
+<text id="bird_101" class="bird" x="165" y="103" dx="0" dy="24" transform="rotate(30, 165, 103) matrix(-1, 0, 0, 1, 354, 0)">💴</text>
+<text id="bird_102" class="bird" x="101" y="56" dx="0" dy="24" transform="">💴</text>
+<text id="bird_103" class="bird" x="82" y="89" dx="0" dy="24" transform="rotate(30, 82, 89) matrix(-1, 0, 0, 1, 188, 0)">💴</text>
+<text id="bird_104" class="bird" x="336" y="84" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 696, 0)">💴</text>
+<text id="bird_105" class="bird" x="783" y="38" dx="0" dy="24" transform="">💴</text>
+<text id="bird_106" class="bird" x="569" y="81" dx="0" dy="24" transform="rotate(30, 569, 81) matrix(-1, 0, 0, 1, 1162, 0)">💴</text>
+<text id="bird_107" class="bird" x="692" y="43" dx="0" dy="24" transform="rotate(30, 692, 43) matrix(-1, 0, 0, 1, 1408, 0)">💴</text>
+<text id="bird_108" class="bird" x="1183" y="35" dx="0" dy="24" transform="rotate(30, 1183, 35)">💴</text>
+<text id="bird_109" class="bird" x="448" y="104" dx="0" dy="24" transform="rotate(30, 448, 104) matrix(-1, 0, 0, 1, 920, 0)">💴</text>
+<text id="bird_110" class="bird" x="215" y="65" dx="0" dy="24" transform="">💴</text>
+<text id="bird_111" class="bird" x="319" y="65" dx="0" dy="24" transform="rotate(-30, 319, 65)">💴</text>
+<text id="bird_112" class="bird" x="266" y="93" dx="0" dy="24" transform="">💴</text>
+<text id="bird_113" class="bird" x="1056" y="51" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2136, 0)">💴</text>
+<text id="bird_114" class="bird" x="912" y="111" dx="0" dy="24" transform="rotate(30, 912, 111) matrix(-1, 0, 0, 1, 1848, 0)">💴</text>
+<text id="bird_115" class="bird" x="898" y="62" dx="0" dy="24" transform="rotate(-30, 898, 62)">💴</text>
+<text id="bird_116" class="bird" x="1148" y="69" dx="0" dy="24" transform="rotate(30, 1148, 69) matrix(-1, 0, 0, 1, 2320, 0)">💴</text>
+<text id="bird_117" class="bird" x="972" y="98" dx="0" dy="24" transform="rotate(30, 972, 98)">💴</text>
+<text id="bird_118" class="bird" x="440" y="92" dx="0" dy="24" transform="rotate(-30, 440, 92)">💴</text>
+<text id="bird_119" class="bird" x="618" y="66" dx="0" dy="24" transform="">💴</text>
+<text id="bird_120" class="bird" x="911" y="46" dx="0" dy="24" transform="">💴</text>
+<text id="bird_121" class="bird" x="496" y="102" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1016, 0)">💴</text>
+<text id="bird_122" class="bird" x="31" y="88" dx="0" dy="24" transform="rotate(30, 31, 88)">💴</text>
+<text id="bird_123" class="bird" x="781" y="41" dx="0" dy="24" transform="rotate(30, 781, 41)">💴</text>
+<text id="bird_124" class="bird" x="735" y="78" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1494, 0)">💴</text>
+<text id="bird_125" class="bird" x="231" y="79" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 486, 0)">💴</text>
+<text id="bird_126" class="bird" x="801" y="107" dx="0" dy="24" transform="rotate(30, 801, 107) matrix(-1, 0, 0, 1, 1626, 0)">💴</text>
+<text id="bird_127" class="bird" x="66" y="60" dx="0" dy="24" transform="rotate(30, 66, 60) matrix(-1, 0, 0, 1, 156, 0)">💴</text>
+<text id="bird_128" class="bird" x="769" y="48" dx="0" dy="24" transform="rotate(30, 769, 48) matrix(-1, 0, 0, 1, 1562, 0)">💴</text>
+<text id="bird_129" class="bird" x="931" y="76" dx="0" dy="24" transform="">💴</text>
+<text id="bird_130" class="bird" x="958" y="67" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1940, 0)">💴</text>
+<text id="bird_131" class="bird" x="377" y="25" dx="0" dy="24" transform="rotate(30, 377, 25) matrix(-1, 0, 0, 1, 778, 0)">💴</text>
+<text id="bird_132" class="bird" x="1058" y="82" dx="0" dy="24" transform="rotate(-30, 1058, 82)">💴</text>
+<text id="bird_133" class="bird" x="975" y="93" dx="0" dy="24" transform="rotate(30, 975, 93) matrix(-1, 0, 0, 1, 1974, 0)">💴</text>
+<text id="bird_134" class="bird" x="986" y="77" dx="0" dy="24" transform="rotate(30, 986, 77) matrix(-1, 0, 0, 1, 1996, 0)">💴</text>
+<text id="bird_135" class="bird" x="750" y="66" dx="0" dy="24" transform="rotate(-30, 750, 66) matrix(-1, 0, 0, 1, 1524, 0)">💴</text>
+<text id="bird_136" class="bird" x="720" y="50" dx="0" dy="24" transform="">💴</text>
+<text id="bird_137" class="bird" x="923" y="50" dx="0" dy="24" transform="rotate(-30, 923, 50) matrix(-1, 0, 0, 1, 1870, 0)">💴</text>
+<text id="bird_138" class="bird" x="377" y="31" dx="0" dy="24" transform="rotate(-30, 377, 31) matrix(-1, 0, 0, 1, 778, 0)">💴</text>
+<text id="bird_139" class="bird" x="630" y="101" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1284, 0)">💴</text>
+<text id="bird_140" class="bird" x="192" y="64" dx="0" dy="24" transform="">💴</text>
+<text id="bird_141" class="bird" x="309" y="105" dx="0" dy="24" transform="rotate(-30, 309, 105) matrix(-1, 0, 0, 1, 642, 0)">💴</text>
+<text id="bird_142" class="bird" x="319" y="42" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 662, 0)">💴</text>
+<text id="bird_143" class="bird" x="480" y="98" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 984, 0)">💴</text>
+<text id="bird_144" class="bird" x="845" y="36" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1714, 0)">💴</text>
+<text id="bird_145" class="bird" x="823" y="52" dx="0" dy="24" transform="rotate(30, 823, 52)">💴</text>
+<text id="bird_146" class="bird" x="305" y="91" dx="0" dy="24" transform="">💴</text>
+<text id="bird_147" class="bird" x="55" y="36" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 134, 0)">💴</text>
+<text id="bird_148" class="bird" x="1176" y="90" dx="0" dy="24" transform="">💴</text>
+<text id="bird_149" class="bird" x="726" y="47" dx="0" dy="24" transform="rotate(-30, 726, 47) matrix(-1, 0, 0, 1, 1476, 0)">💴</text>
+<text id="bird_150" class="bird" x="372" y="72" dx="0" dy="24" transform="">💴</text>
+<text id="bird_151" class="bird" x="1100" y="85" dx="0" dy="24" transform="rotate(30, 1100, 85) matrix(-1, 0, 0, 1, 2224, 0)">💴</text>
+<text id="bird_152" class="bird" x="810" y="64" dx="0" dy="24" transform="rotate(-30, 810, 64)">💴</text>
+<text id="bird_153" class="bird" x="1090" y="89" dx="0" dy="24" transform="rotate(-30, 1090, 89)">💴</text>
+<text id="bird_154" class="bird" x="828" y="55" dx="0" dy="24" transform="rotate(30, 828, 55)">💴</text>
+<text id="bird_155" class="bird" x="408" y="61" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 840, 0)">💴</text>
+<text id="bird_156" class="bird" x="970" y="31" dx="0" dy="24" transform="">💴</text>
+<text id="bird_157" class="bird" x="380" y="52" dx="0" dy="24" transform="">💴</text>
+<text id="bird_158" class="bird" x="654" y="108" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1332, 0)">💴</text>
+<text id="bird_159" class="bird" x="286" y="36" dx="0" dy="24" transform="">💴</text>
+<text id="bird_160" class="bird" x="1028" y="96" dx="0" dy="24" transform="">💴</text>
+<text id="bird_161" class="bird" x="434" y="83" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 892, 0)">💴</text>
+<text id="bird_162" class="bird" x="439" y="49" dx="0" dy="24" transform="">💴</text>
+<text id="bird_163" class="bird" x="1185" y="34" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2394, 0)">💴</text>
+<text id="bird_164" class="bird" x="532" y="29" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1088, 0)">💴</text>
+<text id="input_str" class="main" x="24" y="0" dx="0" dy="120" data-strlen="10">5000兆円欲しい!</text>
+<text id="bird_165" class="bird" x="969" y="103" dx="0" dy="24" transform="">💴</text>
+<text id="bird_166" class="bird" x="900" y="100" dx="0" dy="24" transform="">💴</text>
+<text id="bird_167" class="bird" x="1198" y="37" dx="0" dy="24" transform="">💴</text>
+<text id="bird_168" class="bird" x="1051" y="59" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2126, 0)">💴</text>
+<text id="bird_169" class="bird" x="1013" y="34" dx="0" dy="24" transform="rotate(30, 1013, 34) matrix(-1, 0, 0, 1, 2050, 0)">💴</text>
+<text id="bird_170" class="bird" x="414" y="55" dx="0" dy="24" transform="">💴</text>
+<text id="bird_171" class="bird" x="138" y="74" dx="0" dy="24" transform="rotate(30, 138, 74)">💴</text>
+<text id="bird_172" class="bird" x="1191" y="66" dx="0" dy="24" transform="">💴</text>
+<text id="bird_173" class="bird" x="888" y="83" dx="0" dy="24" transform="rotate(30, 888, 83)">💴</text>
+<text id="bird_174" class="bird" x="1060" y="56" dx="0" dy="24" transform="">💴</text>
+<text id="bird_175" class="bird" x="579" y="69" dx="0" dy="24" transform="rotate(-30, 579, 69)">💴</text>
+<text id="bird_176" class="bird" x="944" y="101" dx="0" dy="24" transform="rotate(-30, 944, 101) matrix(-1, 0, 0, 1, 1912, 0)">💴</text>
+<text id="bird_177" class="bird" x="804" y="85" dx="0" dy="24" transform="">💴</text>
+<text id="bird_178" class="bird" x="1161" y="27" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2346, 0)">💴</text>
+<text id="bird_179" class="bird" x="314" y="84" dx="0" dy="24" transform="">💴</text>
+<text id="bird_180" class="bird" x="27" y="31" dx="0" dy="24" transform="rotate(30, 27, 31)">💴</text>
+<text id="bird_181" class="bird" x="219" y="53" dx="0" dy="24" transform="rotate(30, 219, 53) matrix(-1, 0, 0, 1, 462, 0)">💴</text>
+<text id="bird_182" class="bird" x="596" y="72" dx="0" dy="24" transform="">💴</text>
+<text id="bird_183" class="bird" x="281" y="37" dx="0" dy="24" transform="rotate(-30, 281, 37)">💴</text>
+<text id="bird_184" class="bird" x="127" y="69" dx="0" dy="24" transform="rotate(30, 127, 69) matrix(-1, 0, 0, 1, 278, 0)">💴</text>
+<text id="bird_185" class="bird" x="989" y="49" dx="0" dy="24" transform="rotate(30, 989, 49)">💴</text>
+<text id="bird_186" class="bird" x="816" y="59" dx="0" dy="24" transform="rotate(30, 816, 59)">💴</text>
+<text id="bird_187" class="bird" x="676" y="30" dx="0" dy="24" transform="rotate(-30, 676, 30)">💴</text>
+<text id="bird_188" class="bird" x="1027" y="53" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2078, 0)">💴</text>
+<text id="bird_189" class="bird" x="184" y="82" dx="0" dy="24" transform="">💴</text>
+<text id="bird_190" class="bird" x="933" y="58" dx="0" dy="24" transform="rotate(30, 933, 58) matrix(-1, 0, 0, 1, 1890, 0)">💴</text>
+<text id="bird_191" class="bird" x="754" y="57" dx="0" dy="24" transform="rotate(30, 754, 57) matrix(-1, 0, 0, 1, 1532, 0)">💴</text>
+<text id="bird_192" class="bird" x="597" y="58" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1218, 0)">💴</text>
+<text id="bird_193" class="bird" x="1142" y="73" dx="0" dy="24" transform="">💴</text>
+<text id="bird_194" class="bird" x="1043" y="88" dx="0" dy="24" transform="">💴</text>
+<text id="bird_195" class="bird" x="1100" y="65" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2224, 0)">💴</text>
+<text id="bird_196" class="bird" x="586" y="48" dx="0" dy="24" transform="">💴</text>
+<text id="bird_197" class="bird" x="553" y="44" dx="0" dy="24" transform="">💴</text>
+<text id="bird_198" class="bird" x="1002" y="27" dx="0" dy="24" transform="">💴</text>
+<text id="bird_199" class="bird" x="196" y="49" dx="0" dy="24" transform="rotate(30, 196, 49) matrix(-1, 0, 0, 1, 416, 0)">💴</text>
+<text id="bird_200" class="bird" x="263" y="77" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 550, 0)">💴</text>
+<text id="bird_201" class="bird" x="927" y="70" dx="0" dy="24" transform="">💴</text>
+<text id="bird_202" class="bird" x="1041" y="81" dx="0" dy="24" transform="rotate(30, 1041, 81)">💴</text>
+<text id="bird_203" class="bird" x="713" y="74" dx="0" dy="24" transform="rotate(30, 713, 74)">💴</text>
+<text id="bird_204" class="bird" x="1160" y="66" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 2344, 0)">💴</text>
+<text id="bird_205" class="bird" x="639" y="101" dx="0" dy="24" transform="">💴</text>
+<text id="bird_206" class="bird" x="485" y="25" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 994, 0)">💴</text>
+<text id="bird_207" class="bird" x="59" y="53" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 142, 0)">💴</text>
+<text id="bird_208" class="bird" x="47" y="85" dx="0" dy="24" transform="">💴</text>
+<text id="bird_209" class="bird" x="417" y="59" dx="0" dy="24" transform="">💴</text>
+<text id="bird_210" class="bird" x="1125" y="87" dx="0" dy="24" transform="rotate(30, 1125, 87)">💴</text>
+<text id="bird_211" class="bird" x="1029" y="25" dx="0" dy="24" transform="rotate(-30, 1029, 25) matrix(-1, 0, 0, 1, 2082, 0)">💴</text>
+<text id="bird_212" class="bird" x="205" y="58" dx="0" dy="24" transform="">💴</text>
+<text id="bird_213" class="bird" x="423" y="64" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 870, 0)">💴</text>
+<text id="bird_214" class="bird" x="1093" y="37" dx="0" dy="24" transform="">💴</text>
+<text id="bird_215" class="bird" x="687" y="96" dx="0" dy="24" transform="">💴</text>
+<text id="bird_216" class="bird" x="857" y="59" dx="0" dy="24" transform="rotate(30, 857, 59)">💴</text>
+<text id="bird_217" class="bird" x="304" y="46" dx="0" dy="24" transform="rotate(-30, 304, 46)">💴</text>
+<text id="bird_218" class="bird" x="435" y="105" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 894, 0)">💴</text>
+<text id="bird_219" class="bird" x="438" y="93" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 900, 0)">💴</text>
+<text id="bird_220" class="bird" x="733" y="48" dx="0" dy="24" transform="rotate(30, 733, 48) matrix(-1, 0, 0, 1, 1490, 0)">💴</text>
+<text id="bird_221" class="bird" x="163" y="93" dx="0" dy="24" transform="">💴</text>
+<text id="bird_222" class="bird" x="357" y="90" dx="0" dy="24" transform="rotate(-30, 357, 90) matrix(-1, 0, 0, 1, 738, 0)">💴</text>
+<text id="bird_223" class="bird" x="180" y="26" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 384, 0)">💴</text>
+<text id="bird_224" class="bird" x="1181" y="42" dx="0" dy="24" transform="rotate(30, 1181, 42)">💴</text>
+<text id="bird_225" class="bird" x="56" y="70" dx="0" dy="24" transform="rotate(30, 56, 70) matrix(-1, 0, 0, 1, 136, 0)">💴</text>
+<text id="bird_226" class="bird" x="682" y="71" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1388, 0)">💴</text>
+<text id="bird_227" class="bird" x="732" y="107" dx="0" dy="24" transform="rotate(30, 732, 107) matrix(-1, 0, 0, 1, 1488, 0)">💴</text>
+<text id="bird_228" class="bird" x="326" y="93" dx="0" dy="24" transform="rotate(-30, 326, 93)">💴</text>
+<text id="bird_229" class="bird" x="812" y="81" dx="0" dy="24" transform=" matrix(-1, 0, 0, 1, 1648, 0)">💴</text>
+<text id="bird_230" class="bird" x="154" y="95" dx="0" dy="24" transform="rotate(-30, 154, 95)">💴</text>
+</svg>
