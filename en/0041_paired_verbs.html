@@ -21,73 +21,73 @@
 
 <h2>en- / de- 型</h2>
 <table>
-<tr><th>encapsulate</th><th>decapsulate</th><td>「カプセル化する」の方はよく使う (訳し方については<a href="0006_katakana.html">別のページ</a>にも書いた)。decapsulate という単語は存在するのだが、encapsulate と対にしてよく使うかというと、あまり使用例を見ないような気がする。というか、辞書を見る限り、decapsulate は外科用語っぽい。</td></tr>
+<tr><th id="encapsulate">encapsulate</th><th id="decapsulate">decapsulate</th><td>「カプセル化する」の方はよく使う (訳し方については<a href="0006_katakana.html#encapsulate">別のページ</a>にも書いた)。decapsulate という単語は存在するのだが、encapsulate と対にしてよく使うかというと、あまり使用例を見ないような気がする。というか、辞書を見る限り、decapsulate は外科用語っぽい。</td></tr>
 
-<tr><th>encode</th><th>decode</th><td>「符号化する」と「復号する」。</td></tr>
+<tr><th id="encode">encode</th><th id="decode">decode</th><td>「符号化する」と「復号する」。</td></tr>
 
-<tr><th>encrypt</th><th>decrypt</th><td>「暗号化する」と「復号する」。なお、ほとんどの場合、<a href="http://www.ipa.go.jp/security/rfc/RFC2828-03EJA.html#encipher">encipher</a> と <a href="http://www.ipa.go.jp/security/rfc/RFC2828-03DJA.html#decipher">decipher</a> は使うべきではない。</td></tr>
+<tr><th id="encrypt">encrypt</th><th id="decrypt">decrypt</th><td>「暗号化する」と「復号する」。なお、ほとんどの場合、<a href="http://www.ipa.go.jp/security/rfc/RFC2828-03EJA.html#encipher">encipher</a> と <a href="http://www.ipa.go.jp/security/rfc/RFC2828-03DJA.html#decipher">decipher</a> は使うべきではない。</td></tr>
 
-<tr><th>enqueue</th><th>dequeue</th><td>「キュー (の末尾) に追加する」と「キュー (の先頭) から取り出す」。キューではなくてスタックが対象だと、動詞は push と pop を使う。リストや文字列の操作だと、prepend A to B (Bの先頭にAを追加する) と append A to B (Bの末尾にAを追加する) と concatenate A and B (AとBを連結する) を使う。と、このように、特定のデータ構造と動詞が分かち難く結びついていることがある。push だって、スタックとは別の文脈なら、その対義語が pull だったりするし (情報配信などで「プッシュ型」と「プル型」と言ったりするし、git のコマンドでも push と pull は対義語的だし)。</td></tr>
+<tr><th id="enqueue">enqueue</th><th id="dequeue">dequeue</th><td>「キュー (の末尾) に追加する」と「キュー (の先頭) から取り出す」。キューではなくてスタックが対象だと、動詞は push と pop を使う。リストや文字列の操作だと、prepend A to B (Bの先頭にAを追加する) と append A to B (Bの末尾にAを追加する) と concatenate A and B (AとBを連結する) を使う。と、このように、特定のデータ構造と動詞が分かち難く結びついていることがある。push だって、スタックとは別の文脈なら、その対義語が pull だったりするし (情報配信などで「プッシュ型」と「プル型」と言ったりするし、git のコマンドでも push と pull は対義語的だし)。</td></tr>
 </table>
 
 <h2>- / de- 型</h2>
 <table>
-<tr><th>compress</th><th>decompress</th><td>「圧縮する」と「解凍する」。「解凍」ではなく「伸張」または「展開」を使うこともある。</td></tr>
+<tr><th id="compress">compress</th><th id="decompress">decompress</th><td>「圧縮する」と「解凍する」。「解凍」ではなく「伸張」または「展開」を使うこともある。</td></tr>
 
-<tr><th>couple</th><th>decouple</th><td>「結合する、連結する、接続する、つなげる、関連づける」と「切り離す、分離させる」。</td></tr>
+<tr><th id="couple">couple</th><th id="decouple">decouple</th><td>「結合する、連結する、接続する、つなげる、関連づける」と「切り離す、分離させる」。</td></tr>
 
-<tr><th>identify</th><th>de-identify</th><td>「識別する、特定する、同定する、突き止める、見分ける」(色々な文脈で使える言い方) と「無名化する」(プライバシの文脈で使う言い方)。後者は、de-identified data などと受け身で使うことが多いのかな? ただ、「無名化する」=「連結不可能匿名化する」=「元は誰のデータだったのかを、たとえ他のデータと突き合わせても突き止めることができないように、何らかの処理を施す」という理解で良いのかどうか、大変不安である。pseudonymize (仮名化する) とか anonymize (匿名化する) とか、似た概念があり、ややこしくて把握しきれていない。
+<tr><th id="identify">identify</th><th id="de-identify">de-identify</th><td>「識別する、特定する、同定する、突き止める、見分ける」(色々な文脈で使える言い方) と「無名化する」(プライバシの文脈で使う言い方)。後者は、de-identified data などと受け身で使うことが多いのかな? ただ、「無名化する」=「連結不可能匿名化する」=「元は誰のデータだったのかを、たとえ他のデータと突き合わせても突き止めることができないように、何らかの処理を施す」という理解で良いのかどうか、大変不安である。pseudonymize (仮名化する) とか anonymize (匿名化する) とか、似た概念があり、ややこしくて把握しきれていない。
 なお、場所に関することなら、identify の代わりに locate を使えることもある (位置を突き止める、といった意味で locate を使える)。</td></tr>
 
-<tr><th>interleave</th><th>deinterleave</th><td>「インタリーブする」と「デインタリーブする」。</td></tr>
+<tr><th id="interleave">interleave</th><th id="deinterleave">deinterleave</th><td>「インタリーブする」と「デインタリーブする」。</td></tr>
 
-<tr><th>modulate</th><th>demodulate</th><td>「変調する」と「復調する」。</td></tr>
+<tr><th id="modulate">modulate</th><th id="demodulate">demodulate</th><td>「変調する」と「復調する」。</td></tr>
 
-<tr><th>select</th><th>deselect</th><td>色々と訳しようはあろうが、便利なのは「選択する」と「選択解除する」。文脈によっては、enable と disable に置き換えられるかも。deselect の他に、unselect も使える。ただ、受身の形にして名詞句を修飾する場合には、unselected だと「まだ選択されていない、未選択の」という雰囲気で、deselected だと「選択が解除された」という雰囲気のような気がする。どうだろう……。</td></tr>
+<tr><th id="select">select</th><th id="deselect">deselect</th><td>色々と訳しようはあろうが、便利なのは「選択する」と「選択解除する」。文脈によっては、<a href="#enable">enable と disable</a> に置き換えられるかも。deselect の他に、<a href="#unselect">unselect</a> も使える。ただ、受身の形にして名詞句を修飾する場合には、unselected だと「まだ選択されていない、未選択の」という雰囲気で、deselected だと「選択が解除された」という雰囲気のような気がする。どうだろう……。</td></tr>
 
-<tr><th>serialize</th><th>deserialize</th><td>「シリアライズする」と「デシリアライズする」。これについては、<a href="0006_katakana.html">別のページ</a>にも少し書いた。</td></tr>
+<tr><th id="serialize">serialize</th><th id="deserialize">deserialize</th><td>「シリアライズする」と「デシリアライズする」。これについては、<a href="0006_katakana.html#serialize">別のページ</a>にも少し書いた。</td></tr>
 
-<tr><th>spread</th><th>despread</th><td>(スペクトラム拡散の文脈で)「拡散する」と「逆拡散する」。</td></tr>
+<tr><th id="spread">spread</th><th id="despread">despread</th><td>(スペクトラム拡散の文脈で)「拡散する」と「逆拡散する」。</td></tr>
 </table>
 
 
 <h2>- / dis- 型</h2>
 <table>
-<tr><th>charge</th><th>discharge</th><td>「充電する」と「放電する」。双方とも、これ以外の意味も色々とある。</td></tr>
+<tr><th id="charge">charge</th><th id="discharge">discharge</th><td>「充電する」と「放電する」。双方とも、これ以外の意味も色々とある。</td></tr>
 
-<tr><th>connect</th><th>disconnect</th><td>「接続する」と「切断する、遮断する、接続を切る」。</td></tr>
+<tr><th id="connect">connect</th><th id="disconnect">disconnect</th><td>「接続する」と「切断する、遮断する、接続を切る」。</td></tr>
 
-<tr><th>continue</th><th>discontinue</th><td>「続く、続ける」と「途絶える、中止する」。discontinue という動詞よりも、discontinuity (不連続) という名詞や discontinuous (不連続な) という形容詞の方が (数学の分野などで) よく見るかもしれない。</td></tr>
+<tr><th id="continue">continue</th><th id="discontinue">discontinue</th><td>「続く、続ける」と「途絶える、中止する」。discontinue という動詞よりも、discontinuity (不連続) という名詞や discontinuous (不連続な) という形容詞の方が (数学の分野などで) よく見るかもしれない。</td></tr>
 </table>
 
 <h2>- / in- 型</h2>
 <table>
-<tr><th>activate</th><th>inactivate</th><td>「起動させる、作動させる、活性化する」と「作動しないようにする、不活性化する」。deactivate という言い方もある。</td></tr>
-<tr><th>validate</th><th>invalidate</th><td>「有効にする、妥当性を立証する」と「無効にする、間違いだと立証する」。</td></tr>
+<tr><th id="activate">activate</th><th id="inactivate">inactivate</th><td>「起動させる、作動させる、活性化する」と「作動しないようにする、不活性化する」。deactivate という言い方もある。</td></tr>
+<tr><th id="validate">validate</th><th id="invalidate">invalidate</th><td>「有効にする、妥当性を立証する」と「無効にする、間違いだと立証する」。</td></tr>
 </table>
 
 <h2>- / un- 型</h2>
 <table>
-<tr><th>comment out</th><th>uncomment</th><td>「コメントアウトする」と「アンコメントする」。</td></tr>
+<tr><th id="comment_out">comment out</th><th id="uncomment">uncomment</th><td>「コメントアウトする」と「アンコメントする」。</td></tr>
 
-<tr><th>fold</th><th>unfold</th><td>GUI の文脈で、メニューやリストに関して「折りたたむ、しまう」と「展開する」という意味で使うように思うんだが、collapse と expand の方がよく使うかもしれない。どうだろう? collapsible tree とか呼ぶみたいだしな……。</td></tr>
+<tr><th id="fold">fold</th><th id="unfold">unfold</th><td>GUI の文脈で、メニューやリストに関して「折りたたむ、しまう」と「展開する」という意味で使うように思うんだが、collapse と expand の方がよく使うかもしれない。どうだろう? collapsible tree とか呼ぶみたいだしな……。</td></tr>
 
-<tr><th>install</th><th>uninstall</th><td>「インストールする」と「アンインストールする」。</td></tr>
+<tr><th id="install">install</th><th id="uninstall">uninstall</th><td>「インストールする」と「アンインストールする」。</td></tr>
 
-<tr><th>select</th><th>unselect</th><td>上記の select / deselect の項を参照。</td></tr>
+<tr><th id="select2">select</th><th id="unselect">unselect</th><td>上記の <a href="#select">select / deselect の項</a>を参照。</td></tr>
 </table>
 
 <h2>a- / di- または de- 型</h2>
 <table>
-<tr><th>associate</th><th>dissociate</th><td>「関連づける」と「関連づけを解除する」。</td></tr>
+<tr><th id="associate">associate</th><th id="dissociate">dissociate</th><td>「関連づける」と「関連づけを解除する」。</td></tr>
 
-<tr><th>attach</th><th>detach</th><td>「取り付ける」と「取り外す」。</td></tr>
+<tr><th id="attach">attach</th><th id="detach">detach</th><td>「取り付ける」と「取り外す」。</td></tr>
 </table>
 
 <h2>その他のパタン</h2>
 <table>
-<tr><th>enable</th><th>disable</th><td>コンピュータの機能などを「有効にする、作動させる」と「無効にする、作動しないようにする」。</td></tr>
-<tr><th>set</th><th>reset</th><td>文脈によって色々に訳せるけれど、「セットする」と「リセットする」とするのが楽だし問題も生じない、という場合が多いかな。</td></tr>
+<tr><th id="enable">enable</th><th id="disable">disable</th><td>コンピュータの機能などを「有効にする、作動させる」と「無効にする、作動しないようにする」。</td></tr>
+<tr><th id="set">set</th><th id="reset">reset</th><td>文脈によって色々に訳せるけれど、「セットする」と「リセットする」とするのが楽だし問題も生じない、という場合が多いかな。これについては、<a href="0006_katakana.html#set_reset">別のページ</a>にも書いた。</td></tr>
 </table>
 
 <!--

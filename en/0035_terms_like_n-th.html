@@ -18,36 +18,36 @@
 </nav>
 
 <table>
-<tr><th><i>n</i>-th<br><i>i</i>-th<br><i>j</i>-th<br><i>k</i>-th</th>
+<tr><th id="n-th"><i>n</i>-th<br><i>i</i>-th<br><i>j</i>-th<br><i>k</i>-th</th>
 <td>ここに挙げたとおり、「<i>n</i>番目の」「<i>i</i>番目の」「<i>j</i>番目の」「<i>k</i>番目の」あたりの言い方をよく見る。でも、もちろん何の英字を使っても構わない (このことは、以下のどの表現にも当てはまる)。</td></tr>
 
 
-<tr><th><i>n</i>-ary</th>
+<tr><th id="n-ary"><i>n</i>-ary</th>
 <td>unary, binary, ... の一般化。「n項演算子」とか「n項関係」とかの「n項」のこと。</td></tr>
 
-<tr><th><i>n</i>-fold</th>
+<tr><th id="n-fold"><i>n</i>-fold</th>
 <td>「n倍の」「n重の」「n要素からなる」。データをn分割して、「(n&minus;1)個のデータセットで学習して、残りの1個のデータセットでテスト」を、テスト用のデータセットを変えながらn回やってみて、n回の学習精度を平均する、といったクロスバリデーションは、<i>n</i>-fold cross validation ですね。twofold とか threefold あたりは、普通の辞書にも載っている。</td></tr>
 
-<tr><th><i>n</i>-gram</th>
+<tr><th id="n-gram"><i>n</i>-gram</th>
 <td>unigram, bigram, trigram, ... の一般化。検索など自然言語処理で使われる。</td></tr>
 
-<tr><th><i>n</i>-best</th>
-<td>一番良いものだけでなく上位のn位までのものを、出力したり、(探索対象の) 候補として残しておいたりするときに、<i>n</i>-best という言い方を形容詞として使う。</tr>
+<tr><th id="n-best"><i>n</i>-best</th>
+<td>一番良いものだけでなく上位のn位までのものを、出力したり、(探索対象の) 候補として残しておいたりするときに、<i>n</i>-best という言い方を形容詞として使う。つまり、ビームサーチの文脈であれば、nはビーム幅である。</tr>
 
-<tr><th><i>n</i>-tuple</th>
+<tr><th id="n-tuple"><i>n</i>-tuple</th>
 <td>n個組。そのままカタカナで「nタプル」とも言う。集合とは違って、順序に意味があり、n個の要素の型はばらばらでよい。リスト形式で表すことも多いが、リストのようなデータ構造を指しているのではなく、論理的な概念である (もちろん、タプルを表すデータ型が実装されていることも多いけれど)。n=2なら pair または double で、n=3なら triple または triplet である。</td></tr>
 
 
-<tr><th><i>p</i>-adic</th>
+<tr><th id="p-adic"><i>p</i>-adic</th>
 <td>p進数 (p-adic number) とかp進体とかの「p進」。prime の p をとって、p という文字を好んで使うようだが、使う文字は別に p でなくてもよい。副詞形にして <i>p</i>-adically closed などとも使うみたい。</td></tr>
 
-<tr><th><i>n</i>-pronged</th>
+<tr><th id="n-pronged"><i>n</i>-pronged</th>
 <td>two-pronged (二股の、二方面の)、three-pronged (三又の、三叉の) などの一般化。まあ、滅多に使わないとは思うが。</td></tr>
 
-<tr><th><i>n</i>-tier</th>
+<tr><th id="n-tier"><i>n</i>-tier</th>
 <td>「n層の」「n階層の」。システム・アーキテクチャの文脈で出てくる。</td></tr>
 
-<tr><th>top-<i>n</i></th>
+<tr><th id="top-n">top-<i>n</i></th>
 <td>素直に、「(たくさんあるもののうちの) 上位 n 個の」と考えれば、大抵の場合は意味が通る。が、top-<i>n</i> error rate といった用例だと、「答えの候補を n 個まで出力させて、その n 個の中に正解があれば問題に正答したとみなすことにする」という前提があって、「そうやって算出した誤り率」のことを指していたりすることがあるように思う。つまり、「上位 n 位までを考慮しての誤り率」とでも訳すべき事例。もうちょっと手短に訳したいが、何か良い表現はないかな……?</td></tr>
 
 </table>
