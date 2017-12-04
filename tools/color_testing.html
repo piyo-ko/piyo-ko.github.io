@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>Color testing</title>
+<style>
+body {
+  background: black;
+  color: white;
+}
+h1 {
+  text-align: center;
+  font-family: Skia, sans-serif;
+}
+.disp_color {
+  height: 120pt; 
+  width: 120pt;
+}
+table {
+  background: white;
+  color: black;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+td, th {
+  border: grey 1px solid;
+  height: 40pt;
+  padding-left: 6pt;
+  padding-right: 6pt;
+}
+td.val {
+  width: 12ex;
+  text-align: right;
+  vertical-align: middle;
+}
+</style>
+<script>
+function set_rgb() {
+  const r = document.color_test.red.value;
+  document.getElementById('red_val').textContent =
+    r + ' (0x' + parseInt(r, 10).toString(16) + ')';
+  const g = document.color_test.green.value;
+  document.getElementById('green_val').textContent =
+    g + ' (0x' + parseInt(g, 10).toString(16) + ')';
+  const b = document.color_test.blue.value;
+  document.getElementById('blue_val').textContent =
+    b + ' (0x' + parseInt(b, 10).toString(16) + ')';
+  document.getElementById('disp_rgb').style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
+function set_hsl() {
+  const h = document.color_test.hue.value;
+  document.getElementById('hue_val').textContent = h;
+  const s = document.color_test.saturation.value;
+  document.getElementById('saturation_val').textContent = s + '%';
+  const l = document.color_test.light.value;
+  document.getElementById('light_val').textContent = l + '%';
+  document.getElementById('disp_hsl').style.backgroundColor = 'hsl(' + h + ',' + s + '%,' + l + '%)';
+}
+
+window.onload = function () { set_rgb(); set_hsl(); };
+</script>
+</head>
+
+<body>
+<h1>Color testing</h1>
+
+<form name="color_test">
+
+<table>
+<tr>
+<th>R</th>
+<td><input type="range" name="red" min="0" max="255" step="1" value="128" oninput="set_rgb()" /></td>
+<td id="red_val" class="val"></td>
+<td class="disp_color" id="disp_rgb" rowspan="3"></td>
+</tr>
+
+<tr>
+<th>G</th>
+<td><input type="range" name="green" min="0" max="255" step="1" value="128" oninput="set_rgb()" /></td>
+<td id="green_val" class="val"></td>
+</tr>
+
+<tr>
+<th>B</th>
+<td><input type="range" name="blue" min="0" max="255" step="1" value="128" oninput="set_rgb()" /></td>
+<td id="blue_val" class="val"></td>
+</tr>
+</table>
+
+<br>
+
+
+<table>
+<tr>
+<th>H</th>
+<td><input type="range" name="hue" min="0" max="359" step="1" value="180" oninput="set_hsl()" /></td>
+<td id="hue_val" class="val"></td>
+<td class="disp_color" id="disp_hsl" rowspan="3"></td>
+</tr>
+
+<tr>
+<th>S</th>
+<td><input type="range" name="saturation" min="0" max="100" step="1" value="50" oninput="set_hsl()" /></td>
+<td id="saturation_val" class="val"></td>
+</tr>
+
+<tr>
+<th>L</th>
+<td><input type="range" name="light" min="0" max="100" step="1" value="50" oninput="set_hsl()" /></td>
+<td id="light_val" class="val"></td>
+</tr>
+</table>
+
+</form>
+
+<nav>[<a href="../index.html">Home</a>]</nav>
+</body>
+</html>
