@@ -26,6 +26,17 @@ function read_convert_download() {
     canv.width = w;
     canv.height = h;
     var ctx = canv.getContext('2d');
+    var i, bg_col;
+    for (i = 0; i < 3; i++) {
+      if (document.user_input.bg_col[i].checked) {
+        bg_col = document.user_input.bg_col[i].value;
+        break;
+      }
+    }
+    if (bg_col === 'white' || bg_col === 'black') {
+      ctx.fillStyle = bg_col;
+      ctx.fillRect(0, 0, w, h);
+    } 
     const img_src = 'data:image/svg+xml;charset=utf-8;base64,' + 
                     btoa(unescape(encodeURIComponent(svg_str)));
     var img = new Image();
@@ -58,8 +69,13 @@ function read_convert_download() {
 <p>「<a href="https://qiita.com/jkawamoto/items/792359460aa1c364ee90">svg 要素を png 形式の画像に変換する</a>」という記事を参考にして、SVG から PNG への簡易変換ページを作りました。サイズの変更機能などはありません。単純な変換にだけ対応しています。
 <a href="../fun/tori_moji.html">鳥文字</a>の SVG ファイルを作って遊んだ後などに利用すると良いかも、と思って作りました。</p>
 <hr>
-<form>
+<form name="user_input">
 <p>
+透明な背景の処理方法
+(<input type="radio" name="bg_col" value="none" id="bg_col_none" checked><label for="bg_col_none"> 透明のまま</label>
+<input type="radio" name="bg_col" value="white" id="bg_col_white"><label for="bg_col_white"> 白</label>
+<input type="radio" name="bg_col" value="black" id="bg_col_black"><label for="bg_col_black"> 黒</label>)
+を選択して、
 SVG ファイルを選択すると
 (<input type="file" id="input_svg_file" name="input_svg_file" />)、
 <input type="button" value="PNG 形式への変換およびダウンロード" onclick="read_convert_download()">が可能となります。
