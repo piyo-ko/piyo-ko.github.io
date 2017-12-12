@@ -13,13 +13,35 @@ svg {
 </style>
 <script>
 function read_convert_download() {
-  var reader = new FileReader();
+  if (document.user_input.no_css.checked) {
+    read_convert_download_0(false, '');
+  } else {
+    css_reader = new FileReader();
+    css_reader.onload = function (e) {
+      read_convert_download_0(true, e.target.result);
+    }
+    css_reader.readAsText(document.getElementById('input_css_file').files[0]);
+  }
+}
 
-  reader.onload = function (e) {
-    const svg_str = e.target.result;
+function read_convert_download_0(use_css, css_str) {
+  var svg_reader = new FileReader();
+
+  svg_reader.onload = function (e) {
+    var svg_str = e.target.result;
     document.getElementById('read_image_div').innerHTML = svg_str;
-
     var svg_elt = document.getElementsByTagName('svg')[0];
+    if (use_css) {
+      var style_elts = svg_elt.getElementsByTagName('style');
+      var new_style = document.createElementNS(svg_elt.namespaceURI, 'style');
+      new_style.textContent = css_str;
+      if (style_elts.length === 0) {
+        svg_elt.insertBefore(new_style, svg_elt.firstChild);
+      } else {
+        svg_elt.insertBefore(new_style, style_elts[style_elts.length - 1].nextSibling);
+      }
+      svg_str = document.getElementById('read_image_div').innerHTML;
+    }
     const h = parseInt(svg_elt.height.baseVal.valueAsString);
     const w = parseInt(svg_elt.width.baseVal.valueAsString);
     var canv = document.createElement('canvas');
@@ -58,7 +80,7 @@ function read_convert_download() {
     img.src = img_src;
   };
 
-  reader.readAsText(document.getElementById('input_svg_file').files[0]);
+  svg_reader.readAsText(document.getElementById('input_svg_file').files[0]);
 }
 </script>
 </head>
@@ -70,16 +92,28 @@ function read_convert_download() {
 <a href="../fun/tori_moji.html">鳥文字</a>の SVG ファイルを作って遊んだ後などに利用すると良いかも、と思って作りました。</p>
 <hr>
 <form name="user_input">
-<p>
+<ol>
+<li>
 透明な背景の処理方法
 (<input type="radio" name="bg_col" value="none" id="bg_col_none" checked><label for="bg_col_none"> 透明のまま</label>
 <input type="radio" name="bg_col" value="white" id="bg_col_white"><label for="bg_col_white"> 白</label>
 <input type="radio" name="bg_col" value="black" id="bg_col_black"><label for="bg_col_black"> 黒</label>)
 を選択して、
+</li>
+<li>
+スタイルを指定するための CSS ファイルを選択するか
+(<input type="file" id="input_css_file" name="input_css_file" />)、
+あるいは、
+<input type="checkbox" name="no_css" id="no_css_checkbox"><label for="no_css_checkbox">CSS ファイルを使わないこと</label>を指示して、
+</li>
+<li>
 SVG ファイルを選択すると
 (<input type="file" id="input_svg_file" name="input_svg_file" />)、
+</li>
+<li>
 <input type="button" value="PNG 形式への変換およびダウンロード" onclick="read_convert_download()">が可能となります。
-</p>
+</li>
+</ol>
 </form>
 
 <hr>
