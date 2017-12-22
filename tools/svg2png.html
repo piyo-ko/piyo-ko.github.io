@@ -33,20 +33,38 @@ function read_convert_download_0(use_css, css_str) {
     var svg_elt = document.getElementsByTagName('svg')[0];
     if (use_css) {
       var style_elts = svg_elt.getElementsByTagName('style');
-      var new_style = document.createElementNS(svg_elt.namespaceURI, 'style');
-      new_style.textContent = css_str;
       if (style_elts.length === 0) {
+        const new_style = document.createElementNS(svg_elt.namespaceURI, 'style');
+        new_style.textContent = css_str;
         svg_elt.insertBefore(new_style, svg_elt.firstChild);
       } else {
-        svg_elt.insertBefore(new_style, style_elts[style_elts.length - 1].nextSibling);
+        style_elts[0].innerHTML = css_str + style_elts[0].innerHTML;
       }
       svg_str = document.getElementById('read_image_div').innerHTML;
     }
-    const h = parseInt(svg_elt.height.baseVal.valueAsString);
-    const w = parseInt(svg_elt.width.baseVal.valueAsString);
+    const svg_h = parseInt(svg_elt.height.baseVal.valueAsString);
+    const svg_w = parseInt(svg_elt.width.baseVal.valueAsString);
+    var img_h = img_w = 0;
+    if (document.user_input.set_height.checked) {
+      img_h = parseInt(document.user_input.output_height.value);
+    }
+    if (document.user_input.set_width.checked) {
+      img_w = parseInt(document.user_input.output_width.value);
+    }
+    if (img_h == 0) {
+      if (img_w == 0) {
+        img_h = svg_h; img_w = svg_w;
+      } else {
+        img_h = Math.floor( svg_h * img_w / svg_w );
+      }
+    } else {
+      if (img_w == 0) {
+        img_w = Math.floor( svg_w * img_h / svg_h );
+      }
+    }
     var canv = document.createElement('canvas');
-    canv.width = w;
-    canv.height = h;
+    canv.width = img_w;
+    canv.height = img_h;
     var ctx = canv.getContext('2d');
     var i, bg_col;
     for (i = 0; i < 3; i++) {
@@ -57,13 +75,13 @@ function read_convert_download_0(use_css, css_str) {
     }
     if (bg_col === 'white' || bg_col === 'black') {
       ctx.fillStyle = bg_col;
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, img_w, img_h);
     } 
     const img_src = 'data:image/svg+xml;charset=utf-8;base64,' + 
                     btoa(unescape(encodeURIComponent(svg_str)));
     var img = new Image();
     img.onload = function() {
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0, img_w, img_h);
 
       const main_body = document.getElementById('main_body');
       main_body.appendChild(canv);
@@ -88,9 +106,10 @@ function read_convert_download_0(use_css, css_str) {
 <body class="main-text-only" id="main_body">
 <h1>SVGからPNGへの簡易変換</h1>
 
-<p>「<a href="https://qiita.com/jkawamoto/items/792359460aa1c364ee90">svg 要素を png 形式の画像に変換する</a>」という記事を参考にして、SVG から PNG への簡易変換ページを作りました。サイズの変更機能などはありません。単純な変換にだけ対応しています。
-<a href="../fun/tori_moji.html">鳥文字</a>の SVG ファイルを作って遊んだ後などに利用すると良いかも、と思って作りました。
+<p>「<a href="https://qiita.com/jkawamoto/items/792359460aa1c364ee90">svg 要素を png 形式の画像に変換する</a>」という記事を参考にして、SVG から PNG への簡易変換ページを作りました。
+<a href="../fun/tori_moji.html">鳥文字</a>の SVG ファイルを作って遊んだ後などに利用すると良いかも、と思って作ったものです。
 <a href="https://piyo-ko.github.io/pedigree/pedigree.html">SVG 形式で系図を作成</a>した後にも使えます。
+ちびちびと機能を追加しています。
 </p>
 <hr>
 <form name="user_input">
@@ -107,6 +126,17 @@ function read_convert_download_0(use_css, css_str) {
 (<input type="file" id="input_css_file" name="input_css_file" />)、
 あるいは、
 <input type="checkbox" name="no_css" id="no_css_checkbox"><label for="no_css_checkbox">CSS ファイルを使わないこと</label>を指示して、
+</li>
+<li>
+幅と高さを指定したい場合は指定して (一方のみ指定すると縦横の比率を保って拡大・縮小します)、
+  <ul>
+  <li><input type="checkbox" name="set_width" id="set_width"><label for="set_width">幅を指定する</label>
+  (<input type="number" id="output_width" name="output_width" min="1" /> px)
+  </li>
+  <li><input type="checkbox" name="set_height" id="set_height"><label for="set_height">高さを指定する</label>
+  (<input type="number" id="output_height" name="output_height" min="1" /> px)
+  </li>
+  </ul>
 </li>
 <li>
 SVG ファイルを選択すると
