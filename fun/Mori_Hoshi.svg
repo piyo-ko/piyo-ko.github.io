@@ -1,0 +1,83 @@
+
+<svg id="pedigree" xmlns="http://www.w3.org/2000/svg" width="688" height="560" viewBox="0 0 688 560">
+<style> @import url(pedigree_svg.css); </style>
+<g id="p0g" data-right_links="h0,p1," data-left_links="" data-upper_links="" data-lower_links="">
+  <rect id="p0r" class="masculine" x="116" y="16" width="36" height="80"></rect>
+  <text id="p0t" x="116" y="16" writing-mode="tb" dx="18" dy="4">森静泰</text>
+</g>
+<g id="p1g" data-right_links="" data-left_links="h0,p0," data-upper_links="" data-lower_links="">
+  <rect id="p1r" class="feminine" x="564" y="16" width="36" height="80"></rect>
+  <text id="p1t" x="564" y="16" writing-mode="tb" dx="18" dy="4">森峰子</text>
+</g>
+<path id="h0" class="double" d="M 152,54 l 411,0 m 0,4 l -411,0" data-connect_pos_x="357" data-connect_pos_y="58" data-start_x="152" data-end_x="563" data-y="56" data-lhs_person="p0" data-rhs_person="p1" data-lower_links="v0,v2,v7,"></path>
+<g id="p2g" data-right_links="h1,p3," data-left_links="h2,p5," data-upper_links="v0," data-lower_links="">
+  <rect id="p2r" class="masculine" x="508" y="128" width="36" height="80"></rect>
+  <text id="p2t" x="508" y="128" writing-mode="tb" dx="18" dy="4">森鷗外</text>
+</g>
+<path id="v0" class="solid" d="M 357,59 l 0,32 l 169,0 l 0,36" data-from_x="357" data-from_y="58" data-to_x="526" data-to_y="128" data-parent1="p0" data-parent2="p1" data-child="p2" data-child_pos_idx="1"></path>
+<g id="p3g" data-right_links="" data-left_links="h1,p2," data-upper_links="" data-lower_links="">
+  <rect id="p3r" class="feminine" x="612" y="116" width="36" height="104"></rect>
+  <text id="p3t" x="612" y="116" writing-mode="tb" dx="18" dy="4">森登志子</text>
+</g>
+<path id="h1" class="double" d="M 544,166 l 68,0 m 0,4 l -68,0" data-connect_pos_x="578" data-connect_pos_y="170" data-start_x="544" data-end_x="612" data-y="168" data-lhs_person="p2" data-rhs_person="p3" data-lower_links="v1,"></path>
+<g id="p4g" data-right_links="" data-left_links="" data-upper_links="v1," data-lower_links="">
+  <rect id="p4r" class="masculine" x="560" y="276" width="36" height="80"></rect>
+  <text id="p4t" x="560" y="276" writing-mode="tb" dx="18" dy="4">森於菟</text>
+</g>
+<path id="v1" class="solid" d="M 578,171 l 0,105" data-from_x="578" data-from_y="170" data-to_x="578" data-to_y="276" data-parent1="p2" data-parent2="p3" data-child="p4" data-child_pos_idx="1"></path>
+<g id="p5g" data-right_links="h2,p2," data-left_links="" data-upper_links="" data-lower_links="">
+  <rect id="p5r" class="feminine" x="268" y="128" width="36" height="80"></rect>
+  <text id="p5t" x="268" y="128" writing-mode="tb" dx="18" dy="4">森志げ</text>
+</g>
+<path id="h2" class="double" d="M 304,166 l 203,0 m 0,4 l -203,0" data-connect_pos_x="405" data-connect_pos_y="170" data-start_x="304" data-end_x="507" data-y="168" data-lhs_person="p5" data-rhs_person="p2" data-lower_links="v3,v4,v5,v6,"></path>
+<g id="p6g" data-right_links="" data-left_links="h3,p12," data-upper_links="v2," data-lower_links="">
+  <rect id="p6r" class="feminine" x="148" y="128" width="36" height="152"></rect>
+  <text id="p6t" x="148" y="128" writing-mode="tb" dx="18" dy="4">小金井喜美子</text>
+</g>
+<path id="v2" class="solid" d="M 357,59 l 0,32 l -191,0 l 0,36" data-from_x="357" data-from_y="58" data-to_x="166" data-to_y="128" data-parent1="p0" data-parent2="p1" data-child="p6" data-child_pos_idx="1"></path>
+<g id="p7g" data-right_links="" data-left_links="" data-upper_links="v3," data-lower_links="">
+  <rect id="p7r" class="feminine" x="484" y="276" width="36" height="80"></rect>
+  <text id="p7t" x="484" y="276" writing-mode="tb" dx="18" dy="4">森茉莉</text>
+</g>
+<path id="v3" class="solid" d="M 405,171 l 0,32 l 97,0 l 0,72" data-from_x="405" data-from_y="170" data-to_x="502" data-to_y="276" data-parent1="p5" data-parent2="p2" data-child="p7" data-child_pos_idx="1"></path>
+<g id="p8g" data-right_links="" data-left_links="" data-upper_links="v4," data-lower_links="">
+  <rect id="p8r" class="feminine" x="424" y="276" width="36" height="104"></rect>
+  <text id="p8t" x="424" y="276" writing-mode="tb" dx="18" dy="4">小堀杏奴</text>
+</g>
+<path id="v4" class="solid" d="M 405,171 l 0,32 l 37,0 l 0,72" data-from_x="405" data-from_y="170" data-to_x="442" data-to_y="276" data-parent1="p5" data-parent2="p2" data-child="p8" data-child_pos_idx="1"></path>
+<g id="p9g" data-right_links="" data-left_links="" data-upper_links="v5," data-lower_links="">
+  <rect id="p9r" class="masculine" x="364" y="276" width="36" height="80"></rect>
+  <text id="p9t" x="364" y="276" writing-mode="tb" dx="18" dy="4">森不律</text>
+</g>
+<path id="v5" class="solid" d="M 405,171 l 0,32 l -23,0 l 0,72" data-from_x="405" data-from_y="170" data-to_x="382" data-to_y="276" data-parent1="p5" data-parent2="p2" data-child="p9" data-child_pos_idx="1"></path>
+<g id="p10g" data-right_links="" data-left_links="" data-upper_links="v6," data-lower_links="">
+  <rect id="p10r" class="masculine" x="300" y="276" width="36" height="56"></rect>
+  <text id="p10t" x="300" y="276" writing-mode="tb" dx="18" dy="4">森類</text>
+</g>
+<path id="v6" class="solid" d="M 405,171 l 0,32 l -87,0 l 0,72" data-from_x="405" data-from_y="170" data-to_x="318" data-to_y="276" data-parent1="p5" data-parent2="p2" data-child="p10" data-child_pos_idx="1"></path>
+<g id="p11g" data-right_links="" data-left_links="" data-upper_links="v7," data-lower_links="">
+  <rect id="p11r" class="masculine" x="208" y="128" width="36" height="104"></rect>
+  <text id="p11t" x="208" y="128" writing-mode="tb" dx="18" dy="4">三木竹二</text>
+</g>
+<path id="v7" class="solid" d="M 357,59 l 0,32 l -131,0 l 0,36" data-from_x="357" data-from_y="58" data-to_x="226" data-to_y="128" data-parent1="p0" data-parent2="p1" data-child="p11" data-child_pos_idx="1"></path>
+<g id="p12g" data-right_links="h3,p6," data-left_links="" data-upper_links="" data-lower_links="">
+  <rect id="p12r" class="masculine" x="64" y="140" width="36" height="128"></rect>
+  <text id="p12t" x="64" y="140" writing-mode="tb" dx="18" dy="4">小金井良精</text>
+</g>
+<path id="h3" class="double" d="M 101,202 l 46,0 m 0,4 l -46,0" data-connect_pos_x="124" data-connect_pos_y="206" data-start_x="101" data-end_x="147" data-y="204" data-lhs_person="p12" data-rhs_person="p6" data-lower_links="v8,"></path>
+<g id="p13g" data-right_links="" data-left_links="h4,p14," data-upper_links="v8," data-lower_links="">
+  <rect id="p13r" class="feminine" x="106" y="320" width="36" height="80"></rect>
+  <text id="p13t" x="106" y="320" writing-mode="tb" dx="18" dy="4">星せい</text>
+</g>
+<path id="v8" class="solid" d="M 124,207 l 0,113" data-from_x="124" data-from_y="206" data-to_x="124" data-to_y="320" data-parent1="p12" data-parent2="p6" data-child="p13" data-child_pos_idx="1"></path>
+<g id="p14g" data-right_links="h4,p13," data-left_links="" data-upper_links="" data-lower_links="">
+  <rect id="p14r" class="masculine" x="12" y="332" width="36" height="56"></rect>
+  <text id="p14t" x="12" y="332" writing-mode="tb" dx="18" dy="4">星一</text>
+</g>
+<path id="h4" class="double" d="M 49,358 l 56,0 m 0,4 l -56,0" data-connect_pos_x="77" data-connect_pos_y="362" data-start_x="49" data-end_x="105" data-y="360" data-lhs_person="p14" data-rhs_person="p13" data-lower_links="v9,"></path>
+<g id="p15g" data-right_links="" data-left_links="" data-upper_links="v9," data-lower_links="">
+  <rect id="p15r" class="masculine" x="59" y="448" width="36" height="80"></rect>
+  <text id="p15t" x="59" y="448" writing-mode="tb" dx="18" dy="4">星新一</text>
+</g>
+<path id="v9" class="solid" d="M 77,363 l 0,85" data-from_x="77" data-from_y="362" data-to_x="77" data-to_y="448" data-parent1="p14" data-parent2="p13" data-child="p15" data-child_pos_idx="1"></path>
+</svg>
