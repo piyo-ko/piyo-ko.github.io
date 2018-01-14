@@ -1,0 +1,1121 @@
+
+<svg id="pedigree" xmlns="http://www.w3.org/2000/svg" width="4004" height="2572" viewBox="0 0 4004 2572">
+<style> @import url(pedigree_svg.css); rect.emp {fill: hsl(80, 100%, 80%);}</style>
+<g id="p0g" data-lower_links="v4,v178,v181," data-upper_links="v55," data-left_links="h0,p4," data-right_links="">
+  <rect id="p0r" class="masculine" x="3196" y="228" width="36" height="56"></rect>
+  <text id="p0t" x="3196" y="228" textLength="48" writing-mode="tb" dx="18" dy="4">孫堅</text>
+  </g>
+<g id="p1g" data-lower_links="v6,v61,v65," data-upper_links="v0," data-left_links="h32,p23," data-right_links="">
+  <rect id="p1r" class="masculine" x="924" y="332" width="36" height="56"></rect>
+  <text id="p1t" x="924" y="332" textLength="48" writing-mode="tb" dx="18" dy="4">孫策</text>
+  </g>
+<g id="p2g" data-lower_links="v11,v15,v24," data-upper_links="v1," data-left_links="h5,p29,h18,p45,h19,p46,h20,p47,h22,p48," data-right_links="h12,p43,h13,p41,h14,p42,h15,p34,h16,p40,">
+  <rect id="p2r" class="masculine emp" x="1764" y="901" width="36" height="488"></rect>
+  <text id="p2t" x="1764" y="901" textLength="264" writing-mode="tb" dx="18" dy="112">孫権</text>
+  </g>
+<g id="p3g" data-lower_links="" data-upper_links="" data-left_links="h1,p8," data-right_links="">
+  <rect id="p3r" class="masculine" x="3160" y="408" width="36" height="56"></rect>
+  <text id="p3t" x="3160" y="408" textLength="48" writing-mode="tb" dx="18" dy="4">劉備</text>
+  </g>
+<g id="p4g" data-lower_links="" data-upper_links="v71," data-left_links="" data-right_links="h0,p0,">
+  <rect id="p4r" class="feminine" x="876" y="216" width="36" height="80"></rect>
+  <text id="p4t" x="876" y="216" textLength="72" writing-mode="tb" dx="18" dy="4">呉夫人</text>
+  </g>
+<path id="h0" class="double" d="M 912,254 l 2284,0 m 0,4 l -2284,0" data-connect_pos_x="2054" data-connect_pos_y="258" data-start_x="912" data-end_x="3196" data-y="256" data-lhs_person="p4" data-rhs_person="p0" data-lower_links="v0,v1,v2,v3,v176,"></path>
+<path id="v0" class="solid" d="M 2054,259 l 0,32 l -1112,0 l 0,40" data-from_x="2054" data-from_y="258" data-to_x="942" data-to_y="332" data-parent1="p4" data-parent2="p0" data-child="p1" data-child_pos_idx="1"></path>
+<path id="v1" class="solid" d="M 2054,259 l 0,32 l -272,0 l 0,609" data-from_x="2054" data-from_y="258" data-to_x="1782" data-to_y="901" data-parent1="p4" data-parent2="p0" data-child="p2" data-child_pos_idx="1"></path>
+<g id="p5g" data-lower_links="v8," data-upper_links="v2," data-left_links="" data-right_links="">
+  <rect id="p5r" class="masculine" x="2496" y="322" width="36" height="56"></rect>
+  <text id="p5t" x="2496" y="322" textLength="48" writing-mode="tb" dx="18" dy="4">孫翊</text>
+  </g>
+<g id="p6g" data-lower_links="" data-upper_links="v3," data-left_links="" data-right_links="h40,p115,">
+  <rect id="p6r" class="masculine" x="3028" y="1564" width="36" height="56"></rect>
+  <text id="p6t" x="3028" y="1564" textLength="48" writing-mode="tb" dx="18" dy="4">孫匡</text>
+  </g>
+<path id="v2" class="solid" d="M 2054,259 l 0,32 l 460,0 l 0,30" data-from_x="2054" data-from_y="258" data-to_x="2514" data-to_y="322" data-parent1="p4" data-parent2="p0" data-child="p5" data-child_pos_idx="1"></path>
+<path id="v3" class="solid" d="M 2054,259 l 0,32 l 992,0 l 0,1272" data-from_x="2054" data-from_y="258" data-to_x="3046" data-to_y="1564" data-parent1="p4" data-parent2="p0" data-child="p6" data-child_pos_idx="1"></path>
+<g id="p7g" data-lower_links="" data-upper_links="v4," data-left_links="" data-right_links="">
+  <rect id="p7r" class="masculine" x="3112" y="350" width="36" height="56"></rect>
+  <text id="p7t" x="3112" y="350" textLength="48" writing-mode="tb" dx="18" dy="4">孫朗</text>
+  </g>
+<path id="v4" class="solid" d="M 3214,285 l 0,32 l -84,0 l 0,32" data-from_x="3214" data-from_y="284" data-to_x="3130" data-to_y="350" data-parent1="p0" data-parent1_pos_idx="1" data-child="p7" data-child_pos_idx="1"></path>
+<g id="p8g" data-lower_links="" data-upper_links="v176," data-left_links="" data-right_links="h1,p3,">
+  <rect id="p8r" class="feminine" x="3060" y="396" width="36" height="80"></rect>
+  <text id="p8t" x="3060" y="396" textLength="72" writing-mode="tb" dx="18" dy="4">孫夫人</text>
+  </g>
+
+<path id="h1" class="double" d="M 3096,434 l 64,0 m 0,4 l -64,0" data-connect_pos_x="3128" data-connect_pos_y="438" data-start_x="3096" data-end_x="3160" data-y="436" data-lhs_person="p8" data-rhs_person="p3" data-lower_links=""></path>
+<g id="p9g" data-lower_links="v7," data-upper_links="v6," data-left_links="" data-right_links="">
+  <rect id="p9r" class="masculine" x="924" y="472" width="36" height="56"></rect>
+  <text id="p9t" x="924" y="472" textLength="48" writing-mode="tb" dx="18" dy="4">孫紹</text>
+  </g>
+<path id="v6" class="solid" d="M 942,389 l 0,83" data-from_x="942" data-from_y="388" data-to_x="942" data-to_y="472" data-parent1="p1" data-parent1_pos_idx="1" data-child="p9" data-child_pos_idx="1"></path>
+<g id="p10g" data-lower_links="" data-upper_links="v7," data-left_links="" data-right_links="">
+  <rect id="p10r" class="masculine" x="924" y="592" width="36" height="56"></rect>
+  <text id="p10t" x="924" y="592" textLength="48" writing-mode="tb" dx="18" dy="4">孫奉</text>
+  </g>
+<path id="v7" class="solid" d="M 942,529 l 0,63" data-from_x="942" data-from_y="528" data-to_x="942" data-to_y="592" data-parent1="p9" data-parent1_pos_idx="1" data-child="p10" data-child_pos_idx="1"></path>
+<g id="p11g" data-lower_links="" data-upper_links="v8," data-left_links="" data-right_links="">
+  <rect id="p11r" class="masculine" x="2496" y="442" width="36" height="56"></rect>
+  <text id="p11t" x="2496" y="442" textLength="48" writing-mode="tb" dx="18" dy="4">孫松</text>
+  </g>
+<path id="v8" class="solid" d="M 2514,379 l 0,63" data-from_x="2514" data-from_y="378" data-to_x="2514" data-to_y="442" data-parent1="p5" data-parent1_pos_idx="1" data-child="p11" data-child_pos_idx="1"></path>
+<g id="p12g" data-lower_links="v10," data-upper_links="v92," data-left_links="" data-right_links="">
+  <rect id="p12r" class="masculine" x="3100" y="1952" width="36" height="56"></rect>
+  <text id="p12t" x="3100" y="1952" textLength="48" writing-mode="tb" dx="18" dy="4">孫泰</text>
+  </g>
+
+<g id="p13g" data-lower_links="v93," data-upper_links="v10," data-left_links="h41,p117," data-right_links="">
+  <rect id="p13r" class="masculine" x="3100" y="2092" width="36" height="56"></rect>
+  <text id="p13t" x="3100" y="2092" textLength="48" writing-mode="tb" dx="18" dy="4">孫秀</text>
+  </g>
+<path id="v10" class="solid" d="M 3118,2009 l 0,83" data-from_x="3118" data-from_y="2008" data-to_x="3118" data-to_y="2092" data-parent1="p12" data-parent1_pos_idx="1" data-child="p13" data-child_pos_idx="1"></path>
+<g id="p14g" data-lower_links="v12,v34,v35," data-upper_links="v11,v30," data-left_links="h4,p26," data-right_links="">
+  <rect id="p14r" class="masculine" x="1636" y="1971" width="36" height="56"></rect>
+  <text id="p14t" x="1636" y="1971" textLength="48" writing-mode="tb" dx="18" dy="4">孫登</text>
+  </g>
+<g id="p15g" data-lower_links="" data-upper_links="v15," data-left_links="" data-right_links="h59,p213,">
+  <rect id="p15r" class="masculine" x="1706" y="1513" width="36" height="56"></rect>
+  <text id="p15t" x="1706" y="1513" textLength="48" writing-mode="tb" dx="18" dy="4">孫慮</text>
+  </g>
+<g id="p16g" data-lower_links="v44,v45," data-upper_links="v29," data-left_links="h23,p61," data-right_links="h24,p60,">
+  <rect id="p16r" class="masculine" x="1822" y="1596" width="36" height="56"></rect>
+  <text id="p16t" x="1822" y="1596" textLength="48" writing-mode="tb" dx="18" dy="4">孫和</text>
+  </g>
+<g id="p17g" data-lower_links="v40,v41," data-upper_links="v27," data-left_links="" data-right_links="">
+  <rect id="p17r" class="masculine" x="2046" y="1333" width="36" height="56"></rect>
+  <text id="p17t" x="2046" y="1333" textLength="48" writing-mode="tb" dx="18" dy="4">孫覇</text>
+  </g>
+<g id="p18g" data-lower_links="" data-upper_links="v25," data-left_links="h21,p51," data-right_links="">
+  <rect id="p18r" class="masculine" x="2114" y="2148" width="36" height="56"></rect>
+  <text id="p18t" x="2114" y="2148" textLength="48" writing-mode="tb" dx="18" dy="4">孫奮</text>
+  </g>
+<g id="p19g" data-lower_links="" data-upper_links="v28," data-left_links="" data-right_links="h17,p44,">
+  <rect id="p19r" class="masculine emp" x="2702" y="1124" width="36" height="56"></rect>
+  <text id="p19t" x="2702" y="1124" textLength="48" writing-mode="tb" dx="18" dy="4">孫亮</text>
+  </g>
+<g id="p20g" data-lower_links="" data-upper_links="v26," data-left_links="h10,p32," data-right_links="">
+  <rect id="p20r" class="masculine emp" x="2148" y="1873" width="36" height="56"></rect>
+  <text id="p20t" x="2148" y="1873" textLength="48" writing-mode="tb" dx="18" dy="4">孫休</text>
+  </g>
+<path id="v11" class="solid" d="M 1782,1390 l 0,32 l -128,0 l 0,548" data-from_x="1782" data-from_y="1389" data-to_x="1654" data-to_y="1971" data-parent1="p2" data-parent1_pos_idx="1" data-child="p14" data-child_pos_idx="1"></path>
+<g id="p21g" data-lower_links="" data-upper_links="v12," data-left_links="" data-right_links="">
+  <rect id="p21r" class="masculine" x="1572" y="2091" width="36" height="56"></rect>
+  <text id="p21t" x="1572" y="2091" textLength="48" writing-mode="tb" dx="18" dy="4">孫英</text>
+  </g>
+<path id="v12" class="solid" d="M 1654,2028 l 0,32 l -64,0 l 0,30" data-from_x="1654" data-from_y="2027" data-to_x="1590" data-to_y="2091" data-parent1="p14" data-parent1_pos_idx="1" data-child="p21" data-child_pos_idx="1"></path>
+<g id="p22g" data-lower_links="v13,v14," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p22r" class="masculine" x="820" y="212" width="36" height="56"></rect>
+  <text id="p22t" x="820" y="212" textLength="48" writing-mode="tb" dx="18" dy="4">橋玄</text>
+  </g>
+<g id="p23g" data-lower_links="" data-upper_links="v14," data-left_links="" data-right_links="h32,p1,">
+  <rect id="p23r" class="feminine" x="840" y="332" width="36" height="56"></rect>
+  <text id="p23t" x="840" y="332" textLength="48" writing-mode="tb" dx="18" dy="4">大橋</text>
+  </g>
+<g id="p24g" data-lower_links="" data-upper_links="v13," data-left_links="" data-right_links="h3,p25,">
+  <rect id="p24r" class="feminine" x="796" y="1320" width="36" height="56"></rect>
+  <text id="p24t" x="796" y="1320" textLength="48" writing-mode="tb" dx="18" dy="4">小橋</text>
+  </g>
+<path id="v13" class="solid" d="M 838,269 l 0,32 l -24,0 l 0,1018" data-from_x="838" data-from_y="268" data-to_x="814" data-to_y="1320" data-parent1="p22" data-parent1_pos_idx="1" data-child="p24" data-child_pos_idx="1"></path>
+<path id="v14" class="solid" d="M 838,269 l 0,32 l 20,0 l 0,30" data-from_x="838" data-from_y="268" data-to_x="858" data-to_y="332" data-parent1="p22" data-parent1_pos_idx="1" data-child="p23" data-child_pos_idx="1"></path>
+<g id="p25g" data-lower_links="v16,v17,v18," data-upper_links="" data-left_links="h3,p24," data-right_links="">
+  <rect id="p25r" class="masculine" x="1152" y="1320" width="36" height="56"></rect>
+  <text id="p25t" x="1152" y="1320" textLength="48" writing-mode="tb" dx="18" dy="4">周瑜</text>
+  </g>
+<path id="v15" class="solid" d="M 1782,1390 l 0,32 l -58,0 l 0,90" data-from_x="1782" data-from_y="1389" data-to_x="1724" data-to_y="1513" data-parent1="p2" data-parent1_pos_idx="1" data-child="p15" data-child_pos_idx="1"></path>
+<g id="p26g" data-lower_links="" data-upper_links="v16," data-left_links="" data-right_links="h4,p14,">
+  <rect id="p26r" class="feminine" x="1104" y="1971" width="36" height="56"></rect>
+  <text id="p26t" x="1104" y="1971" textLength="48" writing-mode="tb" dx="18" dy="4">周妃</text>
+  </g>
+
+<path id="h3" class="double" d="M 832,1346 l 320,0 m 0,4 l -320,0" data-connect_pos_x="992" data-connect_pos_y="1350" data-start_x="832" data-end_x="1152" data-y="1348" data-lhs_person="p24" data-rhs_person="p25" data-lower_links=""></path>
+<path id="v16" class="solid" d="M 1170,1377 l 0,32 l -48,0 l 0,561" data-from_x="1170" data-from_y="1376" data-to_x="1122" data-to_y="1971" data-parent1="p25" data-parent1_pos_idx="1" data-child="p26" data-child_pos_idx="1"></path>
+<path id="h4" class="double" d="M 1140,1997 l 496,0 m 0,4 l -496,0" data-connect_pos_x="1388" data-connect_pos_y="2001" data-start_x="1140" data-end_x="1636" data-y="1999" data-lhs_person="p26" data-rhs_person="p14" data-lower_links=""></path>
+<g id="p27g" data-lower_links="" data-upper_links="v18," data-left_links="" data-right_links="h7,p30,">
+  <rect id="p27r" class="masculine" x="1196" y="1515" width="36" height="56"></rect>
+  <text id="p27t" x="1196" y="1515" textLength="48" writing-mode="tb" dx="18" dy="4">周循</text>
+  </g>
+<g id="p28g" data-lower_links="" data-upper_links="v17," data-left_links="" data-right_links="">
+  <rect id="p28r" class="masculine" x="1152" y="1696" width="36" height="56"></rect>
+  <text id="p28t" x="1152" y="1696" textLength="48" writing-mode="tb" dx="18" dy="4">周胤</text>
+  </g>
+<path id="v17" class="solid" d="M 1170,1377 l 0,319" data-from_x="1170" data-from_y="1376" data-to_x="1170" data-to_y="1696" data-parent1="p25" data-parent1_pos_idx="1" data-child="p28" data-child_pos_idx="1"></path>
+<path id="v18" class="solid" d="M 1170,1377 l 0,32 l 44,0 l 0,105" data-from_x="1170" data-from_y="1376" data-to_x="1214" data-to_y="1515" data-parent1="p25" data-parent1_pos_idx="1" data-child="p27" data-child_pos_idx="1"></path>
+<g id="p29g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h5,p2,">
+  <rect id="p29r" class="feminine" x="1212" y="1105" width="36" height="80"></rect>
+  <text id="p29t" x="1212" y="1105" textLength="72" writing-mode="tb" dx="18" dy="4">歩練師</text>
+  </g>
+<g id="p30g" data-lower_links="" data-upper_links="v19," data-left_links="h6,p35,h7,p27," data-right_links="">
+  <rect id="p30r" class="feminine" x="1360" y="1499" width="36" height="176"></rect>
+  <text id="p30t" x="1360" y="1499" textLength="120" writing-mode="tb" dx="18" dy="28">孫魯班</text>
+  </g>
+<g id="p31g" data-lower_links="" data-upper_links="v20," data-left_links="" data-right_links="h8,p33,h9,p38,">
+  <rect id="p31r" class="feminine" x="1404" y="1499" width="36" height="176"></rect>
+  <text id="p31t" x="1404" y="1499" textLength="120" writing-mode="tb" dx="18" dy="28">孫魯育</text>
+  </g>
+<g id="p32g" data-lower_links="" data-upper_links="v23," data-left_links="" data-right_links="h10,p20,">
+  <rect id="p32r" class="feminine" x="1470" y="1861" width="36" height="80"></rect>
+  <text id="p32t" x="1470" y="1861" textLength="72" writing-mode="tb" dx="18" dy="4">朱皇后</text>
+  </g>
+<g id="p33g" data-lower_links="v112,v113," data-upper_links="" data-left_links="h8,p31," data-right_links="">
+  <rect id="p33r" class="masculine" x="1536" y="1559" width="36" height="56"></rect>
+  <text id="p33t" x="1536" y="1559" textLength="48" writing-mode="tb" dx="18" dy="4">朱拠</text>
+  </g>
+<g id="p34g" data-lower_links="" data-upper_links="" data-left_links="h15,p2," data-right_links="">
+  <rect id="p34r" class="feminine" x="2720" y="934" width="36" height="56"></rect>
+  <text id="p34t" x="2720" y="934" textLength="48" writing-mode="tb" dx="18" dy="4">潘淑</text>
+  </g>
+<path id="h5" class="double" d="M 1248,1143 l 516,0 m 0,4 l -516,0" data-connect_pos_x="1506" data-connect_pos_y="1147" data-start_x="1248" data-end_x="1764" data-y="1145" data-lhs_person="p29" data-rhs_person="p2" data-lower_links="v19,v20,"></path>
+<path id="v19" class="solid" d="M 1506,1148 l 0,32 l -128,0 l 0,318" data-from_x="1506" data-from_y="1147" data-to_x="1378" data-to_y="1499" data-parent1="p29" data-parent2="p2" data-child="p30" data-child_pos_idx="1"></path>
+<path id="v20" class="solid" d="M 1506,1148 l 0,32 l -84,0 l 0,318" data-from_x="1506" data-from_y="1147" data-to_x="1422" data-to_y="1499" data-parent1="p29" data-parent2="p2" data-child="p31" data-child_pos_idx="1"></path>
+<g id="p35g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h6,p30,">
+  <rect id="p35r" class="masculine" x="1252" y="1559" width="36" height="56"></rect>
+  <text id="p35t" x="1252" y="1559" textLength="48" writing-mode="tb" dx="18" dy="4">全琮</text>
+  </g>
+<g id="p36g" data-lower_links="" data-upper_links="v21," data-left_links="" data-right_links="">
+  <rect id="p36r" class="masculine" x="1328" y="1739" width="36" height="56"></rect>
+  <text id="p36t" x="1328" y="1739" textLength="48" writing-mode="tb" dx="18" dy="4">全懌</text>
+  </g>
+<g id="p37g" data-lower_links="" data-upper_links="v22," data-left_links="" data-right_links="">
+  <rect id="p37r" class="masculine" x="1280" y="1739" width="36" height="56"></rect>
+  <text id="p37t" x="1280" y="1739" textLength="48" writing-mode="tb" dx="18" dy="4">全呉</text>
+  </g>
+<path id="h6" class="double" d="M 1288,1585 l 72,0 m 0,4 l -72,0" data-connect_pos_x="1324" data-connect_pos_y="1589" data-start_x="1288" data-end_x="1360" data-y="1587" data-lhs_person="p35" data-rhs_person="p30" data-lower_links="v21,v22,"></path>
+<path id="v21" class="solid" d="M 1324,1590 l 0,32 l 22,0 l 0,116" data-from_x="1324" data-from_y="1589" data-to_x="1346" data-to_y="1739" data-parent1="p35" data-parent2="p30" data-child="p36" data-child_pos_idx="1"></path>
+<path id="v22" class="solid" d="M 1324,1590 l 0,32 l -26,0 l 0,116" data-from_x="1324" data-from_y="1589" data-to_x="1298" data-to_y="1739" data-parent1="p35" data-parent2="p30" data-child="p37" data-child_pos_idx="1"></path>
+<path id="h7" class="double" d="M 1232,1541 l 128,0 m 0,4 l -128,0" data-connect_pos_x="1296" data-connect_pos_y="1545" data-start_x="1232" data-end_x="1360" data-y="1543" data-lhs_person="p27" data-rhs_person="p30" data-lower_links=""></path>
+<path id="h8" class="double" d="M 1441,1585 l 95,0 m 0,4 l -95,0" data-connect_pos_x="1488" data-connect_pos_y="1589" data-start_x="1441" data-end_x="1536" data-y="1587" data-lhs_person="p31" data-rhs_person="p33" data-lower_links="v23,"></path>
+<g id="p38g" data-lower_links="" data-upper_links="" data-left_links="h9,p31," data-right_links="h11,p39,">
+  <rect id="p38r" class="masculine" x="1488" y="1515" width="36" height="56"></rect>
+  <text id="p38t" x="1488" y="1515" textLength="48" writing-mode="tb" dx="18" dy="4">劉纂</text>
+  </g>
+<path id="h9" class="double" d="M 1441,1541 l 47,0 m 0,4 l -47,0" data-connect_pos_x="1464" data-connect_pos_y="1545" data-start_x="1441" data-end_x="1488" data-y="1543" data-lhs_person="p31" data-rhs_person="p38" data-lower_links=""></path>
+<path id="v23" class="solid" d="M 1488,1590 l 0,271" data-from_x="1488" data-from_y="1589" data-to_x="1488" data-to_y="1861" data-parent1="p31" data-parent2="p33" data-child="p32" data-child_pos_idx="1"></path>
+<path id="h10" class="double" d="M 1507,1899 l 641,0 m 0,4 l -641,0" data-connect_pos_x="1827" data-connect_pos_y="1903" data-start_x="1507" data-end_x="2148" data-y="1901" data-lhs_person="p32" data-rhs_person="p20" data-lower_links="v36,v37,v38,v39,"></path>
+<g id="p39g" data-lower_links="" data-upper_links="v24," data-left_links="h11,p38," data-right_links="">
+  <rect id="p39r" class="feminine" x="1584" y="1515" width="36" height="56"></rect>
+  <text id="p39t" x="1584" y="1515" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="h11" class="double" d="M 1525,1541 l 59,0 m 0,4 l -59,0" data-connect_pos_x="1554" data-connect_pos_y="1545" data-start_x="1525" data-end_x="1584" data-y="1543" data-lhs_person="p38" data-rhs_person="p39" data-lower_links=""></path>
+<path id="v24" class="solid" d="M 1782,1390 l 0,32 l -180,0 l 0,92" data-from_x="1782" data-from_y="1389" data-to_x="1602" data-to_y="1515" data-parent1="p2" data-parent1_pos_idx="1" data-child="p39" data-child_pos_idx="1"></path>
+<g id="p40g" data-lower_links="" data-upper_links="" data-left_links="h16,p2," data-right_links="">
+  <rect id="p40r" class="feminine" x="1880" y="1276" width="36" height="104"></rect>
+  <text id="p40t" x="1880" y="1276" textLength="96" writing-mode="tb" dx="18" dy="4">大懿皇后</text>
+  </g>
+<g id="p41g" data-lower_links="" data-upper_links="" data-left_links="h13,p2," data-right_links="">
+  <rect id="p41r" class="feminine" x="2200" y="971" width="36" height="104"></rect>
+  <text id="p41t" x="2200" y="971" textLength="96" writing-mode="tb" dx="18" dy="4">敬懐皇后</text>
+  </g>
+<g id="p42g" data-lower_links="" data-upper_links="" data-left_links="h14,p2," data-right_links="">
+  <rect id="p42r" class="feminine" x="2072" y="1239" width="36" height="56"></rect>
+  <text id="p42t" x="2072" y="1239" textLength="48" writing-mode="tb" dx="18" dy="4">謝姫</text>
+  </g>
+<g id="p43g" data-lower_links="" data-upper_links="" data-left_links="h12,p2," data-right_links="">
+  <rect id="p43r" class="feminine" x="2004" y="1117" width="36" height="56"></rect>
+  <text id="p43t" x="2004" y="1117" textLength="48" writing-mode="tb" dx="18" dy="4">仲姫</text>
+  </g>
+<path id="h12" class="double" d="M 1800,1143 l 204,0 m 0,4 l -204,0" data-connect_pos_x="1902" data-connect_pos_y="1147" data-start_x="1800" data-end_x="2004" data-y="1145" data-lhs_person="p2" data-rhs_person="p43" data-lower_links="v25,"></path>
+<path id="v25" class="solid" d="M 1902,1148 l 0,32 l 230,0 l 0,967" data-from_x="1902" data-from_y="1147" data-to_x="2132" data-to_y="2148" data-parent1="p2" data-parent2="p43" data-child="p18" data-child_pos_idx="1"></path>
+<path id="h13" class="double" d="M 1800,1021 l 400,0 m 0,4 l -400,0" data-connect_pos_x="2000" data-connect_pos_y="1025" data-start_x="1800" data-end_x="2200" data-y="1023" data-lhs_person="p2" data-rhs_person="p41" data-lower_links="v26,"></path>
+<path id="v26" class="solid" d="M 2000,1026 l 0,32 l 166,0 l 0,814" data-from_x="2000" data-from_y="1025" data-to_x="2166" data-to_y="1873" data-parent1="p2" data-parent2="p41" data-child="p20" data-child_pos_idx="1"></path>
+<path id="h14" class="double" d="M 1800,1265 l 272,0 m 0,4 l -272,0" data-connect_pos_x="1936" data-connect_pos_y="1269" data-start_x="1800" data-end_x="2072" data-y="1267" data-lhs_person="p2" data-rhs_person="p42" data-lower_links="v27,"></path>
+<path id="v27" class="solid" d="M 1936,1270 l 0,32 l 128,0 l 0,30" data-from_x="1936" data-from_y="1269" data-to_x="2064" data-to_y="1333" data-parent1="p2" data-parent2="p42" data-child="p17" data-child_pos_idx="1"></path>
+<path id="h15" class="double" d="M 1800,960 l 920,0 m 0,4 l -920,0" data-connect_pos_x="2260" data-connect_pos_y="964" data-start_x="1800" data-end_x="2720" data-y="962" data-lhs_person="p2" data-rhs_person="p34" data-lower_links="v28,"></path>
+<path id="v28" class="solid" d="M 2260,965 l 0,32 l 460,0 l 0,126" data-from_x="2260" data-from_y="964" data-to_x="2720" data-to_y="1124" data-parent1="p2" data-parent2="p34" data-child="p19" data-child_pos_idx="1"></path>
+<path id="h16" class="double" d="M 1800,1326 l 80,0 m 0,4 l -80,0" data-connect_pos_x="1840" data-connect_pos_y="1330" data-start_x="1800" data-end_x="1880" data-y="1328" data-lhs_person="p2" data-rhs_person="p40" data-lower_links="v29,"></path>
+<path id="v29" class="solid" d="M 1840,1331 l 0,265" data-from_x="1840" data-from_y="1330" data-to_x="1840" data-to_y="1596" data-parent1="p2" data-parent2="p40" data-child="p16" data-child_pos_idx="1"></path>
+<g id="p44g" data-lower_links="" data-upper_links="v117," data-left_links="h17,p19," data-right_links="">
+  <rect id="p44r" class="feminine" x="3523" y="1112" width="36" height="80"></rect>
+  <text id="p44t" x="3523" y="1112" textLength="72" writing-mode="tb" dx="18" dy="4">全皇后</text>
+  </g>
+<path id="h17" class="double" d="M 2738,1150 l 785,0 m 0,4 l -785,0" data-connect_pos_x="3130" data-connect_pos_y="1154" data-start_x="2738" data-end_x="3523" data-y="1152" data-lhs_person="p19" data-rhs_person="p44" data-lower_links=""></path>
+<g id="p45g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h18,p2,">
+  <rect id="p45r" class="feminine" x="1668" y="983" width="36" height="80"></rect>
+  <text id="p45t" x="1668" y="983" textLength="72" writing-mode="tb" dx="18" dy="4">謝夫人</text>
+  </g>
+<path id="h18" class="double" d="M 1704,1021 l 60,0 m 0,4 l -60,0" data-connect_pos_x="1734" data-connect_pos_y="1025" data-start_x="1704" data-end_x="1764" data-y="1023" data-lhs_person="p45" data-rhs_person="p2" data-lower_links=""></path>
+<g id="p46g" data-lower_links="v30," data-upper_links="v60," data-left_links="" data-right_links="h19,p2,h39,p102,">
+  <rect id="p46r" class="feminine" x="1528" y="1179" width="36" height="176"></rect>
+  <text id="p46t" x="1528" y="1179" textLength="120" writing-mode="tb" dx="18" dy="28">徐夫人</text>
+  </g>
+<path id="h19" class="double" d="M 1564,1265 l 200,0 m 0,4 l -200,0" data-connect_pos_x="1664" data-connect_pos_y="1269" data-start_x="1564" data-end_x="1764" data-y="1267" data-lhs_person="p46" data-rhs_person="p2" data-lower_links=""></path>
+<path id="v30" class="dashed" d="M 1546,1356 l 0,32 l 99,0 l 0,582" data-from_x="1546" data-from_y="1355" data-to_x="1645" data-to_y="1971" data-parent1="p46" data-parent1_pos_idx="1" data-child="p14" data-child_pos_idx="0"></path>
+<g id="p47g" data-lower_links="" data-upper_links="v31," data-left_links="" data-right_links="h20,p2,">
+  <rect id="p47r" class="feminine" x="1320" y="922" width="36" height="80"></rect>
+  <text id="p47t" x="1320" y="922" textLength="72" writing-mode="tb" dx="18" dy="4">袁夫人</text>
+  </g>
+<g id="p48g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h22,p2,">
+  <rect id="p48r" class="feminine" x="1680" y="1288" width="36" height="80"></rect>
+  <text id="p48t" x="1680" y="1288" textLength="72" writing-mode="tb" dx="18" dy="4">趙夫人</text>
+  </g>
+<g id="p49g" data-lower_links="v31,v32," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p49r" class="masculine" x="1196" y="794" width="36" height="56"></rect>
+  <text id="p49t" x="1196" y="794" textLength="48" writing-mode="tb" dx="18" dy="4">袁術</text>
+  </g>
+<path id="v31" class="solid" d="M 1214,851 l 0,32 l 124,0 l 0,38" data-from_x="1214" data-from_y="850" data-to_x="1338" data-to_y="922" data-parent1="p49" data-parent1_pos_idx="1" data-child="p47" data-child_pos_idx="1"></path>
+<g id="p50g" data-lower_links="v33," data-upper_links="v32," data-left_links="" data-right_links="">
+  <rect id="p50r" class="masculine" x="1056" y="954" width="36" height="56"></rect>
+  <text id="p50t" x="1056" y="954" textLength="48" writing-mode="tb" dx="18" dy="4">袁燿</text>
+  </g>
+<path id="v32" class="solid" d="M 1214,851 l 0,32 l -140,0 l 0,70" data-from_x="1214" data-from_y="850" data-to_x="1074" data-to_y="954" data-parent1="p49" data-parent1_pos_idx="1" data-child="p50" data-child_pos_idx="1"></path>
+<g id="p51g" data-lower_links="" data-upper_links="v33," data-left_links="" data-right_links="h21,p18,">
+  <rect id="p51r" class="feminine" x="1056" y="2148" width="36" height="56"></rect>
+  <text id="p51t" x="1056" y="2148" textLength="48" writing-mode="tb" dx="18" dy="4">袁氏</text>
+  </g>
+<path id="v33" class="solid" d="M 1074,1011 l 0,1137" data-from_x="1074" data-from_y="1010" data-to_x="1074" data-to_y="2148" data-parent1="p50" data-parent1_pos_idx="1" data-child="p51" data-child_pos_idx="1"></path>
+<path id="h20" class="double" d="M 1356,960 l 408,0 m 0,4 l -408,0" data-connect_pos_x="1560" data-connect_pos_y="964" data-start_x="1356" data-end_x="1764" data-y="962" data-lhs_person="p47" data-rhs_person="p2" data-lower_links=""></path>
+<path id="h21" class="double" d="M 1092,2174 l 1022,0 m 0,4 l -1022,0" data-connect_pos_x="1603" data-connect_pos_y="2178" data-start_x="1092" data-end_x="2114" data-y="2176" data-lhs_person="p51" data-rhs_person="p18" data-lower_links=""></path>
+<path id="h22" class="double" d="M 1716,1326 l 48,0 m 0,4 l -48,0" data-connect_pos_x="1740" data-connect_pos_y="1330" data-start_x="1716" data-end_x="1764" data-y="1328" data-lhs_person="p48" data-rhs_person="p2" data-lower_links=""></path>
+<g id="p52g" data-lower_links="" data-upper_links="v34," data-left_links="" data-right_links="">
+  <rect id="p52r" class="masculine" x="1636" y="2091" width="36" height="56"></rect>
+  <text id="p52t" x="1636" y="2091" textLength="48" writing-mode="tb" dx="18" dy="4">孫璠</text>
+  </g>
+<path id="v34" class="solid" d="M 1654,2028 l 0,63" data-from_x="1654" data-from_y="2027" data-to_x="1654" data-to_y="2091" data-parent1="p14" data-parent1_pos_idx="1" data-child="p52" data-child_pos_idx="1"></path>
+<g id="p53g" data-lower_links="" data-upper_links="v35," data-left_links="" data-right_links="">
+  <rect id="p53r" class="masculine" x="1700" y="2091" width="36" height="56"></rect>
+  <text id="p53t" x="1700" y="2091" textLength="48" writing-mode="tb" dx="18" dy="4">孫希</text>
+  </g>
+<path id="v35" class="solid" d="M 1654,2028 l 0,32 l 64,0 l 0,30" data-from_x="1654" data-from_y="2027" data-to_x="1718" data-to_y="2091" data-parent1="p14" data-parent1_pos_idx="1" data-child="p53" data-child_pos_idx="1"></path>
+<g id="p54g" data-lower_links="" data-upper_links="v36," data-left_links="" data-right_links="">
+  <rect id="p54r" class="masculine" x="1736" y="1988" width="36" height="80"></rect>
+  <text id="p54t" x="1736" y="1988" textLength="72" writing-mode="tb" dx="18" dy="4">豫章王</text>
+  </g>
+<path id="v36" class="solid" d="M 1827,1904 l 0,32 l -73,0 l 0,51" data-from_x="1827" data-from_y="1903" data-to_x="1754" data-to_y="1988" data-parent1="p32" data-parent2="p20" data-child="p54" data-child_pos_idx="1"></path>
+<g id="p55g" data-lower_links="" data-upper_links="v37," data-left_links="" data-right_links="">
+  <rect id="p55r" class="masculine" x="1800" y="1988" width="36" height="80"></rect>
+  <text id="p55t" x="1800" y="1988" textLength="72" writing-mode="tb" dx="18" dy="4">汝南王</text>
+  </g>
+<path id="v37" class="solid" d="M 1827,1904 l 0,32 l -9,0 l 0,51" data-from_x="1827" data-from_y="1903" data-to_x="1818" data-to_y="1988" data-parent1="p32" data-parent2="p20" data-child="p55" data-child_pos_idx="1"></path>
+<g id="p56g" data-lower_links="" data-upper_links="v38," data-left_links="" data-right_links="">
+  <rect id="p56r" class="masculine" x="1872" y="1988" width="36" height="56"></rect>
+  <text id="p56t" x="1872" y="1988" textLength="48" writing-mode="tb" dx="18" dy="4">梁王</text>
+  </g>
+<path id="v38" class="solid" d="M 1827,1904 l 0,32 l 63,0 l 0,51" data-from_x="1827" data-from_y="1903" data-to_x="1890" data-to_y="1988" data-parent1="p32" data-parent2="p20" data-child="p56" data-child_pos_idx="1"></path>
+<g id="p57g" data-lower_links="" data-upper_links="v39," data-left_links="" data-right_links="">
+  <rect id="p57r" class="masculine" x="1934" y="1988" width="36" height="56"></rect>
+  <text id="p57t" x="1934" y="1988" textLength="48" writing-mode="tb" dx="18" dy="4">陳王</text>
+  </g>
+<path id="v39" class="solid" d="M 1827,1904 l 0,32 l 125,0 l 0,51" data-from_x="1827" data-from_y="1903" data-to_x="1952" data-to_y="1988" data-parent1="p32" data-parent2="p20" data-child="p57" data-child_pos_idx="1"></path>
+<g id="p58g" data-lower_links="" data-upper_links="v40," data-left_links="" data-right_links="">
+  <rect id="p58r" class="masculine" x="2012" y="1472" width="36" height="56"></rect>
+  <text id="p58t" x="2012" y="1472" textLength="48" writing-mode="tb" dx="18" dy="4">孫基</text>
+  </g>
+<path id="v40" class="solid" d="M 2064,1390 l 0,32 l -34,0 l 0,49" data-from_x="2064" data-from_y="1389" data-to_x="2030" data-to_y="1472" data-parent1="p17" data-parent1_pos_idx="1" data-child="p58" data-child_pos_idx="1"></path>
+<g id="p59g" data-lower_links="" data-upper_links="v41," data-left_links="" data-right_links="">
+  <rect id="p59r" class="masculine" x="2076" y="1472" width="36" height="56"></rect>
+  <text id="p59t" x="2076" y="1472" textLength="48" writing-mode="tb" dx="18" dy="4">孫壱</text>
+  </g>
+<path id="v41" class="solid" d="M 2064,1390 l 0,32 l 30,0 l 0,49" data-from_x="2064" data-from_y="1389" data-to_x="2094" data-to_y="1472" data-parent1="p17" data-parent1_pos_idx="1" data-child="p59" data-child_pos_idx="1"></path>
+<g id="p60g" data-lower_links="" data-upper_links="v47," data-left_links="h24,p16," data-right_links="">
+  <rect id="p60r" class="feminine" x="2524" y="1596" width="36" height="56"></rect>
+  <text id="p60t" x="2524" y="1596" textLength="48" writing-mode="tb" dx="18" dy="4">張妃</text>
+  </g>
+<g id="p61g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h23,p16,">
+  <rect id="p61r" class="feminine" x="1732" y="1596" width="36" height="56"></rect>
+  <text id="p61t" x="1732" y="1596" textLength="48" writing-mode="tb" dx="18" dy="4">何姫</text>
+  </g>
+<path id="h23" class="double" d="M 1768,1622 l 54,0 m 0,4 l -54,0" data-connect_pos_x="1795" data-connect_pos_y="1626" data-start_x="1768" data-end_x="1822" data-y="1624" data-lhs_person="p61" data-rhs_person="p16" data-lower_links="v42,"></path>
+<path id="h24" class="double" d="M 1858,1622 l 666,0 m 0,4 l -666,0" data-connect_pos_x="2191" data-connect_pos_y="1626" data-start_x="1858" data-end_x="2524" data-y="1624" data-lhs_person="p16" data-rhs_person="p60" data-lower_links="v43,v46,"></path>
+<g id="p62g" data-lower_links="" data-upper_links="v42," data-left_links="h45,p66," data-right_links="">
+  <rect id="p62r" class="masculine emp" x="1776" y="1748" width="36" height="56"></rect>
+  <text id="p62t" x="1776" y="1748" textLength="48" writing-mode="tb" dx="18" dy="4">孫皓</text>
+  </g>
+<path id="v42" class="solid" d="M 1795,1627 l 0,32 l -1,0 l 0,88" data-from_x="1795" data-from_y="1626" data-to_x="1794" data-to_y="1748" data-parent1="p61" data-parent2="p16" data-child="p62" data-child_pos_idx="1"></path>
+<g id="p63g" data-lower_links="" data-upper_links="v43," data-left_links="" data-right_links="">
+  <rect id="p63r" class="masculine" x="2212" y="1702" width="36" height="56"></rect>
+  <text id="p63t" x="2212" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">孫俊</text>
+  </g>
+<path id="v43" class="solid" d="M 2191,1627 l 0,32 l 39,0 l 0,42" data-from_x="2191" data-from_y="1626" data-to_x="2230" data-to_y="1702" data-parent1="p16" data-parent2="p60" data-child="p63" data-child_pos_idx="1"></path>
+<g id="p64g" data-lower_links="" data-upper_links="v44," data-left_links="" data-right_links="">
+  <rect id="p64r" class="masculine" x="1932" y="1724" width="36" height="56"></rect>
+  <text id="p64t" x="1932" y="1724" textLength="48" writing-mode="tb" dx="18" dy="4">孫徳</text>
+  </g>
+<path id="v44" class="solid" d="M 1840,1653 l 0,32 l 110,0 l 0,38" data-from_x="1840" data-from_y="1652" data-to_x="1950" data-to_y="1724" data-parent1="p16" data-parent1_pos_idx="1" data-child="p64" data-child_pos_idx="1"></path>
+<g id="p65g" data-lower_links="" data-upper_links="v45," data-left_links="" data-right_links="">
+  <rect id="p65r" class="masculine" x="2008" y="1724" width="36" height="56"></rect>
+  <text id="p65t" x="2008" y="1724" textLength="48" writing-mode="tb" dx="18" dy="4">孫謙</text>
+  </g>
+<path id="v45" class="solid" d="M 1840,1653 l 0,32 l 186,0 l 0,38" data-from_x="1840" data-from_y="1652" data-to_x="2026" data-to_y="1724" data-parent1="p16" data-parent1_pos_idx="1" data-child="p65" data-child_pos_idx="1"></path>
+<g id="p66g" data-lower_links="" data-upper_links="v64," data-left_links="" data-right_links="h45,p62,">
+  <rect id="p66r" class="feminine" x="1673" y="1736" width="36" height="80"></rect>
+  <text id="p66t" x="1673" y="1736" textLength="72" writing-mode="tb" dx="18" dy="4">滕芳蘭</text>
+  </g>
+
+<g id="p67g" data-lower_links="" data-upper_links="v50," data-left_links="h26,p68," data-right_links="">
+  <rect id="p67r" class="masculine" x="2704" y="1702" width="36" height="56"></rect>
+  <text id="p67t" x="2704" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸景</text>
+  </g>
+<g id="p68g" data-lower_links="" data-upper_links="v46," data-left_links="" data-right_links="h26,p67,">
+  <rect id="p68r" class="feminine" x="2384" y="1702" width="36" height="56"></rect>
+  <text id="p68t" x="2384" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v46" class="solid" d="M 2191,1627 l 0,32 l 211,0 l 0,42" data-from_x="2191" data-from_y="1626" data-to_x="2402" data-to_y="1702" data-parent1="p16" data-parent2="p60" data-child="p68" data-child_pos_idx="1"></path>
+<path id="h26" class="double" d="M 2420,1728 l 284,0 m 0,4 l -284,0" data-connect_pos_x="2562" data-connect_pos_y="1732" data-start_x="2420" data-end_x="2704" data-y="1730" data-lhs_person="p68" data-rhs_person="p67" data-lower_links=""></path>
+<g id="p69g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h27,p70,">
+  <rect id="p69r" class="masculine" x="2436" y="1200" width="36" height="56"></rect>
+  <text id="p69t" x="2436" y="1200" textLength="48" writing-mode="tb" dx="18" dy="4">張承</text>
+  </g>
+<g id="p70g" data-lower_links="" data-upper_links="v51," data-left_links="h27,p69," data-right_links="">
+  <rect id="p70r" class="feminine" x="2616" y="1188" width="36" height="80"></rect>
+  <text id="p70t" x="2616" y="1188" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛氏</text>
+  </g>
+<path id="h27" class="double" d="M 2472,1226 l 144,0 m 0,4 l -144,0" data-connect_pos_x="2544" data-connect_pos_y="1230" data-start_x="2472" data-end_x="2616" data-y="1228" data-lhs_person="p69" data-rhs_person="p70" data-lower_links="v47,v48,v49,"></path>
+<path id="v47" class="solid" d="M 2544,1231 l 0,32 l -2,0 l 0,332" data-from_x="2544" data-from_y="1230" data-to_x="2542" data-to_y="1596" data-parent1="p69" data-parent2="p70" data-child="p60" data-child_pos_idx="1"></path>
+<g id="p71g" data-lower_links="" data-upper_links="v48," data-left_links="" data-right_links="">
+  <rect id="p71r" class="masculine" x="2466" y="1328" width="36" height="56"></rect>
+  <text id="p71t" x="2466" y="1328" textLength="48" writing-mode="tb" dx="18" dy="4">張震</text>
+  </g>
+<path id="v48" class="solid" d="M 2544,1231 l 0,32 l -60,0 l 0,64" data-from_x="2544" data-from_y="1230" data-to_x="2484" data-to_y="1328" data-parent1="p69" data-parent2="p70" data-child="p71" data-child_pos_idx="1"></path>
+<g id="p72g" data-lower_links="" data-upper_links="v49," data-left_links="" data-right_links="h28,p73,">
+  <rect id="p72r" class="feminine" x="2580" y="1562" width="36" height="56"></rect>
+  <text id="p72t" x="2580" y="1562" textLength="48" writing-mode="tb" dx="18" dy="4">張氏</text>
+  </g>
+<path id="v49" class="solid" d="M 2544,1231 l 0,32 l 54,0 l 0,298" data-from_x="2544" data-from_y="1230" data-to_x="2598" data-to_y="1562" data-parent1="p69" data-parent2="p70" data-child="p72" data-child_pos_idx="1"></path>
+<g id="p73g" data-lower_links="v84,v85,v86,v87,v88," data-upper_links="v75," data-left_links="h28,p72," data-right_links="">
+  <rect id="p73r" class="masculine" x="2828" y="1562" width="36" height="56"></rect>
+  <text id="p73t" x="2828" y="1562" textLength="48" writing-mode="tb" dx="18" dy="4">陸抗</text>
+  </g>
+<path id="h28" class="double" d="M 2616,1588 l 212,0 m 0,4 l -212,0" data-connect_pos_x="2722" data-connect_pos_y="1592" data-start_x="2616" data-end_x="2828" data-y="1590" data-lhs_person="p72" data-rhs_person="p73" data-lower_links="v50,"></path>
+<path id="v50" class="solid" d="M 2722,1593 l 0,109" data-from_x="2722" data-from_y="1592" data-to_x="2722" data-to_y="1702" data-parent1="p72" data-parent2="p73" data-child="p67" data-child_pos_idx="1"></path>
+<g id="p74g" data-lower_links="v51,v52,v53,v54," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p74r" class="masculine" x="2404" y="1044" width="36" height="80"></rect>
+  <text id="p74t" x="2404" y="1044" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛瑾</text>
+  </g>
+<path id="v51" class="solid" d="M 2422,1125 l 0,32 l 212,0 l 0,30" data-from_x="2422" data-from_y="1124" data-to_x="2634" data-to_y="1188" data-parent1="p74" data-parent1_pos_idx="1" data-child="p70" data-child_pos_idx="1"></path>
+<g id="p75g" data-lower_links="v142,v145,v146," data-upper_links="v52," data-left_links="" data-right_links="">
+  <rect id="p75r" class="masculine" x="2252" y="1204" width="36" height="80"></rect>
+  <text id="p75t" x="2252" y="1204" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛恪</text>
+  </g>
+<path id="v52" class="solid" d="M 2422,1125 l 0,32 l -152,0 l 0,46" data-from_x="2422" data-from_y="1124" data-to_x="2270" data-to_y="1204" data-parent1="p74" data-parent1_pos_idx="1" data-child="p75" data-child_pos_idx="1"></path>
+<g id="p76g" data-lower_links="" data-upper_links="v53,v144," data-left_links="" data-right_links="">
+  <rect id="p76r" class="masculine" x="2308" y="1204" width="36" height="80"></rect>
+  <text id="p76t" x="2308" y="1204" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛喬</text>
+  </g>
+<path id="v53" class="solid" d="M 2422,1125 l 0,32 l -96,0 l 0,46" data-from_x="2422" data-from_y="1124" data-to_x="2326" data-to_y="1204" data-parent1="p74" data-parent1_pos_idx="1" data-child="p76" data-child_pos_idx="1"></path>
+<g id="p77g" data-lower_links="" data-upper_links="v54," data-left_links="" data-right_links="">
+  <rect id="p77r" class="masculine" x="2372" y="1204" width="36" height="80"></rect>
+  <text id="p77t" x="2372" y="1204" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛融</text>
+  </g>
+<path id="v54" class="solid" d="M 2422,1125 l 0,32 l -32,0 l 0,46" data-from_x="2422" data-from_y="1124" data-to_x="2390" data-to_y="1204" data-parent1="p74" data-parent1_pos_idx="1" data-child="p77" data-child_pos_idx="1"></path>
+<g id="p78g" data-lower_links="v55,v56,v57,v58," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p78r" class="masculine" x="2460" y="0" width="36" height="56"></rect>
+  <text id="p78t" x="2460" y="0" textLength="48" writing-mode="tb" dx="18" dy="4">孫鍾</text>
+  </g>
+<path id="v55" class="solid" d="M 2478,57 l 0,32 l 736,0 l 0,138" data-from_x="2478" data-from_y="56" data-to_x="3214" data-to_y="228" data-parent1="p78" data-parent1_pos_idx="1" data-child="p0" data-child_pos_idx="1"></path>
+<g id="p79g" data-lower_links="v152,v153," data-upper_links="v56," data-left_links="" data-right_links="">
+  <rect id="p79r" class="masculine" x="340" y="228" width="36" height="56"></rect>
+  <text id="p79t" x="340" y="228" textLength="48" writing-mode="tb" dx="18" dy="4">孫羌</text>
+  </g>
+<path id="v56" class="solid" d="M 2478,57 l 0,32 l -2120,0 l 0,138" data-from_x="2478" data-from_y="56" data-to_x="358" data-to_y="228" data-parent1="p78" data-parent1_pos_idx="1" data-child="p79" data-child_pos_idx="1"></path>
+<g id="p80g" data-lower_links="v98,v99,v100,v101,v102," data-upper_links="v57," data-left_links="" data-right_links="">
+  <rect id="p80r" class="masculine" x="3612" y="228" width="36" height="56"></rect>
+  <text id="p80t" x="3612" y="228" textLength="48" writing-mode="tb" dx="18" dy="4">孫静</text>
+  </g>
+<path id="v57" class="solid" d="M 2478,57 l 0,32 l 1152,0 l 0,138" data-from_x="2478" data-from_y="56" data-to_x="3630" data-to_y="228" data-parent1="p78" data-parent1_pos_idx="1" data-child="p80" data-child_pos_idx="1"></path>
+<g id="p81g" data-lower_links="" data-upper_links="" data-left_links="h31,p82," data-right_links="">
+  <rect id="p81r" class="masculine" x="1204" y="700" width="36" height="56"></rect>
+  <text id="p81t" x="1204" y="700" textLength="48" writing-mode="tb" dx="18" dy="4">徐真</text>
+  </g>
+<g id="p82g" data-lower_links="" data-upper_links="v58," data-left_links="" data-right_links="h31,p81,">
+  <rect id="p82r" class="feminine" x="628" y="700" width="36" height="56"></rect>
+  <text id="p82t" x="628" y="700" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v58" class="solid" d="M 2478,57 l 0,32 l -1832,0 l 0,610" data-from_x="2478" data-from_y="56" data-to_x="646" data-to_y="700" data-parent1="p78" data-parent1_pos_idx="1" data-child="p82" data-child_pos_idx="1"></path>
+
+<g id="p83g" data-lower_links="v60," data-upper_links="v62," data-left_links="" data-right_links="">
+  <rect id="p83r" class="masculine" x="1408" y="822" width="36" height="56"></rect>
+  <text id="p83t" x="1408" y="822" textLength="48" writing-mode="tb" dx="18" dy="4">徐琨</text>
+  </g>
+
+<path id="v60" class="solid" d="M 1426,879 l 0,32 l 120,0 l 0,267" data-from_x="1426" data-from_y="878" data-to_x="1546" data-to_y="1179" data-parent1="p83" data-parent1_pos_idx="1" data-child="p46" data-child_pos_idx="1"></path>
+<g id="p84g" data-lower_links="" data-upper_links="v61," data-left_links="" data-right_links="h37,p86,h38,p85,">
+  <rect id="p84r" class="feminine" x="1544" y="642" width="36" height="200"></rect>
+  <text id="p84t" x="1544" y="642" textLength="120" writing-mode="tb" dx="18" dy="40">孫氏</text>
+  </g>
+<path id="v61" class="solid" d="M 942,389 l 0,32 l 620,0 l 0,220" data-from_x="942" data-from_y="388" data-to_x="1562" data-to_y="642" data-parent1="p1" data-parent1_pos_idx="1" data-child="p84" data-child_pos_idx="1"></path>
+<g id="p85g" data-lower_links="" data-upper_links="v77," data-left_links="h38,p84," data-right_links="">
+  <rect id="p85r" class="masculine" x="2748" y="664" width="36" height="56"></rect>
+  <text id="p85t" x="2748" y="664" textLength="48" writing-mode="tb" dx="18" dy="4">陸遜</text>
+  </g>
+
+<path id="h31" class="double" d="M 664,726 l 540,0 m 0,4 l -540,0" data-connect_pos_x="934" data-connect_pos_y="730" data-start_x="664" data-end_x="1204" data-y="728" data-lhs_person="p82" data-rhs_person="p81" data-lower_links="v62,"></path>
+<path id="v62" class="solid" d="M 934,731 l 0,32 l 492,0 l 0,58" data-from_x="934" data-from_y="730" data-to_x="1426" data-to_y="822" data-parent1="p82" data-parent2="p81" data-child="p83" data-child_pos_idx="1"></path>
+
+<path id="h32" class="double" d="M 876,358 l 47,0 m 0,4 l -47,0" data-connect_pos_x="899" data-connect_pos_y="362" data-start_x="876" data-end_x="923" data-y="360" data-lhs_person="p23" data-rhs_person="p1" data-lower_links=""></path>
+<g id="p86g" data-lower_links="" data-upper_links="" data-left_links="h37,p84," data-right_links="h35,p87,">
+  <rect id="p86r" class="masculine" x="1820" y="714" width="36" height="56"></rect>
+  <text id="p86t" x="1820" y="714" textLength="48" writing-mode="tb" dx="18" dy="4">顧邵</text>
+  </g>
+
+
+<g id="p87g" data-lower_links="" data-upper_links="v76," data-left_links="h35,p86," data-right_links="">
+  <rect id="p87r" class="feminine" x="2020" y="714" width="36" height="56"></rect>
+  <text id="p87t" x="2020" y="714" textLength="48" writing-mode="tb" dx="18" dy="4">陸氏</text>
+  </g>
+<path id="h35" class="double" d="M 1857,740 l 162,0 m 0,4 l -162,0" data-connect_pos_x="1938" data-connect_pos_y="744" data-start_x="1857" data-end_x="2019" data-y="742" data-lhs_person="p86" data-rhs_person="p87" data-lower_links="v73,v74,"></path>
+<g id="p88g" data-lower_links="v64," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p88r" class="masculine" x="1673" y="1596" width="36" height="56"></rect>
+  <text id="p88t" x="1673" y="1596" textLength="48" writing-mode="tb" dx="18" dy="4">滕牧</text>
+  </g>
+<path id="v64" class="solid" d="M 1691,1653 l 0,83" data-from_x="1691" data-from_y="1652" data-to_x="1691" data-to_y="1736" data-parent1="p88" data-parent1_pos_idx="1" data-child="p66" data-child_pos_idx="1"></path>
+<g id="p89g" data-lower_links="" data-upper_links="v65," data-left_links="" data-right_links="h36,p90,">
+  <rect id="p89r" class="feminine" x="1028" y="620" width="36" height="56"></rect>
+  <text id="p89t" x="1028" y="620" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v65" class="solid" d="M 942,389 l 0,32 l 104,0 l 0,198" data-from_x="942" data-from_y="388" data-to_x="1046" data-to_y="620" data-parent1="p1" data-parent1_pos_idx="1" data-child="p89" data-child_pos_idx="1"></path>
+<g id="p90g" data-lower_links="" data-upper_links="v66," data-left_links="h36,p89," data-right_links="">
+  <rect id="p90r" class="masculine" x="1132" y="620" width="36" height="56"></rect>
+  <text id="p90t" x="1132" y="620" textLength="48" writing-mode="tb" dx="18" dy="4">朱紀</text>
+  </g>
+<path id="h36" class="double" d="M 1065,646 l 66,0 m 0,4 l -66,0" data-connect_pos_x="1098" data-connect_pos_y="650" data-start_x="1065" data-end_x="1131" data-y="648" data-lhs_person="p89" data-rhs_person="p90" data-lower_links=""></path>
+<g id="p91g" data-lower_links="v66,v67,v68,v69,v70," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p91r" class="masculine" x="1272" y="444" width="36" height="56"></rect>
+  <text id="p91t" x="1272" y="444" textLength="48" writing-mode="tb" dx="18" dy="4">朱治</text>
+  </g>
+<path id="v66" class="solid" d="M 1290,501 l 0,32 l -140,0 l 0,86" data-from_x="1290" data-from_y="500" data-to_x="1150" data-to_y="620" data-parent1="p91" data-parent1_pos_idx="1" data-child="p90" data-child_pos_idx="1"></path>
+<g id="p92g" data-lower_links="" data-upper_links="v67," data-left_links="" data-right_links="">
+  <rect id="p92r" class="masculine" x="1080" y="584" width="36" height="56"></rect>
+  <text id="p92t" x="1080" y="584" textLength="48" writing-mode="tb" dx="18" dy="4">朱才</text>
+  </g>
+<path id="v67" class="solid" d="M 1290,501 l 0,32 l -192,0 l 0,50" data-from_x="1290" data-from_y="500" data-to_x="1098" data-to_y="584" data-parent1="p91" data-parent1_pos_idx="1" data-child="p92" data-child_pos_idx="1"></path>
+<g id="p93g" data-lower_links="" data-upper_links="v68," data-left_links="" data-right_links="">
+  <rect id="p93r" class="masculine" x="1192" y="584" width="36" height="56"></rect>
+  <text id="p93t" x="1192" y="584" textLength="48" writing-mode="tb" dx="18" dy="4">朱緯</text>
+  </g>
+<path id="v68" class="solid" d="M 1290,501 l 0,32 l -80,0 l 0,50" data-from_x="1290" data-from_y="500" data-to_x="1210" data-to_y="584" data-parent1="p91" data-parent1_pos_idx="1" data-child="p93" data-child_pos_idx="1"></path>
+<g id="p94g" data-lower_links="" data-upper_links="v69," data-left_links="" data-right_links="">
+  <rect id="p94r" class="masculine" x="1260" y="584" width="36" height="80"></rect>
+  <text id="p94t" x="1260" y="584" textLength="72" writing-mode="tb" dx="18" dy="4">朱万歳</text>
+  </g>
+<path id="v69" class="solid" d="M 1290,501 l 0,32 l -12,0 l 0,50" data-from_x="1290" data-from_y="500" data-to_x="1278" data-to_y="584" data-parent1="p91" data-parent1_pos_idx="1" data-child="p94" data-child_pos_idx="1"></path>
+<g id="p95g" data-lower_links="" data-upper_links="v70," data-left_links="" data-right_links="">
+  <rect id="p95r" class="masculine" x="1340" y="584" width="36" height="56"></rect>
+  <text id="p95t" x="1340" y="584" textLength="48" writing-mode="tb" dx="18" dy="4">朱然</text>
+  </g>
+<path id="v70" class="dashed" d="M 1299,501 l 0,32 l 59,0 l 0,50" data-from_x="1299" data-from_y="500" data-to_x="1358" data-to_y="584" data-parent1="p91" data-parent1_pos_idx="2" data-child="p95" data-child_pos_idx="1"></path>
+<g id="p96g" data-lower_links="v71,v72," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p96r" class="masculine" x="784" y="96" width="36" height="56"></rect>
+  <text id="p96t" x="784" y="96" textLength="48" writing-mode="tb" dx="18" dy="4">呉煇</text>
+  </g>
+<path id="v71" class="solid" d="M 802,153 l 0,32 l 92,0 l 0,30" data-from_x="802" data-from_y="152" data-to_x="894" data-to_y="216" data-parent1="p96" data-parent1_pos_idx="1" data-child="p4" data-child_pos_idx="1"></path>
+<g id="p97g" data-lower_links="v148,v150," data-upper_links="v72," data-left_links="" data-right_links="">
+  <rect id="p97r" class="masculine" x="696" y="216" width="36" height="56"></rect>
+  <text id="p97t" x="696" y="216" textLength="48" writing-mode="tb" dx="18" dy="4">呉景</text>
+  </g>
+<path id="v72" class="solid" d="M 802,153 l 0,32 l -88,0 l 0,30" data-from_x="802" data-from_y="152" data-to_x="714" data-to_y="216" data-parent1="p96" data-parent1_pos_idx="1" data-child="p97" data-child_pos_idx="1"></path>
+<g id="p98g" data-lower_links="" data-upper_links="v73," data-left_links="" data-right_links="">
+  <rect id="p98r" class="masculine" x="1948" y="826" width="36" height="56"></rect>
+  <text id="p98t" x="1948" y="826" textLength="48" writing-mode="tb" dx="18" dy="4">顧譚</text>
+  </g>
+<path id="v73" class="solid" d="M 1938,745 l 0,32 l 28,0 l 0,48" data-from_x="1938" data-from_y="744" data-to_x="1966" data-to_y="826" data-parent1="p86" data-parent2="p87" data-child="p98" data-child_pos_idx="1"></path>
+<g id="p99g" data-lower_links="" data-upper_links="v74," data-left_links="" data-right_links="">
+  <rect id="p99r" class="masculine" x="1884" y="826" width="36" height="56"></rect>
+  <text id="p99t" x="1884" y="826" textLength="48" writing-mode="tb" dx="18" dy="4">顧承</text>
+  </g>
+<path id="v74" class="solid" d="M 1938,745 l 0,32 l -36,0 l 0,48" data-from_x="1938" data-from_y="744" data-to_x="1902" data-to_y="826" data-parent1="p86" data-parent2="p87" data-child="p99" data-child_pos_idx="1"></path>
+<path id="h37" class="double" d="M 1580,740 l 239,0 m 0,4 l -239,0" data-connect_pos_x="1699" data-connect_pos_y="744" data-start_x="1580" data-end_x="1819" data-y="742" data-lhs_person="p84" data-rhs_person="p86" data-lower_links=""></path>
+<path id="h38" class="double" d="M 1580,690 l 1168,0 m 0,4 l -1168,0" data-connect_pos_x="2164" data-connect_pos_y="694" data-start_x="1580" data-end_x="2748" data-y="692" data-lhs_person="p84" data-rhs_person="p85" data-lower_links="v75,"></path>
+<path id="v75" class="solid" d="M 2164,695 l 0,32 l 682,0 l 0,834" data-from_x="2164" data-from_y="694" data-to_x="2846" data-to_y="1562" data-parent1="p84" data-parent2="p85" data-child="p73" data-child_pos_idx="1"></path>
+<g id="p100g" data-lower_links="v76,v77,v78," data-upper_links="v83," data-left_links="" data-right_links="">
+  <rect id="p100r" class="masculine" x="2352" y="544" width="36" height="56"></rect>
+  <text id="p100t" x="2352" y="544" textLength="48" writing-mode="tb" dx="18" dy="4">陸駿</text>
+  </g>
+<path id="v76" class="solid" d="M 2370,601 l 0,32 l -332,0 l 0,80" data-from_x="2370" data-from_y="600" data-to_x="2038" data-to_y="714" data-parent1="p100" data-parent1_pos_idx="1" data-child="p87" data-child_pos_idx="1"></path>
+<path id="v77" class="solid" d="M 2370,601 l 0,32 l 396,0 l 0,30" data-from_x="2370" data-from_y="600" data-to_x="2766" data-to_y="664" data-parent1="p100" data-parent1_pos_idx="1" data-child="p85" data-child_pos_idx="1"></path>
+<g id="p101g" data-lower_links="" data-upper_links="v78," data-left_links="" data-right_links="">
+  <rect id="p101r" class="masculine" x="2820" y="664" width="36" height="56"></rect>
+  <text id="p101t" x="2820" y="664" textLength="48" writing-mode="tb" dx="18" dy="4">陸瑁</text>
+  </g>
+<path id="v78" class="solid" d="M 2370,601 l 0,32 l 468,0 l 0,30" data-from_x="2370" data-from_y="600" data-to_x="2838" data-to_y="664" data-parent1="p100" data-parent1_pos_idx="1" data-child="p101" data-child_pos_idx="1"></path>
+<g id="p102g" data-lower_links="" data-upper_links="v80," data-left_links="h39,p46," data-right_links="">
+  <rect id="p102r" class="masculine" x="1612" y="1195" width="36" height="56"></rect>
+  <text id="p102t" x="1612" y="1195" textLength="48" writing-mode="tb" dx="18" dy="4">陸尚</text>
+  </g>
+<path id="h39" class="double" d="M 1564,1221 l 48,0 m 0,4 l -48,0" data-connect_pos_x="1588" data-connect_pos_y="1225" data-start_x="1564" data-end_x="1612" data-y="1223" data-lhs_person="p46" data-rhs_person="p102" data-lower_links=""></path>
+<g id="p103g" data-lower_links="v79," data-upper_links="v81," data-left_links="" data-right_links="">
+  <rect id="p103r" class="masculine" x="1612" y="584" width="36" height="56"></rect>
+  <text id="p103t" x="1612" y="584" textLength="48" writing-mode="tb" dx="18" dy="4">陸康</text>
+  </g>
+<g id="p104g" data-lower_links="v80," data-upper_links="v79," data-left_links="" data-right_links="">
+  <rect id="p104r" class="masculine" x="1612" y="884" width="36" height="56"></rect>
+  <text id="p104t" x="1612" y="884" textLength="48" writing-mode="tb" dx="18" dy="4">陸某</text>
+  </g>
+<path id="v79" class="solid" d="M 1630,641 l 0,243" data-from_x="1630" data-from_y="640" data-to_x="1630" data-to_y="884" data-parent1="p103" data-parent1_pos_idx="1" data-child="p104" data-child_pos_idx="1"></path>
+<path id="v80" class="solid" d="M 1630,941 l 0,254" data-from_x="1630" data-from_y="940" data-to_x="1630" data-to_y="1195" data-parent1="p104" data-parent1_pos_idx="1" data-child="p102" data-child_pos_idx="1"></path>
+<g id="p105g" data-lower_links="v81,v82," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p105r" class="masculine" x="1676" y="304" width="36" height="56"></rect>
+  <text id="p105t" x="1676" y="304" textLength="48" writing-mode="tb" dx="18" dy="4">陸褒</text>
+  </g>
+<path id="v81" class="solid" d="M 1694,361 l 0,32 l -64,0 l 0,190" data-from_x="1694" data-from_y="360" data-to_x="1630" data-to_y="584" data-parent1="p105" data-parent1_pos_idx="1" data-child="p103" data-child_pos_idx="1"></path>
+<g id="p106g" data-lower_links="v83," data-upper_links="v82," data-left_links="" data-right_links="">
+  <rect id="p106r" class="masculine" x="1724" y="424" width="36" height="56"></rect>
+  <text id="p106t" x="1724" y="424" textLength="48" writing-mode="tb" dx="18" dy="4">陸紆</text>
+  </g>
+<path id="v82" class="solid" d="M 1694,361 l 0,32 l 48,0 l 0,30" data-from_x="1694" data-from_y="360" data-to_x="1742" data-to_y="424" data-parent1="p105" data-parent1_pos_idx="1" data-child="p106" data-child_pos_idx="1"></path>
+<path id="v83" class="solid" d="M 1742,481 l 0,32 l 628,0 l 0,30" data-from_x="1742" data-from_y="480" data-to_x="2370" data-to_y="544" data-parent1="p106" data-parent1_pos_idx="1" data-child="p100" data-child_pos_idx="1"></path>
+<g id="p107g" data-lower_links="" data-upper_links="v84," data-left_links="" data-right_links="">
+  <rect id="p107r" class="masculine" x="2780" y="1702" width="36" height="56"></rect>
+  <text id="p107t" x="2780" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸晏</text>
+  </g>
+<path id="v84" class="solid" d="M 2846,1619 l 0,32 l -48,0 l 0,50" data-from_x="2846" data-from_y="1618" data-to_x="2798" data-to_y="1702" data-parent1="p73" data-parent1_pos_idx="1" data-child="p107" data-child_pos_idx="1"></path>
+<g id="p108g" data-lower_links="" data-upper_links="v85," data-left_links="" data-right_links="">
+  <rect id="p108r" class="masculine" x="2848" y="1702" width="36" height="56"></rect>
+  <text id="p108t" x="2848" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸玄</text>
+  </g>
+<path id="v85" class="solid" d="M 2846,1619 l 0,32 l 20,0 l 0,50" data-from_x="2846" data-from_y="1618" data-to_x="2866" data-to_y="1702" data-parent1="p73" data-parent1_pos_idx="1" data-child="p108" data-child_pos_idx="1"></path>
+<g id="p109g" data-lower_links="" data-upper_links="v86," data-left_links="" data-right_links="">
+  <rect id="p109r" class="masculine" x="2912" y="1702" width="36" height="56"></rect>
+  <text id="p109t" x="2912" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸機</text>
+  </g>
+<path id="v86" class="solid" d="M 2846,1619 l 0,32 l 84,0 l 0,50" data-from_x="2846" data-from_y="1618" data-to_x="2930" data-to_y="1702" data-parent1="p73" data-parent1_pos_idx="1" data-child="p109" data-child_pos_idx="1"></path>
+<g id="p110g" data-lower_links="" data-upper_links="v87," data-left_links="" data-right_links="">
+  <rect id="p110r" class="masculine" x="2980" y="1702" width="36" height="56"></rect>
+  <text id="p110t" x="2980" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸雲</text>
+  </g>
+<path id="v87" class="solid" d="M 2846,1619 l 0,32 l 152,0 l 0,50" data-from_x="2846" data-from_y="1618" data-to_x="2998" data-to_y="1702" data-parent1="p73" data-parent1_pos_idx="1" data-child="p110" data-child_pos_idx="1"></path>
+<g id="p111g" data-lower_links="" data-upper_links="v88," data-left_links="" data-right_links="">
+  <rect id="p111r" class="masculine" x="3044" y="1702" width="36" height="56"></rect>
+  <text id="p111t" x="3044" y="1702" textLength="48" writing-mode="tb" dx="18" dy="4">陸耽</text>
+  </g>
+<path id="v88" class="solid" d="M 2846,1619 l 0,32 l 216,0 l 0,50" data-from_x="2846" data-from_y="1618" data-to_x="3062" data-to_y="1702" data-parent1="p73" data-parent1_pos_idx="1" data-child="p111" data-child_pos_idx="1"></path>
+<g id="p112g" data-lower_links="v90,v91," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p112r" class="masculine" x="3204" y="1316" width="36" height="56"></rect>
+  <text id="p112t" x="3204" y="1316" textLength="48" writing-mode="tb" dx="18" dy="4">曹嵩</text>
+  </g>
+<g id="p113g" data-lower_links="v125,v126," data-upper_links="v91," data-left_links="" data-right_links="">
+  <rect id="p113r" class="masculine" x="3236" y="1972" width="36" height="56"></rect>
+  <text id="p113t" x="3236" y="1972" textLength="48" writing-mode="tb" dx="18" dy="4">曹操</text>
+  </g>
+<g id="p114g" data-lower_links="v89," data-upper_links="v90," data-left_links="" data-right_links="">
+  <rect id="p114r" class="masculine" x="3172" y="1444" width="36" height="56"></rect>
+  <text id="p114t" x="3172" y="1444" textLength="48" writing-mode="tb" dx="18" dy="4">曹某</text>
+  </g>
+<g id="p115g" data-lower_links="" data-upper_links="v89," data-left_links="h40,p6," data-right_links="">
+  <rect id="p115r" class="feminine" x="3172" y="1564" width="36" height="56"></rect>
+  <text id="p115t" x="3172" y="1564" textLength="48" writing-mode="tb" dx="18" dy="4">曹氏</text>
+  </g>
+<path id="v89" class="solid" d="M 3190,1501 l 0,63" data-from_x="3190" data-from_y="1500" data-to_x="3190" data-to_y="1564" data-parent1="p114" data-parent1_pos_idx="1" data-child="p115" data-child_pos_idx="1"></path>
+<path id="h40" class="double" d="M 3064,1590 l 108,0 m 0,4 l -108,0" data-connect_pos_x="3118" data-connect_pos_y="1594" data-start_x="3064" data-end_x="3172" data-y="1592" data-lhs_person="p6" data-rhs_person="p115" data-lower_links="v92,"></path>
+<path id="v90" class="solid" d="M 3222,1373 l 0,32 l -32,0 l 0,38" data-from_x="3222" data-from_y="1372" data-to_x="3190" data-to_y="1444" data-parent1="p112" data-parent1_pos_idx="1" data-child="p114" data-child_pos_idx="1"></path>
+<path id="v91" class="solid" d="M 3222,1373 l 0,32 l 32,0 l 0,566" data-from_x="3222" data-from_y="1372" data-to_x="3254" data-to_y="1972" data-parent1="p112" data-parent1_pos_idx="1" data-child="p113" data-child_pos_idx="1"></path>
+<path id="v92" class="solid" d="M 3118,1595 l 0,357" data-from_x="3118" data-from_y="1594" data-to_x="3118" data-to_y="1952" data-parent1="p6" data-parent2="p115" data-child="p12" data-child_pos_idx="1"></path>
+<g id="p116g" data-lower_links="" data-upper_links="v93," data-left_links="" data-right_links="">
+  <rect id="p116r" class="masculine" x="3100" y="2212" width="36" height="56"></rect>
+  <text id="p116t" x="3100" y="2212" textLength="48" writing-mode="tb" dx="18" dy="4">孫倹</text>
+  </g>
+<path id="v93" class="solid" d="M 3118,2149 l 0,63" data-from_x="3118" data-from_y="2148" data-to_x="3118" data-to_y="2212" data-parent1="p13" data-parent1_pos_idx="1" data-child="p116" data-child_pos_idx="1"></path>
+<g id="p117g" data-lower_links="" data-upper_links="v96," data-left_links="" data-right_links="h41,p13,">
+  <rect id="p117r" class="feminine" x="2976" y="2092" width="36" height="56"></rect>
+  <text id="p117t" x="2976" y="2092" textLength="48" writing-mode="tb" dx="18" dy="4">蒯氏</text>
+  </g>
+<path id="h41" class="double" d="M 3012,2118 l 88,0 m 0,4 l -88,0" data-connect_pos_x="3056" data-connect_pos_y="2122" data-start_x="3012" data-end_x="3100" data-y="2120" data-lhs_person="p117" data-rhs_person="p13" data-lower_links=""></path>
+<g id="p118g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h43,p119,">
+  <rect id="p118r" class="masculine" x="2760" y="1976" width="36" height="80"></rect>
+  <text id="p118t" x="2760" y="1976" textLength="72" writing-mode="tb" dx="18" dy="4">司馬昭</text>
+  </g>
+<g id="p119g" data-lower_links="" data-upper_links="v94," data-left_links="h43,p118," data-right_links="">
+  <rect id="p119r" class="feminine" x="2844" y="1976" width="36" height="80"></rect>
+  <text id="p119t" x="2844" y="1976" textLength="72" writing-mode="tb" dx="18" dy="4">王元姫</text>
+  </g>
+<g id="p120g" data-lower_links="v94,v95," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p120r" class="masculine" x="2884" y="1856" width="36" height="56"></rect>
+  <text id="p120t" x="2884" y="1856" textLength="48" writing-mode="tb" dx="18" dy="4">王粛</text>
+  </g>
+<path id="v94" class="solid" d="M 2902,1913 l 0,32 l -40,0 l 0,30" data-from_x="2902" data-from_y="1912" data-to_x="2862" data-to_y="1976" data-parent1="p120" data-parent1_pos_idx="1" data-child="p119" data-child_pos_idx="1"></path>
+<g id="p121g" data-lower_links="" data-upper_links="" data-left_links="h42,p122," data-right_links="">
+  <rect id="p121r" class="masculine" x="3028" y="1976" width="36" height="56"></rect>
+  <text id="p121t" x="3028" y="1976" textLength="48" writing-mode="tb" dx="18" dy="4">蒯鈞</text>
+  </g>
+<g id="p122g" data-lower_links="" data-upper_links="v95," data-left_links="" data-right_links="h42,p121,">
+  <rect id="p122r" class="feminine" x="2924" y="1976" width="36" height="56"></rect>
+  <text id="p122t" x="2924" y="1976" textLength="48" writing-mode="tb" dx="18" dy="4">王氏</text>
+  </g>
+<path id="v95" class="solid" d="M 2902,1913 l 0,32 l 40,0 l 0,30" data-from_x="2902" data-from_y="1912" data-to_x="2942" data-to_y="1976" data-parent1="p120" data-parent1_pos_idx="1" data-child="p122" data-child_pos_idx="1"></path>
+<path id="h42" class="double" d="M 2960,2002 l 68,0 m 0,4 l -68,0" data-connect_pos_x="2994" data-connect_pos_y="2006" data-start_x="2960" data-end_x="3028" data-y="2004" data-lhs_person="p122" data-rhs_person="p121" data-lower_links="v96,"></path>
+<path id="v96" class="solid" d="M 2994,2007 l 0,85" data-from_x="2994" data-from_y="2006" data-to_x="2994" data-to_y="2092" data-parent1="p122" data-parent2="p121" data-child="p117" data-child_pos_idx="1"></path>
+<path id="h43" class="double" d="M 2796,2014 l 48,0 m 0,4 l -48,0" data-connect_pos_x="2820" data-connect_pos_y="2018" data-start_x="2796" data-end_x="2844" data-y="2016" data-lhs_person="p118" data-rhs_person="p119" data-lower_links="v97,"></path>
+<g id="p123g" data-lower_links="" data-upper_links="v97," data-left_links="" data-right_links="">
+  <rect id="p123r" class="masculine" x="2802" y="2092" width="36" height="80"></rect>
+  <text id="p123t" x="2802" y="2092" textLength="72" writing-mode="tb" dx="18" dy="4">司馬炎</text>
+  </g>
+<path id="v97" class="solid" d="M 2820,2019 l 0,73" data-from_x="2820" data-from_y="2018" data-to_x="2820" data-to_y="2092" data-parent1="p118" data-parent2="p119" data-child="p123" data-child_pos_idx="1"></path>
+<g id="p124g" data-lower_links="v103,v104,v105," data-upper_links="v98," data-left_links="" data-right_links="">
+  <rect id="p124r" class="masculine" x="3448" y="672" width="36" height="56"></rect>
+  <text id="p124t" x="3448" y="672" textLength="48" writing-mode="tb" dx="18" dy="4">孫暠</text>
+  </g>
+<path id="v98" class="solid" d="M 3630,285 l 0,32 l -164,0 l 0,354" data-from_x="3630" data-from_y="284" data-to_x="3466" data-to_y="672" data-parent1="p80" data-parent1_pos_idx="1" data-child="p124" data-child_pos_idx="1"></path>
+<g id="p125g" data-lower_links="v120,v121,v122,v123,v124," data-upper_links="v99," data-left_links="" data-right_links="">
+  <rect id="p125r" class="masculine" x="3604" y="356" width="36" height="56"></rect>
+  <text id="p125t" x="3604" y="356" textLength="48" writing-mode="tb" dx="18" dy="4">孫瑜</text>
+  </g>
+<path id="v99" class="solid" d="M 3630,285 l 0,32 l -8,0 l 0,38" data-from_x="3630" data-from_y="284" data-to_x="3622" data-to_y="356" data-parent1="p80" data-parent1_pos_idx="1" data-child="p125" data-child_pos_idx="1"></path>
+<g id="p126g" data-lower_links="v131,v132,v133,v134,v135," data-upper_links="v100," data-left_links="" data-right_links="">
+  <rect id="p126r" class="masculine" x="3796" y="548" width="36" height="56"></rect>
+  <text id="p126t" x="3796" y="548" textLength="48" writing-mode="tb" dx="18" dy="4">孫皎</text>
+  </g>
+<path id="v100" class="solid" d="M 3630,285 l 0,32 l 184,0 l 0,230" data-from_x="3630" data-from_y="284" data-to_x="3814" data-to_y="548" data-parent1="p80" data-parent1_pos_idx="1" data-child="p126" data-child_pos_idx="1"></path>
+<g id="p127g" data-lower_links="v136,v137,v138,v140,v141," data-upper_links="v101," data-left_links="" data-right_links="">
+  <rect id="p127r" class="masculine" x="3892" y="884" width="36" height="56"></rect>
+  <text id="p127t" x="3892" y="884" textLength="48" writing-mode="tb" dx="18" dy="4">孫奐</text>
+  </g>
+<path id="v101" class="solid" d="M 3630,285 l 0,32 l 280,0 l 0,566" data-from_x="3630" data-from_y="284" data-to_x="3910" data-to_y="884" data-parent1="p80" data-parent1_pos_idx="1" data-child="p127" data-child_pos_idx="1"></path>
+<g id="p128g" data-lower_links="" data-upper_links="v102," data-left_links="" data-right_links="">
+  <rect id="p128r" class="masculine" x="3928" y="356" width="36" height="56"></rect>
+  <text id="p128t" x="3928" y="356" textLength="48" writing-mode="tb" dx="18" dy="4">孫謙</text>
+  </g>
+<path id="v102" class="solid" d="M 3630,285 l 0,32 l 316,0 l 0,38" data-from_x="3630" data-from_y="284" data-to_x="3946" data-to_y="356" data-parent1="p80" data-parent1_pos_idx="1" data-child="p128" data-child_pos_idx="1"></path>
+<g id="p129g" data-lower_links="v107,v108,v109,v110,v111," data-upper_links="v103," data-left_links="" data-right_links="">
+  <rect id="p129r" class="masculine" x="3364" y="792" width="36" height="56"></rect>
+  <text id="p129t" x="3364" y="792" textLength="48" writing-mode="tb" dx="18" dy="4">孫綽</text>
+  </g>
+<path id="v103" class="solid" d="M 3466,729 l 0,32 l -84,0 l 0,30" data-from_x="3466" data-from_y="728" data-to_x="3382" data-to_y="792" data-parent1="p124" data-parent1_pos_idx="1" data-child="p129" data-child_pos_idx="1"></path>
+<g id="p130g" data-lower_links="v114," data-upper_links="v104," data-left_links="" data-right_links="">
+  <rect id="p130r" class="masculine" x="3560" y="800" width="36" height="56"></rect>
+  <text id="p130t" x="3560" y="800" textLength="48" writing-mode="tb" dx="18" dy="4">孫超</text>
+  </g>
+<path id="v104" class="solid" d="M 3466,729 l 0,32 l 112,0 l 0,38" data-from_x="3466" data-from_y="728" data-to_x="3578" data-to_y="800" data-parent1="p124" data-parent1_pos_idx="1" data-child="p130" data-child_pos_idx="1"></path>
+<g id="p131g" data-lower_links="v115,v116,v118," data-upper_links="v105," data-left_links="" data-right_links="">
+  <rect id="p131r" class="masculine" x="3636" y="800" width="36" height="56"></rect>
+  <text id="p131t" x="3636" y="800" textLength="48" writing-mode="tb" dx="18" dy="4">孫恭</text>
+  </g>
+<path id="v105" class="solid" d="M 3466,729 l 0,32 l 188,0 l 0,38" data-from_x="3466" data-from_y="728" data-to_x="3654" data-to_y="800" data-parent1="p124" data-parent1_pos_idx="1" data-child="p131" data-child_pos_idx="1"></path>
+<g id="p132g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h44,p142,">
+  <rect id="p132r" class="masculine" x="3446" y="1008" width="36" height="56"></rect>
+  <text id="p132t" x="3446" y="1008" textLength="48" writing-mode="tb" dx="18" dy="4">全尚</text>
+  </g>
+
+<g id="p133g" data-lower_links="" data-upper_links="v107," data-left_links="" data-right_links="">
+  <rect id="p133r" class="masculine" x="3244" y="928" width="36" height="56"></rect>
+  <text id="p133t" x="3244" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫綝</text>
+  </g>
+<path id="v107" class="solid" d="M 3382,849 l 0,32 l -120,0 l 0,46" data-from_x="3382" data-from_y="848" data-to_x="3262" data-to_y="928" data-parent1="p129" data-parent1_pos_idx="1" data-child="p133" data-child_pos_idx="1"></path>
+<g id="p134g" data-lower_links="" data-upper_links="v108," data-left_links="" data-right_links="">
+  <rect id="p134r" class="masculine" x="3364" y="928" width="36" height="56"></rect>
+  <text id="p134t" x="3364" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫拠</text>
+  </g>
+<path id="v108" class="solid" d="M 3382,849 l 0,79" data-from_x="3382" data-from_y="848" data-to_x="3382" data-to_y="928" data-parent1="p129" data-parent1_pos_idx="1" data-child="p134" data-child_pos_idx="1"></path>
+<g id="p135g" data-lower_links="" data-upper_links="v109," data-left_links="" data-right_links="">
+  <rect id="p135r" class="masculine" x="3304" y="928" width="36" height="56"></rect>
+  <text id="p135t" x="3304" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫恩</text>
+  </g>
+<path id="v109" class="solid" d="M 3382,849 l 0,32 l -60,0 l 0,46" data-from_x="3382" data-from_y="848" data-to_x="3322" data-to_y="928" data-parent1="p129" data-parent1_pos_idx="1" data-child="p135" data-child_pos_idx="1"></path>
+<g id="p136g" data-lower_links="" data-upper_links="v110," data-left_links="" data-right_links="">
+  <rect id="p136r" class="masculine" x="3424" y="928" width="36" height="56"></rect>
+  <text id="p136t" x="3424" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫幹</text>
+  </g>
+<path id="v110" class="solid" d="M 3382,849 l 0,32 l 60,0 l 0,46" data-from_x="3382" data-from_y="848" data-to_x="3442" data-to_y="928" data-parent1="p129" data-parent1_pos_idx="1" data-child="p136" data-child_pos_idx="1"></path>
+<g id="p137g" data-lower_links="" data-upper_links="v111," data-left_links="" data-right_links="">
+  <rect id="p137r" class="masculine" x="3492" y="928" width="36" height="56"></rect>
+  <text id="p137t" x="3492" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫闓</text>
+  </g>
+<path id="v111" class="solid" d="M 3382,849 l 0,32 l 128,0 l 0,46" data-from_x="3382" data-from_y="848" data-to_x="3510" data-to_y="928" data-parent1="p129" data-parent1_pos_idx="1" data-child="p137" data-child_pos_idx="1"></path>
+<g id="p138g" data-lower_links="v119," data-upper_links="v112," data-left_links="" data-right_links="">
+  <rect id="p138r" class="masculine" x="1536" y="1693" width="36" height="56"></rect>
+  <text id="p138t" x="1536" y="1693" textLength="48" writing-mode="tb" dx="18" dy="4">朱熊</text>
+  </g>
+<path id="v112" class="solid" d="M 1554,1616 l 0,77" data-from_x="1554" data-from_y="1615" data-to_x="1554" data-to_y="1693" data-parent1="p33" data-parent1_pos_idx="1" data-child="p138" data-child_pos_idx="1"></path>
+<g id="p139g" data-lower_links="" data-upper_links="v113," data-left_links="" data-right_links="h46,p143,">
+  <rect id="p139r" class="masculine" x="1584" y="1805" width="36" height="56"></rect>
+  <text id="p139t" x="1584" y="1805" textLength="48" writing-mode="tb" dx="18" dy="4">朱損</text>
+  </g>
+<path id="v113" class="solid" d="M 1554,1616 l 0,32 l 48,0 l 0,156" data-from_x="1554" data-from_y="1615" data-to_x="1602" data-to_y="1805" data-parent1="p33" data-parent1_pos_idx="1" data-child="p139" data-child_pos_idx="1"></path>
+<g id="p140g" data-lower_links="" data-upper_links="v114," data-left_links="" data-right_links="">
+  <rect id="p140r" class="masculine" x="3560" y="928" width="36" height="56"></rect>
+  <text id="p140t" x="3560" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫憲</text>
+  </g>
+<path id="v114" class="solid" d="M 3578,857 l 0,71" data-from_x="3578" data-from_y="856" data-to_x="3578" data-to_y="928" data-parent1="p130" data-parent1_pos_idx="1" data-child="p140" data-child_pos_idx="1"></path>
+<g id="p141g" data-lower_links="" data-upper_links="v115," data-left_links="" data-right_links="">
+  <rect id="p141r" class="masculine" x="3636" y="928" width="36" height="56"></rect>
+  <text id="p141t" x="3636" y="928" textLength="48" writing-mode="tb" dx="18" dy="4">孫峻</text>
+  </g>
+<path id="v115" class="solid" d="M 3654,857 l 0,71" data-from_x="3654" data-from_y="856" data-to_x="3654" data-to_y="928" data-parent1="p131" data-parent1_pos_idx="1" data-child="p141" data-child_pos_idx="1"></path>
+<g id="p142g" data-lower_links="" data-upper_links="v116," data-left_links="h44,p132," data-right_links="">
+  <rect id="p142r" class="feminine" x="3600" y="1008" width="36" height="56"></rect>
+  <text id="p142t" x="3600" y="1008" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v116" class="solid" d="M 3654,857 l 0,32 l -36,0 l 0,118" data-from_x="3654" data-from_y="856" data-to_x="3618" data-to_y="1008" data-parent1="p131" data-parent1_pos_idx="1" data-child="p142" data-child_pos_idx="1"></path>
+<path id="h44" class="double" d="M 3482,1034 l 118,0 m 0,4 l -118,0" data-connect_pos_x="3541" data-connect_pos_y="1038" data-start_x="3482" data-end_x="3600" data-y="1036" data-lhs_person="p132" data-rhs_person="p142" data-lower_links="v117,"></path>
+<path id="v117" class="solid" d="M 3541,1039 l 0,73" data-from_x="3541" data-from_y="1038" data-to_x="3541" data-to_y="1112" data-parent1="p132" data-parent2="p142" data-child="p44" data-child_pos_idx="1"></path>
+<g id="p143g" data-lower_links="" data-upper_links="v118," data-left_links="h46,p139," data-right_links="">
+  <rect id="p143r" class="feminine" x="3672" y="1805" width="36" height="56"></rect>
+  <text id="p143t" x="3672" y="1805" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v118" class="solid" d="M 3654,857 l 0,32 l 36,0 l 0,915" data-from_x="3654" data-from_y="856" data-to_x="3690" data-to_y="1805" data-parent1="p131" data-parent1_pos_idx="1" data-child="p143" data-child_pos_idx="1"></path>
+<path id="h45" class="double" d="M 1710,1774 l 66,0 m 0,4 l -66,0" data-connect_pos_x="1743" data-connect_pos_y="1778" data-start_x="1710" data-end_x="1776" data-y="1776" data-lhs_person="p66" data-rhs_person="p62" data-lower_links=""></path>
+<path id="h46" class="double" d="M 1621,1831 l 2051,0 m 0,4 l -2051,0" data-connect_pos_x="2646" data-connect_pos_y="1835" data-start_x="1621" data-end_x="3672" data-y="1833" data-lhs_person="p139" data-rhs_person="p143" data-lower_links=""></path>
+<g id="p144g" data-lower_links="" data-upper_links="v119," data-left_links="" data-right_links="">
+  <rect id="p144r" class="masculine" x="1536" y="1813" width="36" height="56"></rect>
+  <text id="p144t" x="1536" y="1813" textLength="48" writing-mode="tb" dx="18" dy="4">朱宣</text>
+  </g>
+<path id="v119" class="solid" d="M 1554,1750 l 0,63" data-from_x="1554" data-from_y="1749" data-to_x="1554" data-to_y="1813" data-parent1="p138" data-parent1_pos_idx="1" data-child="p144" data-child_pos_idx="1"></path>
+<g id="p145g" data-lower_links="" data-upper_links="v120," data-left_links="" data-right_links="">
+  <rect id="p145r" class="masculine" x="3484" y="520" width="36" height="56"></rect>
+  <text id="p145t" x="3484" y="520" textLength="48" writing-mode="tb" dx="18" dy="4">孫弥</text>
+  </g>
+<path id="v120" class="solid" d="M 3622,413 l 0,32 l -120,0 l 0,74" data-from_x="3622" data-from_y="412" data-to_x="3502" data-to_y="520" data-parent1="p125" data-parent1_pos_idx="1" data-child="p145" data-child_pos_idx="1"></path>
+<g id="p146g" data-lower_links="" data-upper_links="v121," data-left_links="" data-right_links="">
+  <rect id="p146r" class="masculine" x="3544" y="520" width="36" height="56"></rect>
+  <text id="p146t" x="3544" y="520" textLength="48" writing-mode="tb" dx="18" dy="4">孫熙</text>
+  </g>
+<path id="v121" class="solid" d="M 3622,413 l 0,32 l -60,0 l 0,74" data-from_x="3622" data-from_y="412" data-to_x="3562" data-to_y="520" data-parent1="p125" data-parent1_pos_idx="1" data-child="p146" data-child_pos_idx="1"></path>
+<g id="p147g" data-lower_links="" data-upper_links="v122," data-left_links="" data-right_links="">
+  <rect id="p147r" class="masculine" x="3604" y="520" width="36" height="56"></rect>
+  <text id="p147t" x="3604" y="520" textLength="48" writing-mode="tb" dx="18" dy="4">孫燿</text>
+  </g>
+<path id="v122" class="solid" d="M 3622,413 l 0,107" data-from_x="3622" data-from_y="412" data-to_x="3622" data-to_y="520" data-parent1="p125" data-parent1_pos_idx="1" data-child="p147" data-child_pos_idx="1"></path>
+<g id="p148g" data-lower_links="" data-upper_links="v123," data-left_links="" data-right_links="">
+  <rect id="p148r" class="masculine" x="3664" y="520" width="36" height="56"></rect>
+  <text id="p148t" x="3664" y="520" textLength="48" writing-mode="tb" dx="18" dy="4">孫曼</text>
+  </g>
+<path id="v123" class="solid" d="M 3622,413 l 0,32 l 60,0 l 0,74" data-from_x="3622" data-from_y="412" data-to_x="3682" data-to_y="520" data-parent1="p125" data-parent1_pos_idx="1" data-child="p148" data-child_pos_idx="1"></path>
+<g id="p149g" data-lower_links="" data-upper_links="v124," data-left_links="" data-right_links="">
+  <rect id="p149r" class="masculine" x="3728" y="520" width="36" height="56"></rect>
+  <text id="p149t" x="3728" y="520" textLength="48" writing-mode="tb" dx="18" dy="4">孫紘</text>
+  </g>
+<path id="v124" class="solid" d="M 3622,413 l 0,32 l 124,0 l 0,74" data-from_x="3622" data-from_y="412" data-to_x="3746" data-to_y="520" data-parent1="p125" data-parent1_pos_idx="1" data-child="p149" data-child_pos_idx="1"></path>
+<g id="p150g" data-lower_links="v128," data-upper_links="v125," data-left_links="h53,p181," data-right_links="">
+  <rect id="p150r" class="masculine" x="3236" y="2264" width="36" height="56"></rect>
+  <text id="p150t" x="3236" y="2264" textLength="48" writing-mode="tb" dx="18" dy="4">曹彰</text>
+  </g>
+<path id="v125" class="solid" d="M 3254,2029 l 0,235" data-from_x="3254" data-from_y="2028" data-to_x="3254" data-to_y="2264" data-parent1="p113" data-parent1_pos_idx="1" data-child="p150" data-child_pos_idx="1"></path>
+<g id="p151g" data-lower_links="v127," data-upper_links="v126," data-left_links="" data-right_links="">
+  <rect id="p151r" class="masculine" x="3312" y="2264" width="36" height="56"></rect>
+  <text id="p151t" x="3312" y="2264" textLength="48" writing-mode="tb" dx="18" dy="4">曹丕</text>
+  </g>
+<path id="v126" class="solid" d="M 3254,2029 l 0,32 l 76,0 l 0,202" data-from_x="3254" data-from_y="2028" data-to_x="3330" data-to_y="2264" data-parent1="p113" data-parent1_pos_idx="1" data-child="p151" data-child_pos_idx="1"></path>
+<g id="p152g" data-lower_links="v129," data-upper_links="v127," data-left_links="" data-right_links="">
+  <rect id="p152r" class="masculine" x="3312" y="2384" width="36" height="56"></rect>
+  <text id="p152t" x="3312" y="2384" textLength="48" writing-mode="tb" dx="18" dy="4">曹叡</text>
+  </g>
+<path id="v127" class="solid" d="M 3330,2321 l 0,63" data-from_x="3330" data-from_y="2320" data-to_x="3330" data-to_y="2384" data-parent1="p151" data-parent1_pos_idx="1" data-child="p152" data-child_pos_idx="1"></path>
+<g id="p153g" data-lower_links="v130," data-upper_links="v128," data-left_links="" data-right_links="">
+  <rect id="p153r" class="masculine" x="3236" y="2384" width="36" height="56"></rect>
+  <text id="p153t" x="3236" y="2384" textLength="48" writing-mode="tb" dx="18" dy="4">曹楷</text>
+  </g>
+<path id="v128" class="solid" d="M 3254,2321 l 0,63" data-from_x="3254" data-from_y="2320" data-to_x="3254" data-to_y="2384" data-parent1="p150" data-parent1_pos_idx="1" data-child="p153" data-child_pos_idx="1"></path>
+<g id="p154g" data-lower_links="" data-upper_links="v129,v130," data-left_links="" data-right_links="h47,p160,">
+  <rect id="p154r" class="masculine" x="3312" y="2504" width="36" height="56"></rect>
+  <text id="p154t" x="3312" y="2504" textLength="48" writing-mode="tb" dx="18" dy="4">曹芳</text>
+  </g>
+<path id="v129" class="dashed" d="M 3330,2441 l 0,63" data-from_x="3330" data-from_y="2440" data-to_x="3330" data-to_y="2504" data-parent1="p152" data-parent1_pos_idx="1" data-child="p154" data-child_pos_idx="1"></path>
+<path id="v130" class="solid" d="M 3254,2441 l 0,32 l 67,0 l 0,30" data-from_x="3254" data-from_y="2440" data-to_x="3321" data-to_y="2504" data-parent1="p153" data-parent1_pos_idx="1" data-child="p154" data-child_pos_idx="0"></path>
+<g id="p155g" data-lower_links="" data-upper_links="v131," data-left_links="" data-right_links="">
+  <rect id="p155r" class="masculine" x="3616" y="668" width="36" height="56"></rect>
+  <text id="p155t" x="3616" y="668" textLength="48" writing-mode="tb" dx="18" dy="4">孫胤</text>
+  </g>
+<path id="v131" class="solid" d="M 3814,605 l 0,32 l -180,0 l 0,30" data-from_x="3814" data-from_y="604" data-to_x="3634" data-to_y="668" data-parent1="p126" data-parent1_pos_idx="1" data-child="p155" data-child_pos_idx="1"></path>
+<g id="p156g" data-lower_links="" data-upper_links="v132," data-left_links="" data-right_links="">
+  <rect id="p156r" class="masculine" x="3676" y="668" width="36" height="56"></rect>
+  <text id="p156t" x="3676" y="668" textLength="48" writing-mode="tb" dx="18" dy="4">孫晞</text>
+  </g>
+<path id="v132" class="solid" d="M 3814,605 l 0,32 l -120,0 l 0,30" data-from_x="3814" data-from_y="604" data-to_x="3694" data-to_y="668" data-parent1="p126" data-parent1_pos_idx="1" data-child="p156" data-child_pos_idx="1"></path>
+<g id="p157g" data-lower_links="" data-upper_links="v133," data-left_links="" data-right_links="">
+  <rect id="p157r" class="masculine" x="3736" y="668" width="36" height="56"></rect>
+  <text id="p157t" x="3736" y="668" textLength="48" writing-mode="tb" dx="18" dy="4">孫咨</text>
+  </g>
+<path id="v133" class="solid" d="M 3814,605 l 0,32 l -60,0 l 0,30" data-from_x="3814" data-from_y="604" data-to_x="3754" data-to_y="668" data-parent1="p126" data-parent1_pos_idx="1" data-child="p157" data-child_pos_idx="1"></path>
+<g id="p158g" data-lower_links="" data-upper_links="v134," data-left_links="" data-right_links="">
+  <rect id="p158r" class="masculine" x="3796" y="668" width="36" height="56"></rect>
+  <text id="p158t" x="3796" y="668" textLength="48" writing-mode="tb" dx="18" dy="4">孫弥</text>
+  </g>
+<path id="v134" class="solid" d="M 3814,605 l 0,63" data-from_x="3814" data-from_y="604" data-to_x="3814" data-to_y="668" data-parent1="p126" data-parent1_pos_idx="1" data-child="p158" data-child_pos_idx="1"></path>
+<g id="p159g" data-lower_links="" data-upper_links="v135," data-left_links="" data-right_links="">
+  <rect id="p159r" class="masculine" x="3856" y="668" width="36" height="56"></rect>
+  <text id="p159t" x="3856" y="668" textLength="48" writing-mode="tb" dx="18" dy="4">孫儀</text>
+  </g>
+<path id="v135" class="solid" d="M 3814,605 l 0,32 l 60,0 l 0,30" data-from_x="3814" data-from_y="604" data-to_x="3874" data-to_y="668" data-parent1="p126" data-parent1_pos_idx="1" data-child="p159" data-child_pos_idx="1"></path>
+<g id="p160g" data-lower_links="" data-upper_links="" data-left_links="h47,p154," data-right_links="h48,p162,">
+  <rect id="p160r" class="feminine" x="3588" y="2492" width="36" height="80"></rect>
+  <text id="p160t" x="3588" y="2492" textLength="72" writing-mode="tb" dx="18" dy="4">邢貴人</text>
+  </g>
+<path id="h47" class="double" d="M 3349,2530 l 239,0 m 0,4 l -239,0" data-connect_pos_x="3468" data-connect_pos_y="2534" data-start_x="3349" data-end_x="3588" data-y="2532" data-lhs_person="p154" data-rhs_person="p160" data-lower_links=""></path>
+<g id="p161g" data-lower_links="" data-upper_links="v136," data-left_links="" data-right_links="">
+  <rect id="p161r" class="masculine" x="3716" y="1024" width="36" height="56"></rect>
+  <text id="p161t" x="3716" y="1024" textLength="48" writing-mode="tb" dx="18" dy="4">孫承</text>
+  </g>
+<path id="v136" class="solid" d="M 3910,941 l 0,32 l -176,0 l 0,50" data-from_x="3910" data-from_y="940" data-to_x="3734" data-to_y="1024" data-parent1="p127" data-parent1_pos_idx="1" data-child="p161" data-child_pos_idx="1"></path>
+<g id="p162g" data-lower_links="" data-upper_links="v137," data-left_links="h48,p160," data-right_links="">
+  <rect id="p162r" class="masculine" x="3756" y="2504" width="36" height="56"></rect>
+  <text id="p162t" x="3756" y="2504" textLength="48" writing-mode="tb" dx="18" dy="4">孫壱</text>
+  </g>
+<path id="v137" class="solid" d="M 3910,941 l 0,32 l -136,0 l 0,1530" data-from_x="3910" data-from_y="940" data-to_x="3774" data-to_y="2504" data-parent1="p127" data-parent1_pos_idx="1" data-child="p162" data-child_pos_idx="1"></path>
+<path id="h48" class="double" d="M 3625,2530 l 131,0 m 0,4 l -131,0" data-connect_pos_x="3690" data-connect_pos_y="2534" data-start_x="3625" data-end_x="3756" data-y="2532" data-lhs_person="p160" data-rhs_person="p162" data-lower_links=""></path>
+<g id="p163g" data-lower_links="" data-upper_links="v138," data-left_links="" data-right_links="">
+  <rect id="p163r" class="masculine" x="3800" y="1024" width="36" height="56"></rect>
+  <text id="p163t" x="3800" y="1024" textLength="48" writing-mode="tb" dx="18" dy="4">孫封</text>
+  </g>
+<path id="v138" class="solid" d="M 3910,941 l 0,32 l -92,0 l 0,50" data-from_x="3910" data-from_y="940" data-to_x="3818" data-to_y="1024" data-parent1="p127" data-parent1_pos_idx="1" data-child="p163" data-child_pos_idx="1"></path>
+<g id="p164g" data-lower_links="v139," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p164r" class="masculine" x="3928" y="1060" width="36" height="56"></rect>
+  <text id="p164t" x="3928" y="1060" textLength="48" writing-mode="tb" dx="18" dy="4">呂範</text>
+  </g>
+<g id="p165g" data-lower_links="" data-upper_links="v139," data-left_links="h49,p166," data-right_links="">
+  <rect id="p165r" class="masculine" x="3928" y="1180" width="36" height="56"></rect>
+  <text id="p165t" x="3928" y="1180" textLength="48" writing-mode="tb" dx="18" dy="4">呂拠</text>
+  </g>
+<path id="v139" class="solid" d="M 3946,1117 l 0,63" data-from_x="3946" data-from_y="1116" data-to_x="3946" data-to_y="1180" data-parent1="p164" data-parent1_pos_idx="1" data-child="p165" data-child_pos_idx="1"></path>
+<g id="p166g" data-lower_links="" data-upper_links="v140," data-left_links="" data-right_links="h49,p165,">
+  <rect id="p166r" class="feminine" x="3844" y="1180" width="36" height="56"></rect>
+  <text id="p166t" x="3844" y="1180" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v140" class="solid" d="M 3910,941 l 0,32 l -48,0 l 0,206" data-from_x="3910" data-from_y="940" data-to_x="3862" data-to_y="1180" data-parent1="p127" data-parent1_pos_idx="1" data-child="p166" data-child_pos_idx="1"></path>
+<path id="h49" class="double" d="M 3880,1206 l 48,0 m 0,4 l -48,0" data-connect_pos_x="3904" data-connect_pos_y="1210" data-start_x="3880" data-end_x="3928" data-y="1208" data-lhs_person="p166" data-rhs_person="p165" data-lower_links=""></path>
+<g id="p167g" data-lower_links="" data-upper_links="v141," data-left_links="h50,p168," data-right_links="">
+  <rect id="p167r" class="feminine" x="3968" y="1272" width="36" height="56"></rect>
+  <text id="p167t" x="3968" y="1272" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v141" class="solid" d="M 3910,941 l 0,32 l 76,0 l 0,298" data-from_x="3910" data-from_y="940" data-to_x="3986" data-to_y="1272" data-parent1="p127" data-parent1_pos_idx="1" data-child="p167" data-child_pos_idx="1"></path>
+<g id="p168g" data-lower_links="v143,v147," data-upper_links="" data-left_links="" data-right_links="h50,p167,">
+  <rect id="p168r" class="masculine" x="2712" y="1272" width="36" height="56"></rect>
+  <text id="p168t" x="2712" y="1272" textLength="48" writing-mode="tb" dx="18" dy="4">滕胤</text>
+  </g>
+<path id="h50" class="double" d="M 2748,1298 l 1220,0 m 0,4 l -1220,0" data-connect_pos_x="3358" data-connect_pos_y="1302" data-start_x="2748" data-end_x="3968" data-y="1300" data-lhs_person="p168" data-rhs_person="p167" data-lower_links=""></path>
+<g id="p169g" data-lower_links="" data-upper_links="v142," data-left_links="" data-right_links="h51,p170,">
+  <rect id="p169r" class="masculine" x="2308" y="1380" width="36" height="80"></rect>
+  <text id="p169t" x="2308" y="1380" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛竦</text>
+  </g>
+<path id="v142" class="solid" d="M 2270,1285 l 0,32 l 56,0 l 0,62" data-from_x="2270" data-from_y="1284" data-to_x="2326" data-to_y="1380" data-parent1="p75" data-parent1_pos_idx="1" data-child="p169" data-child_pos_idx="1"></path>
+<g id="p170g" data-lower_links="" data-upper_links="v143," data-left_links="h51,p169," data-right_links="">
+  <rect id="p170r" class="feminine" x="2624" y="1392" width="36" height="56"></rect>
+  <text id="p170t" x="2624" y="1392" textLength="48" writing-mode="tb" dx="18" dy="4">滕氏</text>
+  </g>
+<path id="v143" class="solid" d="M 2730,1329 l 0,32 l -88,0 l 0,30" data-from_x="2730" data-from_y="1328" data-to_x="2642" data-to_y="1392" data-parent1="p168" data-parent1_pos_idx="1" data-child="p170" data-child_pos_idx="1"></path>
+<path id="h51" class="double" d="M 2344,1418 l 280,0 m 0,4 l -280,0" data-connect_pos_x="2484" data-connect_pos_y="1422" data-start_x="2344" data-end_x="2624" data-y="1420" data-lhs_person="p169" data-rhs_person="p170" data-lower_links=""></path>
+<g id="p171g" data-lower_links="v144," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p171r" class="masculine" x="2317" y="1048" width="36" height="80"></rect>
+  <text id="p171t" x="2317" y="1048" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛亮</text>
+  </g>
+<path id="v144" class="dashed" d="M 2335,1129 l 0,75" data-from_x="2335" data-from_y="1128" data-to_x="2335" data-to_y="1204" data-parent1="p171" data-parent1_pos_idx="1" data-child="p76" data-child_pos_idx="2"></path>
+<g id="p172g" data-lower_links="" data-upper_links="v146," data-left_links="" data-right_links="">
+  <rect id="p172r" class="masculine" x="2252" y="1380" width="36" height="80"></rect>
+  <text id="p172t" x="2252" y="1380" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛建</text>
+  </g>
+<g id="p173g" data-lower_links="" data-upper_links="v145," data-left_links="" data-right_links="">
+  <rect id="p173r" class="masculine" x="2200" y="1380" width="36" height="80"></rect>
+  <text id="p173t" x="2200" y="1380" textLength="72" writing-mode="tb" dx="18" dy="4">諸葛綽</text>
+  </g>
+<path id="v145" class="solid" d="M 2270,1285 l 0,32 l -52,0 l 0,62" data-from_x="2270" data-from_y="1284" data-to_x="2218" data-to_y="1380" data-parent1="p75" data-parent1_pos_idx="1" data-child="p173" data-child_pos_idx="1"></path>
+<path id="v146" class="solid" d="M 2270,1285 l 0,95" data-from_x="2270" data-from_y="1284" data-to_x="2270" data-to_y="1380" data-parent1="p75" data-parent1_pos_idx="1" data-child="p172" data-child_pos_idx="1"></path>
+<g id="p174g" data-lower_links="" data-upper_links="v147," data-left_links="h52,p178," data-right_links="">
+  <rect id="p174r" class="feminine" x="2660" y="2200" width="36" height="56"></rect>
+  <text id="p174t" x="2660" y="2200" textLength="48" writing-mode="tb" dx="18" dy="4">滕氏</text>
+  </g>
+<path id="v147" class="solid" d="M 2730,1329 l 0,32 l -52,0 l 0,838" data-from_x="2730" data-from_y="1328" data-to_x="2678" data-to_y="2200" data-parent1="p168" data-parent1_pos_idx="1" data-child="p174" data-child_pos_idx="1"></path>
+<g id="p175g" data-lower_links="v149," data-upper_links="v148," data-left_links="" data-right_links="">
+  <rect id="p175r" class="masculine" x="668" y="348" width="36" height="56"></rect>
+  <text id="p175t" x="668" y="348" textLength="48" writing-mode="tb" dx="18" dy="4">呉奮</text>
+  </g>
+<path id="v148" class="solid" d="M 714,273 l 0,32 l -28,0 l 0,42" data-from_x="714" data-from_y="272" data-to_x="686" data-to_y="348" data-parent1="p97" data-parent1_pos_idx="1" data-child="p175" data-child_pos_idx="1"></path>
+<g id="p176g" data-lower_links="" data-upper_links="v149," data-left_links="" data-right_links="">
+  <rect id="p176r" class="masculine" x="668" y="540" width="36" height="56"></rect>
+  <text id="p176t" x="668" y="540" textLength="48" writing-mode="tb" dx="18" dy="4">呉安</text>
+  </g>
+<path id="v149" class="solid" d="M 686,405 l 0,135" data-from_x="686" data-from_y="404" data-to_x="686" data-to_y="540" data-parent1="p175" data-parent1_pos_idx="1" data-child="p176" data-child_pos_idx="1"></path>
+<g id="p177g" data-lower_links="v151," data-upper_links="v150," data-left_links="" data-right_links="">
+  <rect id="p177r" class="masculine" x="724" y="348" width="36" height="56"></rect>
+  <text id="p177t" x="724" y="348" textLength="48" writing-mode="tb" dx="18" dy="4">呉祺</text>
+  </g>
+<path id="v150" class="solid" d="M 714,273 l 0,32 l 28,0 l 0,42" data-from_x="714" data-from_y="272" data-to_x="742" data-to_y="348" data-parent1="p97" data-parent1_pos_idx="1" data-child="p177" data-child_pos_idx="1"></path>
+<g id="p178g" data-lower_links="" data-upper_links="v151," data-left_links="" data-right_links="h52,p174,">
+  <rect id="p178r" class="masculine" x="724" y="2200" width="36" height="56"></rect>
+  <text id="p178t" x="724" y="2200" textLength="48" writing-mode="tb" dx="18" dy="4">呉纂</text>
+  </g>
+<path id="v151" class="solid" d="M 742,405 l 0,1795" data-from_x="742" data-from_y="404" data-to_x="742" data-to_y="2200" data-parent1="p177" data-parent1_pos_idx="1" data-child="p178" data-child_pos_idx="1"></path>
+<path id="h52" class="double" d="M 761,2226 l 1899,0 m 0,4 l -1899,0" data-connect_pos_x="1710" data-connect_pos_y="2230" data-start_x="761" data-end_x="2660" data-y="2228" data-lhs_person="p178" data-rhs_person="p174" data-lower_links=""></path>
+<g id="p179g" data-lower_links="v154,v166,v167,v168,v169," data-upper_links="v152," data-left_links="" data-right_links="">
+  <rect id="p179r" class="masculine" x="200" y="536" width="36" height="56"></rect>
+  <text id="p179t" x="200" y="536" textLength="48" writing-mode="tb" dx="18" dy="4">孫賁</text>
+  </g>
+<path id="v152" class="solid" d="M 358,285 l 0,32 l -140,0 l 0,218" data-from_x="358" data-from_y="284" data-to_x="218" data-to_y="536" data-parent1="p79" data-parent1_pos_idx="1" data-child="p179" data-child_pos_idx="1"></path>
+<g id="p180g" data-lower_links="v155,v156,v157,v158,v159," data-upper_links="v153," data-left_links="" data-right_links="">
+  <rect id="p180r" class="masculine" x="520" y="736" width="36" height="56"></rect>
+  <text id="p180t" x="520" y="736" textLength="48" writing-mode="tb" dx="18" dy="4">孫輔</text>
+  </g>
+<path id="v153" class="solid" d="M 358,285 l 0,32 l 180,0 l 0,418" data-from_x="358" data-from_y="284" data-to_x="538" data-to_y="736" data-parent1="p79" data-parent1_pos_idx="1" data-child="p180" data-child_pos_idx="1"></path>
+<g id="p181g" data-lower_links="" data-upper_links="v154," data-left_links="" data-right_links="h53,p150,">
+  <rect id="p181r" class="feminine" x="376" y="2264" width="36" height="56"></rect>
+  <text id="p181t" x="376" y="2264" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v154" class="solid" d="M 218,593 l 0,32 l 176,0 l 0,1638" data-from_x="218" data-from_y="592" data-to_x="394" data-to_y="2264" data-parent1="p179" data-parent1_pos_idx="1" data-child="p181" data-child_pos_idx="1"></path>
+<path id="h53" class="double" d="M 413,2290 l 2822,0 m 0,4 l -2822,0" data-connect_pos_x="1824" data-connect_pos_y="2294" data-start_x="413" data-end_x="3235" data-y="2292" data-lhs_person="p181" data-rhs_person="p150" data-lower_links=""></path>
+<g id="p182g" data-lower_links="v160," data-upper_links="v155," data-left_links="" data-right_links="">
+  <rect id="p182r" class="masculine" x="404" y="856" width="36" height="56"></rect>
+  <text id="p182t" x="404" y="856" textLength="48" writing-mode="tb" dx="18" dy="4">孫興</text>
+  </g>
+<path id="v155" class="solid" d="M 538,793 l 0,32 l -116,0 l 0,30" data-from_x="538" data-from_y="792" data-to_x="422" data-to_y="856" data-parent1="p180" data-parent1_pos_idx="1" data-child="p182" data-child_pos_idx="1"></path>
+<g id="p183g" data-lower_links="v161," data-upper_links="v156," data-left_links="" data-right_links="">
+  <rect id="p183r" class="masculine" x="460" y="856" width="36" height="56"></rect>
+  <text id="p183t" x="460" y="856" textLength="48" writing-mode="tb" dx="18" dy="4">孫昭</text>
+  </g>
+<path id="v156" class="solid" d="M 538,793 l 0,32 l -60,0 l 0,30" data-from_x="538" data-from_y="792" data-to_x="478" data-to_y="856" data-parent1="p180" data-parent1_pos_idx="1" data-child="p183" data-child_pos_idx="1"></path>
+<g id="p184g" data-lower_links="v162," data-upper_links="v157," data-left_links="" data-right_links="">
+  <rect id="p184r" class="masculine" x="520" y="856" width="36" height="56"></rect>
+  <text id="p184t" x="520" y="856" textLength="48" writing-mode="tb" dx="18" dy="4">孫偉</text>
+  </g>
+<path id="v157" class="solid" d="M 538,793 l 0,63" data-from_x="538" data-from_y="792" data-to_x="538" data-to_y="856" data-parent1="p180" data-parent1_pos_idx="1" data-child="p184" data-child_pos_idx="1"></path>
+<g id="p185g" data-lower_links="v163," data-upper_links="v158," data-left_links="" data-right_links="">
+  <rect id="p185r" class="masculine" x="576" y="856" width="36" height="56"></rect>
+  <text id="p185t" x="576" y="856" textLength="48" writing-mode="tb" dx="18" dy="4">孫昕</text>
+  </g>
+<path id="v158" class="solid" d="M 538,793 l 0,32 l 56,0 l 0,30" data-from_x="538" data-from_y="792" data-to_x="594" data-to_y="856" data-parent1="p180" data-parent1_pos_idx="1" data-child="p185" data-child_pos_idx="1"></path>
+<g id="p186g" data-lower_links="" data-upper_links="v159," data-left_links="h54,p188," data-right_links="">
+  <rect id="p186r" class="feminine" x="664" y="970" width="36" height="56"></rect>
+  <text id="p186t" x="664" y="970" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v159" class="solid" d="M 538,793 l 0,32 l 144,0 l 0,144" data-from_x="538" data-from_y="792" data-to_x="682" data-to_y="970" data-parent1="p180" data-parent1_pos_idx="1" data-child="p186" data-child_pos_idx="1"></path>
+<g id="p187g" data-lower_links="" data-upper_links="v160,v161,v162,v163," data-left_links="" data-right_links="h55,p190,">
+  <rect id="p187r" class="masculine" x="490" y="1248" width="36" height="56"></rect>
+  <text id="p187t" x="490" y="1248" textLength="48" writing-mode="tb" dx="18" dy="4">孫奇</text>
+  </g>
+<path id="v160" class="dashed" d="M 422,913 l 0,32 l 86,0 l 0,302" data-from_x="422" data-from_y="912" data-to_x="508" data-to_y="1248" data-parent1="p182" data-parent1_pos_idx="1" data-child="p187" data-child_pos_idx="1"></path>
+<path id="v161" class="dashed" d="M 478,913 l 0,32 l 30,0 l 0,302" data-from_x="478" data-from_y="912" data-to_x="508" data-to_y="1248" data-parent1="p183" data-parent1_pos_idx="1" data-child="p187" data-child_pos_idx="1"></path>
+<path id="v162" class="dashed" d="M 538,913 l 0,32 l -30,0 l 0,302" data-from_x="538" data-from_y="912" data-to_x="508" data-to_y="1248" data-parent1="p184" data-parent1_pos_idx="1" data-child="p187" data-child_pos_idx="1"></path>
+<path id="v163" class="dashed" d="M 594,913 l 0,32 l -86,0 l 0,302" data-from_x="594" data-from_y="912" data-to_x="508" data-to_y="1248" data-parent1="p185" data-parent1_pos_idx="1" data-child="p187" data-child_pos_idx="1"></path>
+<g id="p188g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h54,p186,">
+  <rect id="p188r" class="masculine" x="580" y="970" width="36" height="56"></rect>
+  <text id="p188t" x="580" y="970" textLength="48" writing-mode="tb" dx="18" dy="4">駱統</text>
+  </g>
+<path id="h54" class="double" d="M 616,996 l 48,0 m 0,4 l -48,0" data-connect_pos_x="640" data-connect_pos_y="1000" data-start_x="616" data-end_x="664" data-y="998" data-lhs_person="p188" data-rhs_person="p186" data-lower_links=""></path>
+<g id="p189g" data-lower_links="v165," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p189r" class="masculine" x="574" y="1112" width="36" height="56"></rect>
+  <text id="p189t" x="574" y="1112" textLength="48" writing-mode="tb" dx="18" dy="4">范慎</text>
+  </g>
+<g id="p190g" data-lower_links="" data-upper_links="v165," data-left_links="h55,p187," data-right_links="">
+  <rect id="p190r" class="feminine" x="574" y="1248" width="36" height="56"></rect>
+  <text id="p190t" x="574" y="1248" textLength="48" writing-mode="tb" dx="18" dy="4">范姫</text>
+  </g>
+
+<path id="v165" class="solid" d="M 592,1169 l 0,79" data-from_x="592" data-from_y="1168" data-to_x="592" data-to_y="1248" data-parent1="p189" data-parent1_pos_idx="1" data-child="p190" data-child_pos_idx="1"></path>
+<path id="h55" class="double" d="M 527,1274 l 47,0 m 0,4 l -47,0" data-connect_pos_x="550" data-connect_pos_y="1278" data-start_x="527" data-end_x="574" data-y="1276" data-lhs_person="p187" data-rhs_person="p190" data-lower_links=""></path>
+<g id="p191g" data-lower_links="v170,v171,v172,v173,v174,v175," data-upper_links="v166," data-left_links="" data-right_links="">
+  <rect id="p191r" class="masculine" x="60" y="656" width="36" height="56"></rect>
+  <text id="p191t" x="60" y="656" textLength="48" writing-mode="tb" dx="18" dy="4">孫鄰</text>
+  </g>
+<path id="v166" class="solid" d="M 218,593 l 0,32 l -140,0 l 0,30" data-from_x="218" data-from_y="592" data-to_x="78" data-to_y="656" data-parent1="p179" data-parent1_pos_idx="1" data-child="p191" data-child_pos_idx="1"></path>
+<g id="p192g" data-lower_links="" data-upper_links="v167," data-left_links="" data-right_links="">
+  <rect id="p192r" class="masculine" x="230" y="656" width="36" height="56"></rect>
+  <text id="p192t" x="230" y="656" textLength="48" writing-mode="tb" dx="18" dy="4">孫安</text>
+  </g>
+<path id="v167" class="solid" d="M 218,593 l 0,32 l 30,0 l 0,30" data-from_x="218" data-from_y="592" data-to_x="248" data-to_y="656" data-parent1="p179" data-parent1_pos_idx="1" data-child="p192" data-child_pos_idx="1"></path>
+<g id="p193g" data-lower_links="" data-upper_links="v168," data-left_links="" data-right_links="">
+  <rect id="p193r" class="masculine" x="288" y="656" width="36" height="56"></rect>
+  <text id="p193t" x="288" y="656" textLength="48" writing-mode="tb" dx="18" dy="4">孫煕</text>
+  </g>
+<path id="v168" class="solid" d="M 218,593 l 0,32 l 88,0 l 0,30" data-from_x="218" data-from_y="592" data-to_x="306" data-to_y="656" data-parent1="p179" data-parent1_pos_idx="1" data-child="p193" data-child_pos_idx="1"></path>
+<g id="p194g" data-lower_links="" data-upper_links="v169," data-left_links="" data-right_links="">
+  <rect id="p194r" class="masculine" x="340" y="656" width="36" height="56"></rect>
+  <text id="p194t" x="340" y="656" textLength="48" writing-mode="tb" dx="18" dy="4">孫績</text>
+  </g>
+<path id="v169" class="solid" d="M 218,593 l 0,32 l 140,0 l 0,30" data-from_x="218" data-from_y="592" data-to_x="358" data-to_y="656" data-parent1="p179" data-parent1_pos_idx="1" data-child="p194" data-child_pos_idx="1"></path>
+<g id="p195g" data-lower_links="" data-upper_links="v170," data-left_links="" data-right_links="">
+  <rect id="p195r" class="masculine" x="0" y="776" width="36" height="56"></rect>
+  <text id="p195t" x="0" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫苗</text>
+  </g>
+<path id="v170" class="solid" d="M 78,713 l 0,32 l -60,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="18" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p195" data-child_pos_idx="1"></path>
+<g id="p196g" data-lower_links="" data-upper_links="v171," data-left_links="" data-right_links="">
+  <rect id="p196r" class="masculine" x="56" y="776" width="36" height="56"></rect>
+  <text id="p196t" x="56" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫旅</text>
+  </g>
+<path id="v171" class="solid" d="M 78,713 l 0,32 l -4,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="74" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p196" data-child_pos_idx="1"></path>
+<g id="p197g" data-lower_links="" data-upper_links="v172," data-left_links="" data-right_links="">
+  <rect id="p197r" class="masculine" x="120" y="776" width="36" height="56"></rect>
+  <text id="p197t" x="120" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫述</text>
+  </g>
+<path id="v172" class="solid" d="M 78,713 l 0,32 l 60,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="138" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p197" data-child_pos_idx="1"></path>
+<g id="p198g" data-lower_links="" data-upper_links="v173," data-left_links="" data-right_links="">
+  <rect id="p198r" class="masculine" x="184" y="776" width="36" height="56"></rect>
+  <text id="p198t" x="184" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫震</text>
+  </g>
+<path id="v173" class="solid" d="M 78,713 l 0,32 l 124,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="202" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p198" data-child_pos_idx="1"></path>
+<g id="p199g" data-lower_links="" data-upper_links="v174," data-left_links="" data-right_links="">
+  <rect id="p199r" class="masculine" x="252" y="776" width="36" height="56"></rect>
+  <text id="p199t" x="252" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫諧</text>
+  </g>
+<path id="v174" class="solid" d="M 78,713 l 0,32 l 192,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="270" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p199" data-child_pos_idx="1"></path>
+<g id="p200g" data-lower_links="" data-upper_links="v175," data-left_links="" data-right_links="">
+  <rect id="p200r" class="masculine" x="312" y="776" width="36" height="56"></rect>
+  <text id="p200t" x="312" y="776" textLength="48" writing-mode="tb" dx="18" dy="4">孫歆</text>
+  </g>
+<path id="v175" class="solid" d="M 78,713 l 0,32 l 252,0 l 0,30" data-from_x="78" data-from_y="712" data-to_x="330" data-to_y="776" data-parent1="p191" data-parent1_pos_idx="1" data-child="p200" data-child_pos_idx="1"></path>
+<g id="p201g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p201r" class="feminine" x="200" y="872" width="36" height="80"></rect>
+  <text id="p201t" x="200" y="872" textLength="72" writing-mode="tb" dx="18" dy="4">孫寒華</text>
+  </g>
+<g id="p202g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p202r" class="masculine" x="200" y="1008" width="36" height="56"></rect>
+  <text id="p202t" x="200" y="1008" textLength="48" writing-mode="tb" dx="18" dy="4">孫恵</text>
+  </g>
+<path id="v176" class="solid" d="M 2054,259 l 0,32 l 1024,0 l 0,104" data-from_x="2054" data-from_y="258" data-to_x="3078" data-to_y="396" data-parent1="p4" data-parent2="p0" data-child="p8" data-child_pos_idx="1"></path>
+<g id="p203g" data-lower_links="" data-upper_links="v178," data-left_links="h56,p204," data-right_links="">
+  <rect id="p203r" class="feminine" x="3196" y="496" width="36" height="56"></rect>
+  <text id="p203t" x="3196" y="496" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+
+<path id="v178" class="solid" d="M 3214,285 l 0,211" data-from_x="3214" data-from_y="284" data-to_x="3214" data-to_y="496" data-parent1="p0" data-parent1_pos_idx="1" data-child="p203" data-child_pos_idx="1"></path>
+<g id="p204g" data-lower_links="v179," data-upper_links="" data-left_links="" data-right_links="h56,p203,">
+  <rect id="p204r" class="masculine" x="3112" y="496" width="36" height="56"></rect>
+  <text id="p204t" x="3112" y="496" textLength="48" writing-mode="tb" dx="18" dy="4">弘咨</text>
+  </g>
+<path id="h56" class="double" d="M 3148,522 l 47,0 m 0,4 l -47,0" data-connect_pos_x="3171" data-connect_pos_y="526" data-start_x="3148" data-end_x="3195" data-y="524" data-lhs_person="p204" data-rhs_person="p203" data-lower_links=""></path>
+<g id="p205g" data-lower_links="v180," data-upper_links="v179," data-left_links="" data-right_links="">
+  <rect id="p205r" class="masculine" x="3112" y="616" width="36" height="56"></rect>
+  <text id="p205t" x="3112" y="616" textLength="48" writing-mode="tb" dx="18" dy="4">弘某</text>
+  </g>
+<path id="v179" class="solid" d="M 3130,553 l 0,63" data-from_x="3130" data-from_y="552" data-to_x="3130" data-to_y="616" data-parent1="p204" data-parent1_pos_idx="1" data-child="p205" data-child_pos_idx="1"></path>
+<g id="p206g" data-lower_links="" data-upper_links="v180," data-left_links="" data-right_links="">
+  <rect id="p206r" class="masculine" x="3112" y="736" width="36" height="56"></rect>
+  <text id="p206t" x="3112" y="736" textLength="48" writing-mode="tb" dx="18" dy="4">弘璆</text>
+  </g>
+<path id="v180" class="solid" d="M 3130,673 l 0,63" data-from_x="3130" data-from_y="672" data-to_x="3130" data-to_y="736" data-parent1="p205" data-parent1_pos_idx="1" data-child="p206" data-child_pos_idx="1"></path>
+<g id="p207g" data-lower_links="" data-upper_links="v181," data-left_links="" data-right_links="h57,p208,">
+  <rect id="p207r" class="feminine" x="3256" y="400" width="36" height="56"></rect>
+  <text id="p207t" x="3256" y="400" textLength="48" writing-mode="tb" dx="18" dy="4">孫氏</text>
+  </g>
+<path id="v181" class="solid" d="M 3214,285 l 0,32 l 60,0 l 0,82" data-from_x="3214" data-from_y="284" data-to_x="3274" data-to_y="400" data-parent1="p0" data-parent1_pos_idx="1" data-child="p207" data-child_pos_idx="1"></path>
+<g id="p208g" data-lower_links="" data-upper_links="" data-left_links="h57,p207," data-right_links="">
+  <rect id="p208r" class="masculine" x="3340" y="400" width="36" height="56"></rect>
+  <text id="p208t" x="3340" y="400" textLength="48" writing-mode="tb" dx="18" dy="4">陳某</text>
+  </g>
+<path id="h57" class="double" d="M 3292,426 l 48,0 m 0,4 l -48,0" data-connect_pos_x="3316" data-connect_pos_y="430" data-start_x="3292" data-end_x="3340" data-y="428" data-lhs_person="p207" data-rhs_person="p208" data-lower_links="v182,"></path>
+<g id="p209g" data-lower_links="" data-upper_links="v182," data-left_links="h58,p212," data-right_links="">
+  <rect id="p209r" class="feminine" x="3298" y="800" width="36" height="56"></rect>
+  <text id="p209t" x="3298" y="800" textLength="48" writing-mode="tb" dx="18" dy="4">陳氏</text>
+  </g>
+<path id="v182" class="solid" d="M 3316,431 l 0,369" data-from_x="3316" data-from_y="430" data-to_x="3316" data-to_y="800" data-parent1="p207" data-parent2="p208" data-child="p209" data-child_pos_idx="1"></path>
+<g id="p210g" data-lower_links="v183,v184,v185," data-upper_links="" data-left_links="h60,p215," data-right_links="">
+  <rect id="p210r" class="masculine" x="2916" y="480" width="36" height="56"></rect>
+  <text id="p210t" x="2916" y="480" textLength="48" writing-mode="tb" dx="18" dy="4">潘濬</text>
+  </g>
+<g id="p211g" data-lower_links="" data-upper_links="v183," data-left_links="" data-right_links="">
+  <rect id="p211r" class="masculine" x="2924" y="800" width="36" height="56"></rect>
+  <text id="p211t" x="2924" y="800" textLength="48" writing-mode="tb" dx="18" dy="4">潘翥</text>
+  </g>
+<g id="p212g" data-lower_links="" data-upper_links="v184," data-left_links="" data-right_links="h58,p209,">
+  <rect id="p212r" class="masculine" x="2980" y="800" width="36" height="56"></rect>
+  <text id="p212t" x="2980" y="800" textLength="48" writing-mode="tb" dx="18" dy="4">潘祕</text>
+  </g>
+<g id="p213g" data-lower_links="" data-upper_links="v185," data-left_links="h59,p15," data-right_links="">
+  <rect id="p213r" class="feminine" x="2880" y="1513" width="36" height="56"></rect>
+  <text id="p213t" x="2880" y="1513" textLength="48" writing-mode="tb" dx="18" dy="4">潘氏</text>
+  </g>
+<path id="h58" class="double" d="M 3016,826 l 281,0 m 0,4 l -281,0" data-connect_pos_x="3156" data-connect_pos_y="830" data-start_x="3016" data-end_x="3297" data-y="828" data-lhs_person="p212" data-rhs_person="p209" data-lower_links=""></path>
+<path id="v183" class="solid" d="M 2934,537 l 0,32 l 8,0 l 0,230" data-from_x="2934" data-from_y="536" data-to_x="2942" data-to_y="800" data-parent1="p210" data-parent1_pos_idx="1" data-child="p211" data-child_pos_idx="1"></path>
+<path id="v184" class="solid" d="M 2934,537 l 0,32 l 64,0 l 0,230" data-from_x="2934" data-from_y="536" data-to_x="2998" data-to_y="800" data-parent1="p210" data-parent1_pos_idx="1" data-child="p212" data-child_pos_idx="1"></path>
+<path id="v185" class="solid" d="M 2934,537 l 0,32 l -36,0 l 0,943" data-from_x="2934" data-from_y="536" data-to_x="2898" data-to_y="1513" data-parent1="p210" data-parent1_pos_idx="1" data-child="p213" data-child_pos_idx="1"></path>
+<path id="h59" class="double" d="M 1743,1539 l 1137,0 m 0,4 l -1137,0" data-connect_pos_x="2311" data-connect_pos_y="1543" data-start_x="1743" data-end_x="2880" data-y="1541" data-lhs_person="p15" data-rhs_person="p213" data-lower_links=""></path>
+<g id="p214g" data-lower_links="" data-upper_links="v186," data-left_links="" data-right_links="">
+  <rect id="p214r" class="masculine" x="2688" y="480" width="36" height="56"></rect>
+  <text id="p214t" x="2688" y="480" textLength="48" writing-mode="tb" dx="18" dy="4">蒋琬</text>
+  </g>
+<g id="p215g" data-lower_links="" data-upper_links="v187," data-left_links="" data-right_links="h60,p210,">
+  <rect id="p215r" class="feminine" x="2768" y="480" width="36" height="56"></rect>
+  <text id="p215t" x="2768" y="480" textLength="48" writing-mode="tb" dx="18" dy="4">蒋氏</text>
+  </g>
+<g id="p216g" data-lower_links="v186,v187," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p216r" class="masculine" x="2728" y="322" width="36" height="56"></rect>
+  <text id="p216t" x="2728" y="322" textLength="48" writing-mode="tb" dx="18" dy="4">蒋某</text>
+  </g>
+<path id="h60" class="double" d="M 2805,506 l 111,0 m 0,4 l -111,0" data-connect_pos_x="2860" data-connect_pos_y="510" data-start_x="2805" data-end_x="2916" data-y="508" data-lhs_person="p215" data-rhs_person="p210" data-lower_links=""></path>
+<path id="v186" class="solid" d="M 2746,379 l 0,32 l -40,0 l 0,68" data-from_x="2746" data-from_y="378" data-to_x="2706" data-to_y="480" data-parent1="p216" data-parent1_pos_idx="1" data-child="p214" data-child_pos_idx="1"></path>
+<path id="v187" class="solid" d="M 2746,379 l 0,32 l 40,0 l 0,68" data-from_x="2746" data-from_y="378" data-to_x="2786" data-to_y="480" data-parent1="p216" data-parent1_pos_idx="1" data-child="p215" data-child_pos_idx="1"></path>
+</svg>

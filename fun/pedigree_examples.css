@@ -1,7 +1,13 @@
 object {
 	background: white;
+}
+div.svg_container, body > object {
 	width: 80%;
 	padding: 0;
 	margin-left: 10%;
 	margin-right: 10%;
+}
+div.svg_container {
+	height: 40vh;
+	overflow: auto;
 }
