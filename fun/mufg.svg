@@ -1,5 +1,5 @@
 
-<svg id="pedigree" xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300">
+<svg id="pedigree" xmlns="http://www.w3.org/2000/svg" width="900" height="352" viewBox="0 0 900 352">
 <style> @import url(pedigree_svg.css); </style>
 <g id="p0g" data-right_links="" data-left_links="h0,p1," data-upper_links="" data-lower_links="">
   <rect id="p0r" class="neutral" x="684" y="8" width="104" height="36"></rect>
@@ -30,9 +30,14 @@
 </g>
 <path id="v1" class="solid" d="M 270,35 l 0,97" data-from_x="270" data-from_y="34" data-to_x="270" data-to_y="132" data-parent1="p4" data-parent2="p3" data-child="p5" data-child_pos_idx="1"></path>
 <path id="h2" class="single" d="M 335,150 l 234,0" data-connect_pos_x="452" data-connect_pos_y="150" data-start_x="335" data-end_x="569" data-y="150" data-lhs_person="p5" data-rhs_person="p2" data-lower_links="v2,"></path>
-<g id="p6g" data-right_links="" data-left_links="" data-upper_links="v2," data-lower_links="">
+<g id="p6g" data-right_links="" data-left_links="" data-upper_links="v2," data-lower_links="v3,">
   <rect id="p6r" class="neutral" x="340" y="216" width="224" height="36"></rect>
   <text id="p6t" x="340" y="216" dx="4" dy="28">三菱東京ＵＦＪ銀行</text>
 </g>
 <path id="v2" class="solid" d="M 452,151 l 0,65" data-from_x="452" data-from_y="150" data-to_x="452" data-to_y="216" data-parent1="p5" data-parent2="p2" data-child="p6" data-child_pos_idx="1"></path>
+<g id="p7g" data-lower_links="" data-upper_links="v3," data-left_links="" data-right_links="">
+  <rect id="p7r" class="neutral" x="364" y="316" width="176" height="36"></rect>
+  <text id="p7t" x="364" y="316" textLength="168" dx="4" dy="28">三菱ＵＦＪ銀行</text>
+</g>
+<path id="v3" class="solid" d="M 452,253 l 0,62" data-from_x="452" data-from_y="252" data-to_x="452" data-to_y="316" data-parent1="p6" data-parent1_pos_idx="1" data-child="p7" data-child_pos_idx="1"></path>
 </svg>
