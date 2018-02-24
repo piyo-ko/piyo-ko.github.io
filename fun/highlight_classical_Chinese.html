@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="cn_txt.css" type="text/css">
+<script type="text/javascript" src="keywords.js"></script>
+<script type="text/javascript" src="highlight.js"></script>
+<base target="_top">
+<title>漢文の簡易ハイライト</title>
+<link rel="canonical" href="https://piyo-ko.github.io/fun/highlight_classical_Chinese.html">
+</head>
+<body>
+
+<h1>漢文の簡易ハイライト</h1>
+
+<p>
+ちょっと興味を持った時代についての史書の原文がネットで (<a href="https://ctext.org/zh">中國哲學書電子化計劃</a>や <a href="https://zh.wikisource.org/wiki/Wikisource:%E5%8F%B2%E6%9B%B8">Wikisource</a> で) 気軽に見られる時代なので、ちらっと眺めてみたいときがあります。
+が、私にはちゃんと漢文が読めるほどの教養がない……。
+</p>
+<p>
+というわけで、人名（姓・名・字・号・その他）、地名、血縁関係を示す語、地位や身分を表す語、時を表す語、機能語（や、それに準ずるような語）あたりをハイライトすれば、多少は読めた気になれるかな〜、と思って、このページを作ってみました。
+単なる文字列マッチングしかしていない上に、キーワードの定義も色々と不足があるけれども、まあ、お遊びとしては結構楽しいです。よかったらお使いください。
+御感想などがあれば <a href="https://twitter.com/share?text=@pi__yo__ko%20" target="_blank">Twitter</a> でお知らせください。
+</p>
+
+<form name="cn_txt">
+<textarea name="orig_txt" rows="10" cols="45" placeholder="ここにハイライトしたい漢文を入力してね。句点は「。」を使ってね。"></textarea>
+<textarea name="personal_names" rows="10" cols="20" placeholder="ハイライトしたい人名があれば、ここに一行ごとに一つ入力してね。"></textarea>
+<p class="btn">
+<input type="button" value="ハイライトする" onclick="highlight()"> &nbsp;
+<input type="button" value="クリアする" onclick="clear_all()">
+</p>
+</form>
+
+<p id="hilighted_text"></p>
+
+<p>
+上記のハイライト結果を利用したい場合は、以下のコードをコピーして適当な HTML ファイルの中にペーストしてください。
+このページで使っている<a href="cn_txt.css">スタイルファイル</a>と合わせて使えば、上記と同様にハイライトされます。
+</p>
+<code id="output_html"></code>
+
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+</html>

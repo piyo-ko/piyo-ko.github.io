@@ -1,0 +1,67 @@
+body {
+  background: hsl(100, 75%, 65%);
+  color: hsl(210, 100%, 15%);
+  font-family: serif;
+  padding: 1em;
+}
+input[type="button"] {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+h1 {
+  font-size: large;
+  font-family: "筑紫B丸ゴシック", sans-serif;
+  text-align: center;
+  color: white;
+  background: hsl(210, 100%, 25%);
+}
+p {
+  text-indent: 1em;
+}
+p.btn {
+  text-indent: 0;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+#hilighted_text {
+  text-indent: 0;
+  color: black;
+  border: solid 1px;
+  background: hsl(100, 0%, 90%);
+  padding: 4pt;
+}
+#output_html {
+  display: block;
+  border: solid 1px;
+  background: hsl(100, 75%, 85%);
+}
+
+span.tmp {
+  color: hsl(85, 80%, 35%);
+}
+span.loc {
+  color: hsl(220, 80%, 45%);
+}
+span.soc {
+  color: hsl(155, 85%, 30%);
+}
+span.rel {
+  color: hsl(30, 100%, 40%);
+}
+span.fn {
+  color: hsl(210, 20%, 40%);
+  font-style: italic;
+  padding-right: 2pt;
+}
+span.typ {
+  color: hsl(280, 60%, 55%);
+}
+span.prs {
+  color: hsl(330, 80%, 40%);
+}
