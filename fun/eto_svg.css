@@ -1,0 +1,31 @@
+circle#outer {
+  fill: peachpuff;
+  stroke-width: 1;
+  stroke: tomato;
+}
+circle#inner {
+  fill: white;
+  stroke-width: 1;
+  stroke: tomato;
+}
+circle#ball {
+  fill: tomato;
+}
+line {
+  stroke-width: 1;
+  stroke: tomato;
+}
+line.axis {
+  stroke-width: 2;
+}
+line#axis_1 {
+  stroke: crimson;
+}
+line#axis_2 {
+  stroke: orange;
+}
+text {
+  font-family: "Kaiti TC", "Kaiti SC", "筑紫B丸ゴシック", "クレー", sans-serif;
+  font-size: 12px;
+  fill: crimson;
+}

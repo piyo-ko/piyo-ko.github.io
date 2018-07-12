@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="eto.css" type="text/css">
+<script type="text/javascript" src="eto.js"></script>
+<base target="_top">
+<title>干支</title>
+</head>
+<body>
+
+<div id="eto_container" class="container">
+<svg id="circular_eto_chart" xmlns="http://www.w3.org/2000/svg">
+<style><![CDATA[ @import url(eto_svg.css); ]]></style>
+</svg>
+</div>
+
+
+<div id="slider_container">
+<form name="f">
+甲子<input type="range" name="eto_indicator" id="eto_indicator" min="0" max="59" step="1" oninput="update_indicators()" value="0">癸亥
+</form>
+</div>
+
+<nav>[<a href="../index.html">Home</a>]</nav>
+</body>
+</html>
