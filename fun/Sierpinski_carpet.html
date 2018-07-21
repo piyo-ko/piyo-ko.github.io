@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>Can I draw a fractal such as the Sierpinski carpet by using nested &lt;g&gt; and &lt;use&gt; elements in SVG?</title>
+<link rel="canonical" href="https://piyo-ko.github.io/fun/Sierpinski_carpet.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<style>div.img { text-align: center; padding: 12pt; }</style>
+</head>
+
+<body class="main-text-only">
+<h1>Can I draw a fractal such as the Sierpinski carpet by using nested <tt>&lt;g&gt;</tt> and <tt>&lt;use&gt;</tt> elements in SVG?</h1>
+
+<p>
+The answer is Yes, but it depends.
+The following is my SVG code to draw <a href="https://en.wikipedia.org/wiki/Sierpinski_carpet">the Sierpinski carpet</a>.
+In this code, nested <tt>&lt;g&gt;</tt> and <tt>&lt;use&gt;</tt> elements are used to repeat patterns.
+</p>
+
+<script src="https://gist.github.com/piyo-ko/15ddd28952377880c8392320f170d5ff.js?short_path=3bb6a42"></script>
+
+<p>
+The image that I intend to draw is as follows (a PNG image is presented here).
+</p>
+
+<div class="img">
+<img src="Sierpinski_carpet.png" alt="Sierpinski carpet in the PNG format" />
+</div>
+
+<p>
+The following is the image that is actually displayed when the above SVG code is used.
+How does it look like on your environment?
+</p>
+
+<div class="img">
+<img src="Sierpinski_carpet.svg" alt="Sierpinski carpet in the SVG format" />
+</div>
+
+<p>
+On macOS High Sierra (ver. 10.13.6), Safari (ver. 11.1.2) fails to display the Sierpinski carpet as intended, whereas Firefox Quantum (ver. 61.0.1) and Google Chrome (ver. 67.0.3396.99) successfully display the Sierpinski carpet.
+</p>
+
+<nav>[<a href="../index.html#eng">Home</a>]</nav>
+</body>
+
+</html>
+
+

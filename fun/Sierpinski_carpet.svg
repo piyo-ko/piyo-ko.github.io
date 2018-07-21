@@ -1,0 +1,52 @@
+<svg id="Sierpinski_carpet" xmlns="http://www.w3.org/2000/svg" width="243" height="243" viewBox="0 0 243 243">
+  <style>
+    rect { fill: purple; } 
+    rect.bg { fill: darkorange; }
+  </style>
+  <rect x="0" y="0" width="243" height="243" class="bg" />
+
+  <g id="sq_243">
+    <g id="sq_81">
+      <g id="sq_27">
+        <g id="sq_9">
+          <rect x="1" y="1" width="1" height="1" />
+          <rect x="4" y="1" width="1" height="1" />
+          <rect x="7" y="1" width="1" height="1" />
+          <rect x="1" y="4" width="1" height="1" />
+          <rect x="3" y="3" width="3" height="3" />
+          <rect x="7" y="4" width="1" height="1" />
+          <rect x="1" y="7" width="1" height="1" />
+          <rect x="4" y="7" width="1" height="1" />
+          <rect x="7" y="7" width="1" height="1" />
+        </g>
+
+        <use href="#sq_9" x="9" y="0" />
+        <use href="#sq_9" x="18" y="0" />
+        <use href="#sq_9" x="0" y="9" />
+        <rect x="9" y="9" width="9" height="9" />
+        <use href="#sq_9" x="18" y="9" />
+        <use href="#sq_9" x="0" y="18" />
+        <use href="#sq_9" x="9" y="18" />
+        <use href="#sq_9" x="18" y="18" />
+      </g>
+
+      <use href="#sq_27" x="27" y="0" />
+      <use href="#sq_27" x="54" y="0" />
+      <use href="#sq_27" x="0" y="27" />
+      <rect x="27" y="27" width="27" height="27" />
+      <use href="#sq_27" x="54" y="27" />
+      <use href="#sq_27" x="0" y="54" />
+      <use href="#sq_27" x="27" y="54" />
+      <use href="#sq_27" x="54" y="54" />
+    </g>
+
+    <use href="#sq_81" x="81" y="0" />
+    <use href="#sq_81" x="162" y="0" />
+    <use href="#sq_81" x="0" y="81" />
+    <rect x="81" y="81" width="81" height="81" />
+    <use href="#sq_81" x="162" y="81" />
+    <use href="#sq_81" x="0" y="162" />
+    <use href="#sq_81" x="81" y="162" />
+    <use href="#sq_81" x="162" y="162" />
+  </g>
+</svg>
