@@ -6,47 +6,8 @@
 <title>ISBNからリンクを作る</title>
 <link rel="canonical" href="https://piyo-ko.github.io/tools/ISBN_link.html" />
 <link rel="stylesheet" href="../article.css" type="text/css">
-<script>
-var counter = 0;
-
-function gen_link() {
-  //console.log('gen_link(): hello');
-  var link_txt;
-  var d8 = document.isbn.eight_digits.value.toString();
-  var cd = isbn10_check_digit(d8);
-  
-  if (d8.length != 8) {
-    alert('8桁を入力してね');
-    return(false);
-  }
-  counter++;
-
-  link_txt = '<a href="https://www.amazon.co.jp/dp/4' + d8 + cd;
-  link_txt += ( '/" target="_amzn">Amazon (' + counter + ')</a>' );
-  link_txt += "\n";
-  link_txt += ( '<a href="http://iss.ndl.go.jp/api/openurl?isbn=4' + d8 + cd );
-  link_txt += ( '" target="_ndl">NDL (' + counter + ')</a>' );
-
-  document.getElementById('link_test').innerHTML = link_txt;
-  document.getElementById('link_list').textContent += (link_txt + "\n");
-}
-// dは、最初の "987-4-" を除く、真ん中の8桁。
-// 13桁のISBNと10桁のISBNではチェックディジットが違うので計算せねばならない。
-function isbn10_check_digit(d) {
-  var sum = 4*10;
-  for (var i=0; i<8; i++) {
-    sum += parseInt(d.charAt(i)) * (9 - i);
-  }
-  var c = 11-(sum % 11);
-  if (c == 10) {
-    return('X');
-  } else if (c == 11) {
-    return('0');
-  } else {
-    return(c);
-  }
-}
-</script>
+<script src="ISBN_link.js"></script>
+<script src="isbn10_check_digit.js"></script>
 </head>
 <body class="main-text-only">
 
