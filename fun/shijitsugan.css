@@ -1,0 +1,51 @@
+body {
+  background: hsl(80, 30%, 80%);
+  color: hsl(80, 50%, 20%);
+  font-family: "クレー", Georgia, serif;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 1em;
+}
+
+a {
+  color: hsl(20, 100%, 40%);
+}
+a:hover {
+  background: hsl(20, 100%, 40%);
+  color: hsl(20, 100%, 80%);
+}
+
+h1 {
+  text-align: center;
+  font-size: large;
+  font-family: "筑紫B丸ゴシック", sans-serif;
+  background: hsl(80, 70%, 50%);
+}
+
+table {
+  margin-right: auto;
+  margin-left: auto;
+  border-collapse: collapse;
+}
+td {
+  border: solid 1px hsl(80, 50%, 20%);
+  padding-left: 4pt;
+  padding-right: 4pt;
+  text-align: right;
+}
+tr:nth-child(2n) > td {
+  background: hsl(60, 60%, 80%);
+}
+tr:nth-child(2n+1) > td {
+  background: hsl(80, 50%, 80%);
+}
+tr.start > td {
+  border-top-width: 8pt;
+}
+tr.end > td {
+  border-bottom-width: 8pt;
+}
+
+p {
+  text-indent: 1em;
+}
