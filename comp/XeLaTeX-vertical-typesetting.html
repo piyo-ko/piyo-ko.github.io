@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>HTML + CSS だとブラウザ依存性がつらいので XeLaTeX で縦書きしてみた (が、まだ要改善)</title>
+<link rel="canonical" href="https://piyo-ko.github.io/comp/XeLaTeX-vertical-typesetting.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+</head>
+
+<body class="main-text-only">
+<h1>HTML + CSS だとブラウザ依存性がつらいので XeLaTeX で縦書きしてみた (が、まだ要改善)</h1>
+
+<h2>このページは何?</h2>
+<p>
+このページは、
+(古い総ルビの本のデータ起こしを趣味で行いたいがゆえに)
+「<em>縦書きでルビを振りたい</em>」
+かつ
+「たまに珍しい文字を使うかもしれないから<em>フォントは<a href="http://fonts.jp/hanazono/">花園明朝</a>を使いたい</em>」
+と思いつつも、
+(システム音痴のくせして)
+「WYSIWYG なワープロソフトは嫌」
+となったら、どうすりゃいいのよ、という試行錯誤の記録です。
+現時点では、暫定的に
+「自分一人が見るものなら HTML + CSS を使うのが良く、他人にも見せたいものなら細かい点に目をつぶって XeLaTeX を使うのが良いかな」
+と思っています。
+</p>
+<p>
+私の知識・理解力が及ばないだけで、本当はもっと良い方法があるかと思います。
+それでもこんなページを書いた理由は、備忘録を残すためというのもありますが、
+「技術力のない者がその場しのぎにコマンドを並べただけでも、なんとか縦書きができるのね」
+と敷居を低くする役には立つかなぁ、とも思ったからです。
+コメントなどは <a href="https://twitter.com/pi__yo__ko">Twitter</a> でどうぞお気軽に。
+</p>
+
+<h2>試行錯誤の概要 (これでも概要なのだ)</h2>
+<p>
+とりあえず <em>HTML + CSS</em> で試したら、macOS Mojave + Firefox だとうまくいったものの、<em>Safari だとルビ表示が壊滅的でした</em>。Chrome は省略。
+</p>
+<p>
+<a href="https://www.w3.org/TR/html52/textlevel-semantics.html#the-ruby-element">ruby 要素</a>の文法を私が誤解している可能性もなきにしもあらず、ではありますが、熟語全体を ruby タグで囲って熟語の範囲を明示しつつ熟語ルビ方式で一文字ごとにルビを振ろうとすると、Safari では表示が壊滅的になります。
+たとえば、
+</p>
+
+<code>&lt;ruby&gt;&lt;rb&gt;熟&lt;/rb&gt;&lt;rb&gt;語&lt;/rb&gt;&lt;rp&gt; (&lt;/rp&gt;&lt;rt&gt;じゅく&lt;/rt&gt;&lt;rt&gt;ご&lt;/rt&gt;&lt;rp&gt;) &lt;/rp&gt;&lt;/ruby&gt;</code>
+
+<p>
+とすると
+「<ruby><rb>熟</rb><rb>語</rb><rp> (</rp><rt>じゅく</rt><rt>ご</rt><rp>) </rp></ruby>」
+となります (多分 Safari で御覧の方は、このルビ表示が変になっているかと思います)。
+このようなタグ付の仕方にこだわらず、熟字訓のグループルビ以外はすべて漢字一字ごとに ruby タグで囲う方法によりモノルビ方式でルビを振れば (あるいは熟語を囲う ruby タグの中で rb 要素と rt 要素を交互に並べる方式をとれば) 解決しますが、ちょっとバッドノウハウ的というか負けた気がするので、それはやりたくありません。
+</p>
+
+<p>
+よって、
+「HTML + CSS でのルビ付き縦書きは、自分一人で楽しむもの以外には向かないな」
+というのが今のところの結論です。
+</p>
+
+<p>
+Firefox の [プリント] メニューから PDF ファイルを出力しようと思っても、<em>縦書き・横スクロールの長い文書だと、複数枚の用紙へのページ割り付けがうまくできないよう</em>なので (OS の問題ですかね……)、
+「Firefox から出力した PDF ファイルを他人に渡す」
+という道も行き止まりです (横 10m × 縦 21cm みたいな長い巻物のようなカスタムサイズの用紙を設定すればまた別ですが)。
+</p>
+
+<p>
+そうすると、自然と「次の選択肢は LaTeX かな」となる訳ですが、フォント周りをいじるのは私の手には余ります。
+弱ったなぁ、と思いつつ、恐る恐る<a href="https://texwiki.texjp.org/?TeX%E3%81%A8%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88">TeX Wiki の「TeXとフォント」のページ</a>を見ていると、
+「LaTeX の細かい知識に関心がなく、<em>フォント設定の煩わしさを少しでも軽減したければ</em>、この文書は読まずに <em>XeLaTeX や LuaLaTeX</em> への移行を考えましょう。」
+という素晴らしい案内が書いてあるではありませんか。
+ありがたや。
+というわけで、色々検索しつつ (とりあえず XeLaTeX について) 試行錯誤しました (LuaLaTeX は試していません)。
+主に参考にしたページは以下の通りです。
+</p>
+
+<ul>
+<li><em><a href="https://texwiki.texjp.org/?XeTeX">TeX Wiki の XeTeX のページ</a></em>: ここを起点にして調べ物をしました。直接関連するのは「<a href="https://texwiki.texjp.org/?XeTeX#m8e2a0bc">XeLaTeX で日本語</a>」とそのリンク先あたり。<em>禁則処理</em>に関する「<a href="https://texwiki.texjp.org/?XeTeX#yeeccfb4">改行アルゴリズムの比較</a>」はまだ消化しきれていませんが、とりあえずリンクしておきます。</li>
+</li>
+<li><a href="http://zrbabbler.sp.land.to/xelatex.html">XeLaTeX で日本語する件について</a>: ここからたどれる諸々のページも含め、情報量が多くて消化しきれていないのですが、困ったときに頼れる感じがして、ありがたみがあります。<em>Vertical=RotatedGlyphs や RawFeature の設定</em>についても書いてあります。</li>
+<li><a href="https://zrbabbler.hatenablog.com/entry/20130630/1372599219">xeCJK で CheckSingle で BMP 外の文字を書くとアレ</a>: このエントリ自体の主題ではないのですが、<em>「花園明朝B」をフォールバック</em> (メインのフォントではグリフが定義されていない文字に対して使う代打要員的フォント) <em>に指定する</em>方法や、その際に文字に色付けする方法が分かります。実際に使われたフォントを文字ごとに確認するには、色付けしておくのが手っ取り早くて良いですね (テスト中に重宝します)。</li>
+<li><a href="http://suzusime-log.hatenablog.jp/entry/2017/04/15/210327">XeLaTeXだとかな混植が簡単にできて最高だという話</a>: このエントリでは仮名のブロックを定義してかな混植を実現する方法を説明しています。これを参考にして、(小書き文字や約物などの) <em>横書きと縦書きで位置や形が異なる字</em>の集合を定義し、それらの文字には<em>例外的に花園明朝とは別のフォントを指定</em>しました (理由は後述)。</li>
+<li><a href="http://www.kabipan.com/densan/xetex.html">XeTeX メモ (XeLaTex ではない)</a>: XeLaTeX ではないものの、「縦書き」のセクションの説明が、RawFeature の指定をするうえでの参考になります。</li>
+<li><a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_uz">Registered features - <i>definitions and implementations</i></a>: これは <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/">OpenType® specification</a> の一部のようです。RawFeature として指定可能な vert, vrtr, vrt2, vhal, vpal などの意味を確認するのに使えます。<!--花園明朝にはこの辺の属性を指定しても無視されるようですが、他のフォントを使う場合に参照すると良さそうです。--></li>
+<li><a href="http://mirror.las.iastate.edu/tex-archive/macros/xetex/latex/xecjk/xeCJK.pdf">xeCJK宏包</a>: <a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>の説明ドキュメント (中国語)。公式ドキュメントなので一応挙げておきます。</li>
+</ul>
+
+<p>
+さて、XeLaTeX では、大まかには、<em>文字を左に 90 度回転させた状態で横書きをして、用紙全体を右に 90 度回転させる</em>、という仕組みにより、擬似的に縦書きを実現しているそうです (よって画像を入れる場合も \includegraphics[angle=90]{foo.pdf} のように回転させる必要があります) が、この仕組みだと <em>(小書き文字や約物などの) 横書きと縦書きで位置や形が異なる字がおかしなことになります</em>。
+つまり、フォント指定のコマンドのオプションで RawFeature={vertical} と指定して文字を左に 90 度回転させるだけでは駄目で、<em>縦組み用のグリフがあればそれを使うように Vertical=RotatedGlyphs と指定する必要</em>が生じます。
+</p>
+
+<p>
+ですが、私が使いたい肝心の<em>花園明朝がこの指定に対応していない</em>ようなのです。
+</p>
+
+<code>\setCJKmainfont[Vertical=RotatedGlyphs,RawFeature={vertical}]{HanaMinA}</code>
+
+<p>
+と指定して xelatex コマンドで LaTeX ソースファイルをコンパイルすると、次のような警告が出ました。
+</p>
+
+<code>Package fontspec Warning: OpenType feature 'Vertical=RotatedGlyphs' (vrt2) not
+(fontspec)                available for font 'HanaMinA' with script 'CJK' and
+(fontspec)                language 'Default'.</code>
+
+<p>
+それでも PDF ファイル自体は生成されますが、小書き文字や約物などが横書き用のグリフのままです。
+<a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_uz#vrt2">vrt2</a>, <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_uz#vert">vert</a>, <a href="https://docs.microsoft.com/en-us/typography/opentype/spec/features_uz#vrtr">vrtr</a> の説明を見つつ、RawFeature に指定する属性を書き換えたりして試行錯誤しましたが、どうもうまくいきません。
+この問題は <a href="https://en.wikipedia.org/wiki/List_of_CJK_fonts#Pan-CJK">Wikipedia</a> にも書かれているので、多分ほかの人たちもぶつかったのでしょうね。
+というわけで、何か対策を立てねばなりません。
+</p>
+
+<p>
+まず考えられるのは、Unicode の U+FE10 から U+FE48 のあたりで定義されている「<span style="color: red">︑︒︙︵︶﹁﹂﹃﹄︽︾</span>」などの縦書き用グリフの文字を LaTeX ソースファイルで使うことです。
+小書きの仮名にはこうした縦書き専用文字が見つからないので、あまり良い対策でないことは自明ですが、印刷で仮名を小書きにしていなかった時代の本のデータ起こしが目的なら、この対策でも構わないかもしれません。
+</p>
+
+<p>
+次に考えたのが、<em>縦書きで問題が生じるこれらの文字のみ、別のフォントを使う</em>ことです。
+いわゆる「絶対フォント感」のある人には違和感を感じさせてしまう仕上がりになるかもしれませんが、そこは目をつぶることにします。
+適当な明朝系のフォント (たとえば游明朝体) を選んで、かな混植と同様のことを行ってみました。
+これで<em>実際にうまくいきました</em> (tategumimoji は適当につけた名前です)。-vhal は好みにより +vhal として構いません。
+</p>
+
+<code>\xeCJKDeclareSubCJKBlock{tategumimoji}{
+  `、, `。, `・, `！, `？, `〜, `ー, `…, 
+  `〝, `〞, `‘, `’, `“, `”, 
+  `「, `」, `『, `』, `（, `）, 
+  `【, `】, `〖, `〗, `［, `］, 
+  `〈, `〉, `《, `》, `〘, `〙, `〔, `〕, `｛, `｝, 
+  `ぁ, `ぃ, `ぅ, `ぇ, `ぉ, `っ, `ゃ, `ゅ, `ょ,
+  `ァ, `ィ, `ゥ, `ェ, `ォ, `ッ, `ャ, `ュ, `ョ,
+   `；, `：
+}
+\setCJKmainfont[tategumimoji,Vertical=RotatedGlyphs,RawFeature={vertical:-vhal}]{YuMin-Medium}</code>
+
+<p>
+というわけで一件落着、めでたしめでたし、と言いたいところですが、実はまだ問題があります。
+<em>禁則処理がうまくはたらいていないのです。
+平気で行頭に句読点が来ます。</em>
+ですので、現段階ではこの瑕疵が問題にならない私的用途にしか向いていません。
+もちろん、禁則処理ができていない箇所の前後に手作業で微妙なスペースを入れて調整するという手もありますが、ちょっと気が遠くなるので現実的ではないですね。
+また、TeX Wiki の<a href="https://texwiki.texjp.org/?XeTeX#yeeccfb4">改行アルゴリズムの比較</a>をちゃんと読めば改善策が見つかるのかもしれませんが、もう疲れたので今はここまでにしておきたいと思います (散々ひっぱっておいてその落ちか)。
+</p>
+
+<h2>ちょっとソースファイルと組版結果を見たいわね</h2>
+<p>
+……という奇特な御仁がおいでやもしれぬので、ソースファイルと組版結果を公開しておきますね。
+</p>
+
+<p>
+詳しくは<a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/">リポジトリ</a>の中を御覧ください。
+パッケージファイル (というほど立派なものではない、
+<a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/blob/1af339c47c02887883ee527ad8aa6ab7e98d2c48/xelatexhanaminvertical.sty">現状の .sty ファイル</a>) や、
+<a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/blob/1af339c47c02887883ee527ad8aa6ab7e98d2c48/sample/vol_082.pdf">現状の組版結果</a> (のプレビュー) などが見られます (プレビューではリンクが効かないようですが)。
+備忘録がてら、かなり詳細なコメントをつけたので、どういう意図で何をしているのかは、大体お分かりになるかと思います。
+<a href="https://twitter.com/pi__yo__ko">Twitter</a> で御意見などをいただければ幸いです。
+</p>
+
+
+<h2>ところで HTML + CSS だと実際はどうなの?</h2>
+<p>
+……という詳しい話は、気が向いたら今度書くかもしれません。
+</p>
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+
+</html>
+
+
