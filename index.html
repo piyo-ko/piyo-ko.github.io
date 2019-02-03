@@ -9,21 +9,38 @@
 </head>
 
 <body>
+
+<header>
 <h1>くるくるくるくる🌀あっちへふらふら、こっちへふらふらします</h1>
 <h1 lang="en">swirling around and around, and drifting here and there</h1>
+<nav>[
+<a href="#eng">English</a> | 
+<a href="https://twitter.com/pi__yo__ko">Twitter</a>
+]</nav>
+</header>
 
-<nav><a href="#eng">English</a></nav>
 
-<div class="blue center">
+<section id="ja_left">
+
+<section class="subsec blue">
 <h2>翻訳とか英語とか</h2>
 <ul>
 <li>この頃は少し<a href="https://developer.mozilla.org/ja/profiles/piyo-ko">MDN の翻訳</a>もしている。割と楽しい。</li>
 <li>SICP を翻訳してみた (<a href="SICP/00_cover.html">表紙</a>・<a href="SICP/04_toc.html">目次</a>)。問題は解いていないものが多い。推敲もまだ不十分だが公開している。</li>
 <li>「<a href="https://github.com/piyo-ko/bad-data-guide/blob/master/README_ja.md">Quartzの駄目データの手引き</a>」というのも訳してみた。統計処理の非専門家向け。1項目ずつ独立に読んでも大丈夫。</li>
 <li>英語についての<a href="en/index.html">あれこれ</a>を少しずつまとめているところ。そんなに高いレベルのことではないが、微妙に隙間にはさまってなかなか良い表現が出てこなくて、なんだかもやもやしたままのことなど。<a href="en/0002_reference_sources.html">便利な情報源</a>もまとめた。</li>
-</ul></div>
+</ul>
+</section>
 
-<div class="green center">
+<section class="subsec orange">
+<h2>病気をめぐる色々</h2>
+<ul>
+<li>入院の際の持ち物やお金のことなどについて、<a href="lifehack/0000_hospitalization.html">入院経験者として書いてみた</a>。個人差のある事柄だと思うので参考にならないかもしれないが、ちょっとした不便や不快を防ぐお役に立てれば。</li>
+<li><a href="tools/okusuri_techo.html">紙の「お薬手帳」を画像認識</a>したり、<a href="tools/query_input_page.html">薬の名前の曖昧検索</a>をして同一成分の薬のリストを見たり、といったことも試している。</li>
+</ul>
+</section>
+
+<section class="subsec green">
 <h2>気ままに観察するよ</h2>
 <ul>
 <li><a href="misc/so_long_white_technology.html">さようならホワイトテクノロジー、いままで肴をありがとう</a></li>
@@ -32,22 +49,52 @@
 <li><a href="misc/patent_watching_index.html">特許・商標出願のお気楽観察会</a>も試しに始めてみた。</li>
 <li>ついでに、誰とは言わぬが嘘を言い散らす人が多い今日この頃なので、<a href="misc/patterns_of_fakes.html">騙す方が楽だよね (小並感)</a>という話も書いた。</li>
 <li>株主の議決権行使サイトのセキュリティが素人から見ても何だか心配な感じなので、レポートした (<a href="misc/vote_at_web54.html">第一弾</a>・<a href="misc/vote_at_it-soukai.html">第二弾</a>・<a href="misc/vote_at_evote.html">第三弾</a>)。</li>
-</ul></div>
+</ul>
+</section>
 
+<section class="subsec blue">
+<h2>低空飛行で自炊する</h2>
+<p>
+料理も皿洗いも嫌いながら自炊派。
+「これはひどい」というレベルをさまよっているが、皆様の自炊へのハードルを下げるお役に立つかも、と思って（というのも嘘ではないが、自分用の備忘録も兼ねて）、<a href="lifehack/0003_cooking_index.html">自炊の実態を少し公開してみる</a>。
+</p>
+</section>
 
-<div class="orange left">
+<section class="subsec orange">
+<h2>お遊び</h2>
+<ul>
+<li><a href="fun/eto.html">十干十二支</a>を環状に並べた。ちょっとぐるぐるして遊べる。</li>
+<li>文字の周りに鳥を飛ばして遊ぶ「<a href="fun/tori_moji.html">鳥文字</a>」です。実際はどの文字でも飛ばせます。</li>
+<li><a href="fun_math/Euler-magic-square.html">オイラーの魔方陣</a>。1から順に「この数はどこに配置されるのかな?」と追っていくと、最後には、「え、なにこの魔方陣すごい……っていうかオイラーやっぱりすごい」となる。多分。</li>
+<li>プラレールで樹の形を描く<a href="https://github.com/jun-mitani/railway_tree_animation">デモ</a>が綺麗だったので、<a href="demo/railway_tree_animation.html">色づけ</a>してみた。</li>
+<li><a href="fun_math/collapsible_formulae.html">式の展開の過程の表示・非表示を切り替える</a>例を作ってみた。教材がこうなっていたら割と便利かなと思う。</li>
+<li>「<a href="fun_math/prime_date.html">今日は素数日かな?</a>」と確かめて結果を表示。好きな日付も指定可能。</li>
+<li>絵文字による<a href="fun/moon.html">月の満ち欠け</a>。</li>
+<li><a href="fun_math/frac_1_9801.html">1/9801</a>の数字の並びがちょっと楽しい (小並感)。</li>
+<li>素人くさいが、<a href="fun/crossword_001.html">コンピュータ関連用語のクロスワードパズル</a>を作ってみた。</li>
+<li><a href="fun/onomatopoeia.html">「ほげほげ」みたいな繰り返し言葉を順列組み合わせ的に生成するページ</a>。</li>
+<li><a href="fun/eto_emoji.html">干支の絵文字</a> (ヒエログリフも含む)。</li>
+<li><a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換する</a>お笑いネタ。</li>
+</ul>
+</section>
+
+<section class="subsec green">
+<h2>政治ネタ</h2>
+<ul>
+<li><a href="misc/constitution.html">現憲法を読んで、素人の私でも読みやすいように表示を工夫した</a>。皆様にも是非、胸熱な<a href="misc/constitution.html#chap10">97条</a>を読んでいただきたい。<a href="misc/constitution.html#chap03">3章</a>もおすすめ。一部分を読んだだけでげっそりする自民党の憲法改正草案とは大違い。
+</li>
+<li>お笑いネタとして、<a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換するページ</a>も作ってみた。なんなんですかね、あの日本語……。</li>
+</ul>
+</section>
+</section>
+
+<section id="ja_right">
+<section class="subsec orange">
 <h2>Mac のこと</h2>
 <p>ぼちぼち<a href="Mac/index.html">備忘録的なもの</a>を書いていこうかな。</p>
-</div>
+</section>
 
-<div class="blue right">
-<h2>病気をめぐる色々</h2>
-<ul>
-<li>入院の際の持ち物やお金のことなどについて、<a href="lifehack/0000_hospitalization.html">入院経験者として書いてみた</a>。個人差のある事柄だと思うので参考にならないかもしれないが、ちょっとした不便や不快を防ぐお役に立てれば。</li>
-<li><a href="tools/okusuri_techo.html">紙の「お薬手帳」を画像認識</a>したり、<a href="tools/query_input_page.html">薬の名前の曖昧検索</a>をして同一成分の薬のリストを見たり、といったことも試している。</li>
-</ul></div>
-
-<div class="green center">
+<section class="subsec green">
 <h2>ほんのりプログラミング</h2>
 <ul>
 
@@ -79,9 +126,10 @@
 
 <li>外国語学習用の<a href="https://github.com/piyo-ko/get_tailored_example_sentences">例文抽出ツール</a>を作り途中。ブラウザ版の<a href="demo/get_tailored_example_sentences/filter.html">デモページ</a>あり。</li>
 </ul>
-</div>
+</section>
 
-<div class="orange center">
+
+<section class="subsec blue">
 <h2>資料</h2>
 <ul>
 <li>他の資料的ページと毛色が違うが、<a href="fun/shijitsugan_link.html">気軽に資治通鑑を眺めるためのリンク集</a>も作ってみた</li>。</li>
@@ -89,44 +137,12 @@
 <li>英字、かな、キリル文字、ハングル (の構成要素)、アラビア文字をまとめてキートップに描いた図 (<a href="comp/ref/keyboard.pdf">PDF</a>)。キーの割り当ては手元の MacBook Pro のもの。ラテン文字以外の文字を使う外国語をかじるとキーボードから入力してみたくなるのだが、Mac の「キーボードビューア」だと使い勝手がいまいちなので、こういう図があれば便利かも、と思って作ってみた。本当に便利なのかは謎。</li>
 <li><a href="comp/ref/one-byte-values.html">1バイトの値の早見表</a>。10進数 (符号なし・あり)、16進数、2進数、ASCII文字。符号つき整数の値も含めて1箇所にまとめた表ってあんまり見ない気がするので、あったら便利かな、と思って。</li>
 </ul>
-</div>
+</section>
 
-<div class="blue center">
-<h2>お遊び</h2>
-<ul>
-<li><a href="fun/eto.html">十干十二支</a>を環状に並べた。ちょっとぐるぐるして遊べる。</li>
-<li>文字の周りに鳥を飛ばして遊ぶ「<a href="fun/tori_moji.html">鳥文字</a>」です。実際はどの文字でも飛ばせます。</li>
-<li><a href="fun_math/Euler-magic-square.html">オイラーの魔方陣</a>。1から順に「この数はどこに配置されるのかな?」と追っていくと、最後には、「え、なにこの魔方陣すごい……っていうかオイラーやっぱりすごい」となる。多分。</li>
-<li>プラレールで樹の形を描く<a href="https://github.com/jun-mitani/railway_tree_animation">デモ</a>が綺麗だったので、<a href="demo/railway_tree_animation.html">色づけ</a>してみた。</li>
-<li><a href="fun_math/collapsible_formulae.html">式の展開の過程の表示・非表示を切り替える</a>例を作ってみた。教材がこうなっていたら割と便利かなと思う。</li>
-<li>「<a href="fun_math/prime_date.html">今日は素数日かな?</a>」と確かめて結果を表示。好きな日付も指定可能。</li>
-<li>絵文字による<a href="fun/moon.html">月の満ち欠け</a>。</li>
-<li><a href="fun_math/frac_1_9801.html">1/9801</a>の数字の並びがちょっと楽しい (小並感)。</li>
-<li>素人くさいが、<a href="fun/crossword_001.html">コンピュータ関連用語のクロスワードパズル</a>を作ってみた。</li>
-<li><a href="fun/onomatopoeia.html">「ほげほげ」みたいな繰り返し言葉を順列組み合わせ的に生成するページ</a>。</li>
-<li><a href="fun/eto_emoji.html">干支の絵文字</a> (ヒエログリフも含む)。</li>
-<li><a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換する</a>お笑いネタ。</li>
-</ul>
-</div>
-
-<div class="green left">
-<h2>政治ネタ</h2>
-<ul>
-<li><a href="misc/constitution.html">現憲法を読んで、素人の私でも読みやすいように表示を工夫した</a>。皆様にも是非、胸熱な<a href="misc/constitution.html#chap10">97条</a>を読んでいただきたい。<a href="misc/constitution.html#chap03">3章</a>もおすすめ。一部分を読んだだけでげっそりする自民党の憲法改正草案とは大違い。
-</li>
-<li>お笑いネタとして、<a href="fun/abenizer.html">入力テキストを安倍氏の答弁風に変換するページ</a>も作ってみた。なんなんですかね、あの日本語……。</li>
-</ul>
-</div>
-
-<div class="orange right">
-<h2>低空飛行で自炊する</h2>
-<p>
-料理も皿洗いも嫌いながら自炊派。
-「これはひどい」というレベルをさまよっているが、皆様の自炊へのハードルを下げるお役に立つかも、と思って（というのも嘘ではないが、自分用の備忘録も兼ねて）、<a href="lifehack/0003_cooking_index.html">自炊の実態を少し公開してみる</a>。
-</p></div>
+</section>
 
 
-<div class="blue center" id="eng" lang="en">
+<section id="eng" lang="en" class="subsec blue">
 <h2>Drawing tool for pedigree charts</h2>
 <ul>
 <li><a href="https://piyo-ko.github.io/pedigree/pedigree-en.html">A tool for drawing a pedigree chart (family tree chart) in SVG format</a>, and its <a href="https://github.com/piyo-ko/pedigree">breaf description</a> and <a href="https://piyo-ko.github.io/pedigree/manual_en.html">detailed manual</a> are available.</li>
@@ -154,10 +170,11 @@
 <li><a href="comp/ref/keyboard.pdf">A keyboard diagram</a> (in PDF): A keyboard (of MacBook Pro) is illustrated so that each key top is associated with characters of five languages (more specifically, a Latin character in both lowercase and uppercase, one or two Japanese <i>hiragana</i> characters, a Cyrillic character in both lowercase and uppercase, one or two components of Hangul, and an Arabic character).</li>
 <li><a href="comp/ref/one-byte-values.html">A quick reference to one-byte values</a>.</li>
 </ul>
-</div>
+</section>
 
-<hr style="border: 2pt royalblue inset;">
-<div class="footnote">
+
+<footer>
+<hr>
 <p lang="ja">
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>
 本サイトは、(たとえば対訳版SICPのページのように) 別段の断りのあるページを除いて、<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/deed.ja">クリエイティブ・コモンズ 表示 - 非営利 4.0 国際 ライセンス</a>のもとで提供されています。
@@ -167,7 +184,7 @@
 This website is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License</a> except as otherwise specified.
 If you have any message, please send it to <a href="https://twitter.com/pi__yo__ko" target="_blank">my Twitter account</a>.
 </p>
-</div>
+</footer>
 
 </body>
 

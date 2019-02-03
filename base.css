@@ -6,8 +6,43 @@ body {
 	color: hsl(240, 100%, 12%);
 	padding-top: 1ex;
 	padding-bottom: 2ex;
-	padding-left: 0;
-	padding-right: 0;
+	padding-left: 2em;
+	padding-right: 2em;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto auto auto auto;
+  grid-gap: 1em 1em;
+}
+
+header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+#ja_left {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+#ja_right {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+#eng {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+footer {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 5;
 }
 
 ::selection {
@@ -31,74 +66,37 @@ a:hover {
 	color: hsl(90, 100%, 60%);
 }
 
-div {
-	overflow: auto;
-	padding: 4pt;
-}
-/*
-div.center {
-	max-height: 15ex;
-}
-*/
-div.left, div.right {
-	display: inline-block;
-	width: 40%;
-	height: 15ex;
-	vertical-align: top;
-}
-@media print {
-	div {
-		height: auto;
-		max-height: auto;
-	}
-}
-div.left {
-	margin-left: 5%;
-	margin-right: 0;
-}
-div.right {
-	margin-left: 5%;
-}
-div.center {
-	display: block;
-	margin-top: 10pt;
-	margin-bottom: 10pt;
-	width: 80%;
-	margin-left: 9%;
-}
-div.footnote {
+footer {
 	font-style: italic;
-	border: none;
-	color: black;
-	margin-left: 5%;
-	margin-right: 5%;
-	margin-top: 6pt;
-	padding: 12pt;
+    color: black;
 }
-div.footnote p {
+footer p {
 	margin-top: 6pt;
 }
 
-div > p {
+section.subsec {
+  margin-bottom: 1em;
+}
+section.subsec > p {
 	display: inline;
 }
-div > ul {
+section.subsec > ul {
 	display: inline;
 	list-style: none;
 	margin-left: 0;
 	padding-left: 0;
 }
-div > ul > li {
+section.subsec > ul > li {
 	display: inline;
 	margin-right: 1ex;
 }
-div.blue > ul > li::before {
+section.subsec.blue > ul > li::before {
 	content: "🍒 ";
 }
-div.green > ul > li::before {
+section.subsec.green > ul > li::before {
 	content: "🍄 ";
 }
-div.orange > ul > li::before {
+section.subsec.orange > ul > li::before {
 	content: "⛄️ ";
 }
 p {
@@ -118,8 +116,8 @@ h1 {
 	padding-right: 1em;
 	padding-left: 1em;
 	text-align: right;
-	margin-left: 2%;
-	margin-right: 2%;
+	margin-left: 0;
+	margin-right: 0;
 	margin-bottom: 0;
 }
 h1:lang(en) {
@@ -157,17 +155,17 @@ h2::after {
 }
 .orange {
 	border-color: hsl(55, 100%, 60%);
-	background: hsla(35, 100%, 65%, 0.6);
+	background: hsla(35, 100%, 65%, 0.4);
 	color: hsl(15, 100%, 20%);
 }
 .green {
 	border-color: hsl(85, 100%, 70%);
-	background: hsla(105, 100%, 65%, 0.6);
+	background: hsla(105, 100%, 65%, 0.4);
 	color: hsl(125, 100%, 16%);
 }
 .blue {
 	border-color: hsl(230, 80%, 70%);
-	background: hsla(250, 100%, 80%, 0.6);
+	background: hsla(250, 100%, 80%, 0.4);
 	color: hsl(270, 100%, 20%);
 }
 
@@ -176,4 +174,8 @@ nav {
 }
 nav > a {
 	padding: 4pt;
+}
+
+hr {
+  border: 2pt royalblue inset;
 }
