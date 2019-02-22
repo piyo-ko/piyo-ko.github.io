@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: Firefox の複数のインスタンスを同時に動かす</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/0014_multiple_instances_of_Firefox.html" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2>Firefox の複数のインスタンスを同時に動かす</h2>
+
+<p>
+Firefox のインスタンスを二つ同時に動かしたいと思うことがあったので (別々のタブで開きたいとか、別々のウィンドウで開きたいとかではない)、
+すでに Firefox を起動した状態で、ターミナルで
+</p>
+
+<code>$ open -a Firefox.app -n</code>
+
+<p>
+と打ってみたら、
+「すでに別の Firefox を開いています。同時に複数の Firefox を開くことはできません。」
+とアラートが出て、そこで「終了」ボタンを押すしかなかった (ちなみに Safari だとこのやり方で二つ目のインスタンスを起動できる)。
+</p>
+
+
+<p>
+Mozilla のサイトで<a href="https://developer.mozilla.org/ja/docs/Mozilla/Command_Line_Options">コマンドラインオプションのページ</a>を見て、
+<code>-new-instance</code> や <code>-no-remote</code> なるオプションがあるのを知るが、単に
+</p>
+
+<code>$ open -a Firefox.app --args -new-instance</code>
+
+<p>
+としても駄目で、起動中の Firefox のウィンドウがフォアグラウンドになるだけだった。
+</p>
+
+<code>$ open -a Firefox.app --args -no-remote</code>
+
+<p>
+も試してみたが、同様であった。
+仕方がないので、プロファイルを別途用意するところから真面目に行うことにする。
+</p>
+
+<code>$ cd /Applications/Firefox.app/Contents/MacOS/
+$ ./firefox -CreateProfile MySecondProfile</code>
+
+<p>
+なおここで <code>MySecondProfile</code> は適当につけた任意の名前である。
+こうして準備した後に、
+</p>
+
+<code>$ ./firefox -new-instance -P MySecondProfile</code>
+
+<p>
+と実行したら、<code>Can't find symbol 'GetGraphicsResetStatus'.</code> などとエラーメッセージが出たが、一応、二つ目のインスタンスで Firefox を起動できた。
+</p>
+
+<p>
+……のではあるが、うっかりフォアグラウンドで起動したのでよろしくない。
+そこで <code>~/.bashrc</code> に
+</p>
+
+<code>alias fox2='/Applications/Firefox.app/Contents/MacOS/firefox -new-instance -P MySecondProfile &'</code>
+
+<p>
+などと適当な名前でエイリアスを作って、バックグラウンド指定を忘れないようにしてみた。
+これで <code>fox2</code> と打つだけで Firefox の二つ目のインスタンスを起動できる (エラーメッセージは出てくるけれど……)。
+</p>
+
+<p>
+なお、こうして作った新規プロファイルで Firefox を起動したら、別途、設定を行ったり、アドオンをインストールしたりする必要がある。
+Firefox の二つのインスタンスを見分けられるように、適宜テーマをインストールしておくと良いと思う。
+</p>
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
