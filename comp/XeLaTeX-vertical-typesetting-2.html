@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>XeLaTeX で花園明朝フォントを使って総ルビの縦書きをして、無事、禁則処理もできました、の巻</title>
+<link rel="canonical" href="https://piyo-ko.github.io/comp/XeLaTeX-line-breaking.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+<link rel="stylesheet" href="about_xelatex_and_xeCJK.css" type="text/css">
+</head>
+
+<body class="main-text-only">
+<h1 id="top">XeLaTeX で花園明朝フォントを使って総ルビの縦書きをして、無事、禁則処理もできました、の巻</h1>
+
+<h2 id="about">このページは何?</h2>
+<p>
+このページは、先日の「<a href="XeLaTeX-vertical-typesetting.html">HTML + CSS だとブラウザ依存性がつらいので XeLaTeX で縦書きしてみた (が、まだ要改善)</a>」という記事 (.sty ファイルは <a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/">リポジトリ</a>に置いてあります) の続きです。
+</p>
+
+<p>
+先日書いた方法では、XeLaTeX で<a href="http://fonts.jp/hanazono/">花園明朝</a>を使って縦書きするところまではなんとかできたけれども、禁則処理がどうもうまくはたらいていないのでした。
+試行錯誤した末、<em>禁則処理もうまくいった</em>ので、備忘録を残しておきます。
+</p>
+
+<p>
+だらだら書いていますが、
+<a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/blob/e5e943ffa10d2661728b80932c26e294cc712db3/xelatexhanaminvertical.sty">結果だけ御覧になる</a>のでも、なんとなく意図はつかめるかと思います。
+</p>
+
+<h2 id="outline">試行錯誤の概要</h2>
+<p>
+約物と小書きの仮名が縦書き用グリフになってくれない花園明朝を使うために、仮名混植を真似てごにょごにょする代わりに、この問題に特化した (ように見える) 専用のオプション (<a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>のもの) を使うことにし、それに必要な設定をしました。
+それにともない、結果として、小書きの仮名の禁則処理も改善されました。
+</p>
+
+<p>
+しかし、約物の禁則処理がうまくいかなかったり、脚注番号の直前で改行されたりという問題が残っていました。
+そこで、<a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>のグルー関連のオプション等をうまく設定することで禁則処理ができるようになるのではないかと思って試行錯誤していたのですが、ほとんど迷走していただけでした (多少は禁則処理がましになる、という程度)。
+また、行末に空白を許せば禁則処理がうまくいくかと思って <a href="https://ctan.org/pkg/ragged2e">ragged2e パッケージ</a>も試してみましたが、これもうまくいきませんでした。
+</p>
+
+<p>
+あれこれ試した挙句に気づいたのが、<a href="https://ctan.org/pkg/pxrubrica">pxrubrica パッケージ</a>の設定で<em>和文ゴースト処理を有効にすることで禁則処理がうまくいく</em>、ということでした。
+これが最後の決め手になった (これなしでは、いくらグルーの調整をしてもうまくいかなかった) 理由は、多分、総ルビだから (かつ、脚注番号があちこちについているから) ではないかな、とぼんやり推測しています (が、違うかもしれません)。
+</p>
+
+<h2 id="about_translation">マニュアルからの引用について</h2>
+<p>
+以下では、迷走部分は飛ばして、結果的に採用した設定について詳細を書いてゆきますが、この中で <a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>の<a href="http://mirrors.ctan.org/macros/xetex/latex/xecjk/xeCJK.pdf">マニュアル</a>を引用した箇所があります。
+<a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>の<a href="http://mirrors.ctan.org/macros/xetex/latex/xecjk/xeCJK.pdf">マニュアル</a>は、中国語のものしかないので、2018/04/30 付の v3.7.1 からの抜粋に拙訳 (斜体部分) を添える形で引用しました。
+</p>
+<p>
+とは言っても、わたしはあまり中国語が読めるわけではなくて、中国語のままだと読み返すのがしんどいので自分用のメモとして日本語がほしいな、くらいの気持ちで作った訳文なので、信用しすぎては駄目です。
+むしろ、<a href="https://twitter.com/pi__yo__ko">間違いの御指摘などをいただければ幸いです</a>。
+</p>
+<!--
+<p>
+なお、以下に載せていない部分 (迷走中に試したオプション等) についても<a href="read_xeCJK_manual.html">少し訳したものがある</a>ので、御興味がおありの方はそちらも御笑覧くださいませ。
+</p>
+-->
+
+<h2 id="PunctFamily_and_xeCJKDeclareCharClass">花園明朝フォントでは小書き文字と約物が縦書き用のグリフにならないという問題への解決策</h2>
+
+<p>
+まず、約物と小書き文字に関する方針変更について書きます。
+一見、禁則処理とは関わりのなさそうなところから話を始めますが、<em>かな混植を真似た方式をやめて別の方式にしたら、実は禁則処理の点でも良かった</em>、というところが味噌です。
+</p>
+
+<h3 id="set_PunctFamily">まずは約物について</h3>
+
+<p>
+<a href="XeLaTeX-vertical-typesetting.html">前回の記事</a>に書いたとおり、小書き文字や約物だけ別フォントを使うために、かな混植を真似た方式を使っていたのですが、それをやめました。
+まさにこの目的に特化したオプションが「3.1 <span lang="zh">宏包选项</span> (パッケージオプション)」節にあることに気づいたからです。
+</p>
+
+<code id="PunctFamily">PunctFamily = {⟨<em>false</em>|family⟩}</code>
+
+<blockquote lang="zh">
+默认情况下，CJK标点符号的字体与CJK正文一致，PunctFamily用于单独对标点符号设置字体。⟨family⟩需要使用随后说明的<code>\setCJKfamilyfont</code>或<code>\newCJKfontfamily</code>预先定义。<code>false</code>表示取消本选项的作用，让标点符号字体与正文一致。
+</blockquote>
+
+<p class="trans">
+デフォルト状態では、CJK の約物の字体は、CJK の本文 (の字体) と一致しています。PunctFamily は、<em>約物に対して独立に字体を設定する</em>のに用います。
+⟨family⟩ は、後述の <code>\setCJKfamilyfont</code> または <code>\newCJKfontfamily</code> を用いて、予め定義しておく必要があります。
+<code>false</code> は、このオプションの作用を打ち消して、約物の字体を本文 (の字体) と一致させることを示します。
+</p>
+
+<p>
+これはもしや「花園明朝フォントでは小書き文字と約物が縦書き用のグリフにならない」という問題を解決するための専用コマンドなのでは、と疑いたくなるくらいドンピシャです。
+かな混植を真似た方法 (<a href="XeLaTeX-vertical-typesetting.html">前回の記事</a>を参照) よりも、こちらを使った方が良さそうです。
+</p>
+
+<p>
+では、このオプションはどのコマンドで設定するのかというと、<code>\xeCJKsetup</code> コマンドで設定します。
+</p>
+
+<code id="xeCJKsetup">\xeCJKsetup {⟨key<sub>1</sub>⟩=⟨val<sub>1</sub>⟩,⟨key<sub>2</sub>⟩=⟨val<sub>2</sub>⟩, ...}</code>
+
+<blockquote lang="zh">
+其中⟨key<sub>1</sub>⟩,⟨key<sub>2</sub>⟩是设置选项，而⟨val<sub>1</sub>⟩,⟨val<sub>2</sub>⟩则是对应选项的设置内容。多个选项可以在一个语句中完成设置。
+</blockquote>
+
+<p class="trans">
+ここで、<em>⟨key<sub>1</sub>⟩, ⟨key<sub>2</sub>⟩ は設定オプションで、⟨val<sub>1</sub>⟩, ⟨val<sub>2</sub>⟩ は対応するオプションの設定内容</em>です。
+複数のオプションを一つの文で設定し終えることができます。
+</p>
+
+<p>
+<code>\usepackage{xeCJK}</code> と宣言するときにパッケージオプションを指定してもよいし、そうする代わりに後から <code>\xeCJKsetup</code> でオプションを設定することもできる仕組みになっています。
+ただ、<code>PunctFamily</code> オプションに関しては、上記のとおり「⟨family⟩ は、後述の <code>\setCJKfamilyfont</code> または <code>\newCJKfontfamily</code> を用いて、予め定義しておく必要」があるので、後から <code>\xeCJKsetup</code> で設定するしかありません。
+</p>
+
+<p>
+ではその <code>\newCJKfontfamily</code> とは何か、というと、「3.2 <span lang="zh">字体设置与选择</span> (フォントの設定およびオプション)」節に次のようにあります。
+</p>
+
+<code id="newCJKfontfamily">\newCJKfontfamily [⟨family⟩] \⟨font-switch⟩{⟨font name⟩}[⟨font features⟩] 或
+\newCJKfontfamily [⟨family⟩] \⟨font-switch⟩[⟨font features⟩] {⟨font name⟩}
+</code>
+
+<blockquote lang="zh">
+声明新的CJK字体族⟨family⟩并指定字体，并定义\⟨font-switch⟩，在文档中可以使用它来切换CJK字体族。可以不必指定⟨family⟩，这时候⟨family⟩将等于⟨font-switch⟩。
+</blockquote>
+
+<p class="trans">
+<em>新たな CJK フォントファミリ ⟨family⟩ を宣言する</em>とともに、フォントを指定し、かつ、\⟨font-switch⟩ を定義して、ファイル内でそれを使って CJK フォントファミリを切り換えられるようにします。
+必ずしも ⟨family⟩ を指定しなくてもよく、この場合は、⟨family⟩ は ⟨font-switch⟩ と等しくなります。
+</p>
+
+<p>
+つまり、ここでの ⟨family⟩ と \⟨font-switch⟩ は自分が好きにつける名前であり、⟨font name⟩ はその新たな名前で指す既存フォントの名前 (たとえば <code>YuMin-Medium</code>) であり、⟨font features⟩ は、たとえば <code>Vertical=RotatedGlyphs,RawFeature={vertical:-vhal}</code> といった特性、というわけです。
+</p>
+
+<p>
+このオプションによって、游明朝体 (またはその他の適当なフォント) に上記のような縦書き用の特性を適宜設定し、それに対して適当な名前をつければ (そしてその名前を上述の <code>PunctFamily</code> オプションの値として指定すれば)、約物に対して、本文で使う花園明朝フォントとは別のフォントを使えるようになります。
+具体的には、たとえば以下のように書くことで、(本文では花園明朝を使いつつも) 約物 (花園明朝では縦書き用のグリフにならない文字) では游明朝体を使うことが可能となります (yakumonofont と yakumono は適当につけた名前です)。
+</p>
+
+<code>\newCJKfontfamily [yakumonofont] \yakumono{YuMin-Medium}[Vertical=RotatedGlyphs,RawFeature={vertical:-vhal}]
+\xeCJKsetup{
+  PunctFamily = yakumonofont
+}
+</code>
+
+<h3 id="use_xeCJKDeclareCharClass">小書きの仮名を約物あつかいにする (と、グリフも縦書き用になるし、禁則処理の面でも良い)</h3>
+
+<p>
+ところで、<a href="XeLaTeX-vertical-typesetting.html">前回も書いたとおり</a>、花園明朝を使って縦書きすると、約物だけでなく小書きの仮名も問題になるのでした。
+この問題を解決するために、<em>小書きの仮名を、閉じ括弧の類 (つまり行頭にくることが禁止される) 約物の一種であるかのように定義しました</em>。
+これにより、縦書き用のグリフが使えるフォントを (約物と同様に) 小書きの仮名にも適用でき、かつ、小書きの仮名が行頭にくることも禁止できます。
+なんだか御都合主義っぽく見えますが、そういうコマンドがあったので、利用しない手はありません。
+</p>
+
+
+<p>
+具体的には、「3.4 <span lang="zh">设置CJK字符范围</span> (CJK 文字範囲を設定する)」節に以下のようにあります。
+</p>
+
+
+<code id="xeCJKDeclareCharClass">\xeCJKDeclareCharClass  {⟨class⟩} {⟨class range⟩}
+\xeCJKDeclareCharClass* {⟨class⟩} {⟨class range⟩}
+</code>
+
+<blockquote lang="zh">
+⟨class range⟩的格式和3.3节的⟨block range⟩相同。⟨class⟩的有效值见源代码（第5.4节）。xeCJK已经支持Unicode中所有CJK文字和标点。一般来说，不要轻易改变字符类别。带星号的命令除了设置字符类别以外，为了确保标点处理的正确性，还重置标点符号所属的字符类。
+</blockquote>
+
+<p class="trans">
+⟨class range⟩ の形式は 3.3 節の ⟨block range⟩ と同じです。
+⟨class⟩ の有効な値は、ソースコードの中に見えます (5.4節)。
+xeCJK はすでに Unicode におけるすべての CJK 文字と約物をサポートしています。
+一般には、文字種別を軽率に変更してはいけません。
+アスタリスク付きのコマンドは、文字種別を設定するだけでなく、約物の処理 (禁則処理) の正確性を確保するために、約物の属する文字種別も置換します (訳注: 一応訳してみたが、最後の文はよく分からない)。
+</p>
+
+<p>
+ここで参照されている ⟨class⟩ の有効な値を「5.4 <span lang="zh">字符类别设定</span> (文字種別の設定)」節から抜粋すると、次のとおりです。
+</p>
+
+
+<blockquote lang="zh">
+xeCJK需要以下字符类别用于字符输出。其中Default、CJK、FullLeft、FullRight、Boundary为XƎTEX中预定义的类别，xeCJK新增加了HalfLeft、HalfRight、NormalSpace和CM。其中异体字选择符(Ideographic Variation Selectors)<sup>7</sup>需要XƎTEX0.9999.0以上的版本<sup>8</sup>和相关字体的支持。
+<br>
+<table class="q" lang="zh">
+<tr><th>类别</th><th>说明</th><th>例子</th></tr>
+<tr><td>Default</td><td>西文一般符号</td><td>abc123</td></tr>
+<tr><td>CJK</td><td>CJK表意符号</td><td>汉字ぁぃぅ</td></tr>
+<tr><td>FullLeft</td><td>全角左标点</td><td>（《：“</td></tr>
+<tr><td>FullRight</td><td>全角右标点</td><td>，。）》”</td></tr>
+<tr><td>HalfLeft</td><td>半角左标点</td><td>( [ {</td></tr>
+<tr><td>HalfRight</td><td>半角右标点</td><td>, . ? ) ] }</td></tr>
+<tr><td>NormalSpace</td><td>前后原始间距的符号</td><td>/</td></tr>
+<tr><td>Boundary</td><td>边界</td><td>空格</td></tr>
+<tr><td>CM</td><td>组合标识</td><td>异体字选择符</td></tr>
+<tr><td>HangulJamo</td><td>朝鲜文字母</td><td lang="kr">ᄻᆟᇫ</td></tr>
+</table>
+
+</blockquote>
+
+<div class="trans">
+<p>
+xeCJK は、文字出力において、以下の文字種別を必要とします。
+これらのうち、Default、CJK、FullLeft、FullRight、Boundary は、XeTeX において予め定義された種別です。xeCJK は、HalfLeft、HalfRight、NormalSpace、CM を新たに追加しました。
+これらのうち、異体字セレクタ (Ideographic Variation Selectors) は、XeTeX 0.9999.0 以上のバージョンと、関連するフォントのサポートとを、必要とします。
+</p>
+
+<table class="q">
+<tr><th>種類</th><th>説明</th><th>例</th></tr>
+<tr><td>Default</td><td>欧文の一般的文字</td><td>abc123</td></tr>
+<tr><td>CJK</td><td>CJK 表意文字</td><td>汉字ぁぃぅ</td></tr>
+<tr><td>FullLeft</td><td>全角の左側 (開く側) の約物</td><td>（《：“</td></tr>
+<tr><td>FullRight</td><td>全角の右側 (閉じる側) の約物</td><td>，。）》”</td></tr>
+<tr><td>HalfLeft</td><td>半角の左側 (開く側) の約物</td><td>( [ {</td></tr>
+<tr><td>HalfRight</td><td>半角の右側 (閉じる側) の約物</td><td>, . ? ) ] }</td></tr>
+<tr><td>NormalSpace</td><td>前後が元々空く記号</td><td>/</td></tr>
+<tr><td>Boundary</td><td>境界</td><td>空白</td></tr>
+<tr><td>CM</td><td>組み合わせ標識</td><td>異体字セレクタ</td></tr>
+<tr><td>HangulJamo</td><td>ハングル字母</td><td lang="kr">ᄻᆟᇫ</td></tr>
+</table>
+
+</div>
+
+<p>
+FullLeft は 行末に来てはならない全角文字に相当し、FullRight は行頭に来てはならない全角文字に相当する、と考えれば良さそうです。
+そのいずれでもない CJK に小書き仮名が入っているのが、禁則処理の面でまずそうなところです。
+つまり、<em>小書き仮名が行頭に来ないようにするためには、小書き仮名のクラスを FullRight に改めればよいわけです</em>。
+それにより、小書き仮名の禁則処理もうまくいき、かつ、小書き仮名には約物と同じく、上記の PunctFamily オプションで設定したフォントが使われるので、めでたく縦書き用のグリフとなります。一石二鳥です。
+</p>
+
+<p>なお、<a href="https://github.com/piyo-ko/XeLaTeX-Hanamin-vertical/blob/e5e943ffa10d2661728b80932c26e294cc712db3/xelatexhanaminvertical.sty">実際には</a>以下のとおり、小書き仮名のほかに、二の字点 (〻)・同の字点 (々)・波ダッシュ・長音符号・三点リーダも、行頭では禁止したいので FullRight の文字として指定してみましたが、もしかするとこれらの文字については指定不要なのかもしれません。
+ちょっと試行錯誤に疲れたので、「まあ害にはならないようだし、いいか」と放置しています。
+パッケージのソースコード (と中国語) が読める人が<a href="http://mirrors.ctan.org/macros/xetex/latex/xecjk/xeCJK.pdf#page=27">マニュアルの p. 27</a> 前後を読めば、要否がパッと分かるのかもしれませんね。
+</p>
+
+<code>\xeCJKDeclareCharClass{FullRight}{
+  `〻, `々, `〜, `ー, `…, 
+  `ぁ, `ぃ, `ぅ, `ぇ, `ぉ, `っ, `ゃ, `ゅ, `ょ,
+  `ァ, `ィ, `ゥ, `ェ, `ォ, `ッ, `ャ, `ュ, `ョ
+}</code>
+
+<h2 id="ruby_and_jghost">総ルビと和文ゴースト処理</h2>
+<p>
+続いて、今回の例で禁則処理を成功させる決め手になった「<em>和文ゴースト処理</em>」について書きます。
+これは <a href="https://ctan.org/pkg/pxrubrica">pxrubrica パッケージ</a>で定義されている処理です。
+<a href="http://mirrors.ctan.org/language/japanese/pxrubrica/pxrubrica.pdf#page=7">マニュアルの 2.5 節</a>によると、「和文ゴースト処理」とは、
+</p>
+
+<blockquote>
+和文ルビの親文字列出力の前後に全角空白文字を挿入する（ただしその空きを打ち消すように負の空きを同時に入れる）ことで、親文字列全体が、その外側から見たときに、全角空白文字（大抵のJFMではこれは漢字と同じ扱いになる）と同様に扱われるようにする。
+</blockquote>
+
+<p>
+というもので、これを有効にすることによるメリットとして、「<em>行分割禁止（禁則処理）が常に正しく機能する</em>」「<em>特殊な状況（例えば段落末）でも異常動作を起こしにくい</em>」などが挙げられています。
+同時に、デメリットとして「<em>ルビ出力の進入と共存できない</em>」ことが挙げられています。
+</p>
+
+<p>
+なおここでの「<em>進入</em>」とは「ルビ文字出力が親文字に隣接する文字の領域（水平方向に見た場合）に配置されること」です。
+その逆は「<em>突出</em>」で、これは「ルビ文字出力の端が親文字よりも外側に出ること」です (<a href="http://mirrors.ctan.org/language/japanese/pxrubrica/pxrubrica.pdf#page=3">マニュアルの 2.1 節</a>で定義されている用語です)。
+</p>
+
+<p>
+ところで、わたしが行いたいのは、縦書き・<em>総ルビ</em>の本のデータ起こしです。
+たとえば、いま試しに対象としているのは、<a href="http://dl.ndl.go.jp/info:ndljp/pid/1239900/156">『続国訳漢文大成 経子史部 第五巻 資治通鑑 第五巻』の「巻の第八十二」</a>で、ごくたまに<a href="http://dl.ndl.go.jp/info:ndljp/pid/1239900/165">ルビ注が使われていたりもします (左ページ 7 行目末)</a>。
+</p>
+
+<p>
+ルビサイズの親文字サイズに対する割合は、<code>\rubysizeratio</code> コマンドで変更できますが、規定値は 0.5 です。
+この値を 0.5 未満に変更すれば (たとえば 0.2 などとすれば)、ルビ文字列が親文字より長くなるのを防げるでしょうが、字が小さすぎて見づらいでしょうから、ルビの大きさは変えたくありません。
+</p>
+
+<p>
+一方、総ルビの場合、3 文字以上のルビが振られた親文字が連続することはちょくちょくあります。
+もちろん、
+「総ルビといえども仮名の箇所はあるわけだから、親文字の隣の仮名の横にルビを『進入』させればいいじゃないか」
+という考えもあるでしょうが、わたしは
+「都合よく仮名が配置される保証はないし、<a href="https://www.w3.org/TR/jlreq/ja/#fig2_3_29_2-ja">前の親字から『進入』してきたルビと後の親字から『進入』してきたルビが仮名のところで連続してしまったら読みの区切りが不明確になるだろうし</a>、そもそもルビと親字の対応関係を見た目ではっきりさせるためにも、ルビは『突出』させた方がよい」
+と考えました。
+したがって、<code>\rubysetup{|m|}</code> のように、<em>前進入無し・後進入無し</em>を指定しました (前後の縦棒がこの指定に相当)。
+</p>
+
+<p>
+ただ、当然ながら、総ルビかつ「突出」だと、隣り合う親字同士の間に微妙な大きさの空白がちょこちょこ入り、一行あたりの親字の数も決して一定ではなく、なんとなく禁則処理が難化しそうな雰囲気です。
+また、実際に、<a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>のグルー関連のオプションを調整して試行錯誤しても、なかなか禁則処理がうまくいきませんでした。
+それで困っていたときに、ふと和文ゴースト処理のメリットが目に留まり、試してみたら禁則処理の問題が解決した、というわけです。
+</p>
+
+<p>
+もう少し細かく和文ゴースト処理のメリット・デメリットを読み返してみます。
+まず、「行分割禁止（禁則処理）が常に正しく機能する」という点は、文句なしにありがたいメリットです。
+次に、「特殊な状況（例えば段落末）でも異常動作を起こしにくい」という点ですが、総ルビの場合は文章中のどこにでもルビが存在し得る、と考えるべきでしょうから、「特殊な状況」がそれなりの頻度で生じてもおかしくない、と思っておいた方が安全なわけで、その意味で、これもありがたいメリットです。
+一方、上述のとおり、わたしは総ルビには「進入」はそぐわないと考えて「突出」を選んでいるので、「ルビ出力の進入と共存できない」というデメリットは基本的には無視できます。
+</p>
+
+<img src="rubychu_ex_p31.png" style="width: 80px; float: right; margin: 1em;" alt="「\rubychu{\ruby{弭息}{び|そく}}{ヤメトドム}すべし。」の縦組みの組版結果。「弭」の右に「び」というルビ、「息」の右に「そく」というルビが振られ、「弭息」全体の左には、「す」の字の上半分まで「進入」する形で「ヤメトドム」というルビ注が配置されている。" />
+<p>
+ただし、「基本的には」と言ったのは例外があるためで、その例外についてだけは対処が必要でした。
+具体的には、<em>ルビ注を再現するために定義したコマンドを修正しました</em>。
+これについて、例を挙げて説明します (といっても、今回作業したデータの中にルビ注が一箇所しか出てこなかったので、その箇所にだけ特化して適応してしまっている可能性もなきにしもあらず)。
+</p>
+<p>
+右図はルビ注をつけた箇所の組版結果のスクリーンショットです。
+「弭息」なる熟語の「弭」の字の右に「び」というルビを振り、「息」の字の右に「そく」というルビを振ってあります。
+同時に、「弭息」という文字列全体の左には、「す」の字の上半分まで「進入」する形で「ヤメトドム」というルビ注が書かれています。
+なお、親字の右側のルビは「中付き」のモノルビ方式であるのに対し、親字の左側のルビ注は「肩付き」のグループルビ方式です。
+</p>
+
+<p>
+ところで、<a href="https://ctan.org/pkg/pxrubrica">pxrubrica パッケージ</a>には両側ルビのための <code>\truby</code> コマンドがありますが、どうも右側ルビと左側ルビに対して別々のオプションを指定できないようなのです。
+しかし、右図に示したように、右側ルビと左側ルビ (ルビ注) に別々の書式を適用したいわけです。
+仕方がないので、右側にルビを振った文字列を親字扱いにして、その全体に対して左側にルビを振ることでルビ注を再現することにして、<code>\rubychu</code> なる 2 引数のコマンドを定義しました。
+たとえば「<code>\rubychu{\ruby{弭息}{び|そく}}{ヤメトドム}すべし</code>」のように使うことを想定しています。
+</p>
+
+<p>
+最初の定義は以下のようなものでした。
+ルビ注に対して、「前突出禁止 (<code>||</code>)・グループルビ (<code>g</code>)・左側配置 (<code>S</code>)・行分割禁止 (<code>*</code>)・<em>後進入大</em> (<code>&gt;</code>)」というオプションを指定しています。
+ルビ注文字列が親字文字列より短ければ中付きで構わないけれども、ルビ注文字列の方が長い場合は肩付きにしたい、と思って、このように前突出禁止を指定してみました。
+また、行分割禁止を指定すべきかは迷うところですが、とりあえずこうしてみました。
+</p>
+
+<code>\newcommand{\rubychu}[2]{{%
+  \rubyintergap{0.2}%
+  \ruby[||gS*&gt;]{{\rubyintergap{0}{#1}}}{{\textcolor[rgb]{1.0,0.25,0.0}{#2}}}%
+}}</code>
+
+<p>
+しかし、このオプション指定は、禁則処理の改善のために今回導入した和文ゴースト処理の「<em>ルビ出力の進入と共存できない</em>」という性質に抵触します。
+そこで、ルビ注に関しては一旦 <code>\rubynousejghost</code> で和文ゴースト処理を無効にしつつ、右側にルビを振る (ことが想定される) 箇所 (すなわち <code>{#1}</code> のところ) の直前で <code>\rubyusejghost</code> により再び和文ゴースト処理を有効にするように修正しました。
+最後に再び <code>\rubyusejghost</code> としているのは、このコマンドを抜けた後は和文ゴースト処理を有効にしておきたいからです。
+</p>
+
+<code>\newcommand{\rubychu}[2]{{%
+  \rubynousejghost
+  \rubyintergap{0.2}%
+  \ruby[||gS*&gt;]{{\rubyintergap{0}\rubyusejghost{#1}}}{{\textcolor[rgb]{1.0,0.25,0.0}{#2}}}%
+  \rubyusejghost
+}}</code>
+
+<p>
+以上のようにユーザ定義コマンドの修正は必要でしたが (また、場合によっては和文ゴースト処理を無効化したルビ注の箇所で運悪く禁則処理が失敗するような文書も存在し得るかもしれませんが)、とにかく和文ゴースト処理を取り入れれば総ルビでも禁則処理がうまく働くようです。
+</p>
+
+<h2 id="set_enabled_hanging">ついでにぶら下げ指定もしてみた</h2>
+<p>
+さて、ここからはおまけです。
+試行錯誤中にぶら下げ指定をしてみて、特に害はなさそうなので (かつ、削っても問題がないのかを今更確認するのも面倒なので)、そのまま放置してあります。
+そのぶら下げ指定について、以下に概要だけ書いておきます。
+<!--詳細は<a href="read_xeCJK_manual.html">別のページ</a>に分けました。-->
+</p>
+
+<p>
+ぶら下げ指定は、<a href="https://ctan.org/pkg/xecjk">xeCJK パッケージ</a>で設定できます。
+</p>
+
+<code id="enabled_hanging">enabled-hanging ⟨boolean⟩</code>
+<blockquote lang="zh">
+当以上选项的计算结果得到的宽度小于标点符号的实际边界宽度时，是否允许标点符号悬挂出页面边界。默认值是false。
+</blockquote>
+
+<p class="trans">
+以上のオプションの計算の結果得られた幅が、約物の実際の境界の幅未満のとき、<em>約物をぶら下げて版面の境界より外に出すことを許すかどうか</em>。
+デフォルト値は <code>false</code> です。
+</p>
+
+<p>
+なおここで、「幅」と述べているのは、横書きを想定して説明しているからだと思われます。
+ぶら下げを許可することで、組版の際の制約が弱まるのではないか (そして、その結果として、無理のある不自然な組み方を回避できるのではないか)、という期待があったので、禁則処理に四苦八苦しているときにこのオプションを設定してみました。
+</p>
+
+<p>
+具体的には、このオプションは、「3.5.2 <span lang="zh">定义标点符号处理格式</span> (約物の処理方式を定義する)」節に出てくる <code>\xeCJKDeclarePunctStyle</code> コマンドで設定できる多数のオプションのうちの一つです。</p>
+
+<code id="xeCJKDeclarePunctStyle">\xeCJKDeclarePunctStyle {⟨style⟩} {⟨options⟩}</code>
+
+<blockquote lang="zh">
+定义新的标点符号处理格式，已经存在的同名格式将被覆盖。可以设置的选项将在下面介绍。
+</blockquote>
+
+<p class="trans">
+<em>約物の新しい処理方式を定義します。</em>
+既存の同名の方式は上書きされます。
+設定できるオプションを以下に紹介します。
+</p>
+
+<p>
+このコマンドを使えば、多数のオプションをまとめて設定し、その設定した方式に名前をつけられます。
+そして、その名前は、<a href="#xeCJKsetup">上述の <code>\xeCJKsetup</code> コマンド</a>の中で <code>PunctStyle</code> オプション (約物の処理方式を設定するオプション。詳しい説明はここでは省略) の値として使えます。
+そこで、今回は以下のように指定してみました (<code>yakumonosty</code> は適当につけた名前)。
+これがどこまで実際の組版結果に影響したのかはよく分かりませんが、とりあえず害はなさそうです。
+</p>
+
+<code>\xeCJKDeclarePunctStyle{yakumonosty} {
+  enabled-hanging = true
+}
+\xeCJKsetup {
+  PunctStyle = yakumonosty
+}</code>
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+
+</html>
+

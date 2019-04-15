@@ -1,0 +1,78 @@
+h1, h2, h3 {
+  background: hsl(170, 80%, 85%);
+  border-radius: 1em;
+}
+[lang="zh"] { 
+  font-family: "SIL-Kai-Reg-Jian", "Kai", "STKaitiSC-Regular", "STSongti-SC-Light", "HanaMinA", serif;
+}
+blockquote[lang="zh"], div[lang="zh"] { 
+  background: hsl(170, 50%, 90%);
+  margin-left: 3em;
+  margin-right: 1em;
+  padding: 6pt;
+}
+code {
+  margin-left: 3em;
+}
+code > em {
+  font-weight: bold;
+  background: inherit;
+}
+[lang="kr"] {
+  font-family: "AppleMyungjo", "PCMyungjo", "JCsmPC", serif;
+}
+blockquote {
+  text-indent: 1em;
+}
+table.q {
+  display: inline-table;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px;
+  margin-top: 1ex;
+  padding: 6pt;
+  margin-bottom: 6pt;
+}
+table.q th {
+  color: inherit;
+  background: inherit;
+  font-family: inherit;
+  border-left: none;
+  border-right: none;
+  border-top: solid 1px;
+  border-bottom: solid 1px;
+}
+table.q td {
+  border: none;
+  padding-right: 1em;
+  vertical-align: top;
+}
+p > code, blockquote > code, a > code {
+  color: inherit;
+  background: inherit;
+  display: inline;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+.trans {
+  font-style: italic;
+  margin-left: 3em;
+  margin-right: 1em;
+  padding: 6pt;
+  border: solid 1px hsl(170,100%,30%);
+}
+.trans table.q {
+  font-family: inherit;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+div.trans > p {
+  margin-top: 0;
+}
+.trans em {
+  font-style: italic;
+}
