@@ -12,11 +12,8 @@ function about_today() {
 	var m = t.getMonth()+1; //getMonth()は0〜11を返すので+1する。
 	var d = t.getDate();
 
-	document.getElementById("result_txt").textContent += "今日は西暦だと?\n";
 	about_the_day(y, m, d, true, true);
 	
-	document.getElementById("result_txt").textContent += "\n\n平成だと?\n";
-	about_the_day(y-1988, m, d, false, false);
 	return(true);
 }
 
