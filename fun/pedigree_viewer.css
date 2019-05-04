@@ -1,0 +1,126 @@
+body {
+  background: hsl(210, 20%, 12%);
+  color: hsl(210, 20%, 70%);
+  font-family: serif;
+  padding-left: 0;
+  padding-right: 0;
+}
+button {
+  background: hsl(170, 50%, 12%);
+  font-family: serif;
+  border: 2px solid hsl(170, 80%, 50%);
+  border-radius: 6pt;
+}
+a, button {
+  color: hsl(170, 70%, 70%);
+}
+a:hover, button:hover {
+  color: hsl(170, 50%, 12%);
+  background: hsl(170, 70%, 70%);
+}
+button.toggle {
+  background: hsl(240, 50%, 80%);
+  color: hsl(240, 50%, 12%);
+  border-color: hsl(240, 80%, 50%);
+}
+button.toggle:hover {
+  background: hsl(240, 50%, 12%);
+  color: hsl(240, 50%, 80%);
+}
+h1 {
+  font-size: large;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: center;
+  color: hsl(240, 100%, 80%);
+  padding: 0;
+  margin: 0;
+}
+p {
+  text-indent: 1em;
+  clear: left;
+}
+
+#main {
+  display: grid;
+  grid-template-columns: auto 14em;
+  grid-template-rows: 2em minmax(15em, 70vh) 20em;
+}
+
+#headline {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  z-index: 0;
+}
+#toggle {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  text-align: center;
+  z-index: 0;
+}
+
+#pedigree_display_area {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  background: white;
+  border: solid 2px hsl(210, 100%, 60%);
+  overflow: auto;
+  z-index: 0;
+}
+#person_selector, #detailed_info {
+  grid-row-start: 3;
+  grid-row-end: 4;
+  padding-left: 1em;
+  background: hsl(210, 20%, 12%);
+  color: hsl(210, 20%, 70%);
+  overflow: auto;
+  z-index: 0;
+}
+#person_selector {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  z-index: 0;
+}
+#detailed_info {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  z-index: 0;
+}
+#selected_person_info {
+  border-bottom: solid 2px hsl(210, 100%, 60%);
+}
+
+#info_all {
+  z-index: -1;
+  /* When only 'z-index: -1' is specified, Safari does not
+     render the HTML code as intended.  To cope with this
+     situation, 'transform: translateZ(-1px)' is specified. */
+  transform: translateZ(-1px);
+  grid-row-start: 2;
+  grid-row-end: 4;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  overflow: auto;
+  background: hsl(210, 30%, 17%);
+  color: hsl(210, 20%, 70%);
+}
+dt {
+  padding-right: 0;
+  margin-right: 0;
+  font-family: sans-serif;
+  color: hsl(240, 100%, 80%);
+}
+dd {
+  margin-left: 1em;
+}
+
+em {
+  color: hsl(210, 100%, 70%);
+  font-style: normal;
+}

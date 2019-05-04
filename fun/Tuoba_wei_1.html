@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="pedigree_viewer.css" type="text/css">
+<link rel="stylesheet" href="pedigree_svg.css" type="text/css">
+<script type="text/javascript" src="Tuoba_wei_1.js"></script>
+<script type="text/javascript" src="pedigree_viewer.js"></script>
+<base target="ref">
+<title>元魏皇帝 (僭称を含む) とその直系祖先</title>
+<style>
+nav { text-align: right; } 
+hr { margin-top: 3em; border: ridged white 4pt; }
+</style>
+</head>
+<body>
+<section id="main">
+<h1 id="headline">元魏皇帝 (僭称を含む) とその直系祖先</h1>
+<div id="toggle">
+<button id="view_chart" onclick="show_chart()" class="toggle">系図</button>
+<button id="view_list" onclick="show_list()" class="toggle">一覧</button>
+</div>
+<div id="pedigree_display_area"><object id="svg_dat" type="image/svg+xml" data="Tuoba_wei_1.svg" alt="元魏皇帝 (僭称を含む) とその直系祖先の系図"></object></div>
+
+<div id="person_selector">
+<form name="viewer">
+<label for="list_of_persons">見たい人物は?</label><br>
+<select id="list_of_persons" size="15" onchange="see_in_detail()">
+<option value="p117">上谷公主 (p117)</option>
+<option value="p115">乙乾帰 (p115)</option>
+<option value="p118">乙匹知 (p118)</option>
+<option value="p46">乙弗皇后 (p46)</option>
+<option value="p114">乙海 (p114)</option>
+<option value="p48">乙瑗 (p48)</option>
+<option value="p116">乙瓌 (p116)</option>
+<option value="p121">仇嵩 (p121)</option>
+<option value="p120">仇広 (p120)</option>
+<option value="p58">仇氏 (p58)</option>
+<option value="p119">仇牛 (p119)</option>
+<option value="p89">僕渾 (p89)</option>
+<option value="p78">元亶 (p78)</option>
+<option value="p53">元勰 (p53)</option>
+<option value="p80">元善見 (p80)</option>
+<option value="p55">元子攸 (p55)</option>
+<option value="p31">元宏 (p31)</option>
+<option value="p44">元宝暉 (p44)</option>
+<option value="p45">元宝炬 (p45)</option>
+<option value="p59">元彬 (p59)</option>
+<option value="p63">元怡 (p63)</option>
+<option value="p139">元恂 (p139)</option>
+<option value="p33">元恪 (p33)</option>
+<option value="p70">元恭 (p70)</option>
+<option value="p137">元悦 (p137)</option>
+<option value="p42">元愉 (p42)</option>
+<option value="p71">元懌 (p71)</option>
+<option value="p72">元懐 (p72)</option>
+<option value="p65">元曄 (p65)</option>
+<option value="p62">元朗 (p62)</option>
+<option value="p49">元欽 (p49)</option>
+<option value="p39">元氏 (p39)</option>
+<option value="p136">元法僧 (p136)</option>
+<option value="p67">元羽 (p67)</option>
+<option value="p74">元脩 (p74)</option>
+<option value="p60">元融 (p60)</option>
+<option value="p35">元詡 (p35)</option>
+<option value="p144">元詳 (p144)</option>
+<option value="p51">元釗 (p51)</option>
+<option value="p135">元鍾葵 (p135)</option>
+<option value="p146">元顥 (p146)</option>
+<option value="p147">劉副侖 (p147)</option>
+<option value="p150">劉尸利 (p150)</option>
+<option value="p56">劉椒房 (p56)</option>
+<option value="p149">劉烏利 (p149)</option>
+<option value="p148">劉猛 (p148)</option>
+<option value="p18">劉眷 (p18)</option>
+<option value="p19">劉貴人 (p19)</option>
+<option value="p17">劉路孤 (p17)</option>
+<option value="p151">劉進伯 (p151)</option>
+<option value="p127">吐奴傀 (p127)</option>
+<option value="p110">唐氏 (p110)</option>
+<option value="p90">地粟袁 (p90)</option>
+<option value="p88">大檀 (p88)</option>
+<option value="p132">大王夫人 (p132)</option>
+<option value="p66">孟椒房 (p66)</option>
+<option value="p154">安楽公主 (p154)</option>
+<option value="p85">慕容廆 (p85)</option>
+<option value="p124">慕容木延 (p124)</option>
+<option value="p8">慕容氏 (p8)</option>
+<option value="p123">慕容渉帰 (p123)</option>
+<option value="p9">慕容皝 (p9)</option>
+<option value="p125">慕容莫護跋 (p125)</option>
+<option value="p7">拓跋什翼犍 (p7)</option>
+<option value="p134">拓跋他 (p134)</option>
+<option value="p38">拓跋余 (p38)</option>
+<option value="p1">拓跋力微 (p1)</option>
+<option value="p20">拓跋嗣 (p20)</option>
+<option value="p10">拓跋寔 (p10)</option>
+<option value="p50">拓跋廓 (p50)</option>
+<option value="p4">拓跋弗 (p4)</option>
+<option value="p28">拓跋弘 (p28)</option>
+<option value="p24">拓跋晃 (p24)</option>
+<option value="p57">拓跋楨 (p57)</option>
+<option value="p13">拓跋氏 (p13)</option>
+<option value="p16">拓跋氏 (p16)</option>
+<option value="p2">拓跋沙漠汗 (p2)</option>
+<option value="p26">拓跋濬 (p26)</option>
+<option value="p133">拓跋熙 (p133)</option>
+<option value="p22">拓跋燾 (p22)</option>
+<option value="p15">拓跋珪 (p15)</option>
+<option value="p0">拓跋詰汾 (p0)</option>
+<option value="p5">拓跋鬱律 (p5)</option>
+<option value="p129">木骨閭 (p129)</option>
+<option value="p30">李夫人 (p30)</option>
+<option value="p54">李媛華 (p54)</option>
+<option value="p108">李宝 (p108)</option>
+<option value="p113">李弇 (p113)</option>
+<option value="p99">李恵 (p99)</option>
+<option value="p92">李方叔 (p92)</option>
+<option value="p112">李昶 (p112)</option>
+<option value="p111">李暠 (p111)</option>
+<option value="p130">李柔 (p130)</option>
+<option value="p73">李氏 (p73)</option>
+<option value="p105">李沖 (p105)</option>
+<option value="p109">李翻 (p109)</option>
+<option value="p102">李蓋 (p102)</option>
+<option value="p27">李貴人 (p27)</option>
+<option value="p131">李雍 (p131)</option>
+<option value="p87">杜豹 (p87)</option>
+<option value="p21">杜貴嬪 (p21)</option>
+<option value="p140">林勝 (p140)</option>
+<option value="p138">林貴人 (p138)</option>
+<option value="p43">楊奥妃 (p43)</option>
+<option value="p86">段夫人 (p86)</option>
+<option value="p122">段階 (p122)</option>
+<option value="p47">淮陽公主 (p47)</option>
+<option value="p36">潘充華 (p36)</option>
+<option value="p142">潘弥 (p142)</option>
+<option value="p143">潘猛 (p143)</option>
+<option value="p52">潘貴人 (p52)</option>
+<option value="p6">王氏 (p6)</option>
+<option value="p69">王氏 (p69)</option>
+<option value="p94">王氏 (p94)</option>
+<option value="p96">王氏 (p96)</option>
+<option value="p61">程氏 (p61)</option>
+<option value="p40">羅夫人 (p40)</option>
+<option value="p97">羅提 (p97)</option>
+<option value="p77">羅氏 (p77)</option>
+<option value="p98">羅渥 (p98)</option>
+<option value="p76">羅蓋 (p76)</option>
+<option value="p75">羅雲 (p75)</option>
+<option value="p81">胡国珍 (p81)</option>
+<option value="p84">胡寧 (p84)</option>
+<option value="p79">胡智 (p79)</option>
+<option value="p82">胡淵 (p82)</option>
+<option value="p83">胡真 (p83)</option>
+<option value="p145">范氏 (p145)</option>
+<option value="p104">蓋氏 (p104)</option>
+<option value="p3">蘭氏 (p3)</option>
+<option value="p64">衛氏 (p64)</option>
+<option value="p41">袁貴人 (p41)</option>
+<option value="p11">賀夫人 (p11)</option>
+<option value="p23">賀夫人 (p23)</option>
+<option value="p14">賀紇 (p14)</option>
+<option value="p12">賀野干 (p12)</option>
+<option value="p126">跋提 (p126)</option>
+<option value="p128">車鹿会 (p128)</option>
+<option value="p152">遼西公主 (p152)</option>
+<option value="p25">郁久閭氏 (p25)</option>
+<option value="p91">郁久閭辰 (p91)</option>
+<option value="p107">鄭徳玄 (p107)</option>
+<option value="p106">鄭氏 (p106)</option>
+<option value="p37">閭左昭儀 (p37)</option>
+<option value="p34">霊太后 (p34)</option>
+<option value="p100">韓氏 (p100)</option>
+<option value="p101">韓頽 (p101)</option>
+<option value="p156">馮和 (p156)</option>
+<option value="p29">馮太后 (p29)</option>
+<option value="p155">馮安 (p155)</option>
+<option value="p95">馮弘 (p95)</option>
+<option value="p93">馮朗 (p93)</option>
+<option value="p141">高椒房 (p141)</option>
+<option value="p32">高照容 (p32)</option>
+<option value="p103">高颺 (p103)</option>
+</select>
+</form>
+</div>
+
+<div id="detailed_info">
+<dl id="selected_person_info"></dl>
+<dl id="related_info"></dl>
+</div>
+
+<div id="info_all">
+<p>
+この系図は、<a href="https://piyo-ko.github.io/pedigree/pedigree.html">系図作成ツール</a>の作図例をもう少し増やしたいと思っているときに、少し北魏に興味がわいて (と言っても、つらつら Wikipedia などを眺める程度)、作ってみたものです。
+系図に含めた対象者は、北魏・西魏・東魏で帝位についた人物、皇帝を僭称した人物、および廃太子と、かれらの直系祖先です。
+民族融合ぶりを眺めたり、子貴母死の対象者を見たりしたい、という趣旨で作った図なので、皇后に立てられた人物や外戚として力を持った人物を平気で省略していたりします。
+もう少し人物を増やすべきかもしれませんが、あまり増やしても収拾がつかなくなるので、とりあえずこうしてあります。
+</p>
+
+<p>
+背伸びして<a href="https://doi.org/10.15017/1657870">「北魏における所謂子貴母死について」</a> (稲田友音) を読んでみたのですが、特定の状況下で何らかの目的を持って行われたことが制度と化してゆき、そのうち状況の変化に応じて違う目的でそれが行われるようになり、やがて制度自体が廃止されるに至る、という意味では普遍的なことなのかなぁ、などと、理解しきれないながらも興味深く読みました。
+<a href="https://www.kyoto-up.or.jp/books/9784814001910.html">『北魏道武帝の憂鬱　皇后・外戚・部族』</a> (田余慶・著、田中一輝・王鏗・訳) という本にも興味があるものの、素人の私には難しそうですね。うむむむ。
+
+<p>
+素人なので、勘違いしていることもあると思います。間違いの御指摘その他のコメントは <a href="https://twitter.com/pi__yo__ko">Twitter アカウント</a>宛にいただけると幸いです。
+また、<a href="https://piyo-ko.github.io/pedigree/pedigree.html">系図作成ツール</a>もお試しいただけると幸いです。
+</p>
+
+<nav>[
+<a href="pedigree_examples_index.html" target="_top">作ってみた系図の一覧</a> |
+<a href="../index.html" target="_top">ホーム</a>
+]</nav>
+<hr>
+
+<dl>
+
+<dt id="p117_t">上谷公主</dt>
+<dd id="p117_d"><button type="button" onclick="look_at('p117')">上谷公主を見る</button> <button type="button" onclick="reselect('p117')">上谷公主を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>に「尚<em>上谷公主</em>，世祖之女也。」とある。</dd>
+
+<dt id="p115_t">乙乾帰</dt>
+<dd id="p115_d"><button type="button" onclick="look_at('p115')">乙乾帰を見る</button> <button type="button" onclick="reselect('p115')">乙乾帰を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%B9%99%E4%B9%BE%E5%BD%92">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>に「子乾歸」から始まる附伝がある。</dd>
+
+<dt id="p118_t">乙匹知</dt>
+<dd id="p118_d"><button type="button" onclick="look_at('p118')">乙匹知を見る</button> <button type="button" onclick="reselect('p118')">乙匹知を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>に「世祖時，瓌父<em>匹知</em>慕國威化，遣瓌入貢，世祖因留之。」とある。</dd>
+
+<dt id="p46_t">乙弗皇后</dt>
+<dd id="p46_d"><button type="button" onclick="look_at('p46')">乙弗皇后を見る</button> <button type="button" onclick="reselect('p46')">乙弗皇后を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E4%B9%99%E5%BC%97%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏」から始まる伝がある。</dd>
+
+<dt id="p114_t">乙海</dt>
+<dd id="p114_d"><button type="button" onclick="look_at('p114')">乙海を見る</button> <button type="button" onclick="reselect('p114')">乙海を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙乾帰附伝に続いて、「子海」から始まる附伝がある。</dd>
+
+<dt id="p48_t">乙瑗</dt>
+<dd id="p48_d"><button type="button" onclick="look_at('p48')">乙瑗を見る</button> <button type="button" onclick="reselect('p48')">乙瑗を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%B9%99%E7%91%97">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙海附伝に続いて、「子瑗」から始まる附伝がある。</dd>
+
+<dt id="p116_t">乙瓌</dt>
+<dd id="p116_d"><button type="button" onclick="look_at('p116')">乙瓌を見る</button> <button type="button" onclick="reselect('p116')">乙瓌を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E4%B9%99%E3%82%AB%E3%82%A4">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>。
+</dd>
+
+<dt id="p121_t">仇嵩</dt>
+<dd id="p121_d"><button type="button" onclick="look_at('p121')">仇嵩を見る</button> <button type="button" onclick="reselect('p121')">仇嵩を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「仇款……生二子，長曰<em>嵩</em>，小曰騰。」とある。</dd>
+
+<dt id="p120_t">仇広</dt>
+<dd id="p120_d"><button type="button" onclick="look_at('p120')">仇広を見る</button> <button type="button" onclick="reselect('p120')">仇広を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「仇款……生二子，長曰嵩，小曰騰。……嵩有二子，長曰<em>廣</em>，小曰盆。……初洛齊貴盛之後，<em>廣</em>、盆坐他事誅……<em>廣</em>、盆並善營產業，家于中山，號為巨富，子孫仕進至州主簿。」とある。</dd>
+
+<dt id="p58_t">仇氏</dt>
+<dd id="p58_d"><button type="button" onclick="look_at('p58')">仇氏を見る</button> <button type="button" onclick="reselect('p58')">仇氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「而廣有<em>女孫</em>配南安王楨，生章武王彬，即中山王英弟也。」とある。</dd>
+
+<dt id="p119_t">仇牛</dt>
+<dd id="p119_d"><button type="button" onclick="look_at('p119')">仇牛を見る</button> <button type="button" onclick="reselect('p119')">仇牛を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)#cite_note-autogenerated2-3">Wikipedia (zh)</a> (冉閔の仇世婦のページ)] に引用されている墓誌には「曾祖南安惠王楨……。曾祖妃馮翊<em>仇氏牛</em>之長女，牛為本州別駕。」とあるらしい。</dd>
+
+<dt id="p89_t">僕渾</dt>
+<dd id="p89_d"><button type="button" onclick="look_at('p89')">僕渾を見る</button> <button type="button" onclick="reselect('p89')">僕渾を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「<em>大檀</em>者，<em>社崘季父僕渾之子</em>」とある。
+またこれに先立って、「<em>地粟袁</em>……次子<em>縕紇提</em>別居西邊。」、「獲<em>縕紇提</em>子曷多汗及曷多汗兄詰歸之、<em>社崘</em>、斛律等并宗黨數百人」とある。
+つまり、僕渾は、地粟袁の子の縕紇提の子である社崘から見た季父 (一番下の叔父) なので、地粟袁の子ということ。</dd>
+
+<dt id="p78_t">元亶</dt>
+<dd id="p78_d"><button type="button" onclick="look_at('p78')">元亶を見る</button> <button type="button" onclick="reselect('p78')">元亶を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E4%BA%B6">Wikipedia (ja)</a>]
+清河王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711">『魏書』巻11・廢出三帝紀</a>に「清河王亶」として出てくる。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B712">『魏書』巻12・孝静紀</a>に「孝靜皇帝，諱善見，<em>清河文宣王亶</em>之世子也」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E6%B1%9D%E5%8D%97%E7%8E%8B">『魏書』巻22・汝南王伝</a>に「臨拜日，就<em>懌子亶</em>求懌服玩之物，不時稱旨。乃召<em>亶</em>，杖之百下。<em>亶</em>居廬未葬，形氣羸弱，暴加威撻，殆至不濟。」と出てくる (でも同じ巻22の清河王伝には父の元懌のことだけ書いてあって、元亶が出てこないみたい)。</dd>
+
+<dt id="p53_t">元勰</dt>
+<dd id="p53_d"><button type="button" onclick="look_at('p53')">元勰を見る</button> <button type="button" onclick="reselect('p53')">元勰を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E3%82%AD%E3%83%A7%E3%82%A6">Wikipedia (ja)</a>]
+彭城王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8B">『魏書』巻21下・献文六王列伝</a>に彭城王伝あり。</dd>
+
+<dt id="p80_t">元善見</dt>
+<dd id="p80_d"><button type="button" onclick="look_at('p80')">元善見を見る</button> <button type="button" onclick="reselect('p80')">元善見を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AD%9D%E9%9D%99%E5%B8%9D">Wikipedia (ja)</a>]
+東魏・孝静帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B712">『魏書』巻12・孝静紀</a>。</dd>
+
+<dt id="p55_t">元子攸</dt>
+<dd id="p55_d"><button type="button" onclick="look_at('p55')">元子攸を見る</button> <button type="button" onclick="reselect('p55')">元子攸を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AD%9D%E8%8D%98%E5%B8%9D">Wikipedia (ja)</a>]
+孝荘帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B710">『魏書』巻10・孝荘紀</a>。</dd>
+
+<dt id="p31_t">元宏</dt>
+<dd id="p31_d"><button type="button" onclick="look_at('p31')">元宏を見る</button> <button type="button" onclick="reselect('p31')">元宏を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AD%9D%E6%96%87%E5%B8%9D">Wikipedia (ja)</a>]
+孝文帝。
+『魏書』の<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B77%E4%B8%8A">巻7上</a>・<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B77%E4%B8%8B">巻7下</a>の高祖紀。</dd>
+
+<dt id="p44_t">元宝暉</dt>
+<dd id="p44_d"><button type="button" onclick="look_at('p44')">元宝暉を見る</button> <button type="button" onclick="reselect('p44')">元宝暉を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E5%AF%B6%E6%9A%89">Wikipedia (zh)</a>]
+臨洮王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9</a>に「皇曾孫故<em>臨洮王寶暉</em>世子釗」と名が見える。
+</dd>
+
+<dt id="p45_t">元宝炬</dt>
+<dd id="p45_d"><button type="button" onclick="look_at('p45')">元宝炬を見る</button> <button type="button" onclick="reselect('p45')">元宝炬を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%96%87%E5%B8%9D_(%E8%A5%BF%E9%AD%8F)">Wikipedia (ja)</a>]
+西魏・文帝。
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E6%96%87%E5%B8%9D">『北史』巻5・文帝紀</a>。</dd>
+
+<dt id="p59_t">元彬</dt>
+<dd id="p59_d"><button type="button" onclick="look_at('p59')">元彬を見る</button> <button type="button" onclick="reselect('p59')">元彬を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E5%BD%AC">Wikipedia (ja)</a>]
+章武王。
+『魏書』巻19下の<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E7%AB%A0%E6%AD%A6%E6%95%AC%E7%8E%8B%E5%A4%AA%E6%B4%9B">章武王・拓跋太洛伝</a>に「無子。高祖初，以南安惠王第二子<em>彬</em>為後。」とあり、直後に<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E5%97%A3%E5%AD%90_%E5%BD%AC">元彬の伝</a>が続く。
+</dd>
+
+<dt id="p63_t">元怡</dt>
+<dd id="p63_d"><button type="button" onclick="look_at('p63')">元怡を見る</button> <button type="button" onclick="reselect('p63')">元怡を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%80%A1">Wikipedia (ja)</a>]
+扶風王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E6%89%B6%E9%A2%A8%E7%8E%8B%E6%80%A1">『魏書』巻19下・扶風王・元怡伝</a>。</dd>
+
+<dt id="p139_t">元恂</dt>
+<dd id="p139_d"><button type="button" onclick="look_at('p139')">元恂を見る</button> <button type="button" onclick="reselect('p139')">元恂を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%81%82">Wikipedia (ja)</a>]
+廃太子。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E5%BB%A2%E5%A4%AA%E5%AD%90">『魏書』巻22・廃太子・元恂伝</a>。</dd>
+
+<dt id="p33_t">元恪</dt>
+<dd id="p33_d"><button type="button" onclick="look_at('p33')">元恪を見る</button> <button type="button" onclick="reselect('p33')">元恪を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AE%A3%E6%AD%A6%E5%B8%9D">Wikipedia (ja)</a>]
+宣武帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B78">『魏書』巻8・世宗紀</a>。</dd>
+
+<dt id="p70_t">元恭</dt>
+<dd id="p70_d"><button type="button" onclick="look_at('p70')">元恭を見る</button> <button type="button" onclick="reselect('p70')">元恭を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%81%AD">Wikipedia (ja)</a>]
+前廃帝、節閔帝、広陵王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%89%8D%E5%BB%A2%E5%B8%9D">『魏書』巻11・前廃帝紀</a>。</dd>
+
+<dt id="p137_t">元悦</dt>
+<dd id="p137_d"><button type="button" onclick="look_at('p137')">元悦を見る</button> <button type="button" onclick="reselect('p137')">元悦を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%82%A6">Wikipedia (ja)</a>]
+汝南王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E6%B1%9D%E5%8D%97%E7%8E%8B">『魏書』巻22・汝南王・元悦伝</a>。</dd>
+
+<dt id="p42_t">元愉</dt>
+<dd id="p42_d"><button type="button" onclick="look_at('p42')">元愉を見る</button> <button type="button" onclick="reselect('p42')">元愉を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%84%89">Wikipedia (ja)</a>]
+京兆王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E4%BA%AC%E5%85%86%E7%8E%8B">『魏書』巻22・京兆王・元愉伝</a>。
+ここに「及在州謀逆，<em>愉</em>遂殺長史羊靈引及司馬李遵，稱得清河王密疏，云高肇謀殺害主上。於是遂為壇於信都之南，柴燎告天，<em>即皇帝位</em>。赦天下，號建平元年，立李氏為皇后。」と、皇帝を僭称したことが書かれている。</dd>
+
+<dt id="p71_t">元懌</dt>
+<dd id="p71_d"><button type="button" onclick="look_at('p71')">元懌を見る</button> <button type="button" onclick="reselect('p71')">元懌を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%87%8C">Wikipedia (ja)</a>]
+清河王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E6%B8%85%E6%B2%B3%E7%8E%8B">『魏書』巻22・清河王・元懌伝</a>。</dd>
+
+<dt id="p72_t">元懐</dt>
+<dd id="p72_d"><button type="button" onclick="look_at('p72')">元懐を見る</button> <button type="button" onclick="reselect('p72')">元懐を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%87%90">Wikipedia (ja)</a>]
+広平王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E5%BB%A3%E5%B9%B3%E7%8E%8B">『魏書』巻22・広平王・元懐伝</a>。</dd>
+
+<dt id="p65_t">元曄</dt>
+<dd id="p65_d"><button type="button" onclick="look_at('p65')">元曄を見る</button> <button type="button" onclick="reselect('p65')">元曄を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%9B%84">Wikipedia (ja)</a>]
+東海王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E6%9D%B1%E6%B5%B7%E7%8E%8B%E6%9B%84">『魏書』巻19下・東海王・元曄伝</a>。</dd>
+
+<dt id="p62_t">元朗</dt>
+<dd id="p62_d"><button type="button" onclick="look_at('p62')">元朗を見る</button> <button type="button" onclick="reselect('p62')">元朗を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%9C%97_(%E5%8C%97%E9%AD%8F)">Wikipedia (ja)</a>]
+後廃帝、安定王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%BE%8C%E5%BB%A2%E5%B8%9D">『魏書』巻11・後廃帝紀</a>。</dd>
+
+<dt id="p49_t">元欽</dt>
+<dd id="p49_d"><button type="button" onclick="look_at('p49')">元欽を見る</button> <button type="button" onclick="reselect('p49')">元欽を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%BB%83%E5%B8%9D_(%E8%A5%BF%E9%AD%8F)">Wikipedia (ja)</a>]
+西魏・廃帝。
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E5%BB%A2%E5%B8%9D%E6%AC%BD">『北史』巻5・西魏・廃帝紀</a>。</dd>
+
+<dt id="p39_t">元氏</dt>
+<dd id="p39_d"><button type="button" onclick="look_at('p39')">元氏を見る</button> <button type="button" onclick="reselect('p39')">元氏を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E6%B0%8F_(%E9%AD%8F%E5%AD%9D%E6%98%8E%E5%B8%9D%E5%A5%B3)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>によれば、性別を偽って生後間もなく帝位につけられた (「武泰元年春正月……。乙丑……<em>皇女生，祕言皇子</em>。丙寅，大赦，改元。」「二月……甲寅，<em>皇子即位</em>，大赦天下。」とある)。
+しかし「乙卯，幼主即位。」とあり、この皇女は即位二日目に廃された。
+</dd>
+
+<dt id="p136_t">元法僧</dt>
+<dd id="p136_d"><button type="button" onclick="look_at('p136')">元法僧を見る</button> <button type="button" onclick="reselect('p136')">元法僧を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%B3%95%E5%83%A7">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「長子他……世子吐萬，早卒……吐萬弟鍾葵，早卒……長子法壽……法壽弟<em>法僧</em>……」とある。
+また「孝昌元年，法僧殺行臺高諒，反於彭城，<em>自稱尊號</em>，號年天啟。大軍致討，法僧攜諸子，擁掠城內及文武，<em>南奔蕭衍</em>。」とあり、皇帝を僭称したのちに梁に亡命したことがわかる。
+</dd>
+
+<dt id="p67_t">元羽</dt>
+<dd id="p67_d"><button type="button" onclick="look_at('p67')">元羽を見る</button> <button type="button" onclick="reselect('p67')">元羽を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E7%BE%BD">Wikipedia (ja)</a>]
+広陵王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%BB%A3%E9%99%B5%E7%8E%8B">『魏書』巻21
+上・広陵王・元羽伝</a>。</dd>
+
+<dt id="p74_t">元脩</dt>
+<dd id="p74_d"><button type="button" onclick="look_at('p74')">元脩を見る</button> <button type="button" onclick="reselect('p74')">元脩を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AD%9D%E6%AD%A6%E5%B8%9D_(%E5%8C%97%E9%AD%8F)">Wikipedia (ja)</a>]
+孝武帝。出帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%87%BA%E5%B8%9D">『魏書』巻11・出帝紀</a>。</dd>
+
+<dt id="p60_t">元融</dt>
+<dd id="p60_d"><button type="button" onclick="look_at('p60')">元融を見る</button> <button type="button" onclick="reselect('p60')">元融を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E8%9E%8D">Wikipedia (ja)</a>]
+章武王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E9%95%B7%E5%AD%90_%E7%AB%A0%E6%AD%A6%E8%8E%8A%E6%AD%A6%E7%8E%8B%E8%9E%8D_%EF%BC%88%E9%99%84%E5%AD%90_%E6%99%AF%E5%93%B2%E3%80%81%E6%9C%97%E3%80%81%E9%BB%83%E9%A0%AD%EF%BC%89">『魏書』巻19下・章武王・元融伝</a>。</dd>
+
+<dt id="p35_t">元詡</dt>
+<dd id="p35_d"><button type="button" onclick="look_at('p35')">元詡を見る</button> <button type="button" onclick="reselect('p35')">元詡を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%AD%9D%E6%98%8E%E5%B8%9D">Wikipedia (ja)</a>]
+孝明帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>。</dd>
+
+<dt id="p144_t">元詳</dt>
+<dd id="p144_d"><button type="button" onclick="look_at('p144')">元詳を見る</button> <button type="button" onclick="reselect('p144')">元詳を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E8%A9%B3">Wikipedia (ja)</a>]
+北海王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%8C%97%E6%B5%B7%E7%8E%8B">『魏書』巻21上・北海王・元詳伝</a>。</dd>
+
+<dt id="p51_t">元釗</dt>
+<dd id="p51_d"><button type="button" onclick="look_at('p51')">元釗を見る</button> <button type="button" onclick="reselect('p51')">元釗を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E3%82%B7%E3%83%A7%E3%82%A6">Wikipedia (ja)</a>]
+幼主。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>に「皇曾孫故臨洮王寶暉世子釗」「乙卯，幼主即位」などと見える。
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7004#%E5%B9%BC%E4%B8%BB%E9%87%97">『北史』巻4</a>にも一応本紀がある。</dd>
+
+<dt id="p135_t">元鍾葵</dt>
+<dd id="p135_d"><button type="button" onclick="look_at('p135')">元鍾葵を見る</button> <button type="button" onclick="reselect('p135')">元鍾葵を選択する</button>
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「世子吐萬，早卒……。吐萬弟鍾葵，早卒。」とある。
+</dd>
+
+<dt id="p146_t">元顥</dt>
+<dd id="p146_d"><button type="button" onclick="look_at('p146')">元顥を見る</button> <button type="button" onclick="reselect('p146')">元顥を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%85%83%E3%82%B3%E3%82%A6">Wikipedia (ja)</a>]
+北海王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%8C%97%E6%B5%B7%E7%8E%8B">『魏書』巻21上・北海王・元詳伝</a>に「子顥，字子明，襲。」から始まる附伝あり。</dd>
+
+<dt id="p147_t">劉副侖</dt>
+<dd id="p147_d"><button type="button" onclick="look_at('p147')">劉副侖を見る</button> <button type="button" onclick="reselect('p147')">劉副侖を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%89%AF%E4%BB%91">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……<em>猛生副論。副論生路孤</em>，路孤生眷」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795">『魏書』巻95・劉虎伝</a>には「猛死，子<em>副崙</em>來奔」とある。</dd>
+
+<dt id="p150_t">劉尸利</dt>
+<dd id="p150_d"><button type="button" onclick="look_at('p150')">劉尸利を見る</button> <button type="button" onclick="reselect('p150')">劉尸利を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……穆生度遼將軍進伯，……。生<em>尸利</em>，單于以為谷蠡王，號獨孤部。尸利生烏利」とある。</dd>
+
+<dt id="p56_t">劉椒房</dt>
+<dd id="p56_d"><button type="button" onclick="look_at('p56')">劉椒房を見る</button> <button type="button" onclick="reselect('p56')">劉椒房を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E6%99%83#%E5%A6%BB%E5%A6%BE">Wikipedia (zh)</a> (拓跋晃のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A">『魏書』巻19上</a>に「景穆皇帝十四男。……<em>劉椒房</em>生南安惠王楨、城陽康王長壽。」とある。</dd>
+
+<dt id="p149_t">劉烏利</dt>
+<dd id="p149_d"><button type="button" onclick="look_at('p149')">劉烏利を見る</button> <button type="button" onclick="reselect('p149')">劉烏利を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……尸利生<em>烏利</em>。二子：<em>去卑</em>、猛。」とある。
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7130">『晋書』巻130・赫連勃勃載記</a>には「赫連勃勃，字屈孑，匈奴右賢王<em>去卑</em>之後」とあるので、赫連勃勃の先祖でもある、ということになる (<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795#%E5%8A%89%E8%99%8E">『魏書』巻95・劉虎伝</a>も参照)。
+ところで、<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7101#%E5%8A%89%E5%85%83%E6%B5%B7">『晋書』巻101・劉元海 (劉淵) 載記</a>には「單于<em>羌渠</em>使<em>子於扶羅</em>將兵助漢，討平黃巾。……<em>於扶羅</em>死，<em>弟呼廚泉</em>立，以<em>於扶羅子豹</em>為左賢王，即<em>元海之父</em>也。」とあるから劉淵の曽祖父は羌渠ということになるのだが、羌渠の子 (於扶羅の弟) の呼廚泉からみて去卑は叔父にあたるらしく (<a href="https://zh.wikisource.org/zh-hant/%E5%BE%8C%E6%BC%A2%E6%9B%B8/%E5%8D%B789">『後漢書』巻89</a>や<a href="https://zh.wikisource.org/wiki/%E4%B8%89%E5%9C%8B%E5%BF%97/%E5%8D%B701">『三国志』巻1・魏書・武帝紀</a>に照らして、<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7053#%E7%A0%B4%E5%85%AD%E9%9F%93%E5%B8%B8">『北史』巻53・破六韓常伝</a>の「初<em>呼廚貌</em>入朝漢，為魏武所留，遣<em>其叔父</em>右賢王<em>去卑</em>監本國戶。」の「呼廚貌」は「呼廚泉」のこと、と解釈する、ってことなのかな？)、ということは去卑は羌渠の弟ということになり、だったら去卑の父である劉烏利は羌渠の父でもあるということになって、つまり劉烏利は劉淵の先祖でもある、ということになる。
+……果たしてどこまで信じてよいのだろうか。
+</dd>
+
+<dt id="p148_t">劉猛</dt>
+<dd id="p148_d"><button type="button" onclick="look_at('p148')">劉猛を見る</button> <button type="button" onclick="reselect('p148')">劉猛を選択する</button> 
+ [<a href="https://ja.wikipedia.org/wiki/%E5%8A%89%E7%8C%9B_(%E5%8C%88%E5%A5%B4)">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……尸利生烏利。二子：去卑、<em>猛</em>。猛生副論」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795">『魏書』巻95・劉虎伝</a>には「猛死，子副崙來奔」とある。</dd>
+
+<dt id="p18_t">劉眷</dt>
+<dd id="p18_d"><button type="button" onclick="look_at('p18')">劉眷を見る</button> <button type="button" onclick="reselect('p18')">劉眷を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E5%8A%89%E7%9C%B7">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……路孤生<em>眷</em>，<em>眷</em>生羅辰……」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B723#%E5%8A%89%E5%BA%AB%E4%BB%81">『魏書』巻23・劉庫仁伝</a>に「劉庫仁……劉虎之宗也……母平文皇帝之女。庫仁弟<em>眷</em>，繼攝國事。」とあり、
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「道武宣穆皇后劉氏，<em>劉眷</em>女也」とある。
+</dd>
+
+<dt id="p19_t">劉貴人</dt>
+<dd id="p19_d"><button type="button" onclick="look_at('p19')">劉貴人を見る</button> <button type="button" onclick="reselect('p19')">劉貴人を選択する</button>
+[<a href="">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>道武宣穆皇后劉氏</em>，劉眷女也。登國初，納為夫人，生華陰公主，後生太宗。」から始まる伝がある。「魏故事，後宮產子將為儲貳，其母皆賜死。太祖末年，后以舊法薨。」と、子貴母死の対象だったことが明記されている。</dd>
+
+<dt id="p17_t">劉路孤</dt>
+<dd id="p17_d"><button type="button" onclick="look_at('p17')">劉路孤を見る</button> <button type="button" onclick="reselect('p17')">劉路孤を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E8%B7%AF%E5%AD%A4">Wikipedia (zh)</a>] <a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱鬱律立……二年，<em>劉虎</em>據朔方，來侵西部，帝逆擊，大破之，虎單騎迸走。<em>其從弟路孤</em>率部落內附，<em>帝以女妻之</em>。」とある。</dd>
+
+<dt id="p151_t">劉進伯</dt>
+<dd id="p151_d"><button type="button" onclick="look_at('p151')">劉進伯を見る</button> <button type="button" onclick="reselect('p151')">劉進伯を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……穆生度遼將軍<em>進伯</em>，……。生尸利」とある。</dd>
+
+<dt id="p127_t">吐奴傀</dt>
+<dd id="p127_d"><button type="button" onclick="look_at('p127')">吐奴傀を見る</button> <button type="button" onclick="reselect('p127')">吐奴傀を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%90%90%E5%A5%B4%E5%82%80">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「車鹿會死，子吐奴傀立。」とある。</dd>
+
+<dt id="p110_t">唐氏</dt>
+<dd id="p110_d"><button type="button" onclick="look_at('p110')">唐氏を見る</button> <button type="button" onclick="reselect('p110')">唐氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%AE%9D_(%E6%95%A6%E7%85%8C%E5%85%AC)#%E7%88%B6%E6%AF%8D">Wikipedia (zh)</a> (李宝のページ)]</dd>
+
+<dt id="p90_t">地粟袁</dt>
+<dd id="p90_d"><button type="button" onclick="look_at('p90')">地粟袁を見る</button> <button type="button" onclick="reselect('p90')">地粟袁を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E5%9C%B0%E7%B2%9F%E8%A2%81">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「跋提死，子地粟袁立。」とある。</dd>
+
+<dt id="p88_t">大檀</dt>
+<dd id="p88_d"><button type="button" onclick="look_at('p88')">大檀を見る</button> <button type="button" onclick="reselect('p88')">大檀を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E9%83%81%E4%B9%85%E9%96%AD%E5%A4%A7%E6%AA%80">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「<em>大檀</em>者，<em>社崘季父僕渾之子</em>，先統別部，鎮於西界，能得眾心，國人推戴之，號牟汗紇升蓋可汗」とある。
+またこれに先立って、「<em>地粟袁</em>……次子<em>縕紇提</em>別居西邊。」、「獲<em>縕紇提</em>子曷多汗及曷多汗兄詰歸之、<em>社崘</em>、斛律等并宗黨數百人」とある。
+つまり、僕渾は、地粟袁の子の縕紇提の子である社崘から見た季父 (一番下の叔父) なので、地粟袁の子ということ。大檀はその僕渾の子である。
+</dd>
+
+<dt id="p132_t">大王夫人</dt>
+<dd id="p132_d"><button type="button" onclick="look_at('p132')">大王夫人を見る</button> <button type="button" onclick="reselect('p132')">大王夫人を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E7%86%99#%E6%AF%8D">Wikipedia (zh)</a> (拓跋熙のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716">『魏書』巻16</a>に「道武皇帝十男……大王夫人生陽平王熙」とある。</dd>
+
+<dt id="p66_t">孟椒房</dt>
+<dd id="p66_d"><button type="button" onclick="look_at('p66')">孟椒房を見る</button> <button type="button" onclick="reselect('p66')">孟椒房を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%AD%9F%E6%A4%92%E6%88%BF">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上</a>に「獻文皇帝七男。……孟椒房生廣陵惠王羽。」とある。</dd>
+
+<dt id="p154_t">安楽公主</dt>
+<dd id="p154_d"><button type="button" onclick="look_at('p154')">安楽公主を見る</button> <button type="button" onclick="reselect('p154')">安楽公主を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%AE%89%E4%B9%90%E5%85%AC%E4%B8%BB_(%E5%8C%97%E9%AD%8F)#%E5%AD%90%E5%A5%B3">Wikipedia (zh)</a>] (父の拓跋晃のページ)
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙乾帰附伝に「尚恭宗女安樂公主」とある。</dd>
+
+<dt id="p85_t">慕容廆</dt>
+<dd id="p85_d"><button type="button" onclick="look_at('p85')">慕容廆を見る</button> <button type="button" onclick="reselect('p85')">慕容廆を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%85%95%E5%AE%B9%E3%82%AB%E3%82%A4">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108・慕容廆載記</a>。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795#%E6%85%95%E5%AE%B9%E5%BB%86">『魏書』巻95</a>。</dd>
+
+<dt id="p124_t">慕容木延</dt>
+<dd id="p124_d"><button type="button" onclick="look_at('p124')">慕容木延を見る</button> <button type="button" onclick="reselect('p124')">慕容木延を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%85%95%E5%AE%B9%E6%9C%A8%E5%BB%B6">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……祖木延，左賢王。」とある。</dd>
+
+<dt id="p8_t">慕容氏</dt>
+<dd id="p8_d"><button type="button" onclick="look_at('p8')">慕容氏を見る</button> <button type="button" onclick="reselect('p8')">慕容氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%98%AD%E6%88%90%E7%9A%87%E5%90%8E_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「昭成皇后慕容氏，元真之女也。」から始まる伝がある。</dd>
+
+<dt id="p123_t">慕容渉帰</dt>
+<dd id="p123_d"><button type="button" onclick="look_at('p123')">慕容渉帰を見る</button> <button type="button" onclick="reselect('p123')">慕容渉帰を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%85%95%E5%AE%B9%E6%B8%89%E5%B8%B0">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……父涉歸，以全柳城之功，進拜鮮卑單于，遷邑於遼東北，於是漸慕諸夏之風矣。」とある。</dd>
+
+<dt id="p9_t">慕容皝</dt>
+<dd id="p9_d"><button type="button" onclick="look_at('p9')">慕容皝を見る</button> <button type="button" onclick="reselect('p9')">慕容皝を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%85%95%E5%AE%B9%E3%82%B3%E3%82%A6">Wikipedia (ja)</a>]
+前燕文明帝。
+『魏書』(<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795#%E6%85%95%E5%AE%B9%E5%BB%86">巻95</a>など) では字の元真で記す (<a href="https://ctext.org/wiki.pl?if=gb&chapter=472257#p24">避諱のためらしい</a>)。
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7109#%E6%85%95%E5%AE%B9%E7%9A%9D">『晋書』巻109・慕容皝載記</a>。
+</dd>
+
+<dt id="p125_t">慕容莫護跋</dt>
+<dd id="p125_d"><button type="button" onclick="look_at('p125')">慕容莫護跋を見る</button> <button type="button" onclick="reselect('p125')">慕容莫護跋を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……曾祖莫護跋……」とある。</dd>
+
+<dt id="p7_t">拓跋什翼犍</dt>
+<dd id="p7_d"><button type="button" onclick="look_at('p7')">拓跋什翼犍を見る</button> <button type="button" onclick="reselect('p7')">拓跋什翼犍を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E4%BB%80%E7%BF%BC%E3%82%B1%E3%83%B3">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「昭成皇帝諱什翼犍立，平文之次子也。」から始まる記事あり。</dd>
+
+<dt id="p134_t">拓跋他</dt>
+<dd id="p134_d"><button type="button" onclick="look_at('p134')">拓跋他を見る</button> <button type="button" onclick="reselect('p134')">拓跋他を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E4%BB%96">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「長子他，襲爵。」から始まる附伝あり。</dd>
+
+<dt id="p38_t">拓跋余</dt>
+<dd id="p38_d"><button type="button" onclick="look_at('p38')">拓跋余を見る</button> <button type="button" onclick="reselect('p38')">拓跋余を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E4%BD%99">Wikipedia (ja)</a>]
+南安王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718#%E5%8D%97%E5%AE%89%E7%8E%8B">『魏書』巻18・南安王・拓跋余伝</a>に「世祖暴崩，中常侍宗愛矯皇太后令迎<em>余</em>而立之。」などとある。</dd>
+
+<dt id="p1_t">拓跋力微</dt>
+<dd id="p1_d"><button type="button" onclick="look_at('p1')">拓跋力微を見る</button> <button type="button" onclick="reselect('p1')">拓跋力微を選択する</button>  
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E5%8A%9B%E5%BE%AE">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「始祖神元皇帝諱力微」から始まる記事あり。</dd>
+
+<dt id="p20_t">拓跋嗣</dt>
+<dd id="p20_d"><button type="button" onclick="look_at('p20')">拓跋嗣を見る</button> <button type="button" onclick="reselect('p20')">拓跋嗣を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%98%8E%E5%85%83%E5%B8%9D">Wikipedia (ja)</a>]
+明元帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B73">『魏書』巻3・太宗紀</a>。</dd>
+
+<dt id="p10_t">拓跋寔</dt>
+<dd id="p10_d"><button type="button" onclick="look_at('p10')">拓跋寔を見る</button> <button type="button" onclick="reselect('p10')">拓跋寔を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E5%AF%94">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「三十四年春，長孫斤謀反，伏誅。斤之反也，拔刃向御座，<em>太子獻明皇帝諱寔</em>格之，傷脅。夏五月，薨，後追諡焉。」とある。
+</dd>
+
+<dt id="p50_t">拓跋廓</dt>
+<dd id="p50_d"><button type="button" onclick="look_at('p50')">拓跋廓を見る</button> <button type="button" onclick="reselect('p50')">拓跋廓を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%81%AD%E5%B8%9D_(%E8%A5%BF%E9%AD%8F)">Wikipedia (ja)</a>]
+西魏・恭帝。
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E6%81%AD%E5%B8%9D">『北史』巻5・西魏・恭帝紀</a>。</dd>
+
+<dt id="p4_t">拓跋弗</dt>
+<dd id="p4_d"><button type="button" onclick="look_at('p4')">拓跋弗を見る</button> <button type="button" onclick="reselect('p4')">拓跋弗を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E5%BC%97">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「思皇帝諱弗立，文帝之少子也。」云々の記事あり。</dd>
+
+<dt id="p28_t">拓跋弘</dt>
+<dd id="p28_d"><button type="button" onclick="look_at('p28')">拓跋弘を見る</button> <button type="button" onclick="reselect('p28')">拓跋弘を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E7%8C%AE%E6%96%87%E5%B8%9D">Wikipedia (ja)</a>]
+献文帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B76">『魏書』巻6・顕祖紀</a>。</dd>
+
+<dt id="p24_t">拓跋晃</dt>
+<dd id="p24_d"><button type="button" onclick="look_at('p24')">拓跋晃を見る</button> <button type="button" onclick="reselect('p24')">拓跋晃を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E6%99%83">Wikipedia (ja)</a>]
+景穆太子。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B74%E4%B8%8B#%E6%81%AD%E5%AE%97">『魏書』巻4下・恭宗紀</a>。</dd>
+
+<dt id="p57_t">拓跋楨</dt>
+<dd id="p57_d"><button type="button" onclick="look_at('p57')">拓跋楨を見る</button> <button type="button" onclick="reselect('p57')">拓跋楨を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E3%83%86%E3%82%A4">Wikipedia (ja)</a>]
+南安王。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E5%8D%97%E5%AE%89%E6%83%A0%E7%8E%8B%E6%A5%A8">『魏書』巻19下・南安王・拓跋楨伝</a>。</dd>
+
+<dt id="p13_t">拓跋氏</dt>
+<dd id="p13_d"><button type="button" onclick="look_at('p13')">拓跋氏を見る</button> <button type="button" onclick="reselect('p13')">拓跋氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「賀訥，代人，太祖之元舅，獻明后之兄也。……祖紇，始有勳於國，尚<em>平文女</em>。父野干，尚昭成女遼西公主。」とある。</dd>
+
+<dt id="p16_t">拓跋氏</dt>
+<dd id="p16_d"><button type="button" onclick="look_at('p16')">拓跋氏を見る</button> <button type="button" onclick="reselect('p16')">拓跋氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱鬱律立……二年，<em>劉虎</em>據朔方，來侵西部，帝逆擊，大破之，虎單騎迸走。<em>其從弟路孤</em>率部落內附，<em>帝以女妻之</em>。」とある。</dd>
+
+<dt id="p2_t">拓跋沙漠汗</dt>
+<dd id="p2_d"><button type="button" onclick="look_at('p2')">拓跋沙漠汗を見る</button> <button type="button" onclick="reselect('p2')">拓跋沙漠汗を選択する</button> 
+ [<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E6%B2%99%E6%BC%A0%E6%B1%97">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「文皇帝諱沙漠汗」から始まる記事あり。</dd>
+
+<dt id="p26_t">拓跋濬</dt>
+<dd id="p26_d"><button type="button" onclick="look_at('p26')">拓跋濬を見る</button> <button type="button" onclick="reselect('p26')">拓跋濬を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%96%87%E6%88%90%E5%B8%9D_(%E5%8C%97%E9%AD%8F)">Wikipedia (ja)</a>]
+文成帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B75">『魏書』巻5・高宗紀</a>。</dd>
+
+<dt id="p133_t">拓跋熙</dt>
+<dd id="p133_d"><button type="button" onclick="look_at('p133')">拓跋熙を見る</button> <button type="button" onclick="reselect('p133')">拓跋熙を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E7%85%95">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>。
+</dd>
+
+<dt id="p22_t">拓跋燾</dt>
+<dd id="p22_d"><button type="button" onclick="look_at('p22')">拓跋燾を見る</button> <button type="button" onclick="reselect('p22')">拓跋燾を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E5%A4%AA%E6%AD%A6%E5%B8%9D">Wikipedia (ja)</a>]
+世祖。太武帝。
+『魏書』<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B74%E4%B8%8A">巻4上</a>・
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B74%E4%B8%8B">巻4下</a>。</dd>
+
+<dt id="p15_t">拓跋珪</dt>
+<dd id="p15_d"><button type="button" onclick="look_at('p15')">拓跋珪を見る</button> <button type="button" onclick="reselect('p15')">拓跋珪を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E9%81%93%E6%AD%A6%E5%B8%9D">Wikipedia (ja)</a>]
+道武帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B72">『魏書』巻2・太祖紀</a>。</dd>
+
+<dt id="p0_t">拓跋詰汾</dt>
+<dd id="p0_d"><button type="button" onclick="look_at('p0')">拓跋詰汾を見る</button> <button type="button" onclick="reselect('p0')">拓跋詰汾を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E8%A9%B0%E6%B1%BE">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「聖武皇帝諱詰汾」から始まる記事あり。</dd>
+
+<dt id="p5_t">拓跋鬱律</dt>
+<dd id="p5_d"><button type="button" onclick="look_at('p5')">拓跋鬱律を見る</button> <button type="button" onclick="reselect('p5')">拓跋鬱律を選択する</button> 
+ [<a href="https://ja.wikipedia.org/wiki/%E6%8B%93%E8%B7%8B%E9%AC%B1%E5%BE%8B">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱鬱律立」から始まる記事あり。</dd>
+
+<dt id="p129_t">木骨閭</dt>
+<dd id="p129_d"><button type="button" onclick="look_at('p129')">木骨閭を見る</button> <button type="button" onclick="reselect('p129')">木骨閭を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%9C%A8%E9%AA%A8%E9%96%AD">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「始神元之末，掠騎有得一奴，髮始齊眉，忘本姓名，其主字之曰<em>木骨閭</em>。「木骨閭」者，首禿也。木骨閭與郁久閭聲相近，故後子孫因以為氏。<em>木骨閭</em>既壯，免奴為騎卒。穆帝時，坐後期當斬，亡匿廣漠谿谷間，收合逋逃得百餘人，依紇突隣部。」とある。</dd>
+
+<dt id="p30_t">李夫人</dt>
+<dd id="p30_d"><button type="button" onclick="look_at('p30')">李夫人を見る</button> <button type="button" onclick="reselect('p30')">李夫人を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E7%9A%87%E5%90%8E_(%E5%8C%97%E9%AD%8F%E7%8C%AE%E6%96%87%E5%B8%9D)">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻文思皇后<em>李氏</em>，中山安喜人，南郡王惠之女也。」から始まる伝あり。</dd>
+
+<dt id="p54_t">李媛華</dt>
+<dd id="p54_d"><button type="button" onclick="look_at('p54')">李媛華を見る</button> <button type="button" onclick="reselect('p54')">李媛華を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%AA%9B%E8%8F%AF">Wikipedia (zh)</a> (墓誌が詳しく引用されている)]</dd>
+
+<dt id="p108_t">李宝</dt>
+<dd id="p108_d"><button type="button" onclick="look_at('p108')">李宝を見る</button> <button type="button" onclick="reselect('p108')">李宝を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E5%AE%9D_(%E5%8C%97%E9%AD%8F)">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B739">『魏書』巻39・李宝伝</a>。</dd>
+
+<dt id="p113_t">李弇</dt>
+<dd id="p113_d"><button type="button" onclick="look_at('p113')">李弇を見る</button> <button type="button" onclick="reselect('p113')">李弇を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E5%BC%87">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「祖<em>弇</em>，仕張軌為武衛將軍、安世亭侯。」とある。</dd>
+
+<dt id="p99_t">李恵</dt>
+<dd id="p99_d"><button type="button" onclick="look_at('p99')">李恵を見る</button> <button type="button" onclick="reselect('p99')">李恵を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E6%81%B5">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「李惠，中山人，思皇后之父也。」から始まる伝あり。</dd>
+
+<dt id="p92_t">李方叔</dt>
+<dd id="p92_d"><button type="button" onclick="look_at('p92')">李方叔を見る</button> <button type="button" onclick="reselect('p92')">李方叔を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E6%96%B9%E5%8F%94">Wikipedia (zh)</a> (曽孫の墓誌の情報あり)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成元皇后<em>李氏</em>……父<em>方叔</em>恒言此女當大貴。」とある。</dd>
+
+<dt id="p112_t">李昶</dt>
+<dd id="p112_d"><button type="button" onclick="look_at('p112')">李昶を見る</button> <button type="button" onclick="reselect('p112')">李昶を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E6%98%B6">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「父昶，幼有令名，早卒，遺腹生玄盛。」とある。</dd>
+
+<dt id="p111_t">李暠</dt>
+<dd id="p111_d"><button type="button" onclick="look_at('p111')">李暠を見る</button> <button type="button" onclick="reselect('p111')">李暠を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E3%82%B3%E3%82%A6_(%E8%A5%BF%E6%B6%BC)">Wikipedia (ja)</a>]
+西涼・武昭王。
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>。</dd>
+
+<dt id="p130_t">李柔</dt>
+<dd id="p130_d"><button type="button" onclick="look_at('p130')">李柔を見る</button> <button type="button" onclick="reselect('p130')">李柔を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「高祖雍，曾祖<em>柔</em>，仕晉並歷位郡守。」とある。</dd>
+
+<dt id="p73_t">李氏</dt>
+<dd id="p73_d"><button type="button" onclick="look_at('p73')">李氏を見る</button> <button type="button" onclick="reselect('p73')">李氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%87%BA%E5%B8%9D">『魏書』巻11・出帝紀</a>に
+「出帝，諱脩，字孝則，廣平武穆王懷之第三子也，母<em>李氏</em>。」
+「丁巳，追尊皇考為武穆帝，皇太妃馮氏為武穆后，<em>皇妣李氏</em>為皇太妃。」などとある。</dd>
+
+<dt id="p105_t">李沖</dt>
+<dd id="p105_d"><button type="button" onclick="look_at('p105')">李沖を見る</button> <button type="button" onclick="reselect('p105')">李沖を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E6%B2%96_(%E5%8C%97%E9%AD%8F)">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B753">『魏書』巻53・李沖伝</a>。</dd>
+
+<dt id="p109_t">李翻</dt>
+<dd id="p109_d"><button type="button" onclick="look_at('p109')">李翻を見る</button> <button type="button" onclick="reselect('p109')">李翻を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E7%BF%BB">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B739">『魏書』巻39・李宝伝</a>に「李寶……私署涼王暠之孫也。父<em>翻</em>，字士舉，小字武彊，私署驍騎將軍，祁連、酒泉、晉昌三郡太守。寶沉雅有度量，驍勇善撫接。」とある。</dd>
+
+<dt id="p102_t">李蓋</dt>
+<dd id="p102_d"><button type="button" onclick="look_at('p102')">李蓋を見る</button> <button type="button" onclick="reselect('p102')">李蓋を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%9D%8E%E8%93%8B">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「李惠，中山人，思皇后之父也。父<em>蓋</em>，少知名，歷位殿中、都官二尚書，左將軍，南郡公。」から始まる記事がある。</dd>
+
+<dt id="p27_t">李貴人</dt>
+<dd id="p27_d"><button type="button" onclick="look_at('p27')">李貴人を見る</button> <button type="button" onclick="reselect('p27')">李貴人を選択する</button> 
+
+[<a href="https://zh.wikipedia.org/wiki/%E6%96%87%E6%88%90%E5%85%83%E7%9A%87%E5%90%8E">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成元皇后李氏」から始まる伝あり。「及生顯祖，拜貴人。」などとある。</dd>
+
+<dt id="p131_t">李雍</dt>
+<dd id="p131_d"><button type="button" onclick="look_at('p131')">李雍を見る</button> <button type="button" onclick="reselect('p131')">李雍を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「高祖<em>雍</em>，曾祖柔，仕晉並歷位郡守。」とある。</dd>
+
+<dt id="p87_t">杜豹</dt>
+<dd id="p87_d"><button type="button" onclick="look_at('p87')">杜豹を見る</button> <button type="button" onclick="reselect('p87')">杜豹を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「杜超……密皇后之兄也。……神䴥三年……追加超父<em>豹</em>鎮東大將軍、陽平景王，母曰鉅鹿惠君。」とある。</dd>
+
+<dt id="p21_t">杜貴嬪</dt>
+<dd id="p21_d"><button type="button" onclick="look_at('p21')">杜貴嬪を見る</button> <button type="button" onclick="reselect('p21')">杜貴嬪を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%98%8E%E5%85%83%E5%AF%86%E6%9D%9C%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「明元密皇后杜氏……有寵，生世祖。及太宗即位，拜貴嬪。」などとある。
+</dd>
+
+<dt id="p140_t">林勝</dt>
+<dd id="p140_d"><button type="button" onclick="look_at('p140')">林勝を見る</button> <button type="button" onclick="reselect('p140')">林勝を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文貞皇后<em>林氏</em>……。叔父金閭……。金閭兄<em>勝</em>為平涼太守。金閭，顯祖初為定州刺史。未幾為乙渾所誅，兄弟皆死。勝無子，有二女，入掖庭。」などとある。</dd>
+
+<dt id="p138_t">林貴人</dt>
+<dd id="p138_d"><button type="button" onclick="look_at('p138')">林貴人を見る</button> <button type="button" onclick="reselect('p138')">林貴人を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%9E%97%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>孝文貞皇后林氏</em>……<em>得幸於高祖，生皇子恂</em>。以恂將為儲貳，太和七年后<em>依舊制薨</em>。高祖仁恕，不欲襲前事，而禀文明太后意，故不果行。諡曰貞皇后，葬金陵。<em>及恂以罪賜死</em>，有司奏<em>追廢后為庶人</em>。」とある。</dd>
+
+<dt id="p43_t">楊奥妃</dt>
+<dd id="p43_d"><button type="button" onclick="look_at('p43')">楊奥妃を見る</button> <button type="button" onclick="reselect('p43')">楊奥妃を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%A5%8A%E5%A5%A5%E5%A6%83">Wikipedia (ja)</a>] 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E4%BA%AC%E5%85%86%E7%8E%8B">『魏書』巻22・京兆王・元愉伝</a>に「愉在徐州，<em>納妾李氏，本姓楊</em>」から始まる話があり、また、
+「於是遂為壇於信都之南，柴燎告天，即皇帝位。赦天下，號建平元年，<em>立李氏為皇后</em>。」
+などとある。<a href="https://www.itsfun.com.tw/%E6%A5%8A%E5%A5%A7%E5%A6%83/wiki-01990762-41574652">墓誌</a>も見つかっているらしい。</dd>
+
+<dt id="p86_t">段夫人</dt>
+<dd id="p86_d"><button type="button" onclick="look_at('p86')">段夫人を見る</button> <button type="button" onclick="reselect('p86')">段夫人を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7082">『資治通鑑』巻82</a>に「<em>段國</em>單于階、以<em>女</em>妻廆。生皝・仁・昭。」とある。</dd>
+
+<dt id="p122_t">段階</dt>
+<dd id="p122_d"><button type="button" onclick="look_at('p122')">段階を見る</button> <button type="button" onclick="reselect('p122')">段階を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7082">『資治通鑑』巻82</a>に「<em>段國單于階</em>、以女妻廆。」とある。</dd>
+
+<dt id="p47_t">淮陽公主</dt>
+<dd id="p47_d"><button type="button" onclick="look_at('p47')">淮陽公主を見る</button> <button type="button" onclick="reselect('p47')">淮陽公主を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%B7%AE%E9%98%B3%E5%85%AC%E4%B8%BB_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44</a>に「子瑗，字雅珍。尚淮陽公主，高祖之女也」とあり、
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏……母淮陽長公主，孝文之第四女也。」とある。
+</dd>
+
+<dt id="p36_t">潘充華</dt>
+<dd id="p36_d"><button type="button" onclick="look_at('p36')">潘充華を見る</button> <button type="button" onclick="reselect('p36')">潘充華を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%BD%98%E5%A4%96%E6%86%90">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝明皇后胡氏……。肅宗頗有酒德，專嬖<em>充華潘氏</em>，后及嬪御並無過寵。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>に「皇太后詔曰：「……自潘充華有孕椒宮……」」云々のくだりもある。
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7016">『北史』巻16</a>には「嵩以帝嬪<em>潘外憐</em>有幸，說雲，元叉欲害之。」と記されている。
+</dd>
+
+<dt id="p142_t">潘弥</dt>
+<dd id="p142_d"><button type="button" onclick="look_at('p142')">潘弥を見る</button> <button type="button" onclick="reselect('p142')">潘弥を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E5%8B%B0#cite_note-3">Wikipedia (zh)</a> (元勰のページの注にある墓誌)]
+に「太妃長樂潘氏……父彌，平原樂安二郡太守」とある。
+[<a href="https://zh.wikipedia.org/wiki/%E6%BD%98%E8%B2%B4%E4%BA%BA_(%E5%8C%97%E9%AD%8F%E7%8D%BB%E6%96%87%E5%B8%9D)">Wikipedia (zh)</a> (潘貴人のページ)]
+でも同様。</dd>
+
+<dt id="p143_t">潘猛</dt>
+<dd id="p143_d"><button type="button" onclick="look_at('p143')">潘猛を見る</button> <button type="button" onclick="reselect('p143')">潘猛を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E5%8B%B0#cite_note-3">Wikipedia (zh)</a> (元勰のページの注にある墓誌)]
+に「太妃長樂潘氏，祖猛，青州治中東萊廣川……二郡太守」とある。
+書き起こし方がちょっと謎だ (間に別人のことがはさまっている) が、
+[<a href="https://zh.wikipedia.org/wiki/%E6%BD%98%E8%B2%B4%E4%BA%BA_(%E5%8C%97%E9%AD%8F%E7%8D%BB%E6%96%87%E5%B8%9D)">Wikipedia (zh)</a> (潘貴人のページ)]
+では「祖父潘猛，官至青州治中、东莱、广川二郡太守。」としている。</dd>
+
+<dt id="p52_t">潘貴人</dt>
+<dd id="p52_d"><button type="button" onclick="look_at('p52')">潘貴人を見る</button> <button type="button" onclick="reselect('p52')">潘貴人を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%BD%98%E8%B2%B4%E4%BA%BA_(%E5%8C%97%E9%AD%8F%E7%8D%BB%E6%96%87%E5%B8%9D)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝</a>の冒頭に「獻文皇帝七男。……<em>潘貴人</em>生彭城武宣王勰。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8B">『魏書』巻21下・彭城王・元勰伝</a>に「詔曰：『<em>弟勰所生母潘</em>早齡謝世，顯號未加，勰禍與身具，痛隨形起，今因其展思，有足悲矜，可贈<em>彭城國太妃</em>，以慰存亡。』」とある。</dd>
+
+<dt id="p6_t">王氏</dt>
+<dd id="p6_d"><button type="button" onclick="look_at('p6')">王氏を見る</button> <button type="button" onclick="reselect('p6')">王氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「平文皇后王氏」から始まる伝あり。</dd>
+
+<dt id="p69_t">王氏</dt>
+<dd id="p69_d"><button type="button" onclick="look_at('p69')">王氏を見る</button> <button type="button" onclick="reselect('p69')">王氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%89%8D%E5%BB%A2%E5%B8%9D">『魏書』巻11・前廃帝紀</a>に「前廢帝，諱恭，字脩業，廣陵惠王羽之子也，<em>母曰王氏</em>。」とある。</dd>
+
+<dt id="p94_t">王氏</dt>
+<dd id="p94_d"><button type="button" onclick="look_at('p94')">王氏を見る</button> <button type="button" onclick="reselect('p94')">王氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成文明皇后馮氏……母樂浪王氏。」とある。</dd>
+
+<dt id="p96_t">王氏</dt>
+<dd id="p96_d"><button type="button" onclick="look_at('p96')">王氏を見る</button> <button type="button" onclick="reselect('p96')">王氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E7%8E%8B%E5%A4%AB%E4%BA%BA_(%E9%A6%AE%E5%BC%98)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7122">『資治通鑑』巻122（宋紀4）</a>の元嘉九年のところに「初，<em>燕王嫡妃王氏</em>，<em>生長樂公崇</em>，崇於兄弟爲最長。及卽位，立慕容氏爲王后，<em>王氏不得立</em>，又黜崇，使鎭肥如。<em>崇母弟廣平公朗、樂陵公邈</em>相謂曰：『今國家將亡，人無愚智皆知之。王復受慕容后之譖，吾兄弟死無日矣。』乃相與亡奔遼西，說崇使降魏，崇從之。」とある。
+この「燕王」は馮弘のことで、<button type="button" onclick="look_at('p28')">拓跋弘</button>と諱が同じなので<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B797#%E5%BC%9F_%E6%96%87%E9%80%9A">『魏書』巻97・馮弘伝 (馮文通伝)</a> では「文通，跋之少弟也，本名犯顯祖廟諱。」と避諱されているが、この馮弘伝 (馮文通伝) にも「先是，文通廢其<em>元妻王氏</em>……」から始まる同様の記事がある。
+</dd>
+
+<dt id="p61_t">程氏</dt>
+<dd id="p61_d"><button type="button" onclick="look_at('p61')">程氏を見る</button> <button type="button" onclick="reselect('p61')">程氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%BE%8C%E5%BB%A2%E5%B8%9D">『魏書』巻11・後廃帝紀</a>に「後廢帝，諱朗，字仲哲，章武王融第三子也，母曰<em>程氏</em>。」とある。</dd>
+
+<dt id="p40_t">羅夫人</dt>
+<dd id="p40_d"><button type="button" onclick="look_at('p40')">羅夫人を見る</button> <button type="button" onclick="reselect('p40')">羅夫人を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a> (墓誌の引用あり)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「孝文皇帝七男……羅夫人生清河文獻王懌、汝南文宣王悅。」とある。</dd>
+
+<dt id="p97_t">羅提</dt>
+<dd id="p97_d"><button type="button" onclick="look_at('p97')">羅提を見る</button> <button type="button" onclick="reselect('p97')">羅提を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E7%BD%97%E6%8F%90_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，渥子<em>提</em>，並歷通顯。<em>提</em>從世祖討赫連昌有功，賜昌女為妻。」とある。</dd>
+
+<dt id="p77_t">羅氏</dt>
+<dd id="p77_d"><button type="button" onclick="look_at('p77')">羅氏を見る</button> <button type="button" onclick="reselect('p77')">羅氏を選択する</button> 
+父方のおば、かつ、夫の母にあたる羅夫人の <a href="https://zh.wikipedia.org/wiki/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh) のページ</a>に引用されている墓誌に「祖母河南<em>罗氏</em>。父盖，使持节抚军将军济衮二州刺史。」と出てくる。
+</dd>
+
+<dt id="p98_t">羅渥</dt>
+<dd id="p98_d"><button type="button" onclick="look_at('p98')">羅渥を見る</button> <button type="button" onclick="reselect('p98')">羅渥を選択する</button> 叱羅氏。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子<em>渥</em>，渥子提，並歷通顯。」とある。</dd>
+
+<dt id="p76_t">羅蓋</dt>
+<dd id="p76_d"><button type="button" onclick="look_at('p76')">羅蓋を見る</button> <button type="button" onclick="reselect('p76')">羅蓋を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，渥子提……。子雲……。子<em>蓋</em>，世宗時右將軍、直閤將軍。轉龍驤將軍、濟州刺史。卒，贈本將軍、兗州刺史。」とある。</dd>
+
+<dt id="p75_t">羅雲</dt>
+<dd id="p75_d"><button type="button" onclick="look_at('p75')">羅雲を見る</button> <button type="button" onclick="reselect('p75')">羅雲を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E7%BD%97%E4%BA%91_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，渥子提……。子<em>雲</em>，早有名位。顯祖時給事中，西征敕勒，為賊所襲殺。」とある。</dd>
+
+<dt id="p81_t">胡国珍</dt>
+<dd id="p81_d"><button type="button" onclick="look_at('p81')">胡国珍を見る</button> <button type="button" onclick="reselect('p81')">胡国珍を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E8%83%A1%E5%9B%BD%E7%8F%8D">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>。</dd>
+
+<dt id="p84_t">胡寧</dt>
+<dd id="p84_d"><button type="button" onclick="look_at('p84')">胡寧を見る</button> <button type="button" onclick="reselect('p84')">胡寧を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E8%83%A1%E5%AE%81_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「養<em>兄真</em>子僧洗為後」とあり、また、「<em>真長子寧</em>，字惠歸。襲國珍先爵，改為臨涇伯，後進為公。歷岐涇二州刺史。卒，諡曰孝穆。女為清河王亶妃，生孝靜皇帝。武定初，贈太師、太尉公、錄尚書事，諡曰孝昭。」という附伝がある。</dd>
+
+<dt id="p79_t">胡智</dt>
+<dd id="p79_d"><button type="button" onclick="look_at('p79')">胡智を見る</button> <button type="button" onclick="reselect('p79')">胡智を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E8%83%A1%E6%99%BA">Wikipedia (zh)</a>] では文献を参照して諱を「智」としている。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>には「養<em>兄真</em>子僧洗為後」とあり、また、「<em>真長子寧</em>……<em>女為清河王亶妃</em>，生孝靜皇帝。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B712">『魏書』巻12・孝静紀</a>には「孝靜皇帝，諱善見，清河文宣王亶之世子也，母曰<em>胡妃</em>。」とある。
+</dd>
+
+<dt id="p82_t">胡淵</dt>
+<dd id="p82_d"><button type="button" onclick="look_at('p82')">胡淵を見る</button> <button type="button" onclick="reselect('p82')">胡淵を選択する</button>
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「父<em>淵</em>，赫連屈丐給事黃門侍郎。世祖克統萬，<em>淵</em>以降款之功賜爵武始侯。後拜河州刺史。」とある。</dd>
+
+<dt id="p83_t">胡真</dt>
+<dd id="p83_d"><button type="button" onclick="look_at('p83')">胡真を見る</button> <button type="button" onclick="reselect('p83')">胡真を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「養<em>兄真</em>子僧洗為後」とある。</dd>
+
+<dt id="p145_t">范氏</dt>
+<dd id="p145_d"><button type="button" onclick="look_at('p145')">范氏を見る</button> <button type="button" onclick="reselect('p145')">范氏を選択する</button> <a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%8C%97%E6%B5%B7%E7%8E%8B">『魏書』巻21上・北海王・元詳伝</a>に「寵<em>妾范氏</em>，愛等伉儷，及其死也，痛不自勝，乃至葬訖，猶毀𡑞視之。表請贈平昌縣君。」とある。
+また、元顥伝 (元詳伝の附伝) に「先是，顥啟<em>其舅范遵</em>為殷州刺史，遵以葛榮充逼，未得行。」とある。元顥の母方のおじが范遵ということは、元顥の母は范氏。
+</dd>
+
+<dt id="p104_t">蓋氏</dt>
+<dd id="p104_d"><button type="button" onclick="look_at('p104')">蓋氏を見る</button> <button type="button" onclick="reselect('p104')">蓋氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏，司徒公肇之妹也。父颺，母<em>蓋氏</em>，凡四男三女，皆生於東裔。」とある。</dd>
+
+<dt id="p3_t">蘭氏</dt>
+<dd id="p3_d"><button type="button" onclick="look_at('p3')">蘭氏を見る</button> <button type="button" onclick="reselect('p3')">蘭氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>文帝</em>皇后封氏，生桓、穆二帝，早崩。……<em>次妃蘭氏</em>，生二子，長子曰藍，早卒；次子，思帝也。」とある。</dd>
+
+<dt id="p64_t">衛氏</dt>
+<dd id="p64_d"><button type="button" onclick="look_at('p64')">衛氏を見る</button> <button type="button" onclick="reselect('p64')">衛氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7048#%E5%B0%92%E7%A1%83%E4%B8%96%E9%9A%86">『北史』巻48・爾朱世隆伝</a>に「時仲遠亦自滑台入京。世隆與兄弟密謀，慮<em>元曄母</em>幹豫朝政，伺<em>其母衛氏</em>出行，遣數十騎如劫賊，於京巷殺之。」とある。
+</dd>
+
+<dt id="p41_t">袁貴人</dt>
+<dd id="p41_d"><button type="button" onclick="look_at('p41')">袁貴人を見る</button> <button type="button" onclick="reselect('p41')">袁貴人を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E8%A2%81%E8%B4%B5%E4%BA%BA_(%E5%8C%97%E9%AD%8F%E5%AD%9D%E6%96%87%E5%B8%9D)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「孝文皇帝七男……<em>袁貴人</em>生京兆王愉。」とある。</dd>
+
+<dt id="p11_t">賀夫人</dt>
+<dd id="p11_d"><button type="button" onclick="look_at('p11')">賀夫人を見る</button> <button type="button" onclick="reselect('p11')">賀夫人を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E7%8C%AE%E6%98%8E%E8%B3%80%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻明皇后<em>賀氏</em>，父野干，東部大人。后少以容儀選入東宮，生太祖。」から始まる伝がある。
+</dd>
+
+<dt id="p23_t">賀夫人</dt>
+<dd id="p23_d"><button type="button" onclick="look_at('p23')">賀夫人を見る</button> <button type="button" onclick="reselect('p23')">賀夫人を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E6%95%AC%E5%93%80%E8%B3%80%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「太武敬哀皇后<em>賀氏</em>，代人也。初為夫人，生恭宗。」から始まる伝がある。</dd>
+
+<dt id="p14_t">賀紇</dt>
+<dd id="p14_d"><button type="button" onclick="look_at('p14')">賀紇を見る</button> <button type="button" onclick="reselect('p14')">賀紇を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E8%B4%BA%E7%BA%A5">Wikipedia (zh)</a>]
+賀蘭部。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「祖<em>紇</em>，始有勳於國，尚平文女。」とある。</dd>
+
+<dt id="p12_t">賀野干</dt>
+<dd id="p12_d"><button type="button" onclick="look_at('p12')">賀野干を見る</button> <button type="button" onclick="reselect('p12')">賀野干を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E8%B4%BA%E9%87%8E%E5%B9%B2">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻明皇后賀氏，父<em>野干</em>，東部大人。」とある。
+また、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「父<em>野干</em>，尚昭成女遼西公主」とある。
+</dd>
+
+<dt id="p126_t">跋提</dt>
+<dd id="p126_d"><button type="button" onclick="look_at('p126')">跋提を見る</button> <button type="button" onclick="reselect('p126')">跋提を選択する</button>
+[<a href="https://zh.wikipedia.org/wiki/%E8%B7%8B%E6%8F%90_(%E6%9F%94%E7%84%B6)">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「吐奴傀死，子跋提立。」とある。
+</dd>
+
+<dt id="p128_t">車鹿会</dt>
+<dd id="p128_d"><button type="button" onclick="look_at('p128')">車鹿会を見る</button> <button type="button" onclick="reselect('p128')">車鹿会を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E9%83%81%E4%B9%85%E9%96%AD%E8%BB%8A%E9%B9%BF%E4%BC%9A">Wikipedia (ja)</a>]
+柔然郁久閭氏。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「木骨閭死，子<em>車鹿會</em>雄健，始有部眾，自號柔然，而役屬於國。……<em>車鹿會</em>既為部帥，歲貢馬畜、貂豽皮，冬則徙度漠南，夏則還居漠北。」とある。なお「蠕蠕……姓郁久閭氏。……忘本姓名，其主字之曰木骨閭。「木骨閭」者，首禿也。木骨閭與<em>郁久閭</em>聲相近，故<em>後子孫因以為氏</em>。」とある。</dd>
+
+<dt id="p152_t">遼西公主</dt>
+<dd id="p152_d"><button type="button" onclick="look_at('p152')">遼西公主を見る</button> <button type="button" onclick="reselect('p152')">遼西公主を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E8%BE%BD%E8%A5%BF%E5%85%AC%E4%B8%BB">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「父野干，尚昭成女<em>遼西公主</em>」および「訥中弟染干粗暴，忌太祖，常圖為逆，每為<em>皇姑遼西公主</em>擁護，故染干不得肆其禍心。」とある。</dd>
+
+<dt id="p25_t">郁久閭氏</dt>
+<dd id="p25_d"><button type="button" onclick="look_at('p25')">郁久閭氏を見る</button> <button type="button" onclick="reselect('p25')">郁久閭氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%99%AF%E7%A9%86%E6%81%AD%E7%9A%87%E5%90%8E">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に伝があり、「景穆恭皇后<em>郁久閭氏</em>，河東王毗妹也。……生高宗。」などとある。</dd>
+
+<dt id="p91_t">郁久閭辰</dt>
+<dd id="p91_d"><button type="button" onclick="look_at('p91')">郁久閭辰を見る</button> <button type="button" onclick="reselect('p91')">郁久閭辰を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「景穆恭皇后<em>郁久閭氏</em>，河東王<em>毗</em>妹也。」とあり、
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の閭毗伝には、この兄妹の父についての「和平二年，追諡后祖父延定襄康公，<em>父辰</em>定襄懿王。」という記載がある。</dd>
+
+<dt id="p107_t">鄭徳玄</dt>
+<dd id="p107_d"><button type="button" onclick="look_at('p107')">鄭徳玄を見る</button> <button type="button" onclick="reselect('p107')">鄭徳玄を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E9%83%91%E5%BE%B7%E7%8E%84">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B756">『魏書』巻56・鄭羲伝</a>に附伝があり、「羲從父兄<em>德玄</em>。顯祖初，自淮南內附，拜滎陽太守。」とある。
+もともとは劉宋の人なので、
+<a href="https://zh.wikisource.org/wiki/%E5%AE%8B%E6%9B%B8/%E5%8D%B772">『宋書』巻72・南平穆王・劉鑠伝</a>に「……<em>鄭德玄</em>、張和各起義以應坦之，僕蘭奔虎牢。」とあり、
+<a href="https://zh.wikisource.org/wiki/%E5%AE%8B%E6%9B%B8/%E5%8D%B783#%E5%AE%97%E8%B6%8A">『宋書』巻83・宗越伝</a>に「爽遣將軍<em>鄭德玄</em>前據大峴，<em>德玄</em>分遣偏師楊胡興、劉蜀馬步三千，進攻歷陽。」とあり、
+<a href="https://zh.wikisource.org/wiki/%E5%AE%8B%E6%9B%B8/%E5%8D%B788#%E8%96%9B%E5%AE%89%E9%83%BD">『宋書』巻88・薛安都伝</a>にも「爽遣將<em>鄭德玄</em>戍大峴，<em>德玄</em>使前鋒楊胡與輕兵向歷陽。……<em>德玄</em>復使其司馬梁嚴屯峴東，……」とある。
+</dd>
+
+<dt id="p106_t">鄭氏</dt>
+<dd id="p106_d"><button type="button" onclick="look_at('p106')">鄭氏を見る</button> <button type="button" onclick="reselect('p106')">鄭氏を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%86%B2_(%E5%8C%97%E9%AD%8F)#%E5%A4%AB%E4%BA%BA">Wikipedia (zh)</a> (李沖のページ)] の引用によれば、<button type="button" onclick="reselect('p54')">李媛華</button>の墓誌に「亡父諱沖，司空清淵文穆公。夫人<em>熒陽鄭氏</em>。父德玄，字文通，宋散騎常侍，魏使持節冠軍將軍豫州刺史陽武靖侯。」とあるらしい。
+</dd>
+
+<dt id="p37_t">閭左昭儀</dt>
+<dd id="p37_d"><button type="button" onclick="look_at('p37')">閭左昭儀を見る</button> <button type="button" onclick="reselect('p37')">閭左昭儀を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>の世祖 (太武帝・拓跋燾) の頃の記事に、「<em>大檀</em>部落衰弱，因發疾而死，<em>子吳提</em>立……延和三年二月，以吳提尚西海公主，又遣使人納<em>吳提妹</em>為夫人，又<em>進為左昭儀</em>。」というものがある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B74%E4%B8%8A">『魏書』巻4上・世祖紀</a>にも「二月丁卯，蠕蠕吳提奉其妹」とある。
+また、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718">『魏書』巻18・太武五王列伝</a>の頭に「閭左昭儀生南安王余。」とある。</dd>
+
+<dt id="p34_t">霊太后</dt>
+<dd id="p34_d"><button type="button" onclick="look_at('p34')">霊太后を見る</button> <button type="button" onclick="reselect('p34')">霊太后を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E9%9C%8A%E5%A4%AA%E5%90%8E">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>宣武靈皇后胡氏</em>，安定臨涇人，司徒國珍女也。母皇甫氏……」から始まる伝がある。
+</dd>
+
+<dt id="p100_t">韓氏</dt>
+<dd id="p100_d"><button type="button" onclick="look_at('p100')">韓氏を見る</button> <button type="button" onclick="reselect('p100')">韓氏を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・李恵伝</a>に「李惠，中山人，思皇后之父也。……惠弱冠襲父爵，<em>妻襄城王韓頹女</em>，生二女，長即后也。」とある。
+</dd>
+
+<dt id="p101_t">韓頽</dt>
+<dd id="p101_d"><button type="button" onclick="look_at('p101')">韓頽を見る</button> <button type="button" onclick="reselect('p101')">韓頽を選択する</button> 
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・李恵伝</a>に「李惠，中山人，思皇后之父也。……惠弱冠襲父爵，妻<em>襄城王韓頹</em>女，生二女，長即后也。」とある。</dd>
+
+<dt id="p156_t">馮和</dt>
+<dd id="p156_d"><button type="button" onclick="look_at('p156')">馮和を見る</button> <button type="button" onclick="reselect('p156')">馮和を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%86%AF%E5%92%8C">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7125#%E9%A6%AE%E8%B7%8B">『晋書』巻125・馮跋伝</a>に「永嘉之亂，<em>跋祖父和</em>避地上黨。」とある。</dd>
+
+<dt id="p29_t">馮太后</dt>
+<dd id="p29_d"><button type="button" onclick="look_at('p29')">馮太后を見る</button> <button type="button" onclick="reselect('p29')">馮太后を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E6%96%87%E6%88%90%E6%96%87%E6%98%8E%E7%9A%87%E5%90%8E">Wikipedia (ja)</a>]<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>文成文明皇后馮氏</em>，長樂信都人也。父朗，秦、雍二州刺史、西城郡公，母樂浪王氏。」から始まる伝がある。</dd>
+
+<dt id="p155_t">馮安</dt>
++<dd id="p155_d"><button type="button" onclick="look_at('p155')">馮安を見る</button> <button type="button" onclick="reselect('p155')">馮安を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E5%86%AF%E5%AE%89">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7125#%E9%A6%AE%E8%B7%8B">『晋書』巻125・馮跋伝</a>に「父安，雄武有器量，慕容永時為將軍。」とある。</dd>
+
+<dt id="p95_t">馮弘</dt>
+<dd id="p95_d"><button type="button" onclick="look_at('p95')">馮弘を見る</button> <button type="button" onclick="reselect('p95')">馮弘を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E9%A6%AE%E5%BC%98">Wikipedia (ja)</a>]
+北燕・昭成帝。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B797#%E5%BC%9F_%E6%96%87%E9%80%9A">『魏書』巻97・馮弘伝 (馮文通伝)</a>。</dd>
+
+<dt id="p93_t">馮朗</dt>
+<dd id="p93_d"><button type="button" onclick="look_at('p93')">馮朗を見る</button> <button type="button" onclick="reselect('p93')">馮朗を選択する</button>
+[<a href="https://ja.wikipedia.org/wiki/%E9%A6%AE%E6%9C%97">Wikipedia (ja)</a>]<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成文明皇后馮氏，長樂信都人也。父<em>朗</em>，秦、雍二州刺史、西城郡公，母樂浪王氏。……<em>朗</em>坐事誅，后遂入宮。」とある。
+また、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B797#%E5%BC%9F_%E6%96%87%E9%80%9A">『魏書』巻97・馮弘伝 (馮文通伝)</a> に「文通廢其元妻王氏，黜世子崇……。崇母弟<em>廣平公朗</em>、樂陵公邈相謂曰……」「文通子<em>朗</em>、邈。<em>朗</em>子熙，在〈外戚傳〉。」とある。
+そして、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・馮熙伝</a>には「馮熙……文明太后之兄也。……熙父<em>朗</em>內徙，官至秦雍二州刺史、遼西郡公，坐事誅。文明太后臨朝，追贈假黃鉞、太宰、燕宣王，立廟長安。」とある。</dd>
+
+<dt id="p141_t">高椒房</dt>
+<dd id="p141_d"><button type="button" onclick="look_at('p141')">高椒房を見る</button> <button type="button" onclick="reselect('p141')">高椒房を選択する</button> 
+[<a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E6%A4%92%E6%88%BF">Wikipedia (zh)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝上</a>の冒頭に「獻文皇帝七男……<em>高椒房</em>生北海平王詳。」とある。</dd>
+
+<dt id="p32_t">高照容</dt>
+<dd id="p32_d"><button type="button" onclick="look_at('p32')">高照容を見る</button> <button type="button" onclick="reselect('p32')">高照容を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E9%AB%98%E7%85%A7%E5%AE%B9">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后<em>高氏</em>，司徒公肇之妹也。父颺，母蓋氏……」から始まる伝があり、「遂生世宗。後生廣平王懷，次長樂公主。」とある。
+「照容」という諱は墓誌から分かったのかな。</dd>
+
+<dt id="p103_t">高颺</dt>
+<dd id="p103_d"><button type="button" onclick="look_at('p103')">高颺を見る</button> <button type="button" onclick="reselect('p103')">高颺を選択する</button> 
+[<a href="https://ja.wikipedia.org/wiki/%E9%AB%98%E3%83%A8%E3%82%A6">Wikipedia (ja)</a>]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏，司徒公肇之妹也。父<em>颺</em>，母蓋氏……」とある。
+また、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・高肇伝</a>に「自云本勃海蓨人，五世祖顧，晉永嘉中避亂入高麗。<em>父颺</em>，字法脩。高祖初，與弟乘信及其鄉人韓內、冀富等入國，拜厲威將軍、河間子，乘信明威將軍，俱待以客禮，賜奴婢牛馬綵帛。遂納<em>颺</em>女，是為文昭皇后，生世宗。」とある。</dd>
+
+<dt id="h0_t">拓跋沙漠汗と蘭氏</dt>
+<dd id="h0_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>文帝</em>皇后封氏，生桓、穆二帝，早崩。……<em>次妃蘭氏</em>，生二子，長子曰藍，早卒；次子，思帝也。」とある。</dd>
+
+<dt id="h1_t">拓跋鬱律と王氏</dt>
+<dd id="h1_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「平文皇后王氏」から始まる伝あり。</dd>
+
+<dt id="h2_t">拓跋什翼犍と慕容氏</dt>
+<dd id="h2_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「昭成皇后慕容氏，元真之女也。」とある。</dd>
+
+<dt id="h4_t">賀紇と拓跋氏</dt>
+<dd id="h4_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝の賀訥伝</a>に「賀訥，代人，太祖之元舅，獻明后之兄也。……祖<em>紇</em>，始有勳於國，尚<em>平文女</em>。」とある。</dd>
+
+<dt id="h5_t">賀夫人と拓跋寔</dt>
+<dd id="h5_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻明皇后賀氏」とある。</dd>
+
+<dt id="h6_t">劉路孤と拓跋氏</dt>
+<dd id="h6_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱鬱律立……二年，<em>劉虎</em>據朔方，來侵西部，帝逆擊，大破之，虎單騎迸走。<em>其從弟路孤</em>率部落內附，<em>帝以女妻之</em>。」とある。
+この二人の間の子が劉庫仁 (<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B723#%E5%8A%89%E5%BA%AB%E4%BB%81">『魏書』巻23・劉庫仁伝</a>に「劉庫仁……母平文皇帝之女。……庫仁弟眷」とある)。
+</dd>
+
+<dt id="h7_t">劉貴人と拓跋珪</dt>
+<dd id="h7_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「道武宣穆皇后劉氏」とある。</dd>
+
+<dt id="h8_t">拓跋嗣と杜貴嬪</dt>
+<dd id="h8_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「明元密皇后杜氏」とある。</dd>
+
+<dt id="h9_t">賀夫人と拓跋燾</dt>
+<dd id="h9_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「太武敬哀皇后賀氏」とある。</dd>
+
+<dt id="h10_t">拓跋晃と郁久閭氏</dt>
+<dd id="h10_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「景穆恭皇后郁久閭氏」とある。</dd>
+
+<dt id="h11_t">拓跋濬と李貴人</dt>
+<dd id="h11_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成元皇后李氏」とある。</dd>
+
+<dt id="h12_t">馮太后と拓跋濬</dt>
+<dd id="h12_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成文明皇后馮氏」とある。</dd>
+
+<dt id="h18_t">元恪と霊太后</dt>
+<dd id="h18_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「宣武靈皇后胡氏」とある。また「及肅宗踐阼，尊后為皇太妃，後尊為皇太后。」ともある。</dd>
+
+<dt id="h19_t">元詡と潘充華</dt>
+<dd id="h19_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「肅宗頗有酒德，專嬖充華潘氏」とある。</dd>
+
+<dt id="h20_t">拓跋燾と閭左昭儀</dt>
+<dd id="h20_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>の世祖 (太武帝・拓跋燾) の頃の記事に、「<em>大檀</em>部落衰弱，因發疾而死，<em>子吳提</em>立……延和三年二月，以吳提尚西海公主，又遣使人納<em>吳提妹</em>為夫人，又<em>進為左昭儀</em>。」というものがある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B74%E4%B8%8A">『魏書』巻4上・世祖紀</a>にも「二月丁卯，蠕蠕吳提奉其妹」とある。</dd>
+
+<dt id="h21_t">羅夫人と元宏</dt>
+<dd id="h21_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「孝文皇帝七男……羅夫人生清河文獻王懌、汝南文宣王悅。」とある。</dd>
+
+<dt id="h23_t">楊奥妃と元愉</dt>
+<dd id="h23_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722#%E4%BA%AC%E5%85%86%E7%8E%8B">『魏書』巻22・京兆王・元愉伝</a>に「愉在徐州，<em>納妾李氏，本姓楊</em>」から始まる話があり、また、
+「於是遂為壇於信都之南，柴燎告天，即皇帝位。赦天下，號建平元年，<em>立李氏為皇后</em>。」
+などとある。</dd>
+
+<dt id="h24_t">元宝炬と乙弗皇后</dt>
+<dd id="h24_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏」とある。</dd>
+
+<dt id="h25_t">乙瑗と淮陽公主</dt>
+<dd id="h25_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏……<em>父瑗</em>，儀同三司、兗州刺史。<em>母淮陽長公主</em>，孝文之第四女也。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44</a>にも「乙瓌……。子乾歸……。子海……。子<em>瑗</em>，字雅珍。尚<em>淮陽公主</em>，高祖之女也」とある。</dd>
+
+<dt id="h26_t">袁貴人と元宏</dt>
+<dd id="h26_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「<em>孝文皇帝</em>七男……<em>袁貴人</em>生京兆王愉。」とある。</dd>
+
+<dt id="h29_t">元勰と李媛華</dt>
+<dd id="h29_d">[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%AA%9B%E8%8F%AF">Wikipedia (zh)</a>] に「魏故使持節假黃鉞侍中太師領司徒都督中外諸軍事<em>彭城武宣王妃李氏</em>墓誌銘」が引用されており、「<em>妃諱媛華</em>，隴西狄道縣都鄉和風里人。」などとある。</dd>
+
+<dt id="h30_t">劉椒房と拓跋晃</dt>
+<dd id="h30_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A">『魏書』巻19上</a>に「景穆皇帝十四男。……<em>劉椒房</em>生南安惠王楨、城陽康王長壽。」とある。</dd>
+
+<dt id="h31_t">仇氏と拓跋楨</dt>
+<dd id="h31_d">[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)]
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「而廣有<em>女孫配南安王楨</em>，生章武王彬，即中山王英弟也。」とある。</dd>
+
+<dt id="h32_t">程氏と元融</dt>
+<dd id="h32_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%BE%8C%E5%BB%A2%E5%B8%9D">『魏書』巻11・後廃帝紀</a>に「後廢帝，諱朗，字仲哲，<em>章武王融</em>第三子也，母曰<em>程氏</em>。」とある。</dd>
+
+<dt id="h33_t">元怡と衛氏</dt>
+<dd id="h33_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7048#%E5%B0%92%E7%A1%83%E4%B8%96%E9%9A%86">『北史』巻48・爾朱世隆伝</a>に「時仲遠亦自滑台入京。世隆與兄弟密謀，慮<em>元曄母</em>幹豫朝政，伺<em>其母衛氏</em>出行，遣數十騎如劫賊，於京巷殺之。」とあるので、衛氏は元曄の母。
+一方、元曄の父は元怡である（<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E6%89%B6%E9%A2%A8%E7%8E%8B%E6%80%A1">『魏書』巻19下・扶風王・元怡伝</a>に続けて「長子肅……其弟<em>曄</em>僭立……」と<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E5%AD%90_%E9%AD%AF%E9%83%A1%E7%8E%8B%E8%82%85_%EF%BC%88%E9%99%84%E5%AD%90_%E9%81%93%E8%88%87%EF%BC%89">元肅伝</a>に書かれており、元肅と元曄が元怡の子だとわかる）。
+ということで、元怡と衛氏の間を横線でつないだ。</dd>
+
+<dt id="h36_t">王氏と元羽</dt>
+<dd id="h36_d">
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%89%8D%E5%BB%A2%E5%B8%9D">『魏書』巻11・前廃帝紀</a>に「前廢帝，諱恭，字脩業，<em>廣陵惠王羽</em>之子也，母曰<em>王氏</em>。」とある。</dd>
+
+<dt id="h37_t">李氏と元懐</dt>
+<dd id="h37_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%87%BA%E5%B8%9D">『魏書』巻11・出帝紀</a>に
+「出帝，諱脩，字孝則，<em>廣平武穆王懷</em>之第三子也，母<em>李氏</em>。」とある。</dd>
+
+<dt id="h38_t">羅氏と元懌</dt>
+<dd id="h38_d">羅氏の父方のおばであり元懌の母でもある羅夫人の <a href="https://zh.wikipedia.org/wiki/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh) のページ</a>に引用されている墓誌に「祖相国清河文献王。祖母河南罗氏。」と出てくるので、羅氏と元懌 (清河文献王) は夫婦。</dd>
+
+<dt id="h39_t">元亶と胡智</dt>
+<dd id="h39_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>には「<em>真長子寧</em>……<em>女為清河王亶妃</em>，生孝靜皇帝。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B712">『魏書』巻12・孝静紀</a>には「孝靜皇帝，諱善見，<em>清河文宣王亶之世子也，母曰胡妃</em>。」とある。</dd>
+
+<dt id="h41_t">慕容廆と段夫人</dt>
+<dd id="h41_d"><a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7082">『資治通鑑』巻82</a>に「段國單于階、以女妻廆。」とある。</dd>
+
+<dt id="h42_t">馮朗と王氏</dt>
+<dd id="h42_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成文明皇后馮氏……父朗……母樂浪王氏。」とある。</dd>
+
+<dt id="h43_t">馮弘と王氏</dt>
+<dd id="h43_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B797#%E5%BC%9F_%E6%96%87%E9%80%9A">『魏書』巻97・馮弘伝 (馮文通伝)</a>に「文通廢其元妻王氏……」とある。</dd>
+
+<dt id="h44_t">李恵と韓氏</dt>
+<dd id="h44_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・李恵伝</a>に「<em>李惠</em>，中山人，思皇后之父也。……惠弱冠襲父爵，<em>妻襄城王韓頹女</em>，生二女，長即后也。」とある。</dd>
+
+<dt id="h45_t">蓋氏と高颺</dt>
+<dd id="h45_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏，司徒公肇之妹也。<em>父颺，母蓋氏</em>，凡四男三女，皆生於東裔。」とある。</dd>
+
+<dt id="h46_t">鄭氏と李沖</dt>
+<dd id="h46_d">[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%86%B2_(%E5%8C%97%E9%AD%8F)#%E5%A4%AB%E4%BA%BA">Wikipedia (zh)</a> (李沖のページ)] の引用によれば、<button type="button" onclick="reselect('p54')">李媛華</button>の墓誌に「<em>亡父諱沖</em>，司空清淵文穆公。夫人<em>熒陽鄭氏</em>。父德玄，字文通，宋散騎常侍，魏使持節冠軍將軍豫州刺史陽武靖侯。」とあるらしい。</dd>
+
+<dt id="h47_t">唐氏と李翻</dt>
+<dd id="h47_d"><a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E7%BF%BB#%E5%A4%AB%E4%BA%BA">Wikipedia (zh)</a> (李翻のページ)。</dd>
+
+<dt id="h48_t">乙瓌と上谷公主</dt>
+<dd id="h48_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44</a>に「乙瓌……尚上谷公主，世祖之女也。」とある。</dd>
+
+<dt id="h49_t">拓跋珪と大王夫人</dt>
+<dd id="h49_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716">『魏書』巻16</a>に「道武皇帝十男……大王夫人生陽平王熙」とある。</dd>
+
+<dt id="h50_t">馮太后と拓跋弘</dt>
+<dd id="h50_d"><a href="https://doi.org/10.15017/1657870">「北魏における所謂子貴母死について」</a> (稲田友音) の PDF ファイル上の 18〜23 ページ。<a href="https://ja.wikipedia.org/wiki/%E9%A6%AE%E5%A4%AA%E5%90%8E#%E6%96%87%E6%88%90%E6%96%87%E6%98%8E%E7%9A%87%E5%90%8E%E3%81%A8%E5%AD%9D%E6%96%87%E5%B8%9D">Wikipedia (ja)</a> にも記載あり。</dd>
+
+<dt id="h51_t">李夫人と拓跋弘</dt>
+<dd id="h51_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻文思皇后李氏……」とある。</dd>
+
+<dt id="h52_t">孟椒房と拓跋弘</dt>
+<dd id="h52_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上</a>に「獻文皇帝七男。……孟椒房生廣陵惠王羽。」とある。</dd>
+
+<dt id="h53_t">元宏と高照容</dt>
+<dd id="h53_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏」とある。</dd>
+
+<dt id="h54_t">元宏と林貴人</dt>
+<dd id="h54_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文貞皇后林氏」とある。</dd>
+
+<dt id="h55_t">拓跋弘と潘貴人</dt>
+<dd id="h55_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝</a>の冒頭に「<em>獻文皇帝</em>七男。……<em>潘貴人</em>生彭城武宣王勰。」とある。</dd>
+
+<dt id="h56_t">拓跋弘と高椒房</dt>
+<dd id="h56_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝上</a>の冒頭に「<em>獻文皇帝</em>七男……<em>高椒房</em>生北海平王詳。」とある。</dd>
+
+<dt id="h57_t">范氏と元詳</dt>
+<dd id="h57_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%8C%97%E6%B5%B7%E7%8E%8B">『魏書』巻21上・北海王・元詳伝</a>に「寵妾范氏」とある。</dd>
+
+<dt id="h58_t">賀野干と遼西公主</dt>
+<dd id="h58_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「父野干，尚昭成女遼西公主」とある。</dd>
+
+<dt id="h59_t">乙乾帰と安楽公主:</dt>
++<dd id="h59_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙乾帰附伝に「尚恭宗女安樂公主」とある。</dd>
+
+<dt id="v0_t">拓跋詰汾から拓跋力微へ</dt>
+<dd id="v0_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>には、拓跋詰汾と天女との間の子が拓跋力微だと書いてある。天女ねぇ……。</dd>
+
+<dt id="v1_t">拓跋力微から拓跋沙漠汗へ</dt>
+<dd id="v1_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>の拓跋力微 (始祖) の記事に「四十二年，遣<em>子文帝</em>如魏，且觀風土。<em>文皇帝諱沙漠汗</em>，以國太子留洛陽，為魏賓之冠。」とある。</dd>
+
+<dt id="v2_t">拓跋沙漠汗と蘭氏から拓跋弗へ</dt>
+<dd id="v2_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>文帝</em>皇后封氏，生桓、穆二帝，早崩。……次妃<em>蘭氏</em>，生二子，長子曰藍，早卒；<em>次子，思帝也</em>。」とある。</dd>
+
+<dt id="v3_t">拓跋弗から拓跋鬱律へ</dt>
+<dd id="v3_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱<em>鬱律</em>立，<em>思帝之子也</em>。」とある。</dd>
+
+<dt id="v4_t">拓跋鬱律と王氏から拓跋什翼犍へ</dt>
+<dd id="v4_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>平文皇后王氏</em>，廣寧人也。年十三，因事入宮，得幸於平文，<em>生昭成帝</em>。」とある。</dd>
+
+<dt id="v5_t">慕容皝から慕容氏へ</dt>
+<dd id="v5_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「昭成皇后慕容氏，元真之女也。」とある。</dd>
+
+<dt id="v6_t">拓跋什翼犍と慕容氏から拓跋寔へ</dt>
+<dd id="v6_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「昭成皇后慕容氏……<em>生獻明帝</em>及秦明王。」とある。</dd>
+
+<dt id="v7_t">賀野干から賀夫人へ</dt>
+<dd id="v7_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻明皇后賀氏，父野干，東部大人。」とある。</dd>
+
+<dt id="v8_t">拓跋鬱律から拓跋氏へ</dt>
+<dd id="v8_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝の賀訥伝</a>に「祖紇……尚<em>平文女</em>。」とある。</dd>
+
+<dt id="v10_t">賀夫人と拓跋寔から拓跋珪へ</dt>
+<dd id="v10_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻明皇后賀氏……生太祖。」とある。</dd>
+
+<dt id="v11_t">拓跋鬱律から拓跋氏へ</dt>
+<dd id="v11_d">
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B71">『魏書』巻1</a>に「平文皇帝諱鬱律立……二年，<em>劉虎</em>據朔方，來侵西部，帝逆擊，大破之，虎單騎迸走。<em>其從弟路孤</em>率部落內附，<em>帝以女妻之</em>。」とある。</dd>
+
+<dt id="v13_t">劉眷から劉貴人へ</dt>
+<dd id="v13_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「道武宣穆皇后劉氏，劉眷女也。」とある。</dd>
+
+<dt id="v14_t">劉貴人と拓跋珪から拓跋嗣へ</dt>
+<dd id="v14_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「道武宣穆皇后劉氏……後生太宗。」とある。</dd>
+
+<dt id="v15_t">拓跋嗣と杜貴嬪から拓跋燾へ</dt>
+<dd id="v15_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「明元密皇后杜氏……生世祖。」とある。</dd>
+
+<dt id="v16_t">賀夫人と拓跋燾から拓跋晃へ</dt>
+<dd id="v16_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「太武敬哀皇后賀氏……生恭宗。」とある。</dd>
+
+<dt id="v17_t">拓跋晃と郁久閭氏から拓跋濬へ</dt>
+<dd id="v17_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「景穆恭皇后郁久閭氏……生高宗。」とある。</dd>
+
+<dt id="v24_t">元恪と霊太后から元詡へ</dt>
+<dd id="v24_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「宣武靈皇后胡氏……及肅宗在孕……既誕肅宗……」とある。</dd>
+
+<dt id="v25_t">拓跋燾と閭左昭儀から拓跋余へ</dt>
+<dd id="v25_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B718">『魏書』巻18・太武五王列伝</a>の頭に「閭左昭儀生南安王余。」とある。</dd>
+
+<dt id="v27_t">元詡と潘充華から元氏へ</dt>
+<dd id="v27_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>に「武泰元年春正月……。乙丑……<em>皇女生，祕言皇子</em>。」「二月……甲寅，皇子即位……皇太后詔曰：「……自<em>潘充華</em>有孕椒宮……」」とある。</dd>
+
+<dt id="v29_t">楊奥妃と元愉から元宝炬へ</dt>
+<dd id="v29_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E6%96%87%E5%B8%9D">『北史』巻5・文帝紀</a>に「文皇帝諱寶炬，孝文皇帝之孫，京兆王<em>愉之子</em>也。<em>母曰楊氏</em>。」とある。</dd>
+
+<dt id="v30_t">楊奥妃と元愉から元宝暉へ</dt>
+<dd id="v30_d">元宝暉が元愉と楊奥妃の間の子だというのは <a href="https://ja.wikipedia.org/wiki/%E5%85%83%E6%84%89">Wikipedia (ja)</a> (元愉のページ) にも記載されているが、<a href="https://www.itsfun.com.tw/%E6%A5%8A%E5%A5%A7%E5%A6%83/wiki-01990762-41574652">楊奥妃の墓誌銘</a>からそう読み取れるということなのかな。</dd>
+
+<dt id="v31_t">元宏から淮陽公主へ</dt>
+<dd id="v31_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44</a>に「子瑗，字雅珍。尚<em>淮陽公主，高祖之女</em>也」とあり、
+<a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏……母<em>淮陽長公主，孝文之第四女</em>也。」とある。</dd>
+
+<dt id="v32_t">乙瑗と淮陽公主から乙弗皇后へ</dt>
+<dd id="v32_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7013">『北史』巻13</a>に「文帝文皇后乙弗氏……。父瑗……。母淮陽長公主，孝文之第四女也。」とある。</dd>
+
+<dt id="v34_t">元宝炬と乙弗皇后から元欽へ</dt>
+<dd id="v34_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E5%BB%A2%E5%B8%9D%E6%AC%BD">『北史』巻5・西魏・廃帝紀</a>に「廢帝諱欽，文皇帝之長子也。母曰乙皇后。」とある。</dd>
+
+<dt id="v35_t">元宝炬から拓跋廓へ</dt>
+<dd id="v35_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7005#%E6%81%AD%E5%B8%9D">『北史』巻5・西魏・恭帝紀</a>に「恭皇帝諱廓，文皇之第四子也。」とある。</dd>
+
+<dt id="v36_t">元宝暉から元釗へ</dt>
+<dd id="v36_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B79">『魏書』巻9・肅宗紀</a>に「皇曾孫故臨洮王寶暉世子釗」とある。</dd>
+
+<dt id="v37_t">袁貴人と元宏から元愉へ</dt>
+<dd id="v37_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>に「孝文皇帝七男……袁貴人生京兆王愉。」とある。</dd>
+
+<dt id="v40_t">元勰と李媛華から元子攸へ</dt>
+<dd id="v40_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B710">『魏書』巻10・孝荘紀</a>に「孝莊皇帝諱子攸，彭城王勰之第三子，母曰李妃。」とある。</dd>
+
+<dt id="v41_t">劉椒房と拓跋晃から拓跋楨へ</dt>
+<dd id="v41_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8A">『魏書』巻19上</a>に「景穆皇帝十四男。……劉椒房生南安惠王楨……」とある。</dd>
+
+<dt id="v42_t">仇氏と拓跋楨から元彬へ</dt>
+<dd id="v42_d">
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「而廣有<em>女孫配南安王楨，生章武王彬</em>，即中山王英弟也。」とある。</dd>
+
+<dt id="v43_t">元彬から元融へ</dt>
+<dd id="v43_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E9%95%B7%E5%AD%90_%E7%AB%A0%E6%AD%A6%E8%8E%8A%E6%AD%A6%E7%8E%8B%E8%9E%8D_%EF%BC%88%E9%99%84%E5%AD%90_%E6%99%AF%E5%93%B2%E3%80%81%E6%9C%97%E3%80%81%E9%BB%83%E9%A0%AD%EF%BC%89">『魏書』巻19下</a>に「彬有五子。」に続けて「長子融，字永興。」とある。</dd>
+
+<dt id="v44_t">程氏と元融から元朗へ</dt>
+<dd id="v44_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%BE%8C%E5%BB%A2%E5%B8%9D">『魏書』巻11・後廃帝紀</a>に「後廢帝，諱朗，字仲哲，章武王融第三子也，母曰程氏。」とある。</dd>
+
+<dt id="v45_t">拓跋楨から元怡へ</dt>
+<dd id="v45_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E5%8D%97%E5%AE%89%E6%83%A0%E7%8E%8B%E6%A5%A8">『魏書』巻19下・南安王・拓跋楨伝</a>に「有五子」とあり、直後に「子英」から始まる<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E4%B8%AD%E5%B1%B1%E7%8D%BB%E6%AD%A6%E7%8E%8B%E8%8B%B1">元英伝</a>があり、さらにその後に「英弟怡」から始まる<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E6%89%B6%E9%A2%A8%E7%8E%8B%E6%80%A1">元怡伝</a>がある。</dd>
+
+<dt id="v46_t">元怡と衛氏から元曄へ</dt>
+<dd id="v46_d"><a href="https://zh.wikisource.org/wiki/%E5%8C%97%E5%8F%B2/%E5%8D%B7048#%E5%B0%92%E7%A1%83%E4%B8%96%E9%9A%86">『北史』巻48・爾朱世隆伝</a>に「時仲遠亦自滑台入京。世隆與兄弟密謀，慮<em>元曄母</em>幹豫朝政，伺<em>其母衛氏</em>出行，遣數十騎如劫賊，於京巷殺之。」とあるので、元曄の母は衛氏。
+一方、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E6%89%B6%E9%A2%A8%E7%8E%8B%E6%80%A1">『魏書』巻19下・扶風王・元怡伝</a>に続けて「長子肅……其弟<em>曄</em>僭立……」と<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B719%E4%B8%8B#%E5%AD%90_%E9%AD%AF%E9%83%A1%E7%8E%8B%E8%82%85_%EF%BC%88%E9%99%84%E5%AD%90_%E9%81%93%E8%88%87%EF%BC%89">元肅伝</a>に書かれているから、元曄の父は元怡。
+</dd>
+
+<dt id="v49_t">王氏と元羽から元恭へ</dt>
+<dd id="v49_d">
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%89%8D%E5%BB%A2%E5%B8%9D">『魏書』巻11・前廃帝紀</a>に「前廢帝，諱<em>恭</em>，字脩業，廣陵惠王<em>羽</em>之子也，母曰<em>王氏</em>。」とある。</dd>
+
+<dt id="v50_t">羅夫人と元宏から元懌へ</dt>
+<dd id="v50_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「孝文皇帝七男……羅夫人生清河文獻王懌、汝南文宣王悅。」とある。</dd>
+
+<dt id="v52_t">李氏と元懐から元脩へ</dt>
+<dd id="v52_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B711#%E5%87%BA%E5%B8%9D">『魏書』巻11・出帝紀</a>に
+「出帝，諱<em>脩</em>，字孝則，廣平武穆王<em>懷</em>之第三子也，母<em>李氏</em>。」とある。</dd>
+
+<dt id="v53_t">羅雲から羅夫人へ</dt>
+<dd id="v53_d"><a href="https://zh.wikipedia.org/zh-tw/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh-tw)</a> に引用されている (羅夫人の子孫の<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E6%99%AF%E6%A4%8D">元宝建</a>の) 墓誌に「曾祖母清河王太妃河南<em>羅氏。父雲</em>，使持節侍中鎮東將軍青州刺史。」とある。</dd>
+
+<dt id="v54_t">羅雲から羅蓋へ</dt>
+<dd id="v54_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，渥子提……。子<em>雲</em>……。<em>子蓋</em>……」とある。</dd>
+
+<dt id="v55_t">羅蓋から羅氏へ</dt>
+<dd id="v55_d">羅氏の父方のおば、かつ、夫の母にあたる羅夫人の <a href="https://zh.wikipedia.org/zh-tw/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh-tw) のページ</a>に引用されている (羅氏の子孫の<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E6%99%AF%E6%A4%8D">元宝建</a>の) 墓誌に「祖母河南<em>羅氏。父蓋</em>，使持節撫軍將軍濟袞二州刺史。」とある。</dd>
+
+<dt id="v56_t">羅氏と元懌から元亶へ</dt>
+<dd id="v56_d">羅氏の父方のおば、かつ、夫の母にあたる羅夫人の <a href="https://zh.wikipedia.org/zh-tw/%E7%BE%85%E5%A4%AB%E4%BA%BA_(%E5%8C%97%E9%AD%8F)">Wikipedia (zh-tw) のページ</a>に引用されている (羅氏の子孫の<a href="https://zh.wikipedia.org/wiki/%E5%85%83%E6%99%AF%E6%A4%8D">元宝建</a>の) 墓誌に「祖相國<em>清河文獻王</em>。」祖母河南<em>羅氏</em>。……父相國<em>清河文宣王</em>。」とある。清河文献王は元懌で清河文宣王は元亶なので、この部分から、元亶は元懌と羅氏の子だと読み取れる。</dd>
+
+<dt id="v57_t">元亶と胡智から元善見へ</dt>
+<dd id="v57_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>には「真長子寧……女為清河王亶妃，生孝靜皇帝。」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B712">『魏書』巻12・孝静紀</a>には「孝靜皇帝，諱善見，清河文宣王亶之世子也，母曰胡妃。」とある。</dd>
+
+<dt id="v59_t">胡国珍から霊太后へ</dt>
+<dd id="v59_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「宣武靈皇后胡氏，安定臨涇人，司徒國珍女也。」とある。</dd>
+
+<dt id="v60_t">胡淵から胡国珍へ</dt>
+<dd id="v60_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「父淵」とある。</dd>
+
+<dt id="v61_t">胡淵から胡真へ</dt>
+<dd id="v61_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「<em>父淵</em>」および「養<em>兄真</em>子僧洗為後」とあるとある。</dd>
+
+<dt id="v62_t">胡真から胡寧へ</dt>
+<dd id="v62_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>に「真長子寧」とある。</dd>
+
+<dt id="v63_t">胡寧から胡智へ</dt>
+<dd id="v63_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8B">『魏書』巻83下・胡国珍伝</a>には「真長子寧……女為清河王亶妃，生孝靜皇帝。」とある。</dd>
+
+<dt id="v64_t">慕容廆と段夫人から慕容皝へ</dt>
+<dd id="v64_d"><a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7082">『資治通鑑』巻82</a>に「段國單于階、以女妻廆。生<em>皝</em>・仁・昭。」とある。</dd>
+
+<dt id="v65_t">杜豹から杜貴嬪へ</dt>
+<dd id="v65_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>明元密皇后杜氏</em>，魏郡鄴人，陽平王超之妹也。」とあり、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「杜超……密皇后之兄也。……神䴥三年……追加超父<em>豹</em>鎮東大將軍、陽平景王，母曰鉅鹿惠君。」とある。</dd>
+
+<dt id="v66_t">大檀から閭左昭儀へ</dt>
+<dd id="v66_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>の世祖 (太武帝・拓跋燾) の頃の記事に、「<em>大檀</em>部落衰弱，因發疾而死，<em>子吳提</em>立……延和三年二月，以吳提尚西海公主，又遣使人納<em>吳提妹</em>為夫人，又<em>進為左昭儀</em>。」というものがある。</dd>
+
+<dt id="v67_t">僕渾から大檀へ</dt>
+<dd id="v67_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「<em>大檀</em>者，<em>社崘季父僕渾之子</em>」とある。</dd>
+
+<dt id="v68_t">地粟袁から僕渾へ</dt>
+<dd id="v68_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「大檀者，<em>社崘季父僕渾之子</em>」とある。
+またこれに先立って、「<em>地粟袁</em>……次子<em>縕紇提</em>別居西邊。」、「獲<em>縕紇提</em>子曷多汗及曷多汗兄詰歸之、<em>社崘</em>、斛律等并宗黨數百人」とある。
+つまり、僕渾は、地粟袁の子の縕紇提の子である社崘から見た季父 (一番下の叔父) なので、地粟袁の子ということ。</dd>
+
+<dt id="v69_t">郁久閭辰から郁久閭氏へ</dt>
+<dd id="v69_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「景穆恭皇后<em>郁久閭氏</em>，河東王毗妹也。」とあり、
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の閭毗伝には、この兄妹の父についての「和平二年，追諡后祖父延定襄康公，<em>父辰</em>定襄懿王。」という記載がある。</dd>
+
+<dt id="v70_t">李方叔から李貴人へ</dt>
+<dd id="v70_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成元皇后<em>李氏</em>……父<em>方叔</em>恒言此女當大貴。」とある。</dd>
+
+<dt id="v71_t">馮朗と王氏から馮太后へ</dt>
+<dd id="v71_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成文明皇后馮氏……父朗……母樂浪王氏。」とある。</dd>
+
+<dt id="v72_t">馮弘と王氏から馮朗へ</dt>
+<dd id="v72_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B797#%E5%BC%9F_%E6%96%87%E9%80%9A">『魏書』巻97・馮弘伝 (馮文通伝)</a> に「<em>文通</em>廢其元妻<em>王氏</em>，黜世子崇……。崇母弟<em>廣平公朗</em>……」とある。</dd>
+
+<dt id="v73_t">羅提から羅雲へ</dt>
+<dd id="v73_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，渥子<em>提</em>……。子<em>雲</em>，早有名位。」とある。</dd>
+
+<dt id="v74_t">羅渥から羅提へ</dt>
+<dd id="v74_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・羅結伝</a>の附伝に「結從子渥，<em>渥子提</em>……」とある。</dd>
+
+<dt id="v75_t">李恵と韓氏から李夫人へ</dt>
+<dd id="v75_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・李恵伝</a>に「<em>李惠</em>，中山人，<em>思皇后</em>之父也。……惠弱冠襲父爵，<em>妻襄城王韓頹女，生二女，長即后也</em>。」とある。</dd>
+
+<dt id="v76_t">韓頽から韓氏へ</dt>
+<dd id="v76_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・李恵伝</a>に「李惠，中山人，思皇后之父也。……惠弱冠襲父爵，妻<em>襄城王韓頹女</em>，生二女，長即后也。」とある。</dd>
+
+<dt id="v77_t">李蓋から李恵へ</dt>
+<dd id="v77_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上</a>に「<em>李惠</em>，中山人，思皇后之父也。<em>父蓋</em>……」とある。</dd>
+
+<dt id="v78_t">蓋氏と高颺から高照容へ</dt>
+<dd id="v78_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>孝文昭皇后高氏</em>，司徒公肇之妹也。<em>父颺，母蓋氏</em>，凡四男三女，皆生於東裔。」とある。</dd>
+
+<dt id="v79_t">鄭氏と李沖から李媛華へ</dt>
+<dd id="v79_d">[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%86%B2_(%E5%8C%97%E9%AD%8F)#%E5%A4%AB%E4%BA%BA">Wikipedia (zh)</a> (李沖のページ)] の引用によれば、<button type="button" onclick="reselect('p54')">李媛華</button>の墓誌に「<em>亡父諱沖</em>，司空清淵文穆公。夫人<em>熒陽鄭氏</em>。父德玄，字文通，宋散騎常侍，魏使持節冠軍將軍豫州刺史陽武靖侯。」とあるらしい。</dd>
+
+<dt id="v80_t">鄭徳玄から鄭氏へ</dt>
+<dd id="v80_d">[<a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%86%B2_(%E5%8C%97%E9%AD%8F)#%E5%A4%AB%E4%BA%BA">Wikipedia (zh)</a> (李沖のページ)] の引用によれば、<button type="button" onclick="reselect('p54')">李媛華</button>の墓誌に「夫人<em>熒陽鄭氏</em>。<em>父德玄</em>，字文通，宋散騎常侍，魏使持節冠軍將軍豫州刺史陽武靖侯。」とあるらしい。</dd>
+
+<dt id="v81_t">李宝から李沖へ</dt>
+<dd id="v81_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B753">『魏書』巻53・李沖伝</a>に「<em>李沖</em>，字思順，隴西人，敦煌公<em>寶</em>少子也。」とある。</dd>
+
+<dt id="v82_t">唐氏と李翻から李宝へ</dt>
+<dd id="v82_d"><a href="https://zh.wikipedia.org/wiki/%E6%9D%8E%E5%AE%9D_(%E5%8C%97%E9%AD%8F)#%E7%88%B6%E6%AF%8D">Wikipedia (zh)</a> (李宝のページ)。</dd>
+
+<dt id="v83_t">李暠から李翻へ</dt>
+<dd id="v83_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B739">『魏書』巻39・李宝伝</a>に「李寶……私署涼王<em>暠</em>之孫也。父<em>翻</em>……」とある。</dd>
+
+<dt id="v84_t">李昶から李暠へ</dt>
+<dd id="v84_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「武昭王諱暠……父昶……」とある。</dd>
+
+<dt id="v85_t">李弇から李昶へ</dt>
+<dd id="v85_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「祖弇……父昶……」とある。</dd>
+
+<dt id="v86_t">乙海から乙瑗へ</dt>
+<dd id="v86_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙海附伝に続いて、「子瑗」から始まる附伝がある。</dd>
+
+<dt id="v87_t">乙乾帰から乙海へ</dt>
+<dd id="v87_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙乾帰附伝に続いて、「子海」から始まる附伝がある。</dd>
+
+<dt id="v88_t">拓跋燾から上谷公主へ</dt>
+<dd id="v88_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>に「尚上谷公主，世祖之女也。」とある。</dd>
+
+<dt id="v90_t">乙匹知から乙瓌へ</dt>
+<dd id="v90_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>に「瓌父匹知」とある。</dd>
+
+<dt id="v91_t">仇牛から仇氏へ</dt>
+<dd id="v91_d">[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)] に引用されている墓誌には「曾祖南安惠王楨……。曾祖妃馮翊<em>仇氏牛之長女</em>，牛為本州別駕。」とあるらしい。</dd>
+
+<dt id="v92_t">仇広から仇牛へ</dt>
+<dd id="v92_d">[<a href="https://zh.wikipedia.org/wiki/%E4%BB%87%E4%B8%96%E5%A9%A6_(%E5%86%89%E9%96%94)">Wikipedia (zh)</a> (冉閔の仇世婦のページ)] に引用されている墓誌には「曾祖南安惠王楨……。曾祖妃馮翊<em>仇氏牛之長女</em>，牛為本州別駕。」とあるらしい。
+つまり、南安王・拓跋楨の妃の仇氏の父は仇牛。
+一方、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「而<em>廣有女孫配南安王楨</em>，生章武王彬，即中山王英弟也。」とあるから、南安王妃の仇氏の祖父は仇広。
+ということは、仇広は仇牛の父。</dd>
+
+<dt id="v93_t">仇嵩から仇広へ</dt>
+<dd id="v93_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B794">『魏書』巻94・仇洛齊伝</a>に「<em>嵩</em>有二子，長曰<em>廣</em>，小曰盆。」とある。</dd>
+
+<dt id="v94_t">段階から段夫人へ</dt>
+<dd id="v94_d">
+<a href="https://zh.wikisource.org/wiki/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%92_(%E8%83%A1%E4%B8%89%E7%9C%81%E9%9F%B3%E6%B3%A8)/%E5%8D%B7082">『資治通鑑』巻82</a>に「段國單于階、以女妻廆。」とある。</dd>
+
+<dt id="v95_t">慕容渉帰から慕容廆へ</dt>
+<dd id="v95_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……父涉歸」とある。</dd>
+
+<dt id="v96_t">慕容木延から慕容渉帰へ</dt>
+<dd id="v96_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……祖木延……父涉歸」とある。</dd>
+
+<dt id="v97_t">慕容莫護跋から慕容木延へ</dt>
+<dd id="v97_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108#%E6%85%95%E5%AE%B9%E5%BB%86">『晋書』巻108</a>に「慕容廆……曾祖莫護跋……祖木延」とある。</dd>
+
+<dt id="v98_t">跋提から地粟袁へ</dt>
+<dd id="v98_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「跋提死，子地粟袁立。」とある。</dd>
+
+<dt id="v99_t">吐奴傀から跋提へ</dt>
+<dd id="v99_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「吐奴傀死，子跋提立。」とある。</dd>
+
+<dt id="v100_t">車鹿会から吐奴傀へ</dt>
+<dd id="v100_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「車鹿會死，子吐奴傀立。」とある。</dd>
+
+<dt id="v101_t">木骨閭から車鹿会へ</dt>
+<dd id="v101_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B7103#%E8%A0%95%E8%A0%95">『魏書』巻103・蠕蠕伝</a>に「木骨閭死，<em>子車鹿會</em>雄健，始有部眾，自號柔然，而役屬於國。」とある。</dd>
+
+<dt id="v102_t">李柔から李弇へ</dt>
+<dd id="v102_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「高祖雍，曾祖<em>柔</em>，仕晉並歷位郡守。祖<em>弇</em>，仕張軌為武衛將軍、安世亭侯。」とある。</dd>
+
+<dt id="v103_t">李雍から李柔へ</dt>
+<dd id="v103_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7087#%E6%B6%BC%E6%AD%A6%E6%98%AD%E7%8E%8B">『晋書』巻87・涼武昭王伝</a>に「高祖<em>雍</em>，曾祖<em>柔</em>，仕晉並歷位郡守。」とある。</dd>
+
+<dt id="v104_t">拓跋珪と大王夫人から拓跋熙へ</dt>
+<dd id="v104_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716">『魏書』巻16</a>に「道武皇帝十男……大王夫人生陽平王熙」とある。</dd>
+
+<dt id="v105_t">拓跋熙から拓跋他へ</dt>
+<dd id="v105_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「長子他，襲爵。」とある。</dd>
+
+<dt id="v106_t">拓跋他から元鍾葵へ</dt>
+<dd id="v106_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「長子<em>他</em>，襲爵。……世子吐萬……吐萬弟<em>鍾葵</em>，早卒。」とある。</dd>
+
+<dt id="v107_t">元鍾葵から元法僧へ</dt>
+<dd id="v107_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B716#%E9%99%BD%E5%B9%B3%E7%8E%8B">『魏書』巻16・陽平王・拓跋熙伝</a>に「吐萬弟<em>鍾葵</em>，早卒。長子法壽……法壽弟<em>法僧</em>，……」とある。</dd>
+
+<dt id="v108_t">羅夫人と元宏から元悦へ</dt>
+<dd id="v108_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B722">『魏書』巻22</a>の冒頭に「孝文皇帝七男……羅夫人生清河文獻王懌、汝南文宣王悅。」とある。</dd>
+
+<dt id="v111_t">馮太后と拓跋弘から元宏へ</dt>
+<dd id="v111_d"><a href="https://doi.org/10.15017/1657870">「北魏における所謂子貴母死について」</a> (稲田友音) の PDF ファイル上の 18〜23 ページ。<a href="https://ja.wikipedia.org/wiki/%E9%A6%AE%E5%A4%AA%E5%90%8E#%E6%96%87%E6%88%90%E6%96%87%E6%98%8E%E7%9A%87%E5%90%8E%E3%81%A8%E5%AD%9D%E6%96%87%E5%B8%9D">Wikipedia (ja)</a> にも記載あり。</dd>
+
+<dt id="v112_t">李夫人と拓跋弘から元宏へ</dt>
+<dd id="v112_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「獻文思皇后李氏……顯祖即位，為夫人，生高祖。」とある。</dd>
+
+<dt id="v113_t">孟椒房と拓跋弘から元羽へ</dt>
+<dd id="v113_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上</a>に「獻文皇帝七男。……孟椒房生廣陵惠王羽。」とある。</dd>
+
+<dt id="v114_t">拓跋濬と李貴人から拓跋弘へ</dt>
+<dd id="v114_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「文成元皇后李氏……及生顯祖，拜貴人。」とある。</dd>
+
+<dt id="v115_t">元宏と高照容から元恪へ</dt>
+<dd id="v115_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏……遂生世宗。」とある。</dd>
+
+<dt id="v116_t">元宏と高照容から元懐へ</dt>
+<dd id="v116_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文昭皇后高氏……後生廣平王懷……」とある。</dd>
+
+<dt id="v117_t">元宏と林貴人から元恂へ</dt>
+<dd id="v117_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「孝文貞皇后林氏……生皇子恂。」とある。</dd>
+
+<dt id="v118_t">林勝から林貴人へ</dt>
+<dd id="v118_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B713">『魏書』巻13</a>に「<em>孝文貞皇后林氏</em>……。叔父金閭……。金閭兄<em>勝</em>為平涼太守。……勝無子，有二女，入掖庭。」とある。</dd>
+
+<dt id="v119_t">拓跋弘と潘貴人から元勰へ</dt>
+<dd id="v119_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝</a>の冒頭に「獻文皇帝七男。……潘貴人生彭城武宣王勰。」とある。また、<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8B">『魏書』巻21下・献文六王列伝</a>に「彭城王勰，字彥和。……勰生而<em>母潘氏</em>卒，其年顯祖崩。」とある。</dd>
+
+<dt id="v120_t">潘弥から潘貴人へ</dt>
+<dd id="v120_d"><a href="https://zh.wikipedia.org/wiki/%E5%85%83%E5%8B%B0#cite_note-3">Wikipedia (zh) (元勰のページ) の注</a>にある墓誌に「太妃長樂潘氏……父彌，平原樂安二郡太守」とある。</dd>
+
+<dt id="v121_t">潘猛から潘弥へ</dt>
+<dd id="v121_d"><a href="https://zh.wikipedia.org/wiki/%E5%85%83%E5%8B%B0#cite_note-3">Wikipedia (zh) (元勰のページ) の注</a>にある墓誌に「太妃長樂潘氏，祖<em>猛</em>……父<em>彌</em>……」とある。</dd>
+
+<dt id="v122_t">拓跋弘と高椒房から元詳へ</dt>
+<dd id="v122_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A">『魏書』巻21上・献文六王列伝上</a>の冒頭に「獻文皇帝七男……高椒房生北海平王詳。」とある。</dd>
+
+<dt id="v123_t">范氏と元詳から元顥へ</dt>
+<dd id="v123_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B721%E4%B8%8A#%E5%8C%97%E6%B5%B7%E7%8E%8B">『魏書』巻21上・北海王・元詳伝</a>に「寵<em>妾范氏</em>……」とあり、元顥伝 (元詳伝の附伝) に「顥啟<em>其舅范遵</em>為殷州刺史……」とある。元顥の母方のおじが范遵ということは、元顥の母は范氏。</dd>
+
+<dt id="v124_t">劉路孤から劉眷へ</dt>
+<dd id="v124_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……<em>路孤生眷</em>」とある。</dd>
+
+<dt id="v125_t">劉進伯から劉尸利へ</dt>
+<dd id="v125_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……穆生度遼將軍<em>進伯</em>，……。<em>生尸利</em>」とある。</dd></dd>
+
+<dt id="v126_t">劉尸利から劉烏利へ</dt>
+<dd id="v126_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……<em>尸利生烏利</em>」とある。</dd>
+
+<dt id="v127_t">劉烏利から劉猛へ</dt>
+<dd id="v127_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……尸利生<em>烏利</em>。二子：去卑、<em>猛</em>。」とある。</dd>
+
+<dt id="v128_t">劉猛から劉副侖へ</dt>
+<dd id="v128_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……<em>猛生副論</em>」とある。
+<a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B795">『魏書』巻95・劉虎伝</a>には「<em>猛</em>死，<em>子副崙</em>來奔」とある。</dd>
+
+<dt id="v129_t">劉副侖から劉路孤へ</dt>
+<dd id="v129_d"><a href="https://zh.wikisource.org/wiki/%E6%96%B0%E5%94%90%E6%9B%B8/%E5%8D%B7075%E4%B8%8B#%E7%8D%A8%E5%AD%A4">『新唐書』巻75下</a>に「獨孤氏出自<em>劉氏</em>。……<em>副論生路孤</em>」とある。</dd>
+
+<dt id="v130_t">拓跋什翼犍から遼西公主へ</dt>
+<dd id="v130_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「父野干，尚<em>昭成女遼西公主</em>」とある。</dd>
+
+<dt id="v131_t">賀紇から賀野干へ</dt>
+<dd id="v131_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B783%E4%B8%8A">『魏書』巻83上・外戚伝</a>の賀訥伝に「祖紇……。父野干……」とある。</dd>
+
+<dt id="v132_t">乙瓌から乙乾帰へ:</dt>
+<dd id="v132_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44</a>では乙瓌伝に続けて「子乾歸……」から乙乾帰附伝を始めている。</dd>
+
+<dt id="v133_t">拓跋晃から安楽公主へ:</dt>
+<dd id="v133_d"><a href="https://zh.wikisource.org/wiki/%E9%AD%8F%E6%9B%B8/%E5%8D%B744">『魏書』巻44・乙瓌伝</a>の乙乾帰附伝に「尚<em>恭宗女</em>安樂公主」とある。</dd>
+
+<dt id="v134_t">馮安から馮弘へ:</dt>
+<dd id="v134_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7125#%E9%A6%AE%E8%B7%8B">『晋書』巻125・馮跋伝</a>に「<em>父安</em>，雄武有器量……」および「<em>弟弘</em>殺跋子翼自立，後為魏所伐，東奔高句麗。」とあるので、馮弘は馮安の子。</dd>
+
+<dt id="v135_t">馮和から馮安へ:</dt>
+<dd id="v135_d"><a href="https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7125#%E9%A6%AE%E8%B7%8B">『晋書』巻125・馮跋伝</a>に「永嘉之亂，<em>跋祖父和</em>避地上黨。<em>父安</em>，雄武有器量，慕容永時為將軍。」とあるので馮和は馮安の父。</dd>
+
+</dl>
+</div>
+</section></body>
+</html>

@@ -1,0 +1,899 @@
+<svg id="pedigree" xmlns="http://www.w3.org/2000/svg" width="2670" height="3102" viewBox="0 0 2670 3102" role="img" aria-labelledby="chart_description">
+<title id="chart_title">北魏・西魏・東魏で帝位についたか皇帝を僣称した人物とその直系祖先の系図</title>
+<desc id="chart_description">北魏・西魏・東魏で帝位についたか皇帝を僣称した人物とその直系祖先の系図。</desc>
+<style> @import url(pedigree_svg.css); </style>
+<g id="p0g" data-lower_links="v0," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p0r" class="masculine" x="1239" y="20" width="36" height="104"></rect>
+  <text id="p0t" x="1239" y="20" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋詰汾</text>
+</g>
+<g id="p1g" data-lower_links="v1," data-upper_links="v0," data-left_links="" data-right_links="">
+  <rect id="p1r" class="masculine" x="1239" y="188" width="36" height="104"></rect>
+  <text id="p1t" x="1239" y="188" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋力微</text>
+</g>
+<path id="v0" class="solid" d="M 1257,125 l 0,62" data-from_x="1257" data-from_y="124" data-to_x="1257" data-to_y="188" data-parent1="p0" data-parent1_pos_idx="1" data-child="p1" data-child_pos_idx="1"></path>
+<g id="p2g" data-lower_links="" data-upper_links="v1," data-left_links="" data-right_links="h0,p3,">
+  <rect id="p2r" class="masculine" x="1239" y="356" width="36" height="128"></rect>
+  <text id="p2t" x="1239" y="356" textLength="120" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋沙漠汗</text>
+</g>
+<path id="v1" class="solid" d="M 1257,293 l 0,62" data-from_x="1257" data-from_y="292" data-to_x="1257" data-to_y="356" data-parent1="p1" data-parent1_pos_idx="1" data-child="p2" data-child_pos_idx="1"></path>
+<g id="p3g" data-lower_links="" data-upper_links="" data-left_links="h0,p2," data-right_links="">
+  <rect id="p3r" class="feminine" x="1323" y="392" width="36" height="56"></rect>
+  <text id="p3t" x="1323" y="392" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">蘭氏</text>
+</g>
+<path id="h0" class="double" d="M 1276,418 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1299" data-connect_pos_y="422" data-start_x="1276" data-end_x="1322" data-y="420" data-lhs_person="p2" data-rhs_person="p3" data-lower_links="v2,"></path>
+<g id="p4g" data-lower_links="v3," data-upper_links="v2," data-left_links="" data-right_links="">
+  <rect id="p4r" class="masculine" x="1281" y="512" width="36" height="80"></rect>
+  <text id="p4t" x="1281" y="512" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋弗</text>
+</g>
+<path id="v2" class="solid" d="M 1299,423 l 0,88" data-from_x="1299" data-from_y="422" data-to_x="1299" data-to_y="512" data-parent1="p2" data-parent2="p3" data-child="p4" data-child_pos_idx="1"></path>
+<g id="p5g" data-lower_links="v8,v11," data-upper_links="v3," data-left_links="" data-right_links="h1,p6,">
+  <rect id="p5r" class="masculine" x="1281" y="656" width="36" height="104"></rect>
+  <text id="p5t" x="1281" y="656" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋鬱律</text>
+</g>
+<path id="v3" class="solid" d="M 1299,593 l 0,62" data-from_x="1299" data-from_y="592" data-to_x="1299" data-to_y="656" data-parent1="p4" data-parent1_pos_idx="1" data-child="p5" data-child_pos_idx="1"></path>
+<g id="p6g" data-lower_links="" data-upper_links="" data-left_links="h1,p5," data-right_links="">
+  <rect id="p6r" class="feminine" x="1449" y="680" width="36" height="56"></rect>
+  <text id="p6t" x="1449" y="680" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">王氏</text>
+</g>
+<path id="h1" class="double" d="M 1318,706 l 130,0 m 0,4 l -130,0" data-connect_pos_x="1383" data-connect_pos_y="710" data-start_x="1318" data-end_x="1448" data-y="708" data-lhs_person="p5" data-rhs_person="p6" data-lower_links="v4,"></path>
+<g id="p7g" data-lower_links="v130," data-upper_links="v4," data-left_links="" data-right_links="h2,p8,">
+  <rect id="p7r" class="masculine" x="1365" y="812" width="36" height="128"></rect>
+  <text id="p7t" x="1365" y="812" textLength="120" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋什翼犍</text>
+</g>
+<path id="v4" class="solid" d="M 1383,711 l 0,100" data-from_x="1383" data-from_y="710" data-to_x="1383" data-to_y="812" data-parent1="p5" data-parent2="p6" data-child="p7" data-child_pos_idx="1"></path>
+<g id="p8g" data-lower_links="" data-upper_links="v5," data-left_links="h2,p7," data-right_links="">
+  <rect id="p8r" class="feminine" x="1575" y="836" width="36" height="80"></rect>
+  <text id="p8t" x="1575" y="836" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容氏</text>
+</g>
+<path id="h2" class="double" d="M 1402,874 l 172,0 m 0,4 l -172,0" data-connect_pos_x="1488" data-connect_pos_y="878" data-start_x="1402" data-end_x="1574" data-y="876" data-lhs_person="p7" data-rhs_person="p8" data-lower_links="v6,"></path>
+<g id="p9g" data-lower_links="v5," data-upper_links="v64," data-left_links="" data-right_links="">
+  <rect id="p9r" class="masculine" x="1575" y="668" width="36" height="80"></rect>
+  <text id="p9t" x="1575" y="668" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容皝</text>
+  <text writing-mode="tb" id="p9n0" x="1555" y="672" textLength="80" lengthAdjust="spacing" dx="8" dy="0" class="note blue">前燕文明帝</text>
+</g>
+<path id="v5" class="solid" d="M 1593,749 l 0,86" data-from_x="1593" data-from_y="748" data-to_x="1593" data-to_y="836" data-parent1="p9" data-parent1_pos_idx="1" data-child="p8" data-child_pos_idx="1"></path>
+<g id="p10g" data-lower_links="" data-upper_links="v6," data-left_links="h5,p11," data-right_links="">
+  <rect id="p10r" class="masculine" x="1470" y="1160" width="36" height="80"></rect>
+  <text id="p10t" x="1470" y="1160" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋寔</text>
+</g>
+<path id="v6" class="solid" d="M 1488,879 l 0,280" data-from_x="1488" data-from_y="878" data-to_x="1488" data-to_y="1160" data-parent1="p7" data-parent2="p8" data-child="p10" data-child_pos_idx="1"></path>
+<g id="p11g" data-lower_links="" data-upper_links="v7," data-left_links="" data-right_links="h5,p10,">
+  <rect id="p11r" class="feminine" x="1197" y="1160" width="36" height="80"></rect>
+  <text id="p11t" x="1197" y="1160" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">賀夫人</text>
+</g>
+<g id="p12g" data-lower_links="v7," data-upper_links="v131," data-left_links="" data-right_links="h58,p152,">
+  <rect id="p12r" class="masculine" x="1197" y="1016" width="36" height="80"></rect>
+  <text id="p12t" x="1197" y="1016" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">賀野干</text>
+</g>
+<path id="v7" class="solid" d="M 1215,1097 l 0,62" data-from_x="1215" data-from_y="1096" data-to_x="1215" data-to_y="1160" data-parent1="p12" data-parent1_pos_idx="1" data-child="p11" data-child_pos_idx="1"></path>
+<g id="p13g" data-lower_links="" data-upper_links="v8," data-left_links="h4,p14," data-right_links="">
+  <rect id="p13r" class="feminine" x="1281" y="824" width="36" height="80"></rect>
+  <text id="p13t" x="1281" y="824" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋氏</text>
+</g>
+<path id="v8" class="solid" d="M 1299,761 l 0,62" data-from_x="1299" data-from_y="760" data-to_x="1299" data-to_y="824" data-parent1="p5" data-parent1_pos_idx="1" data-child="p13" data-child_pos_idx="1"></path>
+<g id="p14g" data-lower_links="v131," data-upper_links="" data-left_links="" data-right_links="h4,p13,">
+  <rect id="p14r" class="masculine" x="1197" y="836" width="36" height="56"></rect>
+  <text id="p14t" x="1197" y="836" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">賀紇</text>
+  <text writing-mode="tb" id="p14n0" x="1177" y="844" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note red">賀蘭部</text>
+</g>
+<path id="h4" class="double" d="M 1234,862 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1257" data-connect_pos_y="866" data-start_x="1234" data-end_x="1280" data-y="864" data-lhs_person="p14" data-rhs_person="p13" data-lower_links=""></path>
+
+<path id="h5" class="double" d="M 1234,1198 l 235,0 m 0,4 l -235,0" data-connect_pos_x="1351" data-connect_pos_y="1202" data-start_x="1234" data-end_x="1469" data-y="1200" data-lhs_person="p11" data-rhs_person="p10" data-lower_links="v10,"></path>
+<g id="p15g" data-lower_links="" data-upper_links="v10," data-left_links="h7,p19," data-right_links="h49,p132,">
+  <rect id="p15r" class="masculine" x="1333" y="1278" width="36" height="80"></rect>
+  <text id="p15t" x="1333" y="1278" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋珪</text>
+  <circle id="p15b_upper_right" cx="1375" cy="1272" r="17" fill="darkblue"></circle>
+  <text id="p15bn_upper_right" x="1363" y="1280" textLength="8" dx="8" dy="0" class="num_badge">1</text>
+  <text writing-mode="tb" id="p15n0" x="1313" y="1322" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">道武帝</text>
+</g>
+<path id="v10" class="solid" d="M 1351,1203 l 0,74" data-from_x="1351" data-from_y="1202" data-to_x="1351" data-to_y="1278" data-parent1="p11" data-parent2="p10" data-child="p15" data-child_pos_idx="1"></path>
+<g id="p16g" data-lower_links="" data-upper_links="v11," data-left_links="h6,p17," data-right_links="">
+  <rect id="p16r" class="feminine" x="1113" y="824" width="36" height="80"></rect>
+  <text id="p16t" x="1113" y="824" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋氏</text>
+</g>
+<path id="v11" class="solid" d="M 1299,761 l 0,32 l -168,0 l 0,30" data-from_x="1299" data-from_y="760" data-to_x="1131" data-to_y="824" data-parent1="p5" data-parent1_pos_idx="1" data-child="p16" data-child_pos_idx="1"></path>
+<g id="p17g" data-lower_links="v124," data-upper_links="v129," data-left_links="" data-right_links="h6,p16,">
+  <rect id="p17r" class="masculine" x="1029" y="824" width="36" height="80"></rect>
+  <text id="p17t" x="1029" y="824" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉路孤</text>
+</g>
+<path id="h6" class="double" d="M 1066,862 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1089" data-connect_pos_y="866" data-start_x="1066" data-end_x="1112" data-y="864" data-lhs_person="p17" data-rhs_person="p16" data-lower_links=""></path>
+<g id="p18g" data-lower_links="v13," data-upper_links="v124," data-left_links="" data-right_links="">
+  <rect id="p18r" class="masculine" x="1029" y="1014" width="36" height="56"></rect>
+  <text id="p18t" x="1029" y="1014" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉眷</text>
+</g>
+
+<g id="p19g" data-lower_links="" data-upper_links="v13," data-left_links="" data-right_links="h7,p15,">
+  <rect id="p19r" class="feminine" x="1029" y="1278" width="36" height="80"></rect>
+  <text id="p19t" x="1029" y="1278" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉貴人</text>
+</g>
+<path id="v13" class="solid" d="M 1047,1071 l 0,206" data-from_x="1047" data-from_y="1070" data-to_x="1047" data-to_y="1278" data-parent1="p18" data-parent1_pos_idx="1" data-child="p19" data-child_pos_idx="1"></path>
+<path id="h7" class="double" d="M 1066,1316 l 266,0 m 0,4 l -266,0" data-connect_pos_x="1199" data-connect_pos_y="1320" data-start_x="1066" data-end_x="1332" data-y="1318" data-lhs_person="p19" data-rhs_person="p15" data-lower_links="v14,"></path>
+<g id="p20g" data-lower_links="" data-upper_links="v14," data-left_links="" data-right_links="h8,p21,">
+  <rect id="p20r" class="masculine" x="1181" y="1458" width="36" height="80"></rect>
+  <text id="p20t" x="1181" y="1458" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋嗣</text>
+  <text writing-mode="tb" id="p20n0" x="1161" y="1490" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">明元帝</text>
+  <circle id="p20b_upper_right" cx="1223" cy="1452" r="17" fill="darkblue"></circle>
+  <text id="p20bn_upper_right" x="1211" y="1460" textLength="8" dx="8" dy="0" class="num_badge">2</text>
+</g>
+<path id="v14" class="solid" d="M 1199,1321 l 0,136" data-from_x="1199" data-from_y="1320" data-to_x="1199" data-to_y="1458" data-parent1="p19" data-parent2="p15" data-child="p20" data-child_pos_idx="1"></path>
+<g id="p21g" data-lower_links="" data-upper_links="v65," data-left_links="h8,p20," data-right_links="">
+  <rect id="p21r" class="feminine" x="1464" y="1458" width="36" height="80"></rect>
+  <text id="p21t" x="1464" y="1458" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">杜貴嬪</text>
+</g>
+<path id="h8" class="double" d="M 1218,1496 l 245,0 m 0,4 l -245,0" data-connect_pos_x="1341" data-connect_pos_y="1500" data-start_x="1218" data-end_x="1463" data-y="1498" data-lhs_person="p20" data-rhs_person="p21" data-lower_links="v15,"></path>
+<g id="p22g" data-lower_links="v88," data-upper_links="v15," data-left_links="h9,p23," data-right_links="h20,p37,">
+  <rect id="p22r" class="masculine" x="1323" y="1582" width="36" height="80"></rect>
+  <text id="p22t" x="1323" y="1582" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋燾</text>
+  <text writing-mode="tb" id="p22n0" x="1303" y="1626" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">太武帝</text>
+  <circle id="p22b_upper_right" cx="1365" cy="1576" r="17" fill="darkblue"></circle>
+  <text id="p22bn_upper_right" x="1353" y="1584" textLength="8" dx="8" dy="0" class="num_badge">3</text>
+</g>
+<path id="v15" class="solid" d="M 1341,1501 l 0,80" data-from_x="1341" data-from_y="1500" data-to_x="1341" data-to_y="1582" data-parent1="p20" data-parent2="p21" data-child="p22" data-child_pos_idx="1"></path>
+<g id="p23g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h9,p22,">
+  <rect id="p23r" class="feminine" x="1170" y="1582" width="36" height="80"></rect>
+  <text id="p23t" x="1170" y="1582" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">賀夫人</text>
+</g>
+<path id="h9" class="double" d="M 1207,1620 l 115,0 m 0,4 l -115,0" data-connect_pos_x="1265" data-connect_pos_y="1624" data-start_x="1207" data-end_x="1322" data-y="1622" data-lhs_person="p23" data-rhs_person="p22" data-lower_links="v16,"></path>
+<g id="p24g" data-lower_links="v133," data-upper_links="v16," data-left_links="h30,p56," data-right_links="h10,p25,">
+  <rect id="p24r" class="masculine" x="1247" y="1832" width="36" height="80"></rect>
+  <text id="p24t" x="1247" y="1832" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋晃</text>
+  <text writing-mode="tb" id="p24n0" x="1227" y="1876" textLength="64" lengthAdjust="spacing" dx="8" dy="0" class="note blue">景穆太子</text>
+</g>
+<path id="v16" class="solid" d="M 1265,1625 l 0,206" data-from_x="1265" data-from_y="1624" data-to_x="1265" data-to_y="1832" data-parent1="p23" data-parent2="p22" data-child="p24" data-child_pos_idx="1"></path>
+<g id="p25g" data-lower_links="" data-upper_links="v69," data-left_links="h10,p24," data-right_links="">
+  <rect id="p25r" class="feminine" x="1548" y="1820" width="36" height="104"></rect>
+  <text id="p25t" x="1548" y="1820" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">郁久閭氏</text>
+</g>
+<path id="h10" class="double" d="M 1284,1870 l 263,0 m 0,4 l -263,0" data-connect_pos_x="1437" data-connect_pos_y="1874" data-start_x="1284" data-end_x="1547" data-y="1872" data-lhs_person="p24" data-rhs_person="p25" data-lower_links="v17,"></path>
+<g id="p26g" data-lower_links="" data-upper_links="v17," data-left_links="h12,p29," data-right_links="h11,p27,">
+  <rect id="p26r" class="masculine" x="1419" y="2106" width="36" height="80"></rect>
+  <text id="p26t" x="1419" y="2106" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋濬</text>
+  <text writing-mode="tb" id="p26n0" x="1399" y="2150" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">文成帝</text>
+  <circle id="p26b_upper_right" cx="1461" cy="2100" r="17" fill="darkblue"></circle>
+  <text id="p26bn_upper_right" x="1449" y="2108" textLength="8" dx="8" dy="0" class="num_badge">4</text>
+</g>
+<path id="v17" class="solid" d="M 1437,1875 l 0,230" data-from_x="1437" data-from_y="1874" data-to_x="1437" data-to_y="2106" data-parent1="p24" data-parent2="p25" data-child="p26" data-child_pos_idx="1"></path>
+<g id="p27g" data-lower_links="" data-upper_links="v70," data-left_links="h11,p26," data-right_links="">
+  <rect id="p27r" class="feminine" x="1674" y="2106" width="36" height="80"></rect>
+  <text id="p27t" x="1674" y="2106" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李貴人</text>
+</g>
+<path id="h11" class="double" d="M 1456,2144 l 217,0 m 0,4 l -217,0" data-connect_pos_x="1566" data-connect_pos_y="2148" data-start_x="1456" data-end_x="1673" data-y="2146" data-lhs_person="p26" data-rhs_person="p27" data-lower_links="v114,"></path>
+<g id="p28g" data-lower_links="" data-upper_links="v114," data-left_links="h50,p29,h51,p30,h52,p66," data-right_links="h55,p52,h56,p141,">
+  <rect id="p28r" class="masculine" x="1548" y="2226" width="36" height="128"></rect>
+  <text id="p28t" x="1548" y="2226" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="16">拓跋弘</text>
+  <text writing-mode="tb" id="p28n0" x="1528" y="2342" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">献文帝</text>
+  <circle id="p28b_upper_right" cx="1590" cy="2220" r="17" fill="darkblue"></circle>
+  <text id="p28bn_upper_right" x="1578" y="2228" textLength="8" dx="8" dy="0" class="num_badge">5</text>
+</g>
+
+<g id="p29g" data-lower_links="" data-upper_links="v71," data-left_links="" data-right_links="h12,p26,h50,p28,">
+  <rect id="p29r" class="feminine" x="1076" y="2130" width="36" height="128"></rect>
+  <text id="p29t" x="1076" y="2130" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="16">馮太后</text>
+</g>
+<path id="h12" class="double" d="M 1113,2144 l 305,0 m 0,4 l -305,0" data-connect_pos_x="1266" data-connect_pos_y="2148" data-start_x="1113" data-end_x="1418" data-y="2146" data-lhs_person="p29" data-rhs_person="p26" data-lower_links=""></path>
+<g id="p30g" data-lower_links="" data-upper_links="v75," data-left_links="" data-right_links="h51,p28,">
+  <rect id="p30r" class="feminine" x="708" y="2250" width="36" height="80"></rect>
+  <text id="p30t" x="708" y="2250" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李夫人</text>
+</g>
+<g id="p31g" data-lower_links="v31," data-upper_links="v111,v112," data-left_links="h21,p40,h26,p41," data-right_links="h53,p32,h54,p138,">
+  <rect id="p31r" class="masculine" x="1464" y="2468" width="36" height="104"></rect>
+  <text id="p31t" x="1464" y="2468" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="16">元宏</text>
+  <text writing-mode="tb" id="p31n0" x="1444" y="2550" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">孝文帝</text>
+  <circle id="p31b_upper_right" cx="1506" cy="2462" r="17" fill="darkblue"></circle>
+  <text id="p31bn_upper_right" x="1494" y="2470" textLength="8" dx="8" dy="0" class="num_badge">6</text>
+</g>
+<g id="p32g" data-lower_links="" data-upper_links="v78," data-left_links="h53,p31," data-right_links="">
+  <rect id="p32r" class="feminine" x="2052" y="2506" width="36" height="80"></rect>
+  <text id="p32t" x="2052" y="2506" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">高照容</text>
+</g>
+
+<g id="p33g" data-lower_links="" data-upper_links="v115," data-left_links="" data-right_links="h18,p34,">
+  <rect id="p33r" class="masculine" x="1968" y="2660" width="36" height="56"></rect>
+  <text id="p33t" x="1968" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元恪</text>
+  <text writing-mode="tb" id="p33n0" x="1948" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">宣武帝</text>
+  <circle id="p33b_upper_right" cx="2010" cy="2654" r="17" fill="darkblue"></circle>
+  <text id="p33bn_upper_right" x="1998" y="2662" textLength="8" dx="8" dy="0" class="num_badge">7</text>
+</g>
+
+<g id="p34g" data-lower_links="" data-upper_links="v59," data-left_links="h18,p33," data-right_links="">
+  <rect id="p34r" class="feminine" x="2136" y="2648" width="36" height="80"></rect>
+  <text id="p34t" x="2136" y="2648" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">霊太后</text>
+</g>
+<path id="h18" class="double" d="M 2005,2686 l 130,0 m 0,4 l -130,0" data-connect_pos_x="2070" data-connect_pos_y="2690" data-start_x="2005" data-end_x="2135" data-y="2688" data-lhs_person="p33" data-rhs_person="p34" data-lower_links="v24,"></path>
+<g id="p35g" data-lower_links="" data-upper_links="v24," data-left_links="" data-right_links="h19,p36,">
+  <rect id="p35r" class="masculine" x="2052" y="2790" width="36" height="56"></rect>
+  <text id="p35t" x="2052" y="2790" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元詡</text>
+  <text writing-mode="tb" id="p35n0" x="2032" y="2798" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">孝明帝</text>
+  <circle id="p35b_upper_right" cx="2094" cy="2784" r="17" fill="darkblue"></circle>
+  <text id="p35bn_upper_right" x="2082" y="2792" textLength="8" dx="8" dy="0" class="num_badge">8</text>
+</g>
+<path id="v24" class="solid" d="M 2070,2691 l 0,98" data-from_x="2070" data-from_y="2690" data-to_x="2070" data-to_y="2790" data-parent1="p33" data-parent2="p34" data-child="p35" data-child_pos_idx="1"></path>
+<g id="p36g" data-lower_links="" data-upper_links="" data-left_links="h19,p35," data-right_links="">
+  <rect id="p36r" class="feminine" x="2136" y="2778" width="36" height="80"></rect>
+  <text id="p36t" x="2136" y="2778" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">潘充華</text>
+</g>
+<path id="h19" class="double" d="M 2089,2816 l 46,0 m 0,4 l -46,0" data-connect_pos_x="2112" data-connect_pos_y="2820" data-start_x="2089" data-end_x="2135" data-y="2818" data-lhs_person="p35" data-rhs_person="p36" data-lower_links="v27,"></path>
+<g id="p37g" data-lower_links="" data-upper_links="v66," data-left_links="h20,p22," data-right_links="">
+  <rect id="p37r" class="feminine" x="2010" y="1570" width="36" height="104"></rect>
+  <text id="p37t" x="2010" y="1570" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">閭左昭儀</text>
+</g>
+<path id="h20" class="double" d="M 1360,1620 l 649,0 m 0,4 l -649,0" data-connect_pos_x="1933" data-connect_pos_y="1624" data-start_x="1360" data-end_x="2009" data-y="1622" data-lhs_person="p22" data-rhs_person="p37" data-lower_links="v25,"></path>
+<g id="p38g" data-lower_links="" data-upper_links="v25," data-left_links="" data-right_links="">
+  <rect id="p38r" class="masculine" x="1915" y="1832" width="36" height="80"></rect>
+  <text id="p38t" x="1915" y="1832" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋余</text>
+  <text writing-mode="tb" id="p38n0" x="1895" y="1864" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">南安王</text>
+  <circle id="p38b_upper_right" cx="1957" cy="1826" r="17" fill="black"></circle>
+  <text id="p38bn_upper_right" x="1945" y="1834" textLength="24" dx="0" dy="0" class="num_badge">3-2</text>
+</g>
+<path id="v25" class="solid" d="M 1933,1625 l 0,206" data-from_x="1933" data-from_y="1624" data-to_x="1933" data-to_y="1832" data-parent1="p22" data-parent2="p37" data-child="p38" data-child_pos_idx="1"></path>
+<g id="p39g" data-lower_links="" data-upper_links="v27," data-left_links="" data-right_links="">
+  <rect id="p39r" class="feminine" x="2094" y="2978" width="36" height="56"></rect>
+  <text id="p39t" x="2094" y="2978" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元氏</text>
+  <circle id="p39b_upper_right" cx="2136" cy="2972" r="17" fill="black"></circle>
+  <text id="p39bn_upper_right" x="2124" y="2980" textLength="24" dx="0" dy="0" class="num_badge">8-3</text>
+</g>
+<path id="v27" class="solid" d="M 2112,2821 l 0,156" data-from_x="2112" data-from_y="2820" data-to_x="2112" data-to_y="2978" data-parent1="p35" data-parent2="p36" data-child="p39" data-child_pos_idx="1"></path>
+<g id="p40g" data-lower_links="" data-upper_links="v53," data-left_links="" data-right_links="h21,p31,">
+  <rect id="p40r" class="feminine" x="624" y="2434" width="36" height="80"></rect>
+  <text id="p40t" x="624" y="2434" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅夫人</text>
+</g>
+<path id="h21" class="double" d="M 661,2492 l 802,0 m 0,4 l -802,0" data-connect_pos_x="820" data-connect_pos_y="2496" data-start_x="661" data-end_x="1463" data-y="2494" data-lhs_person="p40" data-rhs_person="p31" data-lower_links="v50,v108,"></path>
+<g id="p41g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h26,p31,">
+  <rect id="p41r" class="feminine" x="1212" y="2506" width="36" height="80"></rect>
+  <text id="p41t" x="1212" y="2506" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">袁貴人</text>
+</g>
+<g id="p42g" data-lower_links="" data-upper_links="v37," data-left_links="h23,p43," data-right_links="">
+  <rect id="p42r" class="masculine" x="1254" y="2616" width="36" height="56"></rect>
+  <text id="p42t" x="1254" y="2616" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元愉</text>
+  <text writing-mode="tb" id="p42n0" x="1234" y="2648" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">京兆王</text>
+  <circle id="p42b_upper_right" cx="1296" cy="2610" r="17" fill="black"></circle>
+  <text id="p42bn_upper_right" x="1284" y="2618" textLength="24" dx="0" dy="0" class="num_badge">7-2</text>
+</g>
+<g id="p43g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h23,p42,">
+  <rect id="p43r" class="feminine" x="1002" y="2604" width="36" height="80"></rect>
+  <text id="p43t" x="1002" y="2604" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">楊奥妃</text>
+</g>
+<path id="h23" class="double" d="M 1039,2642 l 214,0 m 0,4 l -214,0" data-connect_pos_x="1146" data-connect_pos_y="2646" data-start_x="1039" data-end_x="1253" data-y="2644" data-lhs_person="p43" data-rhs_person="p42" data-lower_links="v29,v30,"></path>
+<g id="p44g" data-lower_links="v36," data-upper_links="v30," data-left_links="" data-right_links="">
+  <rect id="p44r" class="masculine" x="1044" y="2814" width="36" height="80"></rect>
+  <text id="p44t" x="1044" y="2814" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元宝暉</text>
+  <text writing-mode="tb" id="p44n0" x="1024" y="2846" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">臨洮王</text>
+</g>
+<g id="p45g" data-lower_links="v35," data-upper_links="v29," data-left_links="" data-right_links="h24,p46,">
+  <rect id="p45r" class="masculine" x="1128" y="2814" width="36" height="80"></rect>
+  <text id="p45t" x="1128" y="2814" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元宝炬</text>
+  <text writing-mode="tb" id="p45n0" x="1108" y="2862" textLength="32" lengthAdjust="spacing" dx="8" dy="0" class="note blue">文帝</text>
+  <circle id="p45b_upper_right" cx="1170" cy="2808" r="17" fill="darkgreen"></circle>
+  <text id="p45bn_upper_right" x="1158" y="2816" textLength="8" dx="8" dy="0" class="num_badge">1</text>
+</g>
+<path id="v29" class="solid" d="M 1146,2647 l 0,166" data-from_x="1146" data-from_y="2646" data-to_x="1146" data-to_y="2814" data-parent1="p43" data-parent2="p42" data-child="p45" data-child_pos_idx="1"></path>
+<path id="v30" class="solid" d="M 1146,2647 l 0,32 l -84,0 l 0,134" data-from_x="1146" data-from_y="2646" data-to_x="1062" data-to_y="2814" data-parent1="p43" data-parent2="p42" data-child="p44" data-child_pos_idx="1"></path>
+<g id="p46g" data-lower_links="" data-upper_links="v32," data-left_links="h24,p45," data-right_links="">
+  <rect id="p46r" class="feminine" x="1380" y="2802" width="36" height="104"></rect>
+  <text id="p46t" x="1380" y="2802" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙弗皇后</text>
+</g>
+<path id="h24" class="double" d="M 1165,2852 l 214,0 m 0,4 l -214,0" data-connect_pos_x="1272" data-connect_pos_y="2856" data-start_x="1165" data-end_x="1379" data-y="2854" data-lhs_person="p45" data-rhs_person="p46" data-lower_links="v34,"></path>
+<g id="p47g" data-lower_links="" data-upper_links="v31," data-left_links="h25,p48," data-right_links="">
+  <rect id="p47r" class="feminine" x="1464" y="2684" width="36" height="104"></rect>
+  <text id="p47t" x="1464" y="2684" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">淮陽公主</text>
+</g>
+<path id="v31" class="solid" d="M 1482,2573 l 0,110" data-from_x="1482" data-from_y="2572" data-to_x="1482" data-to_y="2684" data-parent1="p31" data-parent1_pos_idx="1" data-child="p47" data-child_pos_idx="1"></path>
+<g id="p48g" data-lower_links="" data-upper_links="v86," data-left_links="" data-right_links="h25,p47,">
+  <rect id="p48r" class="masculine" x="876" y="2708" width="36" height="56"></rect>
+  <text id="p48t" x="876" y="2708" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙瑗</text>
+</g>
+<path id="h25" class="double" d="M 913,2734 l 550,0 m 0,4 l -550,0" data-connect_pos_x="1398" data-connect_pos_y="2738" data-start_x="913" data-end_x="1463" data-y="2736" data-lhs_person="p48" data-rhs_person="p47" data-lower_links="v32,"></path>
+<path id="v32" class="solid" d="M 1398,2739 l 0,62" data-from_x="1398" data-from_y="2738" data-to_x="1398" data-to_y="2802" data-parent1="p48" data-parent2="p47" data-child="p46" data-child_pos_idx="1"></path>
+<g id="p49g" data-lower_links="" data-upper_links="v34," data-left_links="" data-right_links="">
+  <rect id="p49r" class="masculine" x="1254" y="2990" width="36" height="56"></rect>
+  <text id="p49t" x="1254" y="2990" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元欽</text>
+  <circle id="p49b_upper_right" cx="1296" cy="2984" r="17" fill="darkgreen"></circle>
+  <text id="p49bn_upper_right" x="1284" y="2992" textLength="8" dx="8" dy="0" class="num_badge">2</text>
+  <text writing-mode="tb" id="p49n0" x="1234" y="3014" textLength="32" lengthAdjust="spacing" dx="8" dy="0" class="note blue">廃帝</text>
+</g>
+<path id="v34" class="solid" d="M 1272,2857 l 0,132" data-from_x="1272" data-from_y="2856" data-to_x="1272" data-to_y="2990" data-parent1="p45" data-parent2="p46" data-child="p49" data-child_pos_idx="1"></path>
+<g id="p50g" data-lower_links="" data-upper_links="v35," data-left_links="" data-right_links="">
+  <rect id="p50r" class="masculine" x="1128" y="2990" width="36" height="80"></rect>
+  <text id="p50t" x="1128" y="2990" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋廓</text>
+  <circle id="p50b_upper_right" cx="1170" cy="2984" r="17" fill="darkgreen"></circle>
+  <text id="p50bn_upper_right" x="1158" y="2992" textLength="8" dx="8" dy="0" class="num_badge">3</text>
+  <text writing-mode="tb" id="p50n0" x="1108" y="3038" textLength="32" lengthAdjust="spacing" dx="8" dy="0" class="note blue">恭帝</text>
+</g>
+<path id="v35" class="solid" d="M 1146,2895 l 0,94" data-from_x="1146" data-from_y="2894" data-to_x="1146" data-to_y="2990" data-parent1="p45" data-parent1_pos_idx="1" data-child="p50" data-child_pos_idx="1"></path>
+<g id="p51g" data-lower_links="" data-upper_links="v36," data-left_links="" data-right_links="">
+  <rect id="p51r" class="masculine" x="1044" y="2990" width="36" height="56"></rect>
+  <text id="p51t" x="1044" y="2990" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元釗</text>
+  <text writing-mode="tb" id="p51n0" x="1024" y="3014" textLength="32" lengthAdjust="spacing" dx="8" dy="0" class="note blue">幼主</text>
+  <circle id="p51b_upper_right" cx="1086" cy="2984" r="17" fill="black"></circle>
+  <text id="p51bn_upper_right" x="1074" y="2992" textLength="24" dx="0" dy="0" class="num_badge">8-4</text>
+</g>
+<path id="v36" class="solid" d="M 1062,2895 l 0,94" data-from_x="1062" data-from_y="2894" data-to_x="1062" data-to_y="2990" data-parent1="p44" data-parent1_pos_idx="1" data-child="p51" data-child_pos_idx="1"></path>
+<path id="h26" class="double" d="M 1249,2544 l 214,0 m 0,4 l -214,0" data-connect_pos_x="1356" data-connect_pos_y="2548" data-start_x="1249" data-end_x="1463" data-y="2546" data-lhs_person="p41" data-rhs_person="p31" data-lower_links="v37,"></path>
+<path id="v37" class="solid" d="M 1356,2549 l 0,32 l -84,0 l 0,34" data-from_x="1356" data-from_y="2548" data-to_x="1272" data-to_y="2616" data-parent1="p41" data-parent2="p31" data-child="p42" data-child_pos_idx="1"></path>
+
+
+<g id="p52g" data-lower_links="" data-upper_links="v120," data-left_links="h55,p28," data-right_links="">
+  <rect id="p52r" class="feminine" x="2388" y="2218" width="36" height="80"></rect>
+  <text id="p52t" x="2388" y="2218" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">潘貴人</text>
+</g>
+
+<g id="p53g" data-lower_links="" data-upper_links="v119," data-left_links="" data-right_links="h29,p54,">
+  <rect id="p53r" class="masculine" x="2304" y="2468" width="36" height="56"></rect>
+  <text id="p53t" x="2304" y="2468" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元勰</text>
+  <text writing-mode="tb" id="p53n0" x="2284" y="2476" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">彭城王</text>
+</g>
+
+<g id="p54g" data-lower_links="" data-upper_links="v79," data-left_links="h29,p53," data-right_links="">
+  <rect id="p54r" class="feminine" x="2514" y="2456" width="36" height="80"></rect>
+  <text id="p54t" x="2514" y="2456" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李媛華</text>
+</g>
+<path id="h29" class="double" d="M 2341,2494 l 172,0 m 0,4 l -172,0" data-connect_pos_x="2427" data-connect_pos_y="2498" data-start_x="2341" data-end_x="2513" data-y="2496" data-lhs_person="p53" data-rhs_person="p54" data-lower_links="v40,"></path>
+<g id="p55g" data-lower_links="" data-upper_links="v40," data-left_links="" data-right_links="">
+  <rect id="p55r" class="masculine" x="2409" y="2660" width="36" height="80"></rect>
+  <text id="p55t" x="2409" y="2660" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元子攸</text>
+  <text writing-mode="tb" id="p55n0" x="2389" y="2692" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">孝荘帝</text>
+  <circle id="p55b_upper_right" cx="2451" cy="2654" r="17" fill="darkblue"></circle>
+  <text id="p55bn_upper_right" x="2439" y="2662" textLength="8" dx="8" dy="0" class="num_badge">9</text>
+</g>
+<path id="v40" class="solid" d="M 2427,2499 l 0,160" data-from_x="2427" data-from_y="2498" data-to_x="2427" data-to_y="2660" data-parent1="p53" data-parent2="p54" data-child="p55" data-child_pos_idx="1"></path>
+<g id="p56g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h30,p24,">
+  <rect id="p56r" class="feminine" x="120" y="1832" width="36" height="80"></rect>
+  <text id="p56t" x="120" y="1832" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉椒房</text>
+</g>
+<path id="h30" class="double" d="M 157,1870 l 1089,0 m 0,4 l -1089,0" data-connect_pos_x="222" data-connect_pos_y="1874" data-start_x="157" data-end_x="1246" data-y="1872" data-lhs_person="p56" data-rhs_person="p24" data-lower_links="v41,"></path>
+<g id="p57g" data-lower_links="v45," data-upper_links="v41," data-left_links="h31,p58," data-right_links="">
+  <rect id="p57r" class="masculine" x="204" y="2106" width="36" height="80"></rect>
+  <text id="p57t" x="204" y="2106" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋楨</text>
+  <text writing-mode="tb" id="p57n0" x="184" y="2150" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">南安王</text>
+</g>
+<path id="v41" class="solid" d="M 222,1875 l 0,230" data-from_x="222" data-from_y="1874" data-to_x="222" data-to_y="2106" data-parent1="p56" data-parent2="p24" data-child="p57" data-child_pos_idx="1"></path>
+<g id="p58g" data-lower_links="" data-upper_links="v91," data-left_links="" data-right_links="h31,p57,">
+  <rect id="p58r" class="feminine" x="36" y="2118" width="36" height="56"></rect>
+  <text id="p58t" x="36" y="2118" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">仇氏</text>
+</g>
+<path id="h31" class="double" d="M 73,2144 l 130,0 m 0,4 l -130,0" data-connect_pos_x="138" data-connect_pos_y="2148" data-start_x="73" data-end_x="203" data-y="2146" data-lhs_person="p58" data-rhs_person="p57" data-lower_links="v42,"></path>
+<g id="p59g" data-lower_links="v43," data-upper_links="v42," data-left_links="" data-right_links="">
+  <rect id="p59r" class="masculine" x="120" y="2298" width="36" height="56"></rect>
+  <text id="p59t" x="120" y="2298" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元彬</text>
+  <text writing-mode="tb" id="p59n0" x="100" y="2306" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">章武王</text>
+</g>
+<path id="v42" class="solid" d="M 138,2149 l 0,148" data-from_x="138" data-from_y="2148" data-to_x="138" data-to_y="2298" data-parent1="p58" data-parent2="p57" data-child="p59" data-child_pos_idx="1"></path>
+<g id="p60g" data-lower_links="" data-upper_links="v43," data-left_links="h32,p61," data-right_links="">
+  <rect id="p60r" class="masculine" x="120" y="2468" width="36" height="56"></rect>
+  <text id="p60t" x="120" y="2468" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元融</text>
+  <text writing-mode="tb" id="p60n0" x="100" y="2500" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">章武王</text>
+</g>
+<path id="v43" class="solid" d="M 138,2355 l 0,112" data-from_x="138" data-from_y="2354" data-to_x="138" data-to_y="2468" data-parent1="p59" data-parent1_pos_idx="1" data-child="p60" data-child_pos_idx="1"></path>
+<g id="p61g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h32,p60,">
+  <rect id="p61r" class="feminine" x="36" y="2468" width="36" height="56"></rect>
+  <text id="p61t" x="36" y="2468" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">程氏</text>
+</g>
+<path id="h32" class="double" d="M 73,2494 l 46,0 m 0,4 l -46,0" data-connect_pos_x="96" data-connect_pos_y="2498" data-start_x="73" data-end_x="119" data-y="2496" data-lhs_person="p61" data-rhs_person="p60" data-lower_links="v44,"></path>
+<g id="p62g" data-lower_links="" data-upper_links="v44," data-left_links="" data-right_links="">
+  <rect id="p62r" class="masculine" x="78" y="2660" width="36" height="56"></rect>
+  <text id="p62t" x="78" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元朗</text>
+  <text writing-mode="tb" id="p62n0" x="58" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">後廃帝</text>
+  <text writing-mode="tb" id="p62n1" x="38" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">安定王</text>
+  <circle id="p62b_upper_right" cx="120" cy="2654" r="17" fill="darkblue"></circle>
+  <text id="p62bn_upper_right" x="108" y="2662" textLength="16" dx="4" dy="0" class="num_badge">12</text>
+</g>
+<path id="v44" class="solid" d="M 96,2499 l 0,160" data-from_x="96" data-from_y="2498" data-to_x="96" data-to_y="2660" data-parent1="p61" data-parent2="p60" data-child="p62" data-child_pos_idx="1"></path>
+<g id="p63g" data-lower_links="" data-upper_links="v45," data-left_links="" data-right_links="h33,p64,">
+  <rect id="p63r" class="masculine" x="204" y="2298" width="36" height="56"></rect>
+  <text id="p63t" x="204" y="2298" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元怡</text>
+  <text writing-mode="tb" id="p63n0" x="184" y="2306" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">扶風王</text>
+</g>
+<path id="v45" class="solid" d="M 222,2187 l 0,110" data-from_x="222" data-from_y="2186" data-to_x="222" data-to_y="2298" data-parent1="p57" data-parent1_pos_idx="1" data-child="p63" data-child_pos_idx="1"></path>
+<g id="p64g" data-lower_links="" data-upper_links="" data-left_links="h33,p63," data-right_links="">
+  <rect id="p64r" class="feminine" x="288" y="2298" width="36" height="56"></rect>
+  <text id="p64t" x="288" y="2298" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">衛氏</text>
+</g>
+<path id="h33" class="double" d="M 241,2324 l 46,0 m 0,4 l -46,0" data-connect_pos_x="264" data-connect_pos_y="2328" data-start_x="241" data-end_x="287" data-y="2326" data-lhs_person="p63" data-rhs_person="p64" data-lower_links="v46,"></path>
+<g id="p65g" data-lower_links="" data-upper_links="v46," data-left_links="" data-right_links="">
+  <rect id="p65r" class="masculine" x="246" y="2468" width="36" height="56"></rect>
+  <text id="p65t" x="246" y="2468" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元曄</text>
+  <text writing-mode="tb" id="p65n0" x="226" y="2476" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">東海王</text>
+  <circle id="p65b_upper_right" cx="288" cy="2462" r="17" fill="darkblue"></circle>
+  <text id="p65bn_upper_right" x="276" y="2470" textLength="16" dx="4" dy="0" class="num_badge">10</text>
+</g>
+<path id="v46" class="solid" d="M 264,2329 l 0,138" data-from_x="264" data-from_y="2328" data-to_x="264" data-to_y="2468" data-parent1="p63" data-parent2="p64" data-child="p65" data-child_pos_idx="1"></path>
+<g id="p66g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h52,p28,">
+  <rect id="p66r" class="feminine" x="372" y="2298" width="36" height="80"></rect>
+  <text id="p66t" x="372" y="2298" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">孟椒房</text>
+</g>
+<g id="p67g" data-lower_links="" data-upper_links="v113," data-left_links="h36,p69," data-right_links="">
+  <rect id="p67r" class="masculine" x="456" y="2456" width="36" height="56"></rect>
+  <text id="p67t" x="456" y="2456" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元羽</text>
+  <text writing-mode="tb" id="p67n0" x="436" y="2488" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">広陵王</text>
+</g>
+
+
+<g id="p69g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h36,p67,">
+  <rect id="p69r" class="feminine" x="372" y="2456" width="36" height="56"></rect>
+  <text id="p69t" x="372" y="2456" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">王氏</text>
+</g>
+<path id="h36" class="double" d="M 409,2482 l 46,0 m 0,4 l -46,0" data-connect_pos_x="432" data-connect_pos_y="2486" data-start_x="409" data-end_x="455" data-y="2484" data-lhs_person="p69" data-rhs_person="p67" data-lower_links="v49,"></path>
+<g id="p70g" data-lower_links="" data-upper_links="v49," data-left_links="" data-right_links="">
+  <rect id="p70r" class="masculine" x="414" y="2660" width="36" height="56"></rect>
+  <text id="p70t" x="414" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元恭</text>
+  <text writing-mode="tb" id="p70n0" x="394" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">前廃帝</text>
+  <text writing-mode="tb" id="p70n1" x="374" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">節閔帝</text>
+  <text writing-mode="tb" id="p70n2" x="354" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">広陵王</text>
+  <circle id="p70b_upper_right" cx="456" cy="2654" r="17" fill="darkblue"></circle>
+  <text id="p70bn_upper_right" x="444" y="2662" textLength="16" dx="4" dy="0" class="num_badge">11</text>
+</g>
+<path id="v49" class="solid" d="M 432,2487 l 0,172" data-from_x="432" data-from_y="2486" data-to_x="432" data-to_y="2660" data-parent1="p69" data-parent2="p67" data-child="p70" data-child_pos_idx="1"></path>
+<g id="p71g" data-lower_links="" data-upper_links="v50," data-left_links="h38,p77," data-right_links="">
+  <rect id="p71r" class="masculine" x="624" y="2660" width="36" height="56"></rect>
+  <text id="p71t" x="624" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元懌</text>
+  <text writing-mode="tb" id="p71n0" x="604" y="2692" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">清河王</text>
+</g>
+<path id="v50" class="solid" d="M 820,2497 l 0,32 l -178,0 l 0,130" data-from_x="820" data-from_y="2496" data-to_x="642" data-to_y="2660" data-parent1="p40" data-parent2="p31" data-child="p71" data-child_pos_idx="1"></path>
+<g id="p72g" data-lower_links="" data-upper_links="v116," data-left_links="h37,p73," data-right_links="">
+  <rect id="p72r" class="masculine" x="1884" y="2660" width="36" height="56"></rect>
+  <text id="p72t" x="1884" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元懐</text>
+  <text writing-mode="tb" id="p72n0" x="1864" y="2692" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">広平王</text>
+</g>
+
+<g id="p73g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h37,p72,">
+  <rect id="p73r" class="feminine" x="1800" y="2660" width="36" height="56"></rect>
+  <text id="p73t" x="1800" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李氏</text>
+</g>
+<path id="h37" class="double" d="M 1837,2686 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1860" data-connect_pos_y="2690" data-start_x="1837" data-end_x="1883" data-y="2688" data-lhs_person="p73" data-rhs_person="p72" data-lower_links="v52,"></path>
+<g id="p74g" data-lower_links="" data-upper_links="v52," data-left_links="" data-right_links="">
+  <rect id="p74r" class="masculine" x="1842" y="2790" width="36" height="56"></rect>
+  <text id="p74t" x="1842" y="2790" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元脩</text>
+  <circle id="p74b_upper_right" cx="1884" cy="2784" r="17" fill="darkblue"></circle>
+  <text id="p74bn_upper_right" x="1872" y="2792" textLength="16" dx="4" dy="0" class="num_badge">13</text>
+  <text writing-mode="tb" id="p74n0" x="1822" y="2798" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">孝武帝</text>
+</g>
+<path id="v52" class="solid" d="M 1860,2691 l 0,98" data-from_x="1860" data-from_y="2690" data-to_x="1860" data-to_y="2790" data-parent1="p73" data-parent2="p72" data-child="p74" data-child_pos_idx="1"></path>
+<g id="p75g" data-lower_links="v53,v54," data-upper_links="v73," data-left_links="" data-right_links="">
+  <rect id="p75r" class="masculine" x="582" y="2266" width="36" height="56"></rect>
+  <text id="p75t" x="582" y="2266" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅雲</text>
+</g>
+<path id="v53" class="solid" d="M 600,2323 l 0,32 l 42,0 l 0,78" data-from_x="600" data-from_y="2322" data-to_x="642" data-to_y="2434" data-parent1="p75" data-parent1_pos_idx="1" data-child="p40" data-child_pos_idx="1"></path>
+<g id="p76g" data-lower_links="v55," data-upper_links="v54," data-left_links="" data-right_links="">
+  <rect id="p76r" class="masculine" x="540" y="2446" width="36" height="56"></rect>
+  <text id="p76t" x="540" y="2446" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅蓋</text>
+</g>
+<path id="v54" class="solid" d="M 600,2323 l 0,32 l -42,0 l 0,90" data-from_x="600" data-from_y="2322" data-to_x="558" data-to_y="2446" data-parent1="p75" data-parent1_pos_idx="1" data-child="p76" data-child_pos_idx="1"></path>
+<g id="p77g" data-lower_links="" data-upper_links="v55," data-left_links="" data-right_links="h38,p71,">
+  <rect id="p77r" class="feminine" x="540" y="2660" width="36" height="56"></rect>
+  <text id="p77t" x="540" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅氏</text>
+</g>
+<path id="v55" class="solid" d="M 558,2503 l 0,156" data-from_x="558" data-from_y="2502" data-to_x="558" data-to_y="2660" data-parent1="p76" data-parent1_pos_idx="1" data-child="p77" data-child_pos_idx="1"></path>
+<path id="h38" class="double" d="M 577,2686 l 46,0 m 0,4 l -46,0" data-connect_pos_x="600" data-connect_pos_y="2690" data-start_x="577" data-end_x="623" data-y="2688" data-lhs_person="p77" data-rhs_person="p71" data-lower_links="v56,"></path>
+<g id="p78g" data-lower_links="" data-upper_links="v56," data-left_links="" data-right_links="h39,p79,">
+  <rect id="p78r" class="masculine" x="582" y="2884" width="36" height="56"></rect>
+  <text id="p78t" x="582" y="2884" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元亶</text>
+  <text writing-mode="tb" id="p78n0" x="562" y="2892" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">清河王</text>
+</g>
+<path id="v56" class="solid" d="M 600,2691 l 0,192" data-from_x="600" data-from_y="2690" data-to_x="600" data-to_y="2884" data-parent1="p77" data-parent2="p71" data-child="p78" data-child_pos_idx="1"></path>
+<g id="p79g" data-lower_links="" data-upper_links="v63," data-left_links="h39,p78," data-right_links="">
+  <rect id="p79r" class="feminine" x="2220" y="2884" width="36" height="56"></rect>
+  <text id="p79t" x="2220" y="2884" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">胡智</text>
+</g>
+<path id="h39" class="double" d="M 619,2910 l 1600,0 m 0,4 l -1600,0" data-connect_pos_x="728" data-connect_pos_y="2914" data-start_x="619" data-end_x="2219" data-y="2912" data-lhs_person="p78" data-rhs_person="p79" data-lower_links="v57,"></path>
+<g id="p80g" data-lower_links="" data-upper_links="v57," data-left_links="" data-right_links="">
+  <rect id="p80r" class="masculine" x="710" y="3002" width="36" height="80"></rect>
+  <text id="p80t" x="710" y="3002" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元善見</text>
+  <circle id="p80b_upper_right" cx="752" cy="2996" r="17" fill="purple"></circle>
+  <text id="p80bn_upper_right" x="740" y="3004" textLength="8" dx="8" dy="0" class="num_badge">1</text>
+  <text writing-mode="tb" id="p80n0" x="690" y="3034" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">孝静帝</text>
+</g>
+<path id="v57" class="solid" d="M 728,2915 l 0,86" data-from_x="728" data-from_y="2914" data-to_x="728" data-to_y="3002" data-parent1="p78" data-parent2="p79" data-child="p80" data-child_pos_idx="1"></path>
+
+
+<g id="p81g" data-lower_links="v59," data-upper_links="v60," data-left_links="" data-right_links="">
+  <rect id="p81r" class="masculine" x="2136" y="2504" width="36" height="80"></rect>
+  <text id="p81t" x="2136" y="2504" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">胡国珍</text>
+</g>
+<path id="v59" class="solid" d="M 2154,2585 l 0,62" data-from_x="2154" data-from_y="2584" data-to_x="2154" data-to_y="2648" data-parent1="p81" data-parent1_pos_idx="1" data-child="p34" data-child_pos_idx="1"></path>
+<g id="p82g" data-lower_links="v60,v61," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p82r" class="masculine" x="2178" y="2290" width="36" height="56"></rect>
+  <text id="p82t" x="2178" y="2290" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">胡淵</text>
+</g>
+<path id="v60" class="solid" d="M 2196,2347 l 0,32 l -42,0 l 0,124" data-from_x="2196" data-from_y="2346" data-to_x="2154" data-to_y="2504" data-parent1="p82" data-parent1_pos_idx="1" data-child="p81" data-child_pos_idx="1"></path>
+<g id="p83g" data-lower_links="v62," data-upper_links="v61," data-left_links="" data-right_links="">
+  <rect id="p83r" class="masculine" x="2220" y="2516" width="36" height="56"></rect>
+  <text id="p83t" x="2220" y="2516" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">胡真</text>
+</g>
+<path id="v61" class="solid" d="M 2196,2347 l 0,32 l 42,0 l 0,136" data-from_x="2196" data-from_y="2346" data-to_x="2238" data-to_y="2516" data-parent1="p82" data-parent1_pos_idx="1" data-child="p83" data-child_pos_idx="1"></path>
+<g id="p84g" data-lower_links="v63," data-upper_links="v62," data-left_links="" data-right_links="">
+  <rect id="p84r" class="masculine" x="2220" y="2660" width="36" height="56"></rect>
+  <text id="p84t" x="2220" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">胡寧</text>
+</g>
+<path id="v62" class="solid" d="M 2238,2573 l 0,86" data-from_x="2238" data-from_y="2572" data-to_x="2238" data-to_y="2660" data-parent1="p83" data-parent1_pos_idx="1" data-child="p84" data-child_pos_idx="1"></path>
+<path id="v63" class="solid" d="M 2238,2717 l 0,166" data-from_x="2238" data-from_y="2716" data-to_x="2238" data-to_y="2884" data-parent1="p84" data-parent1_pos_idx="1" data-child="p79" data-child_pos_idx="1"></path>
+<g id="p85g" data-lower_links="" data-upper_links="v95," data-left_links="" data-right_links="h41,p86,">
+  <rect id="p85r" class="masculine" x="1533" y="548" width="36" height="80"></rect>
+  <text id="p85t" x="1533" y="548" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容廆</text>
+</g>
+<g id="p86g" data-lower_links="" data-upper_links="v94," data-left_links="h41,p85," data-right_links="">
+  <rect id="p86r" class="feminine" x="1617" y="548" width="36" height="80"></rect>
+  <text id="p86t" x="1617" y="548" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">段夫人</text>
+</g>
+<path id="h41" class="double" d="M 1570,586 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1593" data-connect_pos_y="590" data-start_x="1570" data-end_x="1616" data-y="588" data-lhs_person="p85" data-rhs_person="p86" data-lower_links="v64,"></path>
+<path id="v64" class="solid" d="M 1593,591 l 0,76" data-from_x="1593" data-from_y="590" data-to_x="1593" data-to_y="668" data-parent1="p85" data-parent2="p86" data-child="p9" data-child_pos_idx="1"></path>
+<g id="p87g" data-lower_links="v65," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p87r" class="masculine" x="1464" y="1338" width="36" height="56"></rect>
+  <text id="p87t" x="1464" y="1338" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">杜豹</text>
+</g>
+<path id="v65" class="solid" d="M 1482,1395 l 0,62" data-from_x="1482" data-from_y="1394" data-to_x="1482" data-to_y="1458" data-parent1="p87" data-parent1_pos_idx="1" data-child="p21" data-child_pos_idx="1"></path>
+<g id="p88g" data-lower_links="v66," data-upper_links="v67," data-left_links="" data-right_links="">
+  <rect id="p88r" class="masculine" x="2010" y="1410" width="36" height="56"></rect>
+  <text id="p88t" x="2010" y="1410" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">大檀</text>
+  <text writing-mode="tb" id="p88n0" x="1990" y="1414" textLength="144" lengthAdjust="spacing" dx="8" dy="0" class="note blue">柔然牟汗紇升蓋可汗</text>
+</g>
+<path id="v66" class="solid" d="M 2028,1467 l 0,102" data-from_x="2028" data-from_y="1466" data-to_x="2028" data-to_y="1570" data-parent1="p88" data-parent1_pos_idx="1" data-child="p37" data-child_pos_idx="1"></path>
+<g id="p89g" data-lower_links="v67," data-upper_links="v68," data-left_links="" data-right_links="">
+  <rect id="p89r" class="masculine" x="2010" y="1242" width="36" height="56"></rect>
+  <text id="p89t" x="2010" y="1242" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">僕渾</text>
+</g>
+<path id="v67" class="solid" d="M 2028,1299 l 0,110" data-from_x="2028" data-from_y="1298" data-to_x="2028" data-to_y="1410" data-parent1="p89" data-parent1_pos_idx="1" data-child="p88" data-child_pos_idx="1"></path>
+<g id="p90g" data-lower_links="v68," data-upper_links="v98," data-left_links="" data-right_links="">
+  <rect id="p90r" class="masculine" x="2010" y="1050" width="36" height="80"></rect>
+  <text id="p90t" x="2010" y="1050" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">地粟袁</text>
+</g>
+<path id="v68" class="solid" d="M 2028,1131 l 0,110" data-from_x="2028" data-from_y="1130" data-to_x="2028" data-to_y="1242" data-parent1="p90" data-parent1_pos_idx="1" data-child="p89" data-child_pos_idx="1"></path>
+<g id="p91g" data-lower_links="v69," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p91r" class="masculine" x="1548" y="1638" width="36" height="104"></rect>
+  <text id="p91t" x="1548" y="1638" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">郁久閭辰</text>
+</g>
+<path id="v69" class="solid" d="M 1566,1743 l 0,76" data-from_x="1566" data-from_y="1742" data-to_x="1566" data-to_y="1820" data-parent1="p91" data-parent1_pos_idx="1" data-child="p25" data-child_pos_idx="1"></path>
+<g id="p92g" data-lower_links="v70," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p92r" class="masculine" x="1674" y="1898" width="36" height="80"></rect>
+  <text id="p92t" x="1674" y="1898" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李方叔</text>
+</g>
+<path id="v70" class="solid" d="M 1692,1979 l 0,126" data-from_x="1692" data-from_y="1978" data-to_x="1692" data-to_y="2106" data-parent1="p92" data-parent1_pos_idx="1" data-child="p27" data-child_pos_idx="1"></path>
+<g id="p93g" data-lower_links="" data-upper_links="v72," data-left_links="" data-right_links="h42,p94,">
+  <rect id="p93r" class="masculine" x="1023" y="1898" width="36" height="56"></rect>
+  <text id="p93t" x="1023" y="1898" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">馮朗</text>
+</g>
+<g id="p94g" data-lower_links="" data-upper_links="" data-left_links="h42,p93," data-right_links="">
+  <rect id="p94r" class="feminine" x="1128" y="1898" width="36" height="56"></rect>
+  <text id="p94t" x="1128" y="1898" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">王氏</text>
+</g>
+<path id="h42" class="double" d="M 1060,1924 l 67,0 m 0,4 l -67,0" data-connect_pos_x="1094" data-connect_pos_y="1928" data-start_x="1060" data-end_x="1127" data-y="1926" data-lhs_person="p93" data-rhs_person="p94" data-lower_links="v71,"></path>
+<path id="v71" class="solid" d="M 1094,1929 l 0,200" data-from_x="1094" data-from_y="1928" data-to_x="1094" data-to_y="2130" data-parent1="p93" data-parent2="p94" data-child="p29" data-child_pos_idx="1"></path>
+<g id="p95g" data-lower_links="" data-upper_links="v134," data-left_links="" data-right_links="h43,p96,">
+  <rect id="p95r" class="masculine" x="960" y="1582" width="36" height="56"></rect>
+  <text id="p95t" x="960" y="1582" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">馮弘</text>
+  <text writing-mode="tb" id="p95n0" x="940" y="1586" textLength="80" lengthAdjust="spacing" dx="8" dy="0" class="note blue">北燕昭成帝</text>
+</g>
+<g id="p96g" data-lower_links="" data-upper_links="" data-left_links="h43,p95," data-right_links="">
+  <rect id="p96r" class="feminine" x="1086" y="1582" width="36" height="56"></rect>
+  <text id="p96t" x="1086" y="1582" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">王氏</text>
+</g>
+<path id="h43" class="double" d="M 997,1608 l 88,0 m 0,4 l -88,0" data-connect_pos_x="1041" data-connect_pos_y="1612" data-start_x="997" data-end_x="1085" data-y="1610" data-lhs_person="p95" data-rhs_person="p96" data-lower_links="v72,"></path>
+<path id="v72" class="solid" d="M 1041,1613 l 0,284" data-from_x="1041" data-from_y="1612" data-to_x="1041" data-to_y="1898" data-parent1="p95" data-parent2="p96" data-child="p93" data-child_pos_idx="1"></path>
+<g id="p97g" data-lower_links="v73," data-upper_links="v74," data-left_links="" data-right_links="">
+  <rect id="p97r" class="masculine" x="582" y="2096" width="36" height="56"></rect>
+  <text id="p97t" x="582" y="2096" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅提</text>
+</g>
+<path id="v73" class="solid" d="M 600,2153 l 0,112" data-from_x="600" data-from_y="2152" data-to_x="600" data-to_y="2266" data-parent1="p97" data-parent1_pos_idx="1" data-child="p75" data-child_pos_idx="1"></path>
+<g id="p98g" data-lower_links="v74," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p98r" class="masculine" x="582" y="1898" width="36" height="56"></rect>
+  <text id="p98t" x="582" y="1898" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">羅渥</text>
+  <text writing-mode="tb" id="p98n0" x="562" y="1906" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note red">叱羅氏</text>
+</g>
+<path id="v74" class="solid" d="M 600,1955 l 0,140" data-from_x="600" data-from_y="1954" data-to_x="600" data-to_y="2096" data-parent1="p98" data-parent1_pos_idx="1" data-child="p97" data-child_pos_idx="1"></path>
+<g id="p99g" data-lower_links="" data-upper_links="v77," data-left_links="" data-right_links="h44,p100,">
+  <rect id="p99r" class="masculine" x="666" y="2096" width="36" height="56"></rect>
+  <text id="p99t" x="666" y="2096" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李恵</text>
+</g>
+<g id="p100g" data-lower_links="" data-upper_links="v76," data-left_links="h44,p99," data-right_links="">
+  <rect id="p100r" class="feminine" x="750" y="2096" width="36" height="56"></rect>
+  <text id="p100t" x="750" y="2096" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">韓氏</text>
+</g>
+<path id="h44" class="double" d="M 703,2122 l 46,0 m 0,4 l -46,0" data-connect_pos_x="726" data-connect_pos_y="2126" data-start_x="703" data-end_x="749" data-y="2124" data-lhs_person="p99" data-rhs_person="p100" data-lower_links="v75,"></path>
+<path id="v75" class="solid" d="M 726,2127 l 0,122" data-from_x="726" data-from_y="2126" data-to_x="726" data-to_y="2250" data-parent1="p99" data-parent2="p100" data-child="p30" data-child_pos_idx="1"></path>
+<g id="p101g" data-lower_links="v76," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p101r" class="masculine" x="750" y="1898" width="36" height="56"></rect>
+  <text id="p101t" x="750" y="1898" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">韓頽</text>
+</g>
+<path id="v76" class="solid" d="M 768,1955 l 0,140" data-from_x="768" data-from_y="1954" data-to_x="768" data-to_y="2096" data-parent1="p101" data-parent1_pos_idx="1" data-child="p100" data-child_pos_idx="1"></path>
+<g id="p102g" data-lower_links="v77," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p102r" class="masculine" x="666" y="1898" width="36" height="56"></rect>
+  <text id="p102t" x="666" y="1898" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李蓋</text>
+</g>
+<path id="v77" class="solid" d="M 684,1955 l 0,140" data-from_x="684" data-from_y="1954" data-to_x="684" data-to_y="2096" data-parent1="p102" data-parent1_pos_idx="1" data-child="p99" data-child_pos_idx="1"></path>
+<g id="p103g" data-lower_links="" data-upper_links="" data-left_links="h45,p104," data-right_links="">
+  <rect id="p103r" class="masculine" x="2094" y="2290" width="36" height="56"></rect>
+  <text id="p103t" x="2094" y="2290" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">高颺</text>
+</g>
+<g id="p104g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h45,p103,">
+  <rect id="p104r" class="feminine" x="2010" y="2290" width="36" height="56"></rect>
+  <text id="p104t" x="2010" y="2290" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">蓋氏</text>
+</g>
+<path id="h45" class="double" d="M 2047,2316 l 46,0 m 0,4 l -46,0" data-connect_pos_x="2070" data-connect_pos_y="2320" data-start_x="2047" data-end_x="2093" data-y="2318" data-lhs_person="p104" data-rhs_person="p103" data-lower_links="v78,"></path>
+<path id="v78" class="solid" d="M 2070,2321 l 0,184" data-from_x="2070" data-from_y="2320" data-to_x="2070" data-to_y="2506" data-parent1="p104" data-parent2="p103" data-child="p32" data-child_pos_idx="1"></path>
+<g id="p105g" data-lower_links="" data-upper_links="v81," data-left_links="h46,p106," data-right_links="">
+  <rect id="p105r" class="masculine" x="2556" y="2218" width="36" height="56"></rect>
+  <text id="p105t" x="2556" y="2218" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李沖</text>
+</g>
+<g id="p106g" data-lower_links="" data-upper_links="v80," data-left_links="" data-right_links="h46,p105,">
+  <rect id="p106r" class="feminine" x="2472" y="2218" width="36" height="56"></rect>
+  <text id="p106t" x="2472" y="2218" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">鄭氏</text>
+</g>
+<path id="h46" class="double" d="M 2509,2244 l 46,0 m 0,4 l -46,0" data-connect_pos_x="2532" data-connect_pos_y="2248" data-start_x="2509" data-end_x="2555" data-y="2246" data-lhs_person="p106" data-rhs_person="p105" data-lower_links="v79,"></path>
+<path id="v79" class="solid" d="M 2532,2249 l 0,206" data-from_x="2532" data-from_y="2248" data-to_x="2532" data-to_y="2456" data-parent1="p106" data-parent2="p105" data-child="p54" data-child_pos_idx="1"></path>
+<g id="p107g" data-lower_links="v80," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p107r" class="masculine" x="2472" y="2034" width="36" height="80"></rect>
+  <text id="p107t" x="2472" y="2034" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">鄭徳玄</text>
+</g>
+<path id="v80" class="solid" d="M 2490,2115 l 0,102" data-from_x="2490" data-from_y="2114" data-to_x="2490" data-to_y="2218" data-parent1="p107" data-parent1_pos_idx="1" data-child="p106" data-child_pos_idx="1"></path>
+<g id="p108g" data-lower_links="v81," data-upper_links="v82," data-left_links="" data-right_links="">
+  <rect id="p108r" class="masculine" x="2556" y="2046" width="36" height="56"></rect>
+  <text id="p108t" x="2556" y="2046" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李宝</text>
+</g>
+<path id="v81" class="solid" d="M 2574,2103 l 0,114" data-from_x="2574" data-from_y="2102" data-to_x="2574" data-to_y="2218" data-parent1="p108" data-parent1_pos_idx="1" data-child="p105" data-child_pos_idx="1"></path>
+<g id="p109g" data-lower_links="" data-upper_links="v83," data-left_links="h47,p110," data-right_links="">
+  <rect id="p109r" class="masculine" x="2598" y="1914" width="36" height="56"></rect>
+  <text id="p109t" x="2598" y="1914" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李翻</text>
+</g>
+<g id="p110g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h47,p109,">
+  <rect id="p110r" class="feminine" x="2514" y="1914" width="36" height="56"></rect>
+  <text id="p110t" x="2514" y="1914" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">唐氏</text>
+</g>
+<path id="h47" class="double" d="M 2551,1940 l 46,0 m 0,4 l -46,0" data-connect_pos_x="2574" data-connect_pos_y="1944" data-start_x="2551" data-end_x="2597" data-y="1942" data-lhs_person="p110" data-rhs_person="p109" data-lower_links="v82,"></path>
+<path id="v82" class="solid" d="M 2574,1945 l 0,100" data-from_x="2574" data-from_y="1944" data-to_x="2574" data-to_y="2046" data-parent1="p110" data-parent2="p109" data-child="p108" data-child_pos_idx="1"></path>
+<g id="p111g" data-lower_links="v83," data-upper_links="v84," data-left_links="" data-right_links="">
+  <rect id="p111r" class="masculine" x="2598" y="1734" width="36" height="56"></rect>
+  <text id="p111t" x="2598" y="1734" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李暠</text>
+  <text writing-mode="tb" id="p111n0" x="2578" y="1738" textLength="80" lengthAdjust="spacing" dx="8" dy="0" class="note blue">西涼武昭王</text>
+</g>
+<path id="v83" class="solid" d="M 2616,1791 l 0,122" data-from_x="2616" data-from_y="1790" data-to_x="2616" data-to_y="1914" data-parent1="p111" data-parent1_pos_idx="1" data-child="p109" data-child_pos_idx="1"></path>
+<g id="p112g" data-lower_links="v84," data-upper_links="v85," data-left_links="" data-right_links="">
+  <rect id="p112r" class="masculine" x="2598" y="1566" width="36" height="56"></rect>
+  <text id="p112t" x="2598" y="1566" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李昶</text>
+</g>
+<path id="v84" class="solid" d="M 2616,1623 l 0,110" data-from_x="2616" data-from_y="1622" data-to_x="2616" data-to_y="1734" data-parent1="p112" data-parent1_pos_idx="1" data-child="p111" data-child_pos_idx="1"></path>
+<g id="p113g" data-lower_links="v85," data-upper_links="v102," data-left_links="" data-right_links="">
+  <rect id="p113r" class="masculine" x="2598" y="1398" width="36" height="56"></rect>
+  <text id="p113t" x="2598" y="1398" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李弇</text>
+</g>
+<path id="v85" class="solid" d="M 2616,1455 l 0,110" data-from_x="2616" data-from_y="1454" data-to_x="2616" data-to_y="1566" data-parent1="p113" data-parent1_pos_idx="1" data-child="p112" data-child_pos_idx="1"></path>
+<g id="p114g" data-lower_links="v86," data-upper_links="v87," data-left_links="" data-right_links="">
+  <rect id="p114r" class="masculine" x="876" y="2422" width="36" height="56"></rect>
+  <text id="p114t" x="876" y="2422" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙海</text>
+</g>
+<path id="v86" class="solid" d="M 894,2479 l 0,228" data-from_x="894" data-from_y="2478" data-to_x="894" data-to_y="2708" data-parent1="p114" data-parent1_pos_idx="1" data-child="p48" data-child_pos_idx="1"></path>
+<g id="p115g" data-lower_links="v87," data-upper_links="v132," data-left_links="" data-right_links="h59,p154,">
+  <rect id="p115r" class="masculine" x="876" y="2036" width="36" height="80"></rect>
+  <text id="p115t" x="876" y="2036" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙乾帰</text>
+</g>
+<path id="v87" class="solid" d="M 894,2117 l 0,304" data-from_x="894" data-from_y="2116" data-to_x="894" data-to_y="2422" data-parent1="p115" data-parent1_pos_idx="1" data-child="p114" data-child_pos_idx="1"></path>
+<g id="p116g" data-lower_links="v132," data-upper_links="v90," data-left_links="" data-right_links="h48,p117,">
+  <rect id="p116r" class="masculine" x="876" y="1774" width="36" height="56"></rect>
+  <text id="p116t" x="876" y="1774" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙瓌</text>
+</g>
+<g id="p117g" data-lower_links="" data-upper_links="v88," data-left_links="h48,p116," data-right_links="">
+  <rect id="p117r" class="feminine" x="1323" y="1750" width="36" height="104"></rect>
+  <text id="p117t" x="1323" y="1750" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">上谷公主</text>
+</g>
+<path id="v88" class="solid" d="M 1341,1663 l 0,86" data-from_x="1341" data-from_y="1662" data-to_x="1341" data-to_y="1750" data-parent1="p22" data-parent1_pos_idx="1" data-child="p117" data-child_pos_idx="1"></path>
+<path id="h48" class="double" d="M 913,1800 l 409,0 m 0,4 l -409,0" data-connect_pos_x="976" data-connect_pos_y="1804" data-start_x="913" data-end_x="1322" data-y="1802" data-lhs_person="p116" data-rhs_person="p117" data-lower_links=""></path>
+
+<g id="p118g" data-lower_links="v90," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p118r" class="masculine" x="876" y="1582" width="36" height="80"></rect>
+  <text id="p118t" x="876" y="1582" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">乙匹知</text>
+</g>
+<path id="v90" class="solid" d="M 894,1663 l 0,110" data-from_x="894" data-from_y="1662" data-to_x="894" data-to_y="1774" data-parent1="p118" data-parent1_pos_idx="1" data-child="p116" data-child_pos_idx="1"></path>
+<g id="p119g" data-lower_links="v91," data-upper_links="v92," data-left_links="" data-right_links="">
+  <rect id="p119r" class="masculine" x="36" y="1832" width="36" height="56"></rect>
+  <text id="p119t" x="36" y="1832" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">仇牛</text>
+</g>
+<path id="v91" class="solid" d="M 54,1889 l 0,228" data-from_x="54" data-from_y="1888" data-to_x="54" data-to_y="2118" data-parent1="p119" data-parent1_pos_idx="1" data-child="p58" data-child_pos_idx="1"></path>
+<g id="p120g" data-lower_links="v92," data-upper_links="v93," data-left_links="" data-right_links="">
+  <rect id="p120r" class="masculine" x="36" y="1582" width="36" height="56"></rect>
+  <text id="p120t" x="36" y="1582" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">仇広</text>
+</g>
+<path id="v92" class="solid" d="M 54,1639 l 0,192" data-from_x="54" data-from_y="1638" data-to_x="54" data-to_y="1832" data-parent1="p120" data-parent1_pos_idx="1" data-child="p119" data-child_pos_idx="1"></path>
+<g id="p121g" data-lower_links="v93," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p121r" class="masculine" x="36" y="1458" width="36" height="56"></rect>
+  <text id="p121t" x="36" y="1458" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">仇嵩</text>
+</g>
+<path id="v93" class="solid" d="M 54,1515 l 0,66" data-from_x="54" data-from_y="1514" data-to_x="54" data-to_y="1582" data-parent1="p121" data-parent1_pos_idx="1" data-child="p120" data-child_pos_idx="1"></path>
+<g id="p122g" data-lower_links="v94," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p122r" class="masculine" x="1617" y="392" width="36" height="56"></rect>
+  <text id="p122t" x="1617" y="392" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">段階</text>
+</g>
+<path id="v94" class="solid" d="M 1635,449 l 0,98" data-from_x="1635" data-from_y="448" data-to_x="1635" data-to_y="548" data-parent1="p122" data-parent1_pos_idx="1" data-child="p86" data-child_pos_idx="1"></path>
+<g id="p123g" data-lower_links="v95," data-upper_links="v96," data-left_links="" data-right_links="">
+  <rect id="p123r" class="masculine" x="1533" y="380" width="36" height="104"></rect>
+  <text id="p123t" x="1533" y="380" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容渉帰</text>
+</g>
+<path id="v95" class="solid" d="M 1551,485 l 0,62" data-from_x="1551" data-from_y="484" data-to_x="1551" data-to_y="548" data-parent1="p123" data-parent1_pos_idx="1" data-child="p85" data-child_pos_idx="1"></path>
+<g id="p124g" data-lower_links="v96," data-upper_links="v97," data-left_links="" data-right_links="">
+  <rect id="p124r" class="masculine" x="1533" y="212" width="36" height="104"></rect>
+  <text id="p124t" x="1533" y="212" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容木延</text>
+</g>
+<path id="v96" class="solid" d="M 1551,317 l 0,62" data-from_x="1551" data-from_y="316" data-to_x="1551" data-to_y="380" data-parent1="p124" data-parent1_pos_idx="1" data-child="p123" data-child_pos_idx="1"></path>
+<g id="p125g" data-lower_links="v97," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p125r" class="masculine" x="1533" y="20" width="36" height="128"></rect>
+  <text id="p125t" x="1533" y="20" textLength="120" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">慕容莫護跋</text>
+</g>
+<path id="v97" class="solid" d="M 1551,149 l 0,62" data-from_x="1551" data-from_y="148" data-to_x="1551" data-to_y="212" data-parent1="p125" data-parent1_pos_idx="1" data-child="p124" data-child_pos_idx="1"></path>
+<g id="p126g" data-lower_links="v98," data-upper_links="v99," data-left_links="" data-right_links="">
+  <rect id="p126r" class="masculine" x="2010" y="812" width="36" height="56"></rect>
+  <text id="p126t" x="2010" y="812" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">跋提</text>
+</g>
+<path id="v98" class="solid" d="M 2028,869 l 0,180" data-from_x="2028" data-from_y="868" data-to_x="2028" data-to_y="1050" data-parent1="p126" data-parent1_pos_idx="1" data-child="p90" data-child_pos_idx="1"></path>
+<g id="p127g" data-lower_links="v99," data-upper_links="v100," data-left_links="" data-right_links="">
+  <rect id="p127r" class="masculine" x="2010" y="656" width="36" height="80"></rect>
+  <text id="p127t" x="2010" y="656" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">吐奴傀</text>
+</g>
+<path id="v99" class="solid" d="M 2028,737 l 0,74" data-from_x="2028" data-from_y="736" data-to_x="2028" data-to_y="812" data-parent1="p127" data-parent1_pos_idx="1" data-child="p126" data-child_pos_idx="1"></path>
+<g id="p128g" data-lower_links="v100," data-upper_links="v101," data-left_links="" data-right_links="">
+  <rect id="p128r" class="masculine" x="2010" y="512" width="36" height="80"></rect>
+  <text id="p128t" x="2010" y="512" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">車鹿会</text>
+  <text writing-mode="tb" id="p128n0" x="1990" y="516" textLength="96" lengthAdjust="spacing" dx="8" dy="0" class="note red">柔然郁久閭氏</text>
+</g>
+<path id="v100" class="solid" d="M 2028,593 l 0,62" data-from_x="2028" data-from_y="592" data-to_x="2028" data-to_y="656" data-parent1="p128" data-parent1_pos_idx="1" data-child="p127" data-child_pos_idx="1"></path>
+<g id="p129g" data-lower_links="v101," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p129r" class="masculine" x="2010" y="356" width="36" height="80"></rect>
+  <text id="p129t" x="2010" y="356" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">木骨閭</text>
+</g>
+<path id="v101" class="solid" d="M 2028,437 l 0,74" data-from_x="2028" data-from_y="436" data-to_x="2028" data-to_y="512" data-parent1="p129" data-parent1_pos_idx="1" data-child="p128" data-child_pos_idx="1"></path>
+<g id="p130g" data-lower_links="v102," data-upper_links="v103," data-left_links="" data-right_links="">
+  <rect id="p130r" class="masculine" x="2598" y="1254" width="36" height="56"></rect>
+  <text id="p130t" x="2598" y="1254" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李柔</text>
+</g>
+<path id="v102" class="solid" d="M 2616,1311 l 0,86" data-from_x="2616" data-from_y="1310" data-to_x="2616" data-to_y="1398" data-parent1="p130" data-parent1_pos_idx="1" data-child="p113" data-child_pos_idx="1"></path>
+<g id="p131g" data-lower_links="v103," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p131r" class="masculine" x="2598" y="1110" width="36" height="56"></rect>
+  <text id="p131t" x="2598" y="1110" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">李雍</text>
+</g>
+<path id="v103" class="solid" d="M 2616,1167 l 0,86" data-from_x="2616" data-from_y="1166" data-to_x="2616" data-to_y="1254" data-parent1="p131" data-parent1_pos_idx="1" data-child="p130" data-child_pos_idx="1"></path>
+<g id="p132g" data-lower_links="" data-upper_links="" data-left_links="h49,p15," data-right_links="">
+  <rect id="p132r" class="feminine" x="2194" y="1266" width="36" height="104"></rect>
+  <text id="p132t" x="2194" y="1266" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">大王夫人</text>
+</g>
+<path id="h49" class="double" d="M 1370,1316 l 823,0 m 0,4 l -823,0" data-connect_pos_x="2128" data-connect_pos_y="1320" data-start_x="1370" data-end_x="2193" data-y="1318" data-lhs_person="p15" data-rhs_person="p132" data-lower_links="v104,"></path>
+<g id="p133g" data-lower_links="v105," data-upper_links="v104," data-left_links="" data-right_links="">
+  <rect id="p133r" class="masculine" x="2110" y="1434" width="36" height="80"></rect>
+  <text id="p133t" x="2110" y="1434" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋熙</text>
+</g>
+<path id="v104" class="solid" d="M 2128,1321 l 0,112" data-from_x="2128" data-from_y="1320" data-to_x="2128" data-to_y="1434" data-parent1="p15" data-parent2="p132" data-child="p133" data-child_pos_idx="1"></path>
+<g id="p134g" data-lower_links="v106," data-upper_links="v105," data-left_links="" data-right_links="">
+  <rect id="p134r" class="masculine" x="2110" y="1582" width="36" height="80"></rect>
+  <text id="p134t" x="2110" y="1582" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">拓跋他</text>
+</g>
+<path id="v105" class="solid" d="M 2128,1515 l 0,66" data-from_x="2128" data-from_y="1514" data-to_x="2128" data-to_y="1582" data-parent1="p133" data-parent1_pos_idx="1" data-child="p134" data-child_pos_idx="1"></path>
+<g id="p135g" data-lower_links="v107," data-upper_links="v106," data-left_links="" data-right_links="">
+  <rect id="p135r" class="masculine" x="2110" y="1832" width="36" height="80"></rect>
+  <text id="p135t" x="2110" y="1832" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元鍾葵</text>
+</g>
+<path id="v106" class="solid" d="M 2128,1663 l 0,168" data-from_x="2128" data-from_y="1662" data-to_x="2128" data-to_y="1832" data-parent1="p134" data-parent1_pos_idx="1" data-child="p135" data-child_pos_idx="1"></path>
+<g id="p136g" data-lower_links="" data-upper_links="v107," data-left_links="" data-right_links="">
+  <rect id="p136r" class="masculine" x="2110" y="2106" width="36" height="80"></rect>
+  <text id="p136t" x="2110" y="2106" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元法僧</text>
+  <circle id="p136b_upper_right" cx="2152" cy="2100" r="17" fill="black"></circle>
+  <text id="p136bn_upper_right" x="2140" y="2108" textLength="24" dx="0" dy="0" class="num_badge">8-2</text>
+</g>
+<path id="v107" class="solid" d="M 2128,1913 l 0,192" data-from_x="2128" data-from_y="1912" data-to_x="2128" data-to_y="2106" data-parent1="p135" data-parent1_pos_idx="1" data-child="p136" data-child_pos_idx="1"></path>
+<g id="p137g" data-lower_links="" data-upper_links="v108," data-left_links="" data-right_links="">
+  <rect id="p137r" class="masculine" x="708" y="2660" width="36" height="56"></rect>
+  <text id="p137t" x="708" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元悦</text>
+  <text writing-mode="tb" id="p137n0" x="688" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">汝南王</text>
+  <circle id="p137b_upper_right" cx="750" cy="2654" r="17" fill="black"></circle>
+  <text id="p137bn_upper_right" x="734" y="2662" textLength="32" dx="0" dy="0" class="num_badge">11-2</text>
+</g>
+<path id="v108" class="solid" d="M 820,2497 l 0,32 l -94,0 l 0,130" data-from_x="820" data-from_y="2496" data-to_x="726" data-to_y="2660" data-parent1="p40" data-parent2="p31" data-child="p137" data-child_pos_idx="1"></path>
+<path id="h50" class="double dashed" d="M 1113,2240 l 434,0 m 0,4 l -434,0" data-connect_pos_x="1482" data-connect_pos_y="2244" data-start_x="1113" data-end_x="1547" data-y="2242" data-lhs_person="p29" data-rhs_person="p28" data-lower_links="v111,"></path>
+<path id="h51" class="double" d="M 745,2288 l 802,0 m 0,4 l -802,0" data-connect_pos_x="1473" data-connect_pos_y="2292" data-start_x="745" data-end_x="1547" data-y="2290" data-lhs_person="p30" data-rhs_person="p28" data-lower_links="v112,"></path>
+<path id="v111" class="dashed" d="M 1482,2245 l 0,222" data-from_x="1482" data-from_y="2244" data-to_x="1482" data-to_y="2468" data-parent1="p29" data-parent2="p28" data-child="p31" data-child_pos_idx="1"></path>
+<path id="v112" class="solid" d="M 1473,2293 l 0,174" data-from_x="1473" data-from_y="2292" data-to_x="1473" data-to_y="2468" data-parent1="p30" data-parent2="p28" data-child="p31" data-child_pos_idx="0"></path>
+<path id="h52" class="double" d="M 409,2336 l 1138,0 m 0,4 l -1138,0" data-connect_pos_x="474" data-connect_pos_y="2340" data-start_x="409" data-end_x="1547" data-y="2338" data-lhs_person="p66" data-rhs_person="p28" data-lower_links="v113,"></path>
+<path id="v113" class="solid" d="M 474,2341 l 0,114" data-from_x="474" data-from_y="2340" data-to_x="474" data-to_y="2456" data-parent1="p66" data-parent2="p28" data-child="p67" data-child_pos_idx="1"></path>
+<path id="v114" class="solid" d="M 1566,2149 l 0,76" data-from_x="1566" data-from_y="2148" data-to_x="1566" data-to_y="2226" data-parent1="p26" data-parent2="p27" data-child="p28" data-child_pos_idx="1"></path>
+<path id="h53" class="double" d="M 1501,2544 l 550,0 m 0,4 l -550,0" data-connect_pos_x="1943" data-connect_pos_y="2548" data-start_x="1501" data-end_x="2051" data-y="2546" data-lhs_person="p31" data-rhs_person="p32" data-lower_links="v115,v116,"></path>
+<path id="v115" class="solid" d="M 1943,2549 l 0,32 l 43,0 l 0,78" data-from_x="1943" data-from_y="2548" data-to_x="1986" data-to_y="2660" data-parent1="p31" data-parent2="p32" data-child="p33" data-child_pos_idx="1"></path>
+<path id="v116" class="solid" d="M 1943,2549 l 0,32 l -41,0 l 0,78" data-from_x="1943" data-from_y="2548" data-to_x="1902" data-to_y="2660" data-parent1="p31" data-parent2="p32" data-child="p72" data-child_pos_idx="1"></path>
+<g id="p138g" data-lower_links="" data-upper_links="v118," data-left_links="h54,p31," data-right_links="">
+  <rect id="p138r" class="feminine" x="1842" y="2434" width="36" height="80"></rect>
+  <text id="p138t" x="1842" y="2434" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">林貴人</text>
+</g>
+<path id="h54" class="double" d="M 1501,2492 l 340,0 m 0,4 l -340,0" data-connect_pos_x="1734" data-connect_pos_y="2496" data-start_x="1501" data-end_x="1841" data-y="2494" data-lhs_person="p31" data-rhs_person="p138" data-lower_links="v117,"></path>
+<g id="p139g" data-lower_links="" data-upper_links="v117," data-left_links="" data-right_links="">
+  <rect id="p139r" class="masculine" x="1716" y="2660" width="36" height="56"></rect>
+  <text id="p139t" x="1716" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元恂</text>
+  <text writing-mode="tb" id="p139n0" x="1696" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">廃太子</text>
+</g>
+<path id="v117" class="solid" d="M 1734,2497 l 0,162" data-from_x="1734" data-from_y="2496" data-to_x="1734" data-to_y="2660" data-parent1="p31" data-parent2="p138" data-child="p139" data-child_pos_idx="1"></path>
+<g id="p140g" data-lower_links="v118," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p140r" class="masculine" x="1842" y="2290" width="36" height="56"></rect>
+  <text id="p140t" x="1842" y="2290" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">林勝</text>
+</g>
+<path id="v118" class="solid" d="M 1860,2347 l 0,86" data-from_x="1860" data-from_y="2346" data-to_x="1860" data-to_y="2434" data-parent1="p140" data-parent1_pos_idx="1" data-child="p138" data-child_pos_idx="1"></path>
+<g id="p141g" data-lower_links="" data-upper_links="" data-left_links="h56,p28," data-right_links="">
+  <rect id="p141r" class="feminine" x="1716" y="2282" width="36" height="80"></rect>
+  <text id="p141t" x="1716" y="2282" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">高椒房</text>
+</g>
+<path id="h55" class="double" d="M 1585,2256 l 802,0 m 0,4 l -802,0" data-connect_pos_x="2322" data-connect_pos_y="2260" data-start_x="1585" data-end_x="2387" data-y="2258" data-lhs_person="p28" data-rhs_person="p52" data-lower_links="v119,"></path>
+<path id="v119" class="solid" d="M 2322,2261 l 0,206" data-from_x="2322" data-from_y="2260" data-to_x="2322" data-to_y="2468" data-parent1="p28" data-parent2="p52" data-child="p53" data-child_pos_idx="1"></path>
+<g id="p142g" data-lower_links="v120," data-upper_links="v121," data-left_links="" data-right_links="">
+  <rect id="p142r" class="masculine" x="2388" y="2038" width="36" height="56"></rect>
+  <text id="p142t" x="2388" y="2038" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">潘弥</text>
+</g>
+<path id="v120" class="solid" d="M 2406,2095 l 0,122" data-from_x="2406" data-from_y="2094" data-to_x="2406" data-to_y="2218" data-parent1="p142" data-parent1_pos_idx="1" data-child="p52" data-child_pos_idx="1"></path>
+<g id="p143g" data-lower_links="v121," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p143r" class="masculine" x="2388" y="1918" width="36" height="56"></rect>
+  <text id="p143t" x="2388" y="1918" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">潘猛</text>
+</g>
+<path id="v121" class="solid" d="M 2406,1975 l 0,62" data-from_x="2406" data-from_y="1974" data-to_x="2406" data-to_y="2038" data-parent1="p143" data-parent1_pos_idx="1" data-child="p142" data-child_pos_idx="1"></path>
+<path id="h56" class="double" d="M 1585,2320 l 130,0 m 0,4 l -130,0" data-connect_pos_x="1650" data-connect_pos_y="2324" data-start_x="1585" data-end_x="1715" data-y="2322" data-lhs_person="p28" data-rhs_person="p141" data-lower_links="v122,"></path>
+<g id="p144g" data-lower_links="" data-upper_links="v122," data-left_links="h57,p145," data-right_links="">
+  <rect id="p144r" class="masculine" x="1632" y="2558" width="36" height="56"></rect>
+  <text id="p144t" x="1632" y="2558" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元詳</text>
+  <text writing-mode="tb" id="p144n0" x="1612" y="2590" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">北海王</text>
+</g>
+<path id="v122" class="solid" d="M 1650,2325 l 0,232" data-from_x="1650" data-from_y="2324" data-to_x="1650" data-to_y="2558" data-parent1="p28" data-parent2="p141" data-child="p144" data-child_pos_idx="1"></path>
+<g id="p145g" data-lower_links="" data-upper_links="" data-left_links="" data-right_links="h57,p144,">
+  <rect id="p145r" class="feminine" x="1548" y="2558" width="36" height="56"></rect>
+  <text id="p145t" x="1548" y="2558" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">范氏</text>
+</g>
+<path id="h57" class="double" d="M 1585,2584 l 46,0 m 0,4 l -46,0" data-connect_pos_x="1608" data-connect_pos_y="2588" data-start_x="1585" data-end_x="1631" data-y="2586" data-lhs_person="p145" data-rhs_person="p144" data-lower_links="v123,"></path>
+<g id="p146g" data-lower_links="" data-upper_links="v123," data-left_links="" data-right_links="">
+  <rect id="p146r" class="masculine" x="1590" y="2660" width="36" height="56"></rect>
+  <text id="p146t" x="1590" y="2660" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">元顥</text>
+  <text writing-mode="tb" id="p146n0" x="1570" y="2668" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note blue">北海王</text>
+  <circle id="p146b_upper_right" cx="1632" cy="2654" r="17" fill="black"></circle>
+  <text id="p146bn_upper_right" x="1620" y="2662" textLength="24" dx="0" dy="0" class="num_badge">9-2</text>
+</g>
+<path id="v123" class="solid" d="M 1608,2589 l 0,70" data-from_x="1608" data-from_y="2588" data-to_x="1608" data-to_y="2660" data-parent1="p145" data-parent2="p144" data-child="p146" data-child_pos_idx="1"></path>
+<path id="v124" class="solid" d="M 1047,905 l 0,108" data-from_x="1047" data-from_y="904" data-to_x="1047" data-to_y="1014" data-parent1="p17" data-parent1_pos_idx="1" data-child="p18" data-child_pos_idx="1"></path>
+<g id="p147g" data-lower_links="v129," data-upper_links="v128," data-left_links="" data-right_links="">
+  <rect id="p147r" class="masculine" x="1029" y="656" width="36" height="80"></rect>
+  <text id="p147t" x="1029" y="656" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉副侖</text>
+</g>
+<g id="p148g" data-lower_links="v128," data-upper_links="v127," data-left_links="" data-right_links="">
+  <rect id="p148r" class="masculine" x="1029" y="512" width="36" height="56"></rect>
+  <text id="p148t" x="1029" y="512" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉猛</text>
+</g>
+<g id="p149g" data-lower_links="v127," data-upper_links="v126," data-left_links="" data-right_links="">
+  <rect id="p149r" class="masculine" x="1029" y="356" width="36" height="80"></rect>
+  <text id="p149t" x="1029" y="356" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉烏利</text>
+</g>
+<g id="p150g" data-lower_links="v126," data-upper_links="v125," data-left_links="" data-right_links="">
+  <rect id="p150r" class="masculine" x="1029" y="188" width="36" height="80"></rect>
+  <text id="p150t" x="1029" y="188" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉尸利</text>
+</g>
+<g id="p151g" data-lower_links="v125," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p151r" class="masculine" x="1029" y="20" width="36" height="80"></rect>
+  <text id="p151t" x="1029" y="20" textLength="72" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">劉進伯</text>
+  <text writing-mode="tb" id="p151n0" x="1009" y="52" textLength="48" lengthAdjust="spacing" dx="8" dy="0" class="note red">独孤部</text>
+</g>
+<path id="v125" class="solid" d="M 1047,101 l 0,86" data-from_x="1047" data-from_y="100" data-to_x="1047" data-to_y="188" data-parent1="p151" data-parent1_pos_idx="1" data-child="p150" data-child_pos_idx="1"></path>
+<path id="v126" class="solid" d="M 1047,269 l 0,86" data-from_x="1047" data-from_y="268" data-to_x="1047" data-to_y="356" data-parent1="p150" data-parent1_pos_idx="1" data-child="p149" data-child_pos_idx="1"></path>
+<path id="v127" class="solid" d="M 1047,437 l 0,74" data-from_x="1047" data-from_y="436" data-to_x="1047" data-to_y="512" data-parent1="p149" data-parent1_pos_idx="1" data-child="p148" data-child_pos_idx="1"></path>
+<path id="v128" class="solid" d="M 1047,569 l 0,86" data-from_x="1047" data-from_y="568" data-to_x="1047" data-to_y="656" data-parent1="p148" data-parent1_pos_idx="1" data-child="p147" data-child_pos_idx="1"></path>
+<path id="v129" class="solid" d="M 1047,737 l 0,86" data-from_x="1047" data-from_y="736" data-to_x="1047" data-to_y="824" data-parent1="p147" data-parent1_pos_idx="1" data-child="p17" data-child_pos_idx="1"></path>
+<g id="p152g" data-lower_links="" data-upper_links="v130," data-left_links="h58,p12," data-right_links="">
+  <rect id="p152r" class="feminine" x="1365" y="1004" width="36" height="104"></rect>
+  <text id="p152t" x="1365" y="1004" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">遼西公主</text>
+</g>
+<path id="v130" class="solid" d="M 1383,941 l 0,62" data-from_x="1383" data-from_y="940" data-to_x="1383" data-to_y="1004" data-parent1="p7" data-parent1_pos_idx="1" data-child="p152" data-child_pos_idx="1"></path>
+<path id="v131" class="solid" d="M 1215,893 l 0,122" data-from_x="1215" data-from_y="892" data-to_x="1215" data-to_y="1016" data-parent1="p14" data-parent1_pos_idx="1" data-child="p12" data-child_pos_idx="1"></path>
+<path id="h58" class="double" d="M 1234,1054 l 130,0 m 0,4 l -130,0" data-connect_pos_x="1299" data-connect_pos_y="1058" data-start_x="1234" data-end_x="1364" data-y="1056" data-lhs_person="p12" data-rhs_person="p152" data-lower_links=""></path>
+<path id="v132" class="solid" d="M 894,1831 l 0,204" data-from_x="894" data-from_y="1830" data-to_x="894" data-to_y="2036" data-parent1="p116" data-parent1_pos_idx="1" data-child="p115" data-child_pos_idx="1"></path>
+
+<g id="p154g" data-lower_links="" data-upper_links="v133," data-left_links="h59,p115," data-right_links="">
+  <rect id="p154r" class="feminine" x="1247" y="2024" width="36" height="104"></rect>
+  <text id="p154t" x="1247" y="2024" textLength="96" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">安楽公主</text>
+</g>
+<path id="v133" class="solid" d="M 1265,1913 l 0,110" data-from_x="1265" data-from_y="1912" data-to_x="1265" data-to_y="2024" data-parent1="p24" data-parent1_pos_idx="1" data-child="p154" data-child_pos_idx="1"></path>
+<path id="h59" class="double" d="M 913,2074 l 333,0 m 0,4 l -333,0" data-connect_pos_x="1079" data-connect_pos_y="2078" data-start_x="913" data-end_x="1246" data-y="2076" data-lhs_person="p115" data-rhs_person="p154" data-lower_links=""></path>
+<g id="p155g" data-lower_links="v134," data-upper_links="v135," data-left_links="" data-right_links="">
+  <rect id="p155r" class="masculine" x="960" y="1462" width="36" height="56"></rect>
+  <text id="p155t" x="960" y="1462" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">馮安</text>
+</g>
+<path id="v134" class="solid" d="M 978,1519 l 0,62" data-from_x="978" data-from_y="1518" data-to_x="978" data-to_y="1582" data-parent1="p155" data-parent1_pos_idx="1" data-child="p95" data-child_pos_idx="1"></path>
+<g id="p156g" data-lower_links="v135," data-upper_links="" data-left_links="" data-right_links="">
+  <rect id="p156r" class="masculine" x="960" y="1302" width="36" height="56"></rect>
+  <text id="p156t" x="960" y="1302" textLength="48" lengthAdjust="spacing" writing-mode="tb" dx="18" dy="4">馮和</text>
+</g>
+<path id="v135" class="solid" d="M 978,1359 l 0,102" data-from_x="978" data-from_y="1358" data-to_x="978" data-to_y="1462" data-parent1="p156" data-parent1_pos_idx="1" data-child="p155" data-child_pos_idx="1"></path>
+</svg>
