@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base target="_top">
+<title>コンパイルした日ではなく LaTeX ソースファイルの最終更新日を表示したい</title>
+<link rel="canonical" href="https://piyo-ko.github.io/comp/last_modified_date_of_LaTeX_source_file.html" />
+<link rel="stylesheet" href="../article.css" type="text/css">
+</head>
+
+<body class="main-text-only">
+<h1>コンパイルした日ではなく LaTeX ソースファイルの最終更新日を表示したい</h1>
+
+<p>
+LaTeX ソースファイルに、深く考えずに
+<code>\date{\today}</code>
+および
+<code>\maketitle</code>
+と書いたりするが、本当はコンパイルした日ではなく LaTeX ソースファイルの最終更新日を表示してくれた方が嬉しい。
+検索すると <a href="https://ctan.org/pkg/filemod">filemod</a> パッケージが見つかったが、使用の前提条件があるようで、この頃のお気に入りである XeLaTeX では使えないらしい。
+</p>
+
+<p>
+というわけで、LaTeX ソースファイルの最終更新日を表示できるような方法を考えてみた。
+XeLaTeX でうまくいったので、試しに upLaTeX 用のサンプルも作ってみた。
+upLaTeX の方がメジャーな気がするので、後者を以下に示す (ファイルは <a href="https://gist.github.com/piyo-ko/07419033219bfd205f2e87e52c2222b9">Gist</a> に置いた)。
+</p>
+
+<p>
+まず、そもそも LaTeX ソースファイルが一つだけとは限らない。
+複数のファイルがあるなら、それらのうちで最後に更新されたファイルの最終更新日時を採用せねばならない。
+ここでは例として、<code>main.tex</code> の中で <code>\input{data.tex}</code> のように別のファイルを読み込んでいるものとする。
+</p>
+
+<p>
+以下は、<a href="https://gist.github.com/piyo-ko/07419033219bfd205f2e87e52c2222b9">Gist</a> に置いた三つのファイルをまとめて埋め込み表示したものである (<code>Makefile</code> の書き方が洗練されていないが、ここではそれは主題ではないので、とりあえず放置)。
+</p>
+
+<script src="https://gist.github.com/piyo-ko/07419033219bfd205f2e87e52c2222b9.js"></script>
+
+
+<p>
+Linux の <code>ls</code> コマンドには <code>--time-style</code> という素敵なオプションがあるらしいが、わたしが使っているのは macOS (現在は Mojave) である。
+そんな素敵なオプションはない。
+というわけで、ロング・フォーマットで (<code>-l</code>)、最終更新日時が古い方が上になるようにソートして (<code>-t</code> かつ <code>-r</code>)、どのファイルについても更新日時の年・月・日・時・分・秒を省略せずに (<code>-T</code>) 表示させ、その結果を Perl で抜粋・整形することにした (sed や awk でも多分できると思うが、よく知らない)。
+<code>Makefile</code> の中だと <code>$</code> のエスケープが必要なことに注意。
+</p>
+
+<p>
+具体的には、適当な名前の (ここでは <code>\filelastmodified</code>) マクロを定義する文字列を吐き出して、適当な名前の一時ファイル (ここでは <code>def_filelastmodified.tex</code>) にリダイレクトする。
+マクロやファイルの名前は、他のものと衝突しないように適宜考える。
+</p>
+
+<p>
+<code>make</code> を実行すると、<code>def_filelastmodified.tex</code> の内容は、たとえば以下のようになる。
+</p>
+
+<code>\def\filelastmodified{2019年6月13日 19:20:12}
+\def\filelastmodified{2019年6月14日 21:20:07}</code>
+
+<p>
+<code>\newcommand</code> ではなく <code>\def</code> を使うのは、LaTeX ソースファイルが複数の場合があるからで、<code>\renewcommand</code> ではなく <code>\def</code> を使うのは、未定義なのにいきなり <code>\renewcommand</code> は使えないから。
+他と衝突しないように適宜長い名前にしておけば、<code>\def</code> でも害はあるまい。
+もちろん、上記のようなやっつけワンライナじゃなくて、ちゃんと 1 行目では <code>\newcommand</code> を使い、2 行目以降では <code>\renewcommand</code> を使うような行儀の良いスクリプトを書いておいてそれを使ってもよいとは思うが、そこまでする必要はないかな、と思う。
+</p>
+
+<p>
+時刻が不要だったり、日付の形式を変えたかったりする場合は、Perl ワンライナの部分を適宜書き換えればよい。
+もしかすると OS によって <code>ls</code> コマンドの出力形式 (日時の表示形式)が違うかもしれないので、<code>ls</code> コマンドの出力形式によっても、Perl ワンライナの部分を修正する必要があるかもしれない。
+</p>
+
+<p>
+ともあれ、一つまたは複数の LaTeX ソースファイルを <code>ls</code> の対象として指定して上記のように <code>Makefile</code> を書いておけば、<code>make</code> を実行した際に、上記のような一時ファイル (<code>def_filelastmodified.tex</code>) ができる。
+このファイルでは、<code>\filelastmodified</code> の定義を上書きしていくことになる。
+結局、対象の LaTeX ソースファイルのうち最新のファイルの更新日時を表す文字列が、この <code>\filelastmodified</code> なるマクロの定義となる。
+</p>
+
+<p>
+そして、<code>main.tex</code> では、<code>\input{def_filelastmodified.tex}</code> のようにして、この一時ファイルを読み込んでいる (3 行目)。
+したがって、<code>main.tex</code> では、<code>\filelastmodified</code> なるマクロが使えて、たとえば 6 行目の <code>\date{最終更新: \filelastmodified}</code> のように使えばよい。
+あるいは、フッタやヘッダの設定が可能な適当なパッケージを使って、フッタやヘッダにこのマクロで最終更新日時を表示する、といった使い方もできるかと思う。
+</p>
+
+<nav>[<a href="../index.html">ホーム</a>]</nav>
+</body>
+
+</html>
+
+
