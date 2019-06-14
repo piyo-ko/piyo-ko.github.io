@@ -121,6 +121,13 @@ code .res {
 	color: hsl(170, 100%, 80%);
 	font-style: italic;
 }
+p code {
+  display: inline;
+  margin: 0;
+  padding: 2pt;
+  color: inherit;
+  background: inherit;
+}
 
 tt {
 	font-family: "Ricty Discord", "Ricty", "Courier New", monospace;
