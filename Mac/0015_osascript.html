@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>林檎さんについての備忘録: JavaScript で書いたスクリプトを osascript コマンドを使ってターミナル上で実行する</title>
+<link rel="canonical" href="https://piyo-ko.github.io/Mac/0015_osascript.html" />
+<link rel="stylesheet" href="mac.css" type="text/css">
+<script type="text/javascript" src="decor.js"></script>
+</head>
+
+
+<body>
+<div id="left_col"></div>
+
+<div id="main">
+
+<h1><ruby><rb>林檎</rb><rp> (</rp><rt>Macintosh</rt><rp>) </rp></ruby>さんについての備忘録</h1>
+
+<h2>JavaScript で書いたスクリプトを osascript コマンドを使ってターミナル上で実行する</h2>
+
+<p>
+今更だが、macOS には <code>osascript</code> というコマンドがあって、JavaScript で書いたスクリプトをターミナル上で実行させることができる。
+あまり使いどころを思いつかなかったのだが、以下のような使い方をしたらちょっと便利だったので、備忘録を残しておく。
+</p>
+
+<code>$ cat foo.js bar.js | osascript -l JavaScript 2&gt; data.txt</code>
+
+<p>
+ここで、諸般の事情によりスクリプトは二つのファイルに分かれている (一応、名前が衝突しないようにはしてある)。
+<!--(名前が衝突しなければ <code>import</code> や <code>export</code> をしなくても構わないだろう、という大雑把な考えで書いているけれども)-->
+そのため、その内容を <code>cat</code> でつないで <code>osascript</code> にパイプして渡して実行させた。
+また、スクリプト中には <code>console.log</code> による出力を行っている箇所がある。
+これは標準出力ではなく標準エラー出力へと出力されるので、<code>2&gt;</code> とリダイレクトしている。
+</p>
+
+
+<nav>[ <a href="index.html">目次</a> | <a href="../index.html">ホーム</a> ]</nav>
+</div>
+
+<div id="right_col"></div>
+</body>
+</html>
