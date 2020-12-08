@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="test.css" type="text/css">
+<script src="test.js"></script>
+<title>テスト</title>
+</head>
+<body>
+
+<h1>テスト</h1>
+<p>❗️❗これは単なるテスト用の入力フォームです️❗️❗️</p>
+<p>
+(<a target="tw" href="https://twitter.com/tweeting_drtaka/status/1335577294811742209">このツイート</a>と<a target="tw" href="https://twitter.com/tweeting_drtaka/status/1335451018914500609">このツイート</a>を拝見して、作ってみたものです。)
+</p>
+
+<form name="in">
+<h2>患者情報</h2>
+<p class="input">
+<label>患者氏名
+  <input name="患者氏名" type="text" size="" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>国籍
+  <input name="国籍" type="text" size="" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>患者電話番号 (自宅)
+  <input name="患者電話番号 (自宅)" type="tel">
+</label>
+</p>
+
+<p class="input">
+<label>患者電話番号 (携帯)
+  <input name="患者電話番号 (携帯)" type="tel">
+</label>
+</p>
+
+<p class="input">
+<label>患者Email
+  <input name="患者Email" type="email" size="40">
+</label>
+</p>
+
+<p class="input">
+<label>初診年月日 
+  <input name="初診年月日" type="date" placeholder="2020-12-01">
+</label>
+</p>
+
+<p class="input">
+<label>感染推定日 
+  <input name="感染推定日" type="date" placeholder="2020-12-01">
+</label>
+</p>
+
+<p class="input">
+<label>調査時点の患者の主たる所在
+  <label><input name="調査時点の患者の主たる所在" type="radio" value="医療機関"> 医療機関</label>
+  <label><input name="調査時点の患者の主たる所在" type="radio" value="自宅" checked> 自宅</label>
+  <label><input name="調査時点の患者の主たる所在" type="radio" value="勤務先・学校"> 勤務先・学校</label>
+  <span class="nowrap"><label><input name="調査時点の患者の主たる所在" type="radio" value="その他"> その他</label>
+  <input name="調査時点の患者の主たる所在_自由記入" type="text" size="" maxlength=""></span>
+  <label><input name="調査時点の患者の主たる所在" type="radio" value="不明"> 不明
+</label>
+</p>
+
+<p class="input">
+<label>調査時点の患者の連絡先住所
+<!--
+  <input name="調査時点の患者の連絡先住所" type="text" size="" maxlength="">
+-->
+  <br>
+  <textarea name="調査時点の患者の連絡先住所" cols="50" rows="4"></textarea>
+</label>
+</p>
+
+<p class="input">
+<label>調査時点の患者の連絡先電話番号
+  <input name="調査時点の患者の連絡先電話番号" type="tel">
+</label>
+</p>
+
+
+<h2>回答者情報</h2>
+<p class="input">
+<label>調査回答者
+  <label><input name="調査回答者" type="radio" value="本人" checked> 本人</label>
+  <label><input name="調査回答者" type="radio" value="本人以外"> 本人以外</label>
+</label>
+</p>
+
+<p class="input">
+<label>本人以外の回答者・氏名
+  <input name="本人以外の回答者・氏名" type="text" size="" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>本人以外の回答者・本人との関係
+  <input name="本人以外の回答者・本人との関係" type="text" size="" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>調査回答者連絡先 (自宅電話)
+  <input name="調査回答者連絡先 (自宅電話)" type="tel">
+</label>
+</p>
+
+
+<h2>所属情報</h2>
+<p class="input">
+<label>職業・業種・学校（幼稚園・保育園等を含む）等
+  <input name="職業・業種・学校（幼稚園・保育園等を含む）等" type="text" size="60" maxlength="">
+</label>
+<br>
+(児童・生徒の場合、所属クラス・クラブ等詳細に記入すること)
+</p>
+
+<p class="input">
+<label>最終勤務・出席（勤）日 
+  <input name="最終勤務・出席（勤）日" type="date" placeholder="2020-12-01">
+</label>
+</p>
+
+<p class="input">
+<label>勤務先／学校名
+  <input name="勤務先／学校名" type="text" size="60" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>本人以外（保護者等）の連絡先 (氏名)
+  <input name="本人以外（保護者等）の連絡先 (氏名)" type="text" size="" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>本人以外（保護者等）の連絡先 (住所)
+<!--
+  <input name="本人以外（保護者等）の連絡先 (住所)" type="text" size="" maxlength="">
+  -->
+  <br>
+  <textarea name="本人以外（保護者等）の連絡先 (住所)" cols="50" rows="4"></textarea>
+</label>
+</p>
+
+<p class="input">
+<label>本人以外（保護者等）の連絡先 (電話番号)
+  <input name="本人以外（保護者等）の連絡先 (電話番号)" type="tel">
+</label>
+</p>
+
+
+<h2>医学的背景情報</h2>
+<p>
+単に「有無」を問うものは、「有」のときにチェックを入れること。
+</p>
+<p class="input">
+<label>妊娠の有無
+  <input name="妊娠の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>喫煙の有無
+  <input name="喫煙の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>糖尿病の有無
+  <input name="糖尿病の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>呼吸器疾患の有無
+  <label><input name="呼吸器疾患の有無" type="radio" value="無" checked> 無</label>
+  <label><input name="呼吸器疾患の有無" type="radio" value="喘息"> 喘息</label>
+  <label><input name="呼吸器疾患の有無" type="radio" value="COPD"> COPD</label>
+  <label><input name="呼吸器疾患の有無" type="radio" value="その他"> その他</label>
+</label>
+</p>
+
+<p class="input">
+<label>腎疾患の有無
+  <input name="腎疾患の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>肝疾患の有無
+  <input name="肝疾患の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>心疾患の有無
+  <input name="心疾患の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>神経筋疾患の有無
+  <input name="神経筋疾患の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>血液疾患の有無
+  <input name="血液疾患の有無" type="checkbox"> 
+</label>
+(貧血等)
+</p>
+
+<p class="input">
+<label>免疫不全の有無
+  <input name="免疫不全の有無" type="checkbox"> 
+</label>
+(HIV、免疫抑制剤使用含む)
+</p>
+
+<p class="input">
+<label>悪性腫瘍・がんの有無
+  <input name="悪性腫瘍・がんの有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>その他の基礎疾患
+  <input name="その他の基礎疾患" type="text" size="60" maxlength="">
+</label>
+</p>
+
+
+<h2>診断時症状</h2>
+<p class="input">
+<label>咳嗽 (咳)
+  <label><input name="咳嗽 (咳)" type="radio" value="無"> 無</label>
+  <label><input name="咳嗽 (咳)" type="radio" value="有"> 有</label>
+  <label><input name="咳嗽 (咳)" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>呼吸困難
+  <label><input name="呼吸困難" type="radio" value="無"> 無</label>
+  <label><input name="呼吸困難" type="radio" value="有"> 有</label>
+  <label><input name="呼吸困難" type="radio" value="わからない" checked> わからない</label>
+</p>
+
+<p class="input">
+<label>鼻汁・鼻閉
+  <label><input name="鼻汁・鼻閉" type="radio" value="無"> 無</label>
+  <label><input name="鼻汁・鼻閉" type="radio" value="有"> 有</label>
+  <label><input name="鼻汁・鼻閉" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>咽頭痛
+  <label><input name="咽頭痛" type="radio" value="無"> 無</label>
+  <label><input name="咽頭痛" type="radio" value="有"> 有</label>
+  <label><input name="咽頭痛" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>嘔気・嘔吐
+  <label><input name="嘔気・嘔吐" type="radio" value="無"> 無</label>
+  <label><input name="嘔気・嘔吐" type="radio" value="有"> 有</label>
+  <label><input name="嘔気・嘔吐" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>結膜充血
+  <label><input name="結膜充血" type="radio" value="無"> 無</label>
+  <label><input name="結膜充血" type="radio" value="有"> 有</label>
+  <label><input name="結膜充血" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>頭痛
+  <label><input name="頭痛" type="radio" value="無"> 無</label>
+  <label><input name="頭痛" type="radio" value="有"> 有</label>
+  <label><input name="頭痛" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>全身倦怠感
+  <label><input name="全身倦怠感" type="radio" value="無"> 無</label>
+  <label><input name="全身倦怠感" type="radio" value="有"> 有</label>
+  <label><input name="全身倦怠感" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>関節筋肉痛
+  <label><input name="関節筋肉痛" type="radio" value="無"> 無</label>
+  <label><input name="関節筋肉痛" type="radio" value="有"> 有</label>
+  <label><input name="関節筋肉痛" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>下痢
+  <label><input name="下痢" type="radio" value="無"> 無</label>
+  <label><input name="下痢" type="radio" value="有"> 有</label>
+  <label><input name="下痢" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>意識障害
+  <label><input name="意識障害" type="radio" value="無"> 無</label>
+  <label><input name="意識障害" type="radio" value="有"> 有</label>
+  <label><input name="意識障害" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>けいれん
+  <label><input name="けいれん" type="radio" value="無"> 無</label>
+  <label><input name="けいれん" type="radio" value="有"> 有</label>
+  <label><input name="けいれん" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>その他
+<!--
+  <input name="その他" type="text" size="" maxlength="">
+-->
+  <br>
+  <textarea name="その他" cols="50" rows="4"></textarea>
+</label>
+</p>
+
+<p class="input">
+<label>最高体温（℃）
+  <input name="最高体温（℃）" type="number" min="34.0" max="42.0" step="0.1">
+</label>
+</p>
+
+<p class="input">
+<label>最高体温日時 
+  <input name="最高体温日時_日" type="date" placeholder="2020-12-01">
+  <input name="最高体温日時_時" type="time" placeholder="15:30">
+</label>
+</p>
+
+<p class="input">
+<label>発病年月日・時間 
+  <input name="発病年月日・時間_日" type="date" placeholder="2020-12-01">
+  <input name="発病年月日・時間_時間" type="time" placeholder="15:30">頃
+</label>
+</p>
+
+<p class="input">
+<label>その他特記事項 (診断前の臨床経過・治療内容等)
+<!--
+  <input name="その他特記事項" type="text" size="" maxlength="">
+-->
+  <br>
+  <textarea name="その他特記事項" cols="50" rows="4"></textarea>
+</label>
+</p>
+
+<p class="input">
+<label>診断医療機関名
+  <input name="診断医療機関名" type="text" size="60" maxlength="">
+</label>
+</p>
+
+
+<h2>医療機関情報</h2>
+<p class="input">
+<label>入院の有無 (入院有りの場合にチェックする)
+  <input name="入院の有無" type="checkbox"> 
+</label>
+</p>
+
+<p class="input">
+<label>入院開始日 
+  <input name="入院開始日" type="date" placeholder="2020-12-01">
+</label>
+</p>
+
+<p class="input">
+<label>入院終了日 
+  <input name="入院終了日" type="date" placeholder="2020-12-01">
+</label>
+</p>
+
+<p class="input">
+<label>入院医療機関名
+  <input name="入院医療機関名" type="text" size="50" maxlength="">
+</label>
+</p>
+
+<p class="input">
+<label>胸部X線の有無
+  <label><input name="胸部X線の有無" type="radio" value="無"> 無</label>
+  <label><input name="胸部X線の有無" type="radio" value="有"> 有</label>
+  <label><input name="胸部X線の有無" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>胸部CTの有無
+  <label><input name="胸部CTの有無" type="radio" value="無"> 無</label>
+  <label><input name="胸部CTの有無" type="radio" value="有"> 有</label>
+  <label><input name="胸部CTの有無" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<p class="input">
+<label>人工呼吸器使用の有無
+  <label><input name="人工呼吸器使用の有無" type="radio" value="無"> 無</label>
+  <label><input name="人工呼吸器使用の有無" type="radio" value="有"> 有</label>
+  <label><input name="人工呼吸器使用の有無" type="radio" value="わからない" checked> わからない</label>
+</label>
+</p>
+
+<hr>
+<div>
+<button type="button" onclick="get_csv_data()">テスト</button>
+(押すと以下にカンマ区切りの一連の値を吐き出します。エスケープは要検討。)
+<br>
+<button type="button" onclick="clear_csv_data()">出力欄のみ消す</button>
+<button type="reset">全部リセット</button>
+<br><br>
+<textarea name="csv_data" cols="50" rows="10"></textarea>
+</div>
+
+</form>
+</body>
+</html>
+
