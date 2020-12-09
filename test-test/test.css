@@ -1,3 +1,7 @@
+/*
+このファイルは、CC0ライセンス (https://creativecommons.org/publicdomain/zero/1.0/deed.ja) のもとに提供します。
+*/
+
 :root {
   --hue: 60;
   --text-color: hsl(var(--hue), 10%, 10%);

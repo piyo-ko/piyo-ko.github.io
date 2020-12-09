@@ -14,6 +14,27 @@
 (<a target="tw" href="https://twitter.com/tweeting_drtaka/status/1335577294811742209">このツイート</a>と<a target="tw" href="https://twitter.com/tweeting_drtaka/status/1335451018914500609">このツイート</a>を拝見して、作ってみたものです。)
 </p>
 
+<p>
+このHTMLファイル、並びにここに読み込んでいるCSSファイルおよびJavaScriptファイルは、<a href="https://creativecommons.org/publicdomain/zero/1.0/deed.ja">CC0ライセンス</a>のもとに提供します。
+</p>
+<p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+  <a rel="license"
+     href="http://creativecommons.org/publicdomain/zero/1.0/">
+    <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" style="border-style: none;" alt="CC0" />
+  </a>
+  <br />
+  To the extent possible under law,
+  <a rel="dct:publisher"
+     href="https://twitter.com/pi__yo__ko">
+    <span property="dct:title">ぴよ</span></a>
+  has waived all copyright and related or neighboring rights to
+  this work.
+This work is published from:
+<span property="vcard:Country" datatype="dct:ISO3166"
+      content="JP" about="https://github.com/piyo-ko">
+  日本</span>.
+</p>
+
 <form name="in">
 <h2>患者情報</h2>
 <p class="input">
@@ -64,8 +85,9 @@
   <label><input name="調査時点の患者の主たる所在" type="radio" value="自宅" checked> 自宅</label>
   <label><input name="調査時点の患者の主たる所在" type="radio" value="勤務先・学校"> 勤務先・学校</label>
   <span class="nowrap"><label><input name="調査時点の患者の主たる所在" type="radio" value="その他"> その他</label>
+  <label><input name="調査時点の患者の主たる所在" type="radio" value="不明"> 不明<br>
+  「その他」の場合はここに記入:
   <input name="調査時点の患者の主たる所在_自由記入" type="text" size="" maxlength=""></span>
-  <label><input name="調査時点の患者の主たる所在" type="radio" value="不明"> 不明
 </label>
 </p>
 
@@ -433,7 +455,7 @@
 
 <hr>
 <div>
-<button type="button" onclick="get_csv_data()">テスト</button>
+<button type="button" onclick="finish()">テスト</button>
 (押すと以下にカンマ区切りの一連の値を吐き出します。エスケープは要検討。)
 <br>
 <button type="button" onclick="clear_csv_data()">出力欄のみ消す</button>
